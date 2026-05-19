@@ -4,9 +4,9 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { GridProvider } from "@/components/GridTable/GridContext";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 
-import { GridProvider } from "../GridTable/GridContext";
 import GridTableButtons from "./GridTableButtons";
 
 const {

@@ -1,7 +1,7 @@
 // src/components/AppHeader/AppHeader.tsx
 import "./AppHeader.scss";
 
-import React, { useEffect } from "react";
+import React from "react";
 import {
 	CounterClockwiseClockIcon,
 	EyeOpenIcon,
@@ -25,15 +25,6 @@ const EasterEggCoordinates = React.lazy(() => import("./EasterEggCoordinates"));
  */
 const AppHeaderRoot: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const { i18n } = useTranslation();
-	const { a11yMode } = useAppHeaderContext();
-
-	useEffect(() => {
-		if (a11yMode) {
-			document.body.classList.add("a11y-font");
-		} else {
-			document.body.classList.remove("a11y-font");
-		}
-	}, [a11yMode]);
 
 	return (
 		<Box className="app-header" key={i18n.language}>

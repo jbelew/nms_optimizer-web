@@ -1,11 +1,10 @@
 import { useEffect, useRef } from "react";
+import { seoMetadata } from "@shared/seo-metadata.js";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
+import { getSupportedLanguages } from "@/hooks/useSupportedLanguages";
 import { sendEvent } from "@/utils/analytics/tracking";
-
-import { seoMetadata } from "../../../shared/seo-metadata.js";
-import { getSupportedLanguages } from "../useSupportedLanguages";
 
 /**
  * Custom hook for managing SEO side-effects like analytics and document language.

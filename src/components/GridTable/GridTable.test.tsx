@@ -66,7 +66,7 @@ vi.mock("@/store/grid/gridStore", () => ({
 	}),
 }));
 
-vi.mock("@/store/tech/techTreeLoadingStore", () => ({
+vi.mock("@/store/ui/uiStore", () => ({
 	useTechTreeLoadingStore: vi.fn((selector) => {
 		const mockState = {
 			isLoading: false,

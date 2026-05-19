@@ -14,6 +14,7 @@ import { Button, IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
+import { useGridContext } from "@/components/GridTable/useGridContext";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useLoadBuild } from "@/hooks/useLoadBuild/useLoadBuild";
@@ -24,8 +25,6 @@ import { useUrlSync } from "@/hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useDialog } from "@/utils/system/dialogUtils";
-
-import { useGridContext } from "../GridTable/useGridContext";
 
 const BuildNameDialog = React.lazy(
 	() => import("@/components/AppDialog/BuildName/BuildNameDialog")

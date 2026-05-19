@@ -4,9 +4,9 @@ import { useRef, useState, useTransition } from "react";
 import { UI_TIMING } from "@/constants";
 import { useLatest } from "@/hooks/useLatest/useLatest";
 import { useSessionStore } from "@/store/app/sessionStore";
-import { useShakeStore } from "@/store/app/shakeStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useInteractionStore } from "@/store/grid/interactionStore";
+import { useShakeStore } from "@/store/ui/uiStore";
 import { Logger } from "@/utils/system/monitoring";
 
 /**

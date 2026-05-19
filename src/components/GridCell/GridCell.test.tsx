@@ -47,7 +47,7 @@ vi.mock("@/store/grid/gridStore", () => {
 	return { useGridStore };
 });
 
-vi.mock("@/store/app/shakeStore", () => ({
+vi.mock("@/store/ui/uiStore", () => ({
 	useShakeStore: vi.fn(() => ({
 		setShaking: vi.fn(),
 	})),

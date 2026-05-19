@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { getSupportedLanguages } from "@/hooks/useSupportedLanguages";
-import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
+import { safeGetItem, safeSetItem } from "@/utils/browser/environment";
 import { DialogContext } from "@/utils/system/dialogUtils";
 
 /** Set of valid routed dialog identifiers for efficient lookup. */
@@ -59,21 +59,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	const [shareUrl, setShareUrl] = useState<string>("");
 	const [sectionToScrollTo, setSectionToScrollTo] = useState<string | undefined>(undefined);
 	const [tutorialFinished, setTutorialFinished] = useState(() => {
-		const oldKey = "hasVisitedNMSOptimizer";
-		const newKey = "tutorialFinished";
-		const oldVal = safeGetItem(oldKey);
-		const newVal = safeGetItem(newKey);
-
-		if (newVal === "true") {
-			return true;
-		} else if (oldVal === "true") {
-			safeSetItem(newKey, "true");
-			safeRemoveItem(oldKey);
-
-			return true;
-		} else {
-			return false;
-		}
+		return safeGetItem("tutorialFinished") === "true";
 	});
 
 	const pathParts = location.pathname.split("/").filter(Boolean);

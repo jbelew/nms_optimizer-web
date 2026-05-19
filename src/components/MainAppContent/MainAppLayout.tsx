@@ -17,6 +17,7 @@ import { useIdleMount } from "@/hooks/useIdleMount/useIdleMount";
 import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
 import { useFetchTechTreeSuspense } from "@/hooks/useTechTree/useTechTree";
 import { useGridStore } from "@/store/grid/gridStore";
+import { lazyNamed } from "@/utils/system/lazyNamed";
 
 import { MainAppGridSection } from "./MainAppGridSection";
 import {
@@ -30,21 +31,18 @@ const BuildNameDialog = lazy(() => import("@/components/AppDialog/BuildName/Buil
 const OptimizationAlertDialog = lazy(
 	() => import("@/components/AppDialog/OptimizationAlert/OptimizationAlertDialog")
 );
-const ErrorMessageRenderer = lazy(() =>
-	import("@/components/ErrorMessageRenderer/ErrorMessageRenderer").then((m) => ({
-		default: m.ErrorMessageRenderer,
-	}))
+const ErrorMessageRenderer = lazyNamed(
+	() => import("@/components/ErrorMessageRenderer/ErrorMessageRenderer"),
+	"ErrorMessageRenderer"
 );
-const InstallPrompt = lazy(() =>
-	import("@/components/InstallPrompt/InstallPrompt").then((m) => ({ default: m.InstallPrompt }))
+const InstallPrompt = lazyNamed(
+	() => import("@/components/InstallPrompt/InstallPrompt"),
+	"InstallPrompt"
 );
-const ToastRenderer = lazy(() =>
-	import("@/components/Toast/ToastRenderer").then((m) => ({ default: m.ToastRenderer }))
-);
-const SharedModuleSelectionDialog = lazy(() =>
-	import("@/components/ModuleSelectionDialog/SharedModuleSelectionDialog").then((m) => ({
-		default: m.SharedModuleSelectionDialog,
-	}))
+const ToastRenderer = lazyNamed(() => import("@/components/Toast/ToastRenderer"), "ToastRenderer");
+const SharedModuleSelectionDialog = lazyNamed(
+	() => import("@/components/ModuleSelectionDialog/SharedModuleSelectionDialog"),
+	"SharedModuleSelectionDialog"
 );
 
 /**
@@ -59,68 +57,42 @@ export const ShipTypesLoader = () => {
 /**
  * Component that manages deferred background utilities.
  */
-const MainAppBackgroundServices: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const MainAppBackgroundServices: React.FC = () => {
 	const mount = useIdleMount();
+	const { t } = useTranslation();
+	const { clearPatternNoFitTech, handleForceCurrentPnfOptimize, patternNoFitTech } =
+		useMainAppOptimization();
+	const { loadBuild, saveBuild } = useMainAppBuildManagement();
+	const { fileInputRef, handleFileSelect } = loadBuild;
+	const { handleBuildNameCancel, handleBuildNameConfirm, isSaveBuildDialogOpen } = saveBuild;
 
 	if (!mount) return null;
 
-	return <Suspense fallback={null}>{children}</Suspense>;
-};
-
-/**
- * Optimization alert utility.
- */
-const OptimizationAlertUtility: React.FC = () => {
-	const { clearPatternNoFitTech, handleForceCurrentPnfOptimize, patternNoFitTech } =
-		useMainAppOptimization();
-
 	return (
 		<Suspense fallback={null}>
+			<InstallPrompt />
 			<OptimizationAlertDialog
 				isOpen={!!patternNoFitTech}
 				onClose={clearPatternNoFitTech}
 				onForceOptimize={handleForceCurrentPnfOptimize}
 				technologyName={patternNoFitTech}
 			/>
-		</Suspense>
-	);
-};
-
-/**
- * Build naming utility.
- */
-const BuildNameUtility: React.FC = () => {
-	const { saveBuild } = useMainAppBuildManagement();
-	const { handleBuildNameCancel, handleBuildNameConfirm, isSaveBuildDialogOpen } = saveBuild;
-
-	return (
-		<Suspense fallback={null}>
 			<BuildNameDialog
 				isOpen={isSaveBuildDialogOpen}
 				onCancel={handleBuildNameCancel}
 				onConfirm={handleBuildNameConfirm}
 			/>
+			<input
+				accept=".nms"
+				aria-label={t("buttons.loadBuild")}
+				className="hidden"
+				onChange={handleFileSelect}
+				ref={fileInputRef}
+				type="file"
+			/>
+			<ErrorMessageRenderer />
+			<ToastRenderer />
 		</Suspense>
-	);
-};
-
-/**
- * File picker utility for loading builds.
- */
-const FilePickerUtility: React.FC = () => {
-	const { t } = useTranslation();
-	const { loadBuild } = useMainAppBuildManagement();
-	const { fileInputRef, handleFileSelect } = loadBuild;
-
-	return (
-		<input
-			accept=".nms"
-			aria-label={t("buttons.loadBuild")}
-			className="hidden"
-			onChange={handleFileSelect}
-			ref={fileInputRef}
-			type="file"
-		/>
 	);
 };
 
@@ -303,14 +275,7 @@ export const MainAppLayoutContent = () => {
 
 				<MainAppFooter position="bottom-desktop" />
 
-				<MainAppBackgroundServices>
-					<InstallPrompt />
-					<OptimizationAlertUtility />
-					<BuildNameUtility />
-					<FilePickerUtility />
-					<ErrorMessageRenderer />
-					<ToastRenderer />
-				</MainAppBackgroundServices>
+				<MainAppBackgroundServices />
 			</main>
 		</>
 	);

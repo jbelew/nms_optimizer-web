@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "@/store/grid/gridStore";
-import { useTechTreeLoadingStore } from "@/store/tech/techTreeLoadingStore";
+import { useTechTreeLoadingStore } from "@/store/ui/uiStore";
 
 import { useGridRowState } from "./useGridRowState";
 

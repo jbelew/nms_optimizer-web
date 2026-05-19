@@ -5,9 +5,9 @@ import "./assets/css/radix-colors/radix-colors.css";
 import "@radix-ui/themes/components.css";
 import "@radix-ui/themes/utilities.css";
 // Main App CSS
-import "./index.css";
+import "@/index.css";
 // i18n
-import "./i18n/i18n"; // Initialize i18next
+import "@/i18n/i18n"; // Initialize i18next
 
 import React, { StrictMode, useEffect } from "react";
 import { Provider as ToastProviderRadix, Viewport as ToastViewport } from "@radix-ui/react-toast";
@@ -15,23 +15,23 @@ import { Theme } from "@radix-ui/themes";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 
+import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
+import { TooltipManager } from "@/components/TooltipManager/TooltipManager";
 import { UI_TIMING } from "@/constants";
-
-import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
-import { TooltipManager } from "./components/TooltipManager/TooltipManager";
-import { TooltipProvider } from "./context/TooltipContext";
-import { ToastProvider } from "./hooks/useToast/useToast";
-import { routes } from "./routes";
-import { useThemeStore } from "./store/app/themeStore";
-import { initializeAnalytics, initializeAnalyticsClient } from "./utils/analytics/tracking";
-import { preloadInitialState } from "./utils/api/apiPreload";
-import { runWhenIdle } from "./utils/system/idle";
+import { TooltipProvider } from "@/context/TooltipContext";
+import { ToastProvider } from "@/hooks/useToast/useToast";
+import { routes } from "@/routes";
+import { useThemeStore } from "@/store/ui/uiStore";
+import { initializeAnalytics, initializeAnalyticsClient } from "@/utils/analytics/tracking";
+import { preloadInitialState } from "@/utils/api/apiPreload";
+import { performBootstrapMigrations } from "@/utils/system/bootstrap";
+import { runWhenIdle } from "@/utils/system/idle";
 import {
 	captureException,
 	createAppRouter,
 	initializeSentry,
 	Logger,
-} from "./utils/system/monitoring";
+} from "@/utils/system/monitoring";
 
 /**
  * Root component that manages global theme and provider orchestration.
@@ -115,6 +115,9 @@ export const Root = () => {
  * ```
  */
 const bootstrap = async () => {
+	// Perform any necessary data migrations or cleanups before mounting
+	performBootstrapMigrations();
+
 	// Initialize Sentry as early as possible if enabled.
 	// We don't await this to keep it out of the critical path and avoid blocking the mount.
 	if (import.meta.env.VITE_SENTRY_ENABLED === "true") {
@@ -208,6 +211,10 @@ const bootstrap = async () => {
 
 	if (prerendered) {
 		prerendered.remove();
+	}
+
+	if (typeof window !== "undefined" && import.meta.env.VITE_E2E_TESTING) {
+		(window as typeof window & { __BUILD_DATE__?: string }).__BUILD_DATE__ = __BUILD_DATE__;
 	}
 
 	createRoot(document.getElementById("root")!).render(<Root />);

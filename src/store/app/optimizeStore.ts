@@ -1,12 +1,13 @@
 // src/store/app/optimizeStore.ts
 import { create } from "zustand";
+import { immer } from "zustand/middleware/immer";
 
 /**
  * State and actions for tracking the status and errors of optimization solves.
  *
  * @see {@link useOptimizeStore}
  *
- * @category Optimization
+ * @category State
  */
 export interface OptimizeState {
 	/**
@@ -46,14 +47,14 @@ export interface OptimizeState {
 /**
  * Types of errors that can occur during the optimization solve process.
  *
- * @category Optimization
+ * @category State
  */
 type ErrorType = "fatal" | "recoverable";
 
 /**
  * Discriminated union representing the various states of the optimization engine.
  *
- * @category Optimization
+ * @category State
  */
 type OptimizeStatus =
 	| { details: Error | null; severity: ErrorType; type: "error" }
@@ -69,43 +70,44 @@ type OptimizeStatus =
  *
  * @returns {import("zustand").UseBoundStore<import("zustand").StoreApi<OptimizeState>>} The Zustand hook for optimization state.
  *
- * @category Optimization
+ * @category State
  */
-export const useOptimizeStore = create<OptimizeState>((set) => ({
-	setPatternNoFitTech: (tech) =>
-		set((state) => ({
-			status: tech
-				? { tech, type: "warning" }
-				: state.status.type === "warning"
-					? { type: "idle" }
-					: state.status,
-		})),
+export const useOptimizeStore = create<OptimizeState>()(
+	immer((set) => ({
+		setPatternNoFitTech: (tech) =>
+			set((state) => {
+				state.status = tech
+					? { tech, type: "warning" }
+					: state.status.type === "warning"
+						? { type: "idle" }
+						: state.status;
+			}),
 
-	setProgressPercent: (percent) =>
-		set((state) => ({
-			status:
-				state.status.type === "solving"
-					? { ...state.status, progress: percent }
-					: state.status,
-		})),
+		setProgressPercent: (percent) =>
+			set((state) => {
+				if (state.status.type === "solving") {
+					state.status.progress = percent;
+				}
+			}),
 
-	setShowError: (show, severity = "recoverable", details = null) =>
-		set((state) => ({
-			status: show
-				? { details, severity, type: "error" }
-				: state.status.type === "error"
-					? { type: "idle" }
-					: state.status,
-		})),
+		setShowError: (show, severity = "recoverable", details = null) =>
+			set((state) => {
+				state.status = show
+					? { details, severity, type: "error" }
+					: state.status.type === "error"
+						? { type: "idle" }
+						: state.status;
+			}),
 
-	setSolving: (solving) =>
-		set((state) => ({
-			status: solving
-				? { progress: 0, type: "solving" }
-				: state.status.type === "solving"
-					? { type: "idle" }
-					: state.status,
-		})),
+		setSolving: (solving) =>
+			set((state) => {
+				state.status = solving
+					? { progress: 0, type: "solving" }
+					: state.status.type === "solving"
+						? { type: "idle" }
+						: state.status;
+			}),
 
-	status: { type: "idle" },
-}));
+		status: { type: "idle" },
+	}))
+);

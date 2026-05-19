@@ -1,21 +1,24 @@
-import type { ShakeState } from "@/store/app/shakeStore";
 import type { GridStore } from "@/store/grid/gridStore";
 import type { TechState } from "@/store/tech/techStore";
+import type { ModuleSelectionDialogState, ShakeState } from "@/store/ui/uiStore";
 import type { TechTreeRowProps } from "@/types/props";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useTechTree } from "@/components/TechTree/useTechTreeContext";
-import { useShakeStore } from "@/store/app/shakeStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
+import { useModuleSelectionDialogStore, useShakeStore } from "@/store/ui/uiStore";
 
 import { TechTreeRow } from "./TechTreeRow";
 
 // Mock the stores and hooks
 vi.mock("@/store/grid/gridStore", () => ({ useGridStore: vi.fn() }));
 vi.mock("@/store/tech/techStore", () => ({ useTechStore: vi.fn() }));
-vi.mock("@/store/app/shakeStore", () => ({ useShakeStore: vi.fn() }));
+vi.mock("@/store/ui/uiStore", () => ({
+	useModuleSelectionDialogStore: vi.fn(),
+	useShakeStore: vi.fn(),
+}));
 vi.mock("@/components/TechTree/useTechTreeContext", () => ({
 	useTechTree: vi.fn(),
 }));
@@ -40,6 +43,7 @@ vi.mock("react-i18next", () => ({
 const mockUseGridStore = vi.mocked(useGridStore);
 const mockUseTechStore = vi.mocked(useTechStore);
 const mockUseShakeStore = vi.mocked(useShakeStore);
+const mockUseModuleSelectionDialogStore = vi.mocked(useModuleSelectionDialogStore);
 const mockUseTechTree = vi.mocked(useTechTree);
 
 const defaultProps: TechTreeRowProps = {
@@ -142,6 +146,17 @@ const setupMocks = (hasTechInGrid: boolean, solving = false) => {
 		const state: Partial<ShakeState> = { triggerShake: vi.fn() };
 
 		return selector ? selector(state as ShakeState) : (state as ShakeState);
+	});
+
+	mockUseModuleSelectionDialogStore.mockImplementation((selector?: (state: ModuleSelectionDialogState) => unknown) => {
+		const state: ModuleSelectionDialogState = {
+			closeDialog: vi.fn(),
+			isOpen: false,
+			openDialog: vi.fn(),
+			selectedTechData: null,
+		};
+
+		return selector ? selector(state) : state;
 	});
 };
 

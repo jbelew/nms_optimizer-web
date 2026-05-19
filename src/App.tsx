@@ -9,8 +9,9 @@ import {
 	AppDialogFooter,
 	AppDialogRoot,
 	AppDialogTitle,
-} from "./components/AppDialog/Base/AppDialog";
-import { ErrorDialog } from "./components/AppDialog/Error/ErrorDialog";
+} from "@/components/AppDialog/Base/AppDialog";
+import { ErrorDialog } from "@/components/AppDialog/Error/ErrorDialog";
+
 import { Seo } from "./components/Seo/Seo";
 import { UpdatePromptWrapper } from "./components/UpdatePrompt/UpdatePromptWrapper";
 import { DialogProvider } from "./context/dialogContext";
@@ -20,9 +21,11 @@ import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
 import { fetchTechTree } from "./hooks/useTechTree/useTechTree";
 import { useUrlSync } from "./hooks/useUrlSync/useUrlSync";
 import { useUrlNormalization, useUrlValidation } from "./hooks/useValidation/useValidation";
+import { useA11yStore } from "./store/app/a11yStore";
 import { useOptimizeStore } from "./store/app/optimizeStore";
 import { isBot } from "./utils/browser/environment";
 import { useDialog } from "./utils/system/dialogUtils";
+import { lazyNamed } from "./utils/system/lazyNamed";
 import { hideSplashScreenAndShowBackground } from "./utils/system/splashScreen";
 
 /**
@@ -45,29 +48,20 @@ const WelcomeContent = lazy(() => import("./components/AppDialog/Welcome/Welcome
 /**
  * Lazy-loaded orchestrator for route-based modal dialogs.
  */
-const RoutedDialogs = lazy(() =>
-	import("./components/RoutedDialogs/RoutedDialogs").then((module) => ({
-		default: module.RoutedDialogs,
-	}))
+const RoutedDialogs = lazyNamed(
+	() => import("./components/RoutedDialogs/RoutedDialogs"),
+	"RoutedDialogs"
 );
 
 /**
  * Lazy-loaded route component for displaying global user equipment statistics.
  */
-const UserStatsRoute = lazy(() =>
-	import("./routes/UserStatsRoute").then((module) => ({
-		default: module.UserStatsRoute,
-	}))
-);
+const UserStatsRoute = lazyNamed(() => import("./routes/UserStatsRoute"), "UserStatsRoute");
 
 /**
  * Lazy-loaded route component for displaying application performance metrics.
  */
-const PerformanceRoute = lazy(() =>
-	import("./routes/PerformanceRoute").then((module) => ({
-		default: module.PerformanceRoute,
-	}))
-);
+const PerformanceRoute = lazyNamed(() => import("./routes/PerformanceRoute"), "PerformanceRoute");
 
 /**
  * Inner component that manages core data loading and dialog orchestration.
@@ -249,6 +243,16 @@ const App: FC = () => {
 			void fetchTechTree(platform);
 		}
 	}, []);
+
+	const { a11yMode } = useA11yStore();
+
+	useEffect(() => {
+		if (a11yMode) {
+			document.body.classList.add("a11y-font");
+		} else {
+			document.body.classList.remove("a11y-font");
+		}
+	}, [a11yMode]);
 
 	return (
 		<DialogProvider>

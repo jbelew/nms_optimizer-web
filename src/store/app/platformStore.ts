@@ -1,5 +1,6 @@
 // src/store/app/platformStore.ts
 import { create } from "zustand";
+import { immer } from "zustand/middleware/immer";
 
 import { safeGetItem, safeSetItem } from "@/utils/browser/environment";
 import {
@@ -78,63 +79,76 @@ const LOCAL_STORAGE_KEY = PLATFORM_STORAGE_KEY;
  * // returns "solar"
  * ```
  */
-export const usePlatformStore = create<PlatformState>((set) => ({
-	initializePlatform: (validShipTypes: string[], _isKnownRoute = true) => {
-		if (typeof window === "undefined") {
-			set({ selectedPlatform: "standard" });
+export const usePlatformStore = create<PlatformState>()(
+	immer((set) => ({
+		initializePlatform: (validShipTypes: string[], _isKnownRoute = true) => {
+			if (typeof window === "undefined") {
+				set((state) => {
+					state.selectedPlatform = "standard";
+				});
 
-			return;
-		}
+				return;
+			}
 
-		const platformFromUrl = getPlatformFromUrl();
-		const platformFromStorage = getPlatformFromStorage();
+			const platformFromUrl = getPlatformFromUrl();
+			const platformFromStorage = getPlatformFromStorage();
 
-		let updateStorageNeeded = false;
-		let initialPlatform: string;
+			let updateStorageNeeded = false;
+			let initialPlatform: string;
 
-		if (platformFromUrl && validShipTypes.includes(platformFromUrl)) {
-			initialPlatform = platformFromUrl;
+			if (platformFromUrl && validShipTypes.includes(platformFromUrl)) {
+				initialPlatform = platformFromUrl;
 
-			if (platformFromStorage !== initialPlatform) {
+				if (platformFromStorage !== initialPlatform) {
+					safeSetItem(LOCAL_STORAGE_KEY, initialPlatform);
+				}
+			} else if (platformFromStorage && validShipTypes.includes(platformFromStorage)) {
+				initialPlatform = platformFromStorage;
+			} else {
+				initialPlatform = "standard";
+				updateStorageNeeded = true;
+			}
+
+			if (usePlatformStore.getState().selectedPlatform !== initialPlatform) {
+				set((state) => {
+					state.selectedPlatform = initialPlatform;
+				});
+			}
+
+			if (updateStorageNeeded) {
 				safeSetItem(LOCAL_STORAGE_KEY, initialPlatform);
 			}
-		} else if (platformFromStorage && validShipTypes.includes(platformFromStorage)) {
-			initialPlatform = platformFromStorage;
-		} else {
-			initialPlatform = "standard";
-			updateStorageNeeded = true;
-		}
+		},
+		selectedPlatform: resolveInitialPlatform(), // Initialized from URL or storage
+		setSelectedPlatform: (
+			platform,
+			validShipTypes,
+			_updateUrl = true,
+			_isKnownRoute = true
+		) => {
+			if (!validShipTypes.includes(platform)) {
+				Logger.warn(
+					`Attempted to set invalid platform: ${platform}. Falling back to standard.`
+				);
+				platform = "standard";
+			}
 
-		if (usePlatformStore.getState().selectedPlatform !== initialPlatform) {
-			set({ selectedPlatform: initialPlatform });
-		}
+			set((state) => {
+				state.selectedPlatform = platform;
+			});
 
-		if (updateStorageNeeded) {
-			safeSetItem(LOCAL_STORAGE_KEY, initialPlatform);
-		}
-	},
-	selectedPlatform: resolveInitialPlatform(), // Initialized from URL or storage
-	setSelectedPlatform: (platform, validShipTypes, _updateUrl = true, _isKnownRoute = true) => {
-		if (!validShipTypes.includes(platform)) {
-			Logger.warn(
-				`Attempted to set invalid platform: ${platform}. Falling back to standard.`
-			);
-			platform = "standard";
-		}
+			safeSetItem(LOCAL_STORAGE_KEY, platform);
 
-		set({ selectedPlatform: platform });
-
-		safeSetItem(LOCAL_STORAGE_KEY, platform);
-
-		// Update GA4 user property if initialized
-		if (typeof window !== "undefined" && "gtag" in window) {
-			(window.gtag as (command: string, ...args: unknown[]) => void)(
-				"set",
-				"user_properties",
-				{
-					platform_type: platform,
-				}
-			);
-		}
-	},
-}));
+			// Update GA4 user property if initialized
+			if (typeof window !== "undefined" && "gtag" in window) {
+				(window.gtag as (command: string, ...args: unknown[]) => void)(
+					"set",
+					"user_properties",
+					{
+						platform_type: platform,
+					}
+				);
+			}
+		},
+	}))
+);

@@ -61,21 +61,13 @@ describe("BonusStatusIcon Component", () => {
 		});
 	});
 
-	const renderComponent = (
-		techMaxBonus: number,
-		techSolvedBonus: number,
-		status: BonusStatusData | null = null
-	) => {
+	const renderComponent = (techSolvedBonus: number, status: BonusStatusData | null = null) => {
 		mockGetBonusStatus.mockReturnValue(status);
 
 		return render(
 			<I18nextProvider i18n={i18n}>
 				<Theme>
-					<BonusStatusIcon
-						_techMaxBonus={techMaxBonus}
-						tech="test-tech"
-						techSolvedBonus={techSolvedBonus}
-					/>
+					<BonusStatusIcon tech="test-tech" techSolvedBonus={techSolvedBonus} />
 				</Theme>
 			</I18nextProvider>
 		);
@@ -84,7 +76,7 @@ describe("BonusStatusIcon Component", () => {
 	describe("Rendering based on device type", () => {
 		it("should render with ConditionalTooltip on non-touch devices", () => {
 			const status: BonusStatusData = { icon: "check", percent: 0 };
-			const { getByTestId, queryByTestId } = renderComponent(100, 10, status);
+			const { getByTestId, queryByTestId } = renderComponent(10, status);
 			expect(getByTestId("conditional-tooltip")).toBeInTheDocument();
 			expect(queryByTestId("popover-root")).not.toBeInTheDocument();
 		});
@@ -93,7 +85,7 @@ describe("BonusStatusIcon Component", () => {
 			(isTouchDevice as Mock).mockReturnValue(true);
 			const status: BonusStatusData = { icon: "check", percent: 0 };
 
-			const { getByTestId, queryByTestId } = renderComponent(100, 10, status);
+			const { getByTestId, queryByTestId } = renderComponent(10, status);
 			expect(getByTestId("popover-root")).toBeInTheDocument();
 			expect(getByTestId("popover-trigger")).toBeInTheDocument();
 			expect(getByTestId("popover-content")).toBeInTheDocument();
@@ -103,19 +95,19 @@ describe("BonusStatusIcon Component", () => {
 
 	describe("Rendering based on bonus values", () => {
 		it("should return null when techSolvedBonus is 0 and no cached data", () => {
-			const { container } = renderComponent(100, 0, null);
+			const { container } = renderComponent(0, null);
 			// Theme wrapper renders a div, so check if it has any children
 			expect(container.querySelector(".radix-themes")?.childNodes.length).toBe(0);
 		});
 
 		it("should return null when techSolvedBonus is negative and no cached data", () => {
-			const { container } = renderComponent(100, -5, null);
+			const { container } = renderComponent(-5, null);
 			expect(container.querySelector(".radix-themes")?.childNodes.length).toBe(0);
 		});
 
 		it("should render an icon when techSolvedBonus is positive and status exists", () => {
 			const status: BonusStatusData = { icon: "check", percent: 0 };
-			const { container } = renderComponent(100, 10, status);
+			const { container } = renderComponent(10, status);
 			expect(container.querySelector("svg")).not.toBeNull();
 		});
 	});
@@ -123,7 +115,7 @@ describe("BonusStatusIcon Component", () => {
 	describe("Icon variants based on status", () => {
 		it("should render an icon wrapped in a button when status is warning", () => {
 			const status: BonusStatusData = { icon: "warning", percent: 25 };
-			const { container } = renderComponent(75, 10, status);
+			const { container } = renderComponent(10, status);
 			const button = container.querySelector("button");
 			expect(button).toBeInTheDocument();
 			expect(button?.querySelector("svg")).toBeInTheDocument();
@@ -131,13 +123,13 @@ describe("BonusStatusIcon Component", () => {
 
 		it("should render an icon when status is check", () => {
 			const status: BonusStatusData = { icon: "check", percent: 0 };
-			const { container } = renderComponent(100, 10, status);
+			const { container } = renderComponent(10, status);
 			expect(container.querySelector("svg")).toBeInTheDocument();
 		});
 
 		it("should render an icon when status is lightning", () => {
 			const status: BonusStatusData = { icon: "lightning", percent: 25 };
-			const { container } = renderComponent(125, 10, status);
+			const { container } = renderComponent(10, status);
 			expect(container.querySelector("svg")).toBeInTheDocument();
 		});
 	});

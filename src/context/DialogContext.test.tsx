@@ -213,14 +213,6 @@ describe("DialogProvider Component", () => {
 		expect(screen.getByTestId("tutorialFinished")).toHaveTextContent("true");
 	});
 
-	it("should handle old tutorial finished key migration", () => {
-		localStorage.setItem("hasVisitedNMSOptimizer", "true");
-		renderWithProviders("/");
-		expect(screen.getByTestId("tutorialFinished")).toHaveTextContent("true");
-		expect(localStorage.getItem("tutorialFinished")).toBe("true");
-		expect(localStorage.getItem("hasVisitedNMSOptimizer")).toBeNull();
-	});
-
 	it("should initialize tutorial as not finished", () => {
 		renderWithProviders("/");
 		expect(screen.getByTestId("tutorialFinished")).toHaveTextContent("false");

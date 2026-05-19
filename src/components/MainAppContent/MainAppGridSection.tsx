@@ -11,7 +11,7 @@ import {
 } from "@/components/GridTable/GridTable";
 import { MessageSpinner } from "@/components/MessageSpinner/MessageSpinner";
 import { useGridStore } from "@/store/grid/gridStore";
-import { useTechTreeLoadingStore } from "@/store/tech/techTreeLoadingStore";
+import { useTechTreeLoadingStore } from "@/store/ui/uiStore";
 
 import { SharedBuildCallout } from "./SharedBuildCallout";
 import { ShipSelectionHeading } from "./ShipSelectionHeading";

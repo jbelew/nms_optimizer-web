@@ -109,7 +109,7 @@ vi.mock("@/store/app/sessionStore", () => ({
 	})),
 }));
 
-vi.mock("@/store/tech/techTreeLoadingStore", () => ({
+vi.mock("@/store/ui/uiStore", () => ({
 	useTechTreeLoadingStore: {
 		getState: () => ({
 			setLoading: vi.fn(),

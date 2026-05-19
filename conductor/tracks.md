@@ -73,3 +73,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Decouple Performance Summary Cards from Chart Resolution**
   *Link: [./conductor/tracks/perf_summary_decouple_20260504/](./conductor/tracks/perf_summary_decouple_20260504/)*
+
+---
+
+## [~] Track: Address all the issues in docs/CODE_REVIEW.md
+*Link: [./conductor/tracks/codebase_health_refinement_20260519/](./conductor/tracks/codebase_health_refinement_20260519/)*

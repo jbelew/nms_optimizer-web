@@ -1,6 +1,7 @@
 // src/store/tech/techStore.ts
 import type { TechTreeItem } from "@/types/tech";
 import { create } from "zustand";
+import { immer } from "zustand/middleware/immer";
 
 /**
  * State and actions for managing technology definitions, metadata, and solve results.
@@ -154,94 +155,107 @@ export interface TechState {
  *
  * // returns { max_bonus: { pulse: 124.5 }, ... }
  */
-export const useTechStore = create<TechState>((set, get) => ({
-	activeGroups: {},
-	checkedModules: {},
-	clearAllCheckedModules: () => {
-		set((state) => {
-			// Reset all checked modules to their API defaults (modules marked as checked in techGroups)
-			const resetCheckedModules = Object.keys(state.techGroups).reduce(
-				(acc, tech) => {
-					const group = state.techGroups[tech]?.[0];
+export const useTechStore = create<TechState>()(
+	immer((set, get) => ({
+		activeGroups: {},
+		checkedModules: {},
+		clearAllCheckedModules: () => {
+			set((state) => {
+				// Reset all checked modules to their API defaults (modules marked as checked in techGroups)
+				const resetCheckedModules = Object.keys(state.techGroups).reduce(
+					(acc, tech) => {
+						const group = state.techGroups[tech]?.[0];
 
-					if (group) {
-						acc[tech] = group.modules.filter((m) => m.checked).map((m) => m.id);
-					}
+						if (group) {
+							acc[tech] = group.modules.filter((m) => m.checked).map((m) => m.id);
+						}
 
-					return acc;
-				},
-				{} as { [key: string]: string[] }
-			);
+						return acc;
+					},
+					{} as { [key: string]: string[] }
+				);
 
-			return { checkedModules: resetCheckedModules };
-		});
-	},
-	clearCheckedModules: (tech) =>
-		set((state) => ({
-			checkedModules: { ...state.checkedModules, [tech]: [] },
-		})),
-	clearResult: () => set({ max_bonus: {}, solved_bonus: {} }), // Implement clearResult
-	clearTechGroups: () => set({ activeGroups: {}, checkedModules: {}, techGroups: {} }),
-	clearTechMaxBonus: (tech) =>
-		set((state) => ({
-			max_bonus: { ...state.max_bonus, [tech]: 0 },
-		})),
-	clearTechSolvedBonus: (tech) =>
-		set((state) => ({
-			solved_bonus: { ...state.solved_bonus, [tech]: 0 },
-		})),
-	getTechColor: (tech) => get().techColors[tech], // Access state using 'get'
-	initializeTechTree: (
-		colors: { [key: string]: string },
-		techGroups: { [key: string]: TechTreeItem[] },
-		activeGroups: { [key: string]: string },
-		initialCheckedModules: { [key: string]: string[] }
-	) => {
-		set({
-			activeGroups,
-			checkedModules: initialCheckedModules,
-			techColors: colors,
-			techGroups,
-		});
-	},
-	// Note the 'get' parameter
-	max_bonus: {},
-	setActiveGroup: (tech, groupType) =>
-		set((state) => ({
-			activeGroups: { ...state.activeGroups, [tech]: groupType },
-		})),
-	setActiveGroups: (groups) =>
-		set((state) => ({
-			activeGroups: { ...state.activeGroups, ...groups },
-		})),
-	setCheckedModules: (tech, updater) =>
-		set((state) => ({
-			checkedModules: {
-				...state.checkedModules,
-				[tech]: updater(state.checkedModules[tech]),
-			},
-		})),
-	setTechColors: (colors) => set({ techColors: colors }),
-	setTechGroups: (
-		techGroups: { [key: string]: TechTreeItem[] },
-		initialCheckedModules: { [key: string]: string[] }
-	) => {
-		set({ checkedModules: initialCheckedModules, techGroups });
-	},
-	setTechMaxBonus: (tech, max_bonus) =>
-		set((state) => ({
-			max_bonus: { ...state.max_bonus, [tech]: max_bonus },
-		})),
-	setTechSolvedBonus: (tech, bonus) =>
-		set((state) => ({
-			solved_bonus: { ...state.solved_bonus, [tech]: bonus },
-		})),
-	setTechSolveMethod: (tech, solve_method) =>
-		set((state) => ({
-			solve_method: { ...state.solve_method, [tech]: solve_method },
-		})),
-	solve_method: {},
-	solved_bonus: {},
-	techColors: {},
-	techGroups: {},
-}));
+				state.checkedModules = resetCheckedModules;
+			});
+		},
+		clearCheckedModules: (tech) =>
+			set((state) => {
+				state.checkedModules[tech] = [];
+			}),
+		clearResult: () =>
+			set((state) => {
+				state.max_bonus = {};
+				state.solved_bonus = {};
+			}),
+		clearTechGroups: () =>
+			set((state) => {
+				state.activeGroups = {};
+				state.checkedModules = {};
+				state.techGroups = {};
+			}),
+		clearTechMaxBonus: (tech) =>
+			set((state) => {
+				state.max_bonus[tech] = 0;
+			}),
+		clearTechSolvedBonus: (tech) =>
+			set((state) => {
+				state.solved_bonus[tech] = 0;
+			}),
+		getTechColor: (tech) => get().techColors[tech], // Access state using 'get'
+		initializeTechTree: (
+			colors: { [key: string]: string },
+			techGroups: { [key: string]: TechTreeItem[] },
+			activeGroups: { [key: string]: string },
+			initialCheckedModules: { [key: string]: string[] }
+		) => {
+			set((state) => {
+				state.activeGroups = activeGroups;
+				state.checkedModules = initialCheckedModules;
+				state.techColors = colors;
+				state.techGroups = techGroups;
+			});
+		},
+		max_bonus: {},
+		setActiveGroup: (tech, groupType) =>
+			set((state) => {
+				state.activeGroups[tech] = groupType;
+			}),
+		setActiveGroups: (groups) =>
+			set((state) => {
+				Object.assign(state.activeGroups, groups);
+			}),
+		setCheckedModules: (tech, updater) =>
+			set((state) => {
+				state.checkedModules[tech] = updater(state.checkedModules[tech]);
+			}),
+		setTechColors: (colors) =>
+			set((state) => {
+				state.techColors = colors;
+			}),
+		setTechGroups: (
+			techGroups: { [key: string]: TechTreeItem[] },
+			initialCheckedModules: { [key: string]: string[] }
+		) => {
+			set((state) => {
+				state.checkedModules = initialCheckedModules;
+				state.techGroups = techGroups;
+			});
+		},
+		setTechMaxBonus: (tech, max_bonus) =>
+			set((state) => {
+				state.max_bonus[tech] = max_bonus;
+			}),
+		setTechSolvedBonus: (tech, bonus) =>
+			set((state) => {
+				state.solved_bonus[tech] = bonus;
+			}),
+		setTechSolveMethod: (tech, solve_method) =>
+			set((state) => {
+				state.solve_method[tech] = solve_method;
+			}),
+		solve_method: {},
+		solved_bonus: {},
+		techColors: {},
+		techGroups: {},
+	}))
+);

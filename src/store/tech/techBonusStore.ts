@@ -175,13 +175,10 @@ export const useTechBonusStore = create<TechBonusStore>()(
 	)
 );
 
-if (typeof window !== "undefined") {
+if (typeof window !== "undefined" && import.meta.env.VITE_E2E_TESTING) {
 	const w = window as typeof window & {
-		__E2E_EXPOSE__?: boolean;
 		useTechBonusStore?: typeof useTechBonusStore;
 	};
 
-	if (import.meta.env.VITE_E2E_TESTING || w.__E2E_EXPOSE__) {
-		w["useTechBonusStore"] = useTechBonusStore;
-	}
+	w["useTechBonusStore"] = useTechBonusStore;
 }

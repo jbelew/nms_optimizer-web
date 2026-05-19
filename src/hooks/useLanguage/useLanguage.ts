@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
-import { getSupportedLanguages } from "../useSupportedLanguages";
+import { getSupportedLanguages } from "@/hooks/useSupportedLanguages";
 
 /**
  * Custom hook that synchronizes the application language with the current URL path.

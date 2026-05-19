@@ -174,13 +174,10 @@ export const useModuleSelectionStore = create<ModuleSelectionStore>()(
 	)
 );
 
-if (typeof window !== "undefined") {
+if (typeof window !== "undefined" && import.meta.env.VITE_E2E_TESTING) {
 	const w = window as typeof window & {
-		__E2E_EXPOSE__?: boolean;
 		useModuleSelectionStore?: typeof useModuleSelectionStore;
 	};
 
-	if (import.meta.env.VITE_E2E_TESTING || w.__E2E_EXPOSE__) {
-		w["useModuleSelectionStore"] = useModuleSelectionStore;
-	}
+	w["useModuleSelectionStore"] = useModuleSelectionStore;
 }

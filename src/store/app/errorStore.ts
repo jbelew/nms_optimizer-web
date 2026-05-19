@@ -1,5 +1,6 @@
 // src/store/app/errorStore.ts
 import { create } from "zustand";
+import { immer } from "zustand/middleware/immer";
 
 /**
  * Represents a single notification or error message displayed to the user.
@@ -56,42 +57,40 @@ export interface ErrorState {
  * const addError = useErrorStore((s) => s.addError);
  * addError("Failed to save build", "warning");
  */
-export const useErrorStore = create<ErrorState>((set) => ({
-	addError: (message: string, type: ErrorMessage["type"] = "error") => {
-		const id = `${Date.now()}-${Math.random()}`;
-		set((state) => ({
-			errors: [
-				...state.errors,
-				{
+export const useErrorStore = create<ErrorState>()(
+	immer((set) => ({
+		addError: (message: string, type: ErrorMessage["type"] = "error") => {
+			const id = `${Date.now()}-${Math.random()}`;
+			set((state) => {
+				state.errors.push({
 					dismissible: true,
 					id,
 					message,
 					timestamp: Date.now(),
 					type,
-				},
-			],
-		}));
+				});
+			});
 
-		return id;
-	},
-	clearErrors: () => {
-		set({ errors: [] });
-	},
-	errors: [],
-	removeError: (id: string) => {
-		set((state) => ({
-			errors: state.errors.filter((error) => error.id !== id),
-		}));
-	},
-}));
+			return id;
+		},
+		clearErrors: () => {
+			set((state) => {
+				state.errors = [];
+			});
+		},
+		errors: [],
+		removeError: (id: string) => {
+			set((state) => {
+				state.errors = state.errors.filter((error) => error.id !== id);
+			});
+		},
+	}))
+);
 
-if (typeof window !== "undefined") {
+if (typeof window !== "undefined" && import.meta.env.VITE_E2E_TESTING) {
 	const w = window as typeof window & {
-		__E2E_EXPOSE__?: boolean;
 		useErrorStore?: typeof useErrorStore;
 	};
 
-	if (import.meta.env.VITE_E2E_TESTING || w.__E2E_EXPOSE__) {
-		w["useErrorStore"] = useErrorStore;
-	}
+	w["useErrorStore"] = useErrorStore;
 }

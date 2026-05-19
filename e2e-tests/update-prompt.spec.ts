@@ -58,13 +58,11 @@ test.describe("UpdatePrompt Suppression", () => {
 		// 2. Navigate to page
 		await page.goto("/");
 
-		// 3. Wait for app to be ready (custom event dispatched by splashScreen)
-		const appReadyPromise = page.evaluate(() => 
-			new Promise(resolve => window.addEventListener('app-ready', resolve, { once: true }))
-		);
-		await appReadyPromise;
+		// 3. Wait for app to be ready
+		await page.waitForFunction(() => (window as unknown as { __APP_READY__: boolean }).__APP_READY__);
 
-		// 4. Dispatch the event
+		// 4. Dispatch the event after a tiny delay to ensure listeners are active
+		await page.waitForTimeout(100);
 		await page.evaluate(() => {
 			window.dispatchEvent(
 				new CustomEvent("new-version-available", {

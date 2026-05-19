@@ -7,7 +7,7 @@ import GridControlButtons from "./GridControlButtons";
 // Mock useTechTreeLoadingStore
 let mockIsLoading = false;
 
-vi.mock("@/store/tech/techTreeLoadingStore", () => ({
+vi.mock("@/store/ui/uiStore", () => ({
 	useTechTreeLoadingStore: vi.fn((selector) => {
 		const mockState = { isLoading: mockIsLoading };
 
@@ -62,7 +62,7 @@ vi.mock("@/store/grid/gridStore", () => ({
 }));
 
 // Mock useGridRowState hook
-vi.mock("@/components/GridRow/useGridRowState", () => ({
+vi.mock("./useGridRowState", () => ({
 	useGridRowState: (rowIndex: number) => {
 		// Mock implementation that matches our test scenarios
 		if (rowIndex === 0) {

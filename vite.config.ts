@@ -569,8 +569,9 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 		preview: { host: "0.0.0.0", port: 4173 },
 		resolve: {
 			alias: {
-				react: path.resolve(__dirname, "node_modules/react"),
-				"react-dom": path.resolve(__dirname, "node_modules/react-dom"),
+				"@": path.resolve(__dirname, "./src"),
+				"@shared": path.resolve(__dirname, "./shared"),
+				react: path.resolve(__dirname, "node_modules/react"),				"react-dom": path.resolve(__dirname, "node_modules/react-dom"),
 				...(!sentryEnabled
 					? {
 							"@sentry/react": path.resolve(

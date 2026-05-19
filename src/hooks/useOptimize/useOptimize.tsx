@@ -1,8 +1,9 @@
 import type { ApiResponse } from "@/store/grid/gridStore";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
+import { useLatest } from "@/hooks/useLatest/useLatest";
 import { useScrollGridIntoView } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { useOptimizeStore } from "@/store/app/optimizeStore";
 import { usePlatformStore } from "@/store/app/platformStore";
@@ -100,6 +101,11 @@ export const useOptimize = (): UseOptimizeReturn => {
 	const { sendEvent } = useAnalytics();
 	const isLarge = useBreakpoint("1024px");
 
+	const patternNoFitTechRef = useLatest(patternNoFitTech);
+	const selectedShipTypeRef = useLatest(selectedShipType);
+	const isLargeRef = useLatest(isLarge);
+	const sendEventRef = useLatest(sendEvent);
+
 	const isOptimizingRef = useRef(false);
 	const managerRef = useRef<null | OptimizationManager>(null);
 	const isMountedRef = useRef(true);
@@ -107,12 +113,12 @@ export const useOptimize = (): UseOptimizeReturn => {
 	const scrollOptions = { skipOnLargeScreens: true };
 	const { gridContainerRef, scrollIntoView } = useScrollGridIntoView(scrollOptions);
 
-	const resetProgress = () => {
+	const resetProgress = useCallback(() => {
 		if (!isMountedRef.current) return;
 		setSolving(false);
 		isOptimizingRef.current = false;
 		setProgressPercent(0);
-	};
+	}, [setSolving, setProgressPercent]);
 
 	// Reset mount state on unmount
 	useEffect(() => {
@@ -148,107 +154,127 @@ export const useOptimize = (): UseOptimizeReturn => {
 	 * await handleOptimize("pulse");
 	 * ```
 	 */
-	const handleOptimize = async (tech: string, forced: boolean = false) => {
-		performance.mark("optimize-start");
+	const handleOptimize = useCallback(
+		async (tech: string, forced: boolean = false) => {
+			performance.mark("optimize-start");
 
-		if (isOptimizingRef.current) {
-			Logger.warn("Optimization already in progress, ignoring request");
+			if (isOptimizingRef.current) {
+				Logger.warn("Optimization already in progress, ignoring request");
 
-			return;
-		}
+				return;
+			}
 
-		const { setGrid } = useGridStore.getState();
-		const { checkedModules } = useTechStore.getState();
+			const { setGrid } = useGridStore.getState();
 
-		isOptimizingRef.current = true;
-		setSolving(true);
-		setProgressPercent(0);
-		setShowErrorStore(false);
-		if (forced || patternNoFitTech === tech) setPatternNoFitTech(null);
+			isOptimizingRef.current = true;
+			setSolving(true);
+			setProgressPercent(0);
+			setShowErrorStore(false);
+			if (forced || patternNoFitTechRef.current === tech) setPatternNoFitTech(null);
 
-		Logger.info(`Optimization started for ${tech}`, {
-			forced,
-			platform: selectedShipType,
-			tech,
-		});
+			Logger.info(`Optimization started for ${tech}`, {
+				forced,
+				platform: selectedShipTypeRef.current,
+				tech,
+			});
 
-		const manager = new OptimizationManager({
-			forced,
-			isLarge,
-			onComplete: (data: ApiResponse) => {
-				performance.mark("optimize-complete");
-				performance.measure("optimize-to-complete", "optimize-start", "optimize-complete");
-				if (!isMountedRef.current) return;
+			const manager = new OptimizationManager({
+				forced,
+				isLarge: isLargeRef.current,
+				onComplete: (data: ApiResponse) => {
+					performance.mark("optimize-complete");
+					performance.measure(
+						"optimize-to-complete",
+						"optimize-start",
+						"optimize-complete"
+					);
+					if (!isMountedRef.current) return;
 
-				if (patternNoFitTech === tech) setPatternNoFitTech(null);
+					if (patternNoFitTechRef.current === tech) setPatternNoFitTech(null);
 
-				Logger.info(`Optimization complete for ${tech}`, {
-					bonus: data.max_bonus,
-					method: data.solve_method,
-					tech,
-				});
+					Logger.info(`Optimization complete for ${tech}`, {
+						bonus: data.max_bonus,
+						method: data.solve_method,
+						tech,
+					});
 
-				sessionCoordinator.commitOptimizationResult(data, tech);
-				const gaTech =
-					tech === "pulse" && checkedModules[tech]?.includes("PC") ? "photonix" : tech;
+					sessionCoordinator.commitOptimizationResult(data, tech);
+					const currentCheckedModules = useTechStore.getState().checkedModules;
+					const gaTech =
+						tech === "pulse" && currentCheckedModules[tech]?.includes("PC")
+							? "photonix"
+							: tech;
 
-				if (data.grid) {
-					sendEvent({
-						action: "optimize_tech",
+					if (data.grid) {
+						sendEventRef.current({
+							action: "optimize_tech",
+							category: "ui",
+							nonInteraction: false,
+							platform: selectedShipTypeRef.current,
+							solve_method: data.solve_method,
+							supercharged:
+								typeof data.max_bonus === "number" && data.max_bonus > 100,
+							tech: gaTech,
+							value: 1,
+						});
+						setGrid(data.grid);
+					}
+
+					resetProgress();
+				},
+				onError: (err: Error) => {
+					if (!isMountedRef.current) return;
+
+					// Handle benign transport close silently
+					if (err.message === "Socket disconnected (transport close)") {
+						resetProgress();
+
+						return;
+					}
+
+					setShowErrorStore(true, "recoverable", err);
+					resetProgress();
+				},
+				onPatternNoFit: () => {
+					if (!isMountedRef.current) return;
+					Logger.info(`Optimization "Pattern No Fit" for ${tech}`, {
+						platform: selectedShipTypeRef.current,
+						tech,
+					});
+					setPatternNoFitTech(tech);
+					sendEventRef.current({
+						action: "no_fit_warning",
 						category: "ui",
 						nonInteraction: false,
-						platform: selectedShipType,
-						solve_method: data.solve_method,
-						supercharged: typeof data.max_bonus === "number" && data.max_bonus > 100,
-						tech: gaTech,
+						platform: selectedShipTypeRef.current,
+						tech,
 						value: 1,
 					});
-					setGrid(data.grid);
-				}
-
-				resetProgress();
-			},
-			onError: (err: Error) => {
-				if (!isMountedRef.current) return;
-
-				// Handle benign transport close silently
-				if (err.message === "Socket disconnected (transport close)") {
 					resetProgress();
+				},
+				onProgress: (data) => {
+					if (!isMountedRef.current) return;
+					setProgressPercent(data.progress_percent);
+					if (data.best_grid) setGrid(data.best_grid);
+				},
+				tech,
+			});
 
-					return;
-				}
-
-				setShowErrorStore(true, "recoverable", err);
-				resetProgress();
-			},
-			onPatternNoFit: () => {
-				if (!isMountedRef.current) return;
-				Logger.info(`Optimization "Pattern No Fit" for ${tech}`, {
-					platform: selectedShipType,
-					tech,
-				});
-				setPatternNoFitTech(tech);
-				sendEvent({
-					action: "no_fit_warning",
-					category: "ui",
-					nonInteraction: false,
-					platform: selectedShipType,
-					tech,
-					value: 1,
-				});
-				resetProgress();
-			},
-			onProgress: (data) => {
-				if (!isMountedRef.current) return;
-				setProgressPercent(data.progress_percent);
-				if (data.best_grid) setGrid(data.best_grid);
-			},
-			tech,
-		});
-
-		managerRef.current = manager;
-		manager.start();
-	};
+			managerRef.current = manager;
+			manager.start();
+		},
+		[
+			setSolving,
+			setProgressPercent,
+			setShowErrorStore,
+			setPatternNoFitTech,
+			resetProgress,
+			isLargeRef,
+			patternNoFitTechRef,
+			selectedShipTypeRef,
+			sendEventRef,
+		]
+	);
 
 	/**
 	 * Clears the technology stored in the "Pattern No Fit" state.
@@ -258,7 +284,10 @@ export const useOptimize = (): UseOptimizeReturn => {
 	 * clearPatternNoFitTech();
 	 * ```
 	 */
-	const clearPatternNoFitTech = () => setPatternNoFitTech(null);
+	const clearPatternNoFitTech = useCallback(
+		() => setPatternNoFitTech(null),
+		[setPatternNoFitTech]
+	);
 
 	/**
 	 * Forces a solve for the technology that failed pattern matching.
@@ -268,9 +297,9 @@ export const useOptimize = (): UseOptimizeReturn => {
 	 * await handleForceCurrentPnfOptimize();
 	 * ```
 	 */
-	const handleForceCurrentPnfOptimize = async () => {
-		if (patternNoFitTech) await handleOptimize(patternNoFitTech, true);
-	};
+	const handleForceCurrentPnfOptimize = useCallback(async () => {
+		if (patternNoFitTechRef.current) await handleOptimize(patternNoFitTechRef.current, true);
+	}, [handleOptimize, patternNoFitTechRef]);
 
 	return {
 		clearPatternNoFitTech,

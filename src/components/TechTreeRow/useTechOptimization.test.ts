@@ -2,15 +2,15 @@ import type { Mock } from "vitest";
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { useShakeStore } from "@/store/app/shakeStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
+import { useShakeStore } from "@/store/ui/uiStore";
 
 import { useTechOptimization } from "./useTechOptimization";
 
 // Mock stores
 vi.mock("@/store/grid/gridStore");
-vi.mock("@/store/app/shakeStore");
+vi.mock("@/store/ui/uiStore");
 vi.mock("@/store/tech/techStore");
 
 describe("useTechOptimization", () => {

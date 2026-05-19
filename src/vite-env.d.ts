@@ -25,6 +25,12 @@ declare const __BUILD_DATE__: string;
  * Global `Window` extension for development and testing utilities.
  */
 interface Window {
+	/** Indicates if the application has completed its initial mount and is ready. */
+	__APP_READY__?: boolean;
+
+	/** Build date of the application. */
+	__BUILD_DATE__?: string;
+
 	/** E2E Expose flag. */
 	__E2E_EXPOSE__?: boolean;
 
@@ -45,7 +51,7 @@ interface Window {
 	/** Direct access to the `SessionStore` for E2E testing. */
 	useSessionStore: import("./store/app/sessionStore").useSessionStore;
 	/** Direct access to the `ShakeStore` for E2E testing. */
-	useShakeStore: import("./store/app/shakeStore").useShakeStore;
+	useShakeStore: import("./store/ui/uiStore").useShakeStore;
 	/** Direct access to the `TechBonusStore` for E2E testing. */
 	useTechBonusStore: import("./store/tech/techBonusStore").useTechBonusStore;
 }

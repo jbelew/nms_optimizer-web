@@ -18,7 +18,7 @@ import { use, useEffect, useMemo } from "react";
 import { API_URL } from "@/constants";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
-import { useTechTreeLoadingStore } from "@/store/tech/techTreeLoadingStore";
+import { useTechTreeLoadingStore, useUiStore } from "@/store/ui/uiStore";
 import { apiCall } from "@/utils/api/network";
 import { Logger } from "@/utils/system/monitoring";
 import { getTechTreeMaps } from "@/utils/tech/techTreeUtils";
@@ -97,7 +97,7 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 
 	if (!cache.has(cacheKey)) {
 		queueMicrotask(() => {
-			useTechTreeLoadingStore.getState().setLoading(true);
+			useUiStore.getState().setTechTreeLoading(true);
 		});
 
 		const baseUrl = API_URL ? (API_URL.endsWith("/") ? API_URL : `${API_URL}/`) : "/";
@@ -120,13 +120,13 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 					);
 				}
 
-				useTechTreeLoadingStore.getState().setLoading(false);
+				useUiStore.getState().setTechTreeLoading(false);
 
 				return data;
 			})
 			.catch((error) => {
 				Logger.error("Error fetching tech tree:", error);
-				useTechTreeLoadingStore.getState().setLoading(false);
+				useUiStore.getState().setTechTreeLoading(false);
 
 				return {} as TechTree;
 			});
@@ -183,7 +183,7 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 				gridStore.setGridFromInitialDefinition(data.grid_definition);
 			}
 
-			useTechTreeLoadingStore.getState().setLoading(false);
+			useUiStore.getState().setTechTreeLoading(false);
 		}
 	}, [data, maps]);
 

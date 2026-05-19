@@ -5,14 +5,14 @@ import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useSessionStore } from "@/store/app/sessionStore";
-import { useShakeStore } from "@/store/app/shakeStore";
 import { useGridStore } from "@/store/grid/gridStore";
+import { useShakeStore } from "@/store/ui/uiStore";
 
 import { useGridCellInteraction } from "./useGridCellInteraction";
 
 // Mock stores
 vi.mock("@/store/grid/gridStore");
-vi.mock("@/store/app/shakeStore");
+vi.mock("@/store/ui/uiStore");
 vi.mock("@/store/app/sessionStore");
 
 // Define mock functions

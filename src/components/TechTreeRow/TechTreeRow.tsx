@@ -1,7 +1,7 @@
 import "./TechTreeRow.scss";
 
 import type { TechTreeRowProps } from "@/types/props";
-import React, { useMemo } from "react";
+import React, { useCallback } from "react";
 import {
 	Crosshair2Icon,
 	ExclamationTriangleIcon,
@@ -19,7 +19,7 @@ import { useTechTree } from "@/components/TechTree/useTechTreeContext";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useA11yStore } from "@/store/app/a11yStore";
 import { useTechBonusStore } from "@/store/tech/techBonusStore";
-import { useModuleSelectionDialogStore } from "@/store/ui/moduleSelectionDialogStore";
+import { useModuleSelectionDialogStore } from "@/store/ui/uiStore";
 import { isTouchDevice } from "@/utils/browser/environment";
 
 import { TechTreeRowProvider } from "./TechTreeRowContext";
@@ -29,8 +29,6 @@ import { useTechTreeRowContext } from "./useTechTreeRowContext";
  * Props for the `BonusStatusIcon` component.
  */
 interface BonusStatusIconProps {
-	/** The theoretical maximum bonus for the current configuration. */
-	_techMaxBonus: number;
 	/** Unique identifier for the technology. */
 	tech: string;
 	/** The actual bonus achieved in the most recent solve. */
@@ -60,11 +58,7 @@ function renderIcon(
 /**
  * A component that displays a status icon representing the optimization quality of a technology.
  */
-export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
-	_techMaxBonus,
-	tech,
-	techSolvedBonus,
-}) => {
+export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ tech, techSolvedBonus }) => {
 	const { t } = useTranslation();
 	const { getBonusStatus } = useTechBonusStore();
 	const status = getBonusStatus(tech);
@@ -80,17 +74,17 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 
 		switch (icon) {
 			case "check":
-				iconClassName = "mt-[7px] inline-block cursor-pointer align-text-top";
+				iconClassName = "mt-[7px] inline-block align-text-top";
 				iconStyle = { color: "var(--gray-a10)" };
 				tooltipContent = t("techTree.tooltips.validSolve");
 				break;
 			case "lightning":
-				iconClassName = "mt-1.5 inline-block h-4 w-4 cursor-pointer align-text-top";
+				iconClassName = "mt-1.5 inline-block h-4 w-4 align-text-top";
 				iconStyle = { color: "var(--amber-a8)" };
 				tooltipContent = `${t("techTree.tooltips.boostedSolve")} +${percent}%`;
 				break;
 			case "warning":
-				iconClassName = "mt-2 inline-block cursor-pointer align-text-top";
+				iconClassName = "mt-2 inline-block align-text-top";
 				iconStyle = { color: "var(--red-a8)" };
 				tooltipContent = `${t("techTree.tooltips.insufficientSpace")} -${percent}%`;
 				break;
@@ -107,11 +101,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 		return null;
 	}
 
-	const icon = renderIcon(
-		contentData.icon,
-		contentData.iconClassName.replace("cursor-pointer", ""),
-		contentData.iconStyle
-	);
+	const icon = renderIcon(contentData.icon, contentData.iconClassName, contentData.iconStyle);
 
 	if (!icon) {
 		return null;
@@ -239,13 +229,12 @@ const TechTreeRowBadges: React.FC = () => {
 		tech,
 		techColor,
 		techImage,
-		techMaxBonus,
 		techSolvedBonus,
 		translatedTechName,
 	} = useTechTreeRowContext();
 
-	const handleOpenDialog = useMemo(
-		() => () => openDialog({ tech, techColor, techImage }),
+	const handleOpenDialog = useCallback(
+		() => openDialog({ tech, techColor, techImage }),
 		[openDialog, tech, techColor, techImage]
 	);
 
@@ -274,13 +263,7 @@ const TechTreeRowBadges: React.FC = () => {
 
 	return (
 		<>
-			{hasTechInGrid && (
-				<BonusStatusIcon
-					_techMaxBonus={techMaxBonus}
-					tech={tech}
-					techSolvedBonus={techSolvedBonus}
-				/>
-			)}
+			{hasTechInGrid && <BonusStatusIcon tech={tech} techSolvedBonus={techSolvedBonus} />}
 			{modules.length > 1 ? (
 				<ConditionalTooltip
 					label={t("moduleSelection.tooltip", { techName: translatedTechName })}

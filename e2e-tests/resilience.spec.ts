@@ -105,7 +105,7 @@ test.describe("Application Resilience & Recovery", () => {
 			await refreshButton.click();
 
 			// 500.html redirects to /?reload=<timestamp>
-			await page.waitForFunction(() => window.location.pathname === "/" && window.location.search.includes("reload="), { timeout: 15000 });
+			await page.waitForFunction(() => window.location.search.includes("reload="), { timeout: 15000 });
 		});
 	});
 

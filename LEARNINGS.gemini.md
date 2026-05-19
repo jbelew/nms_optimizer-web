@@ -980,3 +980,25 @@ Identified 7 anti-patterns in the NMS Optimizer Web UI, including redundant memo
 - Fixed TypeScript and test regressions caused by store schema updates.
 - Ensured the React Compiler can handle remaining optimizations by removing manual 'useMemo' and 'useCallback'.
 - Confirmed all 915 unit tests pass and build/lint are green.
+
+## 2026-05-19: Fixing E2E Test Failures after Refactoring
+
+### Problem
+- E2E tests were failing due to several issues:
+  1. `window.useGridStore` was not being correctly exposed because `VITE_E2E_TESTING` was not baked into the build.
+  2. `UpdatePrompt` E2E test failed with React error #306 (nested lazy loading issue) in production builds.
+  3. `Resilience` E2E tests had fragile synchronization logic for redirects.
+
+### Solution
+1. **Store Exposure:**
+   - Ensured that `build:e2e` is used, which correctly sets `mode e2e`.
+   - Explicitly exposed `__BUILD_DATE__` on `window` in `src/main.tsx` when in E2E mode to allow reliable version comparisons in tests.
+2. **UpdatePrompt Fix:**
+   - Identified that nesting lazy-loaded components (`UpdatePrompt` lazy-loading `AppDialog`) was causing React error #306 in minified production/e2e builds.
+   - Changed `UpdatePrompt` to use a static import for `AppDialog` (since it's already in the main bundle anyway), resolving the error.
+3. **Test Reliability:**
+   - Refactored `update-prompt.spec.ts` to use `window.__APP_READY__` instead of a race-prone event listener.
+   - Improved `resilience.spec.ts` redirect wait to be more robust by only checking for the presence of the unique `reload=` query parameter.
+
+### Outcome
+- All 15 E2E tests (13 passed, 2 skipped) are now passing consistently in CI mode locally using Chromium.

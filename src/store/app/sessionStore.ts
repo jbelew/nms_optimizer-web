@@ -74,13 +74,10 @@ export const useSessionStore = create<SessionState>((set) => ({
 	supercharged_limit: 0,
 }));
 
-if (typeof window !== "undefined") {
+if (typeof window !== "undefined" && import.meta.env.VITE_E2E_TESTING) {
 	const w = window as typeof window & {
-		__E2E_EXPOSE__?: boolean;
 		useSessionStore?: typeof useSessionStore;
 	};
 
-	if (import.meta.env.VITE_E2E_TESTING || w.__E2E_EXPOSE__) {
-		w["useSessionStore"] = useSessionStore;
-	}
+	w["useSessionStore"] = useSessionStore;
 }
