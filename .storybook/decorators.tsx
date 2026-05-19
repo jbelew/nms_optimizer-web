@@ -1,8 +1,9 @@
 import React from "react";
 import { createGrid, useGridStore } from "../src/store/grid/gridStore";
 import { usePlatformStore } from "../src/store/app/platformStore";
-import { useTechTreeLoadingStore } from "../src/store/ui/uiStore";
+import { useUiStore } from "../src/store/ui/uiStore";
 import { useTechStore } from "../src/store/tech/techStore";
+import { useOptimizeStore } from "../src/store/app/optimizeStore";
 
 /**
  * A wrapper component that applies the dark/light theme class to the document root safely.
@@ -66,8 +67,13 @@ export const StoreResetWrapper = ({ children }: { children: React.ReactNode }) =
         // Reset PlatformStore
         usePlatformStore.setState({ selectedPlatform: "standard" });
 
-        // Reset TechTreeLoadingStore
-        useTechTreeLoadingStore.setState({ isLoading: false });
+        // Reset UI Store (Consolidated)
+        useUiStore.setState({
+            isModuleSelectionDialogOpen: false,
+            isTechTreeLoading: false,
+            selectedTechData: null,
+            shakeCount: 0,
+        });
 
         // Reset TechStore (basic reset, full reset might need more data if available)
         useTechStore.setState({
@@ -78,6 +84,11 @@ export const StoreResetWrapper = ({ children }: { children: React.ReactNode }) =
             solved_bonus: {},
             techColors: {},
             techGroups: {},
+        });
+
+        // Reset OptimizeStore
+        useOptimizeStore.setState({
+            status: { type: "idle" },
         });
     }, []);
 

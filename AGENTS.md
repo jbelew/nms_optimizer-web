@@ -50,7 +50,7 @@
 **Naming**: camelCase files/vars, PascalCase components/types, UPPER_SNAKE_CASE constants.
 
 **Zustand & Immer**:
-Always use the `immer` middleware. Updates should use the functional `set` pattern for deep mutation safety:
+Use the `immer` middleware for stores with nested or complex state structures (e.g., `useGridStore`, `useTechStore`). For flat or simple stores, standard/raw Zustand is preferred to avoid Proxy-based overhead. For stores that do use `immer`, updates should use the functional `set` pattern for deep mutation safety:
 ```typescript
 set((state) => {
   state.nested.property = newValue; // Safe via Immer

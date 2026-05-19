@@ -1002,3 +1002,21 @@ Identified 7 anti-patterns in the NMS Optimizer Web UI, including redundant memo
 
 ### Outcome
 - All 15 E2E tests (13 passed, 2 skipped) are now passing consistently in CI mode locally using Chromium.
+
+## 2026-05-19: Fixing Storybook Test Failures after Store Refactoring
+
+### Perceive & Understand
+* **Request:** The user reported that all Storybook tests were failing.
+* **Context:** A recent refactoring (2026-05-18) consolidated multiple UI-related stores into a single `useUiStore` and provided backward-compatible hook facades like `useTechTreeLoadingStore`.
+* **Findings:** The `.storybook/decorators.tsx` file was using `useTechTreeLoadingStore.setState`. Since the refactor turned this store into a hook facade, it no longer had a `.setState` method, causing a `TypeError` in all stories.
+
+### Reason & Plan
+* **Plan:** Update `.storybook/decorators.tsx` to use the underlying `useUiStore.setState` directly. Also ensure other consolidated states (like `isModuleSelectionDialogOpen`) are reset, and add a reset for `useOptimizeStore` to improve test isolation.
+
+### Act & Implement
+* **Action:** Updated `StoreResetWrapper` in `.storybook/decorators.tsx` to reset `useUiStore` and `useOptimizeStore`.
+* **Action:** Fixed a typo in `ThemeWrapper` where the 'light' theme logic was incorrectly removing the 'light' class instead of the 'dark' class.
+* **Verification:** Ran `bun run test:storybook` and confirmed that all 35 tests passed.
+
+### Refine & Reflect
+* **Reflection:** When refactoring stores into hooks or facade objects, it's crucial to search for all usages of `.setState`, `.getState()`, and `.subscribe()` project-wide, including in Storybook decorators and test setups. Storybook decorators are a common "blind spot" during refactoring as they aren't always covered by standard type-checking if not configured correctly.

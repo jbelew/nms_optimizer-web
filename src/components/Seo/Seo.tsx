@@ -1,11 +1,10 @@
 import React, { useMemo } from "react";
+import { seoMetadata } from "@shared/seo-metadata.js";
+import { getLocalizedSchema, getOgLocale, OG_LOCALE_MAP } from "@shared/seo-schema.js";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
 import { useSupportedLanguages } from "@/hooks/useSupportedLanguages";
-
-import { seoMetadata } from "@shared/seo-metadata.js";
-import { getLocalizedSchema, getOgLocale, OG_LOCALE_MAP } from "@shared/seo-schema.js";
 
 const BASE_URL = "https://nms-optimizer.app";
 const OG_IMAGE_PATH = "/assets/img/screenshots/screenshot.png";

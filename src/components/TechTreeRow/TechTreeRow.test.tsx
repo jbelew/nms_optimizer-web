@@ -148,16 +148,18 @@ const setupMocks = (hasTechInGrid: boolean, solving = false) => {
 		return selector ? selector(state as ShakeState) : (state as ShakeState);
 	});
 
-	mockUseModuleSelectionDialogStore.mockImplementation((selector?: (state: ModuleSelectionDialogState) => unknown) => {
-		const state: ModuleSelectionDialogState = {
-			closeDialog: vi.fn(),
-			isOpen: false,
-			openDialog: vi.fn(),
-			selectedTechData: null,
-		};
+	mockUseModuleSelectionDialogStore.mockImplementation(
+		(selector?: (state: ModuleSelectionDialogState) => unknown) => {
+			const state: ModuleSelectionDialogState = {
+				closeDialog: vi.fn(),
+				isOpen: false,
+				openDialog: vi.fn(),
+				selectedTechData: null,
+			};
 
-		return selector ? selector(state) : state;
-	});
+			return selector ? selector(state) : state;
+		}
+	);
 };
 
 describe("TechTreeRow", () => {

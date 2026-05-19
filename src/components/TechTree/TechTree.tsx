@@ -80,12 +80,9 @@ export const TechTree: React.FC<TechTreeProps> = ({
 	const techTree = techTreeProp || fetchedTechTree;
 	const isGridFull = useGridStore((state) => state.isGridFull);
 
-	const hasRecommendedBuilds =
-		!!techTree?.recommended_builds && techTree.recommended_builds.length > 0;
-
 	return (
 		<TechTreeProvider handleOptimize={handleOptimize} isGridFull={isGridFull} solving={solving}>
-			<TechTreeRoot hasRecommendedBuilds={hasRecommendedBuilds}>
+			<TechTreeRoot>
 				<TechTreeList techTree={techTree} />
 			</TechTreeRoot>
 			<TechTreeRecommended techTree={techTree} />

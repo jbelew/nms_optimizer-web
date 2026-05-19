@@ -1,4 +1,5 @@
-import { lazy, type ComponentType } from "react";
+import type { ComponentType } from "react";
+import { lazy } from "react";
 
 /**
  * A helper to dynamically import named exports with React.lazy.
@@ -17,5 +18,7 @@ export function lazyNamed<T extends Record<string, unknown>>(
 	importFn: () => Promise<T>,
 	name: keyof T
 ) {
-	return lazy(() => importFn().then((module) => ({ default: module[name] as ComponentType<unknown> })));
+	return lazy(() =>
+		importFn().then((module) => ({ default: module[name] as ComponentType<unknown> }))
+	);
 }

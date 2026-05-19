@@ -311,7 +311,10 @@ export const useGridStore = create<GridStore>()(
 					});
 				},
 
-				setBuildName: (name) => set({ buildName: name }),
+				setBuildName: (name) =>
+					set((state) => {
+						state.buildName = name;
+					}),
 
 				setCellActive: (rowIndex, columnIndex, active) => {
 					set((state) => {
@@ -348,7 +351,10 @@ export const useGridStore = create<GridStore>()(
 						recomputeDerivedState(state);
 					}),
 
-				setGridFixed: (fixed) => set({ gridFixed: fixed }),
+				setGridFixed: (fixed) =>
+					set((state) => {
+						state.gridFixed = fixed;
+					}),
 
 				setGridFromInitialDefinition: (definition) => {
 					set((state) => {
@@ -358,9 +364,14 @@ export const useGridStore = create<GridStore>()(
 				},
 
 				setInitialGridDefinition: (definition) =>
-					set({ initialGridDefinition: definition }),
+					set((state) => {
+						state.initialGridDefinition = definition;
+					}),
 
-				setIsSharedGrid: (isShared) => set({ isSharedGrid: isShared }),
+				setIsSharedGrid: (isShared) =>
+					set((state) => {
+						state.isSharedGrid = isShared;
+					}),
 
 				setResult: (result) => {
 					set((state) => {
@@ -368,7 +379,10 @@ export const useGridStore = create<GridStore>()(
 					});
 				},
 
-				setSuperchargedFixed: (fixed) => set({ superchargedFixed: fixed }),
+				setSuperchargedFixed: (fixed) =>
+					set((state) => {
+						state.superchargedFixed = fixed;
+					}),
 
 				superchargedFixed: false,
 

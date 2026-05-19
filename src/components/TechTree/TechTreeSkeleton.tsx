@@ -7,9 +7,8 @@ import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 /**
  * A responsive skeleton component for the tech tree.
  */
-export const TechTreeSkeleton: React.FC = () => {
+export const TechTreeSkeleton: React.FC<{ height?: null | number }> = ({ height }) => {
 	const isLarge = useBreakpoint("1024px");
-	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "523px";
 
 	return (
 		<>
@@ -18,7 +17,9 @@ export const TechTreeSkeleton: React.FC = () => {
 					className="main-app__tech-tree-sidebar shadow-sm"
 					style={{
 						borderRadius: "var(--radius-5)",
-						height: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT,
+						flexGrow: 1,
+						height: height ? `${height}px` : undefined,
+						minHeight: 0,
 						padding: "var(--space-5)",
 					}}
 				>

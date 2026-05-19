@@ -187,26 +187,25 @@ const MainAppSidebarContent: React.FC = () => {
 	const techTree = useFetchTechTreeSuspense(selectedShipType);
 	const isGridFull = useGridStore((state) => state.isGridFull);
 
-	const hasRecommendedBuilds =
-		!!techTree?.recommended_builds && techTree.recommended_builds.length > 0;
-
 	return (
 		<TechTreeProvider handleOptimize={handleOptimize} isGridFull={isGridFull} solving={solving}>
-			{isLargeScreen ? (
-				<>
-					<TechTreeRoot hasRecommendedBuilds={hasRecommendedBuilds}>
-						<TechTreeList techTree={techTree} />
-					</TechTreeRoot>
-					<TechTreeRecommended techTree={techTree} />
-				</>
-			) : (
-				<>
-					<TechTreeRecommended techTree={techTree} />
-					<TechTreeRoot hasRecommendedBuilds={hasRecommendedBuilds}>
-						<TechTreeList techTree={techTree} />
-					</TechTreeRoot>
-				</>
-			)}
+			<Flex direction="column" height="100%" minHeight="0">
+				{isLargeScreen ? (
+					<>
+						<TechTreeRoot>
+							<TechTreeList techTree={techTree} />
+						</TechTreeRoot>
+						<TechTreeRecommended techTree={techTree} />
+					</>
+				) : (
+					<>
+						<TechTreeRecommended techTree={techTree} />
+						<TechTreeRoot>
+							<TechTreeList techTree={techTree} />
+						</TechTreeRoot>
+					</>
+				)}
+			</Flex>
 			<Suspense fallback={null}>
 				<SharedModuleSelectionDialog />
 			</Suspense>
@@ -218,7 +217,7 @@ const MainAppSidebarContent: React.FC = () => {
  * Component that renders the technology tree section.
  */
 export const MainAppSidebarSection: React.FC = () => {
-	const { gridTableTotalWidth } = useMainAppLayout();
+	const { gridHeight, gridTableTotalWidth } = useMainAppLayout();
 	const { isLargeScreen, isSharedGrid } = useMainAppGlobal();
 
 	if (isSharedGrid) return null;
@@ -227,11 +226,15 @@ export const MainAppSidebarSection: React.FC = () => {
 		<Flex
 			className="main-app__tech-tree-section"
 			direction="column"
+			minHeight="0"
 			ml={{ md: "5" }}
 			mt={{ initial: "4", md: "0" }}
+			style={{
+				height: isLargeScreen && gridHeight ? `${gridHeight}px` : undefined,
+			}}
 			width={!isLargeScreen && gridTableTotalWidth ? `${gridTableTotalWidth}px` : "100%"}
 		>
-			<Suspense fallback={<TechTreeSkeleton />}>
+			<Suspense fallback={<TechTreeSkeleton height={gridHeight} />}>
 				<MainAppSidebarContent />
 			</Suspense>
 		</Flex>

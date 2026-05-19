@@ -35,6 +35,10 @@ interface UiActions {
 	openModuleSelectionDialog: (data: SelectedTechData) => void;
 	/** Sets the theme appearance. */
 	setAppearance: (appearance: ThemeAppearance) => void;
+	/** Sets the grid section height. */
+	setGridSectionHeight: (height: null | number) => void;
+	/** Sets the grid table total width. */
+	setGridTableWidth: (width: number | undefined) => void;
 	/** Sets the tech tree loading state. */
 	setTechTreeLoading: (isLoading: boolean) => void;
 	/** Toggles the theme appearance between light and dark. */
@@ -47,6 +51,10 @@ interface UiActions {
 interface UiState {
 	/** Current theme appearance. */
 	appearance: ThemeAppearance;
+	/** Current height of the grid section. */
+	gridSectionHeight: null | number;
+	/** Current width of the grid table. */
+	gridTableWidth: number | undefined;
 	/** Whether the module selection dialog is visible. */
 	isModuleSelectionDialogOpen: boolean;
 	/** Whether the technology tree data is currently loading. */
@@ -63,6 +71,7 @@ interface UiState {
  * 2. Form/validation error shake feedback
  * 3. Tech tree loading state
  * 4. Shared module selection dialog state
+ * 5. Layout dimensions (height/width)
  */
 export const useUiStore = create<UiStore>()(
 	persist(
@@ -70,12 +79,16 @@ export const useUiStore = create<UiStore>()(
 			appearance: "dark",
 			closeModuleSelectionDialog: () =>
 				set({ isModuleSelectionDialogOpen: false, selectedTechData: null }),
+			gridSectionHeight: null,
+			gridTableWidth: undefined,
 			isModuleSelectionDialogOpen: false,
 			isTechTreeLoading: true,
 			openModuleSelectionDialog: (data) =>
 				set({ isModuleSelectionDialogOpen: true, selectedTechData: data }),
 			selectedTechData: null,
 			setAppearance: (appearance) => set({ appearance }),
+			setGridSectionHeight: (gridSectionHeight) => set({ gridSectionHeight }),
+			setGridTableWidth: (gridTableWidth) => set({ gridTableWidth }),
 			setTechTreeLoading: (isTechTreeLoading) => set({ isTechTreeLoading }),
 			shakeCount: 0,
 			toggleAppearance: () =>

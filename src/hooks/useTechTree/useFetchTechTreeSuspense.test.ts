@@ -179,12 +179,14 @@ describe("useFetchTechTreeSuspense", () => {
 		});
 
 		// Mock getState for useUiStore
-		(useUiStore as unknown as {
-			getState: () => {
-				isTechTreeLoading: boolean;
-				setTechTreeLoading: typeof mockSetLoading;
-			};
-		}).getState = () => ({
+		(
+			useUiStore as unknown as {
+				getState: () => {
+					isTechTreeLoading: boolean;
+					setTechTreeLoading: typeof mockSetLoading;
+				};
+			}
+		).getState = () => ({
 			isTechTreeLoading: false,
 			setTechTreeLoading: mockSetLoading,
 		});
