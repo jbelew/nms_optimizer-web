@@ -1,17 +1,17 @@
 import type { PlatformState } from "@/store/app/platformStore";
 import type * as GridStoreModule from "@/store/grid/gridStore";
 import type { GridStore } from "@/store/grid/gridStore";
-import type { TechState } from "@/store/tech/techStore";
+import type { TechStore } from "@/store/tech/techStore";
 import type { Socket } from "socket.io-client";
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
-import { useOptimizeStore } from "@/store/app/optimizeStore";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
+import { useOptimizeStore } from "@/store/ui/uiStore";
 import { createSocket } from "@/utils/api/socketManager";
 
 import { useOptimize } from "./useOptimize";
@@ -92,7 +92,7 @@ describe("useOptimize", () => {
 			checkedModules: {},
 			initializeTechTree: vi.fn(),
 			techGroups: {},
-		} as unknown as TechState);
+		} as unknown as TechStore);
 
 		mockUsePlatformStore.getState.mockImplementation(
 			() =>
@@ -175,7 +175,7 @@ describe("useOptimize", () => {
 			act(() => {
 				resultCallback({
 					grid: null,
-					solve_method: "Pattern No Fit",
+					solveMethod: "Pattern No Fit",
 				});
 			});
 

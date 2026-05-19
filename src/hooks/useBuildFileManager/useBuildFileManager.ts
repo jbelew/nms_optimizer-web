@@ -86,9 +86,9 @@ export const useBuildFileManager = () => {
 				},
 				techState: {
 					checkedModules: techState.checkedModules,
-					max_bonus: techState.max_bonus,
-					solved_bonus: techState.solved_bonus,
-					solve_method: techState.solve_method,
+					maxBonus: techState.maxBonus,
+					solvedBonus: techState.solvedBonus,
+					solveMethod: techState.solveMethod,
 				},
 				bonusState: {
 					bonusStatus: bonusState.bonusStatus,

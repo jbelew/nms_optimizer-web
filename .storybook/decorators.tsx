@@ -3,7 +3,6 @@ import { createGrid, useGridStore } from "../src/store/grid/gridStore";
 import { usePlatformStore } from "../src/store/app/platformStore";
 import { useUiStore } from "../src/store/ui/uiStore";
 import { useTechStore } from "../src/store/tech/techStore";
-import { useOptimizeStore } from "../src/store/app/optimizeStore";
 
 /**
  * A wrapper component that applies the dark/light theme class to the document root safely.
@@ -71,6 +70,7 @@ export const StoreResetWrapper = ({ children }: { children: React.ReactNode }) =
         useUiStore.setState({
             isModuleSelectionDialogOpen: false,
             isTechTreeLoading: false,
+            optimizeStatus: { type: "idle" },
             selectedTechData: null,
             shakeCount: 0,
         });
@@ -84,11 +84,6 @@ export const StoreResetWrapper = ({ children }: { children: React.ReactNode }) =
             solved_bonus: {},
             techColors: {},
             techGroups: {},
-        });
-
-        // Reset OptimizeStore
-        useOptimizeStore.setState({
-            status: { type: "idle" },
         });
     }, []);
 

@@ -4,7 +4,7 @@ import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
-import { useOptimizeStore } from "@/store/app/optimizeStore";
+import { useOptimizeStore } from "@/store/ui/uiStore";
 
 import ErrorContent from "./ErrorContent";
 

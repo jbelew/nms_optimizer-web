@@ -4,16 +4,14 @@ import type { Mock } from "vitest";
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useSessionStore } from "@/store/app/sessionStore";
 import { useGridStore } from "@/store/grid/gridStore";
-import { useShakeStore } from "@/store/ui/uiStore";
+import { useSessionStore, useShakeStore } from "@/store/ui/uiStore";
 
 import { useGridCellInteraction } from "./useGridCellInteraction";
 
 // Mock stores
 vi.mock("@/store/grid/gridStore");
 vi.mock("@/store/ui/uiStore");
-vi.mock("@/store/app/sessionStore");
 
 // Define mock functions
 const mockHandleCellTap = vi.fn();

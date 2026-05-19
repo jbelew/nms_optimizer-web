@@ -29,8 +29,8 @@ import { LanguageSelector } from "@/components/LanguageSelector/LanguageSelector
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 // import { useScreenshot } from "@/hooks/useScreenshot/useScreenshot";
 import { useUrlSync } from "@/hooks/useUrlSync/useUrlSync";
-import { useA11yStore } from "@/store/app/a11yStore";
 import { useGridStore } from "@/store/grid/gridStore";
+import { useA11yStore } from "@/store/ui/uiStore";
 import { useDialog } from "@/utils/system/dialogUtils";
 
 /**

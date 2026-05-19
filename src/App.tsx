@@ -21,8 +21,7 @@ import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
 import { fetchTechTree } from "./hooks/useTechTree/useTechTree";
 import { useUrlSync } from "./hooks/useUrlSync/useUrlSync";
 import { useUrlNormalization, useUrlValidation } from "./hooks/useValidation/useValidation";
-import { useA11yStore } from "./store/app/a11yStore";
-import { useOptimizeStore } from "./store/app/optimizeStore";
+import { useOptimizeStore } from "@/store/ui/uiStore";
 import { isBot } from "./utils/browser/environment";
 import { useDialog } from "./utils/system/dialogUtils";
 import { lazyNamed } from "./utils/system/lazyNamed";
@@ -243,16 +242,6 @@ const App: FC = () => {
 			void fetchTechTree(platform);
 		}
 	}, []);
-
-	const { a11yMode } = useA11yStore();
-
-	useEffect(() => {
-		if (a11yMode) {
-			document.body.classList.add("a11y-font");
-		} else {
-			document.body.classList.remove("a11y-font");
-		}
-	}, [a11yMode]);
 
 	return (
 		<DialogProvider>

@@ -1,7 +1,7 @@
 import "./TechTreeRow.scss";
 
 import type { TechTreeRowProps } from "@/types/props";
-import React, { useCallback } from "react";
+import React from "react";
 import {
 	Crosshair2Icon,
 	ExclamationTriangleIcon,
@@ -17,9 +17,8 @@ import { useTranslation } from "react-i18next";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { useTechTree } from "@/components/TechTree/useTechTreeContext";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
-import { useA11yStore } from "@/store/app/a11yStore";
 import { useTechBonusStore } from "@/store/tech/techBonusStore";
-import { useModuleSelectionDialogStore } from "@/store/ui/uiStore";
+import { useA11yStore, useModuleSelectionDialogStore } from "@/store/ui/uiStore";
 import { isTouchDevice } from "@/utils/browser/environment";
 
 import { TechTreeRowProvider } from "./TechTreeRowContext";
@@ -63,7 +62,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ tech, techSolv
 	const { getBonusStatus } = useTechBonusStore();
 	const status = getBonusStatus(tech);
 
-	const contentData = React.useMemo(() => {
+	const contentData = (() => {
 		if (!status) return null;
 
 		const { icon, percent } = status;
@@ -91,7 +90,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ tech, techSolv
 		}
 
 		return { icon, iconClassName, iconStyle, tooltipContent };
-	}, [status, t]);
+	})();
 
 	if (techSolvedBonus <= 0 && !status) {
 		return null;
@@ -233,10 +232,7 @@ const TechTreeRowBadges: React.FC = () => {
 		translatedTechName,
 	} = useTechTreeRowContext();
 
-	const handleOpenDialog = useCallback(
-		() => openDialog({ tech, techColor, techImage }),
-		[openDialog, tech, techColor, techImage]
-	);
+	const handleOpenDialog = () => openDialog({ tech, techColor, techImage });
 
 	const badgeContent = (
 		<div>

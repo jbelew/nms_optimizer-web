@@ -102,9 +102,9 @@ const StorybookWrapper = ({
 				useTechStore.setState({
 					activeGroups: {},
 					checkedModules: {},
-					max_bonus: {},
-					solve_method: {},
-					solved_bonus: {},
+					maxBonus: {},
+					solvedBonus: {},
+					solveMethod: {},
 					techColors,
 					techGroups,
 				});

@@ -12,8 +12,8 @@ import { registerToolbarForceShow } from "@/hooks/useScrollGridIntoView/useScrol
 import { useScrollHide } from "@/hooks/useScrollHide/useScrollHide";
 import { build, getBuildDate } from "@/routeConfig";
 import { usePlatformStore } from "@/store/app/platformStore";
-import { useSessionStore } from "@/store/app/sessionStore";
 import { useGridStore } from "@/store/grid/gridStore";
+import { useSessionStore } from "@/store/ui/uiStore";
 import { useDialog } from "@/utils/system/dialogUtils";
 import { hideSplashScreenAndShowBackground } from "@/utils/system/splashScreen";
 

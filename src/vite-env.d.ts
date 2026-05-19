@@ -43,13 +43,13 @@ interface Window {
 	};
 
 	/** Direct access to the `ErrorStore` for E2E testing. */
-	useErrorStore: import("./store/app/errorStore").useErrorStore;
+	useErrorStore: import("./store/ui/uiStore").useErrorStore;
 	/** Direct access to the `GridStore` for E2E testing. */
 	useGridStore: import("./store/grid/gridStore").useGridStore;
 	/** Direct access to the `ModuleSelectionStore` for E2E testing. */
 	useModuleSelectionStore: import("./store/tech/moduleSelectionStore").useModuleSelectionStore;
 	/** Direct access to the `SessionStore` for E2E testing. */
-	useSessionStore: import("./store/app/sessionStore").useSessionStore;
+	useSessionStore: import("./store/ui/uiStore").useSessionStore;
 	/** Direct access to the `ShakeStore` for E2E testing. */
 	useShakeStore: import("./store/ui/uiStore").useShakeStore;
 	/** Direct access to the `TechBonusStore` for E2E testing. */

@@ -2,8 +2,7 @@
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useErrorStore } from "@/store/app/errorStore";
-import { useSessionStore } from "@/store/app/sessionStore";
+import { useErrorStore, useSessionStore } from "@/store/ui/uiStore";
 
 /**
  * Maps session counter thresholds to error message keys.
@@ -52,8 +51,8 @@ const ERROR_THRESHOLDS = {
  *
  * @see {@link useErrorStore} for error dispatching.
  * @see {@link useSessionStore} for counter values.
- * @see {@link ../store/app/sessionStore.ts SessionStore Source}
- * @see {@link ../store/app/errorStore.ts ErrorStore Source}
+ * @see {@link ../store/ui/uiStore.ts SessionStore Source}
+ * @see {@link ../store/ui/uiStore.ts ErrorStore Source}
  *
  * @category Hooks
  *

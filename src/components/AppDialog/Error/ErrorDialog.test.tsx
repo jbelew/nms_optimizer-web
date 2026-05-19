@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 
-import { useOptimizeStore } from "@/store/app/optimizeStore";
+import { useOptimizeStore } from "@/store/ui/uiStore";
 
 import { ErrorDialog } from "./ErrorDialog";
 
@@ -14,7 +14,7 @@ vi.mock("react-i18next", () => ({
 }));
 
 // Mock optimizeStore
-vi.mock("@/store/app/optimizeStore", () => ({
+vi.mock("@/store/ui/uiStore", () => ({
 	useOptimizeStore: vi.fn(),
 }));
 

@@ -8,7 +8,7 @@
  * @category Utilities
  */
 
-import { useOptimizeStore } from "@/store/app/optimizeStore";
+import { useOptimizeStore } from "@/store/ui/uiStore";
 import { Logger } from "@/utils/system/monitoring";
 
 /**

@@ -1020,3 +1020,31 @@ Identified 7 anti-patterns in the NMS Optimizer Web UI, including redundant memo
 
 ### Refine & Reflect
 * **Reflection:** When refactoring stores into hooks or facade objects, it's crucial to search for all usages of `.setState`, `.getState()`, and `.subscribe()` project-wide, including in Storybook decorators and test setups. Storybook decorators are a common "blind spot" during refactoring as they aren't always covered by standard type-checking if not configured correctly.
+
+## 2026-05-19: Final Deep Code Review & React 19 Optimization
+
+### Perceive & Understand
+
+*   **Request:** Conducted a final, deep code review to eliminate "AI slop," anti-patterns, and over-engineered logic in a React 19 codebase.
+*   **Context:** The application was using many legacy React 18 patterns (manual `useMemo`, `useCallback`, `useLatest` refs) that are largely redundant with the React Compiler. Accessibility logic (`a11yMode`) was also identified as broken.
+
+### Reason & Plan
+
+*   **Plan:** 
+    1. Resolve accessibility selector issues in `main.tsx`.
+    2. Refactor complex interaction hooks (`useGridCellInteraction`) to remove redundant ref-sync patterns.
+    3. Prune manual memoization where the compiler can take over.
+    4. Fix TypeScript errors in `optimizationManager.ts` and standardize environment variable usage.
+
+### Act & Implement
+
+*   **Action:** 
+    - Fixed `a11yMode` by targeting `document.body.classList` correctly.
+    - Refactored `useGridCellInteraction.ts`, removing `useLatest` and `useTransition`.
+    - Discovered and fixed a double-tap regression on mobile by implementing a "revert first tap" strategy in `handleTouchLogic`.
+    - Cleaned up `useTechModuleManagement.ts`, keeping only necessary `useMemo` wrappers required for `useEffect` reference stability.
+    - Achieved a zero-error, zero-warning state across `oxlint`, `eslint`, and `tsc`.
+
+### Refine & Reflect
+
+*   **Reflection:** While the React 19 Compiler handles the majority of performance-related memoization, manual `useMemo` remains essential for maintaining stable object/array references used as `useEffect` dependencies. Removing "AI slop" must be balanced against interaction timing; moving away from ref-based state synchronization can expose race conditions in multi-event sequences (like double-taps) that require robust state reversion logic.

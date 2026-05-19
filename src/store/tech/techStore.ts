@@ -4,14 +4,19 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 /**
- * State and actions for managing technology definitions, metadata, and solve results.
+ * Combined type representing both the state and actions of the global technology store.
  *
+ * @remarks
+ * This store maintains the "inventory" of technology groups and the user's
+ * current module selections. It also caches the last successful solve results
+ * for each tech category.
+ *
+ * @see {@link useTechStore}
  * @see {@link TechTreeItem}
- * @see {@link import('@/store/tech/moduleSelectionStore').useModuleSelectionStore}
  *
  * @category State
  */
-export interface TechState {
+export interface TechStore {
 	/** The currently active group identifier for each technology. */
 	activeGroups: { [key: string]: string };
 	/** User-selected module IDs for each technology, used as input for the solver. */
@@ -58,6 +63,7 @@ export interface TechState {
 	 * @param {Record<string, string>} colors - Tech-to-color mapping.
 	 * @param {Record<string, TechTreeItem[]>} techGroups - Tech-to-groups mapping.
 	 * @param {Record<string, string>} activeGroups - Tech-to-active-group-ID mapping.
+	 * @param {Record<string, string[]>} initialCheckedModules - Initial module selections.
 	 *
 	 * @see {@link import('@/store/tech/moduleSelectionStore').useModuleSelectionStore}
 	 */
@@ -67,8 +73,17 @@ export interface TechState {
 		activeGroups: { [key: string]: string },
 		initialCheckedModules: { [key: string]: string[] }
 	) => void;
-	/** Mapping of technology keys to their theoretical maximum bonus. */
+	/**
+	 * @deprecated Use maxBonus.
+	 *
+	 * @type {Record<string, number>}
+	 */
 	max_bonus: { [key: string]: number };
+	/**
+	 * Mapping of technology keys to their theoretical maximum bonus.
+	 * @type {Record<string, number>}
+	 */
+	maxBonus: { [key: string]: number };
 	/**
 	 * Sets the active group variant for a technology.
 	 *
@@ -101,6 +116,7 @@ export interface TechState {
 	 * Re-initializes checked modules based on the new groups and existing module selections.
 	 *
 	 * @param {Record<string, TechTreeItem[]>} techGroups - The new technology groups mapping.
+	 * @param {Record<string, string[]>} initialCheckedModules - Initial module selections.
 	 */
 	setTechGroups: (
 		techGroups: { [key: string]: TechTreeItem[] },
@@ -127,10 +143,28 @@ export interface TechState {
 	 * @param {string} method - The name of the solver method.
 	 */
 	setTechSolveMethod: (tech: string, method: string) => void;
-	/** Mapping of technology keys to the solver method string used (e.g., `'SA'`). */
+	/**
+	 * @deprecated Use solveMethod.
+	 *
+	 * @type {Record<string, string>}
+	 */
 	solve_method: { [key: string]: string };
-	/** Mapping of technology keys to the actual bonus achieved in the last solve. */
+	/**
+	 * @deprecated Use solvedBonus.
+	 *
+	 * @type {Record<string, number>}
+	 */
 	solved_bonus: { [key: string]: number };
+	/**
+	 * Mapping of technology keys to the actual bonus achieved by the solver.
+	 * @type {Record<string, number>}
+	 */
+	solvedBonus: { [key: string]: number };
+	/**
+	 * Mapping of technology keys to the solver method string used
+	 * @type {Record<string, string>}
+	 */
+	solveMethod: { [key: string]: string };
 	/** Global registry of colors assigned to each technology category. */
 	techColors: { [key: string]: string };
 	/** List of available technology variants/groups (e.g., `'Standard'` vs `'Photonix'` for Pulse). */
@@ -138,30 +172,26 @@ export interface TechState {
 }
 
 /**
- * Zustand store for managing technology metadata and optimization results.
+ * Helper to synchronize snake_case aliases with camelCase fields.
  *
- * This store acts as the central registry for what technologies are available,
- * how they are colored in the UI, which modules the user has selected, and
- * the results of the latest optimization runs.
- *
- * @returns {import("zustand").UseBoundStore<import("zustand").StoreApi<TechState>>} The tech store hook.
- *
- * @see {@link TechState}
- *
- * @category State
- *
- * @example
- * const { max_bonus, setTechMaxBonus } = useTechStore();
- *
- * // returns { max_bonus: { pulse: 124.5 }, ... }
+ * @param {TechStore} state - The mutable state draft.
  */
-export const useTechStore = create<TechState>()(
+const syncAliases = (state: TechStore) => {
+	if (!state) return;
+	if (state.maxBonus !== undefined) state.max_bonus = state.maxBonus;
+	if (state.solveMethod !== undefined) state.solve_method = state.solveMethod;
+	if (state.solvedBonus !== undefined) state.solved_bonus = state.solvedBonus;
+};
+
+/**
+ * Global technology store managing metadata and results.
+ */
+export const useTechStore = create<TechStore>()(
 	immer((set, get) => ({
 		activeGroups: {},
 		checkedModules: {},
 		clearAllCheckedModules: () => {
-			set((state) => {
-				// Reset all checked modules to their API defaults (modules marked as checked in techGroups)
+			set((state: TechStore) => {
 				const resetCheckedModules = Object.keys(state.techGroups).reduce(
 					(acc, tech) => {
 						const group = state.techGroups[tech]?.[0];
@@ -176,85 +206,105 @@ export const useTechStore = create<TechState>()(
 				);
 
 				state.checkedModules = resetCheckedModules;
+				syncAliases(state);
 			});
 		},
 		clearCheckedModules: (tech) =>
-			set((state) => {
+			set((state: TechStore) => {
 				state.checkedModules[tech] = [];
+				syncAliases(state);
 			}),
 		clearResult: () =>
-			set((state) => {
-				state.max_bonus = {};
-				state.solved_bonus = {};
+			set((state: TechStore) => {
+				state.maxBonus = {};
+				state.solvedBonus = {};
+				state.solveMethod = {};
+				syncAliases(state);
 			}),
 		clearTechGroups: () =>
-			set((state) => {
+			set((state: TechStore) => {
 				state.activeGroups = {};
 				state.checkedModules = {};
 				state.techGroups = {};
+				syncAliases(state);
 			}),
 		clearTechMaxBonus: (tech) =>
-			set((state) => {
-				state.max_bonus[tech] = 0;
+			set((state: TechStore) => {
+				state.maxBonus[tech] = 0;
+				syncAliases(state);
 			}),
 		clearTechSolvedBonus: (tech) =>
-			set((state) => {
-				state.solved_bonus[tech] = 0;
+			set((state: TechStore) => {
+				state.solvedBonus[tech] = 0;
+				syncAliases(state);
 			}),
-		getTechColor: (tech) => get().techColors[tech], // Access state using 'get'
+		getTechColor: (tech) => get().techColors[tech],
 		initializeTechTree: (
 			colors: { [key: string]: string },
 			techGroups: { [key: string]: TechTreeItem[] },
 			activeGroups: { [key: string]: string },
 			initialCheckedModules: { [key: string]: string[] }
 		) => {
-			set((state) => {
+			set((state: TechStore) => {
 				state.activeGroups = activeGroups;
 				state.checkedModules = initialCheckedModules;
 				state.techColors = colors;
 				state.techGroups = techGroups;
+				syncAliases(state);
 			});
 		},
+
 		max_bonus: {},
+		maxBonus: {},
 		setActiveGroup: (tech, groupType) =>
-			set((state) => {
+			set((state: TechStore) => {
 				state.activeGroups[tech] = groupType;
+				syncAliases(state);
 			}),
 		setActiveGroups: (groups) =>
-			set((state) => {
+			set((state: TechStore) => {
 				Object.assign(state.activeGroups, groups);
+				syncAliases(state);
 			}),
 		setCheckedModules: (tech, updater) =>
-			set((state) => {
+			set((state: TechStore) => {
 				state.checkedModules[tech] = updater(state.checkedModules[tech]);
+				syncAliases(state);
 			}),
 		setTechColors: (colors) =>
-			set((state) => {
+			set((state: TechStore) => {
 				state.techColors = colors;
+				syncAliases(state);
 			}),
 		setTechGroups: (
 			techGroups: { [key: string]: TechTreeItem[] },
 			initialCheckedModules: { [key: string]: string[] }
 		) => {
-			set((state) => {
+			set((state: TechStore) => {
 				state.checkedModules = initialCheckedModules;
 				state.techGroups = techGroups;
+				syncAliases(state);
 			});
 		},
-		setTechMaxBonus: (tech, max_bonus) =>
-			set((state) => {
-				state.max_bonus[tech] = max_bonus;
+		setTechMaxBonus: (tech, bonus) =>
+			set((state: TechStore) => {
+				state.maxBonus[tech] = bonus;
+				syncAliases(state);
 			}),
 		setTechSolvedBonus: (tech, bonus) =>
-			set((state) => {
-				state.solved_bonus[tech] = bonus;
+			set((state: TechStore) => {
+				state.solvedBonus[tech] = bonus;
+				syncAliases(state);
 			}),
-		setTechSolveMethod: (tech, solve_method) =>
-			set((state) => {
-				state.solve_method[tech] = solve_method;
+		setTechSolveMethod: (tech, method) =>
+			set((state: TechStore) => {
+				state.solveMethod[tech] = method;
+				syncAliases(state);
 			}),
 		solve_method: {},
 		solved_bonus: {},
+		solvedBonus: {},
+		solveMethod: {},
 		techColors: {},
 		techGroups: {},
 	}))

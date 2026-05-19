@@ -75,8 +75,8 @@ export const useTechTreeRow = ({
 	const { techGroup, techMaxBonus, techSolvedBonus } = useTechStore(
 		useShallow((state) => ({
 			techGroup: state.techGroups[tech],
-			techMaxBonus: state.max_bonus?.[tech] ?? 0,
-			techSolvedBonus: state.solved_bonus?.[tech] ?? 0,
+			techMaxBonus: state.maxBonus?.[tech] ?? 0,
+			techSolvedBonus: state.solvedBonus?.[tech] ?? 0,
 		}))
 	);
 

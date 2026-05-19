@@ -7,19 +7,19 @@ describe("TechStore", () => {
 		// Reset the store before each test
 		useTechStore.setState(() => ({
 			checkedModules: {}, // Add closing parenthesis here
-			max_bonus: {},
-			solve_method: {},
-			solved_bonus: {},
+			maxBonus: {},
+			solvedBonus: {},
+			solveMethod: {},
 			techColors: {},
 		}));
 	});
 
 	it("should have a default state", () => {
-		const { checkedModules, max_bonus, solve_method, solved_bonus, techColors } =
+		const { checkedModules, maxBonus, solvedBonus, solveMethod, techColors } =
 			useTechStore.getState();
-		expect(max_bonus).toEqual({});
-		expect(solved_bonus).toEqual({});
-		expect(solve_method).toEqual({});
+		expect(maxBonus).toEqual({});
+		expect(solvedBonus).toEqual({});
+		expect(solveMethod).toEqual({});
 		expect(techColors).toEqual({});
 		expect(checkedModules).toEqual({});
 	});
@@ -27,23 +27,23 @@ describe("TechStore", () => {
 	it("should set and clear max bonus for a tech", () => {
 		const { clearTechMaxBonus, setTechMaxBonus } = useTechStore.getState();
 		setTechMaxBonus("test-tech", 100);
-		expect(useTechStore.getState().max_bonus["test-tech"]).toBe(100);
+		expect(useTechStore.getState().maxBonus["test-tech"]).toBe(100);
 		clearTechMaxBonus("test-tech");
-		expect(useTechStore.getState().max_bonus["test-tech"]).toBe(0);
+		expect(useTechStore.getState().maxBonus["test-tech"]).toBe(0);
 	});
 
 	it("should set and clear solved bonus for a tech", () => {
 		const { clearTechSolvedBonus, setTechSolvedBonus } = useTechStore.getState();
 		setTechSolvedBonus("test-tech", 90);
-		expect(useTechStore.getState().solved_bonus["test-tech"]).toBe(90);
+		expect(useTechStore.getState().solvedBonus["test-tech"]).toBe(90);
 		clearTechSolvedBonus("test-tech");
-		expect(useTechStore.getState().solved_bonus["test-tech"]).toBe(0);
+		expect(useTechStore.getState().solvedBonus["test-tech"]).toBe(0);
 	});
 
 	it("should set solve method for a tech", () => {
 		const { setTechSolveMethod } = useTechStore.getState();
 		setTechSolveMethod("test-tech", "test-method");
-		expect(useTechStore.getState().solve_method["test-tech"]).toBe("test-method");
+		expect(useTechStore.getState().solveMethod["test-tech"]).toBe("test-method");
 	});
 
 	it("should set and get tech colors", () => {
@@ -75,8 +75,8 @@ describe("TechStore", () => {
 		setTechMaxBonus("test-tech", 100);
 		setTechSolvedBonus("test-tech", 90);
 		clearResult();
-		expect(useTechStore.getState().max_bonus).toEqual({});
-		expect(useTechStore.getState().solved_bonus).toEqual({});
+		expect(useTechStore.getState().maxBonus).toEqual({});
+		expect(useTechStore.getState().solvedBonus).toEqual({});
 	});
 
 	it("should set tech groups and initialize checked modules", () => {

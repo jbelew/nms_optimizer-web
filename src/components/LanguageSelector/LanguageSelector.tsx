@@ -31,7 +31,7 @@ import xxFlagPath from "@/assets/svg/flags/xx.svg";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { languages, nativeLanguageNames } from "@/i18n/i18n";
-import { useErrorStore } from "@/store/app/errorStore";
+import { useErrorStore } from "@/store/ui/uiStore";
 
 /**
  * Mapping of language codes to their respective SVG flag asset paths.

@@ -38,7 +38,7 @@ void i18n
 		backend: {
 			loadPath: "/assets/locales/{{lng}}/{{ns}}.json",
 		},
-		debug: process.env.NODE_ENV === "development",
+		debug: import.meta.env.DEV,
 		defaultNS: "translation",
 		detection: {
 			caches: ["localStorage", "cookie"],

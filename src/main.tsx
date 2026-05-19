@@ -21,7 +21,7 @@ import { UI_TIMING } from "@/constants";
 import { TooltipProvider } from "@/context/TooltipContext";
 import { ToastProvider } from "@/hooks/useToast/useToast";
 import { routes } from "@/routes";
-import { useThemeStore } from "@/store/ui/uiStore";
+import { useA11yStore, useThemeStore } from "@/store/ui/uiStore";
 import { initializeAnalytics, initializeAnalyticsClient } from "@/utils/analytics/tracking";
 import { preloadInitialState } from "@/utils/api/apiPreload";
 import { performBootstrapMigrations } from "@/utils/system/bootstrap";
@@ -54,16 +54,23 @@ export const Root = () => {
 	const { appearance } = useThemeStore();
 	const router = React.useMemo(() => createAppRouter(routes), []);
 
+	const { a11yMode } = useA11yStore();
+
 	useEffect(() => {
 		// Sync theme classes to document root for global CSS visibility (backgrounds, etc)
-		document.documentElement.classList.remove("light", "dark", "light-theme", "dark-theme");
-		document.documentElement.classList.add(
-			appearance,
-			`${appearance}-theme`,
-			"background-visible"
-		);
-		document.documentElement.style.colorScheme = appearance;
-	}, [appearance]);
+		const root = document.documentElement;
+		root.classList.remove("light", "dark", "light-theme", "dark-theme");
+		root.classList.add(appearance, `${appearance}-theme`, "background-visible");
+
+		// Sync accessibility classes
+		if (a11yMode) {
+			document.body.classList.add("a11y-font");
+		} else {
+			document.body.classList.remove("a11y-font");
+		}
+
+		root.style.colorScheme = appearance;
+	}, [appearance, a11yMode]);
 
 	return (
 		<StrictMode>

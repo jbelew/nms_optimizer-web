@@ -5,11 +5,11 @@ import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useLatest } from "@/hooks/useLatest/useLatest";
 import { useScrollGridIntoView } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
-import { useOptimizeStore } from "@/store/app/optimizeStore";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useTechStore } from "@/store/tech/techStore";
+import { useThemeStore as _useThemeStore, useOptimizeStore } from "@/store/ui/uiStore";
 import { OptimizationManager } from "@/utils/optimization/optimizationManager";
 import { Logger } from "@/utils/system/monitoring";
 
@@ -193,8 +193,8 @@ export const useOptimize = (): UseOptimizeReturn => {
 					if (patternNoFitTechRef.current === tech) setPatternNoFitTech(null);
 
 					Logger.info(`Optimization complete for ${tech}`, {
-						bonus: data.max_bonus,
-						method: data.solve_method,
+						bonus: data.maxBonus,
+						method: data.solveMethod,
 						tech,
 					});
 
@@ -211,9 +211,8 @@ export const useOptimize = (): UseOptimizeReturn => {
 							category: "ui",
 							nonInteraction: false,
 							platform: selectedShipTypeRef.current,
-							solve_method: data.solve_method,
-							supercharged:
-								typeof data.max_bonus === "number" && data.max_bonus > 100,
+							solveMethod: data.solveMethod,
+							supercharged: typeof data.maxBonus === "number" && data.maxBonus > 100,
 							tech: gaTech,
 							value: 1,
 						});

@@ -40,6 +40,12 @@ const baseImagePath = "/assets/img/grid/";
 
 /**
  * Parses and styles parenthetical text fragments within a string.
+ *
+ * @param {string} text - The input text containing parentheses.
+ *
+ * @returns {React.ReactNode} Formatted React nodes with styled badges.
+ *
+ * @category Utilities
  */
 const formatParentheses = (text: string): React.ReactNode => {
 	const pattern = /\([^)]+\)/g;
@@ -64,6 +70,12 @@ const formatParentheses = (text: string): React.ReactNode => {
 
 /**
  * Parses and styles bracketed text fragments within a technology label.
+ *
+ * @param {string} label - The input label string.
+ *
+ * @returns {React.ReactNode} Formatted React nodes with code blocks.
+ *
+ * @category Utilities
  */
 const formatLabel = (label: string): React.ReactNode => {
 	const pattern = /\[.*?\]/g;
@@ -84,6 +96,16 @@ const formatLabel = (label: string): React.ReactNode => {
 
 /**
  * Individual module selection checkbox with icon and label.
+ *
+ * @param {object} props - Component properties.
+ * @param {boolean} props.isDisabled - Whether the checkbox is disabled (e.g. due to missing prerequisites).
+ * @param {SelectionModule} props.module - The module data to display.
+ *
+ * @returns {JSX.Element} The rendered checkbox label.
+ *
+ * @component
+ *
+ * @category Components
  */
 const ModuleCheckbox: React.FC<{ isDisabled: boolean; module: SelectionModule }> = ({
 	isDisabled,
@@ -116,6 +138,17 @@ const ModuleCheckbox: React.FC<{ isDisabled: boolean; module: SelectionModule }>
 
 /**
  * Categorized group of module checkboxes.
+ *
+ * @param {object} props - Component properties.
+ * @param {string} props.groupName - The unique key of the module group.
+ * @param {SelectionModule[]} props.modules - List of modules in this group.
+ * @param {string} [props.titleOverride] - Optional display title for the group.
+ *
+ * @returns {JSX.Element | null} The rendered group of checkboxes, or `null` if no modules are present.
+ *
+ * @component
+ *
+ * @category Components
  */
 const ModuleGroup: React.FC<{
 	groupName: string;
@@ -208,6 +241,12 @@ const ModuleGroup: React.FC<{
 
 /**
  * The primary content component for the module selection dialog.
+ *
+ * @returns {JSX.Element} The rendered dialog body.
+ *
+ * @component
+ *
+ * @category Components
  */
 const DialogBody: React.FC = () => {
 	const { t } = useTranslation();
@@ -315,6 +354,12 @@ const DialogBody: React.FC = () => {
 
 /**
  * The action bar component for the module selection dialog.
+ *
+ * @returns {JSX.Element} The rendered dialog footer with Cancel and Optimize buttons.
+ *
+ * @component
+ *
+ * @category Components
  */
 const DialogFooter: React.FC = () => {
 	const { t } = useTranslation();
@@ -339,6 +384,34 @@ const DialogFooter: React.FC = () => {
 
 /**
  * Interactive dialog for selecting specific technology modules for optimization.
+ *
+ * @remarks
+ * This dialog allows users to pick which modules they have installed for a given
+ * technology. It handles prerequisite validation (e.g., must select 'S' class
+ * before 'X' class if applicable) and triggers the optimization process.
+ * It uses {@link ModuleSelectionProvider} to share state across its sub-components.
+ *
+ * @param {ModuleSelectionDialogProps} props - Component properties.
+ *
+ * @returns {JSX.Element} The rendered dialog root.
+ *
+ * @see {@link ModuleSelectionProvider}
+ * @see {@link useModuleSelectionContext}
+ * @see {@link AppDialog}
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <ModuleSelectionDialog
+ *   isOpen={true}
+ *   onClose={() => {}}
+ *   tech="pulse"
+ *   translatedTechName="Pulse Drive"
+ * />
+ * ```
  */
 export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = memo((props) => {
 	const { t } = useTranslation();

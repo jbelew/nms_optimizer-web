@@ -1,5 +1,5 @@
 import type { GridStore } from "@/store/grid/gridStore";
-import type { TechState } from "@/store/tech/techStore";
+import type { TechStore } from "@/store/tech/techStore";
 import type { ModuleSelectionDialogState, ShakeState } from "@/store/ui/uiStore";
 import type { TechTreeRowProps } from "@/types/props";
 import { fireEvent, render, screen } from "@testing-library/react";
@@ -8,7 +8,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useTechTree } from "@/components/TechTree/useTechTreeContext";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
-import { useModuleSelectionDialogStore, useShakeStore } from "@/store/ui/uiStore";
+import { useA11yStore, useModuleSelectionDialogStore, useShakeStore } from "@/store/ui/uiStore";
 
 import { TechTreeRow } from "./TechTreeRow";
 
@@ -16,6 +16,7 @@ import { TechTreeRow } from "./TechTreeRow";
 vi.mock("@/store/grid/gridStore", () => ({ useGridStore: vi.fn() }));
 vi.mock("@/store/tech/techStore", () => ({ useTechStore: vi.fn() }));
 vi.mock("@/store/ui/uiStore", () => ({
+	useA11yStore: vi.fn(),
 	useModuleSelectionDialogStore: vi.fn(),
 	useShakeStore: vi.fn(),
 }));
@@ -82,17 +83,17 @@ const setupMocks = (hasTechInGrid: boolean, solving = false) => {
 		return selector ? selector(state as GridStore) : (state as GridStore);
 	});
 
-	mockUseTechStore.mockImplementation((selector?: (state: TechState) => unknown) => {
-		const state: Partial<TechState> = {
+	mockUseTechStore.mockImplementation((selector?: (state: TechStore) => unknown) => {
+		const state: Partial<TechStore> = {
 			checkedModules: { testTech: ["module1"] },
 
 			clearTechMaxBonus: vi.fn(),
 
 			clearTechSolvedBonus: vi.fn(),
 
-			max_bonus: {},
+			maxBonus: {},
 
-			solved_bonus: {},
+			solvedBonus: {},
 
 			techGroups: {
 				testTech: [
@@ -139,7 +140,7 @@ const setupMocks = (hasTechInGrid: boolean, solving = false) => {
 			},
 		};
 
-		return selector ? selector(state as TechState) : (state as TechState);
+		return selector ? selector(state as TechStore) : (state as TechStore);
 	});
 
 	mockUseShakeStore.mockImplementation((selector?: (state: ShakeState) => unknown) => {
@@ -160,6 +161,12 @@ const setupMocks = (hasTechInGrid: boolean, solving = false) => {
 			return selector ? selector(state) : state;
 		}
 	);
+
+	vi.mocked(useA11yStore).mockReturnValue({
+		a11yMode: false,
+		setA11yMode: vi.fn(),
+		toggleA11yMode: vi.fn(),
+	});
 };
 
 describe("TechTreeRow", () => {

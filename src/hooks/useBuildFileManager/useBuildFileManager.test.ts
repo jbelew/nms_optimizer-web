@@ -24,9 +24,9 @@ vi.mock("@/store/tech/techStore", () => ({
 	useTechStore: {
 		getState: vi.fn(() => ({
 			checkedModules: {},
-			max_bonus: {},
-			solve_method: {},
-			solved_bonus: {},
+			maxBonus: {},
+			solvedBonus: {},
+			solveMethod: {},
 		})),
 		setState: vi.fn(),
 	},
@@ -102,9 +102,9 @@ const createValidBuildFile = () => ({
 	shipType: "freighter",
 	techState: {
 		checkedModules: {},
-		max_bonus: {},
-		solve_method: {},
-		solved_bonus: {},
+		maxBonus: {},
+		solvedBonus: {},
+		solveMethod: {},
 	},
 	timestamp: Date.now(),
 });

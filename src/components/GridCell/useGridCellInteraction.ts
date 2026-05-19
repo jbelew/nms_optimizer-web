@@ -1,12 +1,10 @@
 import type { Cell } from "@/store/grid/gridStore";
-import { useRef, useState, useTransition } from "react";
+import { useRef, useState } from "react";
 
 import { UI_TIMING } from "@/constants";
-import { useLatest } from "@/hooks/useLatest/useLatest";
-import { useSessionStore } from "@/store/app/sessionStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useInteractionStore } from "@/store/grid/interactionStore";
-import { useShakeStore } from "@/store/ui/uiStore";
+import { useSessionStore, useShakeStore } from "@/store/ui/uiStore";
 import { Logger } from "@/utils/system/monitoring";
 
 /**
@@ -47,11 +45,6 @@ export const useGridCellInteraction = (
 	isSharedGrid: boolean
 ) => {
 	const [isTouching, setIsTouching] = useState(false);
-	const [_isPending, startTransition] = useTransition();
-
-	// Use refs for values that change but shouldn't trigger callback recreations
-	const cellRef = useLatest(cell);
-	const isSharedGridRef = useLatest(isSharedGrid);
 
 	// Refs to track gestures (scroll, zoom) vs taps
 	const gestureStartRef = useRef<null | { x: number; y: number }>(null);
@@ -59,18 +52,6 @@ export const useGridCellInteraction = (
 
 	/**
 	 * Triggers a visual shake animation on the grid for feedback.
-	 *
-	 * @remarks
-	 * Proxies to `ShakeStore` to trigger global UI feedback on invalid interactions.
-	 *
-	 * @returns {void} Side-effects only.
-	 *
-	 * @see {@link useShakeStore}
-	 *
-	 * @example Logic trigger
-	 * ```ts
-	 * triggerShake();
-	 * ```
 	 */
 	const triggerShake = () => {
 		useShakeStore.getState().triggerShake();
@@ -78,27 +59,11 @@ export const useGridCellInteraction = (
 
 	/**
 	 * Internal logic for handling timed taps (single vs double).
-	 *
-	 * @remarks
-	 * Implements a custom tap resolution engine to distinguish between:
-	 * 1. **Single Tap**: Normal click behavior.
-	 * 2. **Double Tap**: Supercharge toggle (useful for mobile).
-	 * Includes validation against `gridFixed` and `superchargedFixed` states.
-	 *
-	 * @returns {void} Side-effects only.
-	 *
-	 * @category Logic
-	 *
-	 * @example Manual trigger
-	 * ```ts
-	 * handleTouchLogic();
-	 * ```
 	 */
 	const handleTouchLogic = () => {
 		const gridState = useGridStore.getState();
 		const sessionState = useSessionStore.getState();
 		const interactionState = useInteractionStore.getState();
-		const latestCell = cellRef.current;
 
 		const currentTime = Date.now();
 		const timeSinceLastTap = currentTime - interactionState._lastTapTime;
@@ -111,16 +76,16 @@ export const useGridCellInteraction = (
 			timeSinceLastTap < UI_TIMING.DOUBLE_TAP_THRESHOLD &&
 			timeSinceLastTap > 0
 		) {
-			// Double tap on the same cell - handled by handleCellDoubleTap which also resets lastTap
+			// Double tap on the same cell
 			const totalSupercharged = gridState.totalSuperchargedCells;
 			const isInvalidDoubleTap =
 				gridState.superchargedFixed ||
 				gridState.gridFixed ||
 				rowIndex >= 4 ||
-				(totalSupercharged >= 4 && !latestCell.supercharged);
+				(totalSupercharged >= 4 && !cell.supercharged);
 
 			if (isInvalidDoubleTap) {
-				if (totalSupercharged >= 4 && !latestCell.supercharged) {
+				if (totalSupercharged >= 4 && !cell.supercharged) {
 					sessionState.incrementSuperchargedLimit();
 				} else if (gridState.superchargedFixed) {
 					sessionState.incrementSuperchargedFixed();
@@ -131,45 +96,47 @@ export const useGridCellInteraction = (
 				}
 
 				triggerShake();
-				startTransition(() => {
-					if (interactionState._initialCellStateForTap) {
-						gridState.revertCellTap(
-							rowIndex,
-							columnIndex,
-							interactionState._initialCellStateForTap
-						);
-					}
 
-					interactionState.clearInteractionState();
-				});
+				if (interactionState._initialCellStateForTap) {
+					gridState.revertCellTap(
+						rowIndex,
+						columnIndex,
+						interactionState._initialCellStateForTap
+					);
+				}
+
+				interactionState.clearInteractionState();
 			} else {
-				startTransition(() => {
-					gridState.handleCellDoubleTap(rowIndex, columnIndex);
-					interactionState.clearInteractionState();
-				});
+				// FIX: Revert the first tap's effects before applying double tap logic
+				if (interactionState._initialCellStateForTap) {
+					gridState.revertCellTap(
+						rowIndex,
+						columnIndex,
+						interactionState._initialCellStateForTap
+					);
+				}
+
+				gridState.handleCellDoubleTap(rowIndex, columnIndex);
+				interactionState.clearInteractionState();
 			}
 		} else {
-			// Single tap or tap on a different cell
+			// Single tap
 			interactionState.setLastTap([rowIndex, columnIndex], currentTime);
 			const isInvalidSingleTap =
-				gridState.gridFixed || (gridState.superchargedFixed && latestCell.supercharged);
+				gridState.gridFixed || (gridState.superchargedFixed && cell.supercharged);
 
 			if (isInvalidSingleTap) {
-				if (gridState.superchargedFixed && latestCell.supercharged) {
+				if (gridState.superchargedFixed && cell.supercharged) {
 					sessionState.incrementSuperchargedFixed();
 				} else if (gridState.gridFixed) {
 					sessionState.incrementGridFixed();
 				}
 
 				triggerShake();
-				startTransition(() => {
-					interactionState.setInitialCellStateForTap(null);
-				});
+				interactionState.setInitialCellStateForTap(null);
 			} else {
-				startTransition(() => {
-					interactionState.setInitialCellStateForTap({ ...latestCell });
-					gridState.handleCellTap(rowIndex, columnIndex);
-				});
+				interactionState.setInitialCellStateForTap({ ...cell });
+				gridState.handleCellTap(rowIndex, columnIndex);
 			}
 		}
 	};
@@ -268,9 +235,9 @@ export const useGridCellInteraction = (
 			event.preventDefault();
 		}
 
-		if (isSharedGridRef.current) return;
+		if (isSharedGrid) return;
 
-		if (cellRef.current.module) {
+		if (cell.module) {
 			useSessionStore.getState().incrementModuleLocked();
 			triggerShake();
 
@@ -282,13 +249,6 @@ export const useGridCellInteraction = (
 
 	/**
 	 * Resets the touch state when an interaction is canceled by the system.
-	 *
-	 * @returns {void} Side-effects only.
-	 *
-	 * @example System cancellation
-	 * ```tsx
-	 * <div onTouchCancel={handleTouchCancel} />
-	 * ```
 	 */
 	const handleTouchCancel = () => {
 		setIsTouching(false);
@@ -296,35 +256,19 @@ export const useGridCellInteraction = (
 
 	/**
 	 * Handles primary and modified mouse clicks.
-	 *
-	 * @remarks
-	 * Distinguishes between:
-	 * 1. **Ctrl/Cmd + Click**: Toggles active state.
-	 * 2. **Normal Click**: Toggles supercharged state.
-	 * Includes logging via `Logger` for state changes.
-	 *
-	 * @param {React.MouseEvent} event - The React click event.
-	 *
-	 * @returns {void} Side-effects only.
-	 *
-	 * @example Component registration
-	 * ```tsx
-	 * <div onClick={handleClick} />
-	 * ```
 	 */
 	const handleClick = (event: React.MouseEvent) => {
 		const gridState = useGridStore.getState();
 		const sessionState = useSessionStore.getState();
-		const latestCell = cellRef.current;
 
 		const { gridFixed, superchargedFixed } = gridState;
 
-		if (isSharedGridRef.current) {
+		if (isSharedGrid) {
 			return;
 		}
 
 		// If the cell has a module, no interactions should change its state.
-		if (latestCell.module) {
+		if (cell.module) {
 			sessionState.incrementModuleLocked();
 			triggerShake();
 
@@ -334,8 +278,8 @@ export const useGridCellInteraction = (
 		// Mouse-specific logic (Ctrl/Cmd + Click)
 		if (event.ctrlKey || event.metaKey) {
 			// Ctrl/Cmd + Click: Toggle Active
-			if (gridFixed || (superchargedFixed && latestCell.supercharged)) {
-				if (superchargedFixed && latestCell.supercharged) {
+			if (gridFixed || (superchargedFixed && cell.supercharged)) {
+				if (superchargedFixed && cell.supercharged) {
 					sessionState.incrementSuperchargedFixed();
 				} else if (gridFixed) {
 					sessionState.incrementGridFixed();
@@ -344,13 +288,11 @@ export const useGridCellInteraction = (
 				triggerShake();
 			} else {
 				Logger.info(`Cell active toggled: [${rowIndex}, ${columnIndex}]`, {
-					active: !latestCell.active,
+					active: !cell.active,
 					columnIndex,
 					rowIndex,
 				});
-				startTransition(() => {
-					gridState.toggleCellActive(rowIndex, columnIndex);
-				});
+				gridState.toggleCellActive(rowIndex, columnIndex);
 			}
 		} else {
 			// Normal Click: Toggle Supercharged
@@ -359,10 +301,10 @@ export const useGridCellInteraction = (
 				superchargedFixed ||
 				gridFixed ||
 				rowIndex >= 4 ||
-				(totalSupercharged >= 4 && !latestCell.supercharged);
+				(totalSupercharged >= 4 && !cell.supercharged);
 
 			if (isInvalidSuperchargeToggle) {
-				if (totalSupercharged >= 4 && !latestCell.supercharged) {
+				if (totalSupercharged >= 4 && !cell.supercharged) {
 					sessionState.incrementSuperchargedLimit();
 				} else if (superchargedFixed) {
 					sessionState.incrementSuperchargedFixed();
@@ -375,30 +317,15 @@ export const useGridCellInteraction = (
 				Logger.info(`Cell supercharged toggled: [${rowIndex}, ${columnIndex}]`, {
 					columnIndex,
 					rowIndex,
-					supercharged: !latestCell.supercharged,
+					supercharged: !cell.supercharged,
 				});
-				startTransition(() => {
-					gridState.toggleCellSupercharged(rowIndex, columnIndex);
-				});
+				gridState.toggleCellSupercharged(rowIndex, columnIndex);
 			}
 		}
 	};
 
 	/**
 	 * Prevents the context menu from appearing during interactions.
-	 *
-	 * @remarks
-	 * Standard behavior for the grid to prevent browser defaults from interfering
-	 * with custom touch/long-press logic.
-	 *
-	 * @param {React.MouseEvent} event - The React context menu event.
-	 *
-	 * @returns {void} Side-effects only.
-	 *
-	 * @example Component registration
-	 * ```tsx
-	 * <div onContextMenu={handleContextMenu} />
-	 * ```
 	 */
 	const handleContextMenu = (event: React.MouseEvent) => {
 		event.preventDefault();
@@ -406,26 +333,13 @@ export const useGridCellInteraction = (
 
 	/**
 	 * Manages keyboard-driven interactions for accessibility.
-	 *
-	 * @remarks
-	 * Maps Space and Enter keys to the `toggleCellActive` action, ensuring
-	 * full grid interactability for screen readers and keyboard-only users.
-	 *
-	 * @param {React.KeyboardEvent} event - The React keyboard event.
-	 *
-	 * @returns {void} Side-effects only.
-	 *
-	 * @example Component registration
-	 * ```tsx
-	 * <div onKeyDown={handleKeyDown} />
-	 * ```
 	 */
 	const handleKeyDown = (event: React.KeyboardEvent) => {
 		if (event.key === " " || event.key === "Enter") {
 			event.preventDefault();
-			if (isSharedGridRef.current) return;
+			if (isSharedGrid) return;
 
-			if (cellRef.current.module) {
+			if (cell.module) {
 				useSessionStore.getState().incrementModuleLocked();
 				triggerShake();
 
@@ -439,9 +353,7 @@ export const useGridCellInteraction = (
 				useSessionStore.getState().incrementGridFixed();
 				triggerShake();
 			} else {
-				startTransition(() => {
-					gridState.toggleCellActive(rowIndex, columnIndex);
-				});
+				gridState.toggleCellActive(rowIndex, columnIndex);
 			}
 		}
 	};

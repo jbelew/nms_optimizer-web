@@ -11,11 +11,11 @@ export type ApiResponse = {
 	/** The newly optimized grid layout. `null` if the solve failed. */
 	grid: Grid | null;
 	/** The theoretical maximum bonus for the configuration. */
-	max_bonus: number;
-	/** The identifier of the solver method used (e.g., `'SA'`, `'Pattern'`). */
-	solve_method: string;
+	maxBonus: number;
 	/** The actual bonus achieved by the solver. */
-	solved_bonus: number;
+	solvedBonus: number;
+	/** The identifier of the solver method used (e.g., `'SA'`, `'Pattern'`). */
+	solveMethod: string;
 };
 
 /**

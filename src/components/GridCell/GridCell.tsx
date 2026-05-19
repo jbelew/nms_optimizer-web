@@ -52,22 +52,15 @@ interface GridCellProps {
  * Sub-component for rendering a technology module within a grid cell.
  */
 const ModuleContent: React.FC<{ cell: Cell; rowIndex: number }> = ({ cell, rowIndex }) => {
-	const { upGradePriority, url1x, url2x } = React.useMemo(() => {
-		if (!cell.image) {
-			return { upGradePriority: null, url1x: "", url2x: "" };
-		}
+	if (!cell.image) {
+		return null;
+	}
 
-		const base1x = `/assets/img/grid/${cell.image}`;
-		const base2x = base1x.replace(/\.webp$/, "@2x.webp");
-
-		return {
-			upGradePriority: getUpgradePriority(cell.label),
-			url1x: `${base1x}?v=${__APP_VERSION__}`,
-			url2x: `${base2x}?v=${__APP_VERSION__}`,
-		};
-	}, [cell.image, cell.label]);
-
-	if (!cell.image) return null;
+	const base1x = `/assets/img/grid/${cell.image}`;
+	const base2x = base1x.replace(/\.webp$/, "@2x.webp");
+	const url1x = `${base1x}?v=${__APP_VERSION__}`;
+	const url2x = `${base2x}?v=${__APP_VERSION__}`;
+	const upGradePriority = getUpgradePriority(cell.label);
 
 	return (
 		<>
@@ -183,7 +176,7 @@ const GridCell: React.FC<GridCellProps> = ({ columnIndex, rowIndex }) => {
 		</div>
 	);
 
-	const tooltipContent = React.useMemo(() => stripLabel(cell.label), [cell.label]);
+	const tooltipContent = stripLabel(cell.label);
 	const isTooltipVisible = cell.module && cell.active;
 
 	return isTooltipVisible ? (

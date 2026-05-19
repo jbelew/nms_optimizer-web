@@ -64,14 +64,14 @@ describe("useTechTreeRow", () => {
 		(useTechStore as unknown as Mock).mockImplementation(
 			(
 				selector: (state: {
-					max_bonus: { [key: string]: number };
-					solved_bonus: { [key: string]: number };
+					maxBonus: { [key: string]: number };
+					solvedBonus: { [key: string]: number };
 					techGroups: { [key: string]: [{ modules: unknown[] }] };
 				}) => unknown
 			) =>
 				selector({
-					max_bonus: {},
-					solved_bonus: {},
+					maxBonus: {},
+					solvedBonus: {},
 					techGroups: { testTech: [{ modules: [] }] },
 				})
 		);
@@ -172,14 +172,14 @@ describe("useTechTreeRow", () => {
 		(useTechStore as unknown as Mock).mockImplementation(
 			(
 				selector: (state: {
-					max_bonus: { [key: string]: number };
-					solved_bonus: { [key: string]: number };
+					maxBonus: { [key: string]: number };
+					solvedBonus: { [key: string]: number };
 					techGroups: { [key: string]: [{ modules: unknown[] }] };
 				}) => unknown
 			) =>
 				selector({
-					max_bonus: {},
-					solved_bonus: {},
+					maxBonus: {},
+					solvedBonus: {},
 					techGroups: {}, // No testTech key
 				})
 		);

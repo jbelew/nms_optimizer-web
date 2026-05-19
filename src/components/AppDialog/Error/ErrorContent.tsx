@@ -4,7 +4,7 @@ import { Trans, useTranslation } from "react-i18next";
 
 import { ErrorDisplay } from "@/components/ErrorBoundary/ErrorDisplay";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
-import { useOptimizeStore } from "@/store/app/optimizeStore";
+import { useOptimizeStore } from "@/store/ui/uiStore";
 
 import "./ErrorContent.scss";
 

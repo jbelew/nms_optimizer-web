@@ -20,9 +20,9 @@ describe("GridStore - Result and Tech Operations", () => {
 			});
 			useGridStore.getState().triggerRecompute();
 			useTechStore.setState({
-				max_bonus: {},
-				solve_method: {},
-				solved_bonus: {},
+				maxBonus: {},
+				solvedBonus: {},
+				solveMethod: {},
 			});
 		});
 	});
@@ -31,9 +31,9 @@ describe("GridStore - Result and Tech Operations", () => {
 		it("should set optimization result in grid store", () => {
 			const result = {
 				grid: null,
-				max_bonus: 500,
-				solve_method: "greedy",
-				solved_bonus: 400,
+				maxBonus: 500,
+				solvedBonus: 400,
+				solveMethod: "greedy",
 			};
 
 			act(() => {
@@ -46,9 +46,9 @@ describe("GridStore - Result and Tech Operations", () => {
 		it("should update tech store via sessionCoordinator", () => {
 			const result = {
 				grid: null,
-				max_bonus: 500,
-				solve_method: "greedy",
-				solved_bonus: 400,
+				maxBonus: 500,
+				solvedBonus: 400,
+				solveMethod: "greedy",
 			};
 
 			act(() => {
@@ -56,9 +56,9 @@ describe("GridStore - Result and Tech Operations", () => {
 			});
 
 			const techState = useTechStore.getState();
-			expect(techState.max_bonus["defense"]).toBe(500);
-			expect(techState.solved_bonus["defense"]).toBe(400);
-			expect(techState.solve_method["defense"]).toBe("greedy");
+			expect(techState.maxBonus["defense"]).toBe(500);
+			expect(techState.solvedBonus["defense"]).toBe(400);
+			expect(techState.solveMethod["defense"]).toBe("greedy");
 
 			expect(useGridStore.getState().result).toEqual(result);
 		});
@@ -67,9 +67,9 @@ describe("GridStore - Result and Tech Operations", () => {
 			act(() => {
 				useGridStore.getState().setResult({
 					grid: null,
-					max_bonus: 100,
-					solve_method: "test",
-					solved_bonus: 80,
+					maxBonus: 100,
+					solvedBonus: 80,
+					solveMethod: "test",
 				});
 
 				useGridStore.getState().setResult(null);
@@ -82,9 +82,9 @@ describe("GridStore - Result and Tech Operations", () => {
 			const gridData = createGrid(5, 5);
 			const result = {
 				grid: gridData,
-				max_bonus: 600,
-				solve_method: "optimal",
-				solved_bonus: 500,
+				maxBonus: 600,
+				solvedBonus: 500,
+				solveMethod: "optimal",
 			};
 
 			act(() => {
@@ -92,23 +92,23 @@ describe("GridStore - Result and Tech Operations", () => {
 			});
 
 			const state = useGridStore.getState();
-			expect(state.result?.max_bonus).toBe(600);
-			expect(state.result?.solved_bonus).toBe(500);
+			expect(state.result?.maxBonus).toBe(600);
+			expect(state.result?.solvedBonus).toBe(500);
 		});
 
 		it("should update different techs independently via sessionCoordinator", () => {
 			const defenseResult = {
 				grid: null,
-				max_bonus: 500,
-				solve_method: "greedy",
-				solved_bonus: 400,
+				maxBonus: 500,
+				solvedBonus: 400,
+				solveMethod: "greedy",
 			};
 
 			const attackResult = {
 				grid: null,
-				max_bonus: 600,
-				solve_method: "optimal",
-				solved_bonus: 550,
+				maxBonus: 600,
+				solvedBonus: 550,
+				solveMethod: "optimal",
 			};
 
 			act(() => {
@@ -117,13 +117,13 @@ describe("GridStore - Result and Tech Operations", () => {
 			});
 
 			const techState = useTechStore.getState();
-			expect(techState.max_bonus["defense"]).toBe(500);
-			expect(techState.max_bonus["attack"]).toBe(600);
+			expect(techState.maxBonus["defense"]).toBe(500);
+			expect(techState.maxBonus["attack"]).toBe(600);
 
 			// Last result set in GridStore should be the current one
 			const gridState = useGridStore.getState();
-			expect(gridState.result?.max_bonus).toBe(600);
-			expect(gridState.result?.solved_bonus).toBe(550);
+			expect(gridState.result?.maxBonus).toBe(600);
+			expect(gridState.result?.solvedBonus).toBe(550);
 		});
 	});
 

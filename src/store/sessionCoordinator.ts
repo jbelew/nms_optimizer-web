@@ -95,12 +95,12 @@ export const sessionCoordinator = {
 
 		// 2. Synchronize tech-specific stats in Tech Store
 		if (data) {
-			techStore.setTechMaxBonus(tech, data.max_bonus);
-			techStore.setTechSolvedBonus(tech, data.solved_bonus);
-			techStore.setTechSolveMethod(tech, data.solve_method);
+			techStore.setTechMaxBonus(tech, data.maxBonus);
+			techStore.setTechSolvedBonus(tech, data.solvedBonus);
+			techStore.setTechSolveMethod(tech, data.solveMethod);
 
 			// 3. Update Bonus Status Store
-			const status = computeBonusStatus(data.max_bonus);
+			const status = computeBonusStatus(data.maxBonus);
 			techBonusStore.setBonusStatus(tech, status);
 		}
 	},

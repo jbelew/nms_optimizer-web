@@ -38,26 +38,22 @@ export const ShipSelectionProvider: React.FC<{
 	const [isPending, startTransition] = useTransition();
 	const { isKnownRoute } = useRouteContext();
 
-	const shipTypeKeys = useMemo(() => Object.keys(shipTypes), [shipTypes]);
+	const shipTypeKeys = Object.keys(shipTypes);
 
-	const groupedShipTypes = useMemo(
-		() =>
-			Object.entries(shipTypes).reduce(
-				(acc, [key, details]) => {
-					const type = details.type;
-					if (!acc[type]) acc[type] = [];
-					acc[type].push({ details, key, label: t(`platforms.${key}`) });
+	const groupedShipTypes = Object.entries(shipTypes).reduce(
+		(acc, [key, details]) => {
+			const type = details.type;
+			if (!acc[type]) acc[type] = [];
+			acc[type].push({ details, key, label: t(`platforms.${key}`) });
 
-					return acc;
-				},
-				{} as Record<string, GroupedShipType[]>
-			),
-		[shipTypes, t]
+			return acc;
+		},
+		{} as Record<string, GroupedShipType[]>
 	);
 
 	const handleOptionSelect = useCallback(
 		(option: string) => {
-			if (option !== usePlatformStore.getState().selectedPlatform) {
+			if (option !== selectedShipType) {
 				Logger.info(`Platform selected: ${option}`, { platform: option });
 				startTransition(() => {
 					if (option === "corvette") {
@@ -82,7 +78,15 @@ export const ShipSelectionProvider: React.FC<{
 				});
 			}
 		},
-		[isKnownRoute, sendDeferredEvent, setSelectedShipType, shipTypeKeys, showInfo, t]
+		[
+			selectedShipType,
+			showInfo,
+			t,
+			setSelectedShipType,
+			shipTypeKeys,
+			isKnownRoute,
+			sendDeferredEvent,
+		]
 	);
 
 	const value = useMemo(

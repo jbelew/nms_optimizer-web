@@ -90,7 +90,10 @@ export const useGridStore = create<GridStore>()(
 			 * ```
 			 */
 			const recomputeDerivedState = (state: GridStore) => {
-				if (!state.grid || !state.grid.cells) {
+				const cells = state.grid?.cells;
+
+				// Basic guard for empty grid (though should not happen with current init)
+				if (!cells || cells.length === 0) {
 					state.activeTechs = new Set();
 					state.totalSuperchargedCells = 0;
 					state.hasModulesInGrid = false;
@@ -100,8 +103,6 @@ export const useGridStore = create<GridStore>()(
 
 					return;
 				}
-
-				const cells = state.grid.cells;
 
 				const techs = new Set<string>();
 				let superchargedCount = 0;
@@ -246,7 +247,6 @@ export const useGridStore = create<GridStore>()(
 				initialGridDefinition: undefined,
 
 				isGridFull: false,
-
 				isSharedGrid: false,
 
 				lastActiveRowIndex: -1,
