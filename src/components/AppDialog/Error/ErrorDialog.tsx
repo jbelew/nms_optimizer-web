@@ -3,9 +3,9 @@ import { lazy, Suspense } from "react";
 import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { useOptimizeStore } from "@/store/app/optimizeStore";
 
-const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
 const ErrorContent = lazy(() => import("./ErrorContent"));
 
 /**

@@ -1,14 +1,13 @@
 import type { FC } from "react";
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { CheckIcon, CopyIcon } from "@radix-ui/react-icons";
 import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { Logger } from "@/utils/system/monitoring";
 
 import { ShareLinkContent } from "./ShareLinkContent";
-
-const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
 
 /**
  * Props for the `ShareLinkDialog` component.

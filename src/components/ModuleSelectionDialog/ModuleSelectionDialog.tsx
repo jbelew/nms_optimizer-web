@@ -2,7 +2,7 @@
  * Interactive technology module configuration dialog module.
  */
 
-import React, { lazy, memo, Suspense } from "react";
+import React, { memo, Suspense } from "react";
 import { CheckCircledIcon, InfoCircledIcon } from "@radix-ui/react-icons";
 import {
 	Avatar,
@@ -17,6 +17,7 @@ import {
 } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useDialog } from "@/utils/system/dialogUtils";
 
@@ -29,8 +30,6 @@ import "./ModuleSelectionDialog.scss";
 import type { GroupedModules, ModuleSelectionDialogProps, SelectionModule } from "@/types/props";
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
-
-const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
 
 export type { GroupedModules, ModuleSelectionDialogProps, SelectionModule };
 

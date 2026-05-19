@@ -1,11 +1,11 @@
 import type { FC } from "react";
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
 import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { OptimizationAlertContent } from "./OptimizationAlertContent";
+import AppDialog from "@/components/AppDialog/Base/AppDialog";
 
-const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
+import { OptimizationAlertContent } from "./OptimizationAlertContent";
 
 /**
  * Props for the `OptimizationAlertDialog` component.

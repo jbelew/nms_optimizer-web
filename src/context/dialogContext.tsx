@@ -99,7 +99,9 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 			const lang = (i18n.language || "en").split("-")[0];
 
 			if (data?.shareUrl) {
-				setShareUrl(data.shareUrl);
+				React.startTransition(() => {
+					setShareUrl(data.shareUrl || "");
+				});
 			} else if (dialog) {
 				const path = lang === "en" ? `/${dialog}/` : `/${lang}/${dialog}/`;
 				navigate(path + window.location.search);

@@ -1,6 +1,4 @@
 // src/components/GridTable/GridTable.tsx
-import "./GridTable.scss";
-
 import React from "react";
 
 import GridTableButtons from "@/components/GridTableButtons/GridTableButtons";
