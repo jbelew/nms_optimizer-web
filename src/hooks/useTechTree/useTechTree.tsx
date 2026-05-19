@@ -24,6 +24,10 @@ import { Logger } from "@/utils/system/monitoring";
 import { getTechTreeMaps } from "@/utils/tech/techTreeUtils";
 import { isValidRecommendedBuild } from "@/utils/validation/dataValidation";
 
+/**
+ * Core technology and module types used throughout the tech tree and grid systems.
+ * @category Hooks
+ */
 export type { Module, RecommendedBuild, TechTree, TechTreeItem };
 
 /**

@@ -31,6 +31,10 @@ import type { GroupedModules, ModuleSelectionDialogProps, SelectionModule } from
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 
+/**
+ * Shared types for module grouping and dialog properties.
+ * @category Components
+ */
 export type { GroupedModules, ModuleSelectionDialogProps, SelectionModule };
 
 /** Path to the fallback technology icon. */

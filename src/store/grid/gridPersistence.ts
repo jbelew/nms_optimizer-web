@@ -50,6 +50,27 @@ function debounceSetItem(
 	};
 }
 
+/**
+ * A debounced storage wrapper for persisting the `GridStore`.
+ *
+ * @remarks
+ * This object implements a custom storage interface that debounces write operations.
+ * It prevents excessive disk I/O when the user is rapidly modifying the grid
+ * (e.g., mass-checking modules or moving cells).
+ *
+ * It handles:
+ * 1. **Atomic Reads**: Direct synchronous reads from `localStorage`.
+ * 2. **Debounced Writes**: Buffers state changes and writes them after a period of inactivity.
+ * 3. **Error Handling**: Gracefully logs and suppresses storage-related exceptions (e.g., QuotaExceededError).
+ *
+ * @category State
+ *
+ * @example
+ * ```ts
+ * const value = debouncedStorage.getItem("grid-data");
+ * debouncedStorage.setItem("grid-data", { ...state });
+ * ```
+ */
 export const debouncedStorage = {
 	getItem: (name: string): null | StorageValue<Partial<GridStore>> => {
 		try {

@@ -45,12 +45,23 @@ export type UiStore = UiActions & UiState;
 /**
  * Types of errors that can occur during the optimization solve process.
  *
+ * @remarks
+ * - `fatal`: The solve cannot continue and the user must be notified immediately.
+ * - `recoverable`: A transport or minor logic error that might be resolved by retry.
+ *
  * @category State
  */
 type OptimizeErrorType = "fatal" | "recoverable";
 
 /**
  * Discriminated union representing the various states of the optimization engine.
+ *
+ * @remarks
+ * Tracks the lifecycle of a WebSocket-based optimization request:
+ * - `idle`: No active solve.
+ * - `solving`: Active connection with real-time progress updates.
+ * - `warning`: Handled edge cases like "Pattern No Fit" (PNF).
+ * - `error`: Fatal or recoverable failures reported by the backend.
  *
  * @category State
  */
@@ -62,6 +73,10 @@ type OptimizeStatus =
 
 /**
  * Data payload describing the technology whose dialog is currently open.
+ *
+ * @remarks
+ * Used by the {@link ModuleSelectionDialog} to determine which technology's
+ * modules to display and how to style the header (via `techColor`).
  *
  * @category State
  */
