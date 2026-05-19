@@ -48,6 +48,7 @@
 		"deactivateRow": "Désactiver la Rangée"
 	},
 	"messageSpinner": {
+		"loadingProgress": "Progression du chargement",
 		"randomMessages": [
 			"-(( Demande de conseils à l'Atlas ! ))-",
 			"-(( Recalibrage de l'alignement des nœuds surchargés ! ))-",

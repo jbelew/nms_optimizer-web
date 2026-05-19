@@ -60,6 +60,7 @@
 		"deactivateRow": "Disattiva Riga"
 	},
 	"messageSpinner": {
+		"loadingProgress": "Avanzamento del caricamento",
 		"randomMessages": [
 			"-(( Chiedo guida all'Atlas! ))-",
 			"-(( Ricalibrazione allineamenti nodi di sovraccarico! ))-",

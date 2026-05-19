@@ -27,13 +27,20 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-	args: {},
+	args: {
+		isOpen: true,
+		onClose: () => console.log("Dialog closed"),
+	},
 	decorators: [
 		(Story) => {
-			// Set error state before rendering
+			// Seed error state for ErrorContent to display details
 			React.useEffect(() => {
 				useOptimizeStore.setState({
-					status: { details: null, severity: "recoverable", type: "error" },
+					status: {
+						details: new Error("Test error message from Storybook"),
+						severity: "recoverable",
+						type: "error",
+					},
 				});
 
 				return () => {

@@ -12,13 +12,10 @@
  */
 
 import type { ErrorInfo, ReactNode } from "react";
-import { Component, lazy, Suspense } from "react";
+import { Component } from "react";
 
+import { ErrorContent } from "./ErrorContent";
 import { handleError } from "./errorHandler";
-
-const ErrorContent = lazy(() =>
-	import("./ErrorContent").then((module) => ({ default: module.ErrorContent }))
-);
 
 /**
  * Props for the `ErrorBoundary` component.
@@ -144,11 +141,7 @@ class ErrorBoundary extends Component<Props, State> {
 				return fallback;
 			}
 
-			return (
-				<Suspense fallback={null}>
-					<ErrorContent error={error} errorInfo={errorInfo} variant="page" />
-				</Suspense>
-			);
+			return <ErrorContent error={error} errorInfo={errorInfo} variant="page" />;
 		}
 
 		return children;

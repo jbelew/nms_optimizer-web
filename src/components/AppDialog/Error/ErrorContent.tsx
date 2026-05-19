@@ -63,7 +63,7 @@ const ErrorContent: React.FC = () => {
 	}, [error, sendEvent]);
 
 	return (
-		<>
+		<div className="errorContent">
 			<span className="errorContent__title block pb-2 text-center text-xl font-semibold tracking-widest">
 				{t("errorContent.signalDisruption")}
 			</span>
@@ -85,11 +85,11 @@ const ErrorContent: React.FC = () => {
 			</Text>
 
 			{error && (
-				<div>
+				<div className="mt-4">
 					<ErrorDisplay error={error} />
 				</div>
 			)}
-		</>
+		</div>
 	);
 };
 

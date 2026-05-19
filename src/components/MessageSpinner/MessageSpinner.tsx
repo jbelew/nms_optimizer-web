@@ -66,7 +66,7 @@ export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 	const [showRandomMessage, setShowRandomMessage] = useState<boolean>(false);
 	const { t } = useTranslation();
 
-	const i18nRandomMessages = t("MessageSpinner.randomMessages", {
+	const i18nRandomMessages = t("messageSpinner.randomMessages", {
 		returnObjects: true,
 	}) as string[];
 
@@ -144,7 +144,7 @@ export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 							<div className="mb-10 lg:mb-18">
 								<Progress
 									aria-label={
-										initialMessage || t("MessageSpinner.loadingProgress")
+										initialMessage || t("messageSpinner.loadingProgress")
 									}
 									value={Math.min(
 										isNaN(progressPercent) ? 0 : progressPercent,

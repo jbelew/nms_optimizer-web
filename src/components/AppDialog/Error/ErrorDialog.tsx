@@ -1,12 +1,25 @@
 import type { FC } from "react";
-import { lazy, Suspense } from "react";
+import React from "react";
 import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { useOptimizeStore } from "@/store/app/optimizeStore";
 
-const ErrorContent = lazy(() => import("./ErrorContent"));
+import ErrorContent from "./ErrorContent";
+
+interface ErrorDialogProps {
+	/**
+	 * Optional override for the dialog's open state.
+	 * If not provided, it will be derived from the global optimize store.
+	 */
+	isOpen?: boolean;
+	/**
+	 * Optional override for the close handler.
+	 * If not provided, it will use the default `setShowError(false)` action.
+	 */
+	onClose?: () => void;
+}
 
 /**
  * A wrapper component that manages the display of error dialogs.
@@ -14,8 +27,10 @@ const ErrorContent = lazy(() => import("./ErrorContent"));
  * @remarks
  * This component is designed to be rendered at the root level of the application.
  * It listens to the global error state from `useOptimizeStore` and conditionally
- * renders a lazy-loaded error dialog. This approach keeps the error-related
- * UI and styles out of the critical path.
+ * renders the error dialog. It also accepts props for controlled use in
+ * testing and Storybook.
+ *
+ * @param {ErrorDialogProps} props - Component properties.
  *
  * @returns {JSX.Element | null} The rendered error dialog, or `null` if no error is active.
  *
@@ -32,35 +47,34 @@ const ErrorContent = lazy(() => import("./ErrorContent"));
  * <ErrorDialog />
  * ```
  */
-export const ErrorDialog: FC = () => {
+export const ErrorDialog: FC<ErrorDialogProps> = ({ isOpen: propIsOpen, onClose: propOnClose }) => {
 	const { t } = useTranslation();
 	const status = useOptimizeStore((s) => s.status);
 	const setShowError = useOptimizeStore((s) => s.setShowError);
 
-	const isError = status.type === "error";
+	const isError = propIsOpen ?? status.type === "error";
+	const handleClose = propOnClose ?? (() => setShowError(false));
 
-	if (!isError) {
+	if (!isError && propIsOpen === undefined) {
 		return null;
 	}
 
 	const footer = (
 		<div className="flex justify-end gap-2">
-			<Button onClick={() => setShowError(false)} variant="soft">
+			<Button onClick={handleClose} variant="soft">
 				{t("common.closeDialog")}
 			</Button>
 		</div>
 	);
 
 	return (
-		<Suspense fallback={null}>
-			<AppDialog
-				content={<ErrorContent />}
-				footer={footer}
-				isOpen={isError}
-				onClose={() => setShowError(false)}
-				title={t("dialogs.titles.serverError")}
-				titleKey="dialogs.titles.serverError"
-			/>
-		</Suspense>
+		<AppDialog
+			content={<ErrorContent />}
+			footer={footer}
+			isOpen={isError}
+			onClose={handleClose}
+			title={t("dialogs.titles.serverError")}
+			titleKey="dialogs.titles.serverError"
+		/>
 	);
 };
