@@ -11,6 +11,7 @@ import {
 	AppDialogTitle,
 } from "@/components/AppDialog/Base/AppDialog";
 import { ErrorDialog } from "@/components/AppDialog/Error/ErrorDialog";
+import { useOptimizeStore } from "@/store/ui/uiStore";
 
 import { Seo } from "./components/Seo/Seo";
 import { UpdatePromptWrapper } from "./components/UpdatePrompt/UpdatePromptWrapper";
@@ -21,7 +22,6 @@ import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
 import { fetchTechTree } from "./hooks/useTechTree/useTechTree";
 import { useUrlSync } from "./hooks/useUrlSync/useUrlSync";
 import { useUrlNormalization, useUrlValidation } from "./hooks/useValidation/useValidation";
-import { useOptimizeStore } from "@/store/ui/uiStore";
 import { isBot } from "./utils/browser/environment";
 import { useDialog } from "./utils/system/dialogUtils";
 import { lazyNamed } from "./utils/system/lazyNamed";

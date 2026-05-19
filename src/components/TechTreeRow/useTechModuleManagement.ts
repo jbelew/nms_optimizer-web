@@ -8,15 +8,35 @@ import { useTechStore } from "@/store/tech/techStore";
  *
  * @remarks
  * Coordinates between {@link useTechStore} and {@link useModuleSelectionStore} to:
- * 1. Sync module selections between current state and persistence.
- * 2. Group modules into categories (core, upgrade, Figurines, etc.).
- * 3. Enforce tier-based de-selection logic (Theta > Tau > Sigma).
- * 4. Manage "Select All" and indeterminate checkbox states.
+ * 1. **Persistence Sync**: Automatically saves module selections to local storage via {@link useModuleSelectionStore}.
+ * 2. **Grouping Logic**: Segregates modules into semantic categories (e.g., 'core', 'upgrade', 'figurines').
+ * 3. **Hierarchical Selection**: Enforces tier-based constraints (e.g., removing a 'Theta' module deselects its 'Tau' and 'Sigma' counterparts).
+ * 4. **Interaction State**: Derives indeterminate and "select all" states for complex checkbox interfaces.
  *
  * @param {string} tech - The unique technology identifier (e.g., 'pulse').
- * @param {Array<{ label: string, id: string, image: string, type?: string }>} modules - The full list of modules available for the tech.
+ * @param {Array<{ label: string, id: string, image: string, type?: string }>} modules - The full list of available modules.
  *
- * @returns {object} State flags and event handlers for module selection UI.
+ * @returns {object} Module management state and handlers.
+ * @returns {boolean} returns.allModulesSelected - Whether all available non-core modules are checked.
+ * @returns {Array} returns.currentCheckedModules - IDs of currently selected modules.
+ * @returns {object} returns.groupedModules - Modules grouped by their `type` property.
+ * @returns {function} returns.handleSelectAllChange - Handler for the "Select All" toggle.
+ * @returns {function} returns.handleValueChange - Handler for batch checkbox updates with hierarchy logic.
+ * @returns {boolean} returns.isIndeterminate - Whether some but not all modules are selected.
+ *
+ * @see {@link useTechStore} for the source of truth.
+ * @see {@link useModuleSelectionStore} for persistence logic.
+ * @see {@link ./useTechModuleManagement.test.ts Unit Tests}
+ *
+ * @hook
+ *
+ * @category Hooks
+ *
+ * @example Hook initialization
+ * ```tsx
+ * const { groupedModules, handleValueChange } = useTechModuleManagement("pulse", pulseModules);
+ * // returns { allModulesSelected: false, currentCheckedModules: [...], ... }
+ * ```
  */
 export const useTechModuleManagement = (
 	tech: string,

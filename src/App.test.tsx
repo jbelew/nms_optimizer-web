@@ -11,8 +11,9 @@ import { fireEvent, render } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { vi } from "vitest";
 
-import { routes } from "./routes";
 import { useOptimizeStore } from "@/store/ui/uiStore";
+
+import { routes } from "./routes";
 import { usePlatformStore } from "./store/app/platformStore";
 import { sendEvent } from "./utils/analytics/tracking";
 import { hideSplashScreenAndShowBackground } from "./utils/system/splashScreen";

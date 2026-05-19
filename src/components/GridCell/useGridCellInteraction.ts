@@ -11,31 +11,38 @@ import { Logger } from "@/utils/system/monitoring";
  * Custom hook for managing complex user interactions with an individual grid cell.
  *
  * @remarks
- * Orchestrates mouse, touch, and keyboard events into grid actions.
- * Specialized for mobile gesture detection (taps vs scrolls) and desktop shortcuts.
- * Actions are validated against grid constraints (e.g., supercharge limits)
- * before being dispatched to the `GridStore`.
+ * Orchestrates mouse, touch, and keyboard events into atomic grid actions.
+ * It handles:
+ * 1. **Mobile Gesture Detection**: Distinguishes between intentional taps and accidental scrolls/zooms.
+ * 2. **Double-Tap Logic**: Implements custom double-tap detection for supercharging cells on mobile.
+ * 3. **Constraint Validation**: Checks actions against grid locks (layout/supercharge) before dispatching.
+ * 4. **Feedback**: Triggers visual shake feedback via {@link useShakeStore} on invalid interactions.
  *
  * @param {Cell} cell - The current data model for the cell.
- * @param {number} rowIndex - The row index of the cell (0-based).
- * @param {number} columnIndex - The column index of the cell (0-based).
- * @param {boolean} isSharedGrid - Flag for read-only mode.
+ * @param {number} rowIndex - The 0-based row index of the cell.
+ * @param {number} columnIndex - The 0-based column index of the cell.
+ * @param {boolean} isSharedGrid - Whether the grid is in read-only/shared mode.
  *
- * @returns {object} Interaction flags and event handlers for the cell component.
+ * @returns {object} Interaction flags and event handlers.
+ * @returns {boolean} returns.isTouching - Active touch state for visual feedback.
+ * @returns {function} returns.onMouseDown - Desktop mouse handler.
+ * @returns {function} returns.onTouchStart - Mobile gesture start handler.
+ * @returns {function} returns.onTouchEnd - Mobile gesture resolution handler.
  *
- * @see {@link useGridStore}
- * @see {@link useSessionStore}
- * @see {@link useShakeStore}
- * @see {@link useInteractionStore}
+ * @see {@link useGridStore} for state dispatching.
+ * @see {@link useSessionStore} for telemetry/error tracking.
+ * @see {@link useShakeStore} for visual feedback triggers.
+ * @see {@link useInteractionStore} for cross-cell interaction state.
  * @see {@link ./useGridCellInteraction.test.ts Unit Tests}
  *
  * @hook
  *
  * @category Hooks
  *
- * @example Usage in a component
+ * @example Hook initialization in GridCell
  * ```tsx
  * const handlers = useGridCellInteraction(cell, 0, 5, false);
+ * // returns { isTouching: false, onMouseDown: ..., onTouchStart: ..., ... }
  * ```
  */
 export const useGridCellInteraction = (
