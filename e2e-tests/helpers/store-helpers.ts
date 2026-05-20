@@ -46,8 +46,26 @@ export async function setCellSupercharged(page: Page, row: number, col: number, 
 }
 
 /**
+ * Wait for optimization to reach a specific status.
+ */
+export async function waitForOptimization(page: Page, status: 'error' | 'idle' | 'solving' | 'warning') {
+  await page.waitForFunction((expected) => {
+    return window.useOptimizeStore?.getState().status.type === expected;
+  }, status, { timeout: 60000 });
+}
+
+/**
  * Wait for the grid store to be initialized on the window object.
  */
 export async function waitForStore(page: Page) {
-  await page.waitForFunction(() => !!window.useGridStore);
+  await page.waitForFunction(() => !!window.useGridStore && !!window.useUiStore);
+}
+
+/**
+ * Wait for the technology tree to finish loading.
+ */
+export async function waitForTechTree(page: Page) {
+  await page.waitForFunction(() => {
+    return window.useUiStore?.getState().isTechTreeLoading === false;
+  }, { timeout: 30000 });
 }
