@@ -62,15 +62,32 @@ html.background-visible body.a11y-font {
 
 /* 4. Mobile Responsive Backgrounds */
 @media (width < 640px) {
+	/* Remove body background on mobile; the wrapper owns it instead */
 	html.background-visible body {
-		background-image: url("/assets/img/background@mobile-blurred.webp");
-		background-position: center top;
+		background-color: var(--color-panel-solid);
+		background-image: none;
 	}
 
-	html.background-visible:is(.light, .light-theme) body {
+	html.background-visible .main-app__background-wrapper {
+		background-image: url("/assets/img/background@mobile-blurred.webp");
+		background-position: center top;
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+
+	html.background-visible:is(.light, .light-theme) .main-app__background-wrapper {
 		background-image:
 			linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
 			url("/assets/img/background@mobile-blurred.webp");
+	}
+
+	/* A11y mode: no background images at all */
+	html.background-visible body.a11y-font {
+		background-image: none;
+	}
+
+	html.background-visible body.a11y-font .main-app__background-wrapper {
+		background-image: none;
 	}
 }
 
