@@ -3,7 +3,7 @@
  */
 
 import React, { memo, Suspense } from "react";
-import { CheckCircledIcon, InfoCircledIcon } from "@radix-ui/react-icons";
+import { CheckCircledIcon, InfoCircledIcon, MagicWandIcon } from "@radix-ui/react-icons";
 import {
 	Avatar,
 	Badge,
@@ -401,6 +401,7 @@ const DialogFooter: React.FC = () => {
 				disabled={isOptimizeDisabled}
 				onClick={handleOptimizeClick}
 			>
+				<MagicWandIcon />
 				{t("moduleSelection.optimizeButton")}
 			</Button>
 		</div>
