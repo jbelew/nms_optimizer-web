@@ -64,7 +64,7 @@ html.background-visible body.a11y-font {
 @media (width < 640px) {
 	/* Remove body background on mobile; the wrapper owns it instead */
 	html.background-visible body {
-		background-color: var(--color-panel-solid);
+		background-color: light-dark(white, #18191b);
 		background-image: none;
 	}
 
