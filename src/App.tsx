@@ -25,7 +25,10 @@ import { useUrlNormalization, useUrlValidation } from "./hooks/useValidation/use
 import { isBot } from "./utils/browser/environment";
 import { useDialog } from "./utils/system/dialogUtils";
 import { lazyNamed } from "./utils/system/lazyNamed";
+import { Logger } from "./utils/system/monitoring";
 import { hideSplashScreenAndShowBackground } from "./utils/system/splashScreen";
+
+const IS_DOCKER_BUILD = import.meta.env.VITE_DOCKER === "true";
 
 /**
  * Lazy-loaded component that displays a banner when the user is offline.
@@ -97,7 +100,9 @@ const AppContent: FC = () => {
 	useSeoAndTitle();
 	useUrlValidation();
 
-	const [showWelcome, setShowWelcome] = useState(!userVisited && !activeDialog && !isBot());
+	const [showWelcome, setShowWelcome] = useState(
+		() => !userVisited && !activeDialog && !isBot()
+	);
 
 	useEffect(() => {
 		if (!userVisited && activeDialog) {
@@ -135,8 +140,6 @@ const AppContent: FC = () => {
 		return null;
 	}
 
-	const isDockerBuild = import.meta.env.VITE_DOCKER === "true";
-
 	return (
 		<>
 			<Seo />
@@ -155,12 +158,12 @@ const AppContent: FC = () => {
 					<RoutedDialogs />
 				</Suspense>
 			) : null}
-			{activeDialog === "userstats" && !isDockerBuild ? (
+			{activeDialog === "userstats" && !IS_DOCKER_BUILD ? (
 				<Suspense fallback={null}>
 					<UserStatsRoute />
 				</Suspense>
 			) : null}
-			{activeDialog === "performance" && !isDockerBuild ? (
+			{activeDialog === "performance" && !IS_DOCKER_BUILD ? (
 				<Suspense fallback={null}>
 					<PerformanceRoute />
 				</Suspense>
@@ -239,7 +242,9 @@ const App: FC = () => {
 		const platform = params.get("platform");
 
 		if (platform) {
-			void fetchTechTree(platform);
+			void fetchTechTree(platform).catch((err) => {
+				Logger.warn("Failed to prefetch tech tree during app mount:", err);
+			});
 		}
 	}, []);
 

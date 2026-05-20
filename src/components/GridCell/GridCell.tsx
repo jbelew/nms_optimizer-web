@@ -12,6 +12,9 @@ import { getUpgradePriority } from "@/utils/grid/upgradePriority";
 import { useGridCellInteraction } from "./useGridCellInteraction";
 import { useGridCellStyle } from "./useGridCellStyle";
 
+/** Regular expression to match `.webp` file extensions at the end of a string. */
+const WEBP_REGEX = /\.webp$/;
+
 /**
  * Removes bracketed and parenthetical metadata from a technology label.
  *
@@ -57,7 +60,7 @@ const ModuleContent: React.FC<{ cell: Cell; rowIndex: number }> = ({ cell, rowIn
 	}
 
 	const base1x = `/assets/img/grid/${cell.image}`;
-	const base2x = base1x.replace(/\.webp$/, "@2x.webp");
+	const base2x = base1x.replace(WEBP_REGEX, "@2x.webp");
 	const url1x = `${base1x}?v=${__APP_VERSION__}`;
 	const url2x = `${base2x}?v=${__APP_VERSION__}`;
 	const upGradePriority = getUpgradePriority(cell.label);

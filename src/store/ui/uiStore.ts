@@ -223,7 +223,7 @@ export const useUiStore = create<UiStore>()(
 			(set) => ({
 				a11yMode: false,
 				addError: (message: string, type: ErrorMessage["type"] = "error") => {
-					const id = `${Date.now()}-${Math.random()}`;
+					const id = crypto.randomUUID();
 					set((state) => ({
 						errors: [
 							...state.errors,
@@ -267,14 +267,16 @@ export const useUiStore = create<UiStore>()(
 					set((state) => ({
 						errors: state.errors.filter((error) => error.id !== id),
 					})),
-				resetSession: () =>
+				resetSession: () => {
+					lastShakeTime = 0;
 					set({
 						gridFixedCount: 0,
 						moduleLockedCount: 0,
 						rowLimitCount: 0,
 						superchargedFixedCount: 0,
 						superchargedLimitCount: 0,
-					}),
+					});
+				},
 				rowLimitCount: 0,
 				selectedTechData: null,
 				setA11yMode: (a11yMode) => set({ a11yMode }),

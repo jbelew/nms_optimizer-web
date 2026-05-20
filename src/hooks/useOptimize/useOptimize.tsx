@@ -1,5 +1,6 @@
 import type { ApiResponse } from "@/store/grid/gridStore";
 import { useCallback, useEffect, useRef } from "react";
+import { useShallow } from "zustand/react/shallow";
 
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
@@ -9,7 +10,7 @@ import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useTechStore } from "@/store/tech/techStore";
-import { useThemeStore as _useThemeStore, useOptimizeStore } from "@/store/ui/uiStore";
+import { useOptimizeStore } from "@/store/ui/uiStore";
 import { OptimizationManager } from "@/utils/optimization/optimizationManager";
 import { Logger } from "@/utils/system/monitoring";
 
@@ -44,58 +45,61 @@ export interface UseOptimizeReturn {
 	solving: boolean;
 }
 
+const SCROLL_OPTIONS = { skipOnLargeScreens: true };
+
 /**
  * Custom hook for managing the asynchronous optimization process via WebSockets.
  *
  * @remarks
- * This hook handles the high-level state of the optimization process:
- * 1. UI states like `solving` and `progressPercent`.
- * 2. Interaction with the global `GridStore`, `OptimizeStore`, and `TechStore`.
- * 3. Delegating the WebSocket lifecycle and retry logic to `OptimizationManager`.
- * 4. Handling UI feedback like scrolling and analytics.
+ * This hook acts as the central interface for:
+ * 1. Dispatching optimization requests to the Python backend via {@link OptimizationManager}.
+ * 2. Synchronizing WebSocket state (solving, progress, PNF warnings) to the UI.
+ * 3. Handling automatic view scrolling on touch devices.
+ * 4. Tracking user interaction analytics for starts/cancels/warning states.
  *
- * It acts as the bridge between the React UI and the `OptimizationManager`.
+ * @returns {UseOptimizeReturn} An object containing the optimization state and trigger handlers.
  *
- * @returns {UseOptimizeReturn} State and functions to control the optimization workflow.
- *
- * @see {@link OptimizationManager} for WebSocket lifecycle and retry logic.
- * @see {@link useGridStore} for state persistence.
+ * @see {@link OptimizationManager} for the underlying socket logic.
  * @see {@link useOptimizeStore} for tracking errors and "No Fit" warnings.
- *
- * @hook
  *
  * @category Hooks
  *
  * @example
  * ```tsx
- * const MyComponent = () => {
- *   const { handleOptimize, solving, progressPercent } = useOptimize();
+ * const { solving, progressPercent, handleOptimize } = useOptimize();
  *
- *   const onOptimize = async () => {
- *     // Initiates a WebSocket solve for pulse drive technology
- *     await handleOptimize("pulse");
- *   };
+ * const onOptimize = () => {
+ *   void handleOptimize("pulse");
+ * };
  *
- *   return (
- *     <button onClick={onOptimize} disabled={solving}>
- *       {solving ? `Solving: ${progressPercent}%` : "Optimize Pulse"}
- *     </button>
- *   );
+ * return (
+ *   <button onClick={onOptimize} disabled={solving}>
+ *     {solving ? `Solving: ${progressPercent}%` : "Optimize Pulse"}
+ *   </button>
+ * );
  * };
  * ```
  */
 export const useOptimize = (): UseOptimizeReturn => {
-	const setShowErrorStore = useOptimizeStore((s) => s.setShowError);
-	const setPatternNoFitTech = useOptimizeStore((s) => s.setPatternNoFitTech);
-	const patternNoFitTech = useOptimizeStore((s) =>
-		s.status.type === "warning" ? s.status.tech : null
+	const {
+		patternNoFitTech,
+		progressPercent,
+		setPatternNoFitTech,
+		setProgressPercent,
+		setShowErrorStore,
+		setSolving,
+		solving,
+	} = useOptimizeStore(
+		useShallow((s) => ({
+			patternNoFitTech: s.status.type === "warning" ? s.status.tech : null,
+			progressPercent: s.status.type === "solving" ? s.status.progress : 0,
+			setPatternNoFitTech: s.setPatternNoFitTech,
+			setProgressPercent: s.setProgressPercent,
+			setShowErrorStore: s.setShowError,
+			setSolving: s.setSolving,
+			solving: s.status.type === "solving",
+		}))
 	);
-	const solving = useOptimizeStore((s) => s.status.type === "solving");
-	const setSolving = useOptimizeStore((s) => s.setSolving);
-	const progressPercent = useOptimizeStore((s) =>
-		s.status.type === "solving" ? s.status.progress : 0
-	);
-	const setProgressPercent = useOptimizeStore((s) => s.setProgressPercent);
 
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const { sendEvent } = useAnalytics();
@@ -110,8 +114,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 	const managerRef = useRef<null | OptimizationManager>(null);
 	const isMountedRef = useRef(true);
 
-	const scrollOptions = { skipOnLargeScreens: true };
-	const { gridContainerRef, scrollIntoView } = useScrollGridIntoView(scrollOptions);
+	const { gridContainerRef, scrollIntoView } = useScrollGridIntoView(SCROLL_OPTIONS);
 
 	const resetProgress = useCallback(() => {
 		if (!isMountedRef.current) return;

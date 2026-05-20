@@ -56,8 +56,10 @@ describe("BonusStatusIcon Component", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		(isTouchDevice as Mock).mockReturnValue(false);
-		(useTechBonusStore as unknown as Mock).mockReturnValue({
-			getBonusStatus: mockGetBonusStatus,
+		(useTechBonusStore as unknown as Mock).mockImplementation((selector) => {
+			const state = { getBonusStatus: mockGetBonusStatus };
+
+			return selector ? selector(state) : state;
 		});
 	});
 

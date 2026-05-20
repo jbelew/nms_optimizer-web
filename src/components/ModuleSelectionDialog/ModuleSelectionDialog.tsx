@@ -15,7 +15,7 @@ import {
 	Separator,
 	Text,
 } from "@radix-ui/themes";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { usePlatformStore } from "@/store/app/platformStore";
@@ -171,28 +171,34 @@ const ModuleGroup: React.FC<{
 
 	if (["atlantid", "cosmetic", "reactor", "upgrade"].includes(groupName)) {
 		const rankToModuleMap = new Map<string, string>();
-		modules.forEach((module) => {
-			if (!module.label) return;
-			MODULE_RANK_ORDER.forEach((rank) => {
-				if (module.label.includes(rank)) {
-					rankToModuleMap.set(rank, module.id);
-				}
-			});
-		});
 
-		modules.forEach((module) => {
-			if (!module.label) return;
-			const rankIndex = MODULE_RANK_ORDER.findIndex((rank) => module.label.includes(rank));
-
-			if (rankIndex > 0) {
-				const prerequisiteRank = MODULE_RANK_ORDER[rankIndex - 1];
-				const prerequisiteModuleId = rankToModuleMap.get(prerequisiteRank);
-
-				if (prerequisiteModuleId) {
-					dependencyMap.set(module.id, prerequisiteModuleId);
+		for (const module of modules) {
+			if (module.label) {
+				for (const rank of MODULE_RANK_ORDER) {
+					if (module.label.includes(rank)) {
+						rankToModuleMap.set(rank, module.id);
+						break;
+					}
 				}
 			}
-		});
+		}
+
+		for (const module of modules) {
+			if (module.label) {
+				const rankIndex = MODULE_RANK_ORDER.findIndex((rank) =>
+					module.label!.includes(rank)
+				);
+
+				if (rankIndex > 0) {
+					const prerequisiteRank = MODULE_RANK_ORDER[rankIndex - 1];
+					const prerequisiteModuleId = rankToModuleMap.get(prerequisiteRank);
+
+					if (prerequisiteModuleId) {
+						dependencyMap.set(module.id, prerequisiteModuleId);
+					}
+				}
+			}
+		}
 	}
 
 	if (!modules || modules.length === 0) {
@@ -222,14 +228,9 @@ const ModuleGroup: React.FC<{
 			</div>
 
 			{groupName === "cosmetic" && (
-				<Blockquote
-					className="text-sm sm:text-base"
-					dangerouslySetInnerHTML={{
-						__html: t("moduleSelection.cosmeticInfo"),
-					}}
-					mb="3"
-					mt="1"
-				/>
+				<Blockquote className="text-sm sm:text-base" mb="3" mt="1">
+					<Trans components={{ p: <p /> }} i18nKey="moduleSelection.cosmeticInfo" />
+				</Blockquote>
 			)}
 			{sortedModules.map((module) => {
 				const prerequisiteId = dependencyMap.get(module.id);
@@ -242,6 +243,19 @@ const ModuleGroup: React.FC<{
 		</div>
 	);
 };
+
+/**
+ * A paragraph component that strips the i18n style attribute to prevent runtime errors
+ * in React 19 and replaces it with the equivalent Tailwind class.
+ *
+ * @param {React.ComponentPropsWithoutRef<"p"> & { style?: unknown }} props - Component props including style override.
+ *
+ * @returns {JSX.Element} A clean paragraph element.
+ */
+const SafeParagraph: React.FC<React.ComponentPropsWithoutRef<"p"> & { style?: unknown }> = ({
+	style,
+	...props
+}) => <p {...props} className={style ? "mt-2" : undefined} />;
 
 /**
  * The primary content component for the module selection dialog.
@@ -269,22 +283,29 @@ const DialogBody: React.FC = () => {
 	return (
 		<>
 			{isCorvette && tech !== "trails" && (
-				<span
-					className="mb-3 block text-sm sm:text-base"
-					dangerouslySetInnerHTML={{ __html: t("moduleSelection.warning") }}
-				/>
+				<span className="mb-3 block text-sm sm:text-base">
+					<Trans
+						components={{
+							i: <i />,
+							p: <SafeParagraph />,
+							strong: <strong />,
+						}}
+						i18nKey="moduleSelection.warning"
+					/>
+				</span>
 			)}
 			{tech === "trails" && (
-				<span
-					className="mb-3 block text-sm sm:text-base"
-					dangerouslySetInnerHTML={{ __html: t("moduleSelection.trailsInfo") }}
-				/>
+				<span className="mb-3 block text-sm sm:text-base">
+					<Trans
+						components={{ strong: <strong /> }}
+						i18nKey="moduleSelection.trailsInfo"
+					/>
+				</span>
 			)}
 			{!isCorvette && tech !== "trails" && (
-				<span
-					className="mb-3 block text-sm sm:text-base"
-					dangerouslySetInnerHTML={{ __html: t("moduleSelection.description") }}
-				/>
+				<span className="mb-3 block text-sm sm:text-base">
+					<Trans i18nKey="moduleSelection.description" />
+				</span>
 			)}
 			<label className="flex cursor-pointer items-center text-sm font-medium transition-colors duration-200 hover:text-(--accent-a12) sm:text-base">
 				<Checkbox

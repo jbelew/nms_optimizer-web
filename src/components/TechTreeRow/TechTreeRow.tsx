@@ -59,60 +59,52 @@ function renderIcon(
  */
 export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ tech, techSolvedBonus }) => {
 	const { t } = useTranslation();
-	const { getBonusStatus } = useTechBonusStore();
+	const getBonusStatus = useTechBonusStore((s) => s.getBonusStatus);
 	const status = getBonusStatus(tech);
 
-	const contentData = (() => {
-		if (!status) return null;
-
-		const { icon, percent } = status;
-
-		let iconClassName = "";
-		let iconStyle = {};
-		let tooltipContent = "";
-
-		switch (icon) {
-			case "check":
-				iconClassName = "mt-[7px] inline-block align-text-top";
-				iconStyle = { color: "var(--gray-a10)" };
-				tooltipContent = t("techTree.tooltips.validSolve");
-				break;
-			case "lightning":
-				iconClassName = "mt-1.5 inline-block h-4 w-4 align-text-top";
-				iconStyle = { color: "var(--amber-a8)" };
-				tooltipContent = `${t("techTree.tooltips.boostedSolve")} +${percent}%`;
-				break;
-			case "warning":
-				iconClassName = "mt-2 inline-block align-text-top";
-				iconStyle = { color: "var(--red-a8)" };
-				tooltipContent = `${t("techTree.tooltips.insufficientSpace")} -${percent}%`;
-				break;
-		}
-
-		return { icon, iconClassName, iconStyle, tooltipContent };
-	})();
-
-	if (techSolvedBonus <= 0 && !status) {
+	if ((techSolvedBonus <= 0 && !status) || !status) {
 		return null;
 	}
 
-	if (!contentData) {
-		return null;
+	const { icon, percent } = status;
+
+	let iconClassName: string;
+	let iconStyle: React.CSSProperties;
+	let tooltipContent: string;
+
+	switch (icon) {
+		case "check":
+			iconClassName = "mt-[7px] inline-block align-text-top";
+			iconStyle = { color: "var(--gray-a10)" };
+			tooltipContent = t("techTree.tooltips.validSolve");
+			break;
+		case "lightning":
+			iconClassName = "mt-1.5 inline-block h-4 w-4 align-text-top";
+			iconStyle = { color: "var(--amber-a8)" };
+			tooltipContent = `${t("techTree.tooltips.boostedSolve")} +${percent}%`;
+			break;
+		case "warning":
+			iconClassName = "mt-2 inline-block align-text-top";
+			iconStyle = { color: "var(--red-a8)" };
+			tooltipContent = `${t("techTree.tooltips.insufficientSpace")} -${percent}%`;
+			break;
+		default:
+			return null;
 	}
 
-	const icon = renderIcon(contentData.icon, contentData.iconClassName, contentData.iconStyle);
+	const renderedIcon = renderIcon(icon, iconClassName, iconStyle);
 
-	if (!icon) {
+	if (!renderedIcon) {
 		return null;
 	}
 
 	const trigger = (
 		<button
-			aria-label={contentData.tooltipContent}
+			aria-label={tooltipContent}
 			className="flex cursor-pointer appearance-none border-none bg-transparent p-0"
 			type="button"
 		>
-			{icon}
+			{renderedIcon}
 		</button>
 	);
 
@@ -122,14 +114,14 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ tech, techSolv
 				<Popover.Trigger>{trigger}</Popover.Trigger>
 				<Popover.Content size="1">
 					<Text as="p" size="1" trim="both">
-						{contentData.tooltipContent}
+						{tooltipContent}
 					</Text>
 				</Popover.Content>
 			</Popover.Root>
 		);
 	}
 
-	return <ConditionalTooltip label={contentData.tooltipContent}>{trigger}</ConditionalTooltip>;
+	return <ConditionalTooltip label={tooltipContent}>{trigger}</ConditionalTooltip>;
 };
 
 /**
@@ -165,7 +157,7 @@ const TechTreeRowActions: React.FC = () => {
 			<ConditionalTooltip label={tooltipLabel}>
 				<IconButton
 					aria-label={`${tooltipLabel} ${translatedTechName}`}
-					className={`techRow__resetButton ${!isOptimizeButtonDisabled ? "cursor-pointer!" : ""}`.trim()}
+					className={`techRow__resetButton${!isOptimizeButtonDisabled ? "cursor-pointer!" : ""}`}
 					disabled={isOptimizeButtonDisabled}
 					id={tech}
 					onClick={handleOptimizeClick}
@@ -177,7 +169,7 @@ const TechTreeRowActions: React.FC = () => {
 			<ConditionalTooltip label={t("techTree.tooltips.reset")}>
 				<IconButton
 					aria-label={`${t("techTree.tooltips.reset")} ${translatedTechName}`}
-					className={`techRow__resetButton ${hasTechInGrid && !solving ? "cursor-pointer!" : ""}`.trim()}
+					className={`techRow__resetButton${hasTechInGrid && !solving ? "cursor-pointer!" : ""}`}
 					disabled={!hasTechInGrid || solving || isResetting}
 					onClick={handleReset}
 				>

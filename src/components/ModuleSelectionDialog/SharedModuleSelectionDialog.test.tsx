@@ -13,6 +13,7 @@ import { SharedModuleSelectionDialog } from "./SharedModuleSelectionDialog";
 
 // Mock i18next
 vi.mock("react-i18next", () => ({
+	Trans: ({ i18nKey }: { i18nKey: string }) => <span>{i18nKey}</span>,
 	useTranslation: () => ({
 		t: (key: string) => key,
 	}),

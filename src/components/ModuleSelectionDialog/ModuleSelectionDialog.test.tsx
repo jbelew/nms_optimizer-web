@@ -9,6 +9,7 @@ import { ModuleSelectionDialog } from "./ModuleSelectionDialog";
 
 // Mocking external dependencies
 vi.mock("react-i18next", () => ({
+	Trans: ({ i18nKey }: { i18nKey: string }) => <span>{i18nKey}</span>,
 	useTranslation: () => ({
 		t: (key: string, options?: { techName?: string }) => {
 			if (key === "moduleSelection.title") return `Modules for ${options?.techName}`;

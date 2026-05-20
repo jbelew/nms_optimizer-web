@@ -20,6 +20,40 @@ const VALID_DIALOGS = new Set<DialogType>([
 ]);
 
 /**
+ * Resolves the active dialog type from the given URL pathname.
+ *
+ * @remarks
+ * This function processes the URL path parts to check if the first part or second part
+ * (if a language prefix is present) corresponds to a valid routed dialog.
+ * It ensures that routed dialogs are correctly matched regardless of whether the URL
+ * path includes a supported language prefix.
+ *
+ * @param {string} pathname - The current URL pathname to parse.
+ * @param {string[]} supportedLangs - The list of language codes currently supported by the app.
+ *
+ * @returns {DialogType} The matching dialog type, or `null` if no valid dialog is found.
+ *
+ * @see {@link DialogType}
+ * @see {@link VALID_DIALOGS}
+ *
+ * @category Utilities
+ *
+ * @example Parsing path with language code
+ * ```typescript
+ * getActiveDialogFromPathname("/fr/about", ["en", "fr"]);
+ * // returns "about"
+ * ```
+ */
+const getActiveDialogFromPathname = (pathname: string, supportedLangs: string[]): DialogType => {
+	const pathParts = pathname.split("/").filter(Boolean);
+	if (pathParts.length === 0) return null;
+	const firstPart = pathParts[0];
+	const dialogPath = supportedLangs.includes(firstPart) ? pathParts[1] || null : firstPart;
+
+	return VALID_DIALOGS.has(dialogPath as DialogType) ? (dialogPath as DialogType) : null;
+};
+
+/**
  * Provider component for managing the state and logic of routed dialogs.
  *
  * @remarks
@@ -62,15 +96,8 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		return safeGetItem("tutorialFinished") === "true";
 	});
 
-	const pathParts = location.pathname.split("/").filter(Boolean);
-	const langCand = pathParts[0];
-
 	const supportedLangs = getSupportedLanguages(i18n);
-	const dialogPath: DialogType = supportedLangs.includes(langCand)
-		? (pathParts[1] as DialogType) || null
-		: (pathParts[0] as DialogType) || null;
-
-	const activeDialog: DialogType = VALID_DIALOGS.has(dialogPath) ? dialogPath : null;
+	const activeDialog = getActiveDialogFromPathname(location.pathname, supportedLangs);
 
 	/**
 	 * Navigates to a specific dialog route or sets the share URL state.
