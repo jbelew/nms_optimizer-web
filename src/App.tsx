@@ -100,9 +100,7 @@ const AppContent: FC = () => {
 	useSeoAndTitle();
 	useUrlValidation();
 
-	const [showWelcome, setShowWelcome] = useState(
-		() => !userVisited && !activeDialog && !isBot()
-	);
+	const [showWelcome, setShowWelcome] = useState(() => !userVisited && !activeDialog && !isBot());
 
 	useEffect(() => {
 		if (!userVisited && activeDialog) {
