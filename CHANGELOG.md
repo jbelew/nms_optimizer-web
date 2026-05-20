@@ -1,3 +1,24 @@
+## [7.3.4](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.3...v7.3.4) (2026-05-20)
+
+
+### Bug Fixes
+
+* ensure switchPlatform resets result in gridStore ([e07ff8b](https://github.com/jbelew/nms_optimizer-web/commit/e07ff8baaf3023d42632460fb5e832672451eb21))
+* **mobile:** resolve broken load and save build buttons in mobile toolbar ([baef95f](https://github.com/jbelew/nms_optimizer-web/commit/baef95fb9131049c0b47655e128140bd79839d75))
+* remove useDeferredValue to restore suspense when switching ship types ([9783744](https://github.com/jbelew/nms_optimizer-web/commit/97837446b7be4eef9f80b962b0e33701f919a88d))
+* replace scientific-notation rounding in computeBonusStatus ([290018c](https://github.com/jbelew/nms_optimizer-web/commit/290018c1037630c13921202ad429f71150b050b0))
+* resolve knip issues in Storybook and UI store ([2cbaea0](https://github.com/jbelew/nms_optimizer-web/commit/2cbaea00aefea4a4ee2900f000fd87153b9c1fe9))
+* **styles:** update background handling for mobile responsiveness and accessibility ([2cdc6af](https://github.com/jbelew/nms_optimizer-web/commit/2cdc6affa81adf969782e04265e1929ae89b79bc))
+* **styles:** update mobile background color for improved visibility ([857ea6a](https://github.com/jbelew/nms_optimizer-web/commit/857ea6a2d3223cd258e0e1ddd7ea84845d3900ce))
+* **sync:** resolve shipType URL synchronization infinite loop and Storybook/Knip warnings ([c57d7f6](https://github.com/jbelew/nms_optimizer-web/commit/c57d7f65217688fcf20f2e2eb45dd607274c0c3d))
+* **ui:** resolve Storybook test failures and implement dynamic tech tree layout ([08a387c](https://github.com/jbelew/nms_optimizer-web/commit/08a387c02f218361f371bbf86c84e92f8fe65cbe))
+
+
+### Performance Improvements
+
+* convert useOptimizeStore to per-field selectors ([f241c5c](https://github.com/jbelew/nms_optimizer-web/commit/f241c5c0c0744b2611d9566062f10d97a897a76d))
+* **react:** implement react compiler best practices and secure i18n blocks ([93d88c0](https://github.com/jbelew/nms_optimizer-web/commit/93d88c07de5b475f6b48e0af5637fbe2cc5dfc37))
+
 ## [7.3.3](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.2...v7.3.3) (2026-05-18)
 
 
