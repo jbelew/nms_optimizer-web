@@ -59,12 +59,8 @@ export const ShipTypesLoader = () => {
  */
 const MainAppBackgroundServices: React.FC = () => {
 	const mount = useIdleMount();
-	const { t } = useTranslation();
 	const { clearPatternNoFitTech, handleForceCurrentPnfOptimize, patternNoFitTech } =
 		useMainAppOptimization();
-	const { loadBuild, saveBuild } = useMainAppBuildManagement();
-	const { fileInputRef, handleFileSelect } = loadBuild;
-	const { handleBuildNameCancel, handleBuildNameConfirm, isSaveBuildDialogOpen } = saveBuild;
 
 	if (!mount) return null;
 
@@ -76,19 +72,6 @@ const MainAppBackgroundServices: React.FC = () => {
 				onClose={clearPatternNoFitTech}
 				onForceOptimize={handleForceCurrentPnfOptimize}
 				technologyName={patternNoFitTech}
-			/>
-			<BuildNameDialog
-				isOpen={isSaveBuildDialogOpen}
-				onCancel={handleBuildNameCancel}
-				onConfirm={handleBuildNameConfirm}
-			/>
-			<input
-				accept=".nms"
-				aria-label={t("buttons.loadBuild")}
-				className="hidden"
-				onChange={handleFileSelect}
-				ref={fileInputRef}
-				type="file"
 			/>
 			<ErrorMessageRenderer />
 			<ToastRenderer />
@@ -105,20 +88,41 @@ const MainAppMobileToolbar: React.FC = () => {
 		useMainAppGlobal();
 	const { loadBuild, saveBuild } = useMainAppBuildManagement();
 	const { solving } = useMainAppOptimization();
+	const { t } = useTranslation();
 
 	if (!isSmallScreen) return null;
 
+	const { fileInputRef, handleFileSelect } = loadBuild;
+	const { handleBuildNameCancel, handleBuildNameConfirm, isSaveBuildDialogOpen } = saveBuild;
+
 	return (
-		<MobileToolbar
-			gridRef={containerRef}
-			hasModulesInGrid={hasModulesInGrid}
-			isVisible={isVisible}
-			onLoadBuild={loadBuild.handleLoadBuild}
-			onSaveBuild={saveBuild.handleSaveBuild}
-			onShowChangelog={handleShowChangelog}
-			ref={toolbarRef as React.Ref<HTMLDivElement>}
-			solving={solving}
-		/>
+		<>
+			<MobileToolbar
+				gridRef={containerRef}
+				hasModulesInGrid={hasModulesInGrid}
+				isVisible={isVisible}
+				onLoadBuild={loadBuild.handleLoadBuild}
+				onSaveBuild={saveBuild.handleSaveBuild}
+				onShowChangelog={handleShowChangelog}
+				ref={toolbarRef as React.Ref<HTMLDivElement>}
+				solving={solving}
+			/>
+			<Suspense fallback={null}>
+				<BuildNameDialog
+					isOpen={isSaveBuildDialogOpen}
+					onCancel={handleBuildNameCancel}
+					onConfirm={handleBuildNameConfirm}
+				/>
+			</Suspense>
+			<input
+				accept=".nms"
+				aria-label={t("buttons.loadBuild")}
+				className="hidden"
+				onChange={handleFileSelect}
+				ref={fileInputRef}
+				type="file"
+			/>
+		</>
 	);
 };
 
