@@ -1,11 +1,11 @@
 import type { FC } from "react";
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
 import { Button, Skeleton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { UserStatsContent } from "./userStatsContent";
+import AppDialog from "@/components/AppDialog/Base/AppDialog";
 
-const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
+import { UserStatsContent } from "./userStatsContent";
 
 /**
  * Props for the `UserStatsDialog` component.

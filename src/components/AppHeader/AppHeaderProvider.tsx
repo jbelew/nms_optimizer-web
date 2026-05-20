@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next";
 
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
-import { useA11yStore } from "@/store/app/a11yStore";
 import { useGridStore } from "@/store/grid/gridStore";
+import { useA11yStore } from "@/store/ui/uiStore";
 import { useDialog } from "@/utils/system/dialogUtils";
 
 import { AppHeaderContext } from "./useAppHeaderContext";

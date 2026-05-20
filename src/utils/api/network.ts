@@ -8,7 +8,8 @@
  * @category Utilities
  */
 
-import { useOptimizeStore } from "@/store/app/optimizeStore";
+import { useOptimizeStore } from "@/store/ui/uiStore";
+import { Logger } from "@/utils/system/monitoring";
 
 /**
  * Options for the `apiCall` function, extending standard `RequestInit`.
@@ -115,7 +116,7 @@ export async function apiCall<T = unknown>(
 	try {
 		return await fetchJson<T>(url, fetchOptions, timeout);
 	} catch (error) {
-		console.error("API call failed:", error);
+		Logger.error("API call failed", error);
 
 		if (!skipGlobalError && !isCritical) {
 			// Always trigger error dialog for any failure in apiCall unless skipped or critical
@@ -203,7 +204,10 @@ export async function fetchWithTimeout(
 	let timeoutTriggered = false;
 	const timeoutId = setTimeout(() => {
 		timeoutTriggered = true;
-		console.warn(`[fetchWithTimeout] Timeout (${timeoutMs}ms) TRIGGERED for: ${url}`);
+		Logger.warn(`[fetchWithTimeout] Timeout (${timeoutMs}ms) TRIGGERED for: ${url}`, {
+			timeoutMs,
+			url,
+		});
 		controller.abort();
 	}, timeoutMs);
 
@@ -218,7 +222,9 @@ export async function fetchWithTimeout(
 		return response;
 	} catch (error) {
 		if (timeoutTriggered && error instanceof Error && error.name === "AbortError") {
-			console.error(`[fetchWithTimeout] Request aborted due to timeout: ${url}`);
+			Logger.error(`[fetchWithTimeout] Request aborted due to timeout: ${url}`, error, {
+				url,
+			});
 			throw new Error(`Request timeout after ${timeoutMs}ms: ${url}`, { cause: error });
 		}
 

@@ -2,8 +2,7 @@
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useErrorStore } from "@/store/app/errorStore";
-import { useSessionStore } from "@/store/app/sessionStore";
+import { useErrorStore, useSessionStore } from "@/store/ui/uiStore";
 
 /**
  * Maps session counter thresholds to error message keys.
@@ -52,8 +51,8 @@ const ERROR_THRESHOLDS = {
  *
  * @see {@link useErrorStore} for error dispatching.
  * @see {@link useSessionStore} for counter values.
- * @see {@link ../store/app/sessionStore.ts SessionStore Source}
- * @see {@link ../store/app/errorStore.ts ErrorStore Source}
+ * @see {@link ../store/ui/uiStore.ts SessionStore Source}
+ * @see {@link ../store/ui/uiStore.ts ErrorStore Source}
  *
  * @category Hooks
  *
@@ -80,7 +79,8 @@ export const useErrorDispatcher = () => {
 		supercharged_limit: false,
 	});
 
-	// Reset triggered flags when session resets (all counters back to 0)
+	// Reset triggered flags when session resets (all counters back to 0),
+	// otherwise evaluate each constraint counter against its threshold.
 	useEffect(() => {
 		if (
 			supercharged_limit === 0 &&
@@ -96,62 +96,27 @@ export const useErrorDispatcher = () => {
 				supercharged_fixed: false,
 				supercharged_limit: false,
 			};
-		}
-	}, [supercharged_limit, supercharged_fixed, grid_fixed, module_locked, row_limit]);
 
-	useEffect(() => {
-		if (
-			supercharged_limit >= ERROR_THRESHOLDS.supercharged_limit.threshold &&
-			!triggeredRef.current.supercharged_limit
-		) {
-			triggeredRef.current.supercharged_limit = true;
-			const message = t(ERROR_THRESHOLDS.supercharged_limit.messageKey, {
-				count: supercharged_limit,
-			});
-			addError(message, ERROR_THRESHOLDS.supercharged_limit.type);
+			return;
 		}
-	}, [supercharged_limit, addError, t]);
 
-	useEffect(() => {
-		if (
-			supercharged_fixed >= ERROR_THRESHOLDS.supercharged_fixed.threshold &&
-			!triggeredRef.current.supercharged_fixed
-		) {
-			triggeredRef.current.supercharged_fixed = true;
-			const message = t(ERROR_THRESHOLDS.supercharged_fixed.messageKey, {
-				count: supercharged_fixed,
-			});
-			addError(message, ERROR_THRESHOLDS.supercharged_fixed.type);
-		}
-	}, [supercharged_fixed, addError, t]);
+		const counters = {
+			grid_fixed,
+			module_locked,
+			row_limit,
+			supercharged_fixed,
+			supercharged_limit,
+		};
 
-	useEffect(() => {
-		if (
-			grid_fixed >= ERROR_THRESHOLDS.grid_fixed.threshold &&
-			!triggeredRef.current.grid_fixed
-		) {
-			triggeredRef.current.grid_fixed = true;
-			const message = t(ERROR_THRESHOLDS.grid_fixed.messageKey, { count: grid_fixed });
-			addError(message, ERROR_THRESHOLDS.grid_fixed.type);
-		}
-	}, [grid_fixed, addError, t]);
+		(Object.keys(ERROR_THRESHOLDS) as Array<keyof typeof ERROR_THRESHOLDS>).forEach((key) => {
+			const config = ERROR_THRESHOLDS[key];
+			const currentValue = counters[key];
 
-	useEffect(() => {
-		if (
-			module_locked >= ERROR_THRESHOLDS.module_locked.threshold &&
-			!triggeredRef.current.module_locked
-		) {
-			triggeredRef.current.module_locked = true;
-			const message = t(ERROR_THRESHOLDS.module_locked.messageKey, { count: module_locked });
-			addError(message, ERROR_THRESHOLDS.module_locked.type);
-		}
-	}, [module_locked, addError, t]);
-
-	useEffect(() => {
-		if (row_limit >= ERROR_THRESHOLDS.row_limit.threshold && !triggeredRef.current.row_limit) {
-			triggeredRef.current.row_limit = true;
-			const message = t(ERROR_THRESHOLDS.row_limit.messageKey, { count: row_limit });
-			addError(message, ERROR_THRESHOLDS.row_limit.type);
-		}
-	}, [row_limit, addError, t]);
+			if (currentValue >= config.threshold && !triggeredRef.current[key]) {
+				triggeredRef.current[key] = true;
+				const message = t(config.messageKey, { count: currentValue });
+				addError(message, config.type);
+			}
+		});
+	}, [supercharged_limit, supercharged_fixed, grid_fixed, module_locked, row_limit, addError, t]);
 };

@@ -13,16 +13,21 @@
  */
 
 import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "@/types/tech";
-import { use, useEffect } from "react";
+import { use, useEffect, useMemo } from "react";
 
 import { API_URL } from "@/constants";
 import { useGridStore } from "@/store/grid/gridStore";
-import { useTechStore } from "@/store/tech/techStore";
-import { useTechTreeLoadingStore } from "@/store/tech/techTreeLoadingStore";
+import { sessionCoordinator } from "@/store/sessionCoordinator";
+import { useTechTreeLoadingStore, useUiStore } from "@/store/ui/uiStore";
 import { apiCall } from "@/utils/api/network";
+import { Logger } from "@/utils/system/monitoring";
 import { getTechTreeMaps } from "@/utils/tech/techTreeUtils";
 import { isValidRecommendedBuild } from "@/utils/validation/dataValidation";
 
+/**
+ * Core technology and module types used throughout the tech tree and grid systems.
+ * @category Hooks
+ */
 export type { Module, RecommendedBuild, TechTree, TechTreeItem };
 
 /**
@@ -96,7 +101,7 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 
 	if (!cache.has(cacheKey)) {
 		queueMicrotask(() => {
-			useTechTreeLoadingStore.getState().setLoading(true);
+			useUiStore.getState().setTechTreeLoading(true);
 		});
 
 		const baseUrl = API_URL ? (API_URL.endsWith("/") ? API_URL : `${API_URL}/`) : "/";
@@ -106,7 +111,7 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 					data.recommended_builds = data.recommended_builds.filter(
 						(build: RecommendedBuild) => {
 							if (!isValidRecommendedBuild(build)) {
-								console.error(
+								Logger.error(
 									"Invalid recommended build found in tech tree:",
 									build
 								);
@@ -119,13 +124,13 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 					);
 				}
 
-				useTechTreeLoadingStore.getState().setLoading(false);
+				useUiStore.getState().setTechTreeLoading(false);
 
 				return data;
 			})
 			.catch((error) => {
-				console.error("Error fetching tech tree:", error);
-				useTechTreeLoadingStore.getState().setLoading(false);
+				Logger.error("Error fetching tech tree:", error);
+				useUiStore.getState().setTechTreeLoading(false);
 
 				return {} as TechTree;
 			});
@@ -149,7 +154,6 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
  * @returns {TechTree} The loaded technology tree data structure.
  *
  * @see {@link fetchTechTree} for the promise creator.
- * @see {@link useTechStore} for technology grouping and coloring.
  * @see {@link useGridStore} for grid initialization.
  *
  * @hook
@@ -169,25 +173,23 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTree {
 	const data = use(fetchTechTree(shipType));
 
+	const maps = useMemo(() => (data ? getTechTreeMaps(data) : null), [data]);
+
 	useEffect(() => {
-		if (data && Object.keys(data).length > 0) {
-			const initStores = () => {
-				const { activeGroups, techColors, techGroups } = getTechTreeMaps(data);
-				useTechStore.getState().initializeTechTree(techColors, techGroups, activeGroups);
+		if (data && Object.keys(data).length > 0 && maps) {
+			const { activeGroups, techColors, techGroups } = maps;
+			sessionCoordinator.initializeTechTree(techColors, techGroups, activeGroups);
 
-				const gridStore = useGridStore.getState();
+			const gridStore = useGridStore.getState();
 
-				if (data.grid_definition && !gridStore.selectHasModulesInGrid()) {
-					gridStore.setInitialGridDefinition(data.grid_definition);
-					gridStore.setGridFromInitialDefinition(data.grid_definition);
-				}
+			if (data.grid_definition && !gridStore.hasModulesInGrid) {
+				gridStore.setInitialGridDefinition(data.grid_definition);
+				gridStore.setGridFromInitialDefinition(data.grid_definition);
+			}
 
-				useTechTreeLoadingStore.getState().setLoading(false);
-			};
-
-			initStores();
+			useUiStore.getState().setTechTreeLoading(false);
 		}
-	}, [data, shipType]);
+	}, [data, maps]);
 
 	return data;
 }

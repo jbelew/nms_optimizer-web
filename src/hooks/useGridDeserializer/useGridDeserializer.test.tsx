@@ -32,6 +32,7 @@ vi.mock("@/store/grid/gridStore", () => ({
 }));
 
 vi.mock("@/utils/validation/dataValidation", () => ({
+	isValidRecommendedBuild: vi.fn(),
 	validateRecommendedBuild: vi.fn(),
 }));
 
@@ -172,14 +173,16 @@ describe("deserialize", () => {
 
 		// Assert
 		expect(result).toBeNull();
-		// The error about fetch failing is logged from fetchTechTreeAsync, and then
-		// deserialize logs its own error about empty tech tree data
+		// The error about fetch failing is logged from fetchTechTreeAsync
 		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			"Error fetching tech tree:",
-			expect.any(Error)
+			expect.stringContaining("[ERROR] Error fetching tech tree:"),
+			expect.any(Error),
+			undefined
 		);
 		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			"Tech tree data is empty. Fetch likely failed."
+			expect.stringContaining("[ERROR] Tech tree data is empty. Fetch likely failed."),
+			undefined,
+			undefined
 		);
 		expect(mockSetTechColors).not.toHaveBeenCalled();
 		consoleErrorSpy.mockRestore();
@@ -196,7 +199,10 @@ describe("deserialize", () => {
 		// Assert
 		expect(result).toBeNull();
 		expect(consoleWarnSpy).toHaveBeenCalledWith(
-			"No serialized grid data found. Skipping deserialization."
+			expect.stringContaining(
+				"[WARN] No serialized grid data found. Skipping deserialization."
+			),
+			undefined
 		);
 		expect(mockSetTechColors).not.toHaveBeenCalled();
 		consoleWarnSpy.mockRestore();
@@ -215,9 +221,9 @@ describe("deserialize", () => {
 		expect(result).toBeNull();
 		// The actual error thrown is URI malformed, caught by the outer try/catch
 		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			"Error deserializing grid:",
-			"URI malformed",
-			expect.any(String)
+			expect.stringContaining("[ERROR] Error deserializing grid:"),
+			expect.any(URIError),
+			undefined
 		);
 		expect(mockSetTechColors).not.toHaveBeenCalled();
 		consoleErrorSpy.mockRestore();
@@ -234,9 +240,9 @@ describe("deserialize", () => {
 		// Assert
 		expect(result).toBeNull();
 		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			"Invalid serialized grid format. Incorrect number of parts. Expected 6, got",
-			3,
-			"Skipping deserialization."
+			expect.stringContaining("[ERROR] Invalid serialized grid format"),
+			expect.any(Error),
+			expect.objectContaining({ received: 3 })
 		);
 		expect(mockSetTechColors).not.toHaveBeenCalled();
 		consoleErrorSpy.mockRestore();
@@ -256,7 +262,11 @@ describe("deserialize", () => {
 		expect(result).toBeNull();
 		// This now correctly catches the length mismatch error
 		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			expect.stringContaining("Invalid serialized grid format: String length mismatch.")
+			expect.stringContaining(
+				"[ERROR] Invalid serialized grid format: String length mismatch."
+			),
+			undefined,
+			undefined
 		);
 		expect(mockSetTechColors).not.toHaveBeenCalled();
 		consoleErrorSpy.mockRestore();
@@ -279,7 +289,11 @@ describe("deserialize", () => {
 		// Assert
 		expect(result).toBeNull();
 		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			expect.stringContaining("Invalid serialized grid format: String length mismatch.")
+			expect.stringContaining(
+				"[ERROR] Invalid serialized grid format: String length mismatch."
+			),
+			undefined,
+			undefined
 		);
 		expect(mockSetTechColors).not.toHaveBeenCalled();
 		consoleErrorSpy.mockRestore();

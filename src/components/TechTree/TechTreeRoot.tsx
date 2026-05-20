@@ -8,24 +8,18 @@ import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
  */
 export const TechTreeRoot: React.FC<{
 	children: React.ReactNode;
-	hasRecommendedBuilds: boolean;
-}> = ({ children, hasRecommendedBuilds }) => {
+}> = ({ children }) => {
 	const isLarge = useBreakpoint("1024px");
-	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "523px";
 
 	if (isLarge) {
-		const baseHeight = parseInt(DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT, 10);
-		const scrollAreaHeight = hasRecommendedBuilds
-			? `${baseHeight - 47}px`
-			: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT;
-
 		return (
 			<ScrollArea
 				className="main-app__tech-tree-sidebar shadow-sm"
 				scrollbars="vertical"
 				style={{
 					borderRadius: "var(--radius-5)",
-					height: scrollAreaHeight,
+					flexGrow: 1,
+					minHeight: 0,
 					padding: "var(--space-4)",
 					paddingRight: "var(--space-5)",
 				}}

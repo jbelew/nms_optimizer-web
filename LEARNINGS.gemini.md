@@ -957,3 +957,94 @@ The E2E test suite was brittle due to manual timeouts, incorrect asset paths, an
     2. **Direct Result**: The combined effect of lazy-loading heavy dynamic modules (`html-to-image`, `socket.io-client`), optimizing css pipelines, and centralizing layout components has successfully resolved the performance regression and achieved an elite-grade user experience.
 
 
+
+## PRAR Cycle: Codebase Cleanup & Anti-pattern Resolution (2026-05-18)
+
+### Problem
+Identified 7 anti-patterns in the NMS Optimizer Web UI, including redundant memoization, context over-engineering, module-level state leaks, and inconsistent store access.
+
+### Research
+- Audited 100+ instances of manual memoization.
+- Mapped 'MainAppProvider' and its single-hook orchestration pattern.
+- Located module-level variables in 'useGridCellInteraction.ts'.
+
+### Act
+- **Logic Refactoring**: Extracted 'getUpgradePriority' to a pure utility with unit tests.
+- **State Migration**: Moved double-tap state from hook-level variables to 'GridStore'.
+- **Architecture Simplification**: Eliminated 'createMainAppContext' and simplified 'MainAppProvider' to act as a logic-only bridge, allowing components to use direct Zustand selectors.
+- **Centralization**: Unified optimization status (solving/progress) in 'useOptimizeStore'.
+- **Documentation**: Updated JSDoc to 'agentic-jsdoc' standards across all modified files.
+
+### Review
+- Verified that 'isSharedGrid' prop drilling was successfully removed.
+- Fixed TypeScript and test regressions caused by store schema updates.
+- Ensured the React Compiler can handle remaining optimizations by removing manual 'useMemo' and 'useCallback'.
+- Confirmed all 915 unit tests pass and build/lint are green.
+
+## 2026-05-19: Fixing E2E Test Failures after Refactoring
+
+### Problem
+- E2E tests were failing due to several issues:
+  1. `window.useGridStore` was not being correctly exposed because `VITE_E2E_TESTING` was not baked into the build.
+  2. `UpdatePrompt` E2E test failed with React error #306 (nested lazy loading issue) in production builds.
+  3. `Resilience` E2E tests had fragile synchronization logic for redirects.
+
+### Solution
+1. **Store Exposure:**
+   - Ensured that `build:e2e` is used, which correctly sets `mode e2e`.
+   - Explicitly exposed `__BUILD_DATE__` on `window` in `src/main.tsx` when in E2E mode to allow reliable version comparisons in tests.
+2. **UpdatePrompt Fix:**
+   - Identified that nesting lazy-loaded components (`UpdatePrompt` lazy-loading `AppDialog`) was causing React error #306 in minified production/e2e builds.
+   - Changed `UpdatePrompt` to use a static import for `AppDialog` (since it's already in the main bundle anyway), resolving the error.
+3. **Test Reliability:**
+   - Refactored `update-prompt.spec.ts` to use `window.__APP_READY__` instead of a race-prone event listener.
+   - Improved `resilience.spec.ts` redirect wait to be more robust by only checking for the presence of the unique `reload=` query parameter.
+
+### Outcome
+- All 15 E2E tests (13 passed, 2 skipped) are now passing consistently in CI mode locally using Chromium.
+
+## 2026-05-19: Fixing Storybook Test Failures after Store Refactoring
+
+### Perceive & Understand
+* **Request:** The user reported that all Storybook tests were failing.
+* **Context:** A recent refactoring (2026-05-18) consolidated multiple UI-related stores into a single `useUiStore` and provided backward-compatible hook facades like `useTechTreeLoadingStore`.
+* **Findings:** The `.storybook/decorators.tsx` file was using `useTechTreeLoadingStore.setState`. Since the refactor turned this store into a hook facade, it no longer had a `.setState` method, causing a `TypeError` in all stories.
+
+### Reason & Plan
+* **Plan:** Update `.storybook/decorators.tsx` to use the underlying `useUiStore.setState` directly. Also ensure other consolidated states (like `isModuleSelectionDialogOpen`) are reset, and add a reset for `useOptimizeStore` to improve test isolation.
+
+### Act & Implement
+* **Action:** Updated `StoreResetWrapper` in `.storybook/decorators.tsx` to reset `useUiStore` and `useOptimizeStore`.
+* **Action:** Fixed a typo in `ThemeWrapper` where the 'light' theme logic was incorrectly removing the 'light' class instead of the 'dark' class.
+* **Verification:** Ran `bun run test:storybook` and confirmed that all 35 tests passed.
+
+### Refine & Reflect
+* **Reflection:** When refactoring stores into hooks or facade objects, it's crucial to search for all usages of `.setState`, `.getState()`, and `.subscribe()` project-wide, including in Storybook decorators and test setups. Storybook decorators are a common "blind spot" during refactoring as they aren't always covered by standard type-checking if not configured correctly.
+
+## 2026-05-19: Final Deep Code Review & React 19 Optimization
+
+### Perceive & Understand
+
+*   **Request:** Conducted a final, deep code review to eliminate "AI slop," anti-patterns, and over-engineered logic in a React 19 codebase.
+*   **Context:** The application was using many legacy React 18 patterns (manual `useMemo`, `useCallback`, `useLatest` refs) that are largely redundant with the React Compiler. Accessibility logic (`a11yMode`) was also identified as broken.
+
+### Reason & Plan
+
+*   **Plan:** 
+    1. Resolve accessibility selector issues in `main.tsx`.
+    2. Refactor complex interaction hooks (`useGridCellInteraction`) to remove redundant ref-sync patterns.
+    3. Prune manual memoization where the compiler can take over.
+    4. Fix TypeScript errors in `optimizationManager.ts` and standardize environment variable usage.
+
+### Act & Implement
+
+*   **Action:** 
+    - Fixed `a11yMode` by targeting `document.body.classList` correctly.
+    - Refactored `useGridCellInteraction.ts`, removing `useLatest` and `useTransition`.
+    - Discovered and fixed a double-tap regression on mobile by implementing a "revert first tap" strategy in `handleTouchLogic`.
+    - Cleaned up `useTechModuleManagement.ts`, keeping only necessary `useMemo` wrappers required for `useEffect` reference stability.
+    - Achieved a zero-error, zero-warning state across `oxlint`, `eslint`, and `tsc`.
+
+### Refine & Reflect
+
+*   **Reflection:** While the React 19 Compiler handles the majority of performance-related memoization, manual `useMemo` remains essential for maintaining stable object/array references used as `useEffect` dependencies. Removing "AI slop" must be balanced against interaction timing; moving away from ref-based state synchronization can expose race conditions in multi-event sequences (like double-taps) that require robust state reversion logic.

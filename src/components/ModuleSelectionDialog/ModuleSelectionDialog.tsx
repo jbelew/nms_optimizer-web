@@ -2,8 +2,8 @@
  * Interactive technology module configuration dialog module.
  */
 
-import React, { lazy, memo, Suspense } from "react";
-import { CheckCircledIcon, InfoCircledIcon } from "@radix-ui/react-icons";
+import React, { memo, Suspense } from "react";
+import { CheckCircledIcon, InfoCircledIcon, MagicWandIcon } from "@radix-ui/react-icons";
 import {
 	Avatar,
 	Badge,
@@ -15,8 +15,9 @@ import {
 	Separator,
 	Text,
 } from "@radix-ui/themes";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
+import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useDialog } from "@/utils/system/dialogUtils";
 
@@ -30,8 +31,10 @@ import type { GroupedModules, ModuleSelectionDialogProps, SelectionModule } from
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 
-const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
-
+/**
+ * Shared types for module grouping and dialog properties.
+ * @category Components
+ */
 export type { GroupedModules, ModuleSelectionDialogProps, SelectionModule };
 
 /** Path to the fallback technology icon. */
@@ -41,6 +44,12 @@ const baseImagePath = "/assets/img/grid/";
 
 /**
  * Parses and styles parenthetical text fragments within a string.
+ *
+ * @param {string} text - The input text containing parentheses.
+ *
+ * @returns {React.ReactNode} Formatted React nodes with styled badges.
+ *
+ * @category Utilities
  */
 const formatParentheses = (text: string): React.ReactNode => {
 	const pattern = /\([^)]+\)/g;
@@ -65,6 +74,12 @@ const formatParentheses = (text: string): React.ReactNode => {
 
 /**
  * Parses and styles bracketed text fragments within a technology label.
+ *
+ * @param {string} label - The input label string.
+ *
+ * @returns {React.ReactNode} Formatted React nodes with code blocks.
+ *
+ * @category Utilities
  */
 const formatLabel = (label: string): React.ReactNode => {
 	const pattern = /\[.*?\]/g;
@@ -85,6 +100,16 @@ const formatLabel = (label: string): React.ReactNode => {
 
 /**
  * Individual module selection checkbox with icon and label.
+ *
+ * @param {object} props - Component properties.
+ * @param {boolean} props.isDisabled - Whether the checkbox is disabled (e.g. due to missing prerequisites).
+ * @param {SelectionModule} props.module - The module data to display.
+ *
+ * @returns {JSX.Element} The rendered checkbox label.
+ *
+ * @component
+ *
+ * @category Components
  */
 const ModuleCheckbox: React.FC<{ isDisabled: boolean; module: SelectionModule }> = ({
 	isDisabled,
@@ -117,6 +142,17 @@ const ModuleCheckbox: React.FC<{ isDisabled: boolean; module: SelectionModule }>
 
 /**
  * Categorized group of module checkboxes.
+ *
+ * @param {object} props - Component properties.
+ * @param {string} props.groupName - The unique key of the module group.
+ * @param {SelectionModule[]} props.modules - List of modules in this group.
+ * @param {string} [props.titleOverride] - Optional display title for the group.
+ *
+ * @returns {JSX.Element | null} The rendered group of checkboxes, or `null` if no modules are present.
+ *
+ * @component
+ *
+ * @category Components
  */
 const ModuleGroup: React.FC<{
 	groupName: string;
@@ -135,28 +171,34 @@ const ModuleGroup: React.FC<{
 
 	if (["atlantid", "cosmetic", "reactor", "upgrade"].includes(groupName)) {
 		const rankToModuleMap = new Map<string, string>();
-		modules.forEach((module) => {
-			if (!module.label) return;
-			MODULE_RANK_ORDER.forEach((rank) => {
-				if (module.label.includes(rank)) {
-					rankToModuleMap.set(rank, module.id);
-				}
-			});
-		});
 
-		modules.forEach((module) => {
-			if (!module.label) return;
-			const rankIndex = MODULE_RANK_ORDER.findIndex((rank) => module.label.includes(rank));
-
-			if (rankIndex > 0) {
-				const prerequisiteRank = MODULE_RANK_ORDER[rankIndex - 1];
-				const prerequisiteModuleId = rankToModuleMap.get(prerequisiteRank);
-
-				if (prerequisiteModuleId) {
-					dependencyMap.set(module.id, prerequisiteModuleId);
+		for (const module of modules) {
+			if (module.label) {
+				for (const rank of MODULE_RANK_ORDER) {
+					if (module.label.includes(rank)) {
+						rankToModuleMap.set(rank, module.id);
+						break;
+					}
 				}
 			}
-		});
+		}
+
+		for (const module of modules) {
+			if (module.label) {
+				const rankIndex = MODULE_RANK_ORDER.findIndex((rank) =>
+					module.label!.includes(rank)
+				);
+
+				if (rankIndex > 0) {
+					const prerequisiteRank = MODULE_RANK_ORDER[rankIndex - 1];
+					const prerequisiteModuleId = rankToModuleMap.get(prerequisiteRank);
+
+					if (prerequisiteModuleId) {
+						dependencyMap.set(module.id, prerequisiteModuleId);
+					}
+				}
+			}
+		}
 	}
 
 	if (!modules || modules.length === 0) {
@@ -186,14 +228,9 @@ const ModuleGroup: React.FC<{
 			</div>
 
 			{groupName === "cosmetic" && (
-				<Blockquote
-					className="text-sm sm:text-base"
-					dangerouslySetInnerHTML={{
-						__html: t("moduleSelection.cosmeticInfo"),
-					}}
-					mb="3"
-					mt="1"
-				/>
+				<Blockquote className="text-sm sm:text-base" mb="3" mt="1">
+					<Trans components={{ p: <p /> }} i18nKey="moduleSelection.cosmeticInfo" />
+				</Blockquote>
 			)}
 			{sortedModules.map((module) => {
 				const prerequisiteId = dependencyMap.get(module.id);
@@ -208,7 +245,26 @@ const ModuleGroup: React.FC<{
 };
 
 /**
+ * A paragraph component that strips the i18n style attribute to prevent runtime errors
+ * in React 19 and replaces it with the equivalent Tailwind class.
+ *
+ * @param {React.ComponentPropsWithoutRef<"p"> & { style?: unknown }} props - Component props including style override.
+ *
+ * @returns {JSX.Element} A clean paragraph element.
+ */
+const SafeParagraph: React.FC<React.ComponentPropsWithoutRef<"p"> & { style?: unknown }> = ({
+	style,
+	...props
+}) => <p {...props} className={style ? "mt-2" : undefined} />;
+
+/**
  * The primary content component for the module selection dialog.
+ *
+ * @returns {JSX.Element} The rendered dialog body.
+ *
+ * @component
+ *
+ * @category Components
  */
 const DialogBody: React.FC = () => {
 	const { t } = useTranslation();
@@ -227,22 +283,29 @@ const DialogBody: React.FC = () => {
 	return (
 		<>
 			{isCorvette && tech !== "trails" && (
-				<span
-					className="mb-3 block text-sm sm:text-base"
-					dangerouslySetInnerHTML={{ __html: t("moduleSelection.warning") }}
-				/>
+				<span className="mb-3 block text-sm sm:text-base">
+					<Trans
+						components={{
+							i: <i />,
+							p: <SafeParagraph />,
+							strong: <strong />,
+						}}
+						i18nKey="moduleSelection.warning"
+					/>
+				</span>
 			)}
 			{tech === "trails" && (
-				<span
-					className="mb-3 block text-sm sm:text-base"
-					dangerouslySetInnerHTML={{ __html: t("moduleSelection.trailsInfo") }}
-				/>
+				<span className="mb-3 block text-sm sm:text-base">
+					<Trans
+						components={{ strong: <strong /> }}
+						i18nKey="moduleSelection.trailsInfo"
+					/>
+				</span>
 			)}
 			{!isCorvette && tech !== "trails" && (
-				<span
-					className="mb-3 block text-sm sm:text-base"
-					dangerouslySetInnerHTML={{ __html: t("moduleSelection.description") }}
-				/>
+				<span className="mb-3 block text-sm sm:text-base">
+					<Trans i18nKey="moduleSelection.description" />
+				</span>
 			)}
 			<label className="flex cursor-pointer items-center text-sm font-medium transition-colors duration-200 hover:text-(--accent-a12) sm:text-base">
 				<Checkbox
@@ -316,6 +379,12 @@ const DialogBody: React.FC = () => {
 
 /**
  * The action bar component for the module selection dialog.
+ *
+ * @returns {JSX.Element} The rendered dialog footer with Cancel and Optimize buttons.
+ *
+ * @component
+ *
+ * @category Components
  */
 const DialogFooter: React.FC = () => {
 	const { t } = useTranslation();
@@ -332,6 +401,7 @@ const DialogFooter: React.FC = () => {
 				disabled={isOptimizeDisabled}
 				onClick={handleOptimizeClick}
 			>
+				<MagicWandIcon />
 				{t("moduleSelection.optimizeButton")}
 			</Button>
 		</div>
@@ -340,6 +410,34 @@ const DialogFooter: React.FC = () => {
 
 /**
  * Interactive dialog for selecting specific technology modules for optimization.
+ *
+ * @remarks
+ * This dialog allows users to pick which modules they have installed for a given
+ * technology. It handles prerequisite validation (e.g., must select 'S' class
+ * before 'X' class if applicable) and triggers the optimization process.
+ * It uses {@link ModuleSelectionProvider} to share state across its sub-components.
+ *
+ * @param {ModuleSelectionDialogProps} props - Component properties.
+ *
+ * @returns {JSX.Element} The rendered dialog root.
+ *
+ * @see {@link ModuleSelectionProvider}
+ * @see {@link useModuleSelectionContext}
+ * @see {@link AppDialog}
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <ModuleSelectionDialog
+ *   isOpen={true}
+ *   onClose={() => {}}
+ *   tech="pulse"
+ *   translatedTechName="Pulse Drive"
+ * />
+ * ```
  */
 export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = memo((props) => {
 	const { t } = useTranslation();

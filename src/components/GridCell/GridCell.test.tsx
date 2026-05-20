@@ -1,6 +1,6 @@
 /// <reference types="@testing-library/jest-dom" />
 
-import type { TechState } from "@/store/tech/techStore";
+import type { TechStore } from "@/store/tech/techStore";
 import type { Mock } from "vitest";
 import React from "react";
 import { render, screen } from "@testing-library/react";
@@ -47,7 +47,7 @@ vi.mock("@/store/grid/gridStore", () => {
 	return { useGridStore };
 });
 
-vi.mock("@/store/app/shakeStore", () => ({
+vi.mock("@/store/ui/uiStore", () => ({
 	useShakeStore: vi.fn(() => ({
 		setShaking: vi.fn(),
 	})),
@@ -87,8 +87,8 @@ describe("GridCell", () => {
 		(useCell as unknown as Mock).mockReturnValue(mockCellState);
 
 		(useTechStore as unknown as Mock).mockImplementation(
-			(selector: (state: TechState) => unknown) => {
-				const state: TechState = {
+			(selector: (state: TechStore) => unknown) => {
+				const state: TechStore = {
 					activeGroups: {},
 					checkedModules: {},
 					clearAllCheckedModules: vi.fn(),
@@ -97,9 +97,10 @@ describe("GridCell", () => {
 					clearTechGroups: vi.fn(),
 					clearTechMaxBonus: vi.fn(),
 					clearTechSolvedBonus: vi.fn(),
-					getTechColor: vi.fn(() => "blue"),
+					getTechColor: vi.fn(),
 					initializeTechTree: vi.fn(),
 					max_bonus: {},
+					maxBonus: {},
 					setActiveGroup: vi.fn(),
 					setActiveGroups: vi.fn(),
 					setCheckedModules: vi.fn(),
@@ -110,6 +111,8 @@ describe("GridCell", () => {
 					setTechSolveMethod: vi.fn(),
 					solve_method: {},
 					solved_bonus: {},
+					solvedBonus: {},
+					solveMethod: {},
 					techColors: {},
 					techGroups: {},
 				};
@@ -123,7 +126,7 @@ describe("GridCell", () => {
 		// Mutate mockCellState with overrides before rendering
 		Object.assign(mockCellState, cellOverrides);
 
-		return render(<GridCell columnIndex={0} isSharedGrid={false} rowIndex={0} {...props} />);
+		return render(<GridCell columnIndex={0} rowIndex={0} {...props} />);
 	};
 
 	it("renders correctly", () => {

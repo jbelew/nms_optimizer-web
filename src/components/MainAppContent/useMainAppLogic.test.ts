@@ -5,7 +5,7 @@ import { vi } from "vitest";
 
 import { registerToolbarForceShow } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { usePlatformStore } from "@/store/app/platformStore";
-import { useSessionStore } from "@/store/app/sessionStore";
+import { useSessionStore } from "@/store/ui/uiStore";
 import { hideSplashScreenAndShowBackground } from "@/utils/system/splashScreen";
 
 import { useMainAppLogic } from "./useMainAppLogic";
@@ -90,7 +90,7 @@ vi.mock("@/hooks/useToast/useToast", () => ({
 
 vi.mock("@/store/grid/gridStore", () => ({
 	useGridStore: (selector: (state: unknown) => unknown) =>
-		selector({ isSharedGrid: false, selectHasModulesInGrid: () => true }),
+		selector({ hasModulesInGrid: true, isSharedGrid: false }),
 }));
 
 vi.mock("@/utils/system/splashScreen", () => ({
@@ -103,13 +103,10 @@ vi.mock("@/store/app/platformStore", () => ({
 	),
 }));
 
-vi.mock("@/store/app/sessionStore", () => ({
+vi.mock("@/store/ui/uiStore", () => ({
 	useSessionStore: vi.fn(() => ({
 		resetSession: vi.fn(),
 	})),
-}));
-
-vi.mock("@/store/tech/techTreeLoadingStore", () => ({
 	useTechTreeLoadingStore: {
 		getState: () => ({
 			setLoading: vi.fn(),

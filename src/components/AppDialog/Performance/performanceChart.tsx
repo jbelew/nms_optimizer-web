@@ -1,7 +1,7 @@
 import type { ChartDataPoint } from "./PerformanceTypes";
 import type { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
 import type { FC, KeyboardEvent, ReactNode } from "react";
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
 import { Card, Flex, SegmentedControl, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -316,7 +316,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 	const { search } = useLocation();
 	const { i18n } = useTranslation();
 
-	const selectedMetric = useMemo(() => (metric ? metric.toUpperCase() : null), [metric]);
+	const selectedMetric = metric ? metric.toUpperCase() : null;
 
 	// True for the ~500ms window during which a detail↔detail morph is in flight.
 	// While true, per-metric lines hide and a stable-key overlay handles the morph.
@@ -350,65 +350,56 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 		lastMetricRef.current = selectedMetric;
 	}, [selectedMetric]);
 
-	const updateSelectedMetric = useCallback(
-		(next: null | string) => {
-			// updateSelectedMetric now strictly handles the navigation intent.
-			// The morphing state is handled by the useEffect above to cover all
-			// navigation types (clicks, back/forward buttons, deep links).
-			const lang = (i18n.language || "en").split("-")[0];
-			const isDefaultLang = lang === "en";
-			const basePath = isDefaultLang ? "/performance" : `/${lang}/performance`;
+	const updateSelectedMetric = (next: null | string) => {
+		// updateSelectedMetric now strictly handles the navigation intent.
+		// The morphing state is handled by the useEffect above to cover all
+		// navigation types (clicks, back/forward buttons, deep links).
+		const lang = (i18n.language || "en").split("-")[0];
+		const isDefaultLang = lang === "en";
+		const basePath = isDefaultLang ? "/performance" : `/${lang}/performance`;
 
-			if (next) {
-				navigate(`${basePath}/${next.toLowerCase()}/${search}`);
-			} else {
-				navigate(`${basePath}/${search}`);
-			}
-		},
-		[navigate, i18n.language, search]
-	);
+		if (next) {
+			navigate(`${basePath}/${next.toLowerCase()}/${search}`);
+		} else {
+			navigate(`${basePath}/${search}`);
+		}
+	};
+
 	const locale = i18n.language;
 	const { chartData, summary, uniqueMetrics } = useMemo(
 		() => transformPerformanceData(data, locale, PERFORMANCE_LAYOUT.MAX_CHART_POINTS, 3, range),
 		[data, locale, range]
 	);
 
-	const versionChanges = useMemo(() => getVersionChanges(chartData), [chartData]);
+	const versionChanges = getVersionChanges(chartData);
 
-	const activeMetrics = useMemo(
-		() => METRIC_DISPLAY_ORDER.filter((m) => uniqueMetrics.includes(m)),
-		[uniqueMetrics]
-	);
+	const activeMetrics = METRIC_DISPLAY_ORDER.filter((m) => uniqueMetrics.includes(m));
 
 	const overallScore = summary?.metrics.OVERALL?.score;
 	const overallTrend = summary?.trends.OVERALL ?? "neutral";
 
-	const yDomain = useMemo<[number, number]>(
-		() => (selectedMetric ? [0, METRIC_THRESHOLDS[selectedMetric] || 10000] : OVERALL_Y_DOMAIN),
-		[selectedMetric]
-	);
+	const yDomain: [number, number] = selectedMetric
+		? [0, METRIC_THRESHOLDS[selectedMetric] || 10000]
+		: OVERALL_Y_DOMAIN;
 	const selectedMetricConfig = selectedMetric ? LIGHTHOUSE_CONFIG[selectedMetric] : null;
 
-	const xTickFormatter = useCallback(
-		(val: number) => {
-			const date = new Date(val);
-			const formatOptions: Intl.DateTimeFormatOptions = { day: "numeric", month: "numeric" };
+	const xTickFormatter = (val: number) => {
+		const date = new Date(val);
+		const formatOptions: Intl.DateTimeFormatOptions = { day: "numeric", month: "numeric" };
 
-			return getFormatter(locale, formatOptions).format(date);
-		},
-		[locale]
-	);
+		return getFormatter(locale, formatOptions).format(date);
+	};
 
-	const renderTooltip = useCallback(
-		(props: { active?: boolean; payload?: ReadonlyArray<{ payload?: ChartDataPoint }> }) => (
-			<ChartTooltipContent
-				active={props.active}
-				activeMetrics={activeMetrics}
-				payload={props.payload}
-				selectedMetric={selectedMetric}
-			/>
-		),
-		[selectedMetric, activeMetrics]
+	const renderTooltip = (props: {
+		active?: boolean;
+		payload?: ReadonlyArray<{ payload?: ChartDataPoint }>;
+	}) => (
+		<ChartTooltipContent
+			active={props.active}
+			activeMetrics={activeMetrics}
+			payload={props.payload}
+			selectedMetric={selectedMetric}
+		/>
 	);
 
 	return (

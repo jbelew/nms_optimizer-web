@@ -146,7 +146,7 @@ export const Logger = {
 			...(typeof error === "object" && error !== null ? error : { error }),
 			...data,
 		} as Record<string, unknown>);
-		console.error(`[ERROR] ${message}`, error);
+		console.error(`[ERROR] ${message}`, error, data);
 
 		if (sentryInstance) {
 			if (error instanceof Error) {
@@ -191,6 +191,8 @@ export const Logger = {
 	 */
 	info(message: string, data?: Record<string, unknown>) {
 		this.log(LogLevel.INFO, message, data);
+		// eslint-disable-next-line no-console
+		console.info(`[INFO] ${message}`, data);
 	},
 
 	/**

@@ -6,6 +6,7 @@ import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBuildFileManager } from "@/hooks/useBuildFileManager/useBuildFileManager";
 import { useToast } from "@/hooks/useToast/useToast";
 import { usePlatformStore } from "@/store/app/platformStore";
+import { Logger } from "@/utils/system/monitoring";
 
 /**
  * Return type for the `useLoadBuild` hook.
@@ -110,7 +111,7 @@ export const useLoadBuild = (): UseLoadBuildReturn => {
 					value: 1,
 				});
 			} catch (error) {
-				console.error("Load failed:", error);
+				Logger.error("Load failed:", error);
 				const errorMessage =
 					error instanceof Error ? error.message : t("toast.buildLoadError.description");
 				showError(t("toast.buildLoadError.title"), errorMessage, 5000);

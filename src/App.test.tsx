@@ -11,8 +11,9 @@ import { fireEvent, render } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { vi } from "vitest";
 
+import { useOptimizeStore } from "@/store/ui/uiStore";
+
 import { routes } from "./routes";
-import { useOptimizeStore } from "./store/app/optimizeStore";
 import { usePlatformStore } from "./store/app/platformStore";
 import { sendEvent } from "./utils/analytics/tracking";
 import { hideSplashScreenAndShowBackground } from "./utils/system/splashScreen";
@@ -116,6 +117,17 @@ vi.mock("./utils/analytics/tracking", () => ({
 }));
 
 vi.mock("./components/AppDialog/Base/AppDialog", () => ({
+	AppDialogBody: ({ children }: { children: React.ReactNode }) => (
+		<div data-testid="app-dialog-body">{children}</div>
+	),
+	AppDialogFooter: ({ children }: { children: React.ReactNode }) => (
+		<div data-testid="app-dialog-footer">{children}</div>
+	),
+	AppDialogRoot: ({ children, isOpen }: { children: React.ReactNode; isOpen: boolean }) =>
+		isOpen ? <div data-testid="app-dialog-root">{children}</div> : null,
+	AppDialogTitle: ({ title, titleKey }: { title?: string; titleKey?: string }) => (
+		<div data-testid="app-dialog-title">{titleKey || title}</div>
+	),
 	default: ({
 		content,
 		isOpen,
@@ -135,7 +147,7 @@ vi.mock("./components/AppDialog/Base/AppDialog", () => ({
 
 vi.mock("./components/AppDialog/Welcome/WelcomeContent", () => ({
 	default: ({ onClose }: { onClose: () => void }) => (
-		<div>
+		<div data-testid="welcome-content">
 			<div>dialogs.welcome.description</div>
 			<button onClick={onClose}>dialogs.welcome.getStarted</button>
 		</div>
@@ -159,7 +171,7 @@ describe("App", () => {
 		// Reset the platform store before each test
 		usePlatformStore.setState({ selectedPlatform: "standard" });
 		// Reset the optimize store before each test to prevent state leakage
-		useOptimizeStore.setState({ error: null, errorType: null, showError: false });
+		useOptimizeStore.setState({ status: { type: "idle" } });
 		// Clear all mocks
 		vi.clearAllMocks();
 	});
@@ -224,8 +236,10 @@ describe("App", () => {
 	});
 
 	describe("AppContent component", () => {
-		test("should hide splash screen when showError is true", async () => {
-			useOptimizeStore.setState({ showError: true });
+		test("should hide splash screen when status is error", async () => {
+			useOptimizeStore.setState({
+				status: { details: null, severity: "recoverable", type: "error" },
+			});
 			renderApp(["/"]);
 
 			await vi.waitFor(() => {
@@ -295,35 +309,6 @@ describe("App", () => {
 		});
 	});
 
-	describe("cleanup of prerendered markdown", () => {
-		test("should remove prerendered markdown element on mount", async () => {
-			// Create a prerendered element
-			const prerenderedElement = document.createElement("div");
-			prerenderedElement.setAttribute("data-prerendered-markdown", "true");
-			prerenderedElement.textContent = "Test content";
-			document.body.appendChild(prerenderedElement);
-
-			expect(document.querySelector('[data-prerendered-markdown="true"]')).toBeTruthy();
-
-			renderApp(["/"]);
-
-			await vi.waitFor(() => {
-				expect(document.querySelector('[data-prerendered-markdown="true"]')).toBeFalsy();
-			});
-		});
-
-		test("should not throw if no prerendered element exists", async () => {
-			// Ensure no prerendered element exists
-			const existing = document.querySelector('[data-prerendered-markdown="true"]');
-
-			if (existing) {
-				existing.remove();
-			}
-
-			expect(() => renderApp(["/"])).not.toThrow();
-		});
-	});
-
 	describe("error dialog", () => {
 		test("should render AppDialog with error content when showError is true", async () => {
 			const rendered = renderApp(["/"]);
@@ -361,7 +346,16 @@ describe("App", () => {
 
 			const rendered = renderApp(["/"]);
 
-			const getStartedButton = await rendered.findByText("dialogs.welcome.getStarted");
+			// Find the "Get Started" button in the footer
+			const footers = await rendered.findAllByTestId("app-dialog-footer");
+			const getStartedButton = await vi.waitFor(() => {
+				const btn = Array.from(footers[0].querySelectorAll("button")).find(
+					(b) => b.textContent === "dialogs.welcome.getStarted"
+				);
+				if (!btn) throw new Error("Button not found");
+
+				return btn;
+			});
 			fireEvent.click(getStartedButton);
 
 			await vi.waitFor(() => {

@@ -6,52 +6,23 @@ import React from "react";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import EmptyCellIcon from "@/components/Icons/EmptyCellIcon";
 import { useCell } from "@/hooks/useCell/useCell";
+import { useGridStore } from "@/store/grid/gridStore";
+import { getUpgradePriority } from "@/utils/grid/upgradePriority";
 
 import { useGridCellInteraction } from "./useGridCellInteraction";
 import { useGridCellStyle } from "./useGridCellStyle";
 
-/**
- * Determines the upgrade priority identifier based on a technology's label.
- */
-const getUpgradePriority = (label: string | undefined): string => {
-	if (!label) return "";
-
-	const lowerLabel = label.toLowerCase();
-
-	let tier = "";
-	if (lowerLabel.includes("theta")) tier = "1";
-	else if (lowerLabel.includes("tau")) tier = "2";
-	else if (lowerLabel.includes("sigma")) tier = "3";
-
-	if (!tier) return "";
-
-	if (lowerLabel.includes("salvaged")) return `S${tier}`;
-	if (lowerLabel.includes("forbidden")) return `F${tier}`;
-	if (lowerLabel.includes("reactor")) return `R${tier}`;
-
-	const isBooster =
-		lowerLabel.includes("booster") ||
-		lowerLabel.includes("habitation") ||
-		lowerLabel.includes("array") ||
-		lowerLabel.includes("arcadia") ||
-		lowerLabel.includes("ion barrier") ||
-		lowerLabel.includes("deflector shield") ||
-		lowerLabel.includes("mag-field") ||
-		lowerLabel.includes("thunderbird") ||
-		lowerLabel.includes("torpedo") ||
-		lowerLabel.includes("landing") ||
-		lowerLabel.includes("platform") ||
-		lowerLabel.includes("defense cannon") ||
-		lowerLabel.includes("deadeye");
-
-	if (isBooster) return `C${tier}`;
-	if (lowerLabel.includes("upgrade")) return tier;
-
-	return "";
-};
+/** Regular expression to match `.webp` file extensions at the end of a string. */
+const WEBP_REGEX = /\.webp$/;
 
 /**
  * Removes bracketed and parenthetical metadata from a technology label.
+ *
+ * @param {string | undefined} label - The raw technology label.
+ *
+ * @returns {string} The cleaned label.
+ *
+ * @category Utilities
  */
 const stripLabel = (label: string | undefined): string => {
 	if (!label) return "";
@@ -76,7 +47,7 @@ const CORNER_SPANS = (
  */
 interface GridCellProps {
 	columnIndex: number;
-	isSharedGrid: boolean;
+
 	rowIndex: number;
 }
 
@@ -84,13 +55,14 @@ interface GridCellProps {
  * Sub-component for rendering a technology module within a grid cell.
  */
 const ModuleContent: React.FC<{ cell: Cell; rowIndex: number }> = ({ cell, rowIndex }) => {
-	if (!cell.image) return null;
+	if (!cell.image) {
+		return null;
+	}
 
 	const base1x = `/assets/img/grid/${cell.image}`;
-	const base2x = base1x.replace(/\.webp$/, "@2x.webp");
+	const base2x = base1x.replace(WEBP_REGEX, "@2x.webp");
 	const url1x = `${base1x}?v=${__APP_VERSION__}`;
 	const url2x = `${base2x}?v=${__APP_VERSION__}`;
-
 	const upGradePriority = getUpgradePriority(cell.label);
 
 	return (
@@ -135,10 +107,34 @@ const EmptyContent: React.FC<{
 };
 
 /**
- * A component representing an individual interactive cell in the optimization grid.
+ * A single cell within the technology grid.
+ *
+ * @remarks
+ * Displays technology modules, supercharged slot indicators, and handles
+ * user interactions via the {@link useGridCellInteraction} hook.
+ * It manages its own selection of global state (like `isSharedGrid`) to minimize prop drilling.
+ *
+ * @param {GridCellProps} props - Component properties.
+ *
+ * @returns {JSX.Element} The rendered grid cell.
+ *
+ * @see {@link Cell}
+ * @see {@link useCell}
+ * @see {@link useGridCellInteraction}
+ * @see {@link useGridCellStyle}
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <GridCell columnIndex={0} rowIndex={0} />
+ * ```
  */
-const GridCell: React.FC<GridCellProps> = ({ columnIndex, isSharedGrid, rowIndex }) => {
+const GridCell: React.FC<GridCellProps> = ({ columnIndex, rowIndex }) => {
 	const cell = useCell(rowIndex, columnIndex);
+	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 
 	const {
 		handleClick,

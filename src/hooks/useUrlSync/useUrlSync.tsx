@@ -7,6 +7,8 @@ import { useGridDeserializer } from "@/hooks/useGridDeserializer/useGridDeserial
 import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { createGrid, useGridStore } from "@/store/grid/gridStore";
+import { sessionCoordinator } from "@/store/sessionCoordinator";
+import { Logger } from "@/utils/system/monitoring";
 
 /**
  * Custom hook for synchronizing application state with the browser's URL.
@@ -62,12 +64,14 @@ export const useUrlSync = () => {
 	const isSyncingRef = useRef(false);
 	const shipTypesRef = useRef(shipTypes);
 	const isKnownRouteRef = useRef(isKnownRoute);
+	const deserializeGridRef = useRef(deserializeGrid);
 
 	// Keep refs up to date
 	useEffect(() => {
 		shipTypesRef.current = shipTypes;
 		isKnownRouteRef.current = isKnownRoute;
-	}, [shipTypes, isKnownRoute]);
+		deserializeGridRef.current = deserializeGrid;
+	}, [shipTypes, isKnownRoute, deserializeGrid]);
 
 	// Effect to handle initial URL state and popstate events
 	useEffect(() => {
@@ -81,7 +85,7 @@ export const useUrlSync = () => {
 			try {
 				urlParams = new URLSearchParams(window.location.search);
 			} catch (e) {
-				console.warn("useUrlSync: Failed to parse URL search params", e);
+				Logger.warn("useUrlSync: Failed to parse URL search params", { error: e });
 
 				return;
 			}
@@ -93,7 +97,7 @@ export const useUrlSync = () => {
 			const validShipTypes = Object.keys(currentShipTypes);
 
 			if (validShipTypes.length === 0) {
-				console.warn("useUrlSync: Ship types not loaded yet, deferring URL sync");
+				Logger.warn("useUrlSync: Ship types not loaded yet, deferring URL sync");
 
 				return;
 			}
@@ -120,12 +124,10 @@ export const useUrlSync = () => {
 						// and we DON'T have a grid in the URL (it's not a shared link),
 						// we should reset the grid to an empty state for the new platform.
 						if (!gridFromUrl) {
-							useGridStore
-								.getState()
-								.setGridAndResetAuxiliaryState(createGrid(10, 6));
+							sessionCoordinator.switchPlatform(createGrid(10, 6));
 						}
 					} else {
-						console.warn(
+						Logger.warn(
 							`useUrlSync: Invalid platform from URL: ${platformFromUrl}. Expected one of: ${validShipTypes.join(", ")}`
 						);
 					}
@@ -134,7 +136,7 @@ export const useUrlSync = () => {
 				// Sync grid from URL to store
 				// Grid deserialization will use the platform that was just synced above
 				if (gridFromUrl) {
-					deserializeGrid(gridFromUrl);
+					deserializeGridRef.current(gridFromUrl);
 				} else {
 					const {
 						isSharedGrid: currentIsSharedGrid,
@@ -163,9 +165,8 @@ export const useUrlSync = () => {
 	}, [
 		isKnownRoute,
 		setSelectedShipTypeInStore,
-		deserializeGrid,
-		// Removing selectedShipTypeFromStore and isSharedGrid from dependencies
-		// to break the infinite loop triggered by store persistence
+		// Removing deserializeGrid from dependencies to break the infinite loop
+		// triggered by selectedPlatform changes which re-create deserializeGrid
 	]);
 
 	/**
@@ -188,7 +189,7 @@ export const useUrlSync = () => {
 
 			return url.toString();
 		} catch (error) {
-			console.warn("useUrlSync: Failed to create share URL", error);
+			Logger.warn("useUrlSync: Failed to create share URL", { error });
 
 			return `/?platform=${selectedShipTypeFromStore}&grid=${serializedGrid}`;
 		}
@@ -208,7 +209,7 @@ export const useUrlSync = () => {
 			// Use navigate to ensure React Router is aware of the URL change
 			navigate(url.pathname + url.search, { replace: true });
 		} catch (error) {
-			console.warn("useUrlSync: Failed to update URL for reset", error);
+			Logger.warn("useUrlSync: Failed to update URL for reset", { error });
 		}
 	};
 

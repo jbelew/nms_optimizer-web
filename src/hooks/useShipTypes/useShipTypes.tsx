@@ -1,20 +1,10 @@
+import { use } from "react";
 import { create } from "zustand";
 
 import { API_URL } from "@/constants";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { apiCall } from "@/utils/api/network";
-
-/**
- * A generic resource object compatible with React Suspense.
- *
- * @template T - The type of data being loaded.
- *
- * @category Types
- */
-export type Resource<T> = {
-	/** Returns the data if ready, or throws a promise/error for Suspense to handle. */
-	read: () => T;
-};
+import { Logger } from "@/utils/system/monitoring";
 
 /**
  * Details of a specific ship type.
@@ -41,57 +31,7 @@ export interface ShipTypes {
 	[key: string]: ShipTypeDetail;
 }
 
-/**
- * Creates a Suspense-compatible resource object from a promise.
- *
- * @remarks
- * This utility wraps a promise to manage its state (pending, success, error)
- * and provide a `read()` method that integrates with React Suspense.
- *
- * @template T - The type of data being loaded.
- *
- * @param {Promise<T>} promise - The asynchronous operation to wrap.
- *
- * @returns {Resource<T>} A resource object with a `read` method.
- *
- * @example
- * ```ts
- * const userResource = createResource(fetchUser(id));
- *
- * // Inside a component wrapped in <Suspense>:
- * const user = userResource.read();
- * ```
- */
-const createResource = <T,>(promise: Promise<T>): Resource<T> => {
-	let status: "error" | "pending" | "success" = "pending";
-	let result: T;
-	let error: Error;
-
-	const suspender = promise
-		.then((res: T) => {
-			status = "success";
-			result = res;
-		})
-		.catch((err: Error) => {
-			status = "error";
-			error = err;
-		});
-
-	return {
-		read(): T {
-			if (status === "pending") throw suspender;
-			if (status === "error") throw error;
-
-			if (result === undefined || result === null) {
-				throw new Error("Result is undefined or null");
-			}
-
-			return result;
-		},
-	};
-};
-
-const cache = new Map<string, Resource<ShipTypes>>();
+const cache = new Map<string, Promise<ShipTypes>>();
 
 /**
  * State and actions for the ship types store.
@@ -113,13 +53,11 @@ interface ShipTypesState {
  * Initiates a fetch for all available ship types from the API.
  *
  * @remarks
- * This function caches the resulting resource to ensure multiple calls
+ * This function caches the resulting promise to ensure multiple calls
  * do not trigger redundant network requests. It also updates the
  * `ShipTypesStore` and `PlatformStore` upon success.
  *
- * It returns a Suspense-compatible resource object.
- *
- * @returns {Resource<ShipTypes>} A Suspense resource containing ship type data.
+ * @returns {Promise<ShipTypes>} A promise resolving to ship type data.
  *
  * @see {@link useShipTypesStore} for the persistent data store.
  * @see {@link usePlatformStore} for ship-type/platform coordination.
@@ -127,10 +65,10 @@ interface ShipTypesState {
  *
  * @example
  * ```ts
- * const shipTypesResource = fetchShipTypes();
+ * const shipTypesPromise = fetchShipTypes();
  * ```
  */
-export function fetchShipTypes(): Resource<ShipTypes> {
+export function fetchShipTypes(): Promise<ShipTypes> {
 	const cacheKey = "shipTypes";
 
 	if (!cache.has(cacheKey)) {
@@ -152,14 +90,14 @@ export function fetchShipTypes(): Resource<ShipTypes> {
 				return data;
 			})
 			.catch((error) => {
-				console.error("Error fetching ship types:", error);
+				Logger.error("Error fetching ship types:", error);
 				// Error dialog is already triggered by apiCall
 				// Return empty object to prevent Suspense from throwing
 
 				return {} as ShipTypes;
 			});
 
-		cache.set(cacheKey, createResource(promise));
+		cache.set(cacheKey, promise);
 	}
 
 	return cache.get(cacheKey)!;
@@ -169,13 +107,12 @@ export function fetchShipTypes(): Resource<ShipTypes> {
  * Custom hook for retrieving ship types within a Suspense boundary.
  *
  * @remarks
- * This hook calls `read()` on the ship types resource, which will throw a
- * Promise if the data is not yet available, triggering the nearest
- * `<Suspense>` boundary.
+ * This hook uses React's `use()` hook to resolve the ship types promise,
+ * triggering the nearest `<Suspense>` boundary if the data is not yet available.
  *
  * @returns {ShipTypes} The loaded ship types data.
  *
- * @see {@link fetchShipTypes} for the resource creation logic.
+ * @see {@link fetchShipTypes} for the promise creation logic.
  * @see {@link ./useShipTypes.test.tsx Unit Tests}
  *
  * @hook
@@ -191,7 +128,7 @@ export function fetchShipTypes(): Resource<ShipTypes> {
  * ```
  */
 export function useFetchShipTypesSuspense(): ShipTypes {
-	return fetchShipTypes().read();
+	return use(fetchShipTypes());
 }
 
 /**

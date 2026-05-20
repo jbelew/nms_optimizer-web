@@ -48,6 +48,7 @@
 		"deactivateRow": "Desactivar Fila"
 	},
 	"messageSpinner": {
+		"loadingProgress": "Progreso de carga",
 		"randomMessages": [
 			"-(( ¡Pidiendo orientación al Atlas! ))-",
 			"-(( ¡Recalibrando alineaciones de nodos potenciados! ))-",

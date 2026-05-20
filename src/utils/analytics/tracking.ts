@@ -33,6 +33,7 @@ import type ReactGA from "react-ga4";
 
 import { API_URL, TRACKING_ID } from "@/constants";
 import { isBot, safeGetItem, safeSetItem } from "@/utils/browser/environment";
+import { Logger } from "@/utils/system/monitoring";
 
 /**
  * Resolved `react-ga4` module instance, accounting for CJS/ESM interop in Rolldown.
@@ -389,7 +390,9 @@ export const sendServerEvent = (
 				const success = navigator.sendBeacon(endpoint, beaconBlob);
 				if (success) return;
 			} catch (error) {
-				console.warn("navigator.sendBeacon failed, falling back to fetch:", error);
+				Logger.warn("navigator.sendBeacon failed, falling back to fetch:", {
+					error,
+				});
 			}
 		}
 
@@ -402,10 +405,10 @@ export const sendServerEvent = (
 			keepalive: true,
 			method: "POST",
 		}).catch((error) => {
-			console.error("Analytics event fallback failed:", error);
+			Logger.error("Analytics event fallback failed:", error);
 		});
 	} catch (error) {
-		console.error("Error preparing analytics event:", error);
+		Logger.error("Error preparing analytics event:", error);
 	}
 };
 
@@ -581,7 +584,7 @@ export const sendEvent = (event: GA4Event): void => {
 	try {
 		validateEvent(event);
 	} catch (validationError) {
-		console.error("Event validation failed:", validationError);
+		Logger.error("Event validation failed:", validationError);
 
 		return;
 	}

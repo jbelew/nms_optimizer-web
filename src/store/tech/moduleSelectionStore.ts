@@ -4,6 +4,7 @@ import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
+import { Logger } from "@/utils/system/monitoring";
 
 type SetItemFunction = (
 	name: string,
@@ -44,7 +45,7 @@ function debounceSetItem(
 				try {
 					await setItemFn(name, value);
 				} catch (e) {
-					console.error("Failed to save ModuleSelectionStore to localStorage", e);
+					Logger.error("Failed to save ModuleSelectionStore to localStorage", e);
 				}
 			})();
 		}, msToWait);
@@ -173,8 +174,10 @@ export const useModuleSelectionStore = create<ModuleSelectionStore>()(
 	)
 );
 
-if (import.meta.env.VITE_E2E_TESTING) {
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore - for e2e testing
-	window.useModuleSelectionStore = useModuleSelectionStore;
+if (typeof window !== "undefined" && import.meta.env.VITE_E2E_TESTING) {
+	const w = window as typeof window & {
+		useModuleSelectionStore?: typeof useModuleSelectionStore;
+	};
+
+	w["useModuleSelectionStore"] = useModuleSelectionStore;
 }

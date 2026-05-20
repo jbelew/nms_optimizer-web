@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
-import { useTechTreeLoadingStore } from "@/store/tech/techTreeLoadingStore";
+import { useTechTreeLoadingStore, useUiStore } from "@/store/ui/uiStore";
 import * as apiCallModule from "@/utils/api/network";
 
 import { clearTechTreeCache, useFetchTechTreeSuspense } from "./useTechTree";
@@ -23,8 +23,9 @@ vi.mock("@/store/grid/gridStore", () => ({
 	useGridStore: vi.fn(),
 }));
 
-vi.mock("@/store/tech/techTreeLoadingStore", () => ({
+vi.mock("@/store/ui/uiStore", () => ({
 	useTechTreeLoadingStore: vi.fn(),
+	useUiStore: vi.fn(),
 }));
 
 describe("useFetchTechTreeSuspense", () => {
@@ -86,7 +87,7 @@ describe("useFetchTechTreeSuspense", () => {
 	};
 
 	type MockGridStoreState = {
-		selectHasModulesInGrid: () => boolean;
+		hasModulesInGrid: boolean;
 		setGridFromInitialDefinition: () => void;
 		setInitialGridDefinition: (def: unknown) => void;
 	};
@@ -123,7 +124,7 @@ describe("useFetchTechTreeSuspense", () => {
 
 		vi.mocked(useGridStore).mockImplementation((selector) => {
 			const state: MockGridStoreState = {
-				selectHasModulesInGrid: () => hasGridModules,
+				hasModulesInGrid: hasGridModules,
 				setGridFromInitialDefinition: mockSetGridFromInitialDefinition,
 				setInitialGridDefinition: mockSetInitialGridDefinition,
 			};
@@ -133,7 +134,7 @@ describe("useFetchTechTreeSuspense", () => {
 
 		// Mock getState at module level
 		(useGridStore as unknown as { getState: () => MockGridStoreState }).getState = () => ({
-			selectHasModulesInGrid: () => hasGridModules,
+			hasModulesInGrid: hasGridModules,
 			setGridFromInitialDefinition: mockSetGridFromInitialDefinition,
 			setInitialGridDefinition: mockSetInitialGridDefinition,
 		});
@@ -156,7 +157,7 @@ describe("useFetchTechTreeSuspense", () => {
 				setLoading: mockSetLoading,
 			};
 
-			return selector(state as never);
+			return selector ? selector(state as never) : (state as never);
 		});
 
 		// Mock getState for TechTreeLoadingStore
@@ -165,6 +166,29 @@ describe("useFetchTechTreeSuspense", () => {
 		).getState = () => ({
 			isLoading: false,
 			setLoading: mockSetLoading,
+		});
+
+		// Mock useUiStore
+		vi.mocked(useUiStore).mockImplementation((selector) => {
+			const state = {
+				isTechTreeLoading: false,
+				setTechTreeLoading: mockSetLoading,
+			};
+
+			return selector ? selector(state as never) : (state as never);
+		});
+
+		// Mock getState for useUiStore
+		(
+			useUiStore as unknown as {
+				getState: () => {
+					isTechTreeLoading: boolean;
+					setTechTreeLoading: typeof mockSetLoading;
+				};
+			}
+		).getState = () => ({
+			isTechTreeLoading: false,
+			setTechTreeLoading: mockSetLoading,
 		});
 
 		return {

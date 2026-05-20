@@ -1,57 +1,102 @@
-import { use } from "react";
+import { useTranslation } from "react-i18next";
 
-import {
-	MainAppBuildManagementContext,
-	MainAppGlobalContext,
-	MainAppLayoutContext,
-	MainAppOptimizationContext,
-} from "./createMainAppContext";
+import { useAppLayout } from "@/hooks/useAppLayout/useAppLayout";
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
+import { useLoadBuild } from "@/hooks/useLoadBuild/useLoadBuild";
+import { useOptimize } from "@/hooks/useOptimize/useOptimize";
+import { useSaveBuild } from "@/hooks/useSaveBuild/useSaveBuild";
+import { useScrollHide } from "@/hooks/useScrollHide/useScrollHide";
+import { build, getBuildDate } from "@/routeConfig";
+import { usePlatformStore } from "@/store/app/platformStore";
+import { useGridStore } from "@/store/grid/gridStore";
+import { useDialog } from "@/utils/system/dialogUtils";
 
 /**
- * Hooks to consume focused MainApp contexts.
+ * Hook to access the main application layout state.
  *
- * @throws {Error} If used outside of a MainAppProvider.
+ * @remarks
+ * Proxies to `useAppLayout` to provide layout dimensions and refs.
+ *
+ * @returns {object} Layout state and refs.
+ *
+ * @category Hooks
  */
 export const useMainAppLayout = () => {
-	const context = use(MainAppLayoutContext);
-	if (!context) throw new Error("useMainAppLayout must be used within a MainAppProvider");
-
-	return context;
+	return useAppLayout();
 };
 
 /**
- * Hook to consume the MainApp optimization context.
+ * Hook to access the main application optimization logic.
  *
- * @throws {Error} If used outside of a MainAppProvider.
+ * @remarks
+ * Proxies to `useOptimize` to provide solving status, progress, and handlers.
+ *
+ * @returns {object} Optimization state and functions.
+ *
+ * @category Hooks
  */
 export const useMainAppOptimization = () => {
-	const context = use(MainAppOptimizationContext);
-	if (!context) throw new Error("useMainAppOptimization must be used within a MainAppProvider");
-
-	return context;
+	return useOptimize();
 };
 
 /**
- * Hook to consume the MainApp build management context.
+ * Hook to access the main application build management logic.
  *
- * @throws {Error} If used outside of a MainAppProvider.
+ * @remarks
+ * Aggregates `useLoadBuild` and `useSaveBuild` for persistence operations.
+ *
+ * @returns {object} Load/Save handlers and state.
+ *
+ * @category Hooks
  */
 export const useMainAppBuildManagement = () => {
-	const context = use(MainAppBuildManagementContext);
-	if (!context)
-		throw new Error("useMainAppBuildManagement must be used within a MainAppProvider");
+	const loadBuild = useLoadBuild();
+	const saveBuild = useSaveBuild();
 
-	return context;
+	return { loadBuild, saveBuild };
 };
 
 /**
- * Hook to consume the MainApp global context.
+ * Hook to access global application state and shared handlers.
  *
- * @throws {Error} If used outside of a MainAppProvider.
+ * @remarks
+ * Consolidates metadata (version, date), screen size breakpoints,
+ * shared grid status, and high-level interaction handlers (changelog).
+ *
+ * @returns {object} Global application state and utilities.
+ *
+ * @category Hooks
+ *
+ * @example
+ * ```tsx
+ * const { buildVersion, isSmallScreen } = useMainAppGlobal();
+ * ```
  */
 export const useMainAppGlobal = () => {
-	const context = use(MainAppGlobalContext);
-	if (!context) throw new Error("useMainAppGlobal must be used within a MainAppProvider");
+	const { t } = useTranslation();
+	const { openDialog } = useDialog();
+	const isSmallScreen = !useBreakpoint("640px");
+	const isLargeScreen = useBreakpoint("1024px");
+	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
+	const hasModulesInGrid = useGridStore((state) => state.hasModulesInGrid);
+	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
+	const { isVisible, toolbarRef } = useScrollHide(80);
 
-	return context;
+	const handleShowChangelog = () => {
+		openDialog("changelog");
+	};
+
+	return {
+		buildDate: getBuildDate(),
+		buildVersion: build,
+		handleShowChangelog,
+		hasModulesInGrid,
+		isLargeScreen,
+		isSharedGrid,
+		isSmallScreen,
+		isVisible,
+		selectedShipType,
+		t,
+		toolbarRef,
+	};
 };

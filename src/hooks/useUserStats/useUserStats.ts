@@ -3,18 +3,21 @@ import { use } from "react";
 
 import { fetchUserStats } from "@/utils/api/userStatsResource";
 
+/**
+ * Represents a single aggregate user statistic (e.g., total builds).
+ * @category Hooks
+ */
 export type { UserStat };
 
 /**
  * Custom hook for retrieving aggregate user statistics.
  *
  * @remarks
- * This hook uses React's `use()` hook to resolve the `fetchUserStats()` promise.
- * It is intended to be used within a `<Suspense>` boundary. The returned
- * statistics provide a high-level overview of global optimization trends,
- * such as total builds saved and most popular ship types.
+ * This hook uses the React 19 `use()` primitive to resolve asynchronous user statistic data.
+ * It must be used within a `<Suspense>` boundary. The statistics provide a high-level
+ * overview of global optimization trends, such as total builds saved and popular platforms.
  *
- * @returns {UserStat[]} An array of user statistics objects.
+ * @returns {UserStat[]} An array of global user statistics.
  *
  * @see {@link fetchUserStats} for the underlying resource logic.
  * @see {@link ./useUserStats.test.ts Unit Tests}
@@ -27,7 +30,8 @@ export type { UserStat };
  * ```tsx
  * const StatsDashboard = () => {
  *   const stats = useUserStats();
- *   return <div>Total Builds: {stats.find(s => s.key === 'total_builds')?.value}</div>;
+ *   const totalBuilds = stats.find(s => s.key === "total_builds")?.value ?? 0;
+ *   return <div>Total Builds Saved: {totalBuilds}</div>;
  * };
  * ```
  */

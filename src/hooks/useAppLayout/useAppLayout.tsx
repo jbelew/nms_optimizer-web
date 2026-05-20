@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "@/store/grid/gridStore";
+import { useUiStore } from "@/store/ui/uiStore";
 
 /**
  * Interface representing the dimensions and refs for the application layout.
@@ -31,6 +32,8 @@ const GRID_TABLE_WIDTH_ADJUSTMENT = 0;
  * On large screens, it synchronizes the grid height with the container height to enable
  * side-by-side scrolling.
  *
+ * It syncs results to the global `useUiStore` to allow sharing dimensions across components.
+ *
  * @returns {AppLayout} Layout state including refs and calculated dimensions.
  *
  * @see {@link useGridStore} for shared grid state.
@@ -53,8 +56,12 @@ const GRID_TABLE_WIDTH_ADJUSTMENT = 0;
 export const useAppLayout = (): AppLayout => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const gridTableRef = useRef<HTMLDivElement>(null);
-	const [gridHeight, setGridHeight] = useState<null | number>(null);
-	const [gridTableTotalWidth, setGridTableTotalWidth] = useState<number | undefined>(undefined);
+
+	const gridHeight = useUiStore((s) => s.gridSectionHeight);
+	const gridTableTotalWidth = useUiStore((s) => s.gridTableWidth);
+	const setGridHeight = useUiStore((s) => s.setGridSectionHeight);
+	const setGridTableWidth = useUiStore((s) => s.setGridTableWidth);
+
 	const isLarge = useBreakpoint("1024px");
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 
@@ -73,7 +80,7 @@ export const useAppLayout = (): AppLayout => {
 							setGridHeight(null);
 						}
 					} else if (entry.target === gridTableElement) {
-						setGridTableTotalWidth(
+						setGridTableWidth(
 							Math.round(entry.contentRect.width + GRID_TABLE_WIDTH_ADJUSTMENT)
 						);
 					}
@@ -92,7 +99,7 @@ export const useAppLayout = (): AppLayout => {
 		return () => {
 			observer.disconnect();
 		};
-	}, [isLarge, isSharedGrid]);
+	}, [isLarge, isSharedGrid, setGridHeight, setGridTableWidth]);
 
 	return {
 		containerRef,

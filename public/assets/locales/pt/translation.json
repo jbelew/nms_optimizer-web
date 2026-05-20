@@ -48,6 +48,7 @@
 		"deactivateRow": "Desativar Linha"
 	},
 	"messageSpinner": {
+		"loadingProgress": "Progresso de carregamento",
 		"randomMessages": [
 			"-(( Pedindo orientação ao Atlas! ))-",
 			"-(( Recalibrando alinhamentos de nós sobrecarregados! ))-",

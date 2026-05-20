@@ -4,8 +4,17 @@ import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { Outlet, useLocation } from "react-router-dom";
 
-import { ErrorDialog } from "./components/AppDialog/Error/errorDialog";
-import { UpdatePromptWrapper } from "./components/UpdatePrompt/updatePromptWrapper";
+import {
+	AppDialogBody,
+	AppDialogFooter,
+	AppDialogRoot,
+	AppDialogTitle,
+} from "@/components/AppDialog/Base/AppDialog";
+import { ErrorDialog } from "@/components/AppDialog/Error/ErrorDialog";
+import { useOptimizeStore } from "@/store/ui/uiStore";
+
+import { Seo } from "./components/Seo/Seo";
+import { UpdatePromptWrapper } from "./components/UpdatePrompt/UpdatePromptWrapper";
 import { DialogProvider } from "./context/dialogContext";
 import { useAnalytics } from "./hooks/useAnalytics/useAnalytics";
 import { useFileHandling } from "./hooks/useFileHandling/useFileHandling";
@@ -13,10 +22,13 @@ import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
 import { fetchTechTree } from "./hooks/useTechTree/useTechTree";
 import { useUrlSync } from "./hooks/useUrlSync/useUrlSync";
 import { useUrlNormalization, useUrlValidation } from "./hooks/useValidation/useValidation";
-import { useOptimizeStore } from "./store/app/optimizeStore";
 import { isBot } from "./utils/browser/environment";
 import { useDialog } from "./utils/system/dialogUtils";
+import { lazyNamed } from "./utils/system/lazyNamed";
+import { Logger } from "./utils/system/monitoring";
 import { hideSplashScreenAndShowBackground } from "./utils/system/splashScreen";
+
+const IS_DOCKER_BUILD = import.meta.env.VITE_DOCKER === "true";
 
 /**
  * Lazy-loaded component that displays a banner when the user is offline.
@@ -31,11 +43,6 @@ const OfflineBanner = lazy(() => import("./components/OfflineBanner/OfflineBanne
 const ShareLinkDialog = lazy(() => import("./components/AppDialog/ShareLink/ShareLinkDialog"));
 
 /**
- * Lazy-loaded component for the base dialog structure.
- */
-const AppDialog = lazy(() => import("./components/AppDialog/Base/AppDialog"));
-
-/**
  * Lazy-loaded content for the initial application welcome and introduction.
  */
 const WelcomeContent = lazy(() => import("./components/AppDialog/Welcome/WelcomeContent"));
@@ -43,29 +50,20 @@ const WelcomeContent = lazy(() => import("./components/AppDialog/Welcome/Welcome
 /**
  * Lazy-loaded orchestrator for route-based modal dialogs.
  */
-const RoutedDialogs = lazy(() =>
-	import("./components/RoutedDialogs/RoutedDialogs").then((module) => ({
-		default: module.RoutedDialogs,
-	}))
+const RoutedDialogs = lazyNamed(
+	() => import("./components/RoutedDialogs/RoutedDialogs"),
+	"RoutedDialogs"
 );
 
 /**
  * Lazy-loaded route component for displaying global user equipment statistics.
  */
-const UserStatsRoute = lazy(() =>
-	import("./routes/UserStatsRoute").then((module) => ({
-		default: module.UserStatsRoute,
-	}))
-);
+const UserStatsRoute = lazyNamed(() => import("./routes/UserStatsRoute"), "UserStatsRoute");
 
 /**
  * Lazy-loaded route component for displaying application performance metrics.
  */
-const PerformanceRoute = lazy(() =>
-	import("./routes/PerformanceRoute").then((module) => ({
-		default: module.PerformanceRoute,
-	}))
-);
+const PerformanceRoute = lazyNamed(() => import("./routes/PerformanceRoute"), "PerformanceRoute");
 
 /**
  * Inner component that manages core data loading and dialog orchestration.
@@ -90,7 +88,8 @@ const PerformanceRoute = lazy(() =>
  */
 const AppContent: FC = () => {
 	const { sendEvent } = useAnalytics();
-	const { errorType, showError } = useOptimizeStore();
+	const status = useOptimizeStore((s) => s.status);
+	const isFatal = status.type === "error" && status.severity === "fatal";
 	const { activeDialog, closeDialog, markUserVisited, shareUrl, userVisited } = useDialog();
 	const { t } = useTranslation();
 	const location = useLocation();
@@ -101,7 +100,7 @@ const AppContent: FC = () => {
 	useSeoAndTitle();
 	useUrlValidation();
 
-	const [showWelcome, setShowWelcome] = useState(!userVisited && !activeDialog && !isBot());
+	const [showWelcome, setShowWelcome] = useState(() => !userVisited && !activeDialog && !isBot());
 
 	useEffect(() => {
 		if (!userVisited && activeDialog) {
@@ -122,7 +121,7 @@ const AppContent: FC = () => {
 
 	// Track error screen if shown
 	useEffect(() => {
-		if (showError && errorType === "fatal") {
+		if (status.type === "error" && status.severity === "fatal") {
 			sendEvent({
 				action: "page_view",
 				category: "engagement",
@@ -132,17 +131,16 @@ const AppContent: FC = () => {
 				page_title: `NMS Optimizer: ${t("dialogs.titles.serverError")}`,
 			});
 		}
-	}, [showError, errorType, sendEvent, t, location.pathname, location.search]);
+	}, [status, sendEvent, t, location.pathname, location.search]);
 
 	// If an API error occurred during loading, don't render the main app
-	if (showError && errorType === "fatal") {
+	if (isFatal) {
 		return null;
 	}
 
-	const isDockerBuild = import.meta.env.VITE_DOCKER === "true";
-
 	return (
 		<>
+			<Seo />
 			<Outlet />
 			{shareUrl ? (
 				<Suspense fallback={null}>
@@ -158,12 +156,12 @@ const AppContent: FC = () => {
 					<RoutedDialogs />
 				</Suspense>
 			) : null}
-			{activeDialog === "userstats" && !isDockerBuild ? (
+			{activeDialog === "userstats" && !IS_DOCKER_BUILD ? (
 				<Suspense fallback={null}>
 					<UserStatsRoute />
 				</Suspense>
 			) : null}
-			{activeDialog === "performance" && !isDockerBuild ? (
+			{activeDialog === "performance" && !IS_DOCKER_BUILD ? (
 				<Suspense fallback={null}>
 					<PerformanceRoute />
 				</Suspense>
@@ -171,9 +169,12 @@ const AppContent: FC = () => {
 
 			{showWelcome ? (
 				<Suspense fallback={null}>
-					<AppDialog
-						content={<WelcomeContent onClose={handleCloseWelcome} />}
-						footer={
+					<AppDialogRoot isOpen={showWelcome} onClose={handleCloseWelcome}>
+						<AppDialogTitle titleKey="dialogs.titles.welcome" />
+						<AppDialogBody>
+							<WelcomeContent onClose={handleCloseWelcome} />
+						</AppDialogBody>
+						<AppDialogFooter>
 							<div className="flex justify-end gap-2">
 								<Button
 									className="cursor-pointer"
@@ -183,12 +184,8 @@ const AppContent: FC = () => {
 									{t("dialogs.welcome.getStarted")}
 								</Button>
 							</div>
-						}
-						isOpen={showWelcome}
-						onClose={handleCloseWelcome}
-						title={t("dialogs.titles.welcome", "Welcome")}
-						titleKey="dialogs.titles.welcome"
-					/>
+						</AppDialogFooter>
+					</AppDialogRoot>
 				</Suspense>
 			) : null}
 		</>
@@ -223,7 +220,7 @@ const AppContent: FC = () => {
  * ```
  */
 const App: FC = () => {
-	const { showError } = useOptimizeStore();
+	const showError = useOptimizeStore((s) => s.status.type === "error");
 
 	// Initialize file handling for PWA file association
 	useFileHandling();
@@ -243,14 +240,9 @@ const App: FC = () => {
 		const platform = params.get("platform");
 
 		if (platform) {
-			void fetchTechTree(platform);
-		}
-
-		// Cleanup pre-rendered SSG content
-		const prerendered = document.querySelector('[data-prerendered-markdown="true"]');
-
-		if (prerendered) {
-			prerendered.remove();
+			void fetchTechTree(platform).catch((err) => {
+				Logger.warn("Failed to prefetch tech tree during app mount:", err);
+			});
 		}
 	}, []);
 

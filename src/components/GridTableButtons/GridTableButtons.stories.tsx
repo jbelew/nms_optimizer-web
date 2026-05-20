@@ -2,10 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useEffect, useRef } from "react";
 import * as Toast from "@radix-ui/react-toast";
 
+import { GridProvider } from "@/components/GridTable/GridContext";
 import { ToastProvider } from "@/hooks/useToast/useToast";
 import { createGrid, useGridStore } from "@/store/grid/gridStore";
 
-import { GridProvider } from "../GridTable/GridContext";
 import GridTableButtons from "./GridTableButtons";
 
 const meta: Meta<typeof GridTableButtons> = {

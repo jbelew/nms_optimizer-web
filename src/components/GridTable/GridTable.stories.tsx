@@ -4,7 +4,7 @@ import * as Toast from "@radix-ui/react-toast";
 
 import { ToastProvider } from "@/hooks/useToast/useToast";
 import { createGrid, useGridStore } from "@/store/grid/gridStore";
-import { useTechTreeLoadingStore } from "@/store/tech/techTreeLoadingStore";
+import { useUiStore } from "@/store/ui/uiStore";
 
 import { GridTable } from "./GridTable";
 
@@ -20,8 +20,8 @@ const meta = {
 					result: null,
 					superchargedFixed: false,
 				});
-				useTechTreeLoadingStore.setState({
-					isLoading: false,
+				useUiStore.setState({
+					isTechTreeLoading: false,
 				});
 			}, []);
 
@@ -66,7 +66,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
-		sharedGrid: false,
 		solving: false,
 	},
 	parameters: {
@@ -81,7 +80,6 @@ export const Default: Story = {
 
 export const Solving: Story = {
 	args: {
-		sharedGrid: false,
 		solving: true,
 	},
 	parameters: {

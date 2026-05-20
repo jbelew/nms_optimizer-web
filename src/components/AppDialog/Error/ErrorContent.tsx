@@ -4,7 +4,7 @@ import { Trans, useTranslation } from "react-i18next";
 
 import { ErrorDisplay } from "@/components/ErrorBoundary/ErrorDisplay";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
-import { useOptimizeStore } from "@/store/app/optimizeStore";
+import { useOptimizeStore } from "@/store/ui/uiStore";
 
 import "./ErrorContent.scss";
 
@@ -37,7 +37,9 @@ import "./ErrorContent.scss";
 const ErrorContent: React.FC = () => {
 	const { t } = useTranslation();
 	const { sendEvent } = useAnalytics();
-	const error = useOptimizeStore((state) => state.error);
+	const error = useOptimizeStore((state) =>
+		state.status.type === "error" ? state.status.details : null
+	);
 
 	/**
 	 * Manages the error-boundary CSS class and sends analytics events on mount.
@@ -61,7 +63,7 @@ const ErrorContent: React.FC = () => {
 	}, [error, sendEvent]);
 
 	return (
-		<>
+		<div className="errorContent">
 			<span className="errorContent__title block pb-2 text-center text-xl font-semibold tracking-widest">
 				{t("errorContent.signalDisruption")}
 			</span>
@@ -83,11 +85,11 @@ const ErrorContent: React.FC = () => {
 			</Text>
 
 			{error && (
-				<div>
+				<div className="mt-4">
 					<ErrorDisplay error={error} />
 				</div>
 			)}
-		</>
+		</div>
 	);
 };
 

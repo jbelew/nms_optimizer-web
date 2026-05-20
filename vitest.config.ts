@@ -10,6 +10,7 @@ const dirname =
 
 const sharedAlias = {
 	"@": path.resolve(dirname, "./src"),
+	"@shared": path.resolve(dirname, "./shared"),
 	"virtual:markdown-bundle": path.resolve(dirname, "./vitest-mocks/virtual-markdown-bundle.ts"),
 	"virtual:pwa-register": path.resolve(dirname, "./vitest-mocks/virtual-pwa-register.ts"),
 };

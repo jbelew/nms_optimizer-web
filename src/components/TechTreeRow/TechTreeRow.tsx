@@ -1,8 +1,7 @@
 import "./TechTreeRow.scss";
 
-import type { BonusStatusData } from "@/store/tech/techBonusStore";
 import type { TechTreeRowProps } from "@/types/props";
-import React, { useEffect, useMemo } from "react";
+import React from "react";
 import {
 	Crosshair2Icon,
 	ExclamationTriangleIcon,
@@ -18,9 +17,8 @@ import { useTranslation } from "react-i18next";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { useTechTree } from "@/components/TechTree/useTechTreeContext";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
-import { useA11yStore } from "@/store/app/a11yStore";
 import { useTechBonusStore } from "@/store/tech/techBonusStore";
-import { useModuleSelectionDialogStore } from "@/store/ui/moduleSelectionDialogStore";
+import { useA11yStore, useModuleSelectionDialogStore } from "@/store/ui/uiStore";
 import { isTouchDevice } from "@/utils/browser/environment";
 
 import { TechTreeRowProvider } from "./TechTreeRowContext";
@@ -32,49 +30,8 @@ import { useTechTreeRowContext } from "./useTechTreeRowContext";
 interface BonusStatusIconProps {
 	/** Unique identifier for the technology. */
 	tech: string;
-	/** The theoretical maximum bonus for the current configuration. */
-	techMaxBonus: number;
 	/** The actual bonus achieved in the most recent solve. */
 	techSolvedBonus: number;
-}
-
-/**
- * Core logic to determine the efficiency rating and icon metadata for a technology.
- */
-function computeBonusStatusData(techMaxBonus: number, t: (key: string) => string): BonusStatusData {
-	const roundedMaxBonus = round(techMaxBonus, 2);
-
-	if (roundedMaxBonus < 100) {
-		const percent = Math.round((100 - roundedMaxBonus) * 100) / 100;
-
-		return {
-			icon: "warning",
-			iconClassName: "mt-2 inline-block cursor-pointer align-text-top",
-			iconStyle: { color: "var(--red-a8)" },
-			percent,
-			tooltipContent: `${t("techTree.tooltips.insufficientSpace")} -${percent}%`,
-		};
-	}
-
-	if (roundedMaxBonus === 100) {
-		return {
-			icon: "check",
-			iconClassName: "mt-[7px] inline-block cursor-pointer align-text-top",
-			iconStyle: { color: "var(--gray-a10)" },
-			percent: 0,
-			tooltipContent: `${t("techTree.tooltips.validSolve")} `,
-		};
-	}
-
-	const percent = Math.round((roundedMaxBonus - 100) * 100) / 100;
-
-	return {
-		icon: "lightning",
-		iconClassName: "mt-1.5 inline-block h-4 w-4 cursor-pointer align-text-top",
-		iconStyle: { color: "var(--amber-a8)" },
-		percent,
-		tooltipContent: `${t("techTree.tooltips.boostedSolve")} +${percent}%`,
-	};
 }
 
 /**
@@ -98,76 +55,56 @@ function renderIcon(
 }
 
 /**
- * Rounds a numerical value to a fixed number of decimal places.
- */
-function round(value: number, decimals: number) {
-	return Number(Math.round(Number(value + "e" + decimals)) + "e-" + decimals);
-}
-
-/**
  * A component that displays a status icon representing the optimization quality of a technology.
  */
-export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
-	tech,
-	techMaxBonus,
-	techSolvedBonus,
-}) => {
+export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ tech, techSolvedBonus }) => {
 	const { t } = useTranslation();
-	const { getBonusStatus, setBonusStatus } = useTechBonusStore();
-	const cachedBonusStatus = getBonusStatus(tech);
+	const getBonusStatus = useTechBonusStore((s) => s.getBonusStatus);
+	const status = getBonusStatus(tech);
 
-	const contentData = React.useMemo(() => {
-		return techMaxBonus === 0 && cachedBonusStatus
-			? {
-					...cachedBonusStatus,
-					tooltipContent:
-						cachedBonusStatus.icon === "check"
-							? t("techTree.tooltips.validSolve")
-							: cachedBonusStatus.icon === "warning"
-								? `${t("techTree.tooltips.insufficientSpace")} -${cachedBonusStatus.percent}%`
-								: `${t("techTree.tooltips.boostedSolve")} +${cachedBonusStatus.percent}%`,
-				}
-			: computeBonusStatusData(techMaxBonus, t);
-	}, [techMaxBonus, cachedBonusStatus, t]);
-
-	useEffect(() => {
-		if (techSolvedBonus <= 0) {
-			return;
-		}
-
-		const cached = getBonusStatus(tech);
-		const hasChanged =
-			!cached ||
-			cached.icon !== contentData.icon ||
-			cached.percent !== contentData.percent ||
-			cached.tooltipContent !== contentData.tooltipContent;
-
-		if (hasChanged) {
-			setBonusStatus(tech, contentData);
-		}
-	}, [tech, contentData, setBonusStatus, getBonusStatus, techSolvedBonus]);
-
-	if (techSolvedBonus <= 0 && !cachedBonusStatus) {
+	if ((techSolvedBonus <= 0 && !status) || !status) {
 		return null;
 	}
 
-	const icon = renderIcon(
-		contentData.icon,
-		contentData.iconClassName.replace("cursor-pointer", ""),
-		contentData.iconStyle
-	);
+	const { icon, percent } = status;
 
-	if (!icon) {
+	let iconClassName: string;
+	let iconStyle: React.CSSProperties;
+	let tooltipContent: string;
+
+	switch (icon) {
+		case "check":
+			iconClassName = "mt-[7px] inline-block align-text-top";
+			iconStyle = { color: "var(--gray-a10)" };
+			tooltipContent = t("techTree.tooltips.validSolve");
+			break;
+		case "lightning":
+			iconClassName = "mt-1.5 inline-block h-4 w-4 align-text-top";
+			iconStyle = { color: "var(--amber-a8)" };
+			tooltipContent = `${t("techTree.tooltips.boostedSolve")} +${percent}%`;
+			break;
+		case "warning":
+			iconClassName = "mt-2 inline-block align-text-top";
+			iconStyle = { color: "var(--red-a8)" };
+			tooltipContent = `${t("techTree.tooltips.insufficientSpace")} -${percent}%`;
+			break;
+		default:
+			return null;
+	}
+
+	const renderedIcon = renderIcon(icon, iconClassName, iconStyle);
+
+	if (!renderedIcon) {
 		return null;
 	}
 
 	const trigger = (
 		<button
-			aria-label={contentData.tooltipContent}
+			aria-label={tooltipContent}
 			className="flex cursor-pointer appearance-none border-none bg-transparent p-0"
 			type="button"
 		>
-			{icon}
+			{renderedIcon}
 		</button>
 	);
 
@@ -177,14 +114,14 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 				<Popover.Trigger>{trigger}</Popover.Trigger>
 				<Popover.Content size="1">
 					<Text as="p" size="1" trim="both">
-						{contentData.tooltipContent}
+						{tooltipContent}
 					</Text>
 				</Popover.Content>
 			</Popover.Root>
 		);
 	}
 
-	return <ConditionalTooltip label={contentData.tooltipContent}>{trigger}</ConditionalTooltip>;
+	return <ConditionalTooltip label={tooltipContent}>{trigger}</ConditionalTooltip>;
 };
 
 /**
@@ -220,7 +157,7 @@ const TechTreeRowActions: React.FC = () => {
 			<ConditionalTooltip label={tooltipLabel}>
 				<IconButton
 					aria-label={`${tooltipLabel} ${translatedTechName}`}
-					className={`techRow__resetButton ${!isOptimizeButtonDisabled ? "cursor-pointer!" : ""}`.trim()}
+					className={`techRow__resetButton${!isOptimizeButtonDisabled ? "cursor-pointer!" : ""}`}
 					disabled={isOptimizeButtonDisabled}
 					id={tech}
 					onClick={handleOptimizeClick}
@@ -232,7 +169,7 @@ const TechTreeRowActions: React.FC = () => {
 			<ConditionalTooltip label={t("techTree.tooltips.reset")}>
 				<IconButton
 					aria-label={`${t("techTree.tooltips.reset")} ${translatedTechName}`}
-					className={`techRow__resetButton ${hasTechInGrid && !solving ? "cursor-pointer!" : ""}`.trim()}
+					className={`techRow__resetButton${hasTechInGrid && !solving ? "cursor-pointer!" : ""}`}
 					disabled={!hasTechInGrid || solving || isResetting}
 					onClick={handleReset}
 				>
@@ -283,15 +220,11 @@ const TechTreeRowBadges: React.FC = () => {
 		tech,
 		techColor,
 		techImage,
-		techMaxBonus,
 		techSolvedBonus,
 		translatedTechName,
 	} = useTechTreeRowContext();
 
-	const handleOpenDialog = useMemo(
-		() => () => openDialog({ tech, techColor, techImage }),
-		[openDialog, tech, techColor, techImage]
-	);
+	const handleOpenDialog = () => openDialog({ tech, techColor, techImage });
 
 	const badgeContent = (
 		<div>
@@ -318,13 +251,7 @@ const TechTreeRowBadges: React.FC = () => {
 
 	return (
 		<>
-			{hasTechInGrid && (
-				<BonusStatusIcon
-					tech={tech}
-					techMaxBonus={techMaxBonus}
-					techSolvedBonus={techSolvedBonus}
-				/>
-			)}
+			{hasTechInGrid && <BonusStatusIcon tech={tech} techSolvedBonus={techSolvedBonus} />}
 			{modules.length > 1 ? (
 				<ConditionalTooltip
 					label={t("moduleSelection.tooltip", { techName: translatedTechName })}

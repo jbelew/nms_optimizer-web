@@ -115,21 +115,44 @@ export class OptimizationManager {
 			return;
 		}
 
-		this.socket.on("progress", (data) => {
-			if (this.isCleaningUp) return;
-			this.options.onProgress(data);
-		});
+		this.socket.on(
+			"progress",
+			(data: {
+				best_grid?: Grid;
+				bestGrid?: Grid;
+				progress_percent?: number;
+				progressPercent?: number;
+			}) => {
+				if (this.isCleaningUp) return;
+				// Translate progress data if it contains a best_grid
+				this.options.onProgress({
+					best_grid: (data.best_grid ?? data.bestGrid) as Grid | undefined,
+					progress_percent: (data.progress_percent ??
+						data.progressPercent ??
+						0) as number,
+				});
+			}
+		);
 
-		this.socket.once("optimization_result", (data: unknown) => {
+		this.socket.once("optimization_result", (data: Record<string, unknown>) => {
 			if (this.isCleaningUp) return;
 
-			if (isApiResponse(data)) {
-				if (data.solve_method === "Pattern No Fit" && !forced) {
+			// Translate snake_case from backend to camelCase internal
+			const translatedData: ApiResponse = {
+				grid: data.grid as ApiResponse["grid"],
+				maxBonus: (data.maxBonus ?? data.max_bonus) as number,
+				solvedBonus: (data.solvedBonus ?? data.solved_bonus) as number,
+				solveMethod: (data.solveMethod ?? data.solve_method) as string,
+			};
+
+			if (isApiResponse(translatedData)) {
+				if (translatedData.solveMethod === "Pattern No Fit" && !forced) {
 					this.options.onPatternNoFit();
 				} else {
-					this.options.onComplete(data);
+					this.options.onComplete(translatedData);
 				}
 			} else {
+				Logger.error("Invalid API response format", { data, translatedData });
 				this.options.onError(new Error("Invalid API response format"));
 			}
 
@@ -249,7 +272,7 @@ export class OptimizationManager {
 function isApiResponse(value: unknown): value is ApiResponse {
 	if (typeof value !== "object" || value === null) return false;
 	const obj = value as Record<string, unknown>;
-	if (typeof obj.solve_method !== "string") return false;
+	if (typeof obj.solveMethod !== "string") return false;
 
 	if (obj.grid !== null) {
 		if (typeof obj.grid !== "object" || !obj.grid) return false;
@@ -258,8 +281,8 @@ function isApiResponse(value: unknown): value is ApiResponse {
 			return false;
 	}
 
-	if ("max_bonus" in obj && typeof obj.max_bonus !== "number") return false;
-	if ("solved_bonus" in obj && typeof obj.solved_bonus !== "number") return false;
+	if (obj.maxBonus !== undefined && typeof obj.maxBonus !== "number") return false;
+	if (obj.solvedBonus !== undefined && typeof obj.solvedBonus !== "number") return false;
 
 	return true;
 }

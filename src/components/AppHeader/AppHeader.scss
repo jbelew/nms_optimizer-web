@@ -3,7 +3,7 @@
 	background-image: linear-gradient(to bottom, white, transparent);
 
 	:is(.dark, .dark-theme) & {
-		background-image: linear-gradient(to bottom, black, transparent);
+		background-image: linear-gradient(to bottom, var(--color-panel-solid), transparent);
 	}
 
 	display: flex;

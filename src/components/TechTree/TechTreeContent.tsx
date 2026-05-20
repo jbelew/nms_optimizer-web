@@ -13,7 +13,9 @@
 
 import React, { useMemo } from "react";
 
+import { EmptyState } from "@/components/EmptyState/EmptyState";
 import { type TechTree, type TechTreeItem } from "@/hooks/useTechTree/useTechTree";
+import { Logger } from "@/utils/system/monitoring";
 
 import { TechTreeSection } from "./TechTreeSection";
 
@@ -38,77 +40,69 @@ interface TechTreeContentProps {
  * @returns {JSX.Element} The rendered technology sections.
  *
  * @see {@link TechTreeSection}
- *
- * @component
- *
- * @category Components
- *
- * @example
- * ```tsx
- * <TechTreeContent techTree={fetchedTree} />
- * // renders list of tech categories
- * ```
  */
 export const TechTreeContent: React.FC<TechTreeContentProps> = ({ techTree }) => {
 	/**
-	 * Processed version of the tech tree.
-	 * Filters out non-technology categories, ensures correct types, and sorts technologies alphabetically.
+	 * Processes raw tech tree data into a list of categories and their technologies.
+	 *
+	 * @remarks
+	 * Filters out top-level metadata and performs alphabetical sorting.
 	 */
-	const processedTechTree = useMemo(() => {
-		const result: { [key: string]: TechTreeItem[] } = {};
-		Object.entries(techTree).forEach(([category, technologies]) => {
-			if (
-				category === "recommended_builds" ||
-				category === "grid" ||
-				category === "grid_definition"
-			)
-				return;
+	const technologyGroups = useMemo(() => {
+		const groups: Record<string, TechTreeItem[]> = {};
 
-			const safeTechnologies = Array.isArray(technologies) ? technologies : [];
+		Object.entries(techTree).forEach(([key, value]) => {
+			// Skip special keys like grid_definition, recommended_builds, and the legacy 'grid' key
+			if (key === "grid_definition" || key === "recommended_builds" || key === "grid") return;
 
-			if (!Array.isArray(technologies)) {
-				console.warn(
-					`TechTree: Expected 'technologies' to be an array for category '${category}', but received:`,
-					technologies
-				);
+			// Check if value is an array of TechTreeItems
+			if (Array.isArray(value)) {
+				const validItems = value.filter(
+					(item) =>
+						item && typeof item === "object" && "label" in item && "modules" in item
+				) as TechTreeItem[];
+
+				if (validItems.length > 0 || value.length === 0) {
+					groups[key] = [...validItems];
+					// Sort technologies within each category
+					groups[key].sort((a, b) => a.label.localeCompare(b.label));
+				}
 			}
-
-			const mappedAndSortedTechnologies = safeTechnologies
-				.filter(
-					(tech): tech is TechTreeItem =>
-						typeof tech === "object" && tech !== null && "key" in tech
-				)
-				.map((tech: TechTreeItem) => ({
-					...tech,
-					image: tech.image || null,
-					modules: tech.modules || [],
-				}))
-				.sort((a, b) => a.label.localeCompare(b.label));
-
-			result[category] = mappedAndSortedTechnologies;
 		});
 
-		return result;
+		return groups;
 	}, [techTree]);
 
 	/**
-	 * Array of `TechTreeSection` components to be rendered.
-	 * Each section represents a category of technologies.
+	 * Sorted list of category names.
 	 */
-	const renderedTechTree = useMemo(
-		() =>
-			Object.entries(processedTechTree).map(([type, technologies], index) => (
+	const categories = useMemo(() => Object.keys(technologyGroups).sort(), [technologyGroups]);
+
+	if (categories.length === 0) {
+		Logger.warn("TechTreeContent: No technology categories found to render.", {
+			techTreeKeys: Object.keys(techTree),
+		});
+
+		return (
+			<EmptyState
+				description="No technologies were found for the selected platform."
+				title="No Technologies Found"
+			/>
+		);
+	}
+
+	return (
+		<div className="tech-tree-content">
+			{categories.map((category, index) => (
 				<TechTreeSection
 					index={index}
-					key={type}
-					technologies={technologies as TechTreeItem[]}
-					type={type}
+					key={category}
+					technologies={technologyGroups[category]}
+					type={category}
 				/>
-			)),
-		[processedTechTree]
+			))}
+		</div>
 	);
-
-	return <>{renderedTechTree}</>;
 };
 
 TechTreeContent.displayName = "TechTreeContent";

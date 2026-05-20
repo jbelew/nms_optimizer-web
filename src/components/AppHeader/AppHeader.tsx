@@ -1,7 +1,7 @@
 // src/components/AppHeader/AppHeader.tsx
 import "./AppHeader.scss";
 
-import React, { useEffect } from "react";
+import React from "react";
 import {
 	CounterClockwiseClockIcon,
 	EyeOpenIcon,
@@ -13,7 +13,7 @@ import { Trans, useTranslation } from "react-i18next";
 
 import nmslogo from "@/assets/img/nms-icon.svg";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
-import { LanguageSelector } from "@/components/LanguageSelector/languageSelector";
+import { LanguageSelector } from "@/components/LanguageSelector/LanguageSelector";
 
 import { AppHeaderProvider } from "./AppHeaderProvider";
 import { useAppHeaderContext } from "./useAppHeaderContext";
@@ -25,15 +25,6 @@ const EasterEggCoordinates = React.lazy(() => import("./EasterEggCoordinates"));
  */
 const AppHeaderRoot: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const { i18n } = useTranslation();
-	const { a11yMode } = useAppHeaderContext();
-
-	useEffect(() => {
-		if (a11yMode) {
-			document.body.classList.add("a11y-font");
-		} else {
-			document.body.classList.remove("a11y-font");
-		}
-	}, [a11yMode]);
 
 	return (
 		<Box className="app-header" key={i18n.language}>
@@ -75,7 +66,7 @@ const AppHeaderChangelogButton: React.FC = () => {
 				aria-label={t("buttons.changelog") ?? ""}
 				onClick={onShowChangelog}
 				onMouseEnter={() => {
-					void import("@/components/AppDialog/Markdown/markdownContentRenderer");
+					void import("@/components/AppDialog/Markdown/MarkdownContentRenderer");
 				}}
 				variant="soft"
 			>

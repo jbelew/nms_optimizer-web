@@ -1,0 +1,48 @@
+.MessageSpinner {
+	&__header {
+		&--nms {
+			color: var(--accent-11);
+
+			// Note: this modifier had very similar styles to the base.
+			// sass would allow further optimization here with @extend if needed.;
+			font-family: NMS, sans-serif;
+			font-weight: 400;
+			text-shadow: 0 2px 4px var(--accent-a2);
+			text-transform: uppercase;
+		}
+	}
+
+	&__spinner {
+		height: 4rem;
+		width: 4rem;
+
+		&--big {
+			height: 6rem;
+			width: 6rem;
+		}
+
+		&--accent {
+			/* color: var(--accent-indicator); */
+			height: 4rem;
+			width: 4rem;
+		}
+
+		@media (width <= 639px) {
+			height: 3rem;
+			width: 3rem;
+		}
+	}
+
+	&__random {
+		color: var(--amber-11);
+		font-weight: semi-bold;
+		min-height: 1.5em;
+		opacity: 0;
+		transition: opacity 0.5s ease-in-out;
+		user-select: none;
+
+		&--visible {
+			opacity: 1;
+		}
+	}
+}

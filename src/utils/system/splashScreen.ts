@@ -12,6 +12,8 @@
 
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
+import { Logger } from "@/utils/system/monitoring";
+
 let isHiding = false;
 
 /**
@@ -68,7 +70,7 @@ export async function hideSplashScreenAndShowBackground(): Promise<void> {
 			}, 1000);
 		});
 	} catch (error) {
-		console.error("Error hiding splash screen:", error);
+		Logger.error("Error hiding splash screen", error);
 		isHiding = false;
 	}
 }

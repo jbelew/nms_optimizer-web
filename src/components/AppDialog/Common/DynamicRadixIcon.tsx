@@ -1,6 +1,7 @@
 import React from "react";
 
 import { radixIconRegistry } from "@/utils/icons/iconRegistry";
+import { Logger } from "@/utils/system/monitoring";
 
 /**
  * Props for the `DynamicRadixIcon` component.
@@ -61,7 +62,7 @@ const DynamicRadixIcon: React.FC<DynamicRadixIconProps> = ({
 	const IconComponent = radixIconRegistry[iconName];
 
 	if (!IconComponent) {
-		console.warn(`Radix Icon "${iconName}" not found.`);
+		Logger.warn(`Radix Icon "${iconName}" not found.`);
 
 		return null;
 	}

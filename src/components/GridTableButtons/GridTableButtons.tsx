@@ -14,6 +14,7 @@ import { Button, IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
+import { useGridContext } from "@/components/GridTable/useGridContext";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useLoadBuild } from "@/hooks/useLoadBuild/useLoadBuild";
@@ -22,9 +23,8 @@ import { useScreenshot } from "@/hooks/useScreenshot/useScreenshot";
 import { useScrollGridIntoView } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { useUrlSync } from "@/hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "@/store/grid/gridStore";
+import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useDialog } from "@/utils/system/dialogUtils";
-
-import { useGridContext } from "../GridTable/useGridContext";
 
 const BuildNameDialog = React.lazy(
 	() => import("@/components/AppDialog/BuildName/BuildNameDialog")
@@ -53,7 +53,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 
 	const { markTutorialFinished, openDialog, tutorialFinished } = useDialog();
 	const setIsSharedGrid = useGridStore((state) => state.setIsSharedGrid);
-	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
+	const hasModulesInGrid = useGridStore((state) => state.hasModulesInGrid);
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const {
 		handleBuildNameCancel,
@@ -130,7 +130,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 		sendEvent({ action: "reset_grid", category: "ui", nonInteraction: false, value: 1 });
 
 		startResetTransition(() => {
-			useGridStore.getState().resetGrid();
+			sessionCoordinator.resetSession();
 			updateUrlForReset();
 			setIsSharedGrid(false);
 		});

@@ -1,6 +1,6 @@
 import type { PlatformState } from "@/store/app/platformStore";
 import type { ApiResponse, GridStore } from "@/store/grid/gridStore";
-import type { TechState } from "@/store/tech/techStore";
+import type { TechStore } from "@/store/tech/techStore";
 import type { Socket } from "socket.io-client";
 import type { Mock } from "vitest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -77,7 +77,7 @@ describe("OptimizationManager", () => {
 			activeGroups: {},
 			checkedModules: {},
 			techGroups: {},
-		} as unknown as TechState);
+		} as unknown as TechStore);
 
 		mockUsePlatformStore.getState.mockReturnValue({
 			selectedPlatform: "standard",
@@ -162,9 +162,9 @@ describe("OptimizationManager", () => {
 
 		const mockResponse: ApiResponse = {
 			grid: { cells: [], height: 7, width: 7 },
-			max_bonus: 100,
-			solve_method: "Brute Force",
-			solved_bonus: 90,
+			maxBonus: 100,
+			solvedBonus: 90,
+			solveMethod: "Brute Force",
 		};
 		handleResult(mockResponse);
 
@@ -211,9 +211,9 @@ describe("OptimizationManager", () => {
 
 		handleResult({
 			grid: null,
-			max_bonus: 0,
-			solve_method: "Pattern No Fit",
-			solved_bonus: 0,
+			maxBonus: 0,
+			solvedBonus: 0,
+			solveMethod: "Pattern No Fit",
 		});
 		expect(onPatternNoFit).toHaveBeenCalled();
 	});
@@ -290,7 +290,7 @@ describe("OptimizationManager", () => {
 			activeGroups: { pulse: "group1" },
 			checkedModules: { pulse: ["module1"] },
 			techGroups: { pulse: ["group1", "group2"] },
-		} as unknown as TechState);
+		} as unknown as TechStore);
 
 		const manager = new OptimizationManager({
 			onComplete: vi.fn(),

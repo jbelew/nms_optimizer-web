@@ -5,7 +5,7 @@
 # A metadata-only commit will skip every file-scoped command automatically.
 
 pre-commit:
-  parallel: true
+  parallel: false
   commands:
     # ----- Policy gate (always runs) -----
     beads-enforcement:

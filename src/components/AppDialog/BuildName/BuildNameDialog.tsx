@@ -1,14 +1,19 @@
 import type { BuildNameContentRef } from "./BuildNameContent";
 import type { FC } from "react";
-import { lazy, Suspense, useRef } from "react";
+import { useRef } from "react";
 import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
+
+import {
+	AppDialogBody,
+	AppDialogFooter,
+	AppDialogRoot,
+	AppDialogTitle,
+} from "@/components/AppDialog/Base/AppDialog";
 
 import { BuildNameContent } from "./BuildNameContent";
 
 import "./BuildNameDialog.scss";
-
-const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
 
 /**
  * Props for the `BuildNameDialog` component.
@@ -35,7 +40,7 @@ interface BuildNameDialogProps {
  *
  * @returns {JSX.Element} The rendered build naming dialog.
  *
- * @see {@link AppDialog}
+ * @see {@link AppDialogRoot}
  * @see {@link BuildNameContent}
  * @see {@link ./BuildNameDialog.stories.tsx Storybook}
  *
@@ -57,29 +62,23 @@ const BuildNameDialog: FC<BuildNameDialogProps> = ({ isOpen, onCancel, onConfirm
 	const { t } = useTranslation();
 	const contentRef = useRef<BuildNameContentRef>(null);
 
-	const footer = (
-		<div className="flex justify-end gap-2">
-			<Button onClick={onCancel} variant="soft">
-				{t("buttons.cancel")}
-			</Button>
-			<Button onClick={() => contentRef.current?.handleConfirm()}>{t("buttons.save")}</Button>
-		</div>
-	);
-
 	return (
-		<Suspense fallback={null}>
-			<AppDialog
-				className="buildNameDialog__content"
-				content={
-					<BuildNameContent onCancel={onCancel} onConfirm={onConfirm} ref={contentRef} />
-				}
-				footer={footer}
-				isOpen={isOpen}
-				onClose={onCancel}
-				title={t("dialog.buildName.title") || "Save Build"}
-				titleKey="dialog.buildName.title"
-			/>
-		</Suspense>
+		<AppDialogRoot className="buildNameDialog__content" isOpen={isOpen} onClose={onCancel}>
+			<AppDialogTitle titleKey="dialog.buildName.title" />
+			<AppDialogBody>
+				<BuildNameContent onCancel={onCancel} onConfirm={onConfirm} ref={contentRef} />
+			</AppDialogBody>
+			<AppDialogFooter>
+				<div className="flex justify-end gap-2">
+					<Button onClick={onCancel} variant="soft">
+						{t("buttons.cancel")}
+					</Button>
+					<Button onClick={() => contentRef.current?.handleConfirm()}>
+						{t("buttons.save")}
+					</Button>
+				</div>
+			</AppDialogFooter>
+		</AppDialogRoot>
 	);
 };
 

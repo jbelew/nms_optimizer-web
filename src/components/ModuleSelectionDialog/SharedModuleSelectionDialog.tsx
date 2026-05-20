@@ -24,7 +24,7 @@ import { useTechModuleManagement } from "@/components/TechTreeRow/useTechModuleM
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
-import { useModuleSelectionDialogStore } from "@/store/ui/moduleSelectionDialogStore";
+import { useModuleSelectionDialogStore } from "@/store/ui/uiStore";
 
 /** Default empty array for modules to ensure stable reference when dialog is closed. */
 const EMPTY_MODULES_ARRAY: { id: string; image: string; label: string; type?: string }[] = [];

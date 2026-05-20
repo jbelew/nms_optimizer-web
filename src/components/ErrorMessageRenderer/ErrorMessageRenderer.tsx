@@ -15,7 +15,7 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useToast } from "@/hooks/useToast/useToast";
-import { useErrorStore } from "@/store/app/errorStore";
+import { useErrorStore } from "@/store/ui/uiStore";
 
 /**
  * A non-rendering observer component that bridges the `ErrorStore` and the `Toast` system.

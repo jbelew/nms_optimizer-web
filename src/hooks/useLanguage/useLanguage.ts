@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
+import { getSupportedLanguages } from "@/hooks/useSupportedLanguages";
+
 /**
  * Custom hook that synchronizes the application language with the current URL path.
  *
@@ -31,7 +33,7 @@ export const useLanguage = () => {
 	const location = useLocation();
 
 	useEffect(() => {
-		const supportedLangs = Object.keys(i18n.services.resourceStore.data || {});
+		const supportedLangs = getSupportedLanguages(i18n);
 		const pathParts = location.pathname.split("/").filter((p) => p);
 
 		let lang = "en";

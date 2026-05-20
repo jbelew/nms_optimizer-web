@@ -1,5 +1,4 @@
-import type { ErrorState } from "@/store/app/errorStore";
-import type { SessionState } from "@/store/app/sessionStore";
+import type { ErrorState, SessionState } from "@/store/ui/uiStore";
 import type { i18n, ResourceKey, TFunction } from "i18next";
 import type { UseTranslationResponse } from "react-i18next";
 import type { Mock } from "vitest";
@@ -7,16 +6,12 @@ import { renderHook } from "@testing-library/react";
 import { useTranslation } from "react-i18next";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useErrorStore } from "@/store/app/errorStore";
-import { useSessionStore } from "@/store/app/sessionStore";
+import { useErrorStore, useSessionStore } from "@/store/ui/uiStore";
 
 import { useErrorDispatcher } from "./useErrorDispatcher";
 
-vi.mock("@/store/app/errorStore", () => ({
+vi.mock("@/store/ui/uiStore", () => ({
 	useErrorStore: vi.fn(),
-}));
-
-vi.mock("@/store/app/sessionStore", () => ({
 	useSessionStore: vi.fn(),
 }));
 

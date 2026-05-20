@@ -56,32 +56,14 @@ describe("handleCellTap action in GridStore", () => {
 		expect(finalCell.supercharged).toBe(false);
 	});
 
-	it("should store initial cell state on first tap", () => {
-		act(() => {
-			useGridStore.setState((state) => {
-				state.grid.cells[0][0].active = true;
-				state.grid.cells[0][0].supercharged = false;
-			});
-		});
-
-		act(() => {
-			useGridStore.getState().handleCellTap(0, 0);
-		});
-
-		const storedState = useGridStore.getState()._initialCellStateForTap;
-		expect(storedState).toBeDefined();
-		expect(storedState?.active).toBe(true);
-		expect(storedState?.supercharged).toBe(false);
-	});
-
 	it("should not change cell state if cell is undefined", () => {
-		const { handleCellTap } = useGridStore.getState();
-		const initialState = useGridStore.getState().grid.cells[0][0];
-		useGridStore.setState({ _initialCellStateForTap: initialState });
+		const initialGrid = useGridStore.getState().grid;
 
-		handleCellTap(999, 999); // Use out-of-bounds indices
+		act(() => {
+			useGridStore.getState().handleCellTap(99, 99); // Non-existent cell
+		});
 
-		// Expect no changes or errors
-		expect(useGridStore.getState()._initialCellStateForTap).toEqual(initialState);
+		// Expect no changes
+		expect(useGridStore.getState().grid).toEqual(initialGrid);
 	});
 });

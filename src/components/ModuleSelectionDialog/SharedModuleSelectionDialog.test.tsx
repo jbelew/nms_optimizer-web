@@ -7,19 +7,20 @@ import { useTechModuleManagement } from "@/components/TechTreeRow/useTechModuleM
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
-import { useModuleSelectionDialogStore } from "@/store/ui/moduleSelectionDialogStore";
+import { useModuleSelectionDialogStore } from "@/store/ui/uiStore";
 
 import { SharedModuleSelectionDialog } from "./SharedModuleSelectionDialog";
 
 // Mock i18next
 vi.mock("react-i18next", () => ({
+	Trans: ({ i18nKey }: { i18nKey: string }) => <span>{i18nKey}</span>,
 	useTranslation: () => ({
 		t: (key: string) => key,
 	}),
 }));
 
 // Mock stores and hooks
-vi.mock("@/store/ui/moduleSelectionDialogStore");
+vi.mock("@/store/ui/uiStore");
 vi.mock("@/store/tech/techStore");
 vi.mock("@/store/grid/gridStore");
 vi.mock("@/components/TechTree/useTechTreeContext");

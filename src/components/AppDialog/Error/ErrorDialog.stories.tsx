@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 
-import { useOptimizeStore } from "@/store/app/optimizeStore";
+import { useOptimizeStore } from "@/store/ui/uiStore";
 
-import { ErrorDialog } from "./errorDialog";
+import { ErrorDialog } from "./ErrorDialog";
 
 const meta = {
 	component: ErrorDialog,
@@ -27,15 +27,24 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-	args: {},
+	args: {
+		isOpen: true,
+		onClose: () => console.log("Dialog closed"),
+	},
 	decorators: [
 		(Story) => {
-			// Set error state before rendering
+			// Seed error state for ErrorContent to display details
 			React.useEffect(() => {
-				useOptimizeStore.setState({ showError: true });
+				useOptimizeStore.setState({
+					status: {
+						details: new Error("Test error message from Storybook"),
+						severity: "recoverable",
+						type: "error",
+					},
+				});
 
 				return () => {
-					useOptimizeStore.setState({ showError: false });
+					useOptimizeStore.setState({ status: { type: "idle" } });
 				};
 			}, []);
 

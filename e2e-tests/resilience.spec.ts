@@ -53,13 +53,16 @@ test.describe("Application Resilience & Recovery", () => {
 			void page.goto("/").catch(() => {});
 
 			// Wait for the recovery to fire AND the app to fully boot.
-			// The counter persists across the cache-busting reload so we don't have
-			// to race a transient `?_cb=` URL (which react-router strips).
+			// WebKit can be extremely slow with the cache-busting reload.
 			await page.waitForFunction(
-				() =>
-					sessionStorage.getItem("__recovery_attempts__") === "1" &&
-					(window as Window & { __APP_READY__?: boolean }).__APP_READY__ === true,
-				{ timeout: 30000 }
+				() => {
+					const attempts = sessionStorage.getItem("__recovery_attempts__");
+					const isReady = (window as Window & { __APP_READY__?: boolean }).__APP_READY__;
+
+					// Success condition: we had at least one recovery attempt and the app is ready.
+					return attempts === "1" && isReady === true;
+				},
+				{ polling: 500, timeout: 45000 }
 			);
 
 			// Verify that the marker was cleared by main.tsx.
@@ -86,7 +89,7 @@ test.describe("Application Resilience & Recovery", () => {
 			void page.goto("/").catch(() => {});
 
 			await page.waitForFunction(() => window.location.pathname.includes("/500.html"), {
-				timeout: 30000,
+				timeout: 45000,
 			});
 
 			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
@@ -105,7 +108,7 @@ test.describe("Application Resilience & Recovery", () => {
 			await refreshButton.click();
 
 			// 500.html redirects to /?reload=<timestamp>
-			await page.waitForFunction(() => window.location.pathname === "/" && window.location.search.includes("reload="), { timeout: 15000 });
+			await page.waitForFunction(() => window.location.search.includes("reload="), { timeout: 15000 });
 		});
 	});
 

@@ -78,14 +78,11 @@ export const TechTree: React.FC<TechTreeProps> = ({
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform) || "standard";
 	const fetchedTechTree = useFetchTechTreeSuspense(selectedShipType);
 	const techTree = techTreeProp || fetchedTechTree;
-	const isGridFull = useGridStore((state) => state._isGridFull);
-
-	const hasRecommendedBuilds =
-		!!techTree?.recommended_builds && techTree.recommended_builds.length > 0;
+	const isGridFull = useGridStore((state) => state.isGridFull);
 
 	return (
 		<TechTreeProvider handleOptimize={handleOptimize} isGridFull={isGridFull} solving={solving}>
-			<TechTreeRoot hasRecommendedBuilds={hasRecommendedBuilds}>
+			<TechTreeRoot>
 				<TechTreeList techTree={techTree} />
 			</TechTreeRoot>
 			<TechTreeRecommended techTree={techTree} />

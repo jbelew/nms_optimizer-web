@@ -1,12 +1,13 @@
 import type { FC } from "react";
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { CheckIcon, CopyIcon } from "@radix-ui/react-icons";
 import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { ShareLinkContent } from "./ShareLinkContent";
+import AppDialog from "@/components/AppDialog/Base/AppDialog";
+import { Logger } from "@/utils/system/monitoring";
 
-const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
+import { ShareLinkContent } from "./ShareLinkContent";
 
 /**
  * Props for the `ShareLinkDialog` component.
@@ -73,7 +74,7 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, onClose, shareUrl }
 				copiedTimeoutRef.current = null;
 			}, 2000);
 		} catch (err) {
-			console.error("Failed to copy: ", err);
+			Logger.error("Failed to copy: ", err);
 		}
 	};
 

@@ -48,6 +48,7 @@
 		"deactivateRow": "Reihe Deaktivieren"
 	},
 	"messageSpinner": {
+		"loadingProgress": "Ladefortschritt",
 		"randomMessages": [
 			"-(( Erbitte Führung vom Atlas! ))-",
 			"-(( Rekalibriere Ausrichtung der überladenen Knoten! ))-",

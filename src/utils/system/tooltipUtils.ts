@@ -3,7 +3,7 @@ import { createContext, use } from "react";
 /**
  * Functional interface for controlling the tooltip visibility.
  *
- * @see {@link import('@/context/tooltipContext').TooltipProvider}
+ * @see {@link import('@/context/TooltipContext').TooltipProvider}
  *
  * @category Tooltip
  */
@@ -25,7 +25,7 @@ export interface TooltipActions {
 /**
  * Represents the visual and data state of the active tooltip.
  *
- * @see {@link import('@/context/tooltipContext').TooltipProvider}
+ * @see {@link import('@/context/TooltipContext').TooltipProvider}
  *
  * @category Tooltip
  */
@@ -55,7 +55,7 @@ export const TooltipActionsContext = createContext<TooltipActions | undefined>(u
  *
  * @throws {Error} If called outside of a `TooltipProvider` in non-test environments.
  *
- * @see {@link import('@/context/tooltipContext').TooltipProvider}
+ * @see {@link import('@/context/TooltipContext').TooltipProvider}
  * @see {@link TooltipState}
  *
  * @category Hooks
@@ -89,7 +89,7 @@ export const useTooltipState = () => {
  *
  * @throws {Error} If called outside of a `TooltipProvider` in non-test environments.
  *
- * @see {@link import('@/context/tooltipContext').TooltipProvider}
+ * @see {@link import('@/context/TooltipContext').TooltipProvider}
  * @see {@link TooltipActions}
  *
  * @category Hooks

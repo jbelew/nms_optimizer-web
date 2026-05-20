@@ -5,6 +5,7 @@
 import { act } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 
+import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useTechStore } from "@/store/tech/techStore";
 
 import { createGrid, useGridStore } from "./gridStore";
@@ -19,60 +20,59 @@ describe("GridStore - Result and Tech Operations", () => {
 			});
 			useGridStore.getState().triggerRecompute();
 			useTechStore.setState({
-				max_bonus: {},
-				solve_method: {},
-				solved_bonus: {},
+				maxBonus: {},
+				solvedBonus: {},
+				solveMethod: {},
 			});
 		});
 	});
 
 	describe("setResult", () => {
-		it("should set optimization result", () => {
+		it("should set optimization result in grid store", () => {
 			const result = {
 				grid: null,
-				max_bonus: 500,
-				solve_method: "greedy",
-				solved_bonus: 400,
+				maxBonus: 500,
+				solvedBonus: 400,
+				solveMethod: "greedy",
 			};
 
 			act(() => {
-				useGridStore.getState().setResult(result, "defense");
+				useGridStore.getState().setResult(result);
 			});
 
 			expect(useGridStore.getState().result).toEqual(result);
 		});
 
-		it("should update tech store with result values", () => {
+		it("should update tech store via sessionCoordinator", () => {
 			const result = {
 				grid: null,
-				max_bonus: 500,
-				solve_method: "greedy",
-				solved_bonus: 400,
+				maxBonus: 500,
+				solvedBonus: 400,
+				solveMethod: "greedy",
 			};
 
 			act(() => {
-				useGridStore.getState().setResult(result, "defense");
+				sessionCoordinator.commitOptimizationResult(result, "defense");
 			});
 
-			const state = useGridStore.getState();
-			// Tech store should be updated by setResult
-			expect(state.result?.max_bonus).toBe(500);
-			expect(state.result?.solved_bonus).toBe(400);
+			const techState = useTechStore.getState();
+			expect(techState.maxBonus["defense"]).toBe(500);
+			expect(techState.solvedBonus["defense"]).toBe(400);
+			expect(techState.solveMethod["defense"]).toBe("greedy");
+
+			expect(useGridStore.getState().result).toEqual(result);
 		});
 
 		it("should handle null result", () => {
 			act(() => {
-				useGridStore.getState().setResult(
-					{
-						grid: null,
-						max_bonus: 100,
-						solve_method: "test",
-						solved_bonus: 80,
-					},
-					"defense"
-				);
+				useGridStore.getState().setResult({
+					grid: null,
+					maxBonus: 100,
+					solvedBonus: 80,
+					solveMethod: "test",
+				});
 
-				useGridStore.getState().setResult(null, "defense");
+				useGridStore.getState().setResult(null);
 			});
 
 			expect(useGridStore.getState().result).toBeNull();
@@ -82,44 +82,48 @@ describe("GridStore - Result and Tech Operations", () => {
 			const gridData = createGrid(5, 5);
 			const result = {
 				grid: gridData,
-				max_bonus: 600,
-				solve_method: "optimal",
-				solved_bonus: 500,
+				maxBonus: 600,
+				solvedBonus: 500,
+				solveMethod: "optimal",
 			};
 
 			act(() => {
-				useGridStore.getState().setResult(result, "attack");
+				useGridStore.getState().setResult(result);
 			});
 
 			const state = useGridStore.getState();
-			expect(state.result?.max_bonus).toBe(600);
-			expect(state.result?.solved_bonus).toBe(500);
+			expect(state.result?.maxBonus).toBe(600);
+			expect(state.result?.solvedBonus).toBe(500);
 		});
 
-		it("should update different techs independently", () => {
+		it("should update different techs independently via sessionCoordinator", () => {
 			const defenseResult = {
 				grid: null,
-				max_bonus: 500,
-				solve_method: "greedy",
-				solved_bonus: 400,
+				maxBonus: 500,
+				solvedBonus: 400,
+				solveMethod: "greedy",
 			};
 
 			const attackResult = {
 				grid: null,
-				max_bonus: 600,
-				solve_method: "optimal",
-				solved_bonus: 550,
+				maxBonus: 600,
+				solvedBonus: 550,
+				solveMethod: "optimal",
 			};
 
 			act(() => {
-				useGridStore.getState().setResult(defenseResult, "defense");
-				useGridStore.getState().setResult(attackResult, "attack");
+				sessionCoordinator.commitOptimizationResult(defenseResult, "defense");
+				sessionCoordinator.commitOptimizationResult(attackResult, "attack");
 			});
 
-			// Last result set should be the current one
-			const state = useGridStore.getState();
-			expect(state.result?.max_bonus).toBe(600);
-			expect(state.result?.solved_bonus).toBe(550);
+			const techState = useTechStore.getState();
+			expect(techState.maxBonus["defense"]).toBe(500);
+			expect(techState.maxBonus["attack"]).toBe(600);
+
+			// Last result set in GridStore should be the current one
+			const gridState = useGridStore.getState();
+			expect(gridState.result?.maxBonus).toBe(600);
+			expect(gridState.result?.solvedBonus).toBe(550);
 		});
 	});
 
@@ -131,7 +135,7 @@ describe("GridStore - Result and Tech Operations", () => {
 				useGridStore.getState().triggerRecompute();
 			});
 
-			const hasTech = useGridStore.getState().hasTechInGrid("defense");
+			const hasTech = useGridStore.getState().activeTechs.has("defense");
 
 			expect(hasTech).toBe(false);
 		});
@@ -144,7 +148,7 @@ describe("GridStore - Result and Tech Operations", () => {
 				useGridStore.getState().triggerRecompute();
 			});
 
-			const hasTech = useGridStore.getState().hasTechInGrid("defense");
+			const hasTech = useGridStore.getState().activeTechs.has("defense");
 
 			expect(hasTech).toBe(true);
 		});
@@ -159,7 +163,7 @@ describe("GridStore - Result and Tech Operations", () => {
 				useGridStore.getState().triggerRecompute();
 			});
 
-			const hasTech = useGridStore.getState().hasTechInGrid("defense");
+			const hasTech = useGridStore.getState().activeTechs.has("defense");
 
 			expect(hasTech).toBe(true);
 		});
@@ -175,10 +179,10 @@ describe("GridStore - Result and Tech Operations", () => {
 			});
 
 			const state = useGridStore.getState();
-			expect(state.hasTechInGrid("defense")).toBe(true);
-			expect(state.hasTechInGrid("attack")).toBe(true);
-			expect(state.hasTechInGrid("shield")).toBe(true);
-			expect(state.hasTechInGrid("nonexistent")).toBe(false);
+			expect(state.activeTechs.has("defense")).toBe(true);
+			expect(state.activeTechs.has("attack")).toBe(true);
+			expect(state.activeTechs.has("shield")).toBe(true);
+			expect(state.activeTechs.has("nonexistent")).toBe(false);
 		});
 
 		it("should handle null tech values", () => {
@@ -189,7 +193,7 @@ describe("GridStore - Result and Tech Operations", () => {
 				useGridStore.getState().triggerRecompute();
 			});
 
-			const hasTech = useGridStore.getState().hasTechInGrid("defense");
+			const hasTech = useGridStore.getState().activeTechs.has("defense");
 
 			expect(hasTech).toBe(false);
 		});
@@ -201,7 +205,7 @@ describe("GridStore - Result and Tech Operations", () => {
 				useGridStore.getState().triggerRecompute();
 			});
 
-			const hasTech = useGridStore.getState().hasTechInGrid("defense");
+			const hasTech = useGridStore.getState().activeTechs.has("defense");
 
 			expect(hasTech).toBe(false);
 		});

@@ -7,7 +7,8 @@ import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
 import { useToast } from "@/hooks/useToast/useToast";
 import { usePlatformStore } from "@/store/app/platformStore";
-import { createGrid, useGridStore } from "@/store/grid/gridStore";
+import { createGrid } from "@/store/grid/gridStore";
+import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { Logger } from "@/utils/system/monitoring";
 
 import { ShipSelectionContext } from "./useShipSelectionContext";
@@ -32,34 +33,27 @@ export const ShipSelectionProvider: React.FC<{
 	const shipTypes = useFetchShipTypesSuspense();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const setSelectedShipType = usePlatformStore((state) => state.setSelectedPlatform);
-	const setGridAndResetAuxiliaryState = useGridStore(
-		(state) => state.setGridAndResetAuxiliaryState
-	);
 	const { sendDeferredEvent } = useAnalytics();
 	const { showInfo } = useToast();
 	const [isPending, startTransition] = useTransition();
 	const { isKnownRoute } = useRouteContext();
 
-	const shipTypeKeys = useMemo(() => Object.keys(shipTypes), [shipTypes]);
+	const shipTypeKeys = Object.keys(shipTypes);
 
-	const groupedShipTypes = useMemo(
-		() =>
-			Object.entries(shipTypes).reduce(
-				(acc, [key, details]) => {
-					const type = details.type;
-					if (!acc[type]) acc[type] = [];
-					acc[type].push({ details, key, label: t(`platforms.${key}`) });
+	const groupedShipTypes = Object.entries(shipTypes).reduce(
+		(acc, [key, details]) => {
+			const type = details.type;
+			if (!acc[type]) acc[type] = [];
+			acc[type].push({ details, key, label: t(`platforms.${key}`) });
 
-					return acc;
-				},
-				{} as Record<string, GroupedShipType[]>
-			),
-		[shipTypes, t]
+			return acc;
+		},
+		{} as Record<string, GroupedShipType[]>
 	);
 
 	const handleOptionSelect = useCallback(
 		(option: string) => {
-			if (option !== usePlatformStore.getState().selectedPlatform) {
+			if (option !== selectedShipType) {
 				Logger.info(`Platform selected: ${option}`, { platform: option });
 				startTransition(() => {
 					if (option === "corvette") {
@@ -71,7 +65,7 @@ export const ShipSelectionProvider: React.FC<{
 
 					setSelectedShipType(option, shipTypeKeys, true, isKnownRoute);
 					const initialGrid = createGrid(DEFAULT_GRID_HEIGHT, DEFAULT_GRID_WIDTH);
-					setGridAndResetAuxiliaryState(initialGrid);
+					sessionCoordinator.switchPlatform(initialGrid);
 				});
 
 				sendDeferredEvent({
@@ -85,13 +79,13 @@ export const ShipSelectionProvider: React.FC<{
 			}
 		},
 		[
-			isKnownRoute,
-			sendDeferredEvent,
-			setGridAndResetAuxiliaryState,
-			setSelectedShipType,
-			shipTypeKeys,
+			selectedShipType,
 			showInfo,
 			t,
+			setSelectedShipType,
+			shipTypeKeys,
+			isKnownRoute,
+			sendDeferredEvent,
 		]
 	);
 

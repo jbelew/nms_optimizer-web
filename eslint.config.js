@@ -2,6 +2,7 @@
 import js from "@eslint/js";
 import jsdoc from "eslint-plugin-jsdoc";
 import perfectionist from "eslint-plugin-perfectionist";
+import importX from "eslint-plugin-import-x";
 
 import prettierConfig from "eslint-config-prettier";
 import reactHooks from "eslint-plugin-react-hooks";
@@ -58,6 +59,7 @@ const shared = {
 		},
 	},
 	plugins: {
+		"import-x": importX,
 		jsdoc,
 		perfectionist,
 		"react-hooks": reactHooks,
@@ -71,6 +73,7 @@ const shared = {
 		// TypeScript strict rules
 		// Enforce `import type` for type-only imports — benefits React Compiler & tree-shakers
 		"@typescript-eslint/consistent-type-imports": ["error", { prefer: "type-imports" }],
+
 		"@typescript-eslint/no-explicit-any": "error",
 		"@typescript-eslint/no-unused-vars": [
 			"error",
@@ -80,6 +83,8 @@ const shared = {
 				varsIgnorePattern: "^_",
 			},
 		],
+		// Import enforcement
+		"import-x/no-relative-parent-imports": "error",
 		// Perfectionist sorting rules
 		...perfectionist.configs["recommended-natural"].rules,
 		// These two are handled by @ianvs/prettier-plugin-sort-imports — disable to avoid conflict
@@ -224,6 +229,7 @@ export default tseslint.config(
 		files: ["scripts/**/*.{js,mjs,cjs,ts}", "functions/**/*.{js,ts}", "shared/**/*.{js,ts}", "*.{js,mjs,cjs,ts}"],
 		rules: {
 			...shared.rules,
+			"import-x/no-relative-parent-imports": "off",
 			"jsdoc/require-jsdoc": "off", // Optional for internal scripts
 		},
 	},
@@ -258,6 +264,7 @@ export default tseslint.config(
 		],
 		rules: {
 			...shared.rules,
+			"import-x/no-relative-parent-imports": "off",
 			"jsdoc/require-description": "off",
 			"jsdoc/require-example": "off",
 			"jsdoc/require-jsdoc": "off",
@@ -273,6 +280,7 @@ export default tseslint.config(
 		files: ["**/.storybook/**/*.{ts,tsx}"],
 		rules: {
 			...shared.rules,
+			"import-x/no-relative-parent-imports": "off",
 			"jsdoc/require-jsdoc": "off",
 		},
 	},

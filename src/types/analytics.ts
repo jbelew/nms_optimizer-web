@@ -72,7 +72,7 @@ export interface GA4Event {
 	shipType?: string;
 	// --- Legacy/Other Parameters ---
 	/** Method used for legacy solve tracking. */
-	solve_method?: string;
+	solveMethod?: string;
 	/** Error stack trace. */
 	stackTrace?: string;
 	/** Storage status. */

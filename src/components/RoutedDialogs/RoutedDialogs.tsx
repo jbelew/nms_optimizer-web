@@ -16,12 +16,12 @@ import { lazy, Suspense } from "react";
 import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import LoremIpsumSkeleton from "@/components/AppDialog/Common/LoremIpsumSkeleton";
 import { useDialog } from "@/utils/system/dialogUtils";
 
-const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
 const MarkdownContentRenderer = lazy(() =>
-	import("@/components/AppDialog/Markdown/markdownContentRenderer").then((m) => ({
+	import("@/components/AppDialog/Markdown/MarkdownContentRenderer").then((m) => ({
 		default: m.MarkdownContentRenderer,
 	}))
 );

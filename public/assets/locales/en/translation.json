@@ -60,6 +60,7 @@
 		"deactivateRow": "Deactivate Row"
 	},
 	"messageSpinner": {
+		"loadingProgress": "Loading progress",
 		"randomMessages": [
 			"-(( Asking the Atlas for guidance! ))-",
 			"-(( Recalibrating supercharge node alignments! ))-",

@@ -7,7 +7,7 @@ import { ToastProvider } from "@/hooks/useToast/useToast";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { createGrid, useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
-import { useTechTreeLoadingStore } from "@/store/tech/techTreeLoadingStore";
+import { useUiStore } from "@/store/ui/uiStore";
 
 import { MainAppContent } from "./MainAppContent";
 
@@ -83,7 +83,7 @@ const StorybookWrapper = ({
 			usePlatformStore.setState({ selectedPlatform: "standard" });
 
 			// Reset TechTreeLoadingStore
-			useTechTreeLoadingStore.setState({ isLoading: false });
+			useUiStore.setState({ isTechTreeLoading: false });
 
 			// Initialize TechStore with tech tree data
 			if (techTree) {
@@ -102,9 +102,9 @@ const StorybookWrapper = ({
 				useTechStore.setState({
 					activeGroups: {},
 					checkedModules: {},
-					max_bonus: {},
-					solve_method: {},
-					solved_bonus: {},
+					maxBonus: {},
+					solvedBonus: {},
+					solveMethod: {},
 					techColors,
 					techGroups,
 				});

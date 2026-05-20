@@ -1,7 +1,7 @@
 import React from "react";
 import { createGrid, useGridStore } from "../src/store/grid/gridStore";
 import { usePlatformStore } from "../src/store/app/platformStore";
-import { useTechTreeLoadingStore } from "../src/store/tech/techTreeLoadingStore";
+import { useUiStore } from "../src/store/ui/uiStore";
 import { useTechStore } from "../src/store/tech/techStore";
 
 /**
@@ -66,8 +66,14 @@ export const StoreResetWrapper = ({ children }: { children: React.ReactNode }) =
         // Reset PlatformStore
         usePlatformStore.setState({ selectedPlatform: "standard" });
 
-        // Reset TechTreeLoadingStore
-        useTechTreeLoadingStore.setState({ isLoading: false });
+        // Reset UI Store (Consolidated)
+        useUiStore.setState({
+            isModuleSelectionDialogOpen: false,
+            isTechTreeLoading: false,
+            optimizeStatus: { type: "idle" },
+            selectedTechData: null,
+            shakeCount: 0,
+        });
 
         // Reset TechStore (basic reset, full reset might need more data if available)
         useTechStore.setState({

@@ -10,6 +10,7 @@ import {
 	resetCellContent,
 	useGridStore,
 } from "@/store/grid/gridStore";
+import { Logger } from "@/utils/system/monitoring";
 import { getTechTreeMaps } from "@/utils/tech/techTreeUtils";
 import { isValidRecommendedBuild } from "@/utils/validation/dataValidation";
 
@@ -83,7 +84,7 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 	 */
 	const applyRecommendedBuild = (build: RecommendedBuild) => {
 		if (!isValidRecommendedBuild(build)) {
-			console.error("Invalid RecommendedBuild object received:", build);
+			Logger.error("Invalid RecommendedBuild object received:", undefined, { build });
 
 			return;
 		}

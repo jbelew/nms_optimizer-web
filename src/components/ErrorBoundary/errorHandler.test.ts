@@ -183,7 +183,9 @@ describe("errorHandler", () => {
 
 			handleError(error, errorInfo);
 
-			expect(consoleErrorSpy).toHaveBeenCalledWith("Uncaught error:", error, errorInfo);
+			expect(consoleErrorSpy).toHaveBeenCalledWith("[ERROR] Uncaught error:", error, {
+				errorInfo,
+			});
 		});
 	});
 });

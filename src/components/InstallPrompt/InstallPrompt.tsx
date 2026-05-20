@@ -12,7 +12,7 @@
  */
 
 import React, { useEffect, useRef } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 import { useToast } from "@/hooks/useToast/useToast";
 import { isTouchDevice, safeGetItem, safeSetItem } from "@/utils/browser/environment";
@@ -61,10 +61,13 @@ export const InstallPrompt: React.FC = () => {
 		const hadVisitedBeforeLoad = wasVisitedRef.current;
 
 		if (!isInstalled && !isDismissed && hadVisitedBeforeLoad && isTouchDevice()) {
-			const description = t("installPrompt.iosInstructions");
-
 			showToast({
-				description: <div dangerouslySetInnerHTML={{ __html: description }} />,
+				description: (
+					<Trans
+						components={{ strong: <strong /> }}
+						i18nKey="installPrompt.iosInstructions"
+					/>
+				),
 				duration: 10000,
 				title: t("installPrompt.title"),
 				variant: "success",
