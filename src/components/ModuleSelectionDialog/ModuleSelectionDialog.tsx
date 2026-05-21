@@ -111,11 +111,11 @@ const formatLabel = (label: string): React.ReactNode => {
  *
  * @category Components
  */
-const ModuleCheckbox: React.FC<{ isDisabled: boolean; module: SelectionModule }> = ({
-	isDisabled,
-	module,
-}) => {
-	const { techColor } = useModuleSelectionContext();
+const ModuleCheckbox: React.FC<{
+	isDisabled: boolean;
+	module: SelectionModule;
+	techColor: React.ComponentProps<typeof Avatar>["color"];
+}> = memo(({ isDisabled, module, techColor }) => {
 	const imagePath = module.image
 		? `${baseImagePath}${module.image}?v=${typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "1.0"}`
 		: fallbackImage;
@@ -138,7 +138,9 @@ const ModuleCheckbox: React.FC<{ isDisabled: boolean; module: SelectionModule }>
 			<span className="flex-1">{formatLabel(module.label ?? module.id)}</span>
 		</label>
 	);
-};
+});
+
+ModuleCheckbox.displayName = "ModuleCheckbox";
 
 /**
  * Categorized group of module checkboxes.
@@ -157,8 +159,9 @@ const ModuleCheckbox: React.FC<{ isDisabled: boolean; module: SelectionModule }>
 const ModuleGroup: React.FC<{
 	groupName: string;
 	modules: SelectionModule[];
+	techColor: React.ComponentProps<typeof Avatar>["color"];
 	titleOverride?: string;
-}> = ({ groupName, modules, titleOverride }) => {
+}> = ({ groupName, modules, techColor, titleOverride }) => {
 	const { t } = useTranslation();
 	const { openDialog } = useDialog();
 	const { currentCheckedModules, onClose } = useModuleSelectionContext();
@@ -238,7 +241,14 @@ const ModuleGroup: React.FC<{
 					? !currentCheckedModules.includes(prerequisiteId)
 					: false;
 
-				return <ModuleCheckbox isDisabled={isDisabled} key={module.id} module={module} />;
+				return (
+					<ModuleCheckbox
+						isDisabled={isDisabled}
+						key={module.id}
+						module={module}
+						techColor={techColor}
+					/>
+				);
 			})}
 		</div>
 	);
@@ -367,6 +377,7 @@ const DialogBody: React.FC = () => {
 								groupName={groupName}
 								key={groupName}
 								modules={groupedModules[groupName]}
+								techColor={techColor}
 								titleOverride={titleOverride}
 							/>
 						);

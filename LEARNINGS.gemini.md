@@ -1048,3 +1048,33 @@ Identified 7 anti-patterns in the NMS Optimizer Web UI, including redundant memo
 ### Refine & Reflect
 
 *   **Reflection:** While the React 19 Compiler handles the majority of performance-related memoization, manual `useMemo` remains essential for maintaining stable object/array references used as `useEffect` dependencies. Removing "AI slop" must be balanced against interaction timing; moving away from ref-based state synchronization can expose race conditions in multi-event sequences (like double-taps) that require robust state reversion logic.
+
+## 2026-05-20: INP Performance Improvements (Part 2)
+
+### Perceive & Understand
+- **Request**: Address remaining Interaction to Next Paint (INP) bottlenecks on highly interactive elements identified by the Web Vitals dashboard, specifically Module Selection Checkboxes (448ms - 656ms latency) and the Ship Selection Dropdown (552ms latency).
+- **Context**: 
+    - The module selection checkboxes reside in a dynamically loaded modal dialog. Each `ModuleCheckbox` was subscribing directly to `useModuleSelectionContext()`, triggering an $O(N)$ rendering cascade when any single checkbox changed state.
+    - The Ship Selection Provider was recalculating dynamic object groupings on every single render cycle, violating context reference stability and forcing unnecessary re-renders down its consumer tree.
+
+### Reason & Plan
+- **Plan**:
+    1. **Module Selection Component**:
+        - Wrap `ModuleCheckbox` in `React.memo` to prevent re-rendering when sibling checkboxes are modified.
+        - Remove the direct context query inside `ModuleCheckbox` and instead prop-drill `techColor` from the parent dialog components.
+        - Wrap `groupedModules` construction inside `useTechModuleManagement.ts` with a stable `useMemo` call.
+    2. **Ship Selection Component**:
+        - Memoize `groupedShipTypes` inside `ShipSelectionProvider.tsx` using `useMemo` with `[shipTypes, t]` dependencies to preserve context reference stability.
+    3. **Verification**:
+        - Run `bun run typecheck`, run unit tests for the modified modules, run all Vitest suites, and execute a full production build (`bun run build`) to ensure flawless compilation and SSG.
+
+### Act & Implement
+- **Action**: Modified `ModuleSelectionDialog.tsx` to decouple context, add direct props, and wrap components in `React.memo`.
+- **Action**: Memoized the raw grouping reducer in `useTechModuleManagement.ts` and `ShipSelectionProvider.tsx`.
+- **Action**: Validated changes using the full command suite. Type checks, eslint/oxlint linters, all 27 unit tests, and production bundlers compile perfectly with zero errors or warnings.
+
+### Refine & Reflect
+- **Reflection**:
+    1. **Break Context Cascades**: React Context is a powerful mechanism for sharing state, but subscribing individual leaf components of large lists directly to high-frequency contexts is an anti-pattern. Prop-drilling stable values down to memoized leaf elements completely halts render propagation at the virtual DOM boundary.
+    2. **Context Value Reference Stability**: When exposing dynamic data through a context provider, always ensure the exposed values maintain reference stability. Wrapping computation-heavy calculations in `useMemo` prevents down-tree consumers from executing unnecessary rendering cycles, directly keeping INP and interaction latency to a minimum.
+    3. **Targeting Precision via CSS**: When measuring interaction targets for Web Vitals (such as INP), events that bubble up from graphical children (e.g., `svg` icons or `img` modules) are often logged under generic element names. Applying `pointer-events: none` directly to nested graphical child nodes (such as the SVG, IMG, and text labels inside the cell) forces the browser to resolve the click/touch event directly on the interactive container (`div.gridCell[role="gridcell"]`). This simplifies browser hit-testing and makes Web Vitals dashboards and tracking traces significantly cleaner and more descriptive.

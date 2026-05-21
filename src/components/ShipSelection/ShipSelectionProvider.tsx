@@ -40,16 +40,18 @@ export const ShipSelectionProvider: React.FC<{
 
 	const shipTypeKeys = Object.keys(shipTypes);
 
-	const groupedShipTypes = Object.entries(shipTypes).reduce(
-		(acc, [key, details]) => {
-			const type = details.type;
-			if (!acc[type]) acc[type] = [];
-			acc[type].push({ details, key, label: t(`platforms.${key}`) });
+	const groupedShipTypes = useMemo(() => {
+		return Object.entries(shipTypes).reduce(
+			(acc, [key, details]) => {
+				const type = details.type;
+				if (!acc[type]) acc[type] = [];
+				acc[type].push({ details, key, label: t(`platforms.${key}`) });
 
-			return acc;
-		},
-		{} as Record<string, GroupedShipType[]>
-	);
+				return acc;
+			},
+			{} as Record<string, GroupedShipType[]>
+		);
+	}, [shipTypes, t]);
 
 	const handleOptionSelect = useCallback(
 		(option: string) => {
