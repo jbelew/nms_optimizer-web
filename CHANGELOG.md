@@ -1,3 +1,10 @@
+## [7.3.5](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.4...v7.3.5) (2026-05-21)
+
+
+### Bug Fixes
+
+* **performance:** optimize INP by memoizing components and improving context handling ([a7055bc](https://github.com/jbelew/nms_optimizer-web/commit/a7055bc4b762b7d0342421fd5f460f354340daa8))
+
 ## [7.3.4](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.3...v7.3.4) (2026-05-20)
 
 
