@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from "react";
+import { useShallow } from "zustand/react/shallow";
 
 import { useModuleSelectionStore } from "@/store/tech/moduleSelectionStore";
 import { useTechStore } from "@/store/tech/techStore";
@@ -43,13 +44,10 @@ export const useTechModuleManagement = (
 	modules: { id: string; image: string; label: string; type?: string }[]
 ) => {
 	const setCheckedModules = useTechStore((state) => state.setCheckedModules);
-	const allCheckedModules = useTechStore((state) => state.checkedModules);
-	const { getModuleSelection, setModuleSelection } = useModuleSelectionStore();
-
-	const currentCheckedModules = useMemo(
-		() => allCheckedModules[tech] || [],
-		[allCheckedModules, tech]
+	const currentCheckedModules = useTechStore(
+		useShallow((state) => state.checkedModules[tech] || [])
 	);
+	const { getModuleSelection, setModuleSelection } = useModuleSelectionStore();
 
 	// Sync module selections to persistent store (only if they changed)
 	useEffect(() => {
@@ -70,7 +68,7 @@ export const useTechModuleManagement = (
 	const coreModuleIds = modules.filter((m) => m.type === "core").map((m) => m.id);
 	const nonCoreModuleIds = modules.filter((m) => m.type !== "core").map((m) => m.id);
 
-	const groupedModules = (() => {
+	const groupedModules = useMemo(() => {
 		const groups: { [key: string]: typeof modules } = {
 			atlantid: [],
 			bonus: [],
@@ -99,7 +97,7 @@ export const useTechModuleManagement = (
 		});
 
 		return groups;
-	})();
+	}, [modules]);
 
 	/**
 	 * Toggles the selection status of a single module.

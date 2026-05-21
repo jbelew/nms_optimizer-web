@@ -22,6 +22,12 @@
 	user-select: none;
 	width: var(--grid-cell-size);
 
+	img,
+	svg,
+	span {
+		pointer-events: none;
+	}
+
 	&:focus-visible {
 		outline: 2px solid var(--accent-track);
 		outline-offset: 2px;
