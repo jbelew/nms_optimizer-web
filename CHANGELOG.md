@@ -1,3 +1,10 @@
+## [7.3.6](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.5...v7.3.6) (2026-05-22)
+
+
+### Bug Fixes
+
+* add GitHub stars rating pill to footer and optimize support prompt across multiple languages ([6d8c28a](https://github.com/jbelew/nms_optimizer-web/commit/6d8c28ab90c801637f9eb7f9024b48d2788e6da6))
+
 ## [7.3.5](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.4...v7.3.5) (2026-05-21)
 
 
