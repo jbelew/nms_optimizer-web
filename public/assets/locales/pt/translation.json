@@ -16,7 +16,7 @@
 			"description": "A partir da versão 6.34, as Corvetas <strong>ainda</strong> apresentam problemas de layout conhecidos! Se você criar um layout, recomendamos fortemente usar o recurso <strong>Salvar Construção</strong> para manter um backup do seu trabalho."
 		}
 	},
-	"appName": "NMS Optimizer",
+	"appName": "NMS Otimizador",
 	"buttons": {
 		"instructions": "Instruções",
 		"about": "Sobre",
