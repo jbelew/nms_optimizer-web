@@ -1,3 +1,10 @@
+## [7.3.7](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.6...v7.3.7) (2026-05-22)
+
+
+### Bug Fixes
+
+* correct appName translation in multiple languages ([44f6ffb](https://github.com/jbelew/nms_optimizer-web/commit/44f6ffb61bfc95d50797cb7d404f65d6696cd359))
+
 ## [7.3.6](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.5...v7.3.6) (2026-05-22)
 
 
