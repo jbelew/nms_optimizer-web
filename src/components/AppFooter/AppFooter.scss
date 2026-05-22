@@ -60,6 +60,15 @@
 		padding-top: var(--space-5);
 	}
 
+	&__support-text {
+		text-align: center;
+		width: 100%;
+
+		@media (width >= 1024px) {
+			width: auto;
+		}
+	}
+
 	&__rating-pill {
 		align-items: center;
 		background-color: var(--color-panel-solid);
@@ -79,6 +88,7 @@
 			background-color: var(--gray-3);
 			border-color: var(--amber-8);
 			color: var(--amber-11);
+			transform: translateY(-1px);
 		}
 	}
 }

@@ -80,7 +80,7 @@ export default function BuyMeACoffee() {
 
 	return (
 		<div>
-			<Button asChild size={isLargeScreen ? "1" : "1"} variant="solid">
+			<Button asChild size={isLargeScreen ? "1" : "1"} variant="soft">
 				<a href="https://www.buymeacoffee.com/jbelew" onClick={handleButtonClick}>
 					☕ Buy me a Coffee!
 				</a>

@@ -3,7 +3,7 @@ import "./AppFooter.scss";
 
 import React from "react";
 import { GitHubLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";
-import { Flex, Separator } from "@radix-ui/themes";
+import { Button, Flex, Separator } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 import Buymeacoffee from "@/components/BuyMeACoffee/BuyMeACoffee";
@@ -117,14 +117,15 @@ const AppFooterRating: React.FC = () => {
 	const { t } = useAppFooterContext();
 
 	return (
-		<a
-			className="app-footer__rating-pill"
-			href="https://github.com/jbelew/nms_optimizer-web/stargazers"
-			rel="noopener noreferrer"
-			target="_blank"
-		>
-			{t("footer.ratingPill")}
-		</a>
+		<Button asChild size="1" variant="surface">
+			<a
+				href="https://github.com/jbelew/nms_optimizer-web/stargazers"
+				rel="noopener noreferrer"
+				target="_blank"
+			>
+				{t("footer.ratingPill")}
+			</a>
+		</Button>
 	);
 };
 
@@ -142,7 +143,9 @@ const AppFooterSupport: React.FC = () => {
 				justify="center"
 				wrap="wrap"
 			>
-				<Trans i18nKey="footer.supportPrompt" />
+				<div className="app-footer__support-text">
+					<Trans i18nKey="footer.supportPrompt" />
+				</div>
 				<Buymeacoffee />
 				<AppFooterRating />
 			</Flex>
