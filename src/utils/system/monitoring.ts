@@ -16,6 +16,7 @@ import type {
 } from "@sentry/react";
 import type { RouteObject } from "react-router-dom";
 import { useEffect } from "react";
+import * as Sentry from "@sentry/react";
 import {
 	createBrowserRouter,
 	createRoutesFromChildren,
@@ -254,22 +255,22 @@ export const Logger = {
  * @remarks
  * Configures Sentry with React Router v7 integration and sets up sampling rates
  * based on the environment (DEV vs PROD). Initialization is skipped if
- * `VITE_SENTRY_ENABLED` is not \"true\" or `VITE_SENTRY_DSN` is missing.
+ * `VITE_SENTRY_ENABLED` is not "true" or `VITE_SENTRY_DSN` is missing.
  *
- * This function uses dynamic imports to ensure Sentry SDK is only bundled
- * and loaded if enabled via feature flag.
+ * This function initializes Sentry synchronously to ensure it catches early errors
+ * and wraps the router creator properly.
  *
- * @returns {Promise<void>} Side-effects only.
+ * @returns {void} Side-effects only.
  *
  * @category Utilities
  *
  * @example
  * ```ts
- * await initializeSentry();
+ * initializeSentry();
  * // returns void
  * ```
  */
-export const initializeSentry = async () => {
+export const initializeSentry = () => {
 	// Build-time feature flag to completely tree-shake Sentry out
 	if (import.meta.env.VITE_SENTRY_ENABLED !== "true") {
 		return;
@@ -282,9 +283,7 @@ export const initializeSentry = async () => {
 	}
 
 	try {
-		// Dynamically import Sentry to avoid bundling it when disabled
-		const Sentry = (await import("@sentry/react")) as unknown as SentrySDK;
-		sentryInstance = Sentry;
+		sentryInstance = Sentry as unknown as SentrySDK;
 
 		Sentry.init({
 			allowUrls: [/localhost/, /127\\.0\\.0\\.1/, /nms-optimizer\\.app/i],

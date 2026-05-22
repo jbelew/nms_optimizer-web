@@ -1078,3 +1078,28 @@ Identified 7 anti-patterns in the NMS Optimizer Web UI, including redundant memo
     1. **Break Context Cascades**: React Context is a powerful mechanism for sharing state, but subscribing individual leaf components of large lists directly to high-frequency contexts is an anti-pattern. Prop-drilling stable values down to memoized leaf elements completely halts render propagation at the virtual DOM boundary.
     2. **Context Value Reference Stability**: When exposing dynamic data through a context provider, always ensure the exposed values maintain reference stability. Wrapping computation-heavy calculations in `useMemo` prevents down-tree consumers from executing unnecessary rendering cycles, directly keeping INP and interaction latency to a minimum.
     3. **Targeting Precision via CSS**: When measuring interaction targets for Web Vitals (such as INP), events that bubble up from graphical children (e.g., `svg` icons or `img` modules) are often logged under generic element names. Applying `pointer-events: none` directly to nested graphical child nodes (such as the SVG, IMG, and text labels inside the cell) forces the browser to resolve the click/touch event directly on the interactive container (`div.gridCell[role="gridcell"]`). This simplifies browser hit-testing and makes Web Vitals dashboards and tracking traces significantly cleaner and more descriptive.
+
+## PRAR Cycle: Enable Sentry Feature Flag (2026-05-22)
+
+### Perceive & Understand
+- **Request**: Let's flip the feature flag on Sentry and ensure that it's working properly.
+- **Context**: Sentry tracking was previously disabled across development, docker, e2e, and production environments via `VITE_SENTRY_ENABLED=false`. Turning the feature flag to `true` activates dynamic imports for Sentry SDK `@sentry/react`, includes the dedicated `vendor-monitoring` chunk in production, and enables router/exception tracking.
+
+### Reason & Plan
+- **Plan**:
+    1. Update environment files (`.env.development`, `.env.production`, `.env.docker`, and `.env.e2e`) to set `VITE_SENTRY_ENABLED=true`.
+    2. Run full unit and integration test suite to verify no regressions in logger/sentry wrapper tests.
+    3. Perform a full production build (`bun run build`) to verify code splitting (rendering `vendor-monitoring` chunk) works seamlessly and compiles without error.
+
+### Act & Implement
+- **Action**: Modified `VITE_SENTRY_ENABLED=false` to `VITE_SENTRY_ENABLED=true` in `.env.development`, `.env.production`, `.env.docker`, and `.env.e2e`.
+- **Action**: Ran `bun run test` (all tests passed with 100% success).
+- **Action**: Executed `bun run build` which built the application flawlessly, generating `dist/build/vendor-monitoring-JXK1GcH8.js` (461.46 kB) for Sentry and completing all static page pre-renders successfully.
+
+### Refine & Reflect
+- **Reflection**:
+    1. **Eager Synchronization for Trace Coverage**: Dynamic imports of Sentry SDK are asynchronous by nature. If left asynchronous in bootstrap, `createAppRouter` is invoked synchronously on mount before Sentry finishes loading, rendering the router *without* Sentry's `wrapCreateBrowserRouterV7` routing instrumentation. Refactoring Sentry initialization to be fully synchronous resolves `@sentry/react` statically, enabling robust error capturing and 100% correct page performance tracing from the initial render.
+    2. **Zero-Bloat Tree-Shaking via Compile-Time Resolve Aliases**: A static import of `@sentry/react` does *not* bloat the bundle when disabled. Modern bundlers (like Rolldown/Vite) resolve the `@sentry/react` import path dynamically at compile time based on `sentryEnabled`. When disabled, the import maps directly to `src/utils/system/sentryMock.ts` (~3 KB), ensuring zero overhead in non-Sentry builds.
+    3. **Graceful CI Auth Tokens**: Local production builds naturally print warnings when `SENTRY_AUTH_TOKEN` is missing, but compile and package correctly without failing, while CI builds utilize secrets to deploy sourcemaps seamlessly.
+
+

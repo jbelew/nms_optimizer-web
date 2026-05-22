@@ -125,10 +125,10 @@ const bootstrap = async () => {
 	// Perform any necessary data migrations or cleanups before mounting
 	performBootstrapMigrations();
 
-	// Initialize Sentry as early as possible if enabled.
-	// We don't await this to keep it out of the critical path and avoid blocking the mount.
+	// Initialize Sentry synchronously as early as possible if enabled.
+	// This ensures early errors are caught and the router is correctly instrumented.
 	if (import.meta.env.VITE_SENTRY_ENABLED === "true") {
-		void initializeSentry();
+		initializeSentry();
 	}
 
 	// Initialize analytics and PWA after render is complete
