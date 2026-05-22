@@ -109,21 +109,42 @@ const AppFooterContent: React.FC = () => {
 };
 
 /**
+ * Rating pill component displaying GitHub stars and community rating.
+ *
+ * @returns {React.JSX.Element} The rendered rating pill link.
+ */
+const AppFooterRating: React.FC = () => {
+	const { t } = useAppFooterContext();
+
+	return (
+		<a
+			className="app-footer__rating-pill"
+			href="https://github.com/jbelew/nms_optimizer-web/stargazers"
+			rel="noopener noreferrer"
+			target="_blank"
+		>
+			{t("footer.ratingPill")}
+		</a>
+	);
+};
+
+/**
  * Support section of the footer.
  */
 const AppFooterSupport: React.FC = () => {
 	return (
 		<>
-			<Separator decorative mb="1" mt="1" size="3" />
+			<Separator color="cyan" decorative mb="1" mt="1" size="3" />
 			<Flex
 				align="center"
 				className="app-footer__support"
-				gap={{ initial: "2", lg: "1" }}
+				gap={{ initial: "2", lg: "2" }}
 				justify="center"
 				wrap="wrap"
 			>
 				<Trans i18nKey="footer.supportPrompt" />
 				<Buymeacoffee />
+				<AppFooterRating />
 			</Flex>
 		</>
 	);
@@ -152,6 +173,7 @@ const AppFooterComp: React.FC<{ buildDate?: string; buildVersion: string }> = ({
 const AppFooter = Object.assign(AppFooterComp, {
 	Content: AppFooterContent,
 	Provider: AppFooterProvider,
+	Rating: AppFooterRating,
 	Root: AppFooterRoot,
 	Support: AppFooterSupport,
 });

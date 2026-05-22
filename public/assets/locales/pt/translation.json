@@ -181,7 +181,8 @@
 		"builtBy": "Desenvolvido por jbelew",
 		"license": "GPL-3.0",
 		"buildLabel": "Compilação",
-		"supportPrompt": "Este app sempre será gratuito e sem anúncios. Se você o achou útil, considere apoiar o desenvolvimento com: "
+		"supportPrompt": "Grátis e sem anúncios. Se isso te ajudou, considere nos apoiar com ",
+		"ratingPill": "⭐ 4.9/5 (28 Estrelas GitHub)"
 	},
 	"translationRequest": {
 		"openDialogLabel": "Tradutores Necessários!"
@@ -685,8 +686,8 @@
 		"aboutUpgradeLabelsTooltip": "Sobre Rótulos de Melhoria"
 	},
 	"seo": {
-		"mainPageTitle": "NMS Optimizer: Calculadora de Layout de Tecnologia e Bônus de Adjacência",
-		"appDescription": "Otimize os layouts de tecnologia de No Man's Sky usando algoritmos avançados. Maximize bônus de adjacência e impulsos de espaços sobrecarregados para naves, multiferramentas, corvetas e muito mais.",
+		"mainPageTitle": "NMS Optimizer: Calculadora de Tecnologia e Adjacência NMS",
+		"appDescription": "Otimize layouts de tecnologia no No Man's Sky. Maximize bônus de adjacência e slots sobrecarregados para naves, multiferramentas e mais com algoritmos avançados.",
 		"keywords": "NMS Optimizer, No Man's Sky, bônus de adjacência, espaços sobrecarregados, ferramenta de layout NMS, layout técnico de naves, build de multiferramenta, calculadora de espaço sobrecarregado",
 		"instructionsPageTitle": "NMS Optimizer: Como otimizar seu layout técnico",
 		"instructionsDescription": "Aprenda a usar a grade, gerenciar espaços sobrecarregados e o sistema Theta/Tau/Sigma para builds de No Man's Sky.",

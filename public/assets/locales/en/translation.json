@@ -198,7 +198,8 @@
 		"builtBy": "Built by jbelew",
 		"license": "GPL-3.0",
 		"buildLabel": "Build",
-		"supportPrompt": "This app will always be free and ad-free. If you’ve found it useful, consider supporting development with: "
+		"supportPrompt": "Free & ad-free. If this helped you, consider supporting us with ",
+		"ratingPill": "⭐ 4.9/5 (28 GitHub Stars)"
 	},
 	"translationRequest": {
 		"openDialogLabel": "Translators needed!"
@@ -703,7 +704,7 @@
 	},
 	"seo": {
 		"mainPageTitle": "NMS Optimizer: Tech Layout & Adjacency Bonus Calculator",
-		"appDescription": "Optimize No Man's Sky technology layouts using advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, Corvettes, and more.",
+		"appDescription": "Optimize No Man's Sky tech layouts with advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, and more.",
 		"genre": "Game Tool",
 		"keywords": "NMS Optimizer, No Man's Sky, adjacency bonus, supercharged slots, NMS layout tool, starship tech layout, multitool build, supercharged slot calculator",
 		"instructionsPageTitle": "NMS Optimizer: How to Optimize Your Tech Layout",

@@ -181,7 +181,8 @@
 		"builtBy": "Creado por jbelew",
 		"license": "GPL-3.0",
 		"buildLabel": "Compilación",
-		"supportPrompt": "Esta aplicación siempre será gratuita y sin publicidad. Si te ha resultado útil, considera apoyar el desarrollo con: "
+		"supportPrompt": "Gratis y sin publicidad. Si te ha ayudado, considera apoyarnos con ",
+		"ratingPill": "⭐ 4.9/5 (28 Estrellas GitHub)"
 	},
 	"translationRequest": {
 		"openDialogLabel": "¡Se Necesitan Traductores!"
@@ -685,8 +686,8 @@
 		"aboutUpgradeLabelsTooltip": "Acerca de las Etiquetas de Mejora"
 	},
 	"seo": {
-		"mainPageTitle": "NMS Optimizer: Calculadora de Diseño de Tecnología y Bonus de Adyacencia",
-		"appDescription": "Optimiza los diseños de tecnología de No Man's Sky usando algoritmos avanzados. Maximiza los bonus de adyacencia y potenciadores de ranuras para naves, multiherramientas, corbetas y más.",
+		"mainPageTitle": "NMS Optimizer: Calculadora de Tecnología y Adyacencia NMS",
+		"appDescription": "Optimiza diseños de tecnología de No Man's Sky. Maximiza bonus de adyacencia y ranuras potenciadas para naves, multiherramientas y más con algoritmos avanzados.",
 		"keywords": "NMS Optimizer, No Man's Sky, bonus de adyacencia, ranuras potenciadas, herramienta de diseño NMS, diseño técnico de naves, construcción de multiherramientas, calculadora de ranuras potenciadas",
 		"instructionsPageTitle": "NMS Optimizer: Cómo optimizar tu diseño técnico",
 		"instructionsDescription": "Aprende a usar la cuadrícula, gestionar ranuras potenciadas y el sistema Theta/Tau/Sigma para diseños óptimos en No Man's Sky.",

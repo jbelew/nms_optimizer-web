@@ -49,7 +49,7 @@ function verify() {
     ssgPaths.forEach(p => {
         // Skip the root and language roots as they are handled by /index.html and /lang/index.html
         if (p === '/') return;
-        if (p.match(/^\/(es|fr|de|pt)\/$/)) return;
+        if (p.match(/^\/(es|fr|de|pt|it)\/$/)) return;
 
         if (!excluded.has(p)) {
             console.log(`✗ ${p} is missing from public/_routes.json exclude list`);

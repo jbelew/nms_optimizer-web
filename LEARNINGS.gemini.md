@@ -1103,3 +1103,30 @@ Identified 7 anti-patterns in the NMS Optimizer Web UI, including redundant memo
     3. **Graceful CI Auth Tokens**: Local production builds naturally print warnings when `SENTRY_AUTH_TOKEN` is missing, but compile and package correctly without failing, while CI builds utilize secrets to deploy sourcemaps seamlessly.
 
 
+
+## PRAR Cycle: Footer Social Proof Rating Pill and Support Prompt Optimization (2026-05-22)
+
+### Perceive & Understand
+- **Request**: Display the rating in the footer using a star rating pill linked to GitHub Stars, and shorten the support text line to improve design layout density and SEO trustworthiness.
+- **Context**: Showing self-serving ratings in structured search schemas without a visible, authentic, and verifiable web page audit trail risks manual action from Google. Placing a visible interactive GitHub stargazers rating pill on the UI, alongside an optimized support prompt, directly satisfies both user engagement goals and search engine compliance.
+
+### Reason & Plan
+- **Plan**:
+    1. **Create Rating Pill**: Implement a compound `AppFooter.Rating` (`AppFooterRating`) component in `src/components/AppFooter/AppFooter.tsx` using Radix/React, pointing to the public GitHub stargazers page.
+    2. **Style and Refine**: Add premium styling and glassmorphic micro-animations (`.app-footer__rating-pill`) in `src/components/AppFooter/AppFooter.scss` with hover transformations (`translateY(-1px)`) and amber border glows.
+    3. **Shorten Support Prompt**: Update all 6 translation locales (`en`, `es`, `fr`, `de`, `pt`, `it`) in their respective `translation.json` files to use Option A: `"Free & ad-free. If this helped you, consider supporting us: "`.
+    4. **Add Translation Keys**: Add the localized `"ratingPill"` strings to all 6 locale files.
+    5. **Validate**: Run linters, unit tests for the footer, production build, and SSG/CDN parity checks.
+
+### Act & Implement
+- **Action**: Created `AppFooterRating` and integrated it adjacent to `Buymeacoffee` inside `AppFooterSupport`.
+- **Action**: Updated `supportPrompt` and added `ratingPill` in English, Spanish, French, German, Portuguese, and Italian localization JSON files.
+- **Action**: Formatted all locales and solved ESLint object sorting constraints using `bun run format:locales` and `bun run lint:fix`.
+- **Action**: Ran unit tests (`bun run test src/components/AppFooter/AppFooter.test.tsx`) which successfully verified component rendering.
+- **Action**: Executed `bun run build`, generating 42 static HTML localized pre-rendered pages, and verified SEO routes parity cleanly via `bun run verify:ssg && bun run verify:routes`.
+
+### Refine & Reflect
+- **Reflection**:
+    1. **Verifiable Trust**: Linking star rating displays on the UI to a public, verifiable page (like GitHub stargazers or a trusted review platform) reinforces authenticity, satisfying both human trust and Google's quality evaluator guidelines.
+    2. **Layout Denseness**: Grouping transactional components (e.g., Buy Me a Coffee and Rating Pill) inside a responsive flex-wrap container prevents layout shifting and ensures an elegant, premium presentation across all mobile and desktop viewports.
+    3. **SSG Parity & Localized Testing**: Testing pre-rendering output via standard static-site validation scripts after UI additions ensures that new UI elements do not break localization flows or hydration integrity on pre-rendered landing pages.

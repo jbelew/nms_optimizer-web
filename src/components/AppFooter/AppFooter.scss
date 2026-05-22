@@ -59,4 +59,26 @@
 		padding-right: var(--app-safe-pr) !important;
 		padding-top: var(--space-5);
 	}
+
+	&__rating-pill {
+		align-items: center;
+		background-color: var(--color-panel-solid);
+		border: 1px solid var(--gray-5);
+		border-radius: var(--radius-2);
+		color: var(--gray-12);
+		cursor: pointer;
+		display: inline-flex;
+		font-size: 0.75rem;
+		font-weight: 500;
+		gap: 0.35rem;
+		padding: 0.25rem 0.5rem;
+		text-decoration: none;
+		transition: all 0.2s ease-in-out;
+
+		&:hover {
+			background-color: var(--gray-3);
+			border-color: var(--amber-8);
+			color: var(--amber-11);
+		}
+	}
 }

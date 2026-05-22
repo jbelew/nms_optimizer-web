@@ -198,7 +198,8 @@
 		"builtBy": "Realizzato da jbelew",
 		"license": "GPL-3.0",
 		"buildLabel": "Versione",
-		"supportPrompt": "Questa app sarà sempre gratuita e senza pubblicità. Se l'hai trovata utile, considera di supportare lo sviluppo con: "
+		"supportPrompt": "Gratuita e senza pubblicità. Se ti è stata utile, considera di supportarci con ",
+		"ratingPill": "⭐ 4.9/5 (28 Stelle GitHub)"
 	},
 	"translationRequest": {
 		"openDialogLabel": "Cercasi traduttori!"
@@ -703,7 +704,7 @@
 	},
 	"seo": {
 		"mainPageTitle": "NMS Optimizer: Calcolatore Layout Tecnologia e Bonus Adiacenza",
-		"appDescription": "Ottimizza i layout tecnologici di No Man's Sky usando algoritmi avanzati. Massimizza i bonus di adiacenza e i potenziamenti degli slot sovraccarichi per Navi Stellari, Multitool, Corvette e altro.",
+		"appDescription": "Ottimizza i layout tecnologici di No Man's Sky. Massimizza i bonus di adiacenza e gli slot sovraccarichi per Navi Stellari, Multitool e altro ancora.",
 		"genre": "Strumento di Gioco",
 		"keywords": "NMS Optimizer, No Man's Sky, bonus adiacenza, slot sovraccarichi, strumento layout NMS, layout tecnologia nave stellare, configurazione multitool, calcolatore slot sovraccarichi",
 		"instructionsPageTitle": "NMS Optimizer: Come Ottimizzare il Tuo Layout Tecnologico",

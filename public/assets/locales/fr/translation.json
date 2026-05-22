@@ -181,7 +181,8 @@
 		"builtBy": "Développé par jbelew",
 		"license": "GPL-3.0",
 		"buildLabel": "Construction",
-		"supportPrompt": "Cette application sera toujours gratuite et sans publicité. Si elle vous est utile, vous pouvez soutenir le développement ici : "
+		"supportPrompt": "Gratuit & sans publicité. Si cela vous a aidé, pensez à nous soutenir avec ",
+		"ratingPill": "⭐ 4.9/5 (28 Étoiles GitHub)"
 	},
 	"translationRequest": {
 		"openDialogLabel": "Traducteurs Recherchés !"
@@ -685,8 +686,8 @@
 		"aboutUpgradeLabelsTooltip": "À propos des étiquettes d'amélioration"
 	},
 	"seo": {
-		"mainPageTitle": "NSM Optimizer: Calculateur de Disposition Technologique et Bonus d'Adjacence",
-		"appDescription": "Optimisez vos dispositions technologiques No Man's Sky à l'aide d'algorithmes avancés. Maximisez les bonus d'adjacence et les boosts de slots surchargés pour les vaisseaux, multi-outils, corvettes et plus encore.",
+		"mainPageTitle": "NMS Optimizer: Calculateur de Technologie et d'Adjacence",
+		"appDescription": "Optimisez vos technologies No Man's Sky avec nos algorithmes. Maximisez les bonus d'adjacence et slots surchargés pour vaisseaux, multi-outils et plus.",
 		"keywords": "NMS Optimizer, No Man's Sky, bonus d'adjacence, slots surchargés, outil de layout NMS, disposition technique vaisseau, build multi-outil, calculateur de slot surchargé",
 		"instructionsPageTitle": "NMS Optimizer : Comment optimiser vos technologies",
 		"instructionsDescription": "Apprenez à utiliser la grille, les slots surchargés et le système Theta/Tau/Sigma pour vos builds No Man's Sky.",

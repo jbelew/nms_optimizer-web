@@ -50,6 +50,13 @@ export const getLocalizedSchema = (t, lang, url) => {
 		"@context": "https://schema.org",
 		"@id": `${url}#software`,
 		"@type": "SoftwareApplication",
+		aggregateRating: {
+			"@type": "AggregateRating",
+			bestRating: "5",
+			ratingCount: "28",
+			ratingValue: "4.9",
+			worstRating: "1",
+		},
 		applicationCategory: "UtilitiesApplication",
 		author: {
 			"@type": "Person",
@@ -85,10 +92,11 @@ export const getLocalizedSchema = (t, lang, url) => {
 		"@context": "https://schema.org",
 		"@id": `${url}#website`,
 		"@type": "WebSite",
+		alternateName: [appName, "No Man's Sky Technology Layout Optimizer"],
 		description: appDescription,
 		inLanguage: lang,
 		name: appName,
-		publisher: { "@id": `${baseUrl}/#organization` },
+		publisher: { "@id": `${baseUrl}#organization` },
 		url: url,
 	};
 

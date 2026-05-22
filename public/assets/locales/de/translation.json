@@ -179,9 +179,10 @@
 	"footer": {
 		"issuePrompt": "Etwas stimmt nicht mit deiner Optimierung oder du hast einen Fehler gefunden? <1>Eröffne ein GitHub-Issue</1> und lass es uns wissen!",
 		"builtBy": "Erstellt von jbelew",
-		"supportPrompt": "Diese App wird immer kostenlos und werbefrei bleiben. Wenn sie dir geholfen hat, unterstütze die Entwicklung gerne hier: ",
+		"supportPrompt": "Kostenlos & werbefrei. Wenn dir das geholfen hat, unterstütze uns gerne mit ",
 		"license": "GPL-3.0",
-		"buildLabel": "Build"
+		"buildLabel": "Build",
+		"ratingPill": "⭐ 4.9/5 (28 GitHub-Sterne)"
 	},
 	"translationRequest": {
 		"openDialogLabel": "Übersetzer Gesucht!"
@@ -686,7 +687,7 @@
 	},
 	"seo": {
 		"mainPageTitle": "NMS Optimizer: Tech-Layout- & Adjazenzbonus-Rechner",
-		"appDescription": "Optimiere deine No Man's Sky Technologie-Layouts mit fortschrittlichen Algorithmen. Maximiere Adjazenzboni und Boosts für überladene Slots bei Raumschiffen, Multitools, Korvetten und mehr.",
+		"appDescription": "Optimiere No Man's Sky Technologie-Layouts. Maximiere Adjazenzboni und Boosts für überladene Slots bei Raumschiffen, Multitools und mehr dank smarter Algorithmen.",
 		"keywords": "NMS-Optimierer, No Man's Sky, Adjazenzbonus, überladene Slots, NMS-Layout-Tool, Raumschiff-Tech-Layout, Multitool-Build, Rechner für überladene Slots",
 		"instructionsPageTitle": "NMS Optimizer: So optimierst du dein Tech-Layout",
 		"instructionsDescription": "Lerne das Raster, überladene Slots und das Theta/Tau/Sigma-System für optimale No Man's Sky Builds kennen.",
