@@ -62,9 +62,9 @@
 		"@radix-ui/react-toast": "^1.2.15",
 		"@radix-ui/react-toolbar": "^1.1.11",
 		"@radix-ui/themes": "^3.3.0",
-		"@sentry/react": "^10.53.1",
+		"@sentry/react": "^10.55.0",
 		"html-to-image": "^1.11.13",
-		"i18next": "^26.2.0",
+		"i18next": "^26.3.0",
 		"i18next-browser-languagedetector": "^8.2.1",
 		"i18next-fs-backend": "^2.6.6",
 		"i18next-http-backend": "^4.0.0",
@@ -75,13 +75,13 @@
 		"react-i18next": "^17.0.8",
 		"react-is": "^19.2.6",
 		"react-markdown": "^10.1.0",
-		"react-router-dom": "^7.15.1",
+		"react-router-dom": "^7.16.0",
 		"recharts": "^3.8.1",
 		"rehype-raw": "^7.0.0",
 		"remark-gfm": "^4.0.1",
 		"socket.io-client": "^4.8.3",
-		"web-vitals": "^5.2.0",
-		"zustand": "^5.0.13"
+		"web-vitals": "^5.3.0",
+		"zustand": "^5.0.14"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.29.7",
