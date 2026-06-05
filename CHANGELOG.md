@@ -1,3 +1,10 @@
+## [7.3.9](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.8...v7.3.9) (2026-06-05)
+
+
+### Bug Fixes
+
+* **i18n:** standardize appName to "NMS Optimizer" across all translations ([230df87](https://github.com/jbelew/nms_optimizer-web/commit/230df876de40186f745c50918ec967e3cfcb8576))
+
 ## [7.3.8](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.7...v7.3.8) (2026-06-05)
 
 
