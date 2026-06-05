@@ -16,7 +16,7 @@
 			"description": "Depuis la version 6.34, les Corvettes ont <strong>toujours</strong> des problèmes de disposition connus ! Si vous créez une disposition, nous vous recommandons fortement d'utiliser la fonction <strong>Sauvegarder la construction</strong> pour conserver une sauvegarde de votre travail."
 		}
 	},
-	"appName": "Optimiseur NMS",
+	"appName": "NMS Optimizer",
 	"buttons": {
 		"instructions": "Instructions",
 		"about": "À Propos",
