@@ -45,6 +45,7 @@ describe("deserialize", () => {
 	const mockShipType = "standard";
 
 	beforeEach(() => {
+		vi.mocked(apiCall).mockReset();
 		vi.clearAllMocks();
 		clearTechTreeCache();
 	});
@@ -253,8 +254,6 @@ describe("deserialize", () => {
 		const serializedGrid = "|||||"; // 6 parts, but all undefined/empty
 		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
-		// Mock apiCall to avoid unrelated errors
-		vi.mocked(apiCall).mockResolvedValueOnce({});
 		// Act
 		const result = await deserialize(serializedGrid, mockShipType, mockSetTechColors);
 
@@ -278,9 +277,6 @@ describe("deserialize", () => {
 		const serializedGrid =
 			"1|%033%207%032%2048|ABC%207DE%2048|T3F7T2F48|shield:%03|Cb:A,Ca:B,DS:C,Cc:D,AA:E";
 
-		// Mock apiCall to avoid unrelated errors
-		vi.mocked(apiCall).mockResolvedValueOnce({});
-
 		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
 		// Act
@@ -297,5 +293,60 @@ describe("deserialize", () => {
 		);
 		expect(mockSetTechColors).not.toHaveBeenCalled();
 		consoleErrorSpy.mockRestore();
+	});
+
+	it("should map legacy remembrance and starseed tech keys to core_health", async () => {
+		// Arrange
+		const gridString = "1" + "0".repeat(59);
+		const compressedTech = "A" + " ".repeat(59);
+		const compressedModule = "B" + " ".repeat(59);
+		const compressedAdjBonus = "F" + " ".repeat(59);
+		const techMapString = "remembrance:A"; // Legacy tech maps to character A
+		const moduleMapString = "RM:B"; // Module RM maps to character B
+
+		const serializedGrid = `${gridString}|${compressedTech}|${compressedModule}|${compressedAdjBonus}|${techMapString}|${moduleMapString}`;
+
+		const mockTechTree = {
+			"Tech Category": [
+				{
+					color: "white",
+					key: "core_health",
+					modules: [
+						{
+							active: true,
+							adjacency: "none",
+							adjacency_bonus: 0,
+							bonus: 0,
+							id: "RM",
+							image: "remembrance.webp",
+							label: "Remembrance",
+							tech: "core_health",
+							type: "module",
+							value: 0,
+						},
+					],
+				},
+			],
+		};
+
+		vi.mocked(apiCall).mockResolvedValueOnce(mockTechTree);
+
+		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation((...args) => {
+			console.log("CONSOLE ERROR DIALED IN:", ...args);
+		});
+
+		// Act
+		const result = await deserialize(serializedGrid, mockShipType, mockSetTechColors);
+
+		// Assert
+		consoleErrorSpy.mockRestore();
+		expect(result).not.toBeNull();
+
+		if (result) {
+			const targetCell = result.cells[0][0];
+			expect(targetCell.tech).toBe("core_health"); // remembrance migrated to core_health
+			expect(targetCell.module).toBe("RM");
+			expect(targetCell.active).toBe(true);
+		}
 	});
 });

@@ -242,7 +242,7 @@ export async function generatePage(
 				// Schemas
 				if (softwareSchema)
 					el.append(
-						`<script type="application/ld+json" id="software-schema">${JSON.stringify(softwareSchema)}</script>`,
+						`<script type="application/ld+json" id="softwareapplication-schema">${JSON.stringify(softwareSchema)}</script>`,
 						{ html: true }
 					);
 				if (websiteSchema)
@@ -252,12 +252,12 @@ export async function generatePage(
 					);
 				if (orgSchema)
 					el.append(
-						`<script type="application/ld+json" id="org-schema">${JSON.stringify(orgSchema)}</script>`,
+						`<script type="application/ld+json" id="organization-schema">${JSON.stringify(orgSchema)}</script>`,
 						{ html: true }
 					);
 				if (breadcrumbSchema)
 					el.append(
-						`<script type="application/ld+json" id="breadcrumb-schema">${JSON.stringify(breadcrumbSchema)}</script>`,
+						`<script type="application/ld+json" id="breadcrumblist-schema">${JSON.stringify(breadcrumbSchema)}</script>`,
 						{ html: true }
 					);
 			},

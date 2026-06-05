@@ -324,7 +324,13 @@ export const deserialize = async (
 			.reduce((acc: { [key: string]: string }, entry) => {
 				if (!entry) return acc;
 				const [key, value] = entry.split(":");
-				if (key && value) acc[value] = key;
+
+				if (key && value) {
+					// Map legacy tech keys (remembrance, starseed) to the new consolidated core_health key
+					const migratedKey =
+						key === "remembrance" || key === "starseed" ? "core_health" : key;
+					acc[value] = migratedKey;
+				}
 
 				return acc;
 			}, {});

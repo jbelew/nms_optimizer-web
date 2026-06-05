@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { seoMetadata } from "@shared/seo-metadata.js";
 import { getLocalizedSchema, getOgLocale, OG_LOCALE_MAP } from "@shared/seo-schema.js";
 import { useTranslation } from "react-i18next";
@@ -74,6 +74,53 @@ export const Seo: React.FC = () => {
 		};
 	}, [location.pathname, i18n.language, t, supportedLangs]);
 
+	useEffect(() => {
+		// Clean up any existing JSON-LD schema scripts (from SSG or previous client-side routes)
+		// to prevent duplication, as React 19 handles inline scripts by appending them without deduplication.
+		const schemaIds = [
+			"software-schema",
+			"softwareapplication-schema",
+			"website-schema",
+			"org-schema",
+			"organization-schema",
+			"breadcrumb-schema",
+			"breadcrumblist-schema",
+			"itemlist-schema",
+			"faqpage-schema",
+		];
+		schemaIds.forEach((id) => {
+			const el = document.getElementById(id);
+
+			if (el) {
+				el.remove();
+			}
+		});
+
+		// Inject current schemas dynamically into the document head.
+		const activeScripts: HTMLScriptElement[] = [];
+		schemas.forEach((schema) => {
+			const type = (schema as { "@type": string })["@type"];
+			if (type === "FAQPage" && currentPath !== "/") return;
+
+			const id = `${type?.toLowerCase()}-schema`;
+			const script = document.createElement("script");
+			script.id = id;
+			script.type = "application/ld+json";
+			script.textContent = JSON.stringify(schema);
+			document.head.appendChild(script);
+			activeScripts.push(script);
+		});
+
+		// Cleanup inserted scripts on unmount or when schemas update
+		return () => {
+			activeScripts.forEach((script) => {
+				if (script.parentNode) {
+					script.parentNode.removeChild(script);
+				}
+			});
+		};
+	}, [schemas, currentPath]);
+
 	const ogImageUrl = `${BASE_URL}${OG_IMAGE_PATH}`;
 	const ogImageAlt = t("seo.ogImageAlt", { defaultValue: "NMS Optimizer Screenshot" });
 
@@ -117,21 +164,6 @@ export const Seo: React.FC = () => {
 			<meta content={pageDescription} name="twitter:description" />
 			<meta content={ogImageUrl} name="twitter:image" />
 			<meta content={ogImageAlt} name="twitter:image:alt" />
-
-			{/* Structured Data */}
-			{schemas.map((schema, index) => {
-				const type = (schema as { "@type": string })["@type"];
-				const id = `${type?.toLowerCase()}-schema`;
-
-				// FAQ schema: Only on root route
-				if (type === "FAQPage" && currentPath !== "/") return null;
-
-				return (
-					<script id={id} key={`${type}-${index}`} type="application/ld+json">
-						{JSON.stringify(schema)}
-					</script>
-				);
-			})}
 		</>
 	);
 };
