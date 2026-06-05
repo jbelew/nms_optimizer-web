@@ -1,3 +1,10 @@
+## [7.3.8](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.7...v7.3.8) (2026-06-05)
+
+
+### Bug Fixes
+
+* **seo:** resolve duplicate JSON-LD scripts and legacy tech deserialization warnings ([17b66fa](https://github.com/jbelew/nms_optimizer-web/commit/17b66fa8f5d8f6c8f25320efd3c3d1c216af0f70))
+
 ## [7.3.7](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.6...v7.3.7) (2026-05-22)
 
 
