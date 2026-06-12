@@ -1173,3 +1173,32 @@ Google Search Console reported the critical error: "Review has multiple aggregat
 
 ### Refine & Reflect
 * **Reflection:** Vitest's `mockResolvedValueOnce` maintains a queue of resolved values. When tests return early or bypass mocked function calls, these values persist in the queue and pollute subsequent tests. Simply calling `vi.clearAllMocks()` only clears call history, not mock implementations or resolved values. Adding a targeted `mockReset()` in `beforeEach` for mocked network utilities or using `mockReset` globally ensures complete test isolation.
+
+## PRAR Cycle: Resolve Unstable Nested Components in MarkdownContentRenderer (2026-06-12)
+
+### Perceive & Understand
+- **Request**: Explain the cause of the `react(no-unstable-nested-components)` lint warnings in `MarkdownContentRenderer.tsx` and fix them.
+- **Context**: The `components` prop mapping markdown tags to Radix UI elements was declared inline inside the render body of `MarkdownContentRenderer`. This caused React to recreate the sub-components on every single render cycle, breaking identity references, forcing heavy DOM unmounts/remounts, and losing state/focus.
+
+### Reason & Plan
+- **Plan**:
+    1. Move the stateless markdown tag renderers (like `a`, `blockquote`, `code`, `p`, etc.) to the module scope (top-level) so their references remain completely static.
+    2. For the ref-dependent `h2` renderer, define a React Context (`H2Context`) at the module level. Wrap the markdown component with its provider, and pass a memoized `getOrGenerateId` callback via `useMemo` to prevent context value construction warnings.
+    3. Declare a static `MARKDOWN_COMPONENTS` mapping at the module level and pass it to `<LazyReactMarkdown components={MARKDOWN_COMPONENTS}>`.
+    4. Remove any blank lines between the JSDoc block and the `MarkdownContentRenderer` declaration to satisfy `jsdoc/require-jsdoc` requirements.
+    5. Run `bun run lint && bun run typecheck` and `bunx vitest run src/components/AppDialog/Markdown/MarkdownContentRenderer.test.tsx` to verify correctness.
+
+### Act & Implement
+- **Action**: Extracted sub-renderers to standalone components in `MarkdownContentRenderer.tsx`.
+- **Action**: Defined `H2Context` and wrapped `<LazyReactMarkdown>` inside the provider.
+- **Action**: Corrected `H2Context` union type sorting (`null | { ... }`) to satisfy `perfectionist/sort-union-types`.
+- **Action**: Removed blank lines between JSDoc comments and the `MarkdownContentRenderer` declaration.
+- **Action**: Ran validation checks. All lint warnings/errors resolved, and all unit tests passed with 100% success.
+- **Action**: Committed the changes using `git commit -m "refactor(markdown): extract components from MarkdownContentRenderer to module scope"` and pushed them to `origin/main` after rebasing.
+
+### Refine & Reflect
+- **Reflection**:
+    1. **Reference Stability**: Declaring components inside another component's render body is a severe anti-pattern in React because it breaks component identity stability and causes complete DOM recreation. Extracting renderers to the module level ensures rendering performance stability.
+    2. **Context for Ref/State Access**: React Context is a clean and idiomatic pattern to let module-level static component renderers access parent component state or refs (like custom heading counter and ID mappings) without nesting definitions.
+    3. **ESLint Perfectionist & JSDoc**: Stricter eslint configuration rules like union type sorting and JSDoc spacing need to be handled precisely. For example, leaving a blank line between a JSDoc block and the target definition causes the JSDoc check to fail.
+
