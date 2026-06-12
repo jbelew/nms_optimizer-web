@@ -217,7 +217,8 @@ const bootstrap = async () => {
 
 					if (isOurScript) {
 						handleFatalBootstrapError(
-							event.error || new Error(errorMessage || "Uncaught initialization error")
+							event.error ||
+								new Error(errorMessage || "Uncaught initialization error")
 						);
 					}
 				}

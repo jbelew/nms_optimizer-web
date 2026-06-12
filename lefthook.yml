@@ -41,8 +41,7 @@ pre-commit:
       tags: format
       # Mirrors `bun run format` which only targets ./src
       glob: "src/**/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,md,json,html}"
-      run: bunx prettier --write {staged_files}
-      stage_fixed: true
+      run: bunx prettier --check ./src
 
     # ----- Whole-project checks (only when TS/TSX changes) -----
     typecheck:
