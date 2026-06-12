@@ -79,6 +79,20 @@ describe("monitoring utilities", () => {
 			expect(logs[0].level).toBe(LogLevel.WARN);
 		});
 
+		it("should log warn messages to console and internal storage but skip Sentry when skipSentry is true", () => {
+			Logger.warn("Test skip warn message", { meta: "data" }, true);
+
+			expect(consoleWarnSpy).toHaveBeenCalledWith("[WARN] Test skip warn message", {
+				meta: "data",
+			});
+
+			expect(sentryMock.captureMessage).not.toHaveBeenCalled();
+
+			const logs = Logger.getLogs();
+			expect(logs).toHaveLength(1);
+			expect(logs[0].level).toBe(LogLevel.WARN);
+		});
+
 		it("should log error messages to console, Sentry, and internal storage", () => {
 			const error = new Error("Test error");
 			Logger.error("Test error message", error, { extra: "context" });

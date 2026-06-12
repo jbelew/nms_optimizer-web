@@ -153,6 +153,36 @@ test.describe("Application Resilience & Recovery", () => {
 		});
 	});
 
+	test.describe("Fatal bootstrap error recovery", () => {
+		test("should redirect to 500.html on fatal bootstrap error", async ({ page }) => {
+			await page.addInitScript(() => {
+				const originalGetElementById = document.getElementById;
+
+				document.getElementById = function (id) {
+					if (id === "root") {
+						throw new Error("MOCKED_FATAL_BOOTSTRAP_ERROR");
+					}
+
+					return originalGetElementById.call(document, id);
+				};
+			});
+
+			void page.goto("/").catch(() => {});
+
+			// Wait for redirect to 500.html
+			await page.waitForFunction(() => window.location.pathname.includes("/500.html"), {
+				timeout: 15000,
+			});
+
+			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
+			await expect(errorHeading).toBeVisible();
+
+			const url = page.url();
+			expect(url).toContain("error_type=initialization_error");
+			expect(url).toContain("error_cause=MOCKED_FATAL_BOOTSTRAP_ERROR");
+		});
+	});
+
 	test.describe("Successful boot cleanup", () => {
 		test("should clear MARKER from sessionStorage after successful boot", async ({ page }) => {
 			await page.addInitScript((marker) => {

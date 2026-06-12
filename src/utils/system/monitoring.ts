@@ -226,10 +226,11 @@ export const Logger = {
 	},
 
 	/**
-	 * Logs a warning message and sends it to Sentry.
+	 * Logs a warning message and sends it to Sentry (unless skipped).
 	 *
 	 * @param {string} message - The warning message. **Must not be empty.**
 	 * @param {Record<string, unknown>} [data] - Optional metadata to include in the Sentry report.
+	 * @param {boolean} [skipSentry=false] - If true, prevents sending the warning to Sentry.
 	 *
 	 * @returns {void}
 	 *
@@ -239,11 +240,11 @@ export const Logger = {
 	 * // returns void
 	 * ```
 	 */
-	warn(message: string, data?: Record<string, unknown>) {
+	warn(message: string, data?: Record<string, unknown>, skipSentry = false) {
 		this.log(LogLevel.WARN, message, data);
 		console.warn(`[WARN] ${message}`, data);
 
-		if (sentryInstance) {
+		if (sentryInstance && !skipSentry) {
 			sentryInstance.captureMessage(message, { extra: data, level: "warning" });
 		}
 	},
@@ -290,7 +291,7 @@ export const initializeSentry = () => {
 			dsn,
 			environment: (import.meta.env.VITE_SENTRY_ENV as string) || "production",
 			ignoreErrors: [
-				/runtime\\.sendMessage\\(\\).*Tab not found/i,
+				/runtime\.sendMessage\(\).*Tab not found/i,
 				/Extension/i,
 				/vendor/i,
 				/^Network Error$/i,

@@ -385,6 +385,9 @@ jobs:
     name: Deploy to Cloudflare (Production)
     needs: [build-production, release]
     runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://nms-optimizer.app
     permissions:
       contents: read
     steps:
@@ -446,6 +449,9 @@ jobs:
     needs: [lint-test, security-scan, build, storybook-test, e2e-test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://dev.nms-optimizer-web.pages.dev
     permissions:
       contents: read
     steps:

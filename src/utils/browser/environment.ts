@@ -111,7 +111,11 @@ export const safeGetItem = (key: string): null | string => {
 			return localStorage.getItem(key);
 		}
 	} catch (e) {
-		Logger.warn(`Storage: Failed to get item "${key}" from localStorage`, { error: e, key });
+		Logger.warn(
+			`Storage: Failed to get item "${key}" from localStorage`,
+			{ error: e, key },
+			true
+		);
 	}
 
 	return null;
@@ -140,7 +144,11 @@ export const safeSetItem = (key: string, value: string): boolean => {
 			return true;
 		}
 	} catch (e) {
-		Logger.warn(`Storage: Failed to set item "${key}" in localStorage`, { error: e, key });
+		Logger.warn(
+			`Storage: Failed to set item "${key}" in localStorage`,
+			{ error: e, key },
+			true
+		);
 	}
 
 	return false;
@@ -168,7 +176,11 @@ export const safeRemoveItem = (key: string): boolean => {
 			return true;
 		}
 	} catch (e) {
-		Logger.warn(`Storage: Failed to remove item "${key}" from localStorage`, { error: e, key });
+		Logger.warn(
+			`Storage: Failed to remove item "${key}" from localStorage`,
+			{ error: e, key },
+			true
+		);
 	}
 
 	return false;
@@ -194,7 +206,7 @@ export const safeClear = (): boolean => {
 			return true;
 		}
 	} catch (e) {
-		Logger.warn("Storage: Failed to clear localStorage", { error: e });
+		Logger.warn("Storage: Failed to clear localStorage", { error: e }, true);
 	}
 
 	return false;

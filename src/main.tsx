@@ -14,6 +14,7 @@ import { Provider as ToastProviderRadix, Viewport as ToastViewport } from "@radi
 import { Theme } from "@radix-ui/themes";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
+import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
 import { TooltipManager } from "@/components/TooltipManager/TooltipManager";
@@ -98,6 +99,46 @@ export const Root = () => {
 };
 
 /**
+ * Handles fatal application bootstrap and initialization failures.
+ *
+ * @remarks
+ * If an error or unhandled promise rejection occurs during the initial application mount
+ * or data loading sequence (before the `app-ready` event is dispatched), this handler:
+ * 1. Purges the splash screen components (`#vpss`, `#vpss-style`) to clean up the DOM.
+ * 2. Redirects the browser to the static `/500.html` error recovery page, passing the error description.
+ *
+ * This prevents the application from hanging on a frozen splash screen in case of a fatal boot crash.
+ *
+ * @param {unknown} error - The error or rejection reason captured during bootstrap.
+ *
+ * @returns {void} Side-effects only.
+ *
+ * @see {@link bootstrap}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * handleFatalBootstrapError(new TypeError("Failed to initialize store"));
+ * // redirects browser to /500.html?error_type=initialization_error&error_cause=...
+ * ```
+ */
+const handleFatalBootstrapError = (error: unknown): void => {
+	if (typeof window !== "undefined") {
+		// Clean up the splash screen to avoid visual glitching/hanging
+		try {
+			hideSplashScreen();
+		} catch (_e) {
+			// ignore
+		}
+
+		const errorMessage = error instanceof Error ? error.message : String(error);
+		const errorUrl = `/500.html?error_type=initialization_error&error_cause=${encodeURIComponent(errorMessage)}`;
+		window.location.replace(errorUrl);
+	}
+};
+
+/**
  * Bootstraps the application and handles high-level initialization.
  *
  * @remarks
@@ -122,109 +163,148 @@ export const Root = () => {
  * ```
  */
 const bootstrap = async () => {
-	// Perform any necessary data migrations or cleanups before mounting
-	performBootstrapMigrations();
+	try {
+		// Perform any necessary data migrations or cleanups before mounting
+		performBootstrapMigrations();
 
-	// Initialize Sentry synchronously as early as possible if enabled.
-	// This ensures early errors are caught and the router is correctly instrumented.
-	if (import.meta.env.VITE_SENTRY_ENABLED === "true") {
-		initializeSentry();
-	}
+		// Initialize Sentry synchronously as early as possible if enabled.
+		// This ensures early errors are caught and the router is correctly instrumented.
+		if (import.meta.env.VITE_SENTRY_ENABLED === "true") {
+			initializeSentry();
+		}
 
-	// Initialize analytics and PWA after render is complete
-	if (typeof window !== "undefined") {
-		// Add global error handler to suppress SecurityErrors from cross-origin third-party scripts
-		window.addEventListener("error", (event: ErrorEvent) => {
-			const errorMessage = event.error?.message || event.message || "";
-			const errorName = event.error?.name || "";
+		// Initialize analytics and PWA after render is complete
+		if (typeof window !== "undefined") {
+			// Add global error handler to suppress SecurityErrors from cross-origin third-party scripts
+			window.addEventListener("error", (event: ErrorEvent) => {
+				const errorMessage = event.error?.message || event.message || "";
+				const errorName = event.error?.name || "";
 
-			if (errorName === "SecurityError" && errorMessage.includes("cross-origin")) {
-				event.preventDefault();
+				if (errorName === "SecurityError" && errorMessage.includes("cross-origin")) {
+					event.preventDefault();
 
-				return true;
-			}
-
-			if (errorMessage.includes("Importing a module script failed")) {
-				event.preventDefault();
-				Logger.warn("Caught and suppressed module import failure (Safari flake):", {
-					errorMessage,
-				});
-
-				return true;
-			}
-
-			if (errorMessage.includes("ResizeObserver loop")) {
-				event.preventDefault();
-
-				// This is a benign error that occurs when a resize observer triggers another layout shift in the same frame.
-				return true;
-			}
-
-			Logger.error("Uncaught initialization error:", event.error || event.message);
-		});
-
-		window.addEventListener("unhandledrejection", (event: PromiseRejectionEvent) => {
-			Logger.error("Unhandled promise rejection:", event.reason);
-		});
-
-		window.addEventListener(
-			"app-ready",
-			() => {
-				(window as typeof window & { __APP_READY__?: boolean }).__APP_READY__ = true;
-
-				try {
-					sessionStorage.removeItem("__preload_recovery__");
-				} catch (_e) {
-					// ignore
+					return true;
 				}
 
-				const initDeferredServices = async () => {
-					try {
-						preloadInitialState();
-						initializeAnalyticsClient();
-						await initializeAnalytics();
+				if (errorMessage.includes("Importing a module script failed")) {
+					event.preventDefault();
+					Logger.warn(
+						"Caught and suppressed module import failure (Safari flake):",
+						{ errorMessage },
+						true
+					);
 
-						const { setupServiceWorkerRegistration } =
-							await import("./utils/system/setupServiceWorker");
-						setupServiceWorkerRegistration();
-					} catch (error) {
-						Logger.error("Failed to initialize deferred services:", error);
-						captureException(error, {
-							level: "error",
-							tags: { area: "initialization" },
-						});
+					return true;
+				}
+
+				if (errorMessage.includes("ResizeObserver loop")) {
+					event.preventDefault();
+
+					// This is a benign error that occurs when a resize observer triggers another layout shift in the same frame.
+					return true;
+				}
+
+				Logger.error("Uncaught initialization error:", event.error || event.message);
+
+				if (!(window as typeof window & { __APP_READY__?: boolean }).__APP_READY__) {
+					const filename = event.filename || "";
+					const isOurScript =
+						!filename ||
+						filename.startsWith(window.location.origin) ||
+						filename.startsWith("/") ||
+						filename.includes("/src/") ||
+						filename.includes("/build/");
+
+					if (isOurScript) {
+						handleFatalBootstrapError(
+							event.error || new Error(errorMessage || "Uncaught initialization error")
+						);
 					}
-				};
+				}
+			});
 
-				runWhenIdle(
-					() => {
-						void initDeferredServices();
-					},
-					{ timeout: UI_TIMING.IDLE_TIMEOUT_MS }
-				);
-			},
-			{ once: true }
-		);
+			window.addEventListener("unhandledrejection", (event: PromiseRejectionEvent) => {
+				Logger.error("Unhandled promise rejection:", event.reason);
+
+				if (!(window as typeof window & { __APP_READY__?: boolean }).__APP_READY__) {
+					const reason = event.reason;
+					const stack = reason?.stack || "";
+					const isOurScript =
+						!stack ||
+						stack.includes(window.location.origin) ||
+						stack.includes("/src/") ||
+						stack.includes("/build/");
+
+					if (isOurScript) {
+						handleFatalBootstrapError(
+							reason || new Error("Unhandled promise rejection during bootstrap")
+						);
+					}
+				}
+			});
+
+			window.addEventListener(
+				"app-ready",
+				() => {
+					(window as typeof window & { __APP_READY__?: boolean }).__APP_READY__ = true;
+
+					try {
+						sessionStorage.removeItem("__preload_recovery__");
+					} catch (_e) {
+						// ignore
+					}
+
+					const initDeferredServices = async () => {
+						try {
+							preloadInitialState();
+							initializeAnalyticsClient();
+							await initializeAnalytics();
+
+							const { setupServiceWorkerRegistration } =
+								await import("./utils/system/setupServiceWorker");
+							setupServiceWorkerRegistration();
+						} catch (error) {
+							Logger.error("Failed to initialize deferred services:", error);
+							captureException(error, {
+								level: "error",
+								tags: { area: "initialization" },
+							});
+						}
+					};
+
+					runWhenIdle(
+						() => {
+							void initDeferredServices();
+						},
+						{ timeout: UI_TIMING.IDLE_TIMEOUT_MS }
+					);
+				},
+				{ once: true }
+			);
+		}
+
+		const staticContent = document.querySelector("main.visually-hidden");
+
+		if (staticContent) {
+			staticContent.setAttribute("aria-hidden", "true");
+		}
+
+		// Cleanup pre-rendered SSG content
+		const prerendered = document.querySelector('[data-prerendered-markdown="true"]');
+
+		if (prerendered) {
+			prerendered.remove();
+		}
+
+		if (typeof window !== "undefined" && import.meta.env.VITE_E2E_TESTING) {
+			(window as typeof window & { __BUILD_DATE__?: string }).__BUILD_DATE__ = __BUILD_DATE__;
+		}
+
+		createRoot(document.getElementById("root")!).render(<Root />);
+	} catch (error) {
+		Logger.error("Fatal bootstrap error:", error);
+		handleFatalBootstrapError(error);
 	}
-
-	const staticContent = document.querySelector("main.visually-hidden");
-
-	if (staticContent) {
-		staticContent.setAttribute("aria-hidden", "true");
-	}
-
-	// Cleanup pre-rendered SSG content
-	const prerendered = document.querySelector('[data-prerendered-markdown="true"]');
-
-	if (prerendered) {
-		prerendered.remove();
-	}
-
-	if (typeof window !== "undefined" && import.meta.env.VITE_E2E_TESTING) {
-		(window as typeof window & { __BUILD_DATE__?: string }).__BUILD_DATE__ = __BUILD_DATE__;
-	}
-
-	createRoot(document.getElementById("root")!).render(<Root />);
 };
 
 void bootstrap();
