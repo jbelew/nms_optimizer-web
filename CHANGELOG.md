@@ -1,3 +1,10 @@
+# [7.4.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.9...v7.4.0) (2026-06-12)
+
+
+### Features
+
+* **resilience:** handle fatal boot errors and filter sentry warnings ([7961c6c](https://github.com/jbelew/nms_optimizer-web/commit/7961c6c7abcc1cf2185d86cbc07fe82973867acd))
+
 ## [7.3.9](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.8...v7.3.9) (2026-06-05)
 
 
