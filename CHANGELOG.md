@@ -1,3 +1,10 @@
+## [7.4.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.4.0...v7.4.1) (2026-06-19)
+
+
+### Bug Fixes
+
+* **ssg:** align markdown hydration selectors and cleanup sequence ([3f7b762](https://github.com/jbelew/nms_optimizer-web/commit/3f7b762cdab432b01e586b8dc2e93abd39432a3e))
+
 # [7.4.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.9...v7.4.0) (2026-06-12)
 
 
