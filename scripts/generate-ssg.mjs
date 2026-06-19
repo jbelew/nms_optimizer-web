@@ -159,7 +159,7 @@ export async function generatePage(
 		);
 
 		noscriptBlock = `
-		<main class="ssg-fallback">
+		<main class="ssg-fallback" data-prerendered-markdown="true">
 			${localizedHeader}
 			${renderedHtml}
 			${navigationHtml}

@@ -1202,3 +1202,31 @@ Google Search Console reported the critical error: "Review has multiple aggregat
     2. **Context for Ref/State Access**: React Context is a clean and idiomatic pattern to let module-level static component renderers access parent component state or refs (like custom heading counter and ID mappings) without nesting definitions.
     3. **ESLint Perfectionist & JSDoc**: Stricter eslint configuration rules like union type sorting and JSDoc spacing need to be handled precisely. For example, leaving a blank line between a JSDoc block and the target definition causes the JSDoc check to fail.
 
+## PRAR Cycle: Align SSG Markdown Hydration and Cleanup Selectors (2026-06-19)
+
+### Perceive & Understand
+- **Request**: Align selectors for pre-rendered markdown hydration and clean up in [main.tsx](file:///home/jbelew/projects/nms_optimizer-web/src/main.tsx).
+- **Context**: A prior modernization refactor (Phase 4) changed the static HTML output in the SSG builder ([generate-ssg.mjs](file:///home/jbelew/projects/nms_optimizer-web/scripts/generate-ssg.mjs)) from a `<div data-prerendered-markdown="true">` wrapper to a `<main class="ssg-fallback">` block, but did not update the client-side hydration selector in [MarkdownContentRenderer.tsx](file:///home/jbelew/projects/nms_optimizer-web/src/components/AppDialog/Markdown/MarkdownContentRenderer.tsx) or the cleanup selectors in [main.tsx](file:///home/jbelew/projects/nms_optimizer-web/src/main.tsx).
+- **Impact**:
+  - The client always fell back to network-fetching markdown content on initial load, defeating the hydration optimization.
+  - The hidden pre-rendered fallback markup remained in the DOM indefinitely after initialization, bloating client memory.
+
+### Reason & Plan
+- **Plan**:
+  1. Update [generate-ssg.mjs](file:///home/jbelew/projects/nms_optimizer-web/scripts/generate-ssg.mjs) to output `<main class="ssg-fallback" data-prerendered-markdown="true">` to preserve the query indicator for client-side components.
+  2. Update [generate-ssg.test.mjs](file:///home/jbelew/projects/nms_optimizer-web/scripts/generate-ssg.test.mjs) to check for this new attribute.
+  3. Move the pre-rendered cleanup step in [main.tsx](file:///home/jbelew/projects/nms_optimizer-web/src/main.tsx) from the critical synchronous bootstrap flow to the asynchronous `app-ready` event listener (querying for `.ssg-fallback`), allowing React components to extract the data first.
+  4. Optimize state subscriptions in the `<Root>` component of [main.tsx](file:///home/jbelew/projects/nms_optimizer-web/src/main.tsx) by converting whole-store destructuring into fine-grained selectors.
+  5. Run Vitest tests and production builds to ensure correctness.
+
+### Act & Implement
+- **Action**: Modified [generate-ssg.mjs](file:///home/jbelew/projects/nms_optimizer-web/scripts/generate-ssg.mjs) to add `data-prerendered-markdown="true"` to the fallback main tag.
+- **Action**: Modified [generate-ssg.test.mjs](file:///home/jbelew/projects/nms_optimizer-web/scripts/generate-ssg.test.mjs) expectation to align with the new main tag.
+- **Action**: Updated [main.tsx](file:///home/jbelew/projects/nms_optimizer-web/src/main.tsx) to move the cleanup to `app-ready` using `.ssg-fallback` selector, and converted store consumption in `<Root>` to use granular selectors.
+- **Action**: Ran unit tests and production build. All checks and pages compiled and verified successfully.
+
+### Review
+- **Reflection**:
+  1. **Flow Synchronization**: Removing pre-rendered elements synchronously during bootstrap is a race condition when React components need to query those elements on mount. Cleanup must always be deferred until after the application's hydration or mount cycles are complete, such as inside the `app-ready` event listener.
+  2. **Vigilant Refactoring**: During structural refactors, changes to DOM shapes in builder scripts (like SSG generators) must be tracked and synchronized across both components and cleanup managers to prevent silent path-invalidation bugs.
+

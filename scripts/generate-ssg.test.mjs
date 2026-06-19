@@ -186,7 +186,7 @@ describe("generate-ssg.mjs", () => {
 				"",
 				""
 			);
-			expect(result).toContain('<div id="root"></div>\n\t\t<main class="ssg-fallback">');
+			expect(result).toContain('<div id="root"></div>\n\t\t<main class="ssg-fallback" data-prerendered-markdown="true">');
 		});
 	});
 });

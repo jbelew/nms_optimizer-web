@@ -52,10 +52,10 @@ import {
  * ```
  */
 export const Root = () => {
-	const { appearance } = useThemeStore();
+	const appearance = useThemeStore((s) => s.appearance);
 	const router = React.useMemo(() => createAppRouter(routes), []);
 
-	const { a11yMode } = useA11yStore();
+	const a11yMode = useA11yStore((s) => s.a11yMode);
 
 	useEffect(() => {
 		// Sync theme classes to document root for global CSS visibility (backgrounds, etc)
@@ -255,6 +255,13 @@ const bootstrap = async () => {
 						// ignore
 					}
 
+					// Cleanup pre-rendered SSG content now that React has hydrated / rendered
+					const prerendered = document.querySelector(".ssg-fallback");
+
+					if (prerendered) {
+						prerendered.remove();
+					}
+
 					const initDeferredServices = async () => {
 						try {
 							preloadInitialState();
@@ -282,19 +289,6 @@ const bootstrap = async () => {
 				},
 				{ once: true }
 			);
-		}
-
-		const staticContent = document.querySelector("main.visually-hidden");
-
-		if (staticContent) {
-			staticContent.setAttribute("aria-hidden", "true");
-		}
-
-		// Cleanup pre-rendered SSG content
-		const prerendered = document.querySelector('[data-prerendered-markdown="true"]');
-
-		if (prerendered) {
-			prerendered.remove();
 		}
 
 		if (typeof window !== "undefined" && import.meta.env.VITE_E2E_TESTING) {
