@@ -23,7 +23,7 @@ jobs:
       github.event.workflow_run.actor.login == 'dependabot[bot]'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Extract PR Details
         id: pr_info

@@ -51,7 +51,7 @@ jobs:
 
       - name: Checkout (${{ matrix.label }})
         if: steps.resolve.outputs.skip != 'true'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ steps.resolve.outputs.ref }}
 
