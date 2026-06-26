@@ -3,7 +3,7 @@
 ## CI/CD Status
 
 [![CI Pipeline](https://github.com/jbelew/nms_optimizer-web/actions/workflows/ci.yml/badge.svg)](https://github.com/jbelew/nms_optimizer-web/actions/workflows/ci.yml)
-![Deployment](https://img.shields.io/badge/Deployment-Heroku-blue?logo=heroku)
+[![Deployment](https://img.shields.io/badge/Deployment-Cloudflare_Pages-orange?logo=cloudflare)](https://nms-optimizer.app/)
 [![Build & Publish Application Docker Image](https://github.com/jbelew/nms_optimizer-web/actions/workflows/publish-images.yml/badge.svg)](https://github.com/jbelew/nms_optimizer-web/actions/workflows/publish-images.yml)
 
 **A high-performance Web UI for a No Man's Sky technology layout optimization tool.**
@@ -27,6 +27,7 @@ This tool optimizes technology layouts by calculating pattern-based scores. It p
 
 ### Prerequisites
 - Node.js (Latest LTS recommended)
+- [Bun](https://bun.sh/) (JavaScript runtime and package manager used for dev/build scripts)
 - [Python Solver Service](https://github.com/jbelew/nms_optimizer-service) (running locally for API features)
 
 ### Installation
@@ -101,7 +102,8 @@ bun run build && bun run lighthouse:ci
 
 ### Hybrid Rendering (Bot & No-JS Support)
 To achieve peak SEO and support for clients without JavaScript, this project uses a build-time Static Site Generation approach:
-- **Build Time (SSG)**: Markdown content (instructions, about, changelog) is pre-rendered into static HTML and wrapped in `<noscript>` blocks via `scripts/generate-ssg.mjs`.
+- **Build Time (SSG)**: Markdown content (instructions, about, changelog) is pre-rendered into static HTML blocks (with the `.ssg-fallback` class) via `scripts/generate-ssg.mjs`.
+- **Client Hydration & Cleanup**: During bootstrap, the application extracts the static content to render it instantly (avoiding network requests), and subsequently prunes the static DOM nodes on `app-ready` to prevent memory leaks.
 - **Search Optimization**: This ensures that search engine crawlers and browsers with JavaScript disabled can access the full content of the application's informational pages.
 
 ### Bundle Strategy & Resilience
