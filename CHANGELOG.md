@@ -1,3 +1,10 @@
+## [7.4.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.4.1...v7.4.2) (2026-07-12)
+
+
+### Bug Fixes
+
+* **es-translation:** correct capitalization and phrasing in Spanish localization ([618f1bc](https://github.com/jbelew/nms_optimizer-web/commit/618f1bc99c6a6d62df0ce8a824058485bc291393))
+
 ## [7.4.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.4.0...v7.4.1) (2026-06-19)
 
 
