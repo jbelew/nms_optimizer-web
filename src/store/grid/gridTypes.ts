@@ -175,8 +175,7 @@ export interface GridState {
 	gridFixed: boolean;
 	/** The default layout definition for the current ship type. */
 	initialGridDefinition:
-		| undefined
-		| { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean };
+		undefined | { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean };
 	/** Whether the grid was populated from a shared URL. */
 	isSharedGrid: boolean;
 	/** The most recent optimization result from the server. */
