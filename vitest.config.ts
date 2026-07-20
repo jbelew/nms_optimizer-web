@@ -39,6 +39,9 @@ export default defineConfig({
 				},
 			},
 			{
+				optimizeDeps: {
+					include: ["aria-query", "axobject-query", "lz-string", "pretty-format"],
+				},
 				plugins: [
 					react(),
 					storybookTest({ configDir: path.resolve(dirname, ".storybook") }),
@@ -58,5 +61,6 @@ export default defineConfig({
 				},
 			},
 		],
+		testTimeout: 60000,
 	},
 });

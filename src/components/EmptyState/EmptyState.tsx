@@ -11,6 +11,8 @@ interface EmptyStateProps {
 	title: string;
 }
 
+const DEFAULT_ICON = <InfoCircledIcon height="40" width="40" />;
+
 /**
  * A standardized component for displaying empty states across the application.
  */
@@ -18,7 +20,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 	actionLabel,
 	className,
 	description,
-	icon = <InfoCircledIcon height="40" width="40" />,
+	icon = DEFAULT_ICON,
 	onAction,
 	title,
 }) => {
