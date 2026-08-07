@@ -106,14 +106,14 @@ export const Fireworks = memo(() => {
 
 	// Staggered configuration for 8 fireworks (denser and more active)
 	const configs = [
-		{ delay: 0, duration: 2500 },
-		{ delay: 0.4, duration: 2300 },
-		{ delay: 0.8, duration: 2600 },
-		{ delay: 1.2, duration: 2400 },
-		{ delay: 1.6, duration: 2700 },
-		{ delay: 2.0, duration: 2200 },
-		{ delay: 2.4, duration: 2500 },
-		{ delay: 2.8, duration: 2800 },
+		{ delay: 0, duration: 3500 },
+		{ delay: 0.4, duration: 3200 },
+		{ delay: 0.8, duration: 3800 },
+		{ delay: 1.2, duration: 3400 },
+		{ delay: 1.6, duration: 4000 },
+		{ delay: 2.0, duration: 3000 },
+		{ delay: 2.4, duration: 3600 },
+		{ delay: 2.8, duration: 4200 },
 	];
 
 	return (
