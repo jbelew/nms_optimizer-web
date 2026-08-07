@@ -1275,3 +1275,29 @@ Google Search Console reported the critical error: "Review has multiple aggregat
   1. **Dynamic CSS custom properties**: Combining CSS variables on a parent wrapper with JS iteration handlers provides a clean way to keep CPU/GPU performance high while dynamically randomizing position and styling variables on each animation repeat loop.
   2. **Boundary Test Timezones**: Checking dates locally via `now.getDate()` in tests can introduce timezone shifts depending on the local execution environment (e.g. UTC vs PDT). Always use UTC date methods (`now.getUTCDate()`) for range validations in tests to ensure deterministic runs across all platforms.
 
+## PRAR Cycle: Remove Year Constraint & Upgrade Fireworks Visuals (2026-08-07)
+
+### Perceive & Understand
+- **Request**: Allow the fireworks animation to run annually (rather than only in 2026) between August 7th and August 12th. Upgrade the visual quality of the explosion effects without compromising runtime performance.
+- **Context**: The existing fireworks expanded in rigid, perfectly symmetric circles at fixed sizes. We wanted organic, natural-looking explosions with a brief bright core ignition and gravity droop.
+- **Performance Constraint**: Renders must remain GPU-accelerated (animating only `transform` and `opacity`) and avoid React rendering updates on individual particles.
+
+### Reason & Plan
+- **Plan**:
+  - Remove the `getUTCFullYear() === 2026` constraint from `Fireworks.tsx` and update the Vitest date tests to verify future rendering (e.g., in 2027).
+  - Declare HSL colors, durations, and delays as inherited CSS custom properties on the parent `.firework` element, removing all inline styling loops from individual `.particle` elements.
+  - Add individual travel distance variation and particle-level stagger delays in the Sass `@for` loop to make the burst look natural.
+  - Implement a hot-white spark core flash at the birth of each particle, transitioning to the NMS theme HSL color.
+  - Implement gravity droop in the final keyframes to pull particles downwards as they fade out.
+
+### Act & Implement
+- **Action**: Removed the year check in `Fireworks.tsx` and modified child inline styles to pass custom variables (`--color`, `--delay-offset`, `--duration-offset`, `--distance`) to the parent container style.
+- **Action**: Updated `Fireworks.scss` to calculate circular animations, add gravity translation, handle white-to-color transitions, and stagger particle delays.
+- **Action**: Updated `Fireworks.test.tsx` to verify correct date constraints and particle counts.
+- **Action**: Staged and committed changes locally.
+
+### Refine & Reflect
+- **Reflection**:
+  - **CSS Custom Property Inheritance**: Declaring custom variables on a parent container and relying on CSS inheritance keeps the virtual DOM clean and allows changing variables for all child elements simultaneously with a single parent style update.
+  - **Sass Compile-Time Randomization**: offloading particle-level offsets (like delay offsets and distance adjustments) to Sass compile-time randomizers offloads calculation overhead from the client's CPU entirely.
+
