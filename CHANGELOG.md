@@ -1,3 +1,10 @@
+## [7.4.3](https://github.com/jbelew/nms_optimizer-web/compare/v7.4.2...v7.4.3) (2026-08-07)
+
+
+### Bug Fixes
+
+* **security:** resolve CodeQL scanning alerts for format strings, unused vars, and types ([c9fd93e](https://github.com/jbelew/nms_optimizer-web/commit/c9fd93e4d1298e67c8a76653406fd3b4303642af))
+
 ## [7.4.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.4.1...v7.4.2) (2026-07-12)
 
 
