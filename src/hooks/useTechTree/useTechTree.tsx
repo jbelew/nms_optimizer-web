@@ -18,7 +18,7 @@ import { use, useEffect, useMemo } from "react";
 import { API_URL } from "@/constants";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
-import { useTechTreeLoadingStore, useUiStore } from "@/store/ui/uiStore";
+import { useUiStore } from "@/store/ui/uiStore";
 import { apiCall } from "@/utils/api/network";
 import { Logger } from "@/utils/system/monitoring";
 import { getTechTreeMaps } from "@/utils/tech/techTreeUtils";
@@ -86,7 +86,7 @@ export function fetchTechTree(shipType: string = "standard"): Promise<TechTree> 
  *
  * @returns {Promise<TechTree>} A promise resolving to the `TechTree` data.
  *
- * @see {@link useTechTreeLoadingStore} for monitoring fetch status.
+ * @see `useTechTreeLoadingStore` in `src/store/ui/uiStore.ts` for monitoring fetch status.
  * @see {@link apiCall} for the underlying network implementation.
  * @see {@link isValidRecommendedBuild} for build validation.
  *

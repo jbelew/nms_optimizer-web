@@ -247,16 +247,14 @@ export const deserialize = async (
 
 		// Handle versioning (Legacy strings have no 'vN:' prefix)
 		let payload = decoded;
-		let version = "v0";
+		const isVersioned = /^v\d+:/.test(decoded);
+		const version = isVersioned ? decoded.substring(0, decoded.indexOf(":")) : "v0";
 
-		if (/^v\d+:/.test(decoded)) {
-			const splitIdx = decoded.indexOf(":");
-			version = decoded.substring(0, splitIdx);
-			payload = decoded.substring(splitIdx + 1);
-
+		if (isVersioned) {
+			payload = decoded.substring(decoded.indexOf(":") + 1);
 			Logger.info(`Deserializing grid with version: ${version}`);
 		} else {
-			Logger.info("Deserializing legacy grid (v0)");
+			Logger.info(`Deserializing legacy grid (${version})`);
 		}
 
 		// Format: gridString|compressedTech|compressedModule|compressedAdjBonus|techMap|moduleMap

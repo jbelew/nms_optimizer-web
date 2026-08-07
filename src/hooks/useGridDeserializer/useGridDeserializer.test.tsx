@@ -176,12 +176,14 @@ describe("deserialize", () => {
 		expect(result).toBeNull();
 		// The error about fetch failing is logged from fetchTechTreeAsync
 		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			expect.stringContaining("[ERROR] Error fetching tech tree:"),
+			"[ERROR] %s",
+			expect.stringContaining("Error fetching tech tree:"),
 			expect.any(Error),
 			undefined
 		);
 		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			expect.stringContaining("[ERROR] Tech tree data is empty. Fetch likely failed."),
+			"[ERROR] %s",
+			expect.stringContaining("Tech tree data is empty. Fetch likely failed."),
 			undefined,
 			undefined
 		);
@@ -200,9 +202,8 @@ describe("deserialize", () => {
 		// Assert
 		expect(result).toBeNull();
 		expect(consoleWarnSpy).toHaveBeenCalledWith(
-			expect.stringContaining(
-				"[WARN] No serialized grid data found. Skipping deserialization."
-			),
+			"[WARN] %s",
+			expect.stringContaining("No serialized grid data found. Skipping deserialization."),
 			undefined
 		);
 		expect(mockSetTechColors).not.toHaveBeenCalled();
@@ -222,7 +223,8 @@ describe("deserialize", () => {
 		expect(result).toBeNull();
 		// The actual error thrown is URI malformed, caught by the outer try/catch
 		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			expect.stringContaining("[ERROR] Error deserializing grid:"),
+			"[ERROR] %s",
+			expect.stringContaining("Error deserializing grid:"),
 			expect.any(URIError),
 			undefined
 		);
@@ -241,7 +243,8 @@ describe("deserialize", () => {
 		// Assert
 		expect(result).toBeNull();
 		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			expect.stringContaining("[ERROR] Invalid serialized grid format"),
+			"[ERROR] %s",
+			expect.stringContaining("Invalid serialized grid format"),
 			expect.any(Error),
 			expect.objectContaining({ received: 3 })
 		);
@@ -261,9 +264,8 @@ describe("deserialize", () => {
 		expect(result).toBeNull();
 		// This now correctly catches the length mismatch error
 		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			expect.stringContaining(
-				"[ERROR] Invalid serialized grid format: String length mismatch."
-			),
+			"[ERROR] %s",
+			expect.stringContaining("Invalid serialized grid format: String length mismatch."),
 			undefined,
 			undefined
 		);
@@ -285,9 +287,8 @@ describe("deserialize", () => {
 		// Assert
 		expect(result).toBeNull();
 		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			expect.stringContaining(
-				"[ERROR] Invalid serialized grid format: String length mismatch."
-			),
+			"[ERROR] %s",
+			expect.stringContaining("Invalid serialized grid format: String length mismatch."),
 			undefined,
 			undefined
 		);

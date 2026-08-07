@@ -270,7 +270,7 @@ export class OptimizationManager {
  * ```
  */
 function isApiResponse(value: unknown): value is ApiResponse {
-	if (typeof value !== "object" || value === null) return false;
+	if (value === null || typeof value !== "object") return false;
 	const obj = value as Record<string, unknown>;
 	if (typeof obj.solveMethod !== "string") return false;
 

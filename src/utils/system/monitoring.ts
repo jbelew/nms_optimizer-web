@@ -147,7 +147,7 @@ export const Logger = {
 			...(typeof error === "object" && error !== null ? error : { error }),
 			...data,
 		} as Record<string, unknown>);
-		console.error(`[ERROR] ${message}`, error, data);
+		console.error("[ERROR] %s", message, error, data);
 
 		if (sentryInstance) {
 			if (error instanceof Error) {
@@ -193,7 +193,7 @@ export const Logger = {
 	info(message: string, data?: Record<string, unknown>) {
 		this.log(LogLevel.INFO, message, data);
 		// eslint-disable-next-line no-console
-		console.info(`[INFO] ${message}`, data);
+		console.info("[INFO] %s", message, data);
 	},
 
 	/**
@@ -242,7 +242,7 @@ export const Logger = {
 	 */
 	warn(message: string, data?: Record<string, unknown>, skipSentry = false) {
 		this.log(LogLevel.WARN, message, data);
-		console.warn(`[WARN] ${message}`, data);
+		console.warn("[WARN] %s", message, data);
 
 		if (sentryInstance && !skipSentry) {
 			sentryInstance.captureMessage(message, { extra: data, level: "warning" });

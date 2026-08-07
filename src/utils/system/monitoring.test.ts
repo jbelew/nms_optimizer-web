@@ -65,7 +65,7 @@ describe("monitoring utilities", () => {
 		it("should log warn messages to console, Sentry, and internal storage", () => {
 			Logger.warn("Test warn message", { meta: "data" });
 
-			expect(consoleWarnSpy).toHaveBeenCalledWith("[WARN] Test warn message", {
+			expect(consoleWarnSpy).toHaveBeenCalledWith("[WARN] %s", "Test warn message", {
 				meta: "data",
 			});
 
@@ -82,7 +82,7 @@ describe("monitoring utilities", () => {
 		it("should log warn messages to console and internal storage but skip Sentry when skipSentry is true", () => {
 			Logger.warn("Test skip warn message", { meta: "data" }, true);
 
-			expect(consoleWarnSpy).toHaveBeenCalledWith("[WARN] Test skip warn message", {
+			expect(consoleWarnSpy).toHaveBeenCalledWith("[WARN] %s", "Test skip warn message", {
 				meta: "data",
 			});
 
@@ -97,9 +97,14 @@ describe("monitoring utilities", () => {
 			const error = new Error("Test error");
 			Logger.error("Test error message", error, { extra: "context" });
 
-			expect(consoleErrorSpy).toHaveBeenCalledWith("[ERROR] Test error message", error, {
-				extra: "context",
-			});
+			expect(consoleErrorSpy).toHaveBeenCalledWith(
+				"[ERROR] %s",
+				"Test error message",
+				error,
+				{
+					extra: "context",
+				}
+			);
 
 			expect(sentryMock.captureException).toHaveBeenCalledWith(error, {
 				extra: { extra: "context", message: "Test error message" },
