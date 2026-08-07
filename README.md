@@ -12,7 +12,7 @@ This tool optimizes technology layouts by calculating pattern-based scores. It p
 
 [Live Instance](https://nms-optimizer.app/) | [Python Solver](https://github.com/jbelew/nms_optimizer-service)
 
-![Screenshot](https://github.com/jbelew/nms_optimizer-web/blob/main/public/assets/img/screenshots/screenshot.png?raw=true)
+![Screenshot](https://github.com/jbelew/nms_optimizer-web/blob/main/public/assets/img/screenshots/screenshot_desktop.png?raw=true)
 
 ## 🛠️ Tech Stack
 
