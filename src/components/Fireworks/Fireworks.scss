@@ -19,6 +19,7 @@
 
 .particle {
 	animation: explode ease-out infinite;
+	animation-duration: var(--duration-offset, 2500ms);
 	border-radius: 50%;
 	height: 3px;
 	left: 50%;
@@ -29,12 +30,21 @@
 
 @keyframes explode {
 	0% {
+		background-color: #ffffff;
+		box-shadow: 0 0 10px 4px #ffffff, 0 0 16px 8px rgba(255, 255, 255, 0.6);
 		opacity: 0;
-		transform: translate3d(0, 0, 0) scale(1);
+		transform: translate3d(0, 0, 0) scale(1.2);
 	}
 
-	5% {
+	3% {
+		background-color: #ffffff;
+		box-shadow: 0 0 10px 4px #ffffff, 0 0 16px 8px rgba(255, 255, 255, 0.6);
 		opacity: 1;
+	}
+
+	15% {
+		background-color: var(--color);
+		box-shadow: 0 0 6px 2px var(--color);
 	}
 
 	75% {
@@ -43,16 +53,20 @@
 
 	100% {
 		opacity: 0;
-		transform: translate3d(var(--x), var(--y), 0) scale(0.15);
+		// Particles expand outwards and drop slightly under gravity
+		transform: translate3d(var(--x), calc(var(--y) + 40px), 0) scale(0.15);
 	}
 }
 
-// Map the angles for 16 particles (forming a perfect circular explosion)
+// Map the angles and randomized offsets for 16 particles
 @for $p from 1 through 16 {
 	.particle:nth-child(#{$p}) {
 		$angle: ($p - 1) * 22.5; // 16 points around 360 degrees (360 / 16 = 22.5)
+		$individual-variance: (math.random(30) - 15); // -15px to +15px variation in travel distance
+		$particle-delay: (math.random(150) * 1ms); // stagger the burst slightly (0 to 150ms)
 
-		--x: calc(#{math.cos($angle * 1deg)} * var(--distance, 80px));
-		--y: calc(#{math.sin($angle * 1deg)} * var(--distance, 80px));
+		--x: calc(#{math.cos($angle * 1deg)} * (var(--distance, 80px) + #{$individual-variance}px));
+		--y: calc(#{math.sin($angle * 1deg)} * (var(--distance, 80px) + #{$individual-variance}px));
+		animation-delay: calc(var(--delay-offset, 0s) + #{$particle-delay});
 	}
 }

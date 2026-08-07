@@ -60,23 +60,17 @@ const SingleFirework: React.FC<FireworkProps> = ({ delay, duration }) => {
 			onAnimationIteration={handleIteration}
 			style={
 				{
+					"--color": state.color,
+					"--delay-offset": `${delay}s`,
 					"--distance": state.distance,
+					"--duration-offset": `${duration}ms`,
 					left: state.left,
 					top: state.top,
 				} as React.CSSProperties
 			}
 		>
 			{Array.from({ length: 16 }).map((_, pIdx) => (
-				<div
-					className="particle"
-					key={pIdx}
-					style={{
-						animationDelay: `${delay}s`,
-						animationDuration: `${duration}ms`,
-						backgroundColor: state.color,
-						boxShadow: `0 0 6px 1px ${state.color}`,
-					}}
-				/>
+				<div className="particle" key={pIdx} />
 			))}
 		</div>
 	);
