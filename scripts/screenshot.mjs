@@ -57,6 +57,10 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 			waitUntil: "networkidle",
 		});
 
+		// Wait for the tech tree to fully load and animations to settle
+		await page.waitForSelector(".tech-tree-content", { timeout: 15000 });
+		await page.waitForTimeout(1000);
+
 		// Load the build file through the UI
 		const nmsFilePath = path.resolve(__dirname, "Corvette - Akamai Terror VI.nms");
 		const fileInputSelector = 'input[type="file"][aria-label="Load Build"]';
@@ -96,6 +100,9 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 		await page.goto(baseUrl, {
 			waitUntil: "networkidle",
 		});
+		// Wait for the tech tree to fully load and animations to settle
+		await page.waitForSelector(".tech-tree-content", { timeout: 15000 });
+		await page.waitForTimeout(1000);
 		// Inject CSS to hide scrollbars for the mobile screenshot
 		await page.addStyleTag({
 			content: `
@@ -117,6 +124,9 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 		await page.goto(baseUrl, {
 			waitUntil: "networkidle",
 		});
+		// Wait for the tech tree to fully load and animations to settle
+		await page.waitForSelector(".tech-tree-content", { timeout: 15000 });
+		await page.waitForTimeout(1000);
 		// Inject CSS to hide scrollbars for the tablet screenshot
 		await page.addStyleTag({
 			content: `
