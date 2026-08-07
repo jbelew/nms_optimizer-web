@@ -1,3 +1,12 @@
+# [7.5.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.4.3...v7.5.0) (2026-08-07)
+
+
+### Features
+
+* **ui:** add animated background fireworks for NMS 10th anniversary ([f4dc938](https://github.com/jbelew/nms_optimizer-web/commit/f4dc938bc4a017cc44e4bd55b9a1edd08640ff7e))
+* **ui:** allow fireworks animation on anniversary range every year ([922b57a](https://github.com/jbelew/nms_optimizer-web/commit/922b57a9284e0d2516cbf300dcd44449dc328296))
+* **ui:** disable background fireworks in accessibility mode ([a25b5df](https://github.com/jbelew/nms_optimizer-web/commit/a25b5df6d62fc7346afafeb22d3bf426f228b2bf))
+
 ## [7.4.3](https://github.com/jbelew/nms_optimizer-web/compare/v7.4.2...v7.4.3) (2026-08-07)
 
 
