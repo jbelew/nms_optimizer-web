@@ -1230,3 +1230,48 @@ Google Search Console reported the critical error: "Review has multiple aggregat
   1. **Flow Synchronization**: Removing pre-rendered elements synchronously during bootstrap is a race condition when React components need to query those elements on mount. Cleanup must always be deferred until after the application's hydration or mount cycles are complete, such as inside the `app-ready` event listener.
   2. **Vigilant Refactoring**: During structural refactors, changes to DOM shapes in builder scripts (like SSG generators) must be tracked and synchronized across both components and cleanup managers to prevent silent path-invalidation bugs.
 
+## PRAR Cycle: Resolve Screenshot Script Race Condition (2026-08-07)
+
+### Perceive & Understand
+- **Request**: Resolve a race condition in the Playwright screenshot action where screenshots are captured too early, displaying the "Loading Tech" suspense view.
+- **Context**: The browser script was triggering `page.goto(baseUrl)` and immediately capturing screenshots (or uploading a file) without checking if the asynchronous technology tree data fetch had finished.
+- **Impact**: Captured screenshots showed visual placeholder loaders instead of the actual loaded application state.
+
+### Reason & Plan
+- **Plan**:
+  1. Add `await page.waitForSelector(".tech-tree-content", { timeout: 15000 });` after all `page.goto` calls.
+  2. Add a `await page.waitForTimeout(1000);` buffer to allow layout/render animations to settle.
+  3. Commit the changes and push them to main.
+
+### Act & Implement
+- **Action**: Modified `scripts/screenshot.mjs` to add the required selectors and buffers.
+- **Action**: Ran the script tests and successfully pushed the changes to the remote repository.
+
+### Refine & Reflect
+- **Reflection**: Generic `networkidle` waits do not guarantee React component hydration or asynchronous post-load fetches have finished. When generating automated screenshots of single-page apps, always target specific elements that represent a fully initialized visual state before calling `page.screenshot()`.
+
+## PRAR Cycle: Implement NMS 10th Anniversary Fireworks Celebration Background (2026-08-07)
+
+### Perceive & Understand
+- **Request**: Add a dynamic, non-static fireworks celebration animation to the background for desktop users to celebrate NMS's 10th anniversary, active only from August 7th to August 12th, 2026.
+- **Context**: The initial seasonal snowfall animation had been removed as dead code. Creating static positions in Sass yielded repetitive, distorted shapes. We needed a performance-focused, fully randomized circular burst effect.
+- **Constraints**: Desktop-only (`isLargeScreen` / screen size `>=1024px`), restricted to a specific anniversary week range, fully tested with date boundaries.
+
+### Reason & Plan
+- **Plan**:
+  1. Build a React component (`Fireworks` and `SingleFirework`) that triggers random position, color, and burst radius changes at runtime on every iteration cycle (`onAnimationIteration`).
+  2. In `Fireworks.scss`, map 16 particles spacing them by 22.5 degrees. Calculate offsets dynamically using a shared parent CSS custom property `--distance` to guarantee a perfect circle.
+  3. Constrain the rendering range using UTC date methods (`now.getUTCDate()`, etc.) to prevent local developer/CI runner timezone shifts.
+  4. Write mock date-based Vitest unit tests confirming the boundary limits.
+
+### Act & Implement
+- **Action**: Implemented the components in `src/components/Fireworks/` and registered them conditionally in `MainAppLayout.tsx`.
+- **Action**: Wrote date boundary tests in `Fireworks.test.tsx` using `vi.useFakeTimers()`.
+- **Action**: Verified that all 853 tests and code analysis pipelines pass cleanly.
+- **Action**: Locally committed the changes as `feat(ui): add animated background fireworks for NMS 10th anniversary`.
+
+### Refine & Reflect
+- **Reflection**:
+  1. **Dynamic CSS custom properties**: Combining CSS variables on a parent wrapper with JS iteration handlers provides a clean way to keep CPU/GPU performance high while dynamically randomizing position and styling variables on each animation repeat loop.
+  2. **Boundary Test Timezones**: Checking dates locally via `now.getDate()` in tests can introduce timezone shifts depending on the local execution environment (e.g. UTC vs PDT). Always use UTC date methods (`now.getUTCDate()`) for range validations in tests to ensure deterministic runs across all platforms.
+

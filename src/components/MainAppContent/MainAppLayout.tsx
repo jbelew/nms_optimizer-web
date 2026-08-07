@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import AppFooter from "@/components/AppFooter/AppFooter";
 import AppHeader from "@/components/AppHeader/AppHeader";
+import { Fireworks } from "@/components/Fireworks/Fireworks";
 import { LanguageSelector } from "@/components/LanguageSelector/LanguageSelector";
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 import {
@@ -250,9 +251,11 @@ export const MainAppSidebarSection: React.FC = () => {
  */
 export const MainAppLayoutContent = () => {
 	const { gridContainerRef } = useMainAppOptimization();
+	const { isLargeScreen } = useMainAppGlobal();
 
 	return (
 		<>
+			{isLargeScreen && <Fireworks />}
 			<MainAppMobileToolbar />
 
 			<a
