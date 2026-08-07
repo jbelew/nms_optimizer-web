@@ -31,20 +31,20 @@
 @keyframes explode {
 	0% {
 		background-color: #ffffff;
-		box-shadow: 0 0 10px 4px #ffffff, 0 0 16px 8px rgba(255, 255, 255, 0.6);
+		box-shadow: 0 0 4px 1px #ffffff, 0 0 6px 2px rgba(255, 255, 255, 0.3);
 		opacity: 0;
-		transform: translate3d(0, 0, 0) scale(1.2);
+		transform: translate3d(0, 0, 0) scale(0.8);
 	}
 
 	3% {
 		background-color: #ffffff;
-		box-shadow: 0 0 10px 4px #ffffff, 0 0 16px 8px rgba(255, 255, 255, 0.6);
-		opacity: 1;
+		box-shadow: 0 0 4px 1px #ffffff, 0 0 6px 2px rgba(255, 255, 255, 0.3);
+		opacity: 0.8;
 	}
 
-	15% {
+	12% {
 		background-color: var(--color);
-		box-shadow: 0 0 6px 2px var(--color);
+		box-shadow: 0 0 4px 1px var(--color);
 	}
 
 	75% {
