@@ -51,10 +51,10 @@ describe("Fireworks component", () => {
 		const { container: containerAfter } = render(<Fireworks />);
 		expect(containerAfter.firstChild).toBeNull();
 
-		// August 9, 2027 - wrong year
+		// August 9, 2027 - should still render in another year
 		vi.setSystemTime(new Date("2027-08-09T12:00:00Z"));
-		const { container: containerWrongYear } = render(<Fireworks />);
-		expect(containerWrongYear.firstChild).toBeNull();
+		const { container: containerNextYear } = render(<Fireworks />);
+		expect(containerNextYear.querySelector(".fireworks-container")).toBeInTheDocument();
 	});
 
 	test("renders on the boundary dates of the range", () => {

@@ -99,10 +99,9 @@ SingleFirework.displayName = "SingleFirework";
  * @category Components
  */
 export const Fireworks = memo(() => {
-	// Only run the animation from August 7th to August 12th, 2026
+	// Only run the animation from August 7th to August 12th of any year
 	const now = new Date();
 	const isAnniversaryActive =
-		now.getUTCFullYear() === 2026 &&
 		now.getUTCMonth() === 7 && // August is 7 (0-indexed)
 		now.getUTCDate() >= 7 &&
 		now.getUTCDate() <= 12;
