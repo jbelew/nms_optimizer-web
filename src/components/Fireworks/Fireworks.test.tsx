@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { act, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 import { Fireworks } from "./Fireworks";
@@ -67,5 +67,18 @@ describe("Fireworks component", () => {
 		vi.setSystemTime(new Date("2026-08-12T23:59:59Z"));
 		const { container: containerEnd } = render(<Fireworks />);
 		expect(containerEnd.querySelector(".fireworks-container")).toBeInTheDocument();
+	});
+
+	test("advances animation cycles via timers", () => {
+		const { container } = render(<Fireworks />);
+		expect(container.querySelectorAll(".particle")).toHaveLength(128); // 8 fireworks * 16 particles
+
+		// Advance timers to trigger the first set of cycle updates
+		act(() => {
+			vi.advanceTimersByTime(10000);
+		});
+
+		// Particles should still be rendered (re-created for new cycles)
+		expect(container.querySelectorAll(".particle")).toHaveLength(128);
 	});
 });

@@ -1301,3 +1301,30 @@ Google Search Console reported the critical error: "Review has multiple aggregat
   - **CSS Custom Property Inheritance**: Declaring custom variables on a parent container and relying on CSS inheritance keeps the virtual DOM clean and allows changing variables for all child elements simultaneously with a single parent style update.
   - **Sass Compile-Time Randomization**: offloading particle-level offsets (like delay offsets and distance adjustments) to Sass compile-time randomizers offloads calculation overhead from the client's CPU entirely.
 
+## PRAR Cycle: Fix Fireworks Animation Timing and Jumping Issue (2026-08-07)
+
+### Perceive & Understand
+- **Request**: Fix the fireworks animation where particles/instances are removed or cut off before their animations complete.
+- **Context**: The fireworks animation previously relied on CSS `infinite` loops. The React component attempted to randomize coordinates and colors on every cycle by listening to `onAnimationIteration` on the parent container.
+- **Problem**: 
+  1. CSS `animation-delay` is only applied once during the very first iteration. In subsequent iterations, the particles loop continuously without any pause, which misses the intended rhythm.
+  2. Because particles have randomized staggered delays (up to 150ms), the first particle (which has no `previousElementSibling`) finishes its iteration and calls `setState` while other particles are still in the middle of their current animation cycle. This causes all other particles to instantly jump to the new coordinates and change colors mid-animation, creating a jarring "cut-off" visual glitch.
+
+### Reason & Plan
+- **Plan**:
+  - Replace the CSS `infinite` animation loop with standard single-execution (`animation-iteration-count: 1` or default).
+  - Use React's `useEffect` and `setTimeout` in `SingleFirework` to manage explosion cycles.
+  - Calculate the exact completion time for each cycle: `delay * 1000 + duration + 150` ms for the first cycle, and `duration + 150` ms for subsequent cycles.
+  - In each cycle, update the position, distance, and color, and increment a `cycle` counter.
+  - Reset the particle sub-elements by applying `key={state.cycle}` to the `<Fragment>`, which forces React to unmount the old invisible particles (that have finished animating to `opacity: 0`) and mount new ones that animate cleanly from `0%` at the new position without any jumping.
+
+### Act & Implement
+- **Action**: Refactored `SingleFirework` in `Fireworks.tsx` to handle cycling using React `useEffect` and `setTimeout`. Added a `cycle` counter.
+- **Action**: Updated `Fireworks.scss` to remove the `infinite` keyword from particle animations.
+- **Action**: Added a new test `advances animation cycles via timers` in `Fireworks.test.tsx` using fake timers.
+- **Action**: Verified all tests, linter, formatting, and TypeScript checking pass successfully.
+
+### Refine & Reflect
+- **Reflection**:
+  - **Combining React Lifecycle and CSS Transitions**: CSS `onAnimationIteration` can be unreliable when animating multiple child elements with staggered delays. By coordinating the cycles via a React-controlled `setTimeout` and mounting/unmounting with a `key` change, we ensure a clean reset of the DOM sub-trees once the elements have reached opacity 0.
+

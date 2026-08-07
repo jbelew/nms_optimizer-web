@@ -18,7 +18,7 @@
 }
 
 .particle {
-	animation: explode ease-out infinite;
+	animation: explode ease-out;
 	animation-duration: var(--duration-offset, 2500ms);
 	border-radius: 50%;
 	height: 3px;
@@ -30,15 +30,19 @@
 
 @keyframes explode {
 	0% {
-		background-color: #ffffff;
-		box-shadow: 0 0 4px 1px #ffffff, 0 0 6px 2px rgba(255, 255, 255, 0.3);
+		background-color: #fff;
+		box-shadow:
+			0 0 4px 1px #fff,
+			0 0 6px 2px rgb(255 255 255 / 30%);
 		opacity: 0;
 		transform: translate3d(0, 0, 0) scale(0.8);
 	}
 
 	3% {
-		background-color: #ffffff;
-		box-shadow: 0 0 4px 1px #ffffff, 0 0 6px 2px rgba(255, 255, 255, 0.3);
+		background-color: #fff;
+		box-shadow:
+			0 0 4px 1px #fff,
+			0 0 6px 2px rgb(255 255 255 / 30%);
 		opacity: 0.8;
 	}
 
@@ -53,6 +57,7 @@
 
 	100% {
 		opacity: 0;
+
 		// Particles expand outwards and drop slightly under gravity
 		transform: translate3d(var(--x), calc(var(--y) + 40px), 0) scale(0.15);
 	}
@@ -67,6 +72,7 @@
 
 		--x: calc(#{math.cos($angle * 1deg)} * (var(--distance, 80px) + #{$individual-variance}px));
 		--y: calc(#{math.sin($angle * 1deg)} * (var(--distance, 80px) + #{$individual-variance}px));
+
 		animation-delay: calc(var(--delay-offset, 0s) + #{$particle-delay});
 	}
 }

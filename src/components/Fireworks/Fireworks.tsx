@@ -12,7 +12,7 @@
 
 import "./Fireworks.scss";
 
-import React, { memo, useState } from "react";
+import React, { Fragment, memo, useEffect, useState } from "react";
 
 // NMS Theme Palette for fireworks
 const NMS_COLORS = [
@@ -32,36 +32,61 @@ interface FireworkProps {
 }
 
 /**
- * A single firework instance that randomizes its properties on every iteration.
+ * A single firework instance that randomizes its properties on every cycle.
+ *
+ * @remarks
+ * Uses a React effect with `setTimeout` to manage explosion cycles. This avoids the CSS
+ * `infinite` animation timing issue where staggered particle delays cause particles to jump
+ * when state variables (`left`, `top`, `--color`, `--distance`) change mid-animation.
+ * Instead, the cycle is incremented after the animation completely finishes, mounting new
+ * particles at the new location cleanly.
+ *
+ * @param props - Component props.
+ * @param props.delay - Initial stagger delay in seconds.
+ * @param props.duration - Particle animation duration in milliseconds.
+ *
+ * @see {@link ./Fireworks.test.tsx Unit Tests}
+ *
+ * @category Components
  */
 const SingleFirework: React.FC<FireworkProps> = ({ delay, duration }) => {
 	const [state, setState] = useState(() => ({
 		color: NMS_COLORS[Math.floor(Math.random() * NMS_COLORS.length)],
+		cycle: 0,
 		distance: `${Math.floor(Math.random() * 50) + 70}px`, // slightly larger: 70px to 120px
 		left: `${Math.random() * 80 + 10}vw`,
 		top: `${Math.random() * 45 + 15}vh`,
 	}));
 
-	const handleIteration = (e: React.AnimationEvent) => {
-		// Only trigger state update once per explosion cycle (using the first particle)
-		if (e.target instanceof HTMLElement && !e.target.previousElementSibling) {
-			setState({
+	useEffect(() => {
+		// Calculate the time it takes for particles to finish their animation.
+		// Cycle 0 starts after `delay` seconds. Subsequent cycles start immediately.
+		// The animation lasts `duration` ms, plus a staggered particle delay (max 150ms).
+		const initialDelayMs = state.cycle === 0 ? delay * 1000 : 0;
+		const totalDurationMs = initialDelayMs + duration + 150;
+
+		const timer = setTimeout(() => {
+			setState((prev) => ({
 				color: NMS_COLORS[Math.floor(Math.random() * NMS_COLORS.length)],
+				cycle: prev.cycle + 1,
 				distance: `${Math.floor(Math.random() * 50) + 70}px`,
 				left: `${Math.random() * 80 + 10}vw`,
 				top: `${Math.random() * 45 + 15}vh`,
-			});
-		}
-	};
+			}));
+		}, totalDurationMs);
+
+		return () => {
+			clearTimeout(timer);
+		};
+	}, [delay, duration, state.cycle]);
 
 	return (
 		<div
 			className="firework"
-			onAnimationIteration={handleIteration}
 			style={
 				{
 					"--color": state.color,
-					"--delay-offset": `${delay}s`,
+					"--delay-offset": state.cycle === 0 ? `${delay}s` : "0s",
 					"--distance": state.distance,
 					"--duration-offset": `${duration}ms`,
 					left: state.left,
@@ -69,9 +94,11 @@ const SingleFirework: React.FC<FireworkProps> = ({ delay, duration }) => {
 				} as React.CSSProperties
 			}
 		>
-			{Array.from({ length: 16 }).map((_, pIdx) => (
-				<div className="particle" key={pIdx} />
-			))}
+			<Fragment key={state.cycle}>
+				{Array.from({ length: 16 }).map((_, pIdx) => (
+					<div className="particle" key={pIdx} />
+				))}
+			</Fragment>
 		</div>
 	);
 };
