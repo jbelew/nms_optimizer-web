@@ -58,6 +58,7 @@ seo_report/*
 .gemini
 .amp
 .claude
+**/graphify-out/cache/
 
 # Lighthouse temporary directories
 .lighthouseci/

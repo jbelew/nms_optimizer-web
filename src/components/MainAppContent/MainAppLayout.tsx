@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 
 import AppFooter from "@/components/AppFooter/AppFooter";
 import AppHeader from "@/components/AppHeader/AppHeader";
-import { Fireworks } from "@/components/Fireworks/Fireworks";
 import { LanguageSelector } from "@/components/LanguageSelector/LanguageSelector";
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 import {
@@ -18,7 +17,6 @@ import { useIdleMount } from "@/hooks/useIdleMount/useIdleMount";
 import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
 import { useFetchTechTreeSuspense } from "@/hooks/useTechTree/useTechTree";
 import { useGridStore } from "@/store/grid/gridStore";
-import { useA11yStore } from "@/store/ui/uiStore";
 import { lazyNamed } from "@/utils/system/lazyNamed";
 
 import { MainAppGridSection } from "./MainAppGridSection";
@@ -252,12 +250,9 @@ export const MainAppSidebarSection: React.FC = () => {
  */
 export const MainAppLayoutContent = () => {
 	const { gridContainerRef } = useMainAppOptimization();
-	const { isLargeScreen } = useMainAppGlobal();
-	const a11yMode = useA11yStore((s) => s.a11yMode);
 
 	return (
 		<>
-			{isLargeScreen && !a11yMode && <Fireworks />}
 			<MainAppMobileToolbar />
 
 			<a

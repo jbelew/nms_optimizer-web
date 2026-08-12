@@ -1,0 +1,9 @@
+/home/jbelew/projects/nms_optimizer-web/src/assets/img/nms-icon.svg
+/home/jbelew/projects/nms_optimizer-web/src/assets/img/nms-icon.webp
+/home/jbelew/projects/nms_optimizer-web/src/assets/svg/flags/de.svg
+/home/jbelew/projects/nms_optimizer-web/src/assets/svg/flags/es.svg
+/home/jbelew/projects/nms_optimizer-web/src/assets/svg/flags/fr.svg
+/home/jbelew/projects/nms_optimizer-web/src/assets/svg/flags/it.svg
+/home/jbelew/projects/nms_optimizer-web/src/assets/svg/flags/pt.svg
+/home/jbelew/projects/nms_optimizer-web/src/assets/svg/flags/us.svg
+/home/jbelew/projects/nms_optimizer-web/src/assets/svg/flags/xx.svg

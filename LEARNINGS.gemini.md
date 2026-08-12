@@ -1328,3 +1328,47 @@ Google Search Console reported the critical error: "Review has multiple aggregat
 - **Reflection**:
   - **Combining React Lifecycle and CSS Transitions**: CSS `onAnimationIteration` can be unreliable when animating multiple child elements with staggered delays. By coordinating the cycles via a React-controlled `setTimeout` and mounting/unmounting with a `key` change, we ensure a clean reset of the DOM sub-trees once the elements have reached opacity 0.
 
+
+## PRAR Cycle: Remove Fireworks Animation (2026-08-12)
+
+### Plan & Understand
+- **Request**: Remove the fireworks animation from the codebase, since the anniversary event is over.
+- **Context**: The fireworks animation was implemented in `src/components/Fireworks/` (`Fireworks.tsx`, `Fireworks.scss`, `Fireworks.test.tsx`) and was conditionally rendered in `src/components/MainAppContent/MainAppLayout.tsx`.
+
+### Research & Analyze
+- **Discovery**: 
+  - `src/components/Fireworks/` contained all files dedicated to the fireworks rendering and styling.
+  - `src/components/MainAppContent/MainAppLayout.tsx` had the imports and logic to render the component under large screen conditions, as well as a reference to `useA11yStore` which was only used for this purpose in this file.
+
+### Act & Implement
+- **Action**: Modified `src/components/MainAppContent/MainAppLayout.tsx` to:
+  - Remove imports of `Fireworks` and `useA11yStore`.
+  - Remove `a11yMode` retrieval and the conditionally rendered `<Fireworks />` component.
+- **Action**: Deleted the `src/components/Fireworks` directory and its contents (`Fireworks.tsx`, `Fireworks.scss`, `Fireworks.test.tsx`).
+
+### Refine & Reflect
+- **Reflection**:
+  - Removing code completely when a temporary event is over is a healthy practice for codebase hygiene. By also removing unused imports (`useA11yStore`) and state queries (`a11yMode`) from `MainAppLayout.tsx`, we avoid leaving dead logic behind.
+
+
+## PRAR Cycle: Add Graphify Cache to Gitignore (2026-08-12)
+
+### Plan & Understand
+- **Request**: Add the graphify cache directory/files to `.gitignore`.
+- **Context**: The graphify tool creates a `cache/` directory under both `graphify-out/` and `src/graphify-out/` which contain temporary/cache files that should not be tracked by Git.
+
+### Research & Analyze
+- **Discovery**: 
+  - `graphify-out/cache/` contains `stat-index.json`.
+  - `src/graphify-out/cache/` contains cache metadata such as `stat-index.json` and a `semantic` folder.
+  - Adding the pattern `**/graphify-out/cache/` to `.gitignore` covers all graphify cache instances across the repository.
+
+### Act & Implement
+- **Action**: Appended `**/graphify-out/cache/` under the `# AI tool caches` section in [`.gitignore`](file:///home/jbelew/projects/nms_optimizer-web/.gitignore).
+
+### Refine & Reflect
+- **Reflection**:
+  - Using a wildcard glob matching pattern (`**/graphify-out/cache/`) ensures that if graphify runs on different directory depths, its caches remain ignored automatically.
+
+
+
