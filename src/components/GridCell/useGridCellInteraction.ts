@@ -129,13 +129,10 @@ export const useGridCellInteraction = (
 		} else {
 			// Single tap
 			interactionState.setLastTap([rowIndex, columnIndex], currentTime);
-			const isInvalidSingleTap =
-				gridState.gridFixed || (gridState.superchargedFixed && cell.supercharged);
+			const isInvalidSingleTap = gridState.gridFixed;
 
 			if (isInvalidSingleTap) {
-				if (gridState.superchargedFixed && cell.supercharged) {
-					sessionState.incrementSuperchargedFixed();
-				} else if (gridState.gridFixed) {
+				if (gridState.gridFixed) {
 					sessionState.incrementGridFixed();
 				}
 
@@ -285,13 +282,8 @@ export const useGridCellInteraction = (
 		// Mouse-specific logic (Ctrl/Cmd + Click)
 		if (event.ctrlKey || event.metaKey) {
 			// Ctrl/Cmd + Click: Toggle Active
-			if (gridFixed || (superchargedFixed && cell.supercharged)) {
-				if (superchargedFixed && cell.supercharged) {
-					sessionState.incrementSuperchargedFixed();
-				} else if (gridFixed) {
-					sessionState.incrementGridFixed();
-				}
-
+			if (gridFixed) {
+				sessionState.incrementGridFixed();
 				triggerShake();
 			} else {
 				Logger.info(`Cell active toggled: [${rowIndex}, ${columnIndex}]`, {

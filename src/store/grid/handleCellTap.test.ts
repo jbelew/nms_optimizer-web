@@ -56,6 +56,24 @@ describe("handleCellTap action in GridStore", () => {
 		expect(finalCell.supercharged).toBe(false);
 	});
 
+	it("should deactivate an active cell on single tap but keep supercharged true if superchargedFixed is true", () => {
+		act(() => {
+			useGridStore.setState((state) => {
+				state.grid.cells[0][0].active = true;
+				state.grid.cells[0][0].supercharged = true;
+				state.superchargedFixed = true;
+			});
+		});
+
+		act(() => {
+			useGridStore.getState().handleCellTap(0, 0);
+		});
+
+		const finalCell = useGridStore.getState().grid.cells[0][0];
+		expect(finalCell.active).toBe(false);
+		expect(finalCell.supercharged).toBe(true);
+	});
+
 	it("should not change cell state if cell is undefined", () => {
 		const initialGrid = useGridStore.getState().grid;
 

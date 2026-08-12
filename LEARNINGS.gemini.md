@@ -1371,4 +1371,28 @@ Google Search Console reported the critical error: "Review has multiple aggregat
   - Using a wildcard glob matching pattern (`**/graphify-out/cache/`) ensures that if graphify runs on different directory depths, its caches remain ignored automatically.
 
 
+## PRAR Cycle: Allow Disabling Supercharged Cells When Fixed (2026-08-12)
+
+### Plan & Understand
+- **Request**: If `superchargedFixed` is true on a grid, the user should still be able to disable/enable a supercharged cell.
+- **Context**: Previously, if `superchargedFixed` was true, the code blocked both single tap (on mobile) and Ctrl/Cmd+click (on desktop) on supercharged cells, preventing users from disabling them. Also, deactivating a cell or a row would set `cell.supercharged = false` in the store, which meant the cell lost its fixed supercharged status and could not be re-enabled.
+
+### Research & Analyze
+- **Discovery**: 
+  - The validation logic for active toggling in [`useGridCellInteraction.ts`](file:///home/jbelew/projects/nms_optimizer-web/src/components/GridCell/useGridCellInteraction.ts) checked `(superchargedFixed && cell.supercharged)` to block the action.
+  - The store actions in [`gridStore.ts`](file:///home/jbelew/projects/nms_optimizer-web/src/store/grid/gridStore.ts) (`deActivateRow`, `handleCellTap`, `setCellActive`, and `toggleCellActive`) automatically cleared the `supercharged` status when deactivating/disabling a cell.
+  - We need to preserve the `supercharged` status on active state toggle if `state.superchargedFixed` is true, and permit active toggling in [`useGridCellInteraction.ts`](file:///home/jbelew/projects/nms_optimizer-web/src/components/GridCell/useGridCellInteraction.ts) by removing the constraint.
+
+### Act & Implement
+- **Action**: Modified [`useGridCellInteraction.ts`](file:///home/jbelew/projects/nms_optimizer-web/src/components/GridCell/useGridCellInteraction.ts) to not check `superchargedFixed && cell.supercharged` for active state toggles (touch single-tap and Ctrl/Cmd+click).
+- **Action**: Updated [`gridStore.ts`](file:///home/jbelew/projects/nms_optimizer-web/src/store/grid/gridStore.ts) to guard the clearing of `cell.supercharged` using `!state.superchargedFixed` in `deActivateRow`, `handleCellTap`, `setCellActive`, and `toggleCellActive`. Also added state guards to `toggleCellSupercharged` and `setCellSupercharged`.
+- **Action**: Added an SCSS selector in [`GridCell.scss`](file:///home/jbelew/projects/nms_optimizer-web/src/components/GridCell/GridCell.scss) under `&--inactive` targeting `&.gridCell--supercharged` to present cells that are both inactive and supercharged distinctly.
+- **Action**: Added unit tests to `useGridCellInteraction.test.ts` and `handleCellTap.test.ts` to verify correct behavior.
+
+### Refine & Reflect
+- **Reflection**:
+  - Under a fixed layout constraint, slots should keep their metadata (like being a supercharged slot) even if their operational status (active/inactive) changes. Guards in the store logic ensure invariants remain consistent across both desktop and mobile user interactions.
+
+
+
 

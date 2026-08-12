@@ -157,6 +157,19 @@
 			border-color: var(--gray-a11) !important;
 		}
 
+		&.gridCell--supercharged {
+			background-color: var(--purple-a1) !important;
+			border: 1px dashed var(--accent-indicator);
+			opacity: 0.6;
+
+			@media (hover: hover) {
+				&:hover {
+					background-color: var(--purple-a2) !important;
+					opacity: 0.8;
+				}
+			}
+		}
+
 		.corner {
 			border-color: var(--gray-a4);
 		}

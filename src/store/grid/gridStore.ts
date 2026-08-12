@@ -204,7 +204,10 @@ export const useGridStore = create<GridStore>()(
 						if (state.grid.cells[rowIndex]) {
 							state.grid.cells[rowIndex].forEach((cell: Cell) => {
 								cell.active = false;
-								cell.supercharged = false;
+
+								if (!state.superchargedFixed) {
+									cell.supercharged = false;
+								}
 							});
 						}
 
@@ -234,7 +237,7 @@ export const useGridStore = create<GridStore>()(
 						if (cell) {
 							cell.active = !cell.active;
 
-							if (!cell.active) {
+							if (!cell.active && !state.superchargedFixed) {
 								cell.supercharged = false;
 							}
 						}
@@ -323,7 +326,7 @@ export const useGridStore = create<GridStore>()(
 						if (cell) {
 							cell.active = active;
 
-							if (!active) {
+							if (!active && !state.superchargedFixed) {
 								cell.supercharged = false;
 							}
 						}
@@ -334,6 +337,8 @@ export const useGridStore = create<GridStore>()(
 
 				setCellSupercharged: (rowIndex, columnIndex, supercharged) => {
 					set((state) => {
+						if (state.superchargedFixed) return;
+
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
 
 						if (cell) {
@@ -396,8 +401,8 @@ export const useGridStore = create<GridStore>()(
 							return;
 						}
 
-						if (cell.supercharged) {
-							cell.supercharged = !cell.supercharged;
+						if (cell.supercharged && !state.superchargedFixed) {
+							cell.supercharged = false;
 						}
 
 						if (!cell.active || !cell.module) {
@@ -410,6 +415,8 @@ export const useGridStore = create<GridStore>()(
 
 				toggleCellSupercharged: (rowIndex, columnIndex) =>
 					set((state) => {
+						if (state.superchargedFixed) return;
+
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
 
 						if (!cell) {

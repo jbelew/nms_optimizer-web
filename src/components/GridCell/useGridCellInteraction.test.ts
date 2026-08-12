@@ -5,6 +5,7 @@ import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useGridStore } from "@/store/grid/gridStore";
+import { useInteractionStore } from "@/store/grid/interactionStore";
 import { useSessionStore, useShakeStore } from "@/store/ui/uiStore";
 
 import { useGridCellInteraction } from "./useGridCellInteraction";
@@ -66,6 +67,7 @@ describe("useGridCellInteraction", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		vi.useFakeTimers();
+		useInteractionStore.getState().clearInteractionState();
 
 		// Mock GridStore.getState()
 		mockGetGridState = vi.fn(() => baseMockGridStoreState);
@@ -147,6 +149,29 @@ describe("useGridCellInteraction", () => {
 		expect(mockEvent.preventDefault).toHaveBeenCalled();
 		expect(mockHandleCellTap).toHaveBeenCalledWith(0, 0);
 		expect(mockHandleCellDoubleTap).not.toHaveBeenCalled();
+	});
+
+	it("should call handleCellTap on single tap (touch end) even if cell is supercharged and superchargedFixed is true", () => {
+		mockGetGridState.mockReturnValue({
+			...baseMockGridStoreState,
+			superchargedFixed: true,
+		});
+
+		const { result } = renderGridCellHook({ module: null, supercharged: true });
+		const mockEvent = createMockTouchEvent();
+		Object.defineProperty(mockEvent, "touches", {
+			value: [{ clientX: 0, clientY: 0 }],
+		});
+
+		act(() => {
+			result.current.handleTouchStart(mockEvent);
+			result.current.handleTouchEnd(mockEvent);
+			vi.runAllTimers();
+		});
+
+		expect(mockEvent.preventDefault).toHaveBeenCalled();
+		expect(mockHandleCellTap).toHaveBeenCalledWith(0, 0);
+		expect(mockTriggerShake).not.toHaveBeenCalled();
 	});
 
 	it("should call handleCellDoubleTap on double tap (touch end) on empty cell", () => {
