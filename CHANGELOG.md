@@ -1,3 +1,13 @@
+## [7.5.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.5.0...v7.5.1) (2026-08-07)
+
+
+### Bug Fixes
+
+* **docs:** update screenshot link in README.md to desktop version ([1579631](https://github.com/jbelew/nms_optimizer-web/commit/1579631fc016e224661abeecd037f0f6ae108c89))
+* **fireworks:** increase lower bound duration and extend keyframe opacity fade window ([5af5949](https://github.com/jbelew/nms_optimizer-web/commit/5af5949a97cebe96a3414eb522ff1b780f4dd3e5))
+* **fireworks:** resolve animation timing and jumping issues ([9462933](https://github.com/jbelew/nms_optimizer-web/commit/9462933316311d515123f26943dd9af19f07f60b))
+* **ui:** add space before cursor-pointer class in TechTreeRowActions ([7cd030b](https://github.com/jbelew/nms_optimizer-web/commit/7cd030b796929b576e25a10edcecd9e36c9ca689))
+
 # [7.5.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.4.3...v7.5.0) (2026-08-07)
 
 
