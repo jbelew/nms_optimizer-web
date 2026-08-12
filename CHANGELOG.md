@@ -1,3 +1,10 @@
+## [7.5.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.5.1...v7.5.2) (2026-08-12)
+
+
+### Bug Fixes
+
+* **grid:** allow disabling supercharged slots under superchargedFixed constraint ([#657](https://github.com/jbelew/nms_optimizer-web/issues/657)) ([d137345](https://github.com/jbelew/nms_optimizer-web/commit/d137345ddafd9f12bf04f04c3aa6e6cda4daa9fc))
+
 ## [7.5.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.5.0...v7.5.1) (2026-08-07)
 
 
