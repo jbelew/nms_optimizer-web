@@ -4,6 +4,34 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 7.5 – Anniversary Celebrations & Grid Control (2026-08-12)
+
+This update introduces seasonal celebration visuals and enhances interactive control on restricted layouts.
+
+- **NMS 10th Anniversary Fireworks:** Added a dynamic, GPU-accelerated animated fireworks background celebration to mark No Man's Sky's 10th anniversary. It runs automatically every year between August 7th and August 12th.
+- **Accessibility Optimization:** Background animations are automatically disabled when accessibility or reduced motion features are active.
+- **Fixed Layout Customization:** Allowed players to deactivate or reactivate supercharged slots on grids with fixed layouts without losing their underlying supercharged metadata or formatting.
+- **Interface Polish:** Cleaned up visual presentation details across technology trees and desktop navigation items.
+
+## Version 7.4 – Resilience, Recovery & Seamless Hydration (2026-06-12)
+
+This update hardens the application against network failures and improves initial loading transitions.
+
+- **Boot Resilience & Recovery:** Introduced a robust boot-sequence recovery interface. If strict ad-blockers or network interruptions block critical assets, the app displays a helpful recovery panel rather than failing silently on a blank screen.
+- **Flicker-Free Initial Load:** Optimized the pre-rendered static HTML hydration sequence, ensuring static content is seamlessly loaded by the React application without double-renders or visual jumps.
+- **Spanish Translation Refinements:** Completed a localization audit of the Spanish translation to fix capitalization, phrasing consistency, and term standardization.
+- **Security Enhancements:** Addressed security scans and type-safety items to improve long-term platform stability.
+
+## Version 7.3 – Responsiveness, Loading Optimizations & Social Proof (2026-05-22)
+
+This update significantly improves interface responsiveness and load times while adding community features.
+
+- **GitHub Stars Rating Pill:** Added an interactive stargazers rating pill to the footer linking directly to our public repository stars.
+- **Total Blocking Time (TBT) Reduction:** Optimized cold start times by lazy-loading non-critical dialog content and deferring Sentry telemetry initialization.
+- **Smoother Interactions:** Improved Interaction to Next Paint (INP) latency by memoizing list elements and context bindings, reducing delays during complex grid optimizations.
+- **Restore Back-Forward Cache:** Overhauled cache-control policies to support the browser's native Back-Forward Cache (bfcache), resulting in near-instant back/forward navigation.
+- **Footer Spacing & Layout Polish:** Streamlined footer text and prompt formatting across all 6 supported languages for better layout balance on mobile and desktop viewports.
+
 ## Version 7.2 – Faster Startup & Lighter Loading (2026-05-16)
 
 This update focuses on making the app lighter to download and faster to get started.
