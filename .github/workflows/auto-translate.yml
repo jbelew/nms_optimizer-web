@@ -1,11 +1,11 @@
 name: Auto-Translate (Gemini AI)
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'public/assets/locales/en/**'
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'public/assets/locales/en/**'
   workflow_dispatch:
 
 jobs:
