@@ -68,7 +68,7 @@ Möchtest du beitragen? Der NMS-Optimierer ist vollständig Open Source.
 
 ## Ein riesiges Dankeschön an die Community
 
-Dieses Projekt wäre ohne die unglaubliche _No Man's Sky_-Community nicht möglich. Ein besonderer Dank geht an George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray und alle anderen, die beigetragen haben. Eure Unterstützung, Spenden, das Teilen und die freundlichen Worte bedeuten uns alles und helfen, dieses Projekt am Leben zu erhalten.
+Dieses Projekt wäre ohne die unglaubliche _No Man's Sky_-Community nicht möglich. Ein besonderer Dank geht an George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray, jayriley, arratikbehavior, Someone, Cal Abunga, und alle anderen, die beigetragen haben. Eure Unterstützung, Spenden, das Teilen und die freundlichen Worte bedeuten uns alles und helfen, dieses Projekt am Leben zu erhalten.
 
 ## Ein Rückblick: Frühe Versionen
 
