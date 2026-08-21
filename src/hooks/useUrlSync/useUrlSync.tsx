@@ -65,13 +65,15 @@ export const useUrlSync = () => {
 	const shipTypesRef = useRef(shipTypes);
 	const isKnownRouteRef = useRef(isKnownRoute);
 	const deserializeGridRef = useRef(deserializeGrid);
+	const setSelectedShipTypeInStoreRef = useRef(setSelectedShipTypeInStore);
 
 	// Keep refs up to date
 	useEffect(() => {
 		shipTypesRef.current = shipTypes;
 		isKnownRouteRef.current = isKnownRoute;
 		deserializeGridRef.current = deserializeGrid;
-	}, [shipTypes, isKnownRoute, deserializeGrid]);
+		setSelectedShipTypeInStoreRef.current = setSelectedShipTypeInStore;
+	}, [shipTypes, isKnownRoute, deserializeGrid, setSelectedShipTypeInStore]);
 
 	// Effect to handle initial URL state and popstate events
 	useEffect(() => {
@@ -112,7 +114,7 @@ export const useUrlSync = () => {
 				// so deserialization uses the correct platform
 				if (platformFromUrl && platformFromUrl !== currentPlatform) {
 					if (validShipTypes.includes(platformFromUrl)) {
-						setSelectedShipTypeInStore(
+						setSelectedShipTypeInStoreRef.current(
 							platformFromUrl,
 							validShipTypes,
 							false, // updateUrl = false (we are ALREADY responding to a URL change)
@@ -164,7 +166,6 @@ export const useUrlSync = () => {
 		};
 	}, [
 		isKnownRoute,
-		setSelectedShipTypeInStore,
 		// Removing deserializeGrid from dependencies to break the infinite loop
 		// triggered by selectedPlatform changes which re-create deserializeGrid
 	]);

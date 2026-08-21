@@ -117,7 +117,7 @@ export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 				clearTimeout(resetTimeout);
 			};
 		}
-	}, [isVisible, setRandomMessage]);
+	}, [isVisible]);
 
 	if (!isVisible) {
 		return null;

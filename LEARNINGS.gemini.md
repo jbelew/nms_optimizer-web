@@ -1393,6 +1393,59 @@ Google Search Console reported the critical error: "Review has multiple aggregat
 - **Reflection**:
   - Under a fixed layout constraint, slots should keep their metadata (like being a supercharged slot) even if their operational status (active/inactive) changes. Guards in the store logic ensure invariants remain consistent across both desktop and mobile user interactions.
 
+## PRAR Cycle: Resolve React Exhaustive Dependency Warnings (2026-08-21)
 
+### Perceive & Understand
+- **Request**: Resolve lint errors regarding extra react effect dependencies.
+- **Context**: 5 files had `react(exhaustive-effect-dependencies)` warnings: `useMainAppLogic.ts`, `useUrlSync.tsx`, `useValidation.ts`, `MessageSpinner.tsx`, and `MarkdownContentRenderer.tsx`.
+- **Details**:
+  - `useMainAppLogic.ts`: `selectedShipType` was listed as a dependency but not used in the effect body.
+  - `useUrlSync.tsx`: `setSelectedShipTypeInStore` was listed as a dependency but is a stable Zustand setter.
+  - `useValidation.ts`: `location.pathname` was listed as a dependency but was not referenced inside the effect callback.
+  - `MessageSpinner.tsx`: `setRandomMessage` was listed as a dependency but was not referenced inside the effect callback.
+  - `MarkdownContentRenderer.tsx`: `markdownFileName` was listed as a dependency but was not referenced inside the effect callback.
 
+### Reason & Plan
+- **Plan**:
+  - For `useMainAppLogic.ts`, reference `selectedShipType` in the `useEffect` body via `void selectedShipType;` to satisfy the dependency.
+  - For `useUrlSync.tsx`, remove stable Zustand action `setSelectedShipTypeInStore` from the dependency array.
+  - For `useValidation.ts`, reference `location.pathname` inside the body via `void location.pathname;` to satisfy the dependency while preserving its use of `window.location.href` to avoid breaking test suite mocks.
+  - For `MessageSpinner.tsx`, remove unused `setRandomMessage` from the reset timeout `useEffect` dependencies.
+  - For `MarkdownContentRenderer.tsx`, reference `markdownFileName` inside the reset `useEffect` via `void markdownFileName;`.
+  - Validate everything compiles and passes all unit/script tests.
 
+### Act & Implement
+- **Action**: Applied the planned changes to all 5 files.
+- **Action**: Ran type checking and unit test suites to verify that compilation succeeds and tests pass.
+
+### Refine & Reflect
+- **Reflection**:
+  - React's dependency checking expects all dependencies listed in the dependency array to be referenced inside the effect callback.
+  - For values used solely to trigger an effect, referencing them inside the effect body (e.g., using `void value;` or constructing reactively using location props) satisfies the lint requirements cleanly without introducing unnecessary logic.
+  - Stable actions/setters from state stores (e.g., Zustand or standard `useState` setters) that do not need to trigger re-execution can be safely omitted from the dependency array.
+
+## PRAR Cycle: Resolve Vite Native Config Loader Warnings (2026-08-21)
+
+### Perceive & Understand
+- **Request**: Resolve the Vite warning: `(!) Your Vite config uses features that are unsupported by configLoader: 'native'`.
+- **Context**: The warnings pointed to the use of `__dirname` in `vitest.config.ts` and `vite.config.ts`, as well as a JSON import without import attributes in `vite.config.ts`.
+- **Details**:
+  - `vitest.config.ts` was using a dynamic fallback: `typeof __dirname !== "undefined" ? __dirname : path.dirname(fileURLToPath(import.meta.url))`.
+  - `vite.config.ts` was referencing `__dirname` across multiple resolve aliases and plugins.
+  - `vite.config.ts` was importing `./package.json` without import attributes.
+  - Node.js >= 20.11 natively supports `import.meta.dirname`, and Node.js >= 22 supports standard ES import attributes (`with { type: "json" }`). The project enforces Node.js >= 24.
+
+### Reason & Plan
+- **Plan**:
+  - Replace the dynamic `__dirname` logic with native `import.meta.dirname` in [vitest.config.ts](file:///home/jbelew/projects/nms_optimizer-web/vitest.config.ts) and remove the unused `fileURLToPath` import.
+  - Define `const dirname = import.meta.dirname;` at the top of [vite.config.ts](file:///home/jbelew/projects/nms_optimizer-web/vite.config.ts) and replace all `__dirname` occurrences with `dirname`.
+  - Update the JSON import statement in [vite.config.ts](file:///home/jbelew/projects/nms_optimizer-web/vite.config.ts) to use `with { type: "json" }`.
+  - Verify that all warnings are gone during both tests and production builds.
+
+### Act & Implement
+- **Action**: Refactored [vitest.config.ts](file:///home/jbelew/projects/nms_optimizer-web/vitest.config.ts) and [vite.config.ts](file:///home/jbelew/projects/nms_optimizer-web/vite.config.ts).
+- **Action**: Ran the Vitest test suite and a full production build (`bun run build`), verifying that all native config loader warnings are resolved.
+
+### Refine & Reflect
+- **Reflection**:
+  - In modern ESM environments under newer Node.js versions, using native `import.meta.dirname` and ES standard import attributes (`with { type: "json" }`) provides a clean, built-in solution that allows Vite to natively load config files without polyfills or warnings.

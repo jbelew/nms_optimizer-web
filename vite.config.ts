@@ -14,9 +14,11 @@ import { splashScreen } from "vite-plugin-splash-screen";
 import type { PreRenderedAsset, PreRenderedChunk } from "rolldown";
 import type { UserConfig } from "vite";
 
-import packageJson from "./package.json";
+import packageJson from "./package.json" with { type: "json" };
 import { markdownBundlePlugin } from "./scripts/vite-plugin-markdown-bundle.mjs";
 import { purgeRadixCss } from "./scripts/vite-plugin-purge-radix-css.mjs";
+
+const dirname = import.meta.dirname;
 
 /**
  * Vite 8 / Rolldown Configuration
@@ -266,7 +268,7 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 									version: appVersion,
 								};
 								fs.writeFileSync(
-									path.resolve(__dirname, "dist/version.json"),
+									path.resolve(dirname, "dist/version.json"),
 									JSON.stringify(versionInfo, null, 2)
 								);
 							},
@@ -569,13 +571,13 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 		preview: { host: "0.0.0.0", port: 4173 },
 		resolve: {
 			alias: {
-				"@": path.resolve(__dirname, "./src"),
-				"@shared": path.resolve(__dirname, "./shared"),
-				react: path.resolve(__dirname, "node_modules/react"),				"react-dom": path.resolve(__dirname, "node_modules/react-dom"),
+				"@": path.resolve(dirname, "./src"),
+				"@shared": path.resolve(dirname, "./shared"),
+				react: path.resolve(dirname, "node_modules/react"),				"react-dom": path.resolve(dirname, "node_modules/react-dom"),
 				...(!sentryEnabled
 					? {
 							"@sentry/react": path.resolve(
-								__dirname,
+								dirname,
 								"src/utils/system/sentryMock.ts"
 							),
 						}

@@ -169,6 +169,7 @@ export const useUrlNormalization = () => {
 	const { userVisited } = useDialog();
 
 	useEffect(() => {
+		if (!location.pathname) return;
 		const url = new URL(window.location.href);
 		let changed = false;
 

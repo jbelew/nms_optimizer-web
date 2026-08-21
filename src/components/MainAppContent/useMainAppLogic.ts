@@ -75,7 +75,9 @@ export const useMainAppLogic = () => {
 
 	// Reset error counts when ship type changes
 	useEffect(() => {
-		resetSession();
+		if (selectedShipType) {
+			resetSession();
+		}
 	}, [selectedShipType, resetSession]);
 
 	// Monitor session errors and dispatch messages to toast

@@ -458,8 +458,10 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
 
 	// Reset the counter and map when markdownFileName changes
 	useEffect(() => {
-		h2CounterRef.current = 0;
-		h2IdMapRef.current.clear();
+		if (markdownFileName) {
+			h2CounterRef.current = 0;
+			h2IdMapRef.current.clear();
+		}
 	}, [markdownFileName]);
 
 	// Scroll to the target section when markdown is loaded and targetSectionId is present
