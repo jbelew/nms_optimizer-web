@@ -68,7 +68,7 @@ Para los desarrolladores y fanáticos de los datos, aquí está la tecnología q
 
 ## Un Enorme Agradecimiento a la Comunidad
 
-Este proyecto no sería posible sin la increíble comunidad de _No Man's Sky_. Un agradecimiento especial a George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray, jayriley, arratikbehavior, Someone, Cal Abunga, y todos los demás que han contribuido. Su apoyo, donaciones, compartidos y palabras amables significan todo y ayudan a mantener vivo este proyecto.
+Este proyecto no sería posible sin la increíble comunidad de _No Man's Sky_. Un agradecimiento especial a **George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray, jayriley, arratikbehavior, Someone, Cal Abunga**, y todos los demás que han contribuido. Su apoyo, donaciones, compartidos y palabras amables significan todo y ayudan a mantener vivo este proyecto.
 
 ## Mirando Atrás: Primeras Versiones
 

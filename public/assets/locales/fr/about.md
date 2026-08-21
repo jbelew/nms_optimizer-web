@@ -68,7 +68,7 @@ Vous voulez contribuer ? L'NMS Optimizer est entièrement open-source.
 
 ## Un Grand Merci à la Communauté
 
-Ce projet ne serait pas possible sans l'incroyable communauté de _No Man's Sky_. Un merci spécial à George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray, jayriley, arratikbehavior, Someone, Cal Abunga, et à tous les autres qui ont contribué. Votre soutien, vos dons, vos partages et vos mots gentils signifient tout et aident à garder ce projet en vie.
+Ce projet ne serait pas possible sans l'incroyable communauté de _No Man's Sky_. Un merci spécial à **George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray, jayriley, arratikbehavior, Someone, Cal Abunga**, et à tous les autres qui ont contribué. Votre soutien, vos dons, vos partages et vos mots gentils signifient tout et aident à garder ce projet en vie.
 
 ## Un Regard en Arrière : Les Premières Versions
 
