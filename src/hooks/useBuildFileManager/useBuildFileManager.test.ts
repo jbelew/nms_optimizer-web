@@ -203,14 +203,17 @@ describe("useBuildFileManager", () => {
 				filename: mockFilename,
 			});
 
+			const { result } = renderHook(() => useBuildFileManager());
+
 			const clickSpy = vi
 				.spyOn(HTMLAnchorElement.prototype, "click")
 				.mockImplementation(() => {});
 			const appendChildSpy = vi.spyOn(document.body, "appendChild");
 			const removeChildSpy = vi.spyOn(document.body, "removeChild");
 
-			const { result } = renderHook(() => useBuildFileManager());
-			await result.current.saveBuildToFile(buildName);
+			await act(async () => {
+				await result.current.saveBuildToFile(buildName);
+			});
 
 			// Assert serialization delegation with store states
 			expect(buildSerializer.saveBuild).toHaveBeenCalledWith({
@@ -253,15 +256,107 @@ describe("useBuildFileManager", () => {
 			removeChildSpy.mockRestore();
 		});
 
-		it("should propagate errors thrown by the serializer", async () => {
-			const serializerError = new Error("Serialization error");
-			vi.mocked(buildSerializer.saveBuild).mockRejectedValueOnce(serializerError);
+		it("should manage isPending state during save", async () => {
+			const buildName = "My Test Build";
+			const mockFilename = "My-Test-Build.nms";
+
+			let resolveSave: (value: { blob: Blob; filename: string }) => void = () => {};
+
+			const savePromise = new Promise<{ blob: Blob; filename: string }>((resolve) => {
+				resolveSave = resolve;
+			});
+
+			vi.mocked(buildSerializer.saveBuild).mockReturnValueOnce(
+				savePromise as unknown as ReturnType<typeof buildSerializer.saveBuild>
+			);
 
 			const { result } = renderHook(() => useBuildFileManager());
 
-			await expect(result.current.saveBuildToFile("Fail Build")).rejects.toThrow(
-				"Failed to save build file"
+			const clickSpy = vi
+				.spyOn(HTMLAnchorElement.prototype, "click")
+				.mockImplementation(() => {});
+			const appendChildSpy = vi.spyOn(document.body, "appendChild");
+			const removeChildSpy = vi.spyOn(document.body, "removeChild");
+
+			// Initially, isPending should be false
+			expect(result.current.isPending).toBe(false);
+
+			// Start saving - do not await the returned promise yet so we can inspect intermediate state
+			let savePromiseResult: Promise<void>;
+			act(() => {
+				savePromiseResult = result.current.saveBuildToFile(buildName);
+			});
+
+			// Now, isPending should be true
+			expect(result.current.isPending).toBe(true);
+
+			// Resolve the save operation
+			await act(async () => {
+				resolveSave({
+					blob: mockBlob,
+					filename: mockFilename,
+				});
+				await savePromiseResult;
+			});
+
+			// Finally, isPending should be false again
+			expect(result.current.isPending).toBe(false);
+
+			clickSpy.mockRestore();
+			appendChildSpy.mockRestore();
+			removeChildSpy.mockRestore();
+		});
+
+		it("should reset isPending state to false and propagate errors if serialization fails", async () => {
+			const serializerError = new Error("Serialization error");
+
+			let rejectSave: (reason: Error) => void = () => {};
+
+			const savePromise = new Promise<{ blob: Blob; filename: string }>((_, reject) => {
+				rejectSave = reject;
+			});
+
+			vi.mocked(buildSerializer.saveBuild).mockReturnValueOnce(
+				savePromise as unknown as ReturnType<typeof buildSerializer.saveBuild>
 			);
+
+			const { result } = renderHook(() => useBuildFileManager());
+
+			const clickSpy = vi
+				.spyOn(HTMLAnchorElement.prototype, "click")
+				.mockImplementation(() => {});
+			const appendChildSpy = vi.spyOn(document.body, "appendChild");
+			const removeChildSpy = vi.spyOn(document.body, "removeChild");
+
+			// Initially, isPending should be false
+			expect(result.current.isPending).toBe(false);
+
+			// Start saving
+			let savePromiseResult: Promise<void>;
+			act(() => {
+				savePromiseResult = result.current.saveBuildToFile("Fail Build");
+			});
+
+			// Now, isPending should be true
+			expect(result.current.isPending).toBe(true);
+
+			// Reject the save operation
+			await act(async () => {
+				rejectSave(serializerError);
+				await expect(savePromiseResult).rejects.toThrow("Failed to save build file");
+			});
+
+			// Finally, isPending should be false again
+			expect(result.current.isPending).toBe(false);
+
+			// Assert no DOM download elements were created or cleaned up abnormally
+			expect(URL.createObjectURL).not.toHaveBeenCalled();
+			expect(clickSpy).not.toHaveBeenCalled();
+			expect(appendChildSpy).not.toHaveBeenCalled();
+
+			clickSpy.mockRestore();
+			appendChildSpy.mockRestore();
+			removeChildSpy.mockRestore();
 		});
 	});
 
@@ -330,6 +425,8 @@ describe("useBuildFileManager", () => {
 			await expect(result.current.loadBuildFromFile(mockFile)).rejects.toThrow(
 				"Invalid file type. Please select a .nms build file."
 			);
+
+			expect(result.current.isPending).toBe(false);
 		});
 
 		it("should throw an error if the file exceeds 10MB limit", async () => {
@@ -344,6 +441,8 @@ describe("useBuildFileManager", () => {
 			await expect(result.current.loadBuildFromFile(mockFile)).rejects.toThrow(
 				"File is too large. Build files should be under 10MB."
 			);
+
+			expect(result.current.isPending).toBe(false);
 		});
 
 		it("should throw an error if the file is empty", async () => {
@@ -358,20 +457,8 @@ describe("useBuildFileManager", () => {
 					await result.current.loadBuildFromFile(mockFile);
 				})
 			).rejects.toThrow("File is empty. Please select a valid build file.");
-		});
 
-		it("should propagate errors thrown by the serializer", async () => {
-			const mockFile = new File(["{}"], "test.nms", { type: "application/octet-stream" });
-			const serializerError = new Error("Validation failed");
-			vi.mocked(buildSerializer.loadBuild).mockRejectedValueOnce(serializerError);
-
-			const { result } = renderHook(() => useBuildFileManager());
-
-			await expect(
-				act(async () => {
-					await result.current.loadBuildFromFile(mockFile);
-				})
-			).rejects.toThrow("Validation failed");
+			expect(result.current.isPending).toBe(false);
 		});
 
 		it("should manage isPending state during load", async () => {
@@ -425,6 +512,44 @@ describe("useBuildFileManager", () => {
 			await act(async () => {
 				resolveLoad(mockBuildData);
 				await loadPromiseResult;
+			});
+
+			// Finally, isPending should be false again
+			expect(result.current.isPending).toBe(false);
+		});
+
+		it("should reset isPending state to false and propagate errors if load fails", async () => {
+			const mockFile = new File(["{}"], "test.nms", { type: "application/octet-stream" });
+			const serializerError = new Error("Validation failed");
+
+			let rejectLoad: (reason: Error) => void = () => {};
+
+			const loadPromise = new Promise<never>((_, reject) => {
+				rejectLoad = reject;
+			});
+
+			vi.mocked(buildSerializer.loadBuild).mockReturnValueOnce(
+				loadPromise as unknown as ReturnType<typeof buildSerializer.loadBuild>
+			);
+
+			const { result } = renderHook(() => useBuildFileManager());
+
+			// Initially, isPending should be false
+			expect(result.current.isPending).toBe(false);
+
+			// Start loading
+			let loadPromiseResult: Promise<void>;
+			act(() => {
+				loadPromiseResult = result.current.loadBuildFromFile(mockFile);
+			});
+
+			// Now, isPending should be true
+			expect(result.current.isPending).toBe(true);
+
+			// Reject the load operation
+			await act(async () => {
+				rejectLoad(serializerError);
+				await expect(loadPromiseResult).rejects.toThrow("Validation failed");
 			});
 
 			// Finally, isPending should be false again

@@ -25,3 +25,10 @@ Summary: Refactored `useBuildFileManager.ts` to utilize React 19's `useTransitio
 Key Learnings:
 - React 19 Async Transitions: React 19's `useTransition` allows tracking pending states of async functions natively. Wrapping async file operations and store updates inside the transition callback simplifies UI pending state management.
 - Mocking useTransition in Vitest: Custom mocks of `useTransition` that leverage React's actual state hooks (like `actual.useState`) enable reliable, reactive test assertions of pending states for asynchronous hooks.
+
+Date: 2026-08-28
+Task: Implement GitHub issue #720: "test(build): rewrite useBuildFileManager tests with loading states and download triggers"
+Summary: Rewrote the complete test suite for `useBuildFileManager` hook. Verified that `isPending` starts `false`, transitions to `true` while the file is processed/serialized or read/parsed, and returns to `false` when complete or when an error is thrown. Verified the complete download simulation sequence (URL creation, anchor element instantiation, append/removal, click, and URL revocation). Added error-handling and state-cleanup tests.
+Key Learnings:
+- Testing DOM Side-Effects after renderHook: Spying on DOM methods like `document.body.appendChild` should happen *after* calling `renderHook` to prevent tracking mounting actions executed by the test renderer.
+- Comprehensive State Cleanup Assertions: Ensuring `isPending` resets to `false` and any temporary browser resources are cleaned up upon failures guards against UI lockouts and memory leaks in real applications.

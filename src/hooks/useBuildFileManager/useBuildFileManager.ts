@@ -60,38 +60,47 @@ export const useBuildFileManager = () => {
 	 */
 	const saveBuildToFile = async (buildName: string): Promise<void> => {
 		try {
-			const gridStoreState = useGridStore.getState();
-			const techStoreState = useTechStore.getState();
-			const platformStoreState = usePlatformStore.getState();
+			await new Promise<void>((resolve, reject) => {
+				startTransition(async () => {
+					try {
+						const gridStoreState = useGridStore.getState();
+						const techStoreState = useTechStore.getState();
+						const platformStoreState = usePlatformStore.getState();
 
-			const { blob, filename } = await buildSerializer.saveBuild({
-				buildName,
-				gridState: {
-					grid: gridStoreState.grid,
-					gridFixed: gridStoreState.gridFixed,
-					initialGridDefinition: gridStoreState.initialGridDefinition,
-					isSharedGrid: gridStoreState.isSharedGrid,
-					result: gridStoreState.result,
-					superchargedFixed: gridStoreState.superchargedFixed,
-				},
-				shipType: platformStoreState.selectedPlatform,
-				techState: {
-					bonusStatus: techStoreState.bonusStatus,
-					checkedModules: techStoreState.checkedModules,
-					maxBonus: techStoreState.maxBonus,
-					solvedBonus: techStoreState.solvedBonus,
-					solveMethod: techStoreState.solveMethod,
-				},
+						const { blob, filename } = await buildSerializer.saveBuild({
+							buildName,
+							gridState: {
+								grid: gridStoreState.grid,
+								gridFixed: gridStoreState.gridFixed,
+								initialGridDefinition: gridStoreState.initialGridDefinition,
+								isSharedGrid: gridStoreState.isSharedGrid,
+								result: gridStoreState.result,
+								superchargedFixed: gridStoreState.superchargedFixed,
+							},
+							shipType: platformStoreState.selectedPlatform,
+							techState: {
+								bonusStatus: techStoreState.bonusStatus,
+								checkedModules: techStoreState.checkedModules,
+								maxBonus: techStoreState.maxBonus,
+								solvedBonus: techStoreState.solvedBonus,
+								solveMethod: techStoreState.solveMethod,
+							},
+						});
+
+						const url = URL.createObjectURL(blob);
+						const link = document.createElement("a");
+						link.href = url;
+						link.download = filename;
+						document.body.appendChild(link);
+						link.click();
+						document.body.removeChild(link);
+						URL.revokeObjectURL(url);
+						resolve();
+					} catch (error) {
+						reject(error);
+					}
+				});
 			});
-
-			const url = URL.createObjectURL(blob);
-			const link = document.createElement("a");
-			link.href = url;
-			link.download = filename;
-			document.body.appendChild(link);
-			link.click();
-			document.body.removeChild(link);
-			URL.revokeObjectURL(url);
 		} catch (error) {
 			Logger.error("Failed to save build file:", error);
 			throw new Error("Failed to save build file", { cause: error });
