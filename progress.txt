@@ -4,3 +4,10 @@ Summary: Extracted all serialization and validation business logic from the `use
 Key Learnings:
 - Vitest's `vi.mock` module hoisting executes before mock variable declarations unless the variables are hoisted. Utilizing `vi.hoisted` provides a clean, native way to declare and resolve store state mocks without temporal dead zone ReferenceErrors.
 - Plain business logic functions decoupled from React hooks can be thoroughly and cleanly unit-tested as plain async function calls with minimal mocks, making the test suite faster and easier to maintain.
+
+Date: 2026-08-28
+Task: Implement GitHub issue #716: "refactor(build): thin useBuildFileManager to a DOM adapter"
+Summary: Simplified the `useBuildFileManager` hook into a thin DOM adapter that delegates all serialization, validation, and state restoration logic to the `buildSerializer` module. The hook is now solely responsible for retrieving valid ship types via `useFetchShipTypesSuspense` and managing DOM download and loading integrations.
+Key Learnings:
+- Restricting React hooks to DOM/browser interactions and delegating all core validation and business logic to plain utility modules leads to cleaner, more decoupled components.
+- In Vitest/Testing Library tests, when mocking global DOM methods (e.g., `document.body.appendChild`), care must be taken to only spy on the calls or avoid blocking default behavior that the React runtime requires to render hooks. Using `vi.spyOn` on specific properties or prototypes is a safer approach than stubbing global methods completely.

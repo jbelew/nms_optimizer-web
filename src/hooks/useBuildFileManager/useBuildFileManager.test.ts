@@ -1,207 +1,129 @@
 import { renderHook } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { buildSerializer } from "@/utils/build/buildSerializer";
 
 import { useBuildFileManager } from "./useBuildFileManager";
 
-// Mock dependencies
-const mockRestoreGridState = vi.fn();
-vi.mock("@/store/grid/gridStore", () => ({
-	useGridStore: {
-		getState: vi.fn(() => ({
-			grid: { cells: [], height: 0, width: 0 },
-			gridFixed: false,
-			initialGridDefinition: undefined,
-			isSharedGrid: false,
-			restoreGridState: mockRestoreGridState,
-			result: null,
-			superchargedFixed: false,
-		})),
-		setState: vi.fn(),
+// Mock buildSerializer
+vi.mock("@/utils/build/buildSerializer", () => ({
+	buildSerializer: {
+		loadBuild: vi.fn(),
+		saveBuild: vi.fn(),
 	},
 }));
 
-vi.mock("@/store/tech/techStore", () => ({
-	useTechStore: {
-		getState: vi.fn(() => ({
-			bonusStatus: {},
-			checkedModules: {},
-			maxBonus: {},
-			solvedBonus: {},
-			solveMethod: {},
-		})),
-		setState: vi.fn(),
-	},
-}));
-
-vi.mock("@/store/app/platformStore", () => {
-	const usePlatformStoreMock = vi.fn((selector) => {
-		const store = {
-			selectedPlatform: "freighter",
-			setSelectedPlatform: vi.fn(),
-		};
-
-		return typeof selector === "function" ? selector(store) : store;
-	});
-
-	return {
-		usePlatformStore: usePlatformStoreMock,
-	};
-});
-
+// Mock useFetchShipTypesSuspense hook
 vi.mock("@/hooks/useShipTypes/useShipTypes", () => ({
-	useFetchShipTypesSuspense: () => ({
+	useFetchShipTypesSuspense: vi.fn(() => ({
 		explorer: {},
 		fighter: {},
 		freighter: {},
 		shuttle: {},
-	}),
+	})),
 }));
-
-vi.mock("@/utils/system/hashUtils", () => ({
-	computeSHA256: vi.fn(async () => "abc123def456"),
-}));
-
-/**
- *
- * @example
- */
-const createValidBuildFile = () => ({
-	bonusState: {
-		bonusStatus: {},
-	},
-	checksum: "abc123def456", // Mock checksum - tests will mock computeSHA256 to return this
-	gridState: {
-		grid: { cells: [], height: 0, width: 0 },
-		gridFixed: false,
-		initialGridDefinition: undefined,
-		isSharedGrid: false,
-		result: null,
-		superchargedFixed: false,
-	},
-	moduleState: {
-		moduleSelections: {},
-	},
-	name: "Test Build",
-	shipType: "freighter",
-	techState: {
-		checkedModules: {},
-		maxBonus: {},
-		solvedBonus: {},
-		solveMethod: {},
-	},
-	timestamp: Date.now(),
-});
 
 describe("useBuildFileManager", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 	});
 
+	describe("saveBuildToFile", () => {
+		let originalCreateObjectURL: typeof URL.createObjectURL;
+		let originalRevokeObjectURL: typeof URL.revokeObjectURL;
+		const mockBlob = new Blob(["test"], { type: "application/octet-stream" });
+
+		beforeEach(() => {
+			originalCreateObjectURL = URL.createObjectURL;
+			originalRevokeObjectURL = URL.revokeObjectURL;
+			URL.createObjectURL = vi.fn(() => "blob:http://localhost/mock-uuid");
+			URL.revokeObjectURL = vi.fn();
+		});
+
+		afterEach(() => {
+			URL.createObjectURL = originalCreateObjectURL;
+			URL.revokeObjectURL = originalRevokeObjectURL;
+		});
+
+		it("should delegate serialization to buildSerializer and trigger a DOM download", async () => {
+			const buildName = "My Test Build";
+			const mockFilename = "My-Test-Build.nms";
+
+			vi.mocked(buildSerializer.saveBuild).mockResolvedValueOnce({
+				blob: mockBlob,
+				filename: mockFilename,
+			});
+
+			const clickSpy = vi
+				.spyOn(HTMLAnchorElement.prototype, "click")
+				.mockImplementation(() => {});
+			const appendChildSpy = vi.spyOn(document.body, "appendChild");
+			const removeChildSpy = vi.spyOn(document.body, "removeChild");
+
+			const { result } = renderHook(() => useBuildFileManager());
+			await result.current.saveBuildToFile(buildName);
+
+			// Assert serialization delegation
+			expect(buildSerializer.saveBuild).toHaveBeenCalledWith(buildName);
+
+			// Assert DOM download sequence
+			expect(URL.createObjectURL).toHaveBeenCalledWith(mockBlob);
+			expect(clickSpy).toHaveBeenCalled();
+
+			const appendedElement = appendChildSpy.mock.calls.find(
+				(call) => call[0] instanceof HTMLAnchorElement
+			)?.[0] as HTMLAnchorElement | undefined;
+
+			expect(appendedElement).toBeDefined();
+			expect(appendedElement?.href).toBe("blob:http://localhost/mock-uuid");
+			expect(appendedElement?.download).toBe(mockFilename);
+
+			expect(removeChildSpy).toHaveBeenCalledWith(appendedElement);
+			expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:http://localhost/mock-uuid");
+
+			clickSpy.mockRestore();
+			appendChildSpy.mockRestore();
+			removeChildSpy.mockRestore();
+		});
+
+		it("should propagate errors thrown by the serializer", async () => {
+			const serializerError = new Error("Serialization error");
+			vi.mocked(buildSerializer.saveBuild).mockRejectedValueOnce(serializerError);
+
+			const { result } = renderHook(() => useBuildFileManager());
+
+			await expect(result.current.saveBuildToFile("Fail Build")).rejects.toThrow(
+				"Failed to save build file"
+			);
+		});
+	});
+
 	describe("loadBuildFromFile", () => {
-		it("should reject build file with missing gridState", async () => {
+		it("should delegate validation and state restoration to buildSerializer", async () => {
+			const mockFile = new File(["{}"], "test.nms", { type: "application/octet-stream" });
+			vi.mocked(buildSerializer.loadBuild).mockResolvedValueOnce();
+
 			const { result } = renderHook(() => useBuildFileManager());
+			await result.current.loadBuildFromFile(mockFile);
 
-			const buildFileWithoutGridState = {
-				bonusState: {},
-				checksum: "abc123def456",
-				moduleState: {},
-				name: "Test Build",
-				shipType: "freighter",
-				// Missing gridState
-				techState: {},
-				timestamp: Date.now(),
-			};
-
-			const file = new File([JSON.stringify(buildFileWithoutGridState)], "test.nms", {
-				type: "application/json",
-			});
-
-			await expect(result.current.loadBuildFromFile(file)).rejects.toThrow(
-				/The build file couldn.*t be loaded/i
-			);
+			// Assert delegation to serializer with valid ship types resolved from the hook
+			expect(buildSerializer.loadBuild).toHaveBeenCalledWith(mockFile, [
+				"explorer",
+				"fighter",
+				"freighter",
+				"shuttle",
+			]);
 		});
 
-		it("should accept build file with all required state", async () => {
+		it("should propagate errors thrown by the serializer", async () => {
+			const mockFile = new File(["{}"], "test.nms", { type: "application/octet-stream" });
+			const serializerError = new Error("Validation failed");
+			vi.mocked(buildSerializer.loadBuild).mockRejectedValueOnce(serializerError);
+
 			const { result } = renderHook(() => useBuildFileManager());
 
-			const buildFile = createValidBuildFile();
-
-			const file = new File([JSON.stringify(buildFile)], "test.nms", {
-				type: "application/json",
-			});
-
-			await expect(result.current.loadBuildFromFile(file)).resolves.not.toThrow();
-
-			// Verify that restoreGridState was called with the correct data
-			expect(mockRestoreGridState).toHaveBeenCalledWith({
-				...buildFile.gridState,
-				buildName: buildFile.name,
-			});
-		});
-
-		it("should reject file with invalid JSON", async () => {
-			const { result } = renderHook(() => useBuildFileManager());
-
-			const file = new File(["{ invalid json }"], "test.nms", {
-				type: "application/json",
-			});
-
-			await expect(result.current.loadBuildFromFile(file)).rejects.toThrow(
-				"File contains invalid JSON"
-			);
-		});
-
-		it("should reject file with wrong extension", async () => {
-			const { result } = renderHook(() => useBuildFileManager());
-
-			const buildFile = createValidBuildFile();
-
-			const file = new File([JSON.stringify(buildFile)], "test.txt", {
-				type: "text/plain",
-			});
-
-			await expect(result.current.loadBuildFromFile(file)).rejects.toThrow(
-				"Invalid file type"
-			);
-		});
-
-		it("should reject empty file", async () => {
-			const { result } = renderHook(() => useBuildFileManager());
-
-			const file = new File([], "test.nms", { type: "application/json" });
-
-			await expect(result.current.loadBuildFromFile(file)).rejects.toThrow("File is empty");
-		});
-
-		it("should reject file that is too large", async () => {
-			const { result } = renderHook(() => useBuildFileManager());
-
-			// Create a large file (11MB, exceeds 10MB limit) efficiently without large array allocations
-			const chunk = "x".repeat(1024 * 1024); // 1MB string
-			const parts = Array.from({ length: 11 }, () => chunk);
-			const file = new File(parts, "test.nms", {
-				type: "application/json",
-			});
-
-			await expect(result.current.loadBuildFromFile(file)).rejects.toThrow(
-				"File is too large"
-			);
-		}, 10000);
-
-		it("should reject build file with unsupported shipType", async () => {
-			const { result } = renderHook(() => useBuildFileManager());
-
-			const buildFileWithUnsupportedShip = {
-				...createValidBuildFile(),
-				shipType: "unsupported_ship",
-			};
-
-			const file = new File([JSON.stringify(buildFileWithUnsupportedShip)], "test.nms", {
-				type: "application/json",
-			});
-
-			await expect(result.current.loadBuildFromFile(file)).rejects.toThrow(
-				"Unsupported ship type"
+			await expect(result.current.loadBuildFromFile(mockFile)).rejects.toThrow(
+				"Validation failed"
 			);
 		});
 	});
