@@ -1449,3 +1449,79 @@ Google Search Console reported the critical error: "Review has multiple aggregat
 ### Refine & Reflect
 - **Reflection**:
   - In modern ESM environments under newer Node.js versions, using native `import.meta.dirname` and ES standard import attributes (`with { type: "json" }`) provides a clean, built-in solution that allows Vite to natively load config files without polyfills or warnings.
+
+## PRAR Cycle: Consolidate Shallow State Stores (2026-08-28)
+
+### Perceive & Understand
+- **Request**: Consolidate shallow state stores (`useTechBonusStore`, `useModuleSelectionStore`, and `useInteractionStore`) into the deep domain stores (`useTechStore` and `useGridStore`).
+- **Context**: Having multiple, fine-grained state stores added implementation overhead, made coordination logic complex, and increased rendering/sync cycles.
+- **Details**:
+  - `useTechBonusStore` managed calculated efficiency checkmarks.
+  - `useModuleSelectionStore` managed persistent selected modules.
+  - `useInteractionStore` managed transient grid gesture timings.
+  - `sessionCoordinator.ts` had to coordinate resets and platforms across all 5 stores.
+
+### Reason & Plan
+- **Plan**:
+  - Merge the module selections and efficiency checking status (`bonusStatus`) into `useTechStore` and configure Zustand's `persist` middleware on `useTechStore` to automatically sync to `nms-optimizer-tech-state`.
+  - Merge gesture detection states (`_lastTapCell`, `_lastTapTime`, `_initialCellStateForTap`) into `useGridStore`.
+  - Simplify `sessionCoordinator.ts` to coordinate only the two consolidated stores.
+  - Safely delete the three shallow stores.
+  - Expose backward compatibility facades on the `window` object under `VITE_E2E_TESTING` for legacy E2E test scripts.
+  - Refactor all components (`TechTreeRow.tsx`, `useTechModuleManagement.ts`, `useGridCellInteraction.ts`, `useBuildFileManager.ts`) and tests to interact directly with the consolidated stores.
+
+### Act & Implement
+- **Action**:
+  - Deleted `src/store/tech/techBonusStore.ts`, `src/store/tech/moduleSelectionStore.ts`, and `src/store/grid/interactionStore.ts`.
+  - Deepened `useTechStore` with selectors, actions, and native persistence.
+  - Deepened `useGridStore` with transient interaction states and actions.
+  - Refactored caller hooks and components to directly reference consolidated stores.
+- Cleaned up the sync `useEffect` in `useTechModuleManagement.ts` since `useTechStore` is natively persisted now.
+  - Refactored `useBuildFileManager.ts` to map state fields from `useTechStore` while preserving the exact exported JSON structure for backward compatibility.
+  - Updated all unit, component, and adversarial tests (`BonusStatusIcon.test.tsx`, `useGridCellInteraction.test.ts`, `useBuildFileManager.test.ts`, `useRecommendedBuild.adversarial.test.tsx`, `sessionCoordinator.test.ts`, `GridCell.test.tsx`, `TechTreeRow.test.tsx`, `useFetchTechTreeSuspense.test.ts`) to mock the updated stores and use dynamic implementation mocks.
+
+### Refine & Reflect
+- **Reflection**:
+  - Consolidating fine-grained, shallow stores into deep domain stores results in cleaner component interfaces, fewer side-effect synchronization cycles (`useEffect`), and a simpler coordination model.
+  - Leveraging Zustand's `persist` middleware natively on domain stores removes the need for manual synchronization code in consumer hooks.
+  - When mocking state stores in unit/component tests, returning dynamic implementations (e.g., using `mockImplementation` instead of `mockReturnValue`) is essential to let tests correctly read mutated state values between sequential interactions like double-taps.
+  - Maintaining backward compatibility at the data serialization layer (like the `.nms` build file format) allows internal store structures to change completely without breaking user-facing data portability.
+
+## PRAR Cycle: URL Sync Refactor and Grid Rules Engine (2026-08-28)
+
+### Perceive & Understand
+- **Request**: Deepen URL/state synchronization (Issue #710) and grid rules/validation (Issue #709).
+- **Context**: 
+  - URL synchronization logic and grid deserialization rules were scattered between the React hook `useUrlSync.tsx` and stores.
+  - Technology grid invariants and constraint checks (e.g. index/row constraints, supercharged cell limit of 4, lock flags) were leaked into the gesture/UI handler `useGridCellInteraction.ts`.
+- **Details**:
+  - Move browser state synchronization rules and deserialization logic from `useUrlSync.tsx` to `sessionCoordinator.syncStateFromUrl`.
+  - Consolidate technology grid invariants behind a deep `gridRules` engine (`src/store/grid/gridRules.ts`).
+  - Update `useGridCellInteraction.ts` to query `gridRules` via a simple validation interface (`validateToggleActive`, `validateToggleSupercharged`).
+  - Write pure unit tests for both `sessionCoordinator.syncStateFromUrl` and `gridRules`.
+
+### Reason & Plan
+- **Plan**:
+  - Implement `sessionCoordinator.syncStateFromUrl` and simplify `useUrlSync.tsx` to serve as a thin wrapper.
+  - Write unit tests for `sessionCoordinator.syncStateFromUrl` in `src/store/sessionCoordinator.test.ts`.
+  - Ensure compatibility in mocks between Vitest (with `vi.importActual`) and `bun test` (which lacks it but runs ESM imports cleanly).
+  - Create the validation rules in `src/store/grid/gridRules.ts` returning typed `ValidationResult` objects with reason/error tags.
+  - Refactor `useGridCellInteraction.ts` to call these validation functions and increment the corresponding telemetry in `useSessionStore` based on the validation reason.
+  - Write comprehensive unit tests in `src/store/grid/gridRules.test.ts` to cover all constraints.
+  - Verify that linting, typechecking, and all unit/integration tests pass perfectly.
+
+### Act & Implement
+- **Action**:
+  - Implemented the `syncStateFromUrl` method in `sessionCoordinator.ts` and updated `useUrlSync.tsx`.
+  - Refactored `useUrlSync.test.tsx` to simplify `react-router-dom` mocks and remove `MemoryRouter` wrapper to avoid recursive import hangs in `bun test`.
+  - Added the new `usePlatformStore` mocks and test assertions for `syncStateFromUrl` in `sessionCoordinator.test.ts`.
+  - Created the pure rules engine `src/store/grid/gridRules.ts` and its test suite `src/store/grid/gridRules.test.ts`.
+  - Refactored `useGridCellInteraction.ts` to use `validateToggleActive` and `validateToggleSupercharged`.
+  - Auto-fixed ESLint/Prettier/Perfectionist styling and sorting rules using `bun run lint:fix`.
+  - Confirmed all 865 unit tests and all script tests pass successfully.
+
+### Refine & Reflect
+- **Reflection**:
+  - Dynamic module mocks in mixed Vitest/Bun test runners must avoid using recursive imports (e.g. importing the target module within its mock factory) which leads to ESM import deadlocks.
+  - Decoupling user gestures/UI from business logic invariants (like layout boundaries or supercharge slot count limits) into a pure validation module improves codebase maintainability, reusability, and permits 100% test coverage with fast, simple unit tests.
+  - Using structured validation outcomes (e.g. returning reasons like `'moduleLocked'` or `'gridFixed'`) allows UI components to maintain customized feedback/telemetry behaviors without leaking invariant rules.
