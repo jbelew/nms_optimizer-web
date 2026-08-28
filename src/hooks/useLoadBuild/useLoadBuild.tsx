@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Code } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
@@ -54,11 +54,10 @@ export interface UseLoadBuildReturn {
  */
 export const useLoadBuild = (): UseLoadBuildReturn => {
 	const { t } = useTranslation();
-	const { loadBuildFromFile } = useBuildFileManager();
+	const { isPending, loadBuildFromFile } = useBuildFileManager();
 	const { showError, showSuccess } = useToast();
 	const { sendEvent } = useAnalytics();
 	const fileInputRef = useRef<HTMLInputElement>(null);
-	const [isLoadPending, setIsLoadPending] = useState(false);
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 
 	/**
@@ -90,8 +89,6 @@ export const useLoadBuild = (): UseLoadBuildReturn => {
 		const file = event.target.files?.[0];
 
 		if (file) {
-			setIsLoadPending(true);
-
 			try {
 				await loadBuildFromFile(file);
 				showSuccess(
@@ -115,8 +112,6 @@ export const useLoadBuild = (): UseLoadBuildReturn => {
 				const errorMessage =
 					error instanceof Error ? error.message : t("toast.buildLoadError.description");
 				showError(t("toast.buildLoadError.title"), errorMessage, 5000);
-			} finally {
-				setIsLoadPending(false);
 			}
 		}
 
@@ -128,6 +123,6 @@ export const useLoadBuild = (): UseLoadBuildReturn => {
 		fileInputRef,
 		handleFileSelect,
 		handleLoadBuild,
-		isLoadPending,
+		isLoadPending: isPending,
 	};
 };

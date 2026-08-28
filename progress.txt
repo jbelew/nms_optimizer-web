@@ -18,3 +18,10 @@ Summary: Refactored `buildSerializer.ts` to be completely decoupled from React a
 Key Learnings:
 - Separation of Concerns: Decoupling core serialization from React transitions and global Zustand stores converts the module into a pure utility, removing store mocking needs in the unit tests.
 - JSON Serialization Order: Constructing output structures with alphabetically sorted top-level keys while preserving nested key insertion order satisfies both linter requirements and backward-compatible file integrity checksums.
+
+Date: 2026-08-28
+Task: Implement GitHub issue #719: "refactor(build): thin useBuildFileManager to a DOM adapter with pending state"
+Summary: Refactored `useBuildFileManager.ts` to utilize React 19's `useTransition` hook, allowing it to expose a reactive `isPending` state during asynchronous file operations. Wrapped the file reading, loading, and store state restoration inside the transition callback. Thinned `useLoadBuild.tsx` by removing its local pending state and consuming the hook's `isPending` state directly. Added comprehensive unit tests for `isPending` state changes.
+Key Learnings:
+- React 19 Async Transitions: React 19's `useTransition` allows tracking pending states of async functions natively. Wrapping async file operations and store updates inside the transition callback simplifies UI pending state management.
+- Mocking useTransition in Vitest: Custom mocks of `useTransition` that leverage React's actual state hooks (like `actual.useState`) enable reliable, reactive test assertions of pending states for asynchronous hooks.

@@ -1,5 +1,5 @@
 import type React from "react";
-import { renderHook } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { buildSerializer } from "@/utils/build/buildSerializer";
@@ -104,13 +104,32 @@ vi.mock("@/store/app/platformStore", () => {
 	};
 });
 
-// Mock react's startTransition to run immediately/synchronously
+// Mock react's startTransition and useTransition to run immediately/synchronously and track pending state
 vi.mock("react", async (importOriginal) => {
 	const actual = await importOriginal<typeof React>();
 
 	return {
 		...actual,
 		startTransition: vi.fn((cb: () => void) => cb()),
+		useTransition: vi.fn(() => {
+			const [isPending, setIsPending] = actual.useState(false);
+			const startTransition = actual.useCallback(
+				(cb: () => Promise<void> | void) => {
+					const result = cb();
+
+					if (result instanceof Promise) {
+						setIsPending(true);
+
+						return result.finally(() => {
+							setIsPending(false);
+						});
+					}
+				},
+				[setIsPending]
+			);
+
+			return [isPending, startTransition];
+		}),
 	};
 });
 
@@ -273,7 +292,9 @@ describe("useBuildFileManager", () => {
 			vi.mocked(buildSerializer.loadBuild).mockResolvedValueOnce(mockBuildData);
 
 			const { result } = renderHook(() => useBuildFileManager());
-			await result.current.loadBuildFromFile(mockFile);
+			await act(async () => {
+				await result.current.loadBuildFromFile(mockFile);
+			});
 
 			// Assert delegation to serializer with string content and valid ship types
 			expect(buildSerializer.loadBuild).toHaveBeenCalledWith("{}", [
@@ -332,9 +353,11 @@ describe("useBuildFileManager", () => {
 
 			const { result } = renderHook(() => useBuildFileManager());
 
-			await expect(result.current.loadBuildFromFile(mockFile)).rejects.toThrow(
-				"File is empty. Please select a valid build file."
-			);
+			await expect(
+				act(async () => {
+					await result.current.loadBuildFromFile(mockFile);
+				})
+			).rejects.toThrow("File is empty. Please select a valid build file.");
 		});
 
 		it("should propagate errors thrown by the serializer", async () => {
@@ -344,9 +367,68 @@ describe("useBuildFileManager", () => {
 
 			const { result } = renderHook(() => useBuildFileManager());
 
-			await expect(result.current.loadBuildFromFile(mockFile)).rejects.toThrow(
-				"Validation failed"
+			await expect(
+				act(async () => {
+					await result.current.loadBuildFromFile(mockFile);
+				})
+			).rejects.toThrow("Validation failed");
+		});
+
+		it("should manage isPending state during load", async () => {
+			const mockFile = new File(["{}"], "test.nms", { type: "application/octet-stream" });
+			const mockBuildData = {
+				bonusState: {
+					bonusStatus: {},
+				},
+				checksum: "abc123def456",
+				gridState: {
+					grid: { cells: [], height: 0, width: 0 },
+					gridFixed: false,
+					isSharedGrid: false,
+					result: null,
+					superchargedFixed: false,
+				},
+				moduleState: {},
+				name: "Test Build",
+				shipType: "freighter",
+				techState: {
+					checkedModules: {},
+				},
+				timestamp: Date.now(),
+			};
+
+			let resolveLoad: (value: typeof mockBuildData) => void = () => {};
+
+			const loadPromise = new Promise<typeof mockBuildData>((resolve) => {
+				resolveLoad = resolve;
+			});
+
+			vi.mocked(buildSerializer.loadBuild).mockReturnValueOnce(
+				loadPromise as unknown as ReturnType<typeof buildSerializer.loadBuild>
 			);
+
+			const { result } = renderHook(() => useBuildFileManager());
+
+			// Initially, isPending should be false
+			expect(result.current.isPending).toBe(false);
+
+			// Start loading - do not await the returned promise yet so we can inspect intermediate state
+			let loadPromiseResult: Promise<void>;
+			act(() => {
+				loadPromiseResult = result.current.loadBuildFromFile(mockFile);
+			});
+
+			// Now, isPending should be true
+			expect(result.current.isPending).toBe(true);
+
+			// Resolve the load operation
+			await act(async () => {
+				resolveLoad(mockBuildData);
+				await loadPromiseResult;
+			});
+
+			// Finally, isPending should be false again
+			expect(result.current.isPending).toBe(false);
 		});
 	});
 });

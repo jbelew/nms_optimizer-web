@@ -1,5 +1,5 @@
 import type { BonusStatusData } from "@/store/tech/techStore";
-import { startTransition } from "react";
+import { useTransition } from "react";
 
 import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
 import { usePlatformStore } from "@/store/app/platformStore";
@@ -14,12 +14,13 @@ import { Logger } from "@/utils/system/monitoring";
  * @remarks
  * This hook acts as a thin DOM adapter. It delegates build serialization,
  * validation, and state parsing to the {@link buildSerializer} utility,
- * while handling DOM-specific tasks (e.g., download triggers) and
- * React/Zustand store updates.
+ * while handling DOM-specific tasks (e.g., download triggers), reactive
+ * pending state (`isPending`), and React/Zustand store updates.
  *
- * @returns {object} An object containing `saveBuildToFile` and `loadBuildFromFile` functions.
+ * @returns {object} An object containing the load/save functions and the pending state.
  * @returns {Function} returns.saveBuildToFile - Serializes and downloads the current build.
  * @returns {Function} returns.loadBuildFromFile - Parses and restores a build from a file.
+ * @returns {boolean} returns.isPending - Reactive pending/loading state for file operations.
  *
  * @see {@link ./useBuildFileManager.test.ts Unit Tests}
  * @see {@link buildSerializer}
@@ -30,11 +31,12 @@ import { Logger } from "@/utils/system/monitoring";
  *
  * @example
  * ```tsx
- * const { saveBuildToFile, loadBuildFromFile } = useBuildFileManager();
+ * const { saveBuildToFile, loadBuildFromFile, isPending } = useBuildFileManager();
  * ```
  */
 export const useBuildFileManager = () => {
 	const shipTypes = useFetchShipTypesSuspense();
+	const [isPending, startTransition] = useTransition();
 
 	/**
 	 * Serializes the current application state and triggers a file download in the DOM.
@@ -102,8 +104,8 @@ export const useBuildFileManager = () => {
 	 * @remarks
 	 * This method performs DOM File validation (extension and size checks), reads
 	 * the file contents as text, and delegates parsing/integrity validation to
-	 * {@link buildSerializer.loadBuild}. Once validated, it updates the platform
-	 * selection, grid layout, and tech module states within a React transition.
+	 * {@link buildSerializer.loadBuild} within a React transition to manage
+	 * pending state and store updates.
 	 *
 	 * @param {File} file - The `.nms` file to load.
 	 *
@@ -127,35 +129,48 @@ export const useBuildFileManager = () => {
 				throw new Error("File is too large. Build files should be under 10MB.");
 			}
 
-			const text = await file.text();
-
-			if (!text) {
-				throw new Error("File is empty. Please select a valid build file.");
-			}
-
 			const validShipTypes = Object.keys(shipTypes);
-			const buildData = await buildSerializer.loadBuild(text, validShipTypes);
 
-			const platformState = usePlatformStore.getState();
+			await new Promise<void>((resolve, reject) => {
+				startTransition(async () => {
+					try {
+						const text = await file.text();
 
-			if (buildData.shipType !== platformState.selectedPlatform) {
-				platformState.setSelectedPlatform(buildData.shipType, validShipTypes, true, true);
-			}
+						if (!text) {
+							throw new Error("File is empty. Please select a valid build file.");
+						}
 
-			startTransition(() => {
-				useGridStore
-					.getState()
-					.restoreGridState({ ...buildData.gridState, buildName: buildData.name });
+						const buildData = await buildSerializer.loadBuild(text, validShipTypes);
+						const platformState = usePlatformStore.getState();
 
-				useTechStore.setState({
-					...buildData.techState,
-					bonusStatus: (buildData.bonusState?.bonusStatus ?? {}) as Record<
-						string,
-						BonusStatusData
-					>,
-					checkedModules: (buildData.techState?.checkedModules ??
-						buildData.moduleState?.moduleSelections ??
-						{}) as { [key: string]: string[] },
+						if (buildData.shipType !== platformState.selectedPlatform) {
+							platformState.setSelectedPlatform(
+								buildData.shipType,
+								validShipTypes,
+								true,
+								true
+							);
+						}
+
+						useGridStore.getState().restoreGridState({
+							...buildData.gridState,
+							buildName: buildData.name,
+						});
+
+						useTechStore.setState({
+							...buildData.techState,
+							bonusStatus: (buildData.bonusState?.bonusStatus ?? {}) as Record<
+								string,
+								BonusStatusData
+							>,
+							checkedModules: (buildData.techState?.checkedModules ??
+								buildData.moduleState?.moduleSelections ??
+								{}) as { [key: string]: string[] },
+						});
+						resolve();
+					} catch (error) {
+						reject(error);
+					}
 				});
 			});
 		} catch (error) {
@@ -164,5 +179,5 @@ export const useBuildFileManager = () => {
 		}
 	};
 
-	return { loadBuildFromFile, saveBuildToFile };
+	return { isPending, loadBuildFromFile, saveBuildToFile };
 };
