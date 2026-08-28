@@ -91,6 +91,8 @@ const setupMocks = (hasTechInGrid: boolean, solving = false) => {
 
 			clearTechSolvedBonus: vi.fn(),
 
+			getBonusStatus: vi.fn(() => null),
+
 			maxBonus: {},
 
 			solvedBonus: {},

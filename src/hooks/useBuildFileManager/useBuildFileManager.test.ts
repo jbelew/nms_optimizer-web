@@ -23,28 +23,11 @@ vi.mock("@/store/grid/gridStore", () => ({
 vi.mock("@/store/tech/techStore", () => ({
 	useTechStore: {
 		getState: vi.fn(() => ({
+			bonusStatus: {},
 			checkedModules: {},
 			maxBonus: {},
 			solvedBonus: {},
 			solveMethod: {},
-		})),
-		setState: vi.fn(),
-	},
-}));
-
-vi.mock("@/store/tech/techBonusStore", () => ({
-	useTechBonusStore: {
-		getState: vi.fn(() => ({
-			bonusStatus: {},
-		})),
-		setState: vi.fn(),
-	},
-}));
-
-vi.mock("@/store/tech/moduleSelectionStore", () => ({
-	useModuleSelectionStore: {
-		getState: vi.fn(() => ({
-			moduleSelections: {},
 		})),
 		setState: vi.fn(),
 	},

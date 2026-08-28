@@ -1,11 +1,8 @@
 import type { ApiResponse, Grid } from "./grid/gridStore";
-import type { BonusStatusData } from "./tech/techBonusStore";
+import type { BonusStatusData } from "./tech/techStore";
 import type { TechTreeItem } from "@/types/tech";
 
 import { useGridStore } from "./grid/gridStore";
-import { useInteractionStore } from "./grid/interactionStore";
-import { useModuleSelectionStore } from "./tech/moduleSelectionStore";
-import { useTechBonusStore } from "./tech/techBonusStore";
 import { useTechStore } from "./tech/techStore";
 
 /**
@@ -43,14 +40,14 @@ export function computeBonusStatus(maxBonus: number): BonusStatusData {
  * @returns {Record<string, string[]>} The resolved checked modules.
  */
 function computeInitialCheckedModules(techGroups: { [key: string]: TechTreeItem[] }) {
-	const moduleSelectionStore = useModuleSelectionStore.getState();
+	const techStore = useTechStore.getState();
 
 	return Object.keys(techGroups).reduce(
 		(acc, tech) => {
 			const group = techGroups[tech]?.[0];
 
 			if (group) {
-				const persistedSelection = moduleSelectionStore.getModuleSelection(tech);
+				const persistedSelection = techStore.getModuleSelection(tech);
 
 				if (persistedSelection && persistedSelection.length > 0) {
 					acc[tech] = persistedSelection;
@@ -88,7 +85,6 @@ export const sessionCoordinator = {
 	commitOptimizationResult(data: ApiResponse, tech: string) {
 		const gridStore = useGridStore.getState();
 		const techStore = useTechStore.getState();
-		const techBonusStore = useTechBonusStore.getState();
 
 		// 1. Update Grid Store with the result blob
 		gridStore.setResult(data);
@@ -101,7 +97,7 @@ export const sessionCoordinator = {
 
 			// 3. Update Bonus Status Store
 			const status = computeBonusStatus(data.maxBonus);
-			techBonusStore.setBonusStatus(tech, status);
+			techStore.setBonusStatus(tech, status);
 		}
 	},
 
@@ -134,21 +130,16 @@ export const sessionCoordinator = {
 	resetSession() {
 		const gridStore = useGridStore.getState();
 		const techStore = useTechStore.getState();
-		const techBonusStore = useTechBonusStore.getState();
-		const moduleSelectionStore = useModuleSelectionStore.getState();
-		const interactionStore = useInteractionStore.getState();
 
-		// 1. Reset Grid
+		// 1. Reset Grid and its Interaction State
 		gridStore.resetGrid();
+		gridStore.clearInteractionState();
 
-		// 2. Reset Tech and Selections
+		// 2. Reset Tech, Selections, and computed statuses
 		techStore.clearResult();
 		techStore.clearAllCheckedModules();
-		techBonusStore.clearAllBonusStatus();
-		moduleSelectionStore.clearAllModuleSelections();
-
-		// 3. Reset Interaction State
-		interactionStore.clearInteractionState();
+		techStore.clearAllBonusStatus();
+		techStore.clearAllModuleSelections();
 	},
 
 	/**
@@ -173,23 +164,18 @@ export const sessionCoordinator = {
 	switchPlatform(newGrid: Grid) {
 		const gridStore = useGridStore.getState();
 		const techStore = useTechStore.getState();
-		const techBonusStore = useTechBonusStore.getState();
-		const moduleSelectionStore = useModuleSelectionStore.getState();
-		const interactionStore = useInteractionStore.getState();
 
-		// 1. Update Grid
+		// 1. Update Grid and clear its Interaction State
 		gridStore.setGrid(newGrid);
 		gridStore.setResult(null);
 		gridStore.setIsSharedGrid(false);
 		gridStore.setBuildName(null);
+		gridStore.clearInteractionState();
 
 		// 2. Clear results and groups
 		techStore.clearResult();
 		techStore.clearTechGroups();
-		techBonusStore.clearAllBonusStatus();
-		moduleSelectionStore.clearAllModuleSelections();
-
-		// 3. Clear interaction state
-		interactionStore.clearInteractionState();
+		techStore.clearAllBonusStatus();
+		techStore.clearAllModuleSelections();
 	},
 };

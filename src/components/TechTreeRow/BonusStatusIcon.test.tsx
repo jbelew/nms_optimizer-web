@@ -1,11 +1,11 @@
-import type { BonusStatusData } from "@/store/tech/techBonusStore";
+import type { BonusStatusData } from "@/store/tech/techStore";
 import type { Mock } from "vitest";
 import { Theme } from "@radix-ui/themes";
 import { render } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useTechBonusStore } from "@/store/tech/techBonusStore";
+import { useTechStore } from "@/store/tech/techStore";
 import i18n from "@/test/i18n";
 import { isTouchDevice } from "@/utils/browser/environment";
 
@@ -39,9 +39,9 @@ vi.mock("@radix-ui/themes", async () => {
 	};
 });
 
-// Mock the store properly with a mocked function for useTechBonusStore
-vi.mock("@/store/tech/techBonusStore", () => ({
-	useTechBonusStore: vi.fn(),
+// Mock the store properly with a mocked function for useTechStore
+vi.mock("@/store/tech/techStore", () => ({
+	useTechStore: vi.fn(),
 }));
 
 vi.mock("@/components/ConditionalTooltip/ConditionalTooltip", () => ({
@@ -56,7 +56,7 @@ describe("BonusStatusIcon Component", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		(isTouchDevice as Mock).mockReturnValue(false);
-		(useTechBonusStore as unknown as Mock).mockImplementation((selector) => {
+		(useTechStore as unknown as Mock).mockImplementation((selector) => {
 			const state = { getBonusStatus: mockGetBonusStatus };
 
 			return selector ? selector(state) : state;

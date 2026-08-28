@@ -1,18 +1,16 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useShallow } from "zustand/react/shallow";
 
-import { useModuleSelectionStore } from "@/store/tech/moduleSelectionStore";
 import { useTechStore } from "@/store/tech/techStore";
 
 /**
  * Custom hook to manage the lifecycle of technology modules within the grid.
  *
  * @remarks
- * Coordinates between {@link useTechStore} and {@link useModuleSelectionStore} to:
- * 1. **Persistence Sync**: Automatically saves module selections to local storage via {@link useModuleSelectionStore}.
- * 2. **Grouping Logic**: Segregates modules into semantic categories (e.g., 'core', 'upgrade', 'figurines').
- * 3. **Hierarchical Selection**: Enforces tier-based constraints (e.g., removing a 'Theta' module deselects its 'Tau' and 'Sigma' counterparts).
- * 4. **Interaction State**: Derives indeterminate and "select all" states for complex checkbox interfaces.
+ * Coordinates useTechStore state to:
+ * 1. **Grouping Logic**: Segregates modules into semantic categories (e.g., 'core', 'upgrade', 'figurines').
+ * 2. **Hierarchical Selection**: Enforces tier-based constraints (e.g., removing a 'Theta' module deselects its 'Tau' and 'Sigma' counterparts).
+ * 3. **Interaction State**: Derives indeterminate and "select all" states for complex checkbox interfaces.
  *
  * @param {string} tech - The unique technology identifier (e.g., 'pulse').
  * @param {Array<{ label: string, id: string, image: string, type?: string }>} modules - The full list of available modules.
@@ -25,8 +23,7 @@ import { useTechStore } from "@/store/tech/techStore";
  * @returns {function} returns.handleValueChange - Handler for batch checkbox updates with hierarchy logic.
  * @returns {boolean} returns.isIndeterminate - Whether some but not all modules are selected.
  *
- * @see {@link useTechStore} for the source of truth.
- * @see {@link useModuleSelectionStore} for persistence logic.
+ * @see {@link useTechStore} for the source of truth and persistence logic.
  * @see {@link ./useTechModuleManagement.test.ts Unit Tests}
  *
  * @hook
@@ -47,23 +44,6 @@ export const useTechModuleManagement = (
 	const currentCheckedModules = useTechStore(
 		useShallow((state) => state.checkedModules[tech] || [])
 	);
-	const { getModuleSelection, setModuleSelection } = useModuleSelectionStore();
-
-	// Sync module selections to persistent store (only if they changed)
-	useEffect(() => {
-		if (currentCheckedModules.length > 0) {
-			const persistedSelection = getModuleSelection(tech);
-			// Only update if the selection has actually changed
-			const hasChanged =
-				!persistedSelection ||
-				persistedSelection.length !== currentCheckedModules.length ||
-				!persistedSelection.every((id) => currentCheckedModules.includes(id));
-
-			if (hasChanged) {
-				setModuleSelection(tech, currentCheckedModules);
-			}
-		}
-	}, [tech, currentCheckedModules, setModuleSelection, getModuleSelection]);
 
 	const coreModuleIds = modules.filter((m) => m.type === "core").map((m) => m.id);
 	const nonCoreModuleIds = modules.filter((m) => m.type !== "core").map((m) => m.id);

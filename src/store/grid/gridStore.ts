@@ -147,6 +147,10 @@ export const useGridStore = create<GridStore>()(
 			};
 
 			return {
+				_initialCellStateForTap: null,
+				_lastTapCell: [-1, -1],
+				_lastTapTime: 0,
+
 				activateRow: (rowIndex: number) => {
 					set((state) => {
 						if (state.grid.cells[rowIndex]) {
@@ -197,8 +201,13 @@ export const useGridStore = create<GridStore>()(
 						recomputeDerivedState(state);
 					});
 				},
-
 				buildName: null,
+				clearInteractionState: () =>
+					set((state) => {
+						state._initialCellStateForTap = null;
+						state._lastTapCell = [-1, -1];
+						state._lastTapTime = 0;
+					}),
 				deActivateRow: (rowIndex: number) => {
 					set((state) => {
 						if (state.grid.cells[rowIndex]) {
@@ -214,9 +223,12 @@ export const useGridStore = create<GridStore>()(
 						recomputeDerivedState(state);
 					});
 				},
+
 				firstInactiveRowIndex: 0,
 				grid: createGrid(10, 6),
+
 				gridFixed: false,
+
 				handleCellDoubleTap: (rowIndex: number, columnIndex: number) => {
 					set((state) => {
 						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
@@ -229,7 +241,6 @@ export const useGridStore = create<GridStore>()(
 						recomputeDerivedState(state);
 					});
 				},
-
 				handleCellTap: (rowIndex: number, columnIndex: number) => {
 					set((state) => {
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
@@ -245,11 +256,11 @@ export const useGridStore = create<GridStore>()(
 						recomputeDerivedState(state);
 					});
 				},
+
 				hasModulesInGrid: false,
-
 				initialGridDefinition: undefined,
-
 				isGridFull: false,
+
 				isSharedGrid: false,
 
 				lastActiveRowIndex: -1,
@@ -368,6 +379,11 @@ export const useGridStore = create<GridStore>()(
 					});
 				},
 
+				setInitialCellStateForTap: (cell) =>
+					set((state) => {
+						state._initialCellStateForTap = cell;
+					}),
+
 				setInitialGridDefinition: (definition) =>
 					set((state) => {
 						state.initialGridDefinition = definition;
@@ -376,6 +392,12 @@ export const useGridStore = create<GridStore>()(
 				setIsSharedGrid: (isShared) =>
 					set((state) => {
 						state.isSharedGrid = isShared;
+					}),
+
+				setLastTap: (cell, time) =>
+					set((state) => {
+						state._lastTapCell = cell;
+						state._lastTapTime = time;
 					}),
 
 				setResult: (result) => {
@@ -481,11 +503,22 @@ export const useGridStore = create<GridStore>()(
 
 // Always expose for E2E if the flag is set, using a method that survives minification
 if (typeof window !== "undefined" && import.meta.env.VITE_E2E_TESTING) {
-	const w = window as typeof window & {
-		handleCellDoubleTap?: (row: number, col: number) => void;
-		useGridStore?: typeof useGridStore;
-	};
+	const w = window as Record<string, unknown> & typeof window;
 
 	w["useGridStore"] = useGridStore;
 	w["handleCellDoubleTap"] = useGridStore.getState().handleCellDoubleTap;
+
+	w["useInteractionStore"] = {
+		getState: () => ({
+			_initialCellStateForTap: useGridStore.getState()._initialCellStateForTap,
+			_lastTapCell: useGridStore.getState()._lastTapCell,
+			_lastTapTime: useGridStore.getState()._lastTapTime,
+			clearInteractionState: useGridStore.getState().clearInteractionState,
+			setInitialCellStateForTap: useGridStore.getState().setInitialCellStateForTap,
+			setLastTap: useGridStore.getState().setLastTap,
+		}),
+		setState: (updates: Partial<GridStore>) => {
+			useGridStore.setState(updates);
+		},
+	};
 }

@@ -3,7 +3,6 @@ import { useRef, useState } from "react";
 
 import { UI_TIMING } from "@/constants";
 import { useGridStore } from "@/store/grid/gridStore";
-import { useInteractionStore } from "@/store/grid/interactionStore";
 import { useSessionStore, useShakeStore } from "@/store/ui/uiStore";
 import { Logger } from "@/utils/system/monitoring";
 
@@ -29,10 +28,9 @@ import { Logger } from "@/utils/system/monitoring";
  * @returns {function} returns.onTouchStart - Mobile gesture start handler.
  * @returns {function} returns.onTouchEnd - Mobile gesture resolution handler.
  *
- * @see {@link useGridStore} for state dispatching.
+ * @see {@link useGridStore} for state dispatching and interaction tracking.
  * @see {@link useSessionStore} for telemetry/error tracking.
  * @see {@link useShakeStore} for visual feedback triggers.
- * @see {@link useInteractionStore} for cross-cell interaction state.
  * @see {@link ./useGridCellInteraction.test.ts Unit Tests}
  *
  * @hook
@@ -70,13 +68,11 @@ export const useGridCellInteraction = (
 	const handleTouchLogic = () => {
 		const gridState = useGridStore.getState();
 		const sessionState = useSessionStore.getState();
-		const interactionState = useInteractionStore.getState();
 
 		const currentTime = Date.now();
-		const timeSinceLastTap = currentTime - interactionState._lastTapTime;
+		const timeSinceLastTap = currentTime - gridState._lastTapTime;
 		const isSameCell =
-			interactionState._lastTapCell[0] === rowIndex &&
-			interactionState._lastTapCell[1] === columnIndex;
+			gridState._lastTapCell[0] === rowIndex && gridState._lastTapCell[1] === columnIndex;
 
 		if (
 			isSameCell &&
@@ -104,31 +100,31 @@ export const useGridCellInteraction = (
 
 				triggerShake();
 
-				if (interactionState._initialCellStateForTap) {
+				if (gridState._initialCellStateForTap) {
 					gridState.revertCellTap(
 						rowIndex,
 						columnIndex,
-						interactionState._initialCellStateForTap
+						gridState._initialCellStateForTap
 					);
 				}
 
-				interactionState.clearInteractionState();
+				gridState.clearInteractionState();
 			} else {
 				// FIX: Revert the first tap's effects before applying double tap logic
-				if (interactionState._initialCellStateForTap) {
+				if (gridState._initialCellStateForTap) {
 					gridState.revertCellTap(
 						rowIndex,
 						columnIndex,
-						interactionState._initialCellStateForTap
+						gridState._initialCellStateForTap
 					);
 				}
 
 				gridState.handleCellDoubleTap(rowIndex, columnIndex);
-				interactionState.clearInteractionState();
+				gridState.clearInteractionState();
 			}
 		} else {
 			// Single tap
-			interactionState.setLastTap([rowIndex, columnIndex], currentTime);
+			gridState.setLastTap([rowIndex, columnIndex], currentTime);
 			const isInvalidSingleTap = gridState.gridFixed;
 
 			if (isInvalidSingleTap) {
@@ -137,9 +133,9 @@ export const useGridCellInteraction = (
 				}
 
 				triggerShake();
-				interactionState.setInitialCellStateForTap(null);
+				gridState.setInitialCellStateForTap(null);
 			} else {
-				interactionState.setInitialCellStateForTap({ ...cell });
+				gridState.setInitialCellStateForTap({ ...cell });
 				gridState.handleCellTap(rowIndex, columnIndex);
 			}
 		}

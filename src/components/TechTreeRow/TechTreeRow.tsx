@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { useTechTree } from "@/components/TechTree/useTechTreeContext";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
-import { useTechBonusStore } from "@/store/tech/techBonusStore";
+import { useTechStore } from "@/store/tech/techStore";
 import { useA11yStore, useModuleSelectionDialogStore } from "@/store/ui/uiStore";
 import { isTouchDevice } from "@/utils/browser/environment";
 
@@ -59,7 +59,7 @@ function renderIcon(
  */
 export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ tech, techSolvedBonus }) => {
 	const { t } = useTranslation();
-	const getBonusStatus = useTechBonusStore((s) => s.getBonusStatus);
+	const getBonusStatus = useTechStore((s) => s.getBonusStatus);
 	const status = getBonusStatus(tech);
 
 	if ((techSolvedBonus <= 0 && !status) || !status) {

@@ -93,6 +93,8 @@ export interface GridActions {
 	activateRow: (rowIndex: number) => void;
 	/** Batch applies modules to the grid by linear index. */
 	applyModulesToGrid: (modules: (Module | null)[]) => void;
+	/** Clears the temporary interaction state. */
+	clearInteractionState: () => void;
 	/** Deactivates all cells in the specified row. */
 	deActivateRow: (rowIndex: number) => void;
 	/** Handles a second tap on a cell by toggling its supercharged state. */
@@ -123,12 +125,16 @@ export interface GridActions {
 		gridFixed: boolean;
 		superchargedFixed: boolean;
 	}) => void;
+	/** Sets the initial cell state for a potential double-tap revert/transition. */
+	setInitialCellStateForTap: (cell: Cell | null) => void;
 	/** Stores the initial definition for later resets. */
 	setInitialGridDefinition: (
 		definition: undefined | { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean }
 	) => void;
 	/** Marks the grid as being from a shared URL. */
 	setIsSharedGrid: (isShared: boolean) => void;
+	/** Sets the last tap coordinates and timestamp. */
+	setLastTap: (cell: [number, number], time: number) => void;
 	/** Updates the optimization result. */
 	setResult: (result: ApiResponse | null) => void;
 	/** Toggles the supercharged slot lock. */
@@ -167,6 +173,12 @@ export interface GridComputed {
  * @category State
  */
 export interface GridState {
+	/** Internal state tracking for tap/double-tap logic. */
+	_initialCellStateForTap: Cell | null;
+	/** Row and column index of the last tapped cell. */
+	_lastTapCell: [number, number];
+	/** Timestamp of the last tap for double-tap detection. */
+	_lastTapTime: number;
 	/** The name of the currently loaded build, if any. */
 	buildName: null | string;
 	/** The current 2D grid of cells. */

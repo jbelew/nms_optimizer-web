@@ -88,7 +88,7 @@ describe("GridCell", () => {
 
 		(useTechStore as unknown as Mock).mockImplementation(
 			(selector: (state: TechStore) => unknown) => {
-				const state: TechStore = {
+				const state = {
 					activeGroups: {},
 					checkedModules: {},
 					clearAllCheckedModules: vi.fn(),
@@ -115,7 +115,7 @@ describe("GridCell", () => {
 					solveMethod: {},
 					techColors: {},
 					techGroups: {},
-				};
+				} as unknown as TechStore;
 
 				return selector(state);
 			}

@@ -1,12 +1,10 @@
 import type { Cell, Grid } from "@/store/grid/gridStore";
-import type { BonusStatusData } from "@/store/tech/techBonusStore";
+import type { BonusStatusData } from "@/store/tech/techStore";
 import type { TechTreeItem } from "@/types/tech";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { createEmptyCell, useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
-import { useModuleSelectionStore } from "@/store/tech/moduleSelectionStore";
-import { useTechBonusStore } from "@/store/tech/techBonusStore";
 import { useTechStore } from "@/store/tech/techStore";
 
 // Helper to create a basic grid that matches the required type properly
@@ -33,22 +31,22 @@ describe("useRecommendedBuild Adversarial Tests", () => {
 	beforeEach(() => {
 		// Reset stores before each test
 		useGridStore.getState().resetGrid();
-		useModuleSelectionStore.getState().clearAllModuleSelections();
-		useTechBonusStore.getState().clearAllBonusStatus();
+		useTechStore.getState().clearAllModuleSelections();
+		useTechStore.getState().clearAllBonusStatus();
 		useTechStore.getState().clearResult();
 	});
 
 	it("should preserve module selections when the tech tree is updated but tech remains", () => {
 		// Set initial module selections
-		useModuleSelectionStore.getState().setModuleSelection("tech1", ["module1", "module2"]);
-		useModuleSelectionStore.getState().setModuleSelection("tech2", ["module3"]);
+		useTechStore.getState().setModuleSelection("tech1", ["module1", "module2"]);
+		useTechStore.getState().setModuleSelection("tech2", ["module3"]);
 
 		// Simulate applying a build (updating grid)
 		const newGrid = createGrid(10, 6);
 		useGridStore.getState().setGrid(newGrid);
 
 		// Module selections should still be there
-		expect(useModuleSelectionStore.getState().moduleSelections).toEqual({
+		expect(useTechStore.getState().moduleSelections).toEqual({
 			tech1: ["module1", "module2"],
 			tech2: ["module3"],
 		});
@@ -60,47 +58,43 @@ describe("useRecommendedBuild Adversarial Tests", () => {
 			icon: "check",
 			percent: 100,
 		};
-		useTechBonusStore.getState().setBonusStatus("tech1", bonusData);
-		useModuleSelectionStore.getState().setModuleSelection("bonus_tech", ["bonus_module"]);
+		useTechStore.getState().setBonusStatus("tech1", bonusData);
+		useTechStore.getState().setModuleSelection("bonus_tech", ["bonus_module"]);
 
 		// Apply recommended build
 		const newGrid = createGrid(10, 6);
 		useGridStore.getState().setGrid(newGrid);
 
 		// Tech bonus should still be there (not cleared)
-		expect(useTechBonusStore.getState().bonusStatus.tech1).toEqual(bonusData);
+		expect(useTechStore.getState().bonusStatus.tech1).toEqual(bonusData);
 		// Module selections should still be there (not cleared)
-		expect(useModuleSelectionStore.getState().moduleSelections.bonus_tech).toEqual([
-			"bonus_module",
-		]);
+		expect(useTechStore.getState().moduleSelections.bonus_tech).toEqual(["bonus_module"]);
 	});
 
 	it("should clear selections when switching ships but NOT when applying recommended build", () => {
 		// Set up initial state
-		useModuleSelectionStore.getState().setModuleSelection("tech1", ["module1"]);
+		useTechStore.getState().setModuleSelection("tech1", ["module1"]);
 
 		// Apply recommended build - selections should remain
 		const newGridBuild = createGrid(10, 6);
 		useGridStore.getState().setGrid(newGridBuild);
-		expect(useModuleSelectionStore.getState().moduleSelections.tech1).toEqual(["module1"]);
+		expect(useTechStore.getState().moduleSelections.tech1).toEqual(["module1"]);
 
 		// Now switch ships - this should clear selections
 		const newGridShipSwitch = createGrid(10, 6);
 		sessionCoordinator.switchPlatform(newGridShipSwitch);
-		expect(useModuleSelectionStore.getState().moduleSelections).toEqual({});
+		expect(useTechStore.getState().moduleSelections).toEqual({});
 	});
 
 	it("should apply multiple recommended builds without losing module selections", () => {
 		// Set module selections
-		useModuleSelectionStore
-			.getState()
-			.setModuleSelection("persistent_tech", ["persistent_module"]);
+		useTechStore.getState().setModuleSelection("persistent_tech", ["persistent_module"]);
 
 		// Apply first recommended build
 		let newGrid = createGrid(10, 6);
 		useGridStore.getState().setGrid(newGrid);
 
-		expect(useModuleSelectionStore.getState().moduleSelections.persistent_tech).toEqual([
+		expect(useTechStore.getState().moduleSelections.persistent_tech).toEqual([
 			"persistent_module",
 		]);
 
@@ -109,32 +103,30 @@ describe("useRecommendedBuild Adversarial Tests", () => {
 		useGridStore.getState().setGrid(newGrid);
 
 		// Selections should still be there
-		expect(useModuleSelectionStore.getState().moduleSelections.persistent_tech).toEqual([
+		expect(useTechStore.getState().moduleSelections.persistent_tech).toEqual([
 			"persistent_module",
 		]);
 	});
 
 	it("should preserve module selections across ship switch then build apply", () => {
 		// Set module selections for Ship 1
-		useModuleSelectionStore.getState().setModuleSelection("ship1_tech", ["ship1_module"]);
+		useTechStore.getState().setModuleSelection("ship1_tech", ["ship1_module"]);
 
 		// Switch ships - clears selections
 		let newGrid = createGrid(10, 6);
 		sessionCoordinator.switchPlatform(newGrid);
 
-		expect(useModuleSelectionStore.getState().moduleSelections).toEqual({});
+		expect(useTechStore.getState().moduleSelections).toEqual({});
 
 		// Load new ship's tech tree with selections
-		useModuleSelectionStore.getState().setModuleSelection("ship2_tech", ["ship2_module"]);
+		useTechStore.getState().setModuleSelection("ship2_tech", ["ship2_module"]);
 
 		// Apply recommended build - should NOT clear the selections
 		newGrid = createGrid(10, 6);
 		useGridStore.getState().setGrid(newGrid);
 
-		expect(useModuleSelectionStore.getState().moduleSelections.ship2_tech).toEqual([
-			"ship2_module",
-		]);
-		expect(useModuleSelectionStore.getState().moduleSelections.ship1_tech).toBeUndefined();
+		expect(useTechStore.getState().moduleSelections.ship2_tech).toEqual(["ship2_module"]);
+		expect(useTechStore.getState().moduleSelections.ship1_tech).toBeUndefined();
 	});
 
 	it("should not clear tech bonus status when applying recommended build", () => {
@@ -143,14 +135,14 @@ describe("useRecommendedBuild Adversarial Tests", () => {
 			icon: "check",
 			percent: 0,
 		};
-		useTechBonusStore.getState().setBonusStatus("boosted_tech", bonusData);
+		useTechStore.getState().setBonusStatus("boosted_tech", bonusData);
 
 		// Apply recommended build
 		const newGrid = createGrid(10, 6);
 		useGridStore.getState().setGrid(newGrid);
 
 		// Bonus status should be preserved
-		expect(useTechBonusStore.getState().bonusStatus.boosted_tech).toEqual(bonusData);
+		expect(useTechStore.getState().bonusStatus.boosted_tech).toEqual(bonusData);
 	});
 
 	it("should NOT clear checked modules when applying recommended build", () => {
@@ -183,8 +175,8 @@ describe("useRecommendedBuild Adversarial Tests", () => {
 
 	it("should clear selections when switching ships but preserve when building", () => {
 		// Ship 1 selections
-		useModuleSelectionStore.getState().setModuleSelection("tech1", ["module1"]);
-		useTechBonusStore.getState().setBonusStatus("tech1", {
+		useTechStore.getState().setModuleSelection("tech1", ["module1"]);
+		useTechStore.getState().setBonusStatus("tech1", {
 			icon: "check",
 			percent: 100,
 		});
@@ -193,18 +185,18 @@ describe("useRecommendedBuild Adversarial Tests", () => {
 		let newGrid = createGrid(10, 6);
 		useGridStore.getState().setGrid(newGrid);
 
-		expect(useModuleSelectionStore.getState().moduleSelections.tech1).toEqual(["module1"]);
-		expect(useTechBonusStore.getState().bonusStatus.tech1).toBeDefined();
+		expect(useTechStore.getState().moduleSelections.tech1).toEqual(["module1"]);
+		expect(useTechStore.getState().bonusStatus.tech1).toBeDefined();
 
 		// Switch ships - selections cleared
 		newGrid = createGrid(10, 6);
 		sessionCoordinator.switchPlatform(newGrid);
 
 		// Load build with different selections
-		useModuleSelectionStore.getState().setModuleSelection("tech2", ["module2", "module3"]);
+		useTechStore.getState().setModuleSelection("tech2", ["module2", "module3"]);
 
 		// Should only have build selections, not ship 1's tech1
-		const selections = useModuleSelectionStore.getState().moduleSelections;
+		const selections = useTechStore.getState().moduleSelections;
 		expect(selections.tech1).toBeUndefined();
 		expect(selections.tech2).toEqual(["module2", "module3"]);
 	});
@@ -215,15 +207,15 @@ describe("useRecommendedBuild Adversarial Tests", () => {
 			icon: "check",
 			percent: 100,
 		};
-		useTechBonusStore.getState().setBonusStatus("tech1", bonusData);
+		useTechStore.getState().setBonusStatus("tech1", bonusData);
 
-		expect(useTechBonusStore.getState().bonusStatus.tech1).toEqual(bonusData);
+		expect(useTechStore.getState().bonusStatus.tech1).toEqual(bonusData);
 
 		// Switch ship types
 		const newGrid = createGrid(10, 6);
 		sessionCoordinator.switchPlatform(newGrid);
 
 		// Bonus state should be cleared
-		expect(useTechBonusStore.getState().bonusStatus).toEqual({});
+		expect(useTechStore.getState().bonusStatus).toEqual({});
 	});
 });

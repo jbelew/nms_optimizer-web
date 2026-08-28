@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import { computeBonusStatus, sessionCoordinator } from "./sessionCoordinator";
 
 const mockGridStore = {
+	clearInteractionState: vi.fn(),
 	setBuildName: vi.fn(),
 	setGrid: vi.fn(),
 	setIsSharedGrid: vi.fn(),
@@ -11,20 +12,10 @@ const mockGridStore = {
 };
 
 const mockTechStore = {
+	clearAllBonusStatus: vi.fn(),
+	clearAllModuleSelections: vi.fn(),
 	clearResult: vi.fn(),
 	clearTechGroups: vi.fn(),
-};
-
-const mockTechBonusStore = {
-	clearAllBonusStatus: vi.fn(),
-};
-
-const mockModuleSelectionStore = {
-	clearAllModuleSelections: vi.fn(),
-};
-
-const mockInteractionStore = {
-	clearInteractionState: vi.fn(),
 };
 
 vi.mock("./grid/gridStore", () => ({
@@ -36,24 +27,6 @@ vi.mock("./grid/gridStore", () => ({
 vi.mock("./tech/techStore", () => ({
 	useTechStore: {
 		getState: vi.fn(() => mockTechStore),
-	},
-}));
-
-vi.mock("./tech/techBonusStore", () => ({
-	useTechBonusStore: {
-		getState: vi.fn(() => mockTechBonusStore),
-	},
-}));
-
-vi.mock("./tech/moduleSelectionStore", () => ({
-	useModuleSelectionStore: {
-		getState: vi.fn(() => mockModuleSelectionStore),
-	},
-}));
-
-vi.mock("./grid/interactionStore", () => ({
-	useInteractionStore: {
-		getState: vi.fn(() => mockInteractionStore),
 	},
 }));
 

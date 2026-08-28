@@ -1,17 +1,15 @@
-import type { BonusStatusData } from "./techBonusStore";
+import type { BonusStatusData } from "./techStore";
 import type { TechTreeItem } from "@/hooks/useTechTree/useTechTree";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { createGrid, useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 
-import { useModuleSelectionStore } from "./moduleSelectionStore";
-import { useTechBonusStore } from "./techBonusStore";
 import { useTechStore } from "./techStore";
 
 describe("ModuleSelectionStore - Ship Type Switching", () => {
 	beforeEach(() => {
-		useModuleSelectionStore.setState({ moduleSelections: {} });
+		useTechStore.setState({ moduleSelections: {} });
 		useTechStore.setState({
 			activeGroups: {},
 			checkedModules: {},
@@ -21,17 +19,17 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 			techColors: {},
 			techGroups: {},
 		});
-		useTechBonusStore.setState({ bonusStatus: {} });
+		useTechStore.setState({ bonusStatus: {} });
 		useGridStore.setState({ grid: useGridStore.getState().grid });
 		localStorage.clear();
 	});
 
 	it("should clear module selections when switching ship types via sessionCoordinator", () => {
 		// Start with ship 1 selections
-		useModuleSelectionStore.getState().setModuleSelection("tech1", ["module1", "module2"]);
-		useModuleSelectionStore.getState().setModuleSelection("tech2", ["module3"]);
+		useTechStore.getState().setModuleSelection("tech1", ["module1", "module2"]);
+		useTechStore.getState().setModuleSelection("tech2", ["module3"]);
 
-		expect(useModuleSelectionStore.getState().moduleSelections).toEqual({
+		expect(useTechStore.getState().moduleSelections).toEqual({
 			tech1: ["module1", "module2"],
 			tech2: ["module3"],
 		});
@@ -41,7 +39,7 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 		sessionCoordinator.switchPlatform(newGrid);
 
 		// Module selections should be cleared
-		expect(useModuleSelectionStore.getState().moduleSelections).toEqual({});
+		expect(useTechStore.getState().moduleSelections).toEqual({});
 	});
 
 	it("should clear techGroups and checkedModules when switching ship types", () => {
@@ -99,7 +97,7 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 		};
 
 		sessionCoordinator.setTechGroups(ship1Groups);
-		useModuleSelectionStore.getState().setModuleSelection("ship1tech", ["ship1module"]);
+		useTechStore.getState().setModuleSelection("ship1tech", ["ship1module"]);
 
 		// Switch to Ship 2
 		const newGrid = createGrid(10, 6);
@@ -126,35 +124,35 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 		sessionCoordinator.setTechGroups(ship2Groups);
 
 		// Ship 2 should use API defaults, not Ship 1 selections
-		expect(useModuleSelectionStore.getState().moduleSelections).toEqual({});
+		expect(useTechStore.getState().moduleSelections.ship1tech).toBeUndefined();
 		expect(useTechStore.getState().checkedModules.ship2tech).toEqual([]);
 	});
 
 	it("should restore persisted selections when loading a build", () => {
 		// Set selections directly to the store (simulating hydration from localStorage)
-		useModuleSelectionStore.setState({
-			moduleSelections: {
+		useTechStore.setState({
+			checkedModules: {
 				buildtech: ["buildmodule1", "buildmodule2"],
 			},
 		});
 
-		const store = useModuleSelectionStore.getState();
+		const store = useTechStore.getState();
 		expect(store.getModuleSelection("buildtech")).toEqual(["buildmodule1", "buildmodule2"]);
 	});
 
 	it("should allow switching ships then loading a build without carrying ship 1 selections", () => {
 		// Ship 1: Set selections
-		useModuleSelectionStore.getState().setModuleSelection("tech1", ["module1"]);
+		useTechStore.getState().setModuleSelection("tech1", ["module1"]);
 
 		// Switch ships (clears selections)
 		const newGrid = createGrid(10, 6);
 		sessionCoordinator.switchPlatform(newGrid);
 
 		// Load build with different selections
-		useModuleSelectionStore.getState().setModuleSelection("tech2", ["module2", "module3"]);
+		useTechStore.getState().setModuleSelection("tech2", ["module2", "module3"]);
 
 		// Should only have build selections, not ship 1's tech1
-		const selections = useModuleSelectionStore.getState().moduleSelections;
+		const selections = useTechStore.getState().moduleSelections;
 		expect(selections.tech1).toBeUndefined();
 		expect(selections.tech2).toEqual(["module2", "module3"]);
 	});
@@ -165,16 +163,16 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 			icon: "check",
 			percent: 100,
 		};
-		useTechBonusStore.getState().setBonusStatus("tech1", bonusData);
+		useTechStore.getState().setBonusStatus("tech1", bonusData);
 
-		expect(useTechBonusStore.getState().bonusStatus.tech1).toEqual(bonusData);
+		expect(useTechStore.getState().bonusStatus.tech1).toEqual(bonusData);
 
 		// Switch ship types
 		const newGrid = createGrid(10, 6);
 		sessionCoordinator.switchPlatform(newGrid);
 
 		// Bonus state should be cleared
-		expect(useTechBonusStore.getState().bonusStatus).toEqual({});
+		expect(useTechStore.getState().bonusStatus).toEqual({});
 	});
 
 	it("should handle multiple sequential ship switches without leaking state", () => {
@@ -190,7 +188,7 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 			tech1: [ship1TechGroup],
 		};
 		sessionCoordinator.setTechGroups(ship1Groups);
-		useModuleSelectionStore.getState().setModuleSelection("tech1", ["mod1"]);
+		useTechStore.getState().setModuleSelection("tech1", ["mod1"]);
 
 		// Switch to Ship 2
 		let newGrid = createGrid(10, 6);
@@ -207,7 +205,7 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 			tech2: [ship2TechGroup],
 		};
 		sessionCoordinator.setTechGroups(ship2Groups);
-		useModuleSelectionStore.getState().setModuleSelection("tech2", ["mod2"]);
+		useTechStore.getState().setModuleSelection("tech2", ["mod2"]);
 
 		// Switch to Ship 3
 		newGrid = createGrid(10, 6);
@@ -226,9 +224,9 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 		sessionCoordinator.setTechGroups(ship3Groups);
 
 		// Ship 3 should only have its default selections, not Ship 1 or Ship 2
-		const selections = useModuleSelectionStore.getState().moduleSelections;
+		const selections = useTechStore.getState().moduleSelections;
 		expect(selections.tech1).toBeUndefined();
 		expect(selections.tech2).toBeUndefined();
-		expect(selections.tech3).toBeUndefined(); // Should use API defaults
+		expect(selections.tech3).toEqual(["mod3"]); // Should use API defaults
 	});
 });

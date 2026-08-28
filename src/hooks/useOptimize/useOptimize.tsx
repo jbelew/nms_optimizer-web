@@ -167,7 +167,11 @@ export const useOptimize = (): UseOptimizeReturn => {
 				return;
 			}
 
-			const { setGrid } = useGridStore.getState();
+			const { grid, setGrid } = useGridStore.getState();
+			const { activeGroups, checkedModules, techGroups } = useTechStore.getState();
+			const ship = usePlatformStore.getState().selectedPlatform;
+			const availableModules = checkedModules[tech] || [];
+			const solveType = techGroups[tech]?.length > 1 ? activeGroups[tech] : undefined;
 
 			isOptimizingRef.current = true;
 			setSolving(true);
@@ -182,7 +186,9 @@ export const useOptimize = (): UseOptimizeReturn => {
 			});
 
 			const manager = new OptimizationManager({
+				availableModules,
 				forced,
+				grid,
 				isLarge: isLargeRef.current,
 				onComplete: (data: ApiResponse) => {
 					performance.mark("optimize-complete");
@@ -259,6 +265,8 @@ export const useOptimize = (): UseOptimizeReturn => {
 					setProgressPercent(data.progress_percent);
 					if (data.best_grid) setGrid(data.best_grid);
 				},
+				ship,
+				solveType,
 				tech,
 			});
 

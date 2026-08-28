@@ -1,7 +1,67 @@
 // src/store/tech/techStore.ts
 import type { TechTreeItem } from "@/types/tech";
+import type { StorageValue } from "zustand/middleware";
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
+
+import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
+import { Logger } from "@/utils/system/monitoring";
+
+/**
+ * Metadata representing the calculated bonus status for a specific technology.
+ */
+export type BonusStatusData = {
+	/** Identifier for the icon to display in the UI. */
+	icon: "check" | "lightning" | "warning" | null;
+	/** The calculated efficiency percentage. */
+	percent: number;
+};
+
+type SetItemFunction = (name: string, value: StorageValue<Partial<TechStore>>) => Promise<void>;
+
+function debounceSetItem(
+	setItemFn: SetItemFunction,
+	msToWait: number
+): (name: string, value: StorageValue<Partial<TechStore>>) => Promise<void> {
+	let timeoutId: null | number = null;
+
+	return (name: string, value: StorageValue<Partial<TechStore>>): Promise<void> => {
+		if (typeof window === "undefined") {
+			return Promise.resolve();
+		}
+
+		if (timeoutId !== null) {
+			clearTimeout(timeoutId);
+		}
+
+		timeoutId = window.setTimeout(() => {
+			void (async () => {
+				try {
+					await setItemFn(name, value);
+				} catch (e) {
+					Logger.error("Failed to save TechStore to localStorage", e);
+				}
+			})();
+		}, msToWait);
+
+		return Promise.resolve();
+	};
+}
+
+const debouncedStorage = {
+	getItem: (name: string) => {
+		const item = safeGetItem(name);
+
+		return item ? JSON.parse(item) : null;
+	},
+	removeItem: (name: string) => {
+		safeRemoveItem(name);
+	},
+	setItem: debounceSetItem(async (name: string, value: StorageValue<Partial<TechStore>>) => {
+		safeSetItem(name, JSON.stringify(value));
+	}, 500),
+};
 
 /**
  * Combined type representing both the state and actions of the global technology store.
@@ -19,16 +79,27 @@ import { immer } from "zustand/middleware/immer";
 export interface TechStore {
 	/** The currently active group identifier for each technology. */
 	activeGroups: { [key: string]: string };
+	/** Mapping of technology keys to their calculated status data. */
+	bonusStatus: Record<string, BonusStatusData>;
 	/** User-selected module IDs for each technology, used as input for the solver. */
 	checkedModules: { [key: string]: string[] };
+	/** Resets all technology status mappings. */
+	clearAllBonusStatus: () => void;
 	/** Resets all technologies to their default module selections as defined in the tech tree. */
 	clearAllCheckedModules: () => void;
+	/** Resets the entire module selection registry. */
+	clearAllModuleSelections: () => void;
+	/** Clears the status for a specific technology. */
+	clearBonusStatus: (tech: string) => void;
+
 	/**
 	 * Deselects all modules for a specific technology.
 	 *
 	 * @param {string} tech - The technology key.
 	 */
 	clearCheckedModules: (tech: string) => void;
+	/** Removes all module selections for a specific technology. */
+	clearModuleSelection: (tech: string) => void;
 	/** Purges all previous optimization results (max bonus and solved bonus). */
 	clearResult: () => void;
 	/** Purges all technology metadata, active groups, and module selections. */
@@ -39,13 +110,16 @@ export interface TechStore {
 	 * @param {string} tech - The technology key to clear.
 	 */
 	clearTechMaxBonus: (tech: string) => void;
-
 	/**
 	 * Resets the solved bonus value for a technology to zero.
 	 *
 	 * @param {string} tech - The technology key to clear.
 	 */
 	clearTechSolvedBonus: (tech: string) => void;
+	/** Retrieves the current status data for a technology. */
+	getBonusStatus: (tech: string) => BonusStatusData | null;
+	/** Retrieves the currently selected module IDs for a given technology. */
+	getModuleSelection: (tech: string) => null | string[];
 	/**
 	 * Returns the color assigned to a specific technology.
 	 *
@@ -84,6 +158,8 @@ export interface TechStore {
 	 * @type {Record<string, number>}
 	 */
 	maxBonus: { [key: string]: number };
+	/** A mapping where keys are technology identifiers and values are arrays of selected module IDs. */
+	moduleSelections: Record<string, string[]>;
 	/**
 	 * Sets the active group variant for a technology.
 	 *
@@ -97,6 +173,8 @@ export interface TechStore {
 	 * @param {Record<string, string>} groups - Mapping of tech keys to their new active group identifiers.
 	 */
 	setActiveGroups: (groups: { [key: string]: string }) => void;
+	/** Sets the bonus status for a technology. */
+	setBonusStatus: (tech: string, data: BonusStatusData) => void;
 	/**
 	 * Functional update for a technology's checked modules.
 	 *
@@ -104,6 +182,8 @@ export interface TechStore {
 	 * @param {function(string[]): string[]} updater - Function that receives current modules and returns updated ones.
 	 */
 	setCheckedModules: (tech: string, updater: (prev?: string[]) => string[]) => void;
+	/** Updates the selected modules for a specific technology. */
+	setModuleSelection: (tech: string, moduleIds: string[]) => void;
 	/**
 	 * Updates the global technology color registry.
 	 *
@@ -149,6 +229,7 @@ export interface TechStore {
 	 * @type {Record<string, string>}
 	 */
 	solve_method: { [key: string]: string };
+
 	/**
 	 * @deprecated Use solvedBonus.
 	 *
@@ -181,131 +262,236 @@ const syncAliases = (state: TechStore) => {
 	if (state.maxBonus !== undefined) state.max_bonus = state.maxBonus;
 	if (state.solveMethod !== undefined) state.solve_method = state.solveMethod;
 	if (state.solvedBonus !== undefined) state.solved_bonus = state.solvedBonus;
+	if (state.checkedModules !== undefined) state.moduleSelections = state.checkedModules;
 };
 
 /**
  * Global technology store managing metadata and results.
  */
 export const useTechStore = create<TechStore>()(
-	immer((set, get) => ({
-		activeGroups: {},
-		checkedModules: {},
-		clearAllCheckedModules: () => {
-			set((state: TechStore) => {
-				const resetCheckedModules = Object.keys(state.techGroups).reduce(
-					(acc, tech) => {
-						const group = state.techGroups[tech]?.[0];
+	persist(
+		immer((set, get) => ({
+			activeGroups: {},
+			bonusStatus: {},
+			checkedModules: {},
+			clearAllBonusStatus: () => {
+				set((state) => {
+					state.bonusStatus = {};
+					syncAliases(state);
+				});
+			},
 
-						if (group) {
-							acc[tech] = group.modules.filter((m) => m.checked).map((m) => m.id);
-						}
+			clearAllCheckedModules: () => {
+				set((state: TechStore) => {
+					const resetCheckedModules = Object.keys(state.techGroups).reduce(
+						(acc, tech) => {
+							const group = state.techGroups[tech]?.[0];
 
-						return acc;
-					},
-					{} as { [key: string]: string[] }
-				);
+							if (group) {
+								acc[tech] = group.modules.filter((m) => m.checked).map((m) => m.id);
+							}
 
-				state.checkedModules = resetCheckedModules;
-				syncAliases(state);
-			});
-		},
-		clearCheckedModules: (tech) =>
-			set((state: TechStore) => {
-				state.checkedModules[tech] = [];
-				syncAliases(state);
-			}),
-		clearResult: () =>
-			set((state: TechStore) => {
-				state.maxBonus = {};
-				state.solvedBonus = {};
-				state.solveMethod = {};
-				syncAliases(state);
-			}),
-		clearTechGroups: () =>
-			set((state: TechStore) => {
-				state.activeGroups = {};
-				state.checkedModules = {};
-				state.techGroups = {};
-				syncAliases(state);
-			}),
-		clearTechMaxBonus: (tech) =>
-			set((state: TechStore) => {
-				state.maxBonus[tech] = 0;
-				syncAliases(state);
-			}),
-		clearTechSolvedBonus: (tech) =>
-			set((state: TechStore) => {
-				state.solvedBonus[tech] = 0;
-				syncAliases(state);
-			}),
-		getTechColor: (tech) => get().techColors[tech],
-		initializeTechTree: (
-			colors: { [key: string]: string },
-			techGroups: { [key: string]: TechTreeItem[] },
-			activeGroups: { [key: string]: string },
-			initialCheckedModules: { [key: string]: string[] }
-		) => {
-			set((state: TechStore) => {
-				state.activeGroups = activeGroups;
-				state.checkedModules = initialCheckedModules;
-				state.techColors = colors;
-				state.techGroups = techGroups;
-				syncAliases(state);
-			});
-		},
+							return acc;
+						},
+						{} as { [key: string]: string[] }
+					);
 
-		max_bonus: {},
-		maxBonus: {},
-		setActiveGroup: (tech, groupType) =>
-			set((state: TechStore) => {
-				state.activeGroups[tech] = groupType;
-				syncAliases(state);
+					state.checkedModules = resetCheckedModules;
+					syncAliases(state);
+				});
+			},
+			clearAllModuleSelections: () => {
+				set((state) => {
+					state.checkedModules = {};
+					syncAliases(state);
+				});
+			},
+			clearBonusStatus: (tech) => {
+				set((state) => {
+					delete state.bonusStatus[tech];
+					syncAliases(state);
+				});
+			},
+			clearCheckedModules: (tech) =>
+				set((state: TechStore) => {
+					state.checkedModules[tech] = [];
+					syncAliases(state);
+				}),
+			clearModuleSelection: (tech) => {
+				set((state) => {
+					delete state.checkedModules[tech];
+					syncAliases(state);
+				});
+			},
+			clearResult: () =>
+				set((state: TechStore) => {
+					state.maxBonus = {};
+					state.solvedBonus = {};
+					state.solveMethod = {};
+					syncAliases(state);
+				}),
+			clearTechGroups: () =>
+				set((state: TechStore) => {
+					state.activeGroups = {};
+					state.checkedModules = {};
+					state.techGroups = {};
+					syncAliases(state);
+				}),
+			clearTechMaxBonus: (tech) =>
+				set((state: TechStore) => {
+					state.maxBonus[tech] = 0;
+					syncAliases(state);
+				}),
+
+			clearTechSolvedBonus: (tech) =>
+				set((state: TechStore) => {
+					state.solvedBonus[tech] = 0;
+					syncAliases(state);
+				}),
+			getBonusStatus: (tech) => get().bonusStatus[tech] ?? null,
+			getModuleSelection: (tech) => get().checkedModules[tech] ?? null,
+			getTechColor: (tech) => get().techColors[tech],
+			initializeTechTree: (
+				colors: { [key: string]: string },
+				techGroups: { [key: string]: TechTreeItem[] },
+				activeGroups: { [key: string]: string },
+				initialCheckedModules: { [key: string]: string[] }
+			) => {
+				set((state: TechStore) => {
+					state.activeGroups = activeGroups;
+					state.checkedModules = initialCheckedModules;
+					state.techColors = colors;
+					state.techGroups = techGroups;
+					syncAliases(state);
+				});
+			},
+			max_bonus: {},
+			maxBonus: {},
+			moduleSelections: {},
+			setActiveGroup: (tech, groupType) =>
+				set((state: TechStore) => {
+					state.activeGroups[tech] = groupType;
+					syncAliases(state);
+				}),
+			setActiveGroups: (groups) =>
+				set((state: TechStore) => {
+					Object.assign(state.activeGroups, groups);
+					syncAliases(state);
+				}),
+			setBonusStatus: (tech, data) => {
+				set((state) => {
+					state.bonusStatus[tech] = data;
+					syncAliases(state);
+				});
+			},
+			setCheckedModules: (tech, updater) =>
+				set((state: TechStore) => {
+					state.checkedModules[tech] = updater(state.checkedModules[tech]);
+					syncAliases(state);
+				}),
+			setModuleSelection: (tech, moduleIds) => {
+				set((state) => {
+					state.checkedModules[tech] = moduleIds;
+					syncAliases(state);
+				});
+			},
+			setTechColors: (colors) =>
+				set((state: TechStore) => {
+					state.techColors = colors;
+					syncAliases(state);
+				}),
+			setTechGroups: (
+				techGroups: { [key: string]: TechTreeItem[] },
+				initialCheckedModules: { [key: string]: string[] }
+			) => {
+				set((state: TechStore) => {
+					state.checkedModules = initialCheckedModules;
+					state.techGroups = techGroups;
+					syncAliases(state);
+				});
+			},
+			setTechMaxBonus: (tech, bonus) =>
+				set((state: TechStore) => {
+					state.maxBonus[tech] = bonus;
+					syncAliases(state);
+				}),
+
+			setTechSolvedBonus: (tech, bonus) =>
+				set((state: TechStore) => {
+					state.solvedBonus[tech] = bonus;
+					syncAliases(state);
+				}),
+			setTechSolveMethod: (tech, method) =>
+				set((state: TechStore) => {
+					state.solveMethod[tech] = method;
+					syncAliases(state);
+				}),
+			solve_method: {},
+			solved_bonus: {},
+
+			solvedBonus: {},
+			solveMethod: {},
+			techColors: {},
+			techGroups: {},
+		})),
+		{
+			name: "nms-optimizer-tech-state",
+			partialize: (state) => ({
+				bonusStatus: state.bonusStatus,
+				checkedModules: state.checkedModules,
 			}),
-		setActiveGroups: (groups) =>
-			set((state: TechStore) => {
-				Object.assign(state.activeGroups, groups);
-				syncAliases(state);
-			}),
-		setCheckedModules: (tech, updater) =>
-			set((state: TechStore) => {
-				state.checkedModules[tech] = updater(state.checkedModules[tech]);
-				syncAliases(state);
-			}),
-		setTechColors: (colors) =>
-			set((state: TechStore) => {
-				state.techColors = colors;
-				syncAliases(state);
-			}),
-		setTechGroups: (
-			techGroups: { [key: string]: TechTreeItem[] },
-			initialCheckedModules: { [key: string]: string[] }
-		) => {
-			set((state: TechStore) => {
-				state.checkedModules = initialCheckedModules;
-				state.techGroups = techGroups;
-				syncAliases(state);
-			});
-		},
-		setTechMaxBonus: (tech, bonus) =>
-			set((state: TechStore) => {
-				state.maxBonus[tech] = bonus;
-				syncAliases(state);
-			}),
-		setTechSolvedBonus: (tech, bonus) =>
-			set((state: TechStore) => {
-				state.solvedBonus[tech] = bonus;
-				syncAliases(state);
-			}),
-		setTechSolveMethod: (tech, method) =>
-			set((state: TechStore) => {
-				state.solveMethod[tech] = method;
-				syncAliases(state);
-			}),
-		solve_method: {},
-		solved_bonus: {},
-		solvedBonus: {},
-		solveMethod: {},
-		techColors: {},
-		techGroups: {},
-	}))
+			storage: debouncedStorage,
+		}
+	)
 );
+
+if (typeof window !== "undefined") {
+	const w = window as typeof window & {
+		useModuleSelectionStore?: {
+			getState: () => {
+				clearAllModuleSelections: () => void;
+				moduleSelections: Record<string, string[]>;
+				setModuleSelection: (tech: string, modules: string[]) => void;
+			};
+			setState: (updates: { moduleSelections?: Record<string, string[]> }) => void;
+		};
+		useTechBonusStore?: {
+			getState: () => {
+				bonusStatus: Record<string, BonusStatusData>;
+				clearAllBonusStatus: () => void;
+				setBonusStatus: (tech: string, bonus: BonusStatusData) => void;
+			};
+			setState: (updates: { bonusStatus?: Record<string, BonusStatusData> }) => void;
+		};
+		useTechStore?: typeof useTechStore;
+	};
+
+	w["useTechStore"] = useTechStore;
+
+	if (import.meta.env.VITE_E2E_TESTING) {
+		w["useModuleSelectionStore"] = {
+			getState: () => ({
+				clearAllModuleSelections: useTechStore.getState().clearAllModuleSelections,
+				moduleSelections: useTechStore.getState().checkedModules,
+				setModuleSelection: useTechStore.getState().setModuleSelection,
+			}),
+			setState: (updates: { moduleSelections?: Record<string, string[]> }) => {
+				if (updates.moduleSelections) {
+					useTechStore.setState({ checkedModules: updates.moduleSelections });
+				}
+			},
+		};
+		w["useTechBonusStore"] = {
+			getState: () => ({
+				bonusStatus: useTechStore.getState().bonusStatus,
+				clearAllBonusStatus: useTechStore.getState().clearAllBonusStatus,
+				setBonusStatus: useTechStore.getState().setBonusStatus,
+			}),
+			setState: (updates: { bonusStatus?: Record<string, BonusStatusData> }) => {
+				if (updates.bonusStatus) {
+					useTechStore.setState({ bonusStatus: updates.bonusStatus });
+				}
+			},
+		};
+	}
+}

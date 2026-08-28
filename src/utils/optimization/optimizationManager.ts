@@ -1,9 +1,7 @@
 import type { ApiResponse, Cell, Grid } from "@/store/grid/gridStore";
 import type { Socket } from "socket.io-client";
 
-import { usePlatformStore } from "@/store/app/platformStore";
-import { createEmptyCell, useGridStore } from "@/store/grid/gridStore";
-import { useTechStore } from "@/store/tech/techStore";
+import { createEmptyCell } from "@/store/grid/gridStore";
 import { createSocket, TRANSPORT_ERROR_MESSAGES } from "@/utils/api/socketManager";
 import { Logger } from "@/utils/system/monitoring";
 
@@ -14,8 +12,12 @@ const MAX_TRANSPORT_RETRIES = 2;
  * Options for configuring an optimization request.
  */
 export interface OptimizationOptions {
+	/** The list of available/checked modules for the technology. */
+	availableModules: string[];
 	/** If true, bypasses pattern matching and uses advanced solvers immediately. */
 	forced?: boolean;
+	/** The current grid layout before optimization. */
+	grid: Grid;
 	/** Whether to send periodic grid updates during long solves. */
 	isLarge?: boolean;
 	/** Callback for successful completion. */
@@ -28,6 +30,10 @@ export interface OptimizationOptions {
 	onProgress: (data: { best_grid?: Grid; progress_percent: number }) => void;
 	/** Internal retry counter for transport errors. */
 	retryCount?: number;
+	/** The selected ship type/platform. */
+	ship: string;
+	/** The optional solve type for technology groups. */
+	solveType?: string;
 	/** The unique identifier for the technology to optimize. */
 	tech: string;
 }
@@ -97,8 +103,6 @@ export class OptimizationManager {
 	 */
 	public async start() {
 		const { forced, isLarge, retryCount = 0, tech } = this.options;
-		const { activeGroups, checkedModules, techGroups } = useTechStore.getState();
-		const selectedShipType = usePlatformStore.getState().selectedPlatform;
 
 		try {
 			this.socket = await createSocket();
@@ -212,12 +216,10 @@ export class OptimizationManager {
 			this.cleanup();
 		});
 
-		const solve_type = techGroups[tech]?.length > 1 ? activeGroups[tech] : undefined;
-
 		const emitOptimize = () => {
 			if (!this.socket || this.isCleaningUp) return;
 
-			const { grid } = useGridStore.getState();
+			const { availableModules, grid, ship, solveType } = this.options;
 			const updatedGrid: Grid = {
 				...grid,
 				cells: grid.cells.map((row: Cell[]) => {
@@ -237,12 +239,12 @@ export class OptimizationManager {
 			};
 
 			const payload = {
-				available_modules: checkedModules[tech] || [],
+				available_modules: availableModules,
 				forced,
 				grid: updatedGrid,
 				send_grid_updates: isLarge,
-				ship: selectedShipType,
-				solve_type,
+				ship,
+				solve_type: solveType,
 				tech,
 			};
 

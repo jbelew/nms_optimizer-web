@@ -1,13 +1,8 @@
-import type { PlatformState } from "@/store/app/platformStore";
-import type { ApiResponse, GridStore } from "@/store/grid/gridStore";
-import type { TechStore } from "@/store/tech/techStore";
+import type { ApiResponse } from "@/store/grid/gridStore";
 import type { Socket } from "socket.io-client";
 import type { Mock } from "vitest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { usePlatformStore } from "@/store/app/platformStore";
-import { useGridStore } from "@/store/grid/gridStore";
-import { useTechStore } from "@/store/tech/techStore";
 import { createSocket } from "@/utils/api/socketManager";
 
 import { OptimizationManager } from "./optimizationManager";
@@ -19,21 +14,6 @@ vi.mock("@/utils/api/socketManager", () => ({
 
 vi.mock("@/store/grid/gridStore", () => ({
 	createEmptyCell: vi.fn((sc, active) => ({ active, supercharged: sc, tech: null })),
-	useGridStore: {
-		getState: vi.fn(),
-	},
-}));
-
-vi.mock("@/store/tech/techStore", () => ({
-	useTechStore: {
-		getState: vi.fn(),
-	},
-}));
-
-vi.mock("@/store/app/platformStore", () => ({
-	usePlatformStore: {
-		getState: vi.fn(),
-	},
 }));
 
 vi.mock("@/utils/system/monitoring", () => ({
@@ -44,10 +24,7 @@ vi.mock("@/utils/system/monitoring", () => ({
 	},
 }));
 
-const mockCreateSocket = vi.mocked(createSocket);
-const mockUseGridStore = vi.mocked(useGridStore);
-const mockUseTechStore = vi.mocked(useTechStore);
-const mockUsePlatformStore = vi.mocked(usePlatformStore);
+const mockCreateSocket = createSocket as unknown as Mock;
 
 describe("OptimizationManager", () => {
 	const createMockSocket = () => ({
@@ -59,29 +36,17 @@ describe("OptimizationManager", () => {
 		once: vi.fn(),
 	});
 
+	const defaultOptions = {
+		availableModules: [],
+		grid: { cells: [], height: 7, width: 7 },
+		ship: "standard",
+	};
+
 	beforeEach(() => {
 		vi.clearAllMocks();
 		mockCreateSocket.mockImplementation(() =>
 			Promise.resolve(createMockSocket() as unknown as Socket)
 		);
-
-		mockUseGridStore.getState.mockReturnValue({
-			grid: {
-				cells: [],
-				height: 7,
-				width: 7,
-			},
-		} as unknown as GridStore);
-
-		mockUseTechStore.getState.mockReturnValue({
-			activeGroups: {},
-			checkedModules: {},
-			techGroups: {},
-		} as unknown as TechStore);
-
-		mockUsePlatformStore.getState.mockReturnValue({
-			selectedPlatform: "standard",
-		} as unknown as PlatformState);
 	});
 
 	it("should retry on transport error and finally fail after MAX_TRANSPORT_RETRIES", async () => {
@@ -91,6 +56,7 @@ describe("OptimizationManager", () => {
 		const onPatternNoFit = vi.fn();
 
 		const manager = new OptimizationManager({
+			...defaultOptions,
 			onComplete,
 			onError,
 			onPatternNoFit,
@@ -136,6 +102,7 @@ describe("OptimizationManager", () => {
 	it("should complete successfully after a retry", async () => {
 		const onComplete = vi.fn();
 		const manager = new OptimizationManager({
+			...defaultOptions,
 			onComplete,
 			onError: vi.fn(),
 			onPatternNoFit: vi.fn(),
@@ -174,6 +141,7 @@ describe("OptimizationManager", () => {
 	it("should handle progress updates", async () => {
 		const onProgress = vi.fn();
 		const manager = new OptimizationManager({
+			...defaultOptions,
 			onComplete: vi.fn(),
 			onError: vi.fn(),
 			onPatternNoFit: vi.fn(),
@@ -196,6 +164,7 @@ describe("OptimizationManager", () => {
 	it("should handle Pattern No Fit response", async () => {
 		const onPatternNoFit = vi.fn();
 		const manager = new OptimizationManager({
+			...defaultOptions,
 			onComplete: vi.fn(),
 			onError: vi.fn(),
 			onPatternNoFit,
@@ -221,6 +190,7 @@ describe("OptimizationManager", () => {
 	it("should handle genuine disconnect as error", async () => {
 		const onError = vi.fn();
 		const manager = new OptimizationManager({
+			...defaultOptions,
 			onComplete: vi.fn(),
 			onError,
 			onPatternNoFit: vi.fn(),
@@ -243,6 +213,7 @@ describe("OptimizationManager", () => {
 	it("should handle transport close by calling onError (for UI state reset)", async () => {
 		const onError = vi.fn();
 		const manager = new OptimizationManager({
+			...defaultOptions,
 			onComplete: vi.fn(),
 			onError,
 			onPatternNoFit: vi.fn(),
@@ -268,6 +239,7 @@ describe("OptimizationManager", () => {
 		mockCreateSocket.mockImplementation(() => Promise.resolve(mockSocket as unknown as Socket));
 
 		const manager = new OptimizationManager({
+			...defaultOptions,
 			onComplete: vi.fn(),
 			onError: vi.fn(),
 			onPatternNoFit: vi.fn(),
@@ -286,17 +258,14 @@ describe("OptimizationManager", () => {
 	});
 
 	it("should include modules and solve_type in the payload", async () => {
-		mockUseTechStore.getState.mockReturnValue({
-			activeGroups: { pulse: "group1" },
-			checkedModules: { pulse: ["module1"] },
-			techGroups: { pulse: ["group1", "group2"] },
-		} as unknown as TechStore);
-
 		const manager = new OptimizationManager({
+			...defaultOptions,
+			availableModules: ["module1"],
 			onComplete: vi.fn(),
 			onError: vi.fn(),
 			onPatternNoFit: vi.fn(),
 			onProgress: vi.fn(),
+			solveType: "group1",
 			tech: "pulse",
 		});
 

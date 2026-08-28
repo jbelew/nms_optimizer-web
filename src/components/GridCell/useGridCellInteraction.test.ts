@@ -5,7 +5,6 @@ import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useGridStore } from "@/store/grid/gridStore";
-import { useInteractionStore } from "@/store/grid/interactionStore";
 import { useSessionStore, useShakeStore } from "@/store/ui/uiStore";
 
 import { useGridCellInteraction } from "./useGridCellInteraction";
@@ -35,13 +34,22 @@ const mockUseSessionStore = useSessionStore as unknown as Mock;
 
 describe("useGridCellInteraction", () => {
 	const baseMockGridStoreState = {
+		_initialCellStateForTap: null as Cell | null,
 		_lastTapCell: [-1, -1] as [number, number],
 		_lastTapTime: 0,
 		clearInitialCellStateForTap: mockClearInitialCellStateForTap,
+		clearInteractionState: vi.fn(() => {
+			baseMockGridStoreState._initialCellStateForTap = null;
+			baseMockGridStoreState._lastTapCell = [-1, -1];
+			baseMockGridStoreState._lastTapTime = 0;
+		}),
 		gridFixed: false,
 		handleCellDoubleTap: mockHandleCellDoubleTap,
 		handleCellTap: mockHandleCellTap,
 		revertCellTap: mockRevertCellTap,
+		setInitialCellStateForTap: vi.fn((cell: Cell | null) => {
+			baseMockGridStoreState._initialCellStateForTap = cell;
+		}),
 		setLastTap: (cell: [number, number], time: number) => {
 			baseMockGridStoreState._lastTapCell = cell;
 			baseMockGridStoreState._lastTapTime = time;
@@ -67,7 +75,7 @@ describe("useGridCellInteraction", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		vi.useFakeTimers();
-		useInteractionStore.getState().clearInteractionState();
+		baseMockGridStoreState.clearInteractionState();
 
 		// Mock GridStore.getState()
 		mockGetGridState = vi.fn(() => baseMockGridStoreState);
@@ -229,10 +237,10 @@ describe("useGridCellInteraction", () => {
 	});
 
 	it("should call revertCellTap and trigger shake if superchargedFixed on double tap", () => {
-		mockGetGridState.mockReturnValue({
+		mockGetGridState.mockImplementation(() => ({
 			...baseMockGridStoreState,
 			superchargedFixed: true,
-		});
+		}));
 
 		const { result } = renderGridCellHook({ module: null });
 
@@ -251,7 +259,7 @@ describe("useGridCellInteraction", () => {
 	});
 
 	it("should call revertCellTap and trigger shake if gridFixed on double tap", () => {
-		mockGetGridState.mockReturnValue({ ...baseMockGridStoreState, gridFixed: true });
+		mockGetGridState.mockImplementation(() => ({ ...baseMockGridStoreState, gridFixed: true }));
 
 		const { result } = renderGridCellHook({ module: null });
 
@@ -270,10 +278,10 @@ describe("useGridCellInteraction", () => {
 	});
 
 	it("should call revertCellTap and trigger shake if totalSupercharged >= 4 on double tap", () => {
-		mockGetGridState.mockReturnValue({
+		mockGetGridState.mockImplementation(() => ({
 			...baseMockGridStoreState,
 			totalSuperchargedCells: 4,
-		});
+		}));
 
 		const { result } = renderGridCellHook({ module: null, supercharged: false });
 

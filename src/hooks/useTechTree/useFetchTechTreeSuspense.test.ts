@@ -73,6 +73,7 @@ describe("useFetchTechTreeSuspense", () => {
 
 	type MockTechStoreState = {
 		activeGroups: Record<string, string>;
+		getModuleSelection: (tech: string) => null | string[];
 		initializeTechTree: (
 			colors: Record<string, string>,
 			techGroups: Record<string, TechTreeItem[]>,
@@ -103,6 +104,7 @@ describe("useFetchTechTreeSuspense", () => {
 		const mockSetActiveGroup = vi.fn();
 		const mockSetActiveGroups = vi.fn();
 		const mockInitializeTechTree = vi.fn();
+		const mockGetModuleSelection = vi.fn(() => null);
 		const mockSetInitialGridDefinition = vi.fn();
 		const mockSetGridFromInitialDefinition = vi.fn();
 		const mockSetLoading = vi.fn();
@@ -110,6 +112,7 @@ describe("useFetchTechTreeSuspense", () => {
 		vi.mocked(useTechStore).mockImplementation((selector) => {
 			const state: MockTechStoreState = {
 				activeGroups: {},
+				getModuleSelection: mockGetModuleSelection,
 				initializeTechTree: mockInitializeTechTree,
 				setActiveGroup: mockSetActiveGroup,
 				setActiveGroups: mockSetActiveGroups,
@@ -142,6 +145,7 @@ describe("useFetchTechTreeSuspense", () => {
 		// Mock getState for useTechStore to support setActiveGroups
 		(useTechStore as unknown as { getState: () => MockTechStoreState }).getState = () => ({
 			activeGroups: {},
+			getModuleSelection: mockGetModuleSelection,
 			initializeTechTree: mockInitializeTechTree,
 			setActiveGroup: mockSetActiveGroup,
 			setActiveGroups: mockSetActiveGroups,

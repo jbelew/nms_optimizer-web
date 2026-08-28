@@ -47,11 +47,27 @@ interface Window {
 	/** Direct access to the `GridStore` for E2E testing. */
 	useGridStore: import("./store/grid/gridStore").useGridStore;
 	/** Direct access to the `ModuleSelectionStore` for E2E testing. */
-	useModuleSelectionStore: import("./store/tech/moduleSelectionStore").useModuleSelectionStore;
+	useModuleSelectionStore: {
+		getState: () => {
+			clearAllModuleSelections: () => void;
+			moduleSelections: Record<string, string[]>;
+			setModuleSelection: (tech: string, modules: string[]) => void;
+		};
+		setState: (updates: { moduleSelections?: Record<string, string[]> }) => void;
+	};
 	/** Direct access to the `SessionStore` for E2E testing. */
 	useSessionStore: import("./store/ui/uiStore").useSessionStore;
 	/** Direct access to the `ShakeStore` for E2E testing. */
 	useShakeStore: import("./store/ui/uiStore").useShakeStore;
 	/** Direct access to the `TechBonusStore` for E2E testing. */
-	useTechBonusStore: import("./store/tech/techBonusStore").useTechBonusStore;
+	useTechBonusStore: {
+		getState: () => {
+			bonusStatus: Record<string, import("./store/tech/techStore").BonusStatusData>;
+			clearAllBonusStatus: () => void;
+			setBonusStatus: (tech: string, bonus: import("./store/tech/techStore").BonusStatusData) => void;
+		};
+		setState: (updates: { bonusStatus?: Record<string, import("./store/tech/techStore").BonusStatusData> }) => void;
+	};
+	/** Direct access to the `TechStore` for E2E testing. */
+	useTechStore: import("./store/tech/techStore").useTechStore;
 }

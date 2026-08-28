@@ -1,11 +1,10 @@
+import type { BonusStatusData } from "@/store/tech/techStore";
 import type { BuildFile } from "@/utils/validation/dataValidation";
 import { startTransition } from "react";
 
 import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
-import { useModuleSelectionStore } from "@/store/tech/moduleSelectionStore";
-import { useTechBonusStore } from "@/store/tech/techBonusStore";
 import { useTechStore } from "@/store/tech/techStore";
 import { computeSHA256 } from "@/utils/system/hashUtils";
 import { Logger } from "@/utils/system/monitoring";
@@ -45,7 +44,7 @@ export const useBuildFileManager = () => {
 	 * Serializes the current application state and triggers a file download.
 	 *
 	 * @remarks
-	 * This method gathers state from multiple stores (Grid, Tech, Bonus, ModuleSelection),
+	 * This method gathers state from Grid and Tech stores,
 	 * calculates a SHA-256 checksum for integrity, and triggers a browser download
 	 * of a `.nms` file.
 	 *
@@ -66,8 +65,6 @@ export const useBuildFileManager = () => {
 			// Get current state from all stores
 			const gridState = useGridStore.getState();
 			const techState = useTechStore.getState();
-			const bonusState = useTechBonusStore.getState();
-			const moduleState = useModuleSelectionStore.getState();
 
 			/**
 			 * CRITICAL: The order of keys in this object MUST remain stable.
@@ -91,10 +88,10 @@ export const useBuildFileManager = () => {
 					solveMethod: techState.solveMethod,
 				},
 				bonusState: {
-					bonusStatus: bonusState.bonusStatus,
+					bonusStatus: techState.bonusStatus,
 				},
 				moduleState: {
-					moduleSelections: moduleState.moduleSelections,
+					moduleSelections: techState.checkedModules,
 				},
 			};
 			/* eslint-enable perfectionist/sort-objects */
@@ -225,9 +222,16 @@ export const useBuildFileManager = () => {
 					.getState()
 					.restoreGridState({ ...buildData.gridState, buildName: buildData.name });
 
-				useTechStore.setState(buildData.techState);
-				useTechBonusStore.setState(buildData.bonusState);
-				useModuleSelectionStore.setState(buildData.moduleState);
+				useTechStore.setState({
+					...buildData.techState,
+					bonusStatus: (buildData.bonusState?.bonusStatus ?? {}) as Record<
+						string,
+						BonusStatusData
+					>,
+					checkedModules: (buildData.techState?.checkedModules ??
+						buildData.moduleState?.moduleSelections ??
+						{}) as { [key: string]: string[] },
+				});
 			});
 		} catch (error) {
 			Logger.error("Failed to load build file:", error);
