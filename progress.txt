@@ -1,0 +1,6 @@
+Date: 2026-08-28
+Task: Implement GitHub issue #715: "refactor(build): extract buildSerializer module with full test coverage"
+Summary: Extracted all serialization and validation business logic from the `useBuildFileManager` hook into a new standalone, plain-object module `src/utils/build/buildSerializer.ts`. Exposes `saveBuild` and `loadBuild` functions. Written 100% test coverage in `src/utils/build/buildSerializer.test.ts` without relying on DOM emulation or `renderHook`.
+Key Learnings:
+- Vitest's `vi.mock` module hoisting executes before mock variable declarations unless the variables are hoisted. Utilizing `vi.hoisted` provides a clean, native way to declare and resolve store state mocks without temporal dead zone ReferenceErrors.
+- Plain business logic functions decoupled from React hooks can be thoroughly and cleanly unit-tested as plain async function calls with minimal mocks, making the test suite faster and easier to maintain.

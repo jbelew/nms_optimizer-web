@@ -1525,3 +1525,33 @@ Google Search Console reported the critical error: "Review has multiple aggregat
   - Dynamic module mocks in mixed Vitest/Bun test runners must avoid using recursive imports (e.g. importing the target module within its mock factory) which leads to ESM import deadlocks.
   - Decoupling user gestures/UI from business logic invariants (like layout boundaries or supercharge slot count limits) into a pure validation module improves codebase maintainability, reusability, and permits 100% test coverage with fast, simple unit tests.
   - Using structured validation outcomes (e.g. returning reasons like `'moduleLocked'` or `'gridFixed'`) allows UI components to maintain customized feedback/telemetry behaviors without leaking invariant rules.
+
+## PRAR Cycle: Extract buildSerializer Module (2026-08-28)
+
+### Perceive & Understand
+- **Request**: Extract all serialization, integrity check, parsing, and restoration logic from `useBuildFileManager` into a standalone, testable, plain-object module `src/utils/build/buildSerializer.ts` with 100% test coverage.
+- **Context**: `useBuildFileManager` was mixing React-specific file I/O, download triggers, cryptographic hashing (SHA-256), JSON key sorting, validation structure rules, and store restoration.
+- **Details**:
+  - Implement `saveBuild` and `loadBuild` on `buildSerializer` plain object module.
+  - Implement full test coverage in `src/utils/build/buildSerializer.test.ts` without using React `renderHook` or DOM emulation.
+
+### Reason & Plan
+- **Plan**:
+  - Create the `buildSerializer.ts` module using imports from `startTransition`, `useGridStore`, `useTechStore`, `usePlatformStore`, `computeSHA256`, `isValidBuildFile`, and `sanitizeFilename`.
+  - Ensure order-sensitive properties in `stateData` matches previous format exactly to maintain backward compatibility.
+  - Implement pure async unit tests in `buildSerializer.test.ts` to test all scenarios including success roundtrip, validation limits, bad checksums, unsupported ship types, and platform transitions.
+  - Use `vi.hoisted` to declare mock hooks/state functions to ensure they are initialized before the hoisted `vi.mock` modules evaluate, avoiding TDZ ReferenceErrors.
+
+### Act & Implement
+- **Action**:
+  - Wrote the utility module `src/utils/build/buildSerializer.ts`.
+  - Wrote the test suite `src/utils/build/buildSerializer.test.ts` with 11 comprehensive test cases.
+  - Ran typechecks and tests successfully.
+  - Resolved perfect styling and sorting rules with linter auto-fixes.
+  - Commented on and closed issue 715 on GitHub.
+
+### Refine & Reflect
+- **Reflection**:
+  - Decoupling complex JSON serialization, size checks, and cryptographic hashing from React components/hooks into pure plain-object modules increases testability.
+  - Leveraging `vi.hoisted` in Vitest ensures that store-mocking setup functions exist before mocked module factories execute, preventing ReferenceErrors during module resolution.
+  - Decoupled code allows for fast, lightweight test suites that bypass the need for jsdom render environments or hook wrappers entirely.
