@@ -2,6 +2,7 @@ import type { Cell } from "@/store/grid/gridStore";
 import { useRef, useState } from "react";
 
 import { UI_TIMING } from "@/constants";
+import { validateToggleActive, validateToggleSupercharged } from "@/store/grid/gridRules";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useSessionStore, useShakeStore } from "@/store/ui/uiStore";
 import { Logger } from "@/utils/system/monitoring";
@@ -79,22 +80,23 @@ export const useGridCellInteraction = (
 			timeSinceLastTap < UI_TIMING.DOUBLE_TAP_THRESHOLD &&
 			timeSinceLastTap > 0
 		) {
-			// Double tap on the same cell
-			const totalSupercharged = gridState.totalSuperchargedCells;
-			const isInvalidDoubleTap =
-				gridState.superchargedFixed ||
-				gridState.gridFixed ||
-				rowIndex >= 4 ||
-				(totalSupercharged >= 4 && !cell.supercharged);
+			// Double tap on the same cell (Toggle Supercharged)
+			const validation = validateToggleSupercharged({
+				cell,
+				gridFixed: gridState.gridFixed,
+				rowIndex,
+				superchargedFixed: gridState.superchargedFixed,
+				totalSupercharged: gridState.totalSuperchargedCells,
+			});
 
-			if (isInvalidDoubleTap) {
-				if (totalSupercharged >= 4 && !cell.supercharged) {
+			if (!validation.valid) {
+				if (validation.reason === "superchargedLimit") {
 					sessionState.incrementSuperchargedLimit();
-				} else if (gridState.superchargedFixed) {
+				} else if (validation.reason === "superchargedFixed") {
 					sessionState.incrementSuperchargedFixed();
-				} else if (gridState.gridFixed) {
+				} else if (validation.reason === "gridFixed") {
 					sessionState.incrementGridFixed();
-				} else if (rowIndex >= 4) {
+				} else if (validation.reason === "rowLimit") {
 					sessionState.incrementRowLimit();
 				}
 
@@ -123,12 +125,15 @@ export const useGridCellInteraction = (
 				gridState.clearInteractionState();
 			}
 		} else {
-			// Single tap
+			// Single tap (Toggle Active)
 			gridState.setLastTap([rowIndex, columnIndex], currentTime);
-			const isInvalidSingleTap = gridState.gridFixed;
+			const validation = validateToggleActive({
+				cell,
+				gridFixed: gridState.gridFixed,
+			});
 
-			if (isInvalidSingleTap) {
-				if (gridState.gridFixed) {
+			if (!validation.valid) {
+				if (validation.reason === "gridFixed") {
 					sessionState.incrementGridFixed();
 				}
 
@@ -261,25 +266,25 @@ export const useGridCellInteraction = (
 		const gridState = useGridStore.getState();
 		const sessionState = useSessionStore.getState();
 
-		const { gridFixed, superchargedFixed } = gridState;
-
 		if (isSharedGrid) {
-			return;
-		}
-
-		// If the cell has a module, no interactions should change its state.
-		if (cell.module) {
-			sessionState.incrementModuleLocked();
-			triggerShake();
-
 			return;
 		}
 
 		// Mouse-specific logic (Ctrl/Cmd + Click)
 		if (event.ctrlKey || event.metaKey) {
 			// Ctrl/Cmd + Click: Toggle Active
-			if (gridFixed) {
-				sessionState.incrementGridFixed();
+			const validation = validateToggleActive({
+				cell,
+				gridFixed: gridState.gridFixed,
+			});
+
+			if (!validation.valid) {
+				if (validation.reason === "moduleLocked") {
+					sessionState.incrementModuleLocked();
+				} else if (validation.reason === "gridFixed") {
+					sessionState.incrementGridFixed();
+				}
+
 				triggerShake();
 			} else {
 				Logger.info(`Cell active toggled: [${rowIndex}, ${columnIndex}]`, {
@@ -291,20 +296,25 @@ export const useGridCellInteraction = (
 			}
 		} else {
 			// Normal Click: Toggle Supercharged
-			const totalSupercharged = gridState.totalSuperchargedCells;
-			const isInvalidSuperchargeToggle =
-				superchargedFixed ||
-				gridFixed ||
-				rowIndex >= 4 ||
-				(totalSupercharged >= 4 && !cell.supercharged);
+			const validation = validateToggleSupercharged({
+				cell,
+				gridFixed: gridState.gridFixed,
+				rowIndex,
+				superchargedFixed: gridState.superchargedFixed,
+				totalSupercharged: gridState.totalSuperchargedCells,
+			});
 
-			if (isInvalidSuperchargeToggle) {
-				if (totalSupercharged >= 4 && !cell.supercharged) {
+			if (!validation.valid) {
+				if (validation.reason === "moduleLocked") {
+					sessionState.incrementModuleLocked();
+				} else if (validation.reason === "superchargedLimit") {
 					sessionState.incrementSuperchargedLimit();
-				} else if (superchargedFixed) {
+				} else if (validation.reason === "superchargedFixed") {
 					sessionState.incrementSuperchargedFixed();
-				} else if (rowIndex >= 4) {
+				} else if (validation.reason === "rowLimit") {
 					sessionState.incrementRowLimit();
+				} else if (validation.reason === "gridFixed") {
+					sessionState.incrementGridFixed();
 				}
 
 				triggerShake();
@@ -334,21 +344,21 @@ export const useGridCellInteraction = (
 			event.preventDefault();
 			if (isSharedGrid) return;
 
-			if (cell.module) {
-				useSessionStore.getState().incrementModuleLocked();
-				triggerShake();
+			const validation = validateToggleActive({
+				cell,
+				gridFixed: useGridStore.getState().gridFixed,
+			});
 
-				return;
-			}
+			if (!validation.valid) {
+				if (validation.reason === "moduleLocked") {
+					useSessionStore.getState().incrementModuleLocked();
+				} else if (validation.reason === "gridFixed") {
+					useSessionStore.getState().incrementGridFixed();
+				}
 
-			const gridState = useGridStore.getState();
-			const { gridFixed } = gridState;
-
-			if (gridFixed) {
-				useSessionStore.getState().incrementGridFixed();
 				triggerShake();
 			} else {
-				gridState.toggleCellActive(rowIndex, columnIndex);
+				useGridStore.getState().toggleCellActive(rowIndex, columnIndex);
 			}
 		}
 	};
