@@ -64,9 +64,14 @@ interface Window {
 		getState: () => {
 			bonusStatus: Record<string, import("./store/tech/techStore").BonusStatusData>;
 			clearAllBonusStatus: () => void;
-			setBonusStatus: (tech: string, bonus: import("./store/tech/techStore").BonusStatusData) => void;
+			setBonusStatus: (
+				tech: string,
+				bonus: import("./store/tech/techStore").BonusStatusData
+			) => void;
 		};
-		setState: (updates: { bonusStatus?: Record<string, import("./store/tech/techStore").BonusStatusData> }) => void;
+		setState: (updates: {
+			bonusStatus?: Record<string, import("./store/tech/techStore").BonusStatusData>;
+		}) => void;
 	};
 	/** Direct access to the `TechStore` for E2E testing. */
 	useTechStore: import("./store/tech/techStore").useTechStore;

@@ -28,6 +28,7 @@ pre-commit:
     lint-js:
       tags: lint
       glob: "*.{js,jsx,ts,tsx,cjs,mjs}"
+      exclude: "*.d.ts"
       run: bunx oxlint --fix {staged_files} && bunx eslint --fix {staged_files}
       stage_fixed: true
 
