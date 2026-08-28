@@ -82,3 +82,17 @@ Use try-catch in hooks, pass error state via context/store, display user-friendl
 - **Storybook Builds**: Storybook builds were failing due to a large file exceeding the service worker's cache limit. The fix involved increasing `maximumFileSizeToCacheInBytes` in `vite.config.ts` and conditionally disabling the `generate-version-json` plugin during Storybook builds.
 - **SEO**: Do not shorten the meta description in `index.html`.
 - **Commits**: Follow the Angular convention for commit messages (enforced by Commitlint).
+
+## Agent skills
+
+### Issue tracker
+
+Issues and specs for this repo live as GitHub issues. See [issue-tracker.md](file:///home/jbelew/projects/nms_optimizer-web/docs/agents/issue-tracker.md).
+
+### Triage labels
+
+Using the five canonical triage labels (needs-triage, needs-info, ready-for-agent, ready-for-human, wontfix). See [triage-labels.md](file:///home/jbelew/projects/nms_optimizer-web/docs/agents/triage-labels.md).
+
+### Domain docs
+
+Single-context documentation layout. See [domain.md](file:///home/jbelew/projects/nms_optimizer-web/docs/agents/domain.md).

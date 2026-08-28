@@ -1,54 +1,25 @@
-# Gemini Agent: Core Directives and Operating Protocols
+# Gemini Agent: Core Directives & Protocols
 
-This document captures project-specific operating protocols and environment-specific configurations for AI agents.
+This document captures project-specific protocols and configurations for AI agents.
 
-## WSL2 Performance Audit Protocol
-
-To run performance audits (Lighthouse/LHCI) in WSL2, you MUST follow these steps to ensure Chrome is correctly configured and reachable:
-
-1. **CHROME_PATH**: Ensure `CHROME_PATH="/usr/bin/google-chrome"` is set in `.env.local` or exported.
-2. **Chrome Flags**: Always use `--headless --no-sandbox --disable-gpu` to avoid connection issues. These are codified in `scripts/lighthouserc.cjs`.
-3. **Localhost/127.0.0.1**: Always use `http://127.0.0.1:4173/` (instead of `localhost`) for both `vite preview` and the Lighthouse URL to avoid potential hostname mismatch interstitials.
-
-**Example Command**:
-
-```bash
-bun run preview -- --host 127.0.0.1 & \
-sleep 5 && \
-lhci autorun --config=scripts/lighthouserc.cjs
-```
-
----
-
-## 1. Learning Protocol
-
-To ensure you learn from your actions and avoid repeating mistakes, you must adhere to the following protocol:
+## Learning Protocol
 
 - **Learning Log**: Maintain `LEARNINGS.gemini.md` in the root directory.
-- **Record Cycles**: This file serves as an immutable, timestamped log. For each task, append a summary of the PRAR cycle. **Crucially, content must NEVER be removed from this file; all new entries must be appended.**
+- **Record Cycles**: Summarize each PRAR cycle at the end of the log. Do not modify or remove past entries; only append.
 
-## 2. JSDoc Guidelines
+## JSDoc Guidelines
 
-When writing, maintaining, or modifying JavaScript/TypeScript code, you MUST ensure all functions, classes, and complex variables are properly documented or updated using JSDoc. This process must conform to the **agentic-jsdoc** skill.
+- Ensure all public APIs, functions, classes, and complex variables are documented with JSDoc conforming to the **agentic-jsdoc** skill.
+- Always include `@param` tags for parameters and `@returns` for return values, using TypeScript types where applicable.
 
-- **Mandatory Updates**: Always update or add JSDoc when modifying existing code or adding new functionality.
-- **Conformity**: Use the **agentic-jsdoc** skill for automated generation and to ensure documentation is optimized for LLM parsing.
-- **All public APIs**: Every function, class, or method that is part of a public interface should have JSDoc.
-- **Parameters and Returns**: Always document `@param` for each parameter and `@returns` for the return value (if any).
-- **Types**: Use TypeScript types in JSDoc where applicable.
+## Tool Protocols
 
----
+- **Beads**: Only use Beads in conjunction with Conductor. Do not use Beads for independent tasks unless a Conductor track or plan is active.
 
-## 3. Tool-specific Protocols
+## Graphify (Knowledge Graph)
 
-- **Beads**: Beads SHOULD ONLY be used in conjunction with Conductor. Do not use Beads for independent task management unless a Conductor track or track-level plan is active.
-
-## graphify
-
-This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
-
-Rules:
-- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
-- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
-- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+This project has a knowledge graph at `graphify-out/`.
+- For codebase questions, run `graphify query "<question>"` when `graphify-out/graph.json` exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts.
+- If `graphify-out/wiki/index.md` exists, use it for broad navigation instead of raw source browsing.
+- Read `graphify-out/GRAPH_REPORT.md` only for broad architecture review.
 - After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
