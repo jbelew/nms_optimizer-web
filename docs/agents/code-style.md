@@ -3,7 +3,7 @@
 Coding standards and patterns for TypeScript, React, state management, and styling.
 
 ## Tooling & Configuration
-- **ESLint**: Version 10.x with Flat Config ([`eslint.config.js`](file:///home/jbelew/projects/nms_optimizer-web/eslint.config.js)).
+- **ESLint**: Version 10.x with Flat Config ([`eslint.config.js`](file:///home/jbelew/projects/nms_optimizer-web/eslint.config.js)). You are never allowed to disable eslint rules with "eslint-disable"!
 - **TypeScript**: Strict TypeScript mode. The use of `any` is never permitted. Use interfaces for React component props; use discriminated unions for variants.
 - **Naming Conventions**: `camelCase` for files/variables, `PascalCase` for React components/types, `UPPER_SNAKE_CASE` for constants.
 

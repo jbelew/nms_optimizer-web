@@ -22,7 +22,7 @@
 		"ariaLabel": "Seleziona tipo di nave",
 		"corvetteWarning": {
 			"title": "Avviso Corvette!",
-			"description": "Alla versione 6.34, le Corvette presentano <strong>ancora</strong> problemi di layout noti! Se crei un layout, ti consigliamo vivamente di utilizzare la funzione <strong>Salva Configurazione</strong> per mantenere un backup del tuo lavoro."
+			"description": "Le Corvette presentano <strong>ancora</strong> problemi di layout noti! Se crei un layout, ti consigliamo vivamente di utilizzare la funzione <strong>Salva Configurazione</strong> per mantenere un backup del tuo lavoro."
 		}
 	},
 	"appName": "NMS Optimizer",

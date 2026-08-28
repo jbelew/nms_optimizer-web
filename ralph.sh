@@ -33,16 +33,10 @@ while [ $ITERATION -le $MAX_ITERATIONS ]; do
     # Check if there are any remaining open issues
     # 2>/dev/null to hide deprecation warnings
     OPEN_ISSUES=$(gh issue list --state open --label "ready-for-agent" --json number --jq 'length' 2>/dev/null || echo "0")
-    
-    if [ "$OPEN_ISSUES" -eq 0 ]; then
-        # Check all open issues as fallback
-        OPEN_ISSUES=$(gh issue list --state open --json number --jq 'length' 2>/dev/null || echo "0")
-    fi
-    
     if [ "$OPEN_ISSUES" -eq 0 ]; then
         echo ""
         echo "========================================="
-        echo "  All tasks successfully completed!"
+        echo "  All 'ready-for-agent' tasks completed!"
         echo "========================================="
         echo ""
         exit 0

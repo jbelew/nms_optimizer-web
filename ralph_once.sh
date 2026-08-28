@@ -17,13 +17,8 @@ if [ -z "$ISSUE_NUM" ]; then
     NEXT_ISSUE=$(gh issue list --state open --label "ready-for-agent" --json number,title,body --jq '.[0]' 2>/dev/null || true)
     
     if [ -z "$NEXT_ISSUE" ] || [ "$NEXT_ISSUE" = "null" ]; then
-        echo "No 'ready-for-agent' issues found. Checking all open issues..."
-        NEXT_ISSUE=$(gh issue list --state open --json number,title,body --jq '.[0]' 2>/dev/null || true)
-    fi
-    
-    if [ -z "$NEXT_ISSUE" ] || [ "$NEXT_ISSUE" = "null" ]; then
         echo "========================================="
-        echo "  No open issues found in the repository!"
+        echo "  No 'ready-for-agent' issues found!"
         echo "========================================="
         exit 0
     fi
@@ -56,7 +51,7 @@ gh issue edit "$ISSUE_NUM" --add-assignee @me 2>/dev/null || echo "Note: Could n
 
 # Construct the prompt for the Antigravity CLI agent
 PROMPT=$(cat << EOF
-You are running as an autonomous AI agent in a Ralph loop iteration. Your job is to implement GitHub issue #$ISSUE_NUM: "$ISSUE_TITLE".
+/goal Implement GitHub issue #$ISSUE_NUM: "$ISSUE_TITLE".
 
 ## Issue Description:
 $ISSUE_BODY
@@ -90,13 +85,18 @@ $ISSUE_COMMENTS
 EOF
 )
 
-# Run agy in headless print mode with the generated prompt
+# Run agy in headless mode with the generated prompt
 # Pass any extra arguments from user (e.g., --model, --effort) to agy
 agy \
-  --print \
+  --mode=accept-edits \
   --dangerously-skip-permissions \
+  --project="$(pwd)" \
+  --print-timeout=20m \
   --prompt "$PROMPT" \
   "$@"
+
+# Automatically promote any issues that are now unblocked by the completion of this issue
+./scripts/promote_issues.py
 
 echo "========================================="
 echo "Finished iteration for issue #$ISSUE_NUM"
