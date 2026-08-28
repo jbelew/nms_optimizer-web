@@ -6,7 +6,6 @@ import { useRouteContext } from "@/context/RouteContext";
 import { useGridDeserializer } from "@/hooks/useGridDeserializer/useGridDeserializer";
 import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
 import { usePlatformStore } from "@/store/app/platformStore";
-import { createGrid, useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { Logger } from "@/utils/system/monitoring";
 
@@ -29,7 +28,7 @@ import { Logger } from "@/utils/system/monitoring";
  * @returns {{ updateUrlForShare: () => string, updateUrlForReset: () => void }} Functions to generate share links and reset URL state.
  *
  * @see {@link usePlatformStore} for ship type state.
- * @see {@link useGridStore} for the underlying grid data.
+ * @see useGridStore for the underlying grid data.
  * @see {@link useGridDeserializer} for serialization logic.
  * @see {@link ./useUrlSync.test.tsx Unit Tests}
  *
@@ -55,7 +54,6 @@ export const useUrlSync = () => {
 	const navigate = useNavigate();
 	const { isKnownRoute } = useRouteContext();
 	const selectedShipTypeFromStore = usePlatformStore((state) => state.selectedPlatform);
-	const setSelectedShipTypeInStore = usePlatformStore((state) => state.setSelectedPlatform);
 	const { deserializeGrid, serializeGrid } = useGridDeserializer();
 	const shipTypes = useFetchShipTypesSuspense();
 
@@ -65,15 +63,13 @@ export const useUrlSync = () => {
 	const shipTypesRef = useRef(shipTypes);
 	const isKnownRouteRef = useRef(isKnownRoute);
 	const deserializeGridRef = useRef(deserializeGrid);
-	const setSelectedShipTypeInStoreRef = useRef(setSelectedShipTypeInStore);
 
 	// Keep refs up to date
 	useEffect(() => {
 		shipTypesRef.current = shipTypes;
 		isKnownRouteRef.current = isKnownRoute;
 		deserializeGridRef.current = deserializeGrid;
-		setSelectedShipTypeInStoreRef.current = setSelectedShipTypeInStore;
-	}, [shipTypes, isKnownRoute, deserializeGrid, setSelectedShipTypeInStore]);
+	}, [shipTypes, isKnownRoute, deserializeGrid]);
 
 	// Effect to handle initial URL state and popstate events
 	useEffect(() => {
@@ -107,48 +103,13 @@ export const useUrlSync = () => {
 			isSyncingRef.current = true;
 
 			try {
-				const currentPlatform = usePlatformStore.getState().selectedPlatform;
-
-				// IMPORTANT: Sync platform BEFORE grid to avoid race conditions
-				// If we have both platform and grid from URL, ensure platform is set first
-				// so deserialization uses the correct platform
-				if (platformFromUrl && platformFromUrl !== currentPlatform) {
-					if (validShipTypes.includes(platformFromUrl)) {
-						setSelectedShipTypeInStoreRef.current(
-							platformFromUrl,
-							validShipTypes,
-							false, // updateUrl = false (we are ALREADY responding to a URL change)
-							isKnownRouteRef.current
-						);
-
-						// --- Bug Fix: Back Navigation Desync ---
-						// If the platform changed via a popstate event (Back/Forward),
-						// and we DON'T have a grid in the URL (it's not a shared link),
-						// we should reset the grid to an empty state for the new platform.
-						if (!gridFromUrl) {
-							sessionCoordinator.switchPlatform(createGrid(10, 6));
-						}
-					} else {
-						Logger.warn(
-							`useUrlSync: Invalid platform from URL: ${platformFromUrl}. Expected one of: ${validShipTypes.join(", ")}`
-						);
-					}
-				}
-
-				// Sync grid from URL to store
-				// Grid deserialization will use the platform that was just synced above
-				if (gridFromUrl) {
-					deserializeGridRef.current(gridFromUrl);
-				} else {
-					const {
-						isSharedGrid: currentIsSharedGrid,
-						setIsSharedGrid: storeSetIsSharedGrid,
-					} = useGridStore.getState();
-
-					if (currentIsSharedGrid) {
-						storeSetIsSharedGrid(false);
-					}
-				}
+				sessionCoordinator.syncStateFromUrl({
+					deserializeGrid: deserializeGridRef.current,
+					gridFromUrl,
+					isKnownRoute: isKnownRouteRef.current,
+					platformFromUrl,
+					validShipTypes,
+				});
 			} finally {
 				isSyncingRef.current = false;
 			}
@@ -164,11 +125,7 @@ export const useUrlSync = () => {
 		return () => {
 			window.removeEventListener("popstate", handlePopState);
 		};
-	}, [
-		isKnownRoute,
-		// Removing deserializeGrid from dependencies to break the infinite loop
-		// triggered by selectedPlatform changes which re-create deserializeGrid
-	]);
+	}, [isKnownRoute]);
 
 	/**
 	 * Generates a full URL including the current ship type and serialized grid state.

@@ -2,7 +2,6 @@ import type { PlatformState } from "@/store/app/platformStore";
 import type { Mock } from "vitest";
 import { act } from "react";
 import { renderHook } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useGridDeserializer } from "@/hooks/useGridDeserializer/useGridDeserializer";
@@ -12,19 +11,23 @@ import { useGridStore } from "@/store/grid/gridStore";
 
 import { useUrlSync } from "./useUrlSync";
 
-vi.mock("@/store/grid/gridStore");
-vi.mock("@/store/app/platformStore");
-vi.mock("@/hooks/useGridDeserializer/useGridDeserializer");
-vi.mock("@/hooks/useShipTypes/useShipTypes");
+vi.mock("@/store/grid/gridStore", () => ({
+	createGrid: vi.fn(),
+	useGridStore: vi.fn() as unknown as Mock,
+}));
+vi.mock("@/store/app/platformStore", () => ({
+	usePlatformStore: vi.fn() as unknown as Mock,
+}));
+vi.mock("@/hooks/useGridDeserializer/useGridDeserializer", () => ({
+	useGridDeserializer: vi.fn() as unknown as Mock,
+}));
+vi.mock("@/hooks/useShipTypes/useShipTypes", () => ({
+	useFetchShipTypesSuspense: vi.fn() as unknown as Mock,
+}));
 const mockNavigate = vi.fn();
-vi.mock("react-router-dom", async () => {
-	const original = await vi.importActual("react-router-dom");
-
-	return {
-		...original,
-		useNavigate: () => mockNavigate,
-	};
-});
+vi.mock("react-router-dom", () => ({
+	useNavigate: () => mockNavigate,
+}));
 vi.mock("@/context/RouteContext", () => ({
 	useRouteContext: vi.fn(() => ({ isKnownRoute: true })),
 }));
@@ -85,7 +88,7 @@ describe("useUrlSync", () => {
 	 */
 	it("should update URL for sharing", () => {
 		mockSerializeGrid.mockReturnValue("serialized-grid");
-		const { result } = renderHook(() => useUrlSync(), { wrapper: MemoryRouter });
+		const { result } = renderHook(() => useUrlSync());
 		const sharedUrl = result.current.updateUrlForShare();
 		const url = new URL(sharedUrl);
 		expect(url.searchParams.get("grid")).toBe("serialized-grid");
@@ -97,7 +100,7 @@ describe("useUrlSync", () => {
 	 */
 	it("should update URL for reset", () => {
 		window.history.pushState({}, "", "/?grid=some-grid&platform=test-platform");
-		const { result } = renderHook(() => useUrlSync(), { wrapper: MemoryRouter });
+		const { result } = renderHook(() => useUrlSync());
 		result.current.updateUrlForReset();
 		expect(mockNavigate).toHaveBeenCalledWith("/?platform=test-platform", { replace: true });
 	});
@@ -107,7 +110,7 @@ describe("useUrlSync", () => {
 	 */
 	it("should deserialize grid from URL on initial load", () => {
 		window.history.pushState({}, "", "/?grid=serialized-grid&platform=test-platform");
-		renderHook(() => useUrlSync(), { wrapper: MemoryRouter });
+		renderHook(() => useUrlSync());
 		expect(mockDeserializeGrid).toHaveBeenCalledWith("serialized-grid");
 	});
 
@@ -119,7 +122,7 @@ describe("useUrlSync", () => {
 		(useFetchShipTypesSuspense as unknown as Mock).mockReturnValue({
 			"new-platform": { label: "New Platform", type: "Starship" },
 		});
-		renderHook(() => useUrlSync(), { wrapper: MemoryRouter });
+		renderHook(() => useUrlSync());
 		expect(mockSetSelectedPlatform).toHaveBeenCalledWith(
 			"new-platform",
 			["new-platform"],
@@ -138,7 +141,7 @@ describe("useUrlSync", () => {
 			"test-platform": { label: "Test Platform", type: "Starship" },
 		});
 
-		renderHook(() => useUrlSync(), { wrapper: MemoryRouter });
+		renderHook(() => useUrlSync());
 
 		act(() => {
 			window.history.pushState({}, "", "/?grid=new-serialized-grid&platform=new-platform");

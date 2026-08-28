@@ -2,7 +2,10 @@ import type { ApiResponse, Grid } from "./grid/gridStore";
 import type { BonusStatusData } from "./tech/techStore";
 import type { TechTreeItem } from "@/types/tech";
 
-import { useGridStore } from "./grid/gridStore";
+import { Logger } from "@/utils/system/monitoring";
+
+import { usePlatformStore } from "./app/platformStore";
+import { createGrid, useGridStore } from "./grid/gridStore";
 import { useTechStore } from "./tech/techStore";
 
 /**
@@ -177,5 +180,61 @@ export const sessionCoordinator = {
 		techStore.clearTechGroups();
 		techStore.clearAllBonusStatus();
 		techStore.clearAllModuleSelections();
+	},
+
+	/**
+	 * Synchronizes application state with values retrieved from the browser URL.
+	 *
+	 * Handles conditional ship platform switches and grid layout deserialization.
+	 *
+	 * @param {object} params - The search parameter values and deserializer.
+	 * @param {string | null} params.platformFromUrl - The platform query parameter.
+	 * @param {string | null} params.gridFromUrl - The grid layout query parameter.
+	 * @param {string[]} params.validShipTypes - Array of supported ship type identifiers.
+	 * @param {boolean} params.isKnownRoute - True if route is standard/known.
+	 * @param {(serialized: string) => void} params.deserializeGrid - Callback to deserialize grid string.
+	 */
+	syncStateFromUrl(params: {
+		deserializeGrid: (serialized: string) => void;
+		gridFromUrl: null | string;
+		isKnownRoute: boolean;
+		platformFromUrl: null | string;
+		validShipTypes: string[];
+	}) {
+		const { deserializeGrid, gridFromUrl, isKnownRoute, platformFromUrl, validShipTypes } =
+			params;
+		const platformStore = usePlatformStore.getState();
+		const currentPlatform = platformStore.selectedPlatform;
+
+		// Sync platform first to avoid grid deserialization conflicts
+		if (platformFromUrl && platformFromUrl !== currentPlatform) {
+			if (validShipTypes.includes(platformFromUrl)) {
+				platformStore.setSelectedPlatform(
+					platformFromUrl,
+					validShipTypes,
+					false, // updateUrl = false (we are ALREADY responding to a URL change)
+					isKnownRoute
+				);
+
+				if (!gridFromUrl) {
+					sessionCoordinator.switchPlatform(createGrid(10, 6));
+				}
+			} else {
+				Logger.warn(
+					`sessionCoordinator: Invalid platform from URL: ${platformFromUrl}. Expected one of: ${validShipTypes.join(", ")}`
+				);
+			}
+		}
+
+		if (gridFromUrl) {
+			deserializeGrid(gridFromUrl);
+		} else {
+			const { isSharedGrid: currentIsSharedGrid, setIsSharedGrid: storeSetIsSharedGrid } =
+				useGridStore.getState();
+
+			if (currentIsSharedGrid) {
+				storeSetIsSharedGrid(false);
+			}
+		}
 	},
 };

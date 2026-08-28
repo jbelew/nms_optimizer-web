@@ -5,6 +5,7 @@ import { computeBonusStatus, sessionCoordinator } from "./sessionCoordinator";
 
 const mockGridStore = {
 	clearInteractionState: vi.fn(),
+	isSharedGrid: false,
 	setBuildName: vi.fn(),
 	setGrid: vi.fn(),
 	setIsSharedGrid: vi.fn(),
@@ -18,7 +19,13 @@ const mockTechStore = {
 	clearTechGroups: vi.fn(),
 };
 
+const mockPlatformStoreState = {
+	selectedPlatform: "test-platform",
+	setSelectedPlatform: vi.fn(),
+};
+
 vi.mock("./grid/gridStore", () => ({
+	createGrid: vi.fn(),
 	useGridStore: {
 		getState: vi.fn(() => mockGridStore),
 	},
@@ -27,6 +34,12 @@ vi.mock("./grid/gridStore", () => ({
 vi.mock("./tech/techStore", () => ({
 	useTechStore: {
 		getState: vi.fn(() => mockTechStore),
+	},
+}));
+
+vi.mock("./app/platformStore", () => ({
+	usePlatformStore: {
+		getState: () => mockPlatformStoreState,
 	},
 }));
 
@@ -66,5 +79,55 @@ describe("sessionCoordinator", () => {
 		expect(mockGridStore.setResult).toHaveBeenCalledWith(null);
 		expect(mockGridStore.setIsSharedGrid).toHaveBeenCalledWith(false);
 		expect(mockGridStore.setBuildName).toHaveBeenCalledWith(null);
+	});
+
+	describe("syncStateFromUrl", () => {
+		it("should synchronize platform and deserialize grid when both are present", () => {
+			mockPlatformStoreState.selectedPlatform = "old-platform";
+			const mockDeserializeGrid = vi.fn();
+
+			sessionCoordinator.syncStateFromUrl({
+				deserializeGrid: mockDeserializeGrid,
+				gridFromUrl: "serialized-grid",
+				isKnownRoute: true,
+				platformFromUrl: "new-platform",
+				validShipTypes: ["old-platform", "new-platform"],
+			});
+
+			expect(mockPlatformStoreState.setSelectedPlatform).toHaveBeenCalledWith(
+				"new-platform",
+				["old-platform", "new-platform"],
+				false,
+				true
+			);
+			expect(mockDeserializeGrid).toHaveBeenCalledWith("serialized-grid");
+		});
+
+		it("should reset platform and grid when platform is changed without grid", () => {
+			mockPlatformStoreState.selectedPlatform = "old-platform";
+			const mockDeserializeGrid = vi.fn();
+			const switchPlatformSpy = vi
+				.spyOn(sessionCoordinator, "switchPlatform")
+				.mockImplementation(() => {});
+
+			sessionCoordinator.syncStateFromUrl({
+				deserializeGrid: mockDeserializeGrid,
+				gridFromUrl: null,
+				isKnownRoute: true,
+				platformFromUrl: "new-platform",
+				validShipTypes: ["old-platform", "new-platform"],
+			});
+
+			expect(mockPlatformStoreState.setSelectedPlatform).toHaveBeenCalledWith(
+				"new-platform",
+				["old-platform", "new-platform"],
+				false,
+				true
+			);
+			expect(switchPlatformSpy).toHaveBeenCalled();
+			expect(mockDeserializeGrid).not.toHaveBeenCalled();
+
+			switchPlatformSpy.mockRestore();
+		});
 	});
 });
