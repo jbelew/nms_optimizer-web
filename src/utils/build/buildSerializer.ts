@@ -1,68 +1,101 @@
 import type { BonusStatusData } from "@/store/tech/techStore";
 import type { BuildFile } from "@/utils/validation/dataValidation";
-import { startTransition } from "react";
 
-import { usePlatformStore } from "@/store/app/platformStore";
-import { useGridStore } from "@/store/grid/gridStore";
-import { useTechStore } from "@/store/tech/techStore";
 import { computeSHA256 } from "@/utils/system/hashUtils";
 import { Logger } from "@/utils/system/monitoring";
 import { isValidBuildFile, sanitizeFilename } from "@/utils/validation/dataValidation";
+
+/**
+ * Parameters for serializing the application state into a saveable build file.
+ *
+ * @category Utilities
+ */
+export interface SaveBuildParams {
+	/** The display name of the build. */
+	buildName: string;
+	/** The serialized grid state parameters. */
+	gridState: SaveBuildGridState;
+	/** The ship type identifier. */
+	shipType: string;
+	/** The serialized tech state parameters. */
+	techState: SaveBuildTechState;
+}
+
+/**
+ * Grid state parameters required for saving a build configuration.
+ *
+ * @category Utilities
+ */
+interface SaveBuildGridState {
+	/** The 2D grid of cells. */
+	grid: unknown;
+	/** Whether the active layout of the grid is locked. */
+	gridFixed: boolean;
+	/** The default layout definition for the current ship type. */
+	initialGridDefinition?: unknown;
+	/** Whether the grid was populated from a shared URL. */
+	isSharedGrid: boolean;
+	/** The most recent optimization result. */
+	result: unknown;
+	/** Whether the locations of supercharged slots are locked. */
+	superchargedFixed: boolean;
+}
+
+/**
+ * Tech state parameters required for saving a build configuration.
+ *
+ * @category Utilities
+ */
+interface SaveBuildTechState {
+	/** Mapping of technology keys to their calculated status data. */
+	bonusStatus: Record<string, BonusStatusData>;
+	/** User-selected module IDs for each technology. */
+	checkedModules: Record<string, string[]>;
+	/** Mapping of technology keys to their theoretical maximum bonus. */
+	maxBonus: Record<string, number>;
+	/** Mapping of technology keys to their actual solved bonus. */
+	solvedBonus: Record<string, number>;
+	/** Mapping of technology keys to their solver method. */
+	solveMethod: Record<string, string>;
+}
 
 /**
  * Utility module for serializing and deserializing application build configurations.
  *
  * @remarks
  * This module provides functions to save the current optimizer state (grid, technology selection, etc.)
- * into a JSON-based `.nms` build file and to reload a saved build file back into the application stores.
- * It encapsulates validation logic, integrity checksums, platform transitioning, and store restoration
- * to keep UI hooks clean and decoupled from business serialization logic.
+ * into a JSON-based `.nms` build file and to parse and validate build content.
+ * It is completely decoupled from React and Zustand store singletons, making it pure and easily testable.
  *
  * @category Utilities
  */
 export const buildSerializer = {
 	/**
-	 * Parses, validates, and loads a build configuration file, updating application state.
+	 * Parses and validates a build configuration JSON text.
 	 *
 	 * @remarks
-	 * This function parses the provided `.nms` file content, validates that the file conforms to size
-	 * limits and file extension requirements, checks JSON structure validity, performs a checksum integrity
-	 * verification, validates ship platform compatibility, and updates application stores inside a React
-	 * transition.
+	 * This function parses the provided JSON text, validates that it conforms to the `BuildFile` schema,
+	 * performs a checksum integrity verification, and validates ship type compatibility.
 	 *
-	 * @param {File} file - The uploaded build file to parse and apply.
-	 * @param {string[]} validShipTypes - Array of supported ship type identifiers used for compatibility validation.
+	 * @param {string} text - The JSON text content of the build file.
+	 * @param {string[]} validShipTypes - Array of supported ship type identifiers.
 	 *
-	 * @returns {Promise<void>} A promise resolving when the state has been successfully restored.
+	 * @returns {Promise<BuildFile>} A promise resolving to the parsed and validated BuildFile object.
 	 *
-	 * @throws {Error} If file type/extension is invalid, file exceeds size limit, content is empty or invalid JSON, structure is invalid, checksum fails, or ship type is unsupported.
+	 * @throws {Error} If text is empty or invalid JSON, structure is invalid, checksum fails, or ship type is unsupported.
 	 *
 	 * @see {@link isValidBuildFile}
-	 * @see {@link usePlatformStore}
-	 * @see {@link useGridStore}
-	 * @see {@link useTechStore}
 	 * @see {@link ./buildSerializer.test.ts Unit Tests}
 	 *
 	 * @example
 	 * ```ts
-	 * const file = event.target.files[0];
 	 * const validShipTypes = ["fighter", "explorer", "shuttle"];
-	 * await buildSerializer.loadBuild(file, validShipTypes);
+	 * const buildData = await buildSerializer.loadBuild(jsonText, validShipTypes);
 	 * ```
 	 */
-	async loadBuild(file: File, validShipTypes: string[]): Promise<void> {
+	async loadBuild(text: string, validShipTypes: string[]): Promise<BuildFile> {
 		try {
-			if (!file.name.endsWith(".nms")) {
-				throw new Error("Invalid file type. Please select a .nms build file.");
-			}
-
-			if (file.size > 10 * 1024 * 1024) {
-				throw new Error("File is too large. Build files should be under 10MB.");
-			}
-
-			const text = await file.text();
-
-			if (!text) {
+			if (!text || !text.trim()) {
 				throw new Error("File is empty. Please select a valid build file.");
 			}
 
@@ -110,28 +143,7 @@ export const buildSerializer = {
 				);
 			}
 
-			const platformState = usePlatformStore.getState();
-
-			if (buildData.shipType !== platformState.selectedPlatform) {
-				platformState.setSelectedPlatform(buildData.shipType, validShipTypes, true, true);
-			}
-
-			startTransition(() => {
-				useGridStore
-					.getState()
-					.restoreGridState({ ...buildData.gridState, buildName: buildData.name });
-
-				useTechStore.setState({
-					...buildData.techState,
-					bonusStatus: (buildData.bonusState?.bonusStatus ?? {}) as Record<
-						string,
-						BonusStatusData
-					>,
-					checkedModules: (buildData.techState?.checkedModules ??
-						buildData.moduleState?.moduleSelections ??
-						{}) as { [key: string]: string[] },
-				});
-			});
+			return buildData;
 		} catch (error) {
 			Logger.error("Failed to load build file:", error);
 			throw error;
@@ -139,37 +151,35 @@ export const buildSerializer = {
 	},
 
 	/**
-	 * Serializes the current application state into a saveable build file content structure.
+	 * Serializes the provided state parameters into a saveable build file content structure.
 	 *
 	 * @remarks
-	 * This function retrieves the state from the grid, tech, and platform stores,
-	 * assembles the stable key-ordered state object, computes a SHA-256 integrity checksum,
-	 * formats it as a `BuildFile` structure, and returns it as a binary `Blob` and a sanitized filename.
+	 * This function assembles the stable key-ordered state object, computes a SHA-256 integrity checksum,
+	 * formats it as a `BuildFile` structure with alphabetically sorted top-level keys,
+	 * and returns it as a binary `Blob` and a sanitized filename.
 	 *
-	 * @param {string} buildName - The name to assign to the saved build configuration.
+	 * @param {SaveBuildParams} params - The parameters representing the build state to save.
 	 *
-	 * @returns {Promise<{ blob: Blob; filename: string }>} A promise resolving to an object containing the serialised binary `Blob` and the `.nms` sanitized filename.
+	 * @returns {Promise<{ blob: Blob; filename: string }>} A promise resolving to the serialised binary `Blob` and the `.nms` sanitized filename.
 	 *
-	 * @throws {Error} If state retrieval, SHA-256 computation, or JSON serialization fails.
+	 * @throws {Error} If SHA-256 computation or JSON serialization fails.
 	 *
-	 * @see {@link useGridStore}
-	 * @see {@link useTechStore}
-	 * @see {@link usePlatformStore}
 	 * @see {@link computeSHA256}
 	 * @see {@link ./buildSerializer.test.ts Unit Tests}
 	 *
 	 * @example
 	 * ```ts
-	 * const { blob, filename } = await buildSerializer.saveBuild("My Fighter Layout");
-	 * // returns { blob: Blob, filename: "My-Fighter-Layout.nms" }
+	 * const { blob, filename } = await buildSerializer.saveBuild({
+	 *   buildName: "My Fighter Layout",
+	 *   shipType: "fighter",
+	 *   gridState,
+	 *   techState,
+	 * });
 	 * ```
 	 */
-	async saveBuild(buildName: string): Promise<{ blob: Blob; filename: string }> {
+	async saveBuild(params: SaveBuildParams): Promise<{ blob: Blob; filename: string }> {
 		try {
-			const gridState = useGridStore.getState();
-			const techState = useTechStore.getState();
-			const platformState = usePlatformStore.getState();
-			const selectedShipType = platformState.selectedPlatform;
+			const { buildName, gridState, shipType, techState } = params;
 
 			/**
 			 * CRITICAL: The order of keys in this object MUST remain stable.
@@ -204,12 +214,19 @@ export const buildSerializer = {
 			const stateDataJson = JSON.stringify(stateData);
 			const checksum = await computeSHA256(stateDataJson);
 
+			/**
+			 * Alphabetically sorted top-level keys to satisfy requirement:
+			 * bonusState, checksum, gridState, moduleState, name, shipType, techState, timestamp.
+			 */
 			const buildData: BuildFile = {
+				bonusState: stateData.bonusState,
 				checksum,
+				gridState: stateData.gridState,
+				moduleState: stateData.moduleState,
 				name: buildName,
-				shipType: selectedShipType,
+				shipType,
+				techState: stateData.techState,
 				timestamp: Date.now(),
-				...stateData,
 			};
 
 			const json = JSON.stringify(buildData, null, 2);

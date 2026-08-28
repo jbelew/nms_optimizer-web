@@ -11,3 +11,10 @@ Summary: Simplified the `useBuildFileManager` hook into a thin DOM adapter that 
 Key Learnings:
 - Restricting React hooks to DOM/browser interactions and delegating all core validation and business logic to plain utility modules leads to cleaner, more decoupled components.
 - In Vitest/Testing Library tests, when mocking global DOM methods (e.g., `document.body.appendChild`), care must be taken to only spy on the calls or avoid blocking default behavior that the React runtime requires to render hooks. Using `vi.spyOn` on specific properties or prototypes is a safer approach than stubbing global methods completely.
+
+Date: 2026-08-28
+Task: Implement GitHub issue #718: "refactor(build): decouple buildSerializer from React and Zustand stores"
+Summary: Refactored `buildSerializer.ts` to be completely decoupled from React and Zustand store singletons. `loadBuild` now accepts raw JSON text and valid ship types, returning the parsed/validated state object to the caller. `saveBuild` accepts state parameters, computes the integrity checksum, and formats the output into a JSON structure with alphabetically sorted top-level keys while preserving the original insertion order of nested state keys. Updated `useBuildFileManager.ts` and the test suites.
+Key Learnings:
+- Separation of Concerns: Decoupling core serialization from React transitions and global Zustand stores converts the module into a pure utility, removing store mocking needs in the unit tests.
+- JSON Serialization Order: Constructing output structures with alphabetically sorted top-level keys while preserving nested key insertion order satisfies both linter requirements and backward-compatible file integrity checksums.

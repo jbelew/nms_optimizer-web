@@ -1555,3 +1555,34 @@ Google Search Console reported the critical error: "Review has multiple aggregat
   - Decoupling complex JSON serialization, size checks, and cryptographic hashing from React components/hooks into pure plain-object modules increases testability.
   - Leveraging `vi.hoisted` in Vitest ensures that store-mocking setup functions exist before mocked module factories execute, preventing ReferenceErrors during module resolution.
   - Decoupled code allows for fast, lightweight test suites that bypass the need for jsdom render environments or hook wrappers entirely.
+
+## PRAR Cycle: Decouple buildSerializer from React and Zustand stores (2026-08-28)
+
+### Perceive & Understand
+- **Request**: Refactor `buildSerializer.ts` to be a pure TypeScript serialization and verification module operating on raw data rather than browser `File` objects. Remove all React and Zustand store couplings.
+- **Context**: The previous implementation had direct calls to `startTransition` and Zustand stores (`useGridStore.getState()`, etc.).
+- **Details**:
+  - `loadBuild` accepts JSON text string and array of ship types and returns the parsed and validated state object to the caller.
+  - `saveBuild` accepts state parameters, computes the integrity checksum, and formats the output into a JSON structure with alphabetically sorted top-level keys while keeping nested state keys in their original insertion order to maintain backward-compatible checksum verification.
+  - Exclude all React and store mocks from `buildSerializer.test.ts` to test the pure parser/serializer using string inputs and output assertions.
+
+### Reason & Plan
+- **Plan**:
+  - Update `buildSerializer.ts` to implement the pure TypeScript serialization and validation logic.
+  - Update `useBuildFileManager.ts` to act as the React/DOM/store integration adapter (retrieving store state to pass to `saveBuild`, and applying parsed state returned by `loadBuild` inside a `startTransition` call).
+  - Update `buildSerializer.test.ts` to test the pure functions using mock-free strings and object assertions.
+  - Update `useBuildFileManager.test.ts` to assert that the hook correctly retrieves store state and triggers DOM downloads or state updates.
+  - Fix any linter (specifically `perfectionist/sort-objects`) and test suite errors.
+
+### Act & Implement
+- **Action**:
+  - Refactored `src/utils/build/buildSerializer.ts` and `src/hooks/useBuildFileManager/useBuildFileManager.ts`.
+  - Rewrote the unit test suite `src/utils/build/buildSerializer.test.ts` without React or store mocks.
+  - Updated `src/hooks/useBuildFileManager/useBuildFileManager.test.ts` to mock stores and verify integration.
+  - Alphabetized interface properties and object keys to fully satisfy ESLint perfectionist requirements.
+  - Closed issue #718 on GitHub.
+
+### Refine & Reflect
+- **Reflection**:
+  - Keeping core file serializers/parsers pure and decoupled from framework-specific singletons (like Zustand stores or React transitions) makes them modular, easily portable, and simple to unit test.
+  - We can satisfy strict linter sorting requirements on caller/test objects while preserving custom, order-dependent serialization formats required for backward-compatible checksum verification by controlling how the serialized objects are dynamically constructed.

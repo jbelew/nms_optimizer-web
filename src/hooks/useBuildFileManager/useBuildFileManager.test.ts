@@ -1,9 +1,118 @@
+import type React from "react";
 import { renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { buildSerializer } from "@/utils/build/buildSerializer";
 
 import { useBuildFileManager } from "./useBuildFileManager";
+
+// Use vi.hoisted to declare mock functions and states that must be evaluated
+// before the hoisted vi.mock factories run.
+const {
+	mockGetGridState,
+	mockGetPlatformState,
+	mockGetTechState,
+	mockRestoreGridState,
+	mockSetSelectedPlatform,
+	mockSetTechState,
+} = vi.hoisted(() => {
+	const mockRestoreGridState = vi.fn();
+	const mockGetGridState = vi.fn(() => ({
+		grid: { cells: [], height: 0, width: 0 },
+		gridFixed: false,
+		initialGridDefinition: undefined,
+		isSharedGrid: false,
+		restoreGridState: mockRestoreGridState,
+		result: null,
+		superchargedFixed: false,
+	}));
+
+	const mockSetTechState = vi.fn();
+	const mockGetTechState = vi.fn(() => ({
+		bonusStatus: {},
+		checkedModules: {},
+		maxBonus: {},
+		solvedBonus: {},
+		solveMethod: {},
+	}));
+
+	const mockSetSelectedPlatform = vi.fn();
+	const mockGetPlatformState = vi.fn(() => ({
+		selectedPlatform: "freighter",
+		setSelectedPlatform: mockSetSelectedPlatform,
+	}));
+
+	return {
+		mockGetGridState,
+		mockGetPlatformState,
+		mockGetTechState,
+		mockRestoreGridState,
+		mockSetSelectedPlatform,
+		mockSetTechState,
+	};
+});
+
+vi.mock("@/store/grid/gridStore", () => {
+	const mockStore = vi.fn((selector) => {
+		const store = mockGetGridState();
+
+		return typeof selector === "function" ? selector(store) : store;
+	});
+	Object.defineProperty(mockStore, "getState", {
+		value: mockGetGridState,
+		writable: true,
+	});
+
+	return {
+		useGridStore: mockStore,
+	};
+});
+
+vi.mock("@/store/tech/techStore", () => {
+	const mockStore = vi.fn((selector) => {
+		const store = mockGetTechState();
+
+		return typeof selector === "function" ? selector(store) : store;
+	});
+	Object.defineProperty(mockStore, "getState", {
+		value: mockGetTechState,
+		writable: true,
+	});
+	Object.defineProperty(mockStore, "setState", {
+		value: mockSetTechState,
+		writable: true,
+	});
+
+	return {
+		useTechStore: mockStore,
+	};
+});
+
+vi.mock("@/store/app/platformStore", () => {
+	const mockStore = vi.fn((selector) => {
+		const store = mockGetPlatformState();
+
+		return typeof selector === "function" ? selector(store) : store;
+	});
+	Object.defineProperty(mockStore, "getState", {
+		value: mockGetPlatformState,
+		writable: true,
+	});
+
+	return {
+		usePlatformStore: mockStore,
+	};
+});
+
+// Mock react's startTransition to run immediately/synchronously
+vi.mock("react", async (importOriginal) => {
+	const actual = await importOriginal<typeof React>();
+
+	return {
+		...actual,
+		startTransition: vi.fn((cb: () => void) => cb()),
+	};
+});
 
 // Mock buildSerializer
 vi.mock("@/utils/build/buildSerializer", () => ({
@@ -26,6 +135,27 @@ vi.mock("@/hooks/useShipTypes/useShipTypes", () => ({
 describe("useBuildFileManager", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
+		// Reset store state getters to their default mock implementations
+		mockGetGridState.mockImplementation(() => ({
+			grid: { cells: [], height: 0, width: 0 },
+			gridFixed: false,
+			initialGridDefinition: undefined,
+			isSharedGrid: false,
+			restoreGridState: mockRestoreGridState,
+			result: null,
+			superchargedFixed: false,
+		}));
+		mockGetTechState.mockImplementation(() => ({
+			bonusStatus: {},
+			checkedModules: {},
+			maxBonus: {},
+			solvedBonus: {},
+			solveMethod: {},
+		}));
+		mockGetPlatformState.mockImplementation(() => ({
+			selectedPlatform: "freighter",
+			setSelectedPlatform: mockSetSelectedPlatform,
+		}));
 	});
 
 	describe("saveBuildToFile", () => {
@@ -63,8 +193,26 @@ describe("useBuildFileManager", () => {
 			const { result } = renderHook(() => useBuildFileManager());
 			await result.current.saveBuildToFile(buildName);
 
-			// Assert serialization delegation
-			expect(buildSerializer.saveBuild).toHaveBeenCalledWith(buildName);
+			// Assert serialization delegation with store states
+			expect(buildSerializer.saveBuild).toHaveBeenCalledWith({
+				buildName,
+				gridState: {
+					grid: { cells: [], height: 0, width: 0 },
+					gridFixed: false,
+					initialGridDefinition: undefined,
+					isSharedGrid: false,
+					result: null,
+					superchargedFixed: false,
+				},
+				shipType: "freighter",
+				techState: {
+					bonusStatus: {},
+					checkedModules: {},
+					maxBonus: {},
+					solvedBonus: {},
+					solveMethod: {},
+				},
+			});
 
 			// Assert DOM download sequence
 			expect(URL.createObjectURL).toHaveBeenCalledWith(mockBlob);
@@ -101,18 +249,92 @@ describe("useBuildFileManager", () => {
 	describe("loadBuildFromFile", () => {
 		it("should delegate validation and state restoration to buildSerializer", async () => {
 			const mockFile = new File(["{}"], "test.nms", { type: "application/octet-stream" });
-			vi.mocked(buildSerializer.loadBuild).mockResolvedValueOnce();
+			const mockBuildData = {
+				bonusState: {
+					bonusStatus: {},
+				},
+				checksum: "abc123def456",
+				gridState: {
+					grid: { cells: [], height: 0, width: 0 },
+					gridFixed: false,
+					isSharedGrid: false,
+					result: null,
+					superchargedFixed: false,
+				},
+				moduleState: {},
+				name: "Test Build",
+				shipType: "freighter",
+				techState: {
+					checkedModules: {},
+				},
+				timestamp: Date.now(),
+			};
+
+			vi.mocked(buildSerializer.loadBuild).mockResolvedValueOnce(mockBuildData);
 
 			const { result } = renderHook(() => useBuildFileManager());
 			await result.current.loadBuildFromFile(mockFile);
 
-			// Assert delegation to serializer with valid ship types resolved from the hook
-			expect(buildSerializer.loadBuild).toHaveBeenCalledWith(mockFile, [
+			// Assert delegation to serializer with string content and valid ship types
+			expect(buildSerializer.loadBuild).toHaveBeenCalledWith("{}", [
 				"explorer",
 				"fighter",
 				"freighter",
 				"shuttle",
 			]);
+
+			// Assert state restoration calls
+			expect(mockRestoreGridState).toHaveBeenCalledWith({
+				buildName: "Test Build",
+				grid: { cells: [], height: 0, width: 0 },
+				gridFixed: false,
+				isSharedGrid: false,
+				result: null,
+				superchargedFixed: false,
+			});
+			expect(mockSetTechState).toHaveBeenCalledWith({
+				bonusStatus: {},
+				checkedModules: {},
+			});
+			expect(mockSetSelectedPlatform).not.toHaveBeenCalled();
+		});
+
+		it("should throw an error if the file extension is not .nms", async () => {
+			const mockFile = new File(["{}"], "test.json", {
+				type: "application/json",
+			});
+
+			const { result } = renderHook(() => useBuildFileManager());
+
+			await expect(result.current.loadBuildFromFile(mockFile)).rejects.toThrow(
+				"Invalid file type. Please select a .nms build file."
+			);
+		});
+
+		it("should throw an error if the file exceeds 10MB limit", async () => {
+			const chunk = "x".repeat(1024 * 1024); // 1MB
+			const parts = Array.from({ length: 11 }, () => chunk); // 11MB
+			const mockFile = new File(parts, "large.nms", {
+				type: "application/octet-stream",
+			});
+
+			const { result } = renderHook(() => useBuildFileManager());
+
+			await expect(result.current.loadBuildFromFile(mockFile)).rejects.toThrow(
+				"File is too large. Build files should be under 10MB."
+			);
+		});
+
+		it("should throw an error if the file is empty", async () => {
+			const mockFile = new File([], "empty.nms", {
+				type: "application/octet-stream",
+			});
+
+			const { result } = renderHook(() => useBuildFileManager());
+
+			await expect(result.current.loadBuildFromFile(mockFile)).rejects.toThrow(
+				"File is empty. Please select a valid build file."
+			);
 		});
 
 		it("should propagate errors thrown by the serializer", async () => {
