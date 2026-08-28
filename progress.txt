@@ -32,3 +32,11 @@ Summary: Rewrote the complete test suite for `useBuildFileManager` hook. Verifie
 Key Learnings:
 - Testing DOM Side-Effects after renderHook: Spying on DOM methods like `document.body.appendChild` should happen *after* calling `renderHook` to prevent tracking mounting actions executed by the test renderer.
 - Comprehensive State Cleanup Assertions: Ensuring `isPending` resets to `false` and any temporary browser resources are cleaned up upon failures guards against UI lockouts and memory leaks in real applications.
+
+Date: 2026-08-28
+Task: Implement GitHub issue #724: "refactor(build): correct React transition boundaries in useBuildFileManager"
+Summary: Refactored the `useBuildFileManager` hook to run asynchronous file I/O, validation, and DOM download triggers outside of React transitions. Replaced `useTransition()` progress tracking with a standard `useState(false)` pending flag inside the hook. Implemented a new `restoreTechState` action on the Zustand technology store (`useTechStore`) to encapsulate technology state restoration and legacy fallback merging, and consumed it in the hook. Wrapped only store update calls (`restoreGridState`, `restoreTechState`, and `setSelectedPlatform`) in `startTransition`. Updated `useBuildFileManager.test.ts` and `techStore.test.ts` to assert that pending state transitions and DOM download side-effects behave correctly under the new model.
+Key Learnings:
+- Asynchronous operations, network/disk I/O, and DOM download triggers must not run inside React transitions. Wrapping them in transitions is a performance anti-pattern. React transitions should wrap only synchronous state updates.
+- Encapsulating complex multi-field state restorations into single store actions (like `restoreTechState`) maintains clean modular store boundaries and decouples custom hooks from state schemas.
+- In Vitest hook rendering tests, any state changes triggered by asynchronous helper calls (such as validation errors) must be wrapped in React's `act(...)` utility to prevent development warning logs.

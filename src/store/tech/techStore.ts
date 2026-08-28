@@ -161,6 +161,28 @@ export interface TechStore {
 	/** A mapping where keys are technology identifiers and values are arrays of selected module IDs. */
 	moduleSelections: Record<string, string[]>;
 	/**
+	 * Restores the technology state from saved build parameters.
+	 *
+	 * @remarks
+	 * This action merges the saved `techState`, `bonusState`, and `moduleState` into the
+	 * store. It resolves legacy mappings (such as `moduleSelections` or `checkedModules`)
+	 * and synchronizes internal state aliases.
+	 *
+	 * @param {object} params - The state components to restore.
+	 * @param {Record<string, unknown>} params.techState - The serialized main tech state (checkedModules, maxBonus, solvedBonus, solveMethod).
+	 * @param {Record<string, unknown>} [params.bonusState] - The serialized bonus status map.
+	 * @param {Record<string, unknown>} [params.moduleState] - The serialized legacy module selection fallback state.
+	 *
+	 * @returns {void} Updates the store state in place.
+	 *
+	 * @see {@link ./techStore.test.ts Unit Tests}
+	 */
+	restoreTechState: (params: {
+		bonusState?: Record<string, unknown>;
+		moduleState?: Record<string, unknown>;
+		techState: Record<string, unknown>;
+	}) => void;
+	/**
 	 * Sets the active group variant for a technology.
 	 *
 	 * @param {string} tech - The technology key.
@@ -223,13 +245,13 @@ export interface TechStore {
 	 * @param {string} method - The name of the solver method.
 	 */
 	setTechSolveMethod: (tech: string, method: string) => void;
+
 	/**
 	 * @deprecated Use solveMethod.
 	 *
 	 * @type {Record<string, string>}
 	 */
 	solve_method: { [key: string]: string };
-
 	/**
 	 * @deprecated Use solvedBonus.
 	 *
@@ -368,6 +390,25 @@ export const useTechStore = create<TechStore>()(
 			max_bonus: {},
 			maxBonus: {},
 			moduleSelections: {},
+			restoreTechState: (params) =>
+				set((state: TechStore) => {
+					const techState = params.techState || {};
+					const bonusState = params.bonusState || {};
+					const moduleState = params.moduleState || {};
+
+					state.maxBonus = (techState.maxBonus ?? {}) as Record<string, number>;
+					state.solvedBonus = (techState.solvedBonus ?? {}) as Record<string, number>;
+					state.solveMethod = (techState.solveMethod ?? {}) as Record<string, string>;
+					state.bonusStatus = (bonusState.bonusStatus ?? {}) as Record<
+						string,
+						BonusStatusData
+					>;
+					state.checkedModules = (techState.checkedModules ??
+						moduleState.moduleSelections ??
+						{}) as Record<string, string[]>;
+
+					syncAliases(state);
+				}),
 			setActiveGroup: (tech, groupType) =>
 				set((state: TechStore) => {
 					state.activeGroups[tech] = groupType;
@@ -410,12 +451,12 @@ export const useTechStore = create<TechStore>()(
 					syncAliases(state);
 				});
 			},
+
 			setTechMaxBonus: (tech, bonus) =>
 				set((state: TechStore) => {
 					state.maxBonus[tech] = bonus;
 					syncAliases(state);
 				}),
-
 			setTechSolvedBonus: (tech, bonus) =>
 				set((state: TechStore) => {
 					state.solvedBonus[tech] = bonus;

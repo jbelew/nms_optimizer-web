@@ -1586,3 +1586,38 @@ Google Search Console reported the critical error: "Review has multiple aggregat
 - **Reflection**:
   - Keeping core file serializers/parsers pure and decoupled from framework-specific singletons (like Zustand stores or React transitions) makes them modular, easily portable, and simple to unit test.
   - We can satisfy strict linter sorting requirements on caller/test objects while preserving custom, order-dependent serialization formats required for backward-compatible checksum verification by controlling how the serialized objects are dynamically constructed.
+
+## PRAR Cycle: React Transition Boundaries in useBuildFileManager (2026-08-28)
+
+### Perceive & Understand
+- **Request**: Refactor `useBuildFileManager` hook (Issue #724) to execute asynchronous file I/O, validation, and DOM download triggers outside of React transitions. Use standard React state for tracking operations and wrap only the final store state updates in transitions. Consume the new `restoreTechState` action on `useTechStore` instead of directly calling `useTechStore.setState`.
+- **Context**: Asynchronous or long-running operations like reading file text or triggering browser downloads should run outside React transitions. Wrapping them in `startTransition` is a performance anti-pattern.
+- **Details**:
+  - Replace `useTransition()` progress tracking with a standard `useState(false)` pending flag inside the hook.
+  - Implement a `restoreTechState` store action on `useTechStore` (Issue #722) to encapsulate technology state restoration and fallback merging.
+  - Wrap only `restoreGridState`, `restoreTechState`, and `setSelectedPlatform` updates inside `startTransition`.
+  - Update `useBuildFileManager.test.ts` and `techStore.test.ts` to assert that pending state transitions and DOM download side-effects behave correctly under the new model.
+
+### Reason & Plan
+- **Plan**:
+  - Add the `restoreTechState` action signature and implementation to `useTechStore` to cleanly merge `checkedModules`, `maxBonus`, `solvedBonus`, `solveMethod`, and `bonusStatus` states including fallbacks for legacy format.
+  - In `useBuildFileManager.ts`, replace `useTransition` hook with `useState(false)` for tracking pending operations.
+  - Update `saveBuildToFile` and `loadBuildFromFile` to set and reset the pending state flag.
+  - Call the state updating actions (`restoreGridState`, `restoreTechState`, and `setSelectedPlatform`) from inside a top-level `startTransition` block.
+  - Update test suites to assert proper state transition wrapping, validation behavior, mock assertions, and clean up test execution warnings.
+
+### Act & Implement
+- **Action**:
+  - Added `restoreTechState` action and JSDoc to `TechStore` interface and state creator in `src/store/tech/techStore.ts`.
+  - Refactored `useBuildFileManager.ts` to use local `useState(false)` and wrap only the store updates in `startTransition`.
+  - Added tests for `restoreTechState` in `src/store/tech/techStore.test.ts`.
+  - Updated assertions and tests in `src/hooks/useBuildFileManager/useBuildFileManager.test.ts`, including wrapping validation tests in React's `act` wrapper to eliminate warnings.
+  - Ran `bun run lint:fix` to auto-sort properties and format code to resolve ESLint perfectionist and style rules.
+  - Confirmed all typechecks and unit tests passed cleanly.
+
+### Refine & Reflect
+- **Reflection**:
+  - Asynchronous steps, I/O, and DOM side-effects should never be wrapped in React transitions. Transitions are designed to run synchronously to register state updates that React can schedule and defer, so long-running operations belong outside them.
+  - Encapsulating store updates within dedicated store actions (like `restoreTechState`) maintains clean store boundaries and prevents custom hooks from envying store internals.
+  - React's `act` function must wrap any operations inside tests that trigger component state updates to prevent async rendering log noise.
+

@@ -267,4 +267,57 @@ describe("TechStore", () => {
 		expect(useTechStore.getState().checkedModules).toEqual({});
 		expect(useTechStore.getState().techGroups).toEqual({});
 	});
+
+	describe("restoreTechState", () => {
+		it("should restore tech state and bonus state parameters correctly", () => {
+			const { restoreTechState } = useTechStore.getState();
+			restoreTechState({
+				bonusState: {
+					bonusStatus: { "tech-1": { icon: "check", percent: 95 } },
+				},
+				techState: {
+					checkedModules: { "tech-1": ["mod-1"] },
+					maxBonus: { "tech-1": 150 },
+					solvedBonus: { "tech-1": 140 },
+					solveMethod: { "tech-1": "annealing" },
+				},
+			});
+
+			const state = useTechStore.getState();
+			expect(state.checkedModules).toEqual({ "tech-1": ["mod-1"] });
+			expect(state.maxBonus).toEqual({ "tech-1": 150 });
+			expect(state.solvedBonus).toEqual({ "tech-1": 140 });
+			expect(state.solveMethod).toEqual({ "tech-1": "annealing" });
+			expect(state.bonusStatus).toEqual({ "tech-1": { icon: "check", percent: 95 } });
+		});
+
+		it("should fall back to moduleSelections in moduleState for legacy builds", () => {
+			const { restoreTechState } = useTechStore.getState();
+			restoreTechState({
+				moduleState: {
+					moduleSelections: { "tech-1": ["mod-2"] },
+				},
+				techState: {
+					maxBonus: { "tech-1": 150 },
+				},
+			});
+
+			const state = useTechStore.getState();
+			expect(state.checkedModules).toEqual({ "tech-1": ["mod-2"] });
+		});
+
+		it("should initialize empty structures when parameters are missing", () => {
+			const { restoreTechState } = useTechStore.getState();
+			restoreTechState({
+				techState: {},
+			});
+
+			const state = useTechStore.getState();
+			expect(state.checkedModules).toEqual({});
+			expect(state.maxBonus).toEqual({});
+			expect(state.solvedBonus).toEqual({});
+			expect(state.solveMethod).toEqual({});
+			expect(state.bonusStatus).toEqual({});
+		});
+	});
 });

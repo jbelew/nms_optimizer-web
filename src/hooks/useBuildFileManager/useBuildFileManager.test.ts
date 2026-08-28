@@ -1,4 +1,5 @@
 import type React from "react";
+import { startTransition } from "react";
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -13,6 +14,7 @@ const {
 	mockGetPlatformState,
 	mockGetTechState,
 	mockRestoreGridState,
+	mockRestoreTechState,
 	mockSetSelectedPlatform,
 	mockSetTechState,
 } = vi.hoisted(() => {
@@ -27,11 +29,13 @@ const {
 		superchargedFixed: false,
 	}));
 
+	const mockRestoreTechState = vi.fn();
 	const mockSetTechState = vi.fn();
 	const mockGetTechState = vi.fn(() => ({
 		bonusStatus: {},
 		checkedModules: {},
 		maxBonus: {},
+		restoreTechState: mockRestoreTechState,
 		solvedBonus: {},
 		solveMethod: {},
 	}));
@@ -47,6 +51,7 @@ const {
 		mockGetPlatformState,
 		mockGetTechState,
 		mockRestoreGridState,
+		mockRestoreTechState,
 		mockSetSelectedPlatform,
 		mockSetTechState,
 	};
@@ -168,6 +173,7 @@ describe("useBuildFileManager", () => {
 			bonusStatus: {},
 			checkedModules: {},
 			maxBonus: {},
+			restoreTechState: mockRestoreTechState,
 			solvedBonus: {},
 			solveMethod: {},
 		}));
@@ -250,6 +256,7 @@ describe("useBuildFileManager", () => {
 
 			expect(removeChildSpy).toHaveBeenCalledWith(appendedElement);
 			expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:http://localhost/mock-uuid");
+			expect(startTransition).not.toHaveBeenCalled();
 
 			clickSpy.mockRestore();
 			appendChildSpy.mockRestore();
@@ -408,11 +415,13 @@ describe("useBuildFileManager", () => {
 				result: null,
 				superchargedFixed: false,
 			});
-			expect(mockSetTechState).toHaveBeenCalledWith({
-				bonusStatus: {},
-				checkedModules: {},
+			expect(mockRestoreTechState).toHaveBeenCalledWith({
+				bonusState: mockBuildData.bonusState,
+				moduleState: mockBuildData.moduleState,
+				techState: mockBuildData.techState,
 			});
 			expect(mockSetSelectedPlatform).not.toHaveBeenCalled();
+			expect(startTransition).toHaveBeenCalled();
 		});
 
 		it("should throw an error if the file extension is not .nms", async () => {
@@ -422,9 +431,11 @@ describe("useBuildFileManager", () => {
 
 			const { result } = renderHook(() => useBuildFileManager());
 
-			await expect(result.current.loadBuildFromFile(mockFile)).rejects.toThrow(
-				"Invalid file type. Please select a .nms build file."
-			);
+			await expect(
+				act(async () => {
+					await result.current.loadBuildFromFile(mockFile);
+				})
+			).rejects.toThrow("Invalid file type. Please select a .nms build file.");
 
 			expect(result.current.isPending).toBe(false);
 		});
@@ -438,9 +449,11 @@ describe("useBuildFileManager", () => {
 
 			const { result } = renderHook(() => useBuildFileManager());
 
-			await expect(result.current.loadBuildFromFile(mockFile)).rejects.toThrow(
-				"File is too large. Build files should be under 10MB."
-			);
+			await expect(
+				act(async () => {
+					await result.current.loadBuildFromFile(mockFile);
+				})
+			).rejects.toThrow("File is too large. Build files should be under 10MB.");
 
 			expect(result.current.isPending).toBe(false);
 		});

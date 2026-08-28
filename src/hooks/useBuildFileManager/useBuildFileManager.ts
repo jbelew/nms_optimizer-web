@@ -1,5 +1,4 @@
-import type { BonusStatusData } from "@/store/tech/techStore";
-import { useTransition } from "react";
+import { startTransition, useState } from "react";
 
 import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
 import { usePlatformStore } from "@/store/app/platformStore";
@@ -36,7 +35,7 @@ import { Logger } from "@/utils/system/monitoring";
  */
 export const useBuildFileManager = () => {
 	const shipTypes = useFetchShipTypesSuspense();
-	const [isPending, startTransition] = useTransition();
+	const [isPending, setIsPending] = useState(false);
 
 	/**
 	 * Serializes the current application state and triggers a file download in the DOM.
@@ -59,51 +58,46 @@ export const useBuildFileManager = () => {
 	 * ```
 	 */
 	const saveBuildToFile = async (buildName: string): Promise<void> => {
+		setIsPending(true);
+
 		try {
-			await new Promise<void>((resolve, reject) => {
-				startTransition(async () => {
-					try {
-						const gridStoreState = useGridStore.getState();
-						const techStoreState = useTechStore.getState();
-						const platformStoreState = usePlatformStore.getState();
+			const gridStoreState = useGridStore.getState();
+			const techStoreState = useTechStore.getState();
+			const platformStoreState = usePlatformStore.getState();
 
-						const { blob, filename } = await buildSerializer.saveBuild({
-							buildName,
-							gridState: {
-								grid: gridStoreState.grid,
-								gridFixed: gridStoreState.gridFixed,
-								initialGridDefinition: gridStoreState.initialGridDefinition,
-								isSharedGrid: gridStoreState.isSharedGrid,
-								result: gridStoreState.result,
-								superchargedFixed: gridStoreState.superchargedFixed,
-							},
-							shipType: platformStoreState.selectedPlatform,
-							techState: {
-								bonusStatus: techStoreState.bonusStatus,
-								checkedModules: techStoreState.checkedModules,
-								maxBonus: techStoreState.maxBonus,
-								solvedBonus: techStoreState.solvedBonus,
-								solveMethod: techStoreState.solveMethod,
-							},
-						});
-
-						const url = URL.createObjectURL(blob);
-						const link = document.createElement("a");
-						link.href = url;
-						link.download = filename;
-						document.body.appendChild(link);
-						link.click();
-						document.body.removeChild(link);
-						URL.revokeObjectURL(url);
-						resolve();
-					} catch (error) {
-						reject(error);
-					}
-				});
+			const { blob, filename } = await buildSerializer.saveBuild({
+				buildName,
+				gridState: {
+					grid: gridStoreState.grid,
+					gridFixed: gridStoreState.gridFixed,
+					initialGridDefinition: gridStoreState.initialGridDefinition,
+					isSharedGrid: gridStoreState.isSharedGrid,
+					result: gridStoreState.result,
+					superchargedFixed: gridStoreState.superchargedFixed,
+				},
+				shipType: platformStoreState.selectedPlatform,
+				techState: {
+					bonusStatus: techStoreState.bonusStatus,
+					checkedModules: techStoreState.checkedModules,
+					maxBonus: techStoreState.maxBonus,
+					solvedBonus: techStoreState.solvedBonus,
+					solveMethod: techStoreState.solveMethod,
+				},
 			});
+
+			const url = URL.createObjectURL(blob);
+			const link = document.createElement("a");
+			link.href = url;
+			link.download = filename;
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+			URL.revokeObjectURL(url);
 		} catch (error) {
 			Logger.error("Failed to save build file:", error);
 			throw new Error("Failed to save build file", { cause: error });
+		} finally {
+			setIsPending(false);
 		}
 	};
 
@@ -129,6 +123,8 @@ export const useBuildFileManager = () => {
 	 * ```
 	 */
 	const loadBuildFromFile = async (file: File): Promise<void> => {
+		setIsPending(true);
+
 		try {
 			if (!file.name.endsWith(".nms")) {
 				throw new Error("Invalid file type. Please select a .nms build file.");
@@ -139,52 +135,42 @@ export const useBuildFileManager = () => {
 			}
 
 			const validShipTypes = Object.keys(shipTypes);
+			const text = await file.text();
 
-			await new Promise<void>((resolve, reject) => {
-				startTransition(async () => {
-					try {
-						const text = await file.text();
+			if (!text) {
+				throw new Error("File is empty. Please select a valid build file.");
+			}
 
-						if (!text) {
-							throw new Error("File is empty. Please select a valid build file.");
-						}
+			const buildData = await buildSerializer.loadBuild(text, validShipTypes);
 
-						const buildData = await buildSerializer.loadBuild(text, validShipTypes);
-						const platformState = usePlatformStore.getState();
+			startTransition(() => {
+				const platformState = usePlatformStore.getState();
 
-						if (buildData.shipType !== platformState.selectedPlatform) {
-							platformState.setSelectedPlatform(
-								buildData.shipType,
-								validShipTypes,
-								true,
-								true
-							);
-						}
+				if (buildData.shipType !== platformState.selectedPlatform) {
+					platformState.setSelectedPlatform(
+						buildData.shipType,
+						validShipTypes,
+						true,
+						true
+					);
+				}
 
-						useGridStore.getState().restoreGridState({
-							...buildData.gridState,
-							buildName: buildData.name,
-						});
+				useGridStore.getState().restoreGridState({
+					...buildData.gridState,
+					buildName: buildData.name,
+				});
 
-						useTechStore.setState({
-							...buildData.techState,
-							bonusStatus: (buildData.bonusState?.bonusStatus ?? {}) as Record<
-								string,
-								BonusStatusData
-							>,
-							checkedModules: (buildData.techState?.checkedModules ??
-								buildData.moduleState?.moduleSelections ??
-								{}) as { [key: string]: string[] },
-						});
-						resolve();
-					} catch (error) {
-						reject(error);
-					}
+				useTechStore.getState().restoreTechState({
+					bonusState: buildData.bonusState,
+					moduleState: buildData.moduleState,
+					techState: buildData.techState,
 				});
 			});
 		} catch (error) {
 			Logger.error("Failed to load build file:", error);
 			throw error;
+		} finally {
+			setIsPending(false);
 		}
 	};
 
