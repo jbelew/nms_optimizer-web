@@ -20,12 +20,12 @@ describe("useGridCellInteraction (Thin DOM Adapter)", () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockGetGridState = vi.fn(() => baseMockMockGridStoreState());
+		mockGetGridState = vi.fn(() => createMockGridStoreState());
 		(useGridStore as unknown as { getState: Mock }).getState = mockGetGridState;
 	});
 
 	// Helper to get fresh mock state for each test run to avoid reference mutation issues
-	const baseMockMockGridStoreState = () => ({
+	const createMockGridStoreState = () => ({
 		registerCellTap: mockRegisterCellTap,
 		toggleCellActive: mockToggleCellActive,
 		toggleCellSupercharged: mockToggleCellSupercharged,

@@ -89,3 +89,10 @@ Summary: Refactored `toggleCellActive`, `toggleCellSupercharged`, `setCellActive
 Key Learnings:
 - Standardizing store actions to run their own invariants and return a transaction status simplifies client hooks and guarantees state safety.
 - Spying on global store methods in Vitest allows for reliable assertions on global state telemetry and side-effects.
+
+Date: 2026-08-29
+Task: Implement GitHub issue #733: "fix(test): rename baseMockMockGridStoreState typo in useGridCellInteraction test"
+Summary: Renamed the factory function `baseMockMockGridStoreState` typo to `createMockGridStoreState` at its definition and call site in `src/components/GridCell/useGridCellInteraction.test.ts`. Verified the test suite runs and passes cleanly under Vitest.
+Key Learnings:
+- Renaming utility helpers to explicitly declare their factory intent (e.g. `createMockGridStoreState`) clarifies test code readability.
+- Chained test run tasks in npm/bun scripts can forward file arguments to all sub-commands; when running tests on single Vitest files, calling `vitest run` directly is cleaner than chaining through scripts that forward parameters to Bun's native runner.
