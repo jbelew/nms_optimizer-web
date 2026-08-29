@@ -40,3 +40,10 @@ Key Learnings:
 - Asynchronous operations, network/disk I/O, and DOM download triggers must not run inside React transitions. Wrapping them in transitions is a performance anti-pattern. React transitions should wrap only synchronous state updates.
 - Encapsulating complex multi-field state restorations into single store actions (like `restoreTechState`) maintains clean modular store boundaries and decouples custom hooks from state schemas.
 - In Vitest hook rendering tests, any state changes triggered by asynchronous helper calls (such as validation errors) must be wrapped in React's `act(...)` utility to prevent development warning logs.
+
+Date: 2026-08-28
+Task: Implement GitHub issue #723: "refactor(build): re-type grid state parameters and extract checksum builder"
+Summary: Re-typed `SaveBuildGridState` properties to use `Grid` and `ApiResponse` domain types, eliminating primitive obsession. Extracted and completed `buildChecksumPayload` as a unified helper. Eliminated all `eslint-disable perfectionist/sort-objects` inline comments by rewriting payload construction with sequential property assignment (`payload[KEY] = value` style), which preserves critical insertion order without triggering the lint rule. Fixed `initialGridDefinition: undefined` serialization via `?? null` to ensure the key always appears in JSON output for checksum consistency. Updated the test suite with new `buildChecksumPayload` key-ordering, insertion-order stability, and checksum payload verification tests.
+Key Learnings:
+- Computed property keys in object literals (e.g., `{ [KEY]: value }`) are still checked by `perfectionist/sort-objects` against the string values of those keys. The rule sees the computed value, not just the presence of brackets. Sequential property assignment on an empty object (`const o = {}; o[KEY] = value`) is the correct approach to bypass this rule without `eslint-disable` comments.
+- `JSON.stringify` drops properties with `undefined` values. When checksum stability requires a key to always be present, normalize `undefined` to `null` using `?? null` before serialization.

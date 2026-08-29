@@ -1621,3 +1621,59 @@ Google Search Console reported the critical error: "Review has multiple aggregat
   - Encapsulating store updates within dedicated store actions (like `restoreTechState`) maintains clean store boundaries and prevents custom hooks from envying store internals.
   - React's `act` function must wrap any operations inside tests that trigger component state updates to prevent async rendering log noise.
 
+## PRAR Cycle: Strongly typed grid parameters and unified checksum builder (2026-08-28)
+
+### Perceive & Understand
+- **Request**: Strongly type grid parameters in `SaveBuildGridState` properties using `Grid` and `ApiResponse` domain types, eliminating primitive obsession. Extract a unified helper function `buildChecksumPayload` to construct the checksum object using computed key assignments to bypass the `sort-objects` lint rule without using `eslint-disable` comments. Update `buildSerializer.test.ts` to verify checksum stability, type validations, and proper key ordering.
+- **Context**: The `buildSerializer` module had inline `/* eslint-disable perfectionist/sort-objects */` overrides to enforce key order of the checksum payload and nested state configurations.
+- **Details**:
+  - Re-type `SaveBuildGridState` to use `Grid` and `ApiResponse | null` (and `GridState["initialGridDefinition"]`).
+  - Extract a unified helper `buildChecksumPayload` in `buildSerializer.ts`.
+  - Use computed keys to dynamically construct objects and bypass the perfectionist sort lint rule.
+  - Remove all banned inline `eslint-disable` overrides.
+  - Update `buildSerializer.test.ts` to assert payload structures, key orders, and stable JSON serializations.
+
+### Reason & Plan
+- **Plan**:
+  - Import domain types `ApiResponse`, `Grid`, `GridState` from `@/store/grid/gridStore` in `buildSerializer.ts`.
+  - Modify `SaveBuildGridState` properties to use these exact domain types.
+  - Define `buildChecksumPayload` helper with computed keys mapping `gridState`, `techState`, `bonusState`, and `moduleState`.
+  - Use computed keys inside `saveBuild` for nested grid, tech, bonus, and module payloads to guarantee key insertion order.
+  - Update `loadBuild` and `saveBuild` to call `buildChecksumPayload`.
+  - Add tests in `buildSerializer.test.ts` to verify computed key mapping order, stability of the stringified payload, and proper serialization behavior in `saveBuild`.
+
+### Act & Implement
+- **Action**:
+  - Updated `src/utils/build/buildSerializer.ts` to re-type variables and extract `buildChecksumPayload`.
+  - Refactored `loadBuild` and `saveBuild` to use the helper.
+  - Updated `src/utils/build/buildSerializer.test.ts` to add tests for type correctness, checksum stability, and key ordering.
+  - Ran typechecks and tests successfully.
+
+### Refine \u0026 Reflect
+- **Reflection**:
+  - Computed property names in JS/TS object literals (using bracket notation `[KEY]: value`) bypass static ESLint object key ordering checks because key names are technically evaluated dynamically. This is a very clean way to enforce strict insertion order for order-dependent protocols (such as checksums/hashing) without resorting to inline linter disable comments.
+  - Explicitly inspecting the call arguments of mocked core utilities (like `computeSHA256`) in unit tests allows us to assert nested structure and key serialization ordering, ensuring checksum stability without needing to rely on non-deterministic system hashing or unmocking complex platform dependencies.
+
+## 2026-08-28: Correction — Issue #723 ESLint sort-objects Bypass
+
+### Perceive \& Understand
+- **Correction to above**: The previous reflection was incorrect. The `perfectionist/sort-objects` ESLint rule **does** apply to computed property keys in object literals (`{ [KEY]: value }`). The rule resolves the computed key's string value and checks alphabetical ordering. Using `[KEY_BONUS_STATE]` (value: `"bonusState"`) after `[KEY_TECH_STATE]` (value: `"techState"`) still triggers the lint error.
+
+### Reason \& Plan
+- The correct approach to bypass `perfectionist/sort-objects` without `eslint-disable` comments is **sequential property assignment on a pre-declared empty object**:
+  ```ts
+  const payload: Record<string, unknown> = {};
+  payload[KEY_GRID_STATE] = gridState;  // inserted first
+  payload[KEY_TECH_STATE] = techState;  // inserted second
+  ```
+  This is not an object literal and is not subject to the lint rule.
+
+### Act \& Implement
+- Rewrote all payload builders in `buildSerializer.ts` to use sequential property assignment.
+- Applied the same pattern in test fixtures that required intentionally non-alphabetical property ordering.
+- Additionally fixed `initialGridDefinition: undefined` serialization: `JSON.stringify` silently drops `undefined` values, breaking checksum key consistency. Normalized using `gridState.initialGridDefinition ?? null`.
+
+### Refine \& Reflect
+- **Key learning**: `perfectionist/sort-objects` evaluates computed key expressions. Sequential assignment (`obj[key] = value`) is the only way to control insertion order without inline lint comments.
+- **Key learning**: When checksum stability requires a key to always be present in the JSON output, normalize optional `undefined` values to `null` using `?? null` before serialization.
+
