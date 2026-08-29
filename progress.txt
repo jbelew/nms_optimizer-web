@@ -54,3 +54,17 @@ Summary: Confirmed that the `restoreTechState` store action, JSDoc signature, an
 Key Learnings:
 - Restoring tech state using a dedicated action on the store prevents direct state mutation in React hooks, maintaining clean store encapsulation boundaries.
 - Re-verifying previously completed issue requirements through the test suite and TypeScript compilers ensures that the implementation remains robust and does not regress.
+
+Date: 2026-08-29
+Task: Fix default checked modules removal on grid reset
+Summary: Removed the redundant and incorrect `techStore.clearAllModuleSelections()` call from `sessionCoordinator.resetSession()`. In the consolidated store, both `clearAllCheckedModules` and `clearAllModuleSelections` modify the same `checkedModules` state registry. `clearAllCheckedModules` correctly restores the default checked modules from the tech tree, but `clearAllModuleSelections` immediately cleared it to `{}`, causing the optimization button to become disabled. Kept `clearAllModuleSelections` in `switchPlatform` since platform changes should reset all custom selections. Added `resetGrid` and `clearAllCheckedModules` mocks to `sessionCoordinator.test.ts` and added a unit test to verify `resetSession` behavior.
+Key Learnings:
+- When consolidating multiple independent stores into a single Zustand store, we must review the sequence of store actions called in transaction workflows (like resetting or switching state). Actions that previously modified separate states might now write to the same fields, causing unintended overrides.
+- Resetting a session should restore default/baseline configurations (like standard ship core modules and their selections) rather than completely wiping all data structures. Complete wipes should be reserved for global lifecycle transitions like switching ship platforms.
+
+Date: 2026-08-29
+Task: Migrate Hook useGridCellInteraction to Thin DOM Adapter (GitHub #728)
+Summary: Migrated `useGridCellInteraction` from a fat hook with validation, metrics, and shake triggers to a thin DOM adapter routing mouse, keyboard, accessibility, and touch events directly to store actions. Shifted layout invariant validators and gesture transaction timing (single vs double tap detection) directly into the store module (`registerCellTap`). Added layout lock and slot validations inside store mutator actions (`toggleCellActive`, `toggleCellSupercharged`, `setCellActive`, and `setCellSupercharged`) as well. Replaced the hook's unit test suite with simplified event-routing verification. Created `registerCellTap.test.ts` to fully cover store-level gestures, rollback transactions, and UI telemetry.
+Key Learnings:
+- Thinning out React hooks into pure DOM adapters enforces strict module boundaries and guarantees store state consistency, regardless of where or how mutations are triggered.
+- Moving touch-timing and validation constraints into store-level transactions allows for direct unit testing of invariants without simulating fragile browser events.

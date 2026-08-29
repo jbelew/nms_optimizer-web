@@ -101,6 +101,8 @@ export interface GridActions {
 	handleCellDoubleTap: (rowIndex: number, columnIndex: number) => void;
 	/** Handles a single tap on a grid cell. */
 	handleCellTap: (rowIndex: number, columnIndex: number) => void;
+	/** Registers a cell tap event for mobile gesture/double-tap logic. */
+	registerCellTap: (rowIndex: number, columnIndex: number, timestamp: number) => void;
 	/** Resets the grid to its initial state or a blank grid. */
 	resetGrid: () => void;
 	/** Removes all modules of a specific technology from the grid. */

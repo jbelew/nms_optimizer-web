@@ -1,22 +1,14 @@
 import type { Cell } from "@/store/grid/gridStore";
 import { useRef, useState } from "react";
 
-import { UI_TIMING } from "@/constants";
-import { validateToggleActive, validateToggleSupercharged } from "@/store/grid/gridRules";
 import { useGridStore } from "@/store/grid/gridStore";
-import { useSessionStore, useShakeStore } from "@/store/ui/uiStore";
-import { Logger } from "@/utils/system/monitoring";
 
 /**
- * Custom hook for managing complex user interactions with an individual grid cell.
+ * Custom hook for managing browser/DOM interactions with an individual grid cell.
  *
  * @remarks
- * Orchestrates mouse, touch, and keyboard events into atomic grid actions.
- * It handles:
- * 1. **Mobile Gesture Detection**: Distinguishes between intentional taps and accidental scrolls/zooms.
- * 2. **Double-Tap Logic**: Implements custom double-tap detection for supercharging cells on mobile.
- * 3. **Constraint Validation**: Checks actions against grid locks (layout/supercharge) before dispatching.
- * 4. **Feedback**: Triggers visual shake feedback via {@link useShakeStore} on invalid interactions.
+ * Acts as a thin DOM adapter that routes raw mouse, touch, and keyboard events
+ * directly to the store actions.
  *
  * @param {Cell} cell - The current data model for the cell.
  * @param {number} rowIndex - The 0-based row index of the cell.
@@ -25,24 +17,20 @@ import { Logger } from "@/utils/system/monitoring";
  *
  * @returns {object} Interaction flags and event handlers.
  * @returns {boolean} returns.isTouching - Active touch state for visual feedback.
- * @returns {function} returns.onMouseDown - Desktop mouse handler.
- * @returns {function} returns.onTouchStart - Mobile gesture start handler.
- * @returns {function} returns.onTouchEnd - Mobile gesture resolution handler.
+ * @returns {function} returns.handleClick - Desktop mouse click handler.
+ * @returns {function} returns.handleContextMenu - Prevents default context menu.
+ * @returns {function} returns.handleKeyDown - Keyboard accessibility handler.
+ * @returns {function} returns.handleTouchCancel - Touch cancellation handler.
+ * @returns {function} returns.handleTouchEnd - Touch end gesture translator.
+ * @returns {function} returns.handleTouchMove - Touch movement tracker.
+ * @returns {function} returns.handleTouchStart - Touch start detector.
  *
- * @see {@link useGridStore} for state dispatching and interaction tracking.
- * @see {@link useSessionStore} for telemetry/error tracking.
- * @see {@link useShakeStore} for visual feedback triggers.
+ * @see {@link useGridStore} for store-level validations and transactions.
  * @see {@link ./useGridCellInteraction.test.ts Unit Tests}
  *
  * @hook
  *
  * @category Hooks
- *
- * @example Hook initialization in GridCell
- * ```tsx
- * const handlers = useGridCellInteraction(cell, 0, 5, false);
- * // returns { isTouching: false, onMouseDown: ..., onTouchStart: ..., ... }
- * ```
  */
 export const useGridCellInteraction = (
 	cell: Cell,
@@ -57,110 +45,7 @@ export const useGridCellInteraction = (
 	const isGestureRef = useRef(false);
 
 	/**
-	 * Triggers a visual shake animation on the grid for feedback.
-	 */
-	const triggerShake = () => {
-		useShakeStore.getState().triggerShake();
-	};
-
-	/**
-	 * Internal logic for handling timed taps (single vs double).
-	 */
-	const handleTouchLogic = () => {
-		const gridState = useGridStore.getState();
-		const sessionState = useSessionStore.getState();
-
-		const currentTime = Date.now();
-		const timeSinceLastTap = currentTime - gridState._lastTapTime;
-		const isSameCell =
-			gridState._lastTapCell[0] === rowIndex && gridState._lastTapCell[1] === columnIndex;
-
-		if (
-			isSameCell &&
-			timeSinceLastTap < UI_TIMING.DOUBLE_TAP_THRESHOLD &&
-			timeSinceLastTap > 0
-		) {
-			// Double tap on the same cell (Toggle Supercharged)
-			const validation = validateToggleSupercharged({
-				cell,
-				gridFixed: gridState.gridFixed,
-				rowIndex,
-				superchargedFixed: gridState.superchargedFixed,
-				totalSupercharged: gridState.totalSuperchargedCells,
-			});
-
-			if (!validation.valid) {
-				if (validation.reason === "superchargedLimit") {
-					sessionState.incrementSuperchargedLimit();
-				} else if (validation.reason === "superchargedFixed") {
-					sessionState.incrementSuperchargedFixed();
-				} else if (validation.reason === "gridFixed") {
-					sessionState.incrementGridFixed();
-				} else if (validation.reason === "rowLimit") {
-					sessionState.incrementRowLimit();
-				}
-
-				triggerShake();
-
-				if (gridState._initialCellStateForTap) {
-					gridState.revertCellTap(
-						rowIndex,
-						columnIndex,
-						gridState._initialCellStateForTap
-					);
-				}
-
-				gridState.clearInteractionState();
-			} else {
-				// FIX: Revert the first tap's effects before applying double tap logic
-				if (gridState._initialCellStateForTap) {
-					gridState.revertCellTap(
-						rowIndex,
-						columnIndex,
-						gridState._initialCellStateForTap
-					);
-				}
-
-				gridState.handleCellDoubleTap(rowIndex, columnIndex);
-				gridState.clearInteractionState();
-			}
-		} else {
-			// Single tap (Toggle Active)
-			gridState.setLastTap([rowIndex, columnIndex], currentTime);
-			const validation = validateToggleActive({
-				cell,
-				gridFixed: gridState.gridFixed,
-			});
-
-			if (!validation.valid) {
-				if (validation.reason === "gridFixed") {
-					sessionState.incrementGridFixed();
-				}
-
-				triggerShake();
-				gridState.setInitialCellStateForTap(null);
-			} else {
-				gridState.setInitialCellStateForTap({ ...cell });
-				gridState.handleCellTap(rowIndex, columnIndex);
-			}
-		}
-	};
-
-	/**
 	 * Records the start of a touch interaction.
-	 *
-	 * @remarks
-	 * Tracks initial coordinates and checks for multi-finger gestures to prevent
-	 * unintended taps during zooming or scrolling.
-	 *
-	 * @param {React.TouchEvent} event - The React touch start event.
-	 *
-	 * @returns {void} Side-effects only.
-	 *
-	 * @example Component registration
-	 * ```tsx
-	 * <div onTouchStart={handleTouchStart} />
-	 * ```
 	 */
 	const handleTouchStart = (event: React.TouchEvent) => {
 		setIsTouching(true);
@@ -179,19 +64,6 @@ export const useGridCellInteraction = (
 
 	/**
 	 * Tracks movement to distinguish between a tap and a scroll gesture.
-	 *
-	 * @remarks
-	 * Compares current touch coordinates to `gestureStartRef`. If movement
-	 * exceeds 10px, the interaction is marked as a gesture (`isGestureRef`).
-	 *
-	 * @param {React.TouchEvent} event - The React touch move event.
-	 *
-	 * @returns {void} Side-effects only.
-	 *
-	 * @example Component registration
-	 * ```tsx
-	 * <div onTouchMove={handleTouchMove} />
-	 * ```
 	 */
 	const handleTouchMove = (event: React.TouchEvent) => {
 		if (isGestureRef.current || !gestureStartRef.current) return;
@@ -208,20 +80,7 @@ export const useGridCellInteraction = (
 	};
 
 	/**
-	 * Finalizes a touch interaction and triggers tap logic if no movement was detected.
-	 *
-	 * @remarks
-	 * Prevents default behavior (e.g., ghost clicks) and validates if the cell
-	 * is part of a static module before processing the tap.
-	 *
-	 * @param {React.TouchEvent | React.MouseEvent} event - The React event finalizing interaction.
-	 *
-	 * @returns {void} Side-effects only.
-	 *
-	 * @example Component registration
-	 * ```tsx
-	 * <div onTouchEnd={handleTouchEnd} />
-	 * ```
+	 * Finalizes a touch interaction and dispatches the event to the store.
 	 */
 	const handleTouchEnd = (event: React.MouseEvent | React.TouchEvent) => {
 		setIsTouching(false);
@@ -234,22 +93,14 @@ export const useGridCellInteraction = (
 			return;
 		}
 
-		// We can cast event to any because we preventDefault on both if needed,
-		// though physically this is usually a TouchEvent.
 		if (event.cancelable) {
 			event.preventDefault();
 		}
 
 		if (isSharedGrid) return;
 
-		if (cell.module) {
-			useSessionStore.getState().incrementModuleLocked();
-			triggerShake();
-
-			return;
-		}
-
-		handleTouchLogic();
+		const currentTime = Date.now();
+		useGridStore.getState().registerCellTap(rowIndex, columnIndex, currentTime);
 	};
 
 	/**
@@ -263,69 +114,19 @@ export const useGridCellInteraction = (
 	 * Handles primary and modified mouse clicks.
 	 */
 	const handleClick = (event: React.MouseEvent) => {
-		const gridState = useGridStore.getState();
-		const sessionState = useSessionStore.getState();
-
 		if (isSharedGrid) {
 			return;
 		}
 
+		const gridState = useGridStore.getState();
+
 		// Mouse-specific logic (Ctrl/Cmd + Click)
 		if (event.ctrlKey || event.metaKey) {
 			// Ctrl/Cmd + Click: Toggle Active
-			const validation = validateToggleActive({
-				cell,
-				gridFixed: gridState.gridFixed,
-			});
-
-			if (!validation.valid) {
-				if (validation.reason === "moduleLocked") {
-					sessionState.incrementModuleLocked();
-				} else if (validation.reason === "gridFixed") {
-					sessionState.incrementGridFixed();
-				}
-
-				triggerShake();
-			} else {
-				Logger.info(`Cell active toggled: [${rowIndex}, ${columnIndex}]`, {
-					active: !cell.active,
-					columnIndex,
-					rowIndex,
-				});
-				gridState.toggleCellActive(rowIndex, columnIndex);
-			}
+			gridState.toggleCellActive(rowIndex, columnIndex);
 		} else {
 			// Normal Click: Toggle Supercharged
-			const validation = validateToggleSupercharged({
-				cell,
-				gridFixed: gridState.gridFixed,
-				rowIndex,
-				superchargedFixed: gridState.superchargedFixed,
-				totalSupercharged: gridState.totalSuperchargedCells,
-			});
-
-			if (!validation.valid) {
-				if (validation.reason === "moduleLocked") {
-					sessionState.incrementModuleLocked();
-				} else if (validation.reason === "superchargedLimit") {
-					sessionState.incrementSuperchargedLimit();
-				} else if (validation.reason === "superchargedFixed") {
-					sessionState.incrementSuperchargedFixed();
-				} else if (validation.reason === "rowLimit") {
-					sessionState.incrementRowLimit();
-				} else if (validation.reason === "gridFixed") {
-					sessionState.incrementGridFixed();
-				}
-
-				triggerShake();
-			} else {
-				Logger.info(`Cell supercharged toggled: [${rowIndex}, ${columnIndex}]`, {
-					columnIndex,
-					rowIndex,
-					supercharged: !cell.supercharged,
-				});
-				gridState.toggleCellSupercharged(rowIndex, columnIndex);
-			}
+			gridState.toggleCellSupercharged(rowIndex, columnIndex);
 		}
 	};
 
@@ -344,22 +145,7 @@ export const useGridCellInteraction = (
 			event.preventDefault();
 			if (isSharedGrid) return;
 
-			const validation = validateToggleActive({
-				cell,
-				gridFixed: useGridStore.getState().gridFixed,
-			});
-
-			if (!validation.valid) {
-				if (validation.reason === "moduleLocked") {
-					useSessionStore.getState().incrementModuleLocked();
-				} else if (validation.reason === "gridFixed") {
-					useSessionStore.getState().incrementGridFixed();
-				}
-
-				triggerShake();
-			} else {
-				useGridStore.getState().toggleCellActive(rowIndex, columnIndex);
-			}
+			useGridStore.getState().toggleCellActive(rowIndex, columnIndex);
 		}
 	};
 

@@ -1,11 +1,12 @@
 import type { Grid } from "./grid/gridStore";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { computeBonusStatus, sessionCoordinator } from "./sessionCoordinator";
 
 const mockGridStore = {
 	clearInteractionState: vi.fn(),
 	isSharedGrid: false,
+	resetGrid: vi.fn(),
 	setBuildName: vi.fn(),
 	setGrid: vi.fn(),
 	setIsSharedGrid: vi.fn(),
@@ -14,6 +15,7 @@ const mockGridStore = {
 
 const mockTechStore = {
 	clearAllBonusStatus: vi.fn(),
+	clearAllCheckedModules: vi.fn(),
 	clearAllModuleSelections: vi.fn(),
 	clearResult: vi.fn(),
 	clearTechGroups: vi.fn(),
@@ -70,6 +72,10 @@ describe("computeBonusStatus rounding", () => {
 });
 
 describe("sessionCoordinator", () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
 	it("switchPlatform resets the optimization result in gridStore", () => {
 		const newGrid = { cells: [] } as unknown as Grid;
 
@@ -79,6 +85,17 @@ describe("sessionCoordinator", () => {
 		expect(mockGridStore.setResult).toHaveBeenCalledWith(null);
 		expect(mockGridStore.setIsSharedGrid).toHaveBeenCalledWith(false);
 		expect(mockGridStore.setBuildName).toHaveBeenCalledWith(null);
+	});
+
+	it("resetSession resets stores and restores default checked modules rather than clearing them completely", () => {
+		sessionCoordinator.resetSession();
+
+		expect(mockGridStore.resetGrid).toHaveBeenCalled();
+		expect(mockGridStore.clearInteractionState).toHaveBeenCalled();
+		expect(mockTechStore.clearResult).toHaveBeenCalled();
+		expect(mockTechStore.clearAllCheckedModules).toHaveBeenCalled();
+		expect(mockTechStore.clearAllBonusStatus).toHaveBeenCalled();
+		expect(mockTechStore.clearAllModuleSelections).not.toHaveBeenCalled();
 	});
 
 	describe("syncStateFromUrl", () => {

@@ -467,5 +467,60 @@ describe("GridStore - Result and Tech Operations", () => {
 			expect(state.grid.height).toBe(initialHeight);
 			expect(state.gridFixed).toBe(true);
 		});
+
+		it("should clear activeTechs for techs not in initialGridDefinition after resetGrid", () => {
+			const definition = {
+				grid: [
+					[
+						{
+							active: true,
+							adjacency: "none",
+							adjacency_bonus: 0,
+							bonus: 0,
+							id: "",
+							image: "",
+							label: "",
+							sc_eligible: false,
+							supercharged: false,
+							tech: "",
+							type: "",
+							value: 0,
+						},
+					],
+				],
+				gridFixed: true,
+				superchargedFixed: false,
+			};
+
+			act(() => {
+				useGridStore.getState().setInitialGridDefinition(definition);
+				useGridStore.getState().setGridFromInitialDefinition(definition);
+			});
+
+			expect(useGridStore.getState().activeTechs.has("defense")).toBe(false);
+
+			// Modify grid to add a tech
+			act(() => {
+				const currentGrid = useGridStore.getState().grid;
+				// Create a deep copy of the grid to make it mutable
+				const gridCopy = {
+					...currentGrid,
+					cells: currentGrid.cells.map((row) => row.map((cell) => ({ ...cell }))),
+				};
+				gridCopy.cells[0][0].tech = "defense";
+				gridCopy.cells[0][0].module = "def_mod";
+				useGridStore.setState({ grid: gridCopy });
+				useGridStore.getState().triggerRecompute();
+			});
+
+			expect(useGridStore.getState().activeTechs.has("defense")).toBe(true);
+
+			// Reset should restore from definition (which has no tech)
+			act(() => {
+				useGridStore.getState().resetGrid();
+			});
+
+			expect(useGridStore.getState().activeTechs.has("defense")).toBe(false);
+		});
 	});
 });

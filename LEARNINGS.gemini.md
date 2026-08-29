@@ -1704,3 +1704,68 @@ Google Search Console reported the critical error: "Review has multiple aggregat
   - Keeping track of the exact status of each issue helps prevent redundant effort when related issues overlap.
   - Verification using local development scripts (tests, linter, and type checker) is the ultimate source of truth before resolving tickets.
 
+## PRAR Cycle: Fix default checked modules removal on grid reset (2026-08-29)
+
+### Perceive & Understand
+- **Request**: Investigate why the optimization buttons are disabled/failing after the "Reset Grid" operation is performed.
+- **Context**: The user identified that the check `const isOptimizeButtonDisabled = (isGridFull && !hasTechInGrid) || solving || currentCheckedModules.length === 0;` was failing (evaluating to `true`) because `currentCheckedModules.length` became 0 after "Reset Grid".
+- **Details**:
+  - `sessionCoordinator.resetSession()` called `techStore.clearAllCheckedModules()` followed immediately by `techStore.clearAllModuleSelections()`.
+  - In the consolidated store, both of these actions modify the same `checkedModules` state registry. `clearAllCheckedModules()` correctly restored the default checked modules from the tech tree, but `clearAllModuleSelections()` immediately cleared the registry to `{}`.
+  - This left the active ship platform with no checked modules in the sidebar, which disabled the optimization buttons and broke the UI workflow.
+
+### Reason & Plan
+- **Plan**:
+  - Remove the redundant and incorrect `clearAllModuleSelections()` call from `sessionCoordinator.resetSession()`.
+  - Maintain `clearAllModuleSelections()` in `switchPlatform` because when switching ships, we do want to wipe selections before loading the new ship's layout.
+  - Add `clearAllCheckedModules: vi.fn()` to `mockTechStore` in `src/store/sessionCoordinator.test.ts`.
+  - Add a dedicated unit test in `sessionCoordinator.test.ts` to assert that `resetSession` invokes the correct store actions and does not clear module selections.
+  - Verify that the unit tests pass.
+
+### Act & Implement
+- **Action**:
+  - Modified `src/store/sessionCoordinator.ts` to remove `techStore.clearAllModuleSelections()` from `resetSession()`.
+  - Updated `src/store/sessionCoordinator.test.ts` with the new mocks and assertions.
+  - Added a `beforeEach` block to `sessionCoordinator.test.ts` to clear mock calls between test cases.
+  - Executed the unit test suite and verified a 100% pass rate.
+
+### Refine & Reflect
+- **Reflection**:
+  - When consolidating multiple domain stores into a single slice/store, it's critical to review how previously independent state reset actions interact. Actions that previously operated on distinct stores might now write to the same state fields, leading to sequential overwrites.
+  - Resetting a session should restore default/baseline configurations (like standard ship core modules and their selections) rather than completely wiping all data structures. Complete wipes should be reserved for global lifecycle transitions like switching ship platforms.
+
+## PRAR Cycle: Migrate Hook useGridCellInteraction to Thin DOM Adapter (2026-08-29)
+
+### Perceive & Understand
+- **Request**: Migrate the hook `useGridCellInteraction` into a thin DOM adapter by removing validations, telemetry metrics, shake triggers, and timing logics.
+- **Context**: The React hook `useGridCellInteraction` had complex timing and logic dependencies that leaked business invariants into the UI component layer, making testing grid rules brittle. This issue was blocked by #727 (`registerCellTap` action in `gridStore`) and #726 (layout validations inside store mutator actions).
+- **Details**:
+  - We had to first declare and implement the tap transaction manager `registerCellTap` inside `gridStore.ts` and `gridTypes.ts`.
+  - We relocated the single vs double tap gesture detection and rollback transitions into `registerCellTap` in the store.
+  - We moved validation checks (`validateToggleActive` and `validateToggleSupercharged`) and UI store telemetry updates (`triggerShake` and violation counts) into `toggleCellActive`, `toggleCellSupercharged`, `setCellActive`, `setCellSupercharged`, and `registerCellTap`.
+
+### Reason & Plan
+- **Plan**:
+  - Implement `registerCellTap` inside `gridStore.ts` and update `GridActions` type definition in `gridTypes.ts`.
+  - Refactor `toggleCellActive`, `toggleCellSupercharged`, `setCellActive`, and `setCellSupercharged` to run validations, log telemetry violations, and trigger UI shake effects on failure.
+  - Rewrite `useGridCellInteraction.ts` to be a pure event router, passing touch events to `registerCellTap` and mouse click/keypress events to `toggleCellActive` / `toggleCellSupercharged`.
+  - Create a new unit test suite `registerCellTap.test.ts` to fully test store-level gesture transaction outcomes (timing, locks, limits, reverts, and telemetry metrics).
+  - Rewrite `useGridCellInteraction.test.ts` to mock store actions and assert routing parameters.
+  - Verify overall project health with typecheck, lint, and full test runs.
+
+### Act & Implement
+- **Action**:
+  - Added `registerCellTap` signature and implementation in `gridStore.ts` and `gridTypes.ts`.
+  - Relocated validations to the store mutator actions.
+  - Simplified `useGridCellInteraction.ts` hook into a thin adapter.
+  - Created `registerCellTap.test.ts` with 9 tests covering gesture boundaries.
+  - Updated `useGridCellInteraction.test.ts` with mock-routing tests.
+  - Fixed test environment leakage by calling `clearInteractionState` in test setups.
+  - Satisfied object key sorting requirements for `registerCellTap` property by placing it alphabetically.
+  - Ran typechecks, formatting auto-fixes, and the full test suite (all passed).
+
+### Refine & Reflect
+- **Reflection**:
+  - Encapsulating validation logic inside store actions rather than hooks ensures that grid state invariants are protected regardless of the calling context (hooks, CLI, imports, or sync actions).
+  - Isolating test files that use Zustand store instances is critical. Calling reset actions like `clearInteractionState` inside `beforeEach` prevents subtle temporal coupling/leakage issues across unit tests.
+

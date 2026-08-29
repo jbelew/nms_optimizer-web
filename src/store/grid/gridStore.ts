@@ -4,11 +4,14 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
+import { UI_TIMING } from "@/constants";
+import { useUiStore } from "@/store/ui/uiStore";
 import { resolveInitialPlatform } from "@/utils/browser/platformResolver";
 import { Logger } from "@/utils/system/monitoring";
 
 import { createCellFromModuleData, createGrid, resetCellContent } from "./gridFactories";
 import { debouncedStorage } from "./gridPersistence";
+import { validateToggleActive, validateToggleSupercharged } from "./gridRules";
 
 export * from "./gridFactories";
 
@@ -265,6 +268,132 @@ export const useGridStore = create<GridStore>()(
 
 				lastActiveRowIndex: -1,
 
+				registerCellTap: (rowIndex: number, columnIndex: number, timestamp: number) => {
+					set((state) => {
+						const cell = state.grid.cells[rowIndex]?.[columnIndex];
+
+						if (!cell) {
+							Logger.error(`Cell not found at [${rowIndex}, ${columnIndex}]`);
+
+							return;
+						}
+
+						if (cell.module) {
+							const uiState = useUiStore.getState();
+							uiState.incrementModuleLockedCount();
+							uiState.triggerShake();
+
+							return;
+						}
+
+						const timeSinceLastTap = timestamp - state._lastTapTime;
+						const isSameCell =
+							state._lastTapCell[0] === rowIndex &&
+							state._lastTapCell[1] === columnIndex;
+
+						if (
+							isSameCell &&
+							timeSinceLastTap < UI_TIMING.DOUBLE_TAP_THRESHOLD &&
+							timeSinceLastTap > 0
+						) {
+							const validation = validateToggleSupercharged({
+								cell,
+								gridFixed: state.gridFixed,
+								rowIndex,
+								superchargedFixed: state.superchargedFixed,
+								totalSupercharged: state.totalSuperchargedCells,
+							});
+
+							if (!validation.valid) {
+								const uiState = useUiStore.getState();
+
+								if (validation.reason === "superchargedLimit") {
+									uiState.incrementSuperchargedLimitCount();
+								} else if (validation.reason === "superchargedFixed") {
+									uiState.incrementSuperchargedFixedCount();
+								} else if (validation.reason === "gridFixed") {
+									uiState.incrementGridFixedCount();
+								} else if (validation.reason === "rowLimit") {
+									uiState.incrementRowLimitCount();
+								} else if (validation.reason === "moduleLocked") {
+									uiState.incrementModuleLockedCount();
+								}
+
+								uiState.triggerShake();
+
+								if (state._initialCellStateForTap) {
+									const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
+
+									if (currentCell) {
+										currentCell.active = state._initialCellStateForTap.active;
+										currentCell.supercharged =
+											state._initialCellStateForTap.supercharged;
+									}
+								}
+
+								state._initialCellStateForTap = null;
+								state._lastTapCell = [-1, -1];
+								state._lastTapTime = 0;
+							} else {
+								if (state._initialCellStateForTap) {
+									const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
+
+									if (currentCell) {
+										currentCell.active = state._initialCellStateForTap.active;
+										currentCell.supercharged =
+											state._initialCellStateForTap.supercharged;
+									}
+								}
+
+								const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
+
+								if (currentCell) {
+									currentCell.supercharged = !currentCell.supercharged;
+									currentCell.active = true;
+								}
+
+								state._initialCellStateForTap = null;
+								state._lastTapCell = [-1, -1];
+								state._lastTapTime = 0;
+							}
+						} else {
+							state._lastTapCell = [rowIndex, columnIndex];
+							state._lastTapTime = timestamp;
+
+							const validation = validateToggleActive({
+								cell,
+								gridFixed: state.gridFixed,
+							});
+
+							if (!validation.valid) {
+								const uiState = useUiStore.getState();
+
+								if (validation.reason === "gridFixed") {
+									uiState.incrementGridFixedCount();
+								} else if (validation.reason === "moduleLocked") {
+									uiState.incrementModuleLockedCount();
+								}
+
+								uiState.triggerShake();
+								state._initialCellStateForTap = null;
+							} else {
+								state._initialCellStateForTap = { ...cell };
+								const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
+
+								if (currentCell) {
+									currentCell.active = !currentCell.active;
+
+									if (!currentCell.active && !state.superchargedFixed) {
+										currentCell.supercharged = false;
+									}
+								}
+							}
+						}
+
+						recomputeDerivedState(state);
+					});
+				},
+
 				resetGrid: () => {
 					set((state) => {
 						const definition = state.initialGridDefinition;
@@ -335,6 +464,27 @@ export const useGridStore = create<GridStore>()(
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
 
 						if (cell) {
+							if (cell.active !== active) {
+								const validation = validateToggleActive({
+									cell,
+									gridFixed: state.gridFixed,
+								});
+
+								if (!validation.valid) {
+									const uiState = useUiStore.getState();
+
+									if (validation.reason === "gridFixed") {
+										uiState.incrementGridFixedCount();
+									} else if (validation.reason === "moduleLocked") {
+										uiState.incrementModuleLockedCount();
+									}
+
+									uiState.triggerShake();
+
+									return;
+								}
+							}
+
 							cell.active = active;
 
 							if (!active && !state.superchargedFixed) {
@@ -348,12 +498,40 @@ export const useGridStore = create<GridStore>()(
 
 				setCellSupercharged: (rowIndex, columnIndex, supercharged) => {
 					set((state) => {
-						if (state.superchargedFixed) return;
-
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
 
 						if (cell) {
-							if (supercharged && !cell.active) return;
+							if (cell.supercharged !== supercharged) {
+								if (supercharged && !cell.active) return;
+								const validation = validateToggleSupercharged({
+									cell,
+									gridFixed: state.gridFixed,
+									rowIndex,
+									superchargedFixed: state.superchargedFixed,
+									totalSupercharged: state.totalSuperchargedCells,
+								});
+
+								if (!validation.valid) {
+									const uiState = useUiStore.getState();
+
+									if (validation.reason === "superchargedLimit") {
+										uiState.incrementSuperchargedLimitCount();
+									} else if (validation.reason === "superchargedFixed") {
+										uiState.incrementSuperchargedFixedCount();
+									} else if (validation.reason === "gridFixed") {
+										uiState.incrementGridFixedCount();
+									} else if (validation.reason === "rowLimit") {
+										uiState.incrementRowLimitCount();
+									} else if (validation.reason === "moduleLocked") {
+										uiState.incrementModuleLockedCount();
+									}
+
+									uiState.triggerShake();
+
+									return;
+								}
+							}
+
 							cell.supercharged = supercharged;
 						}
 
@@ -423,6 +601,25 @@ export const useGridStore = create<GridStore>()(
 							return;
 						}
 
+						const validation = validateToggleActive({
+							cell,
+							gridFixed: state.gridFixed,
+						});
+
+						if (!validation.valid) {
+							const uiState = useUiStore.getState();
+
+							if (validation.reason === "gridFixed") {
+								uiState.incrementGridFixedCount();
+							} else if (validation.reason === "moduleLocked") {
+								uiState.incrementModuleLockedCount();
+							}
+
+							uiState.triggerShake();
+
+							return;
+						}
+
 						if (cell.supercharged && !state.superchargedFixed) {
 							cell.supercharged = false;
 						}
@@ -437,12 +634,38 @@ export const useGridStore = create<GridStore>()(
 
 				toggleCellSupercharged: (rowIndex, columnIndex) =>
 					set((state) => {
-						if (state.superchargedFixed) return;
-
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
 
 						if (!cell) {
 							Logger.error(`Cell not found at [${rowIndex}, ${columnIndex}]`);
+
+							return;
+						}
+
+						const validation = validateToggleSupercharged({
+							cell,
+							gridFixed: state.gridFixed,
+							rowIndex,
+							superchargedFixed: state.superchargedFixed,
+							totalSupercharged: state.totalSuperchargedCells,
+						});
+
+						if (!validation.valid) {
+							const uiState = useUiStore.getState();
+
+							if (validation.reason === "superchargedLimit") {
+								uiState.incrementSuperchargedLimitCount();
+							} else if (validation.reason === "superchargedFixed") {
+								uiState.incrementSuperchargedFixedCount();
+							} else if (validation.reason === "gridFixed") {
+								uiState.incrementGridFixedCount();
+							} else if (validation.reason === "rowLimit") {
+								uiState.incrementRowLimitCount();
+							} else if (validation.reason === "moduleLocked") {
+								uiState.incrementModuleLockedCount();
+							}
+
+							uiState.triggerShake();
 
 							return;
 						}
@@ -507,6 +730,7 @@ if (typeof window !== "undefined" && import.meta.env.VITE_E2E_TESTING) {
 
 	w["useGridStore"] = useGridStore;
 	w["handleCellDoubleTap"] = useGridStore.getState().handleCellDoubleTap;
+	w["registerCellTap"] = useGridStore.getState().registerCellTap;
 
 	w["useInteractionStore"] = {
 		getState: () => ({

@@ -142,7 +142,6 @@ export const sessionCoordinator = {
 		techStore.clearResult();
 		techStore.clearAllCheckedModules();
 		techStore.clearAllBonusStatus();
-		techStore.clearAllModuleSelections();
 	},
 
 	/**
