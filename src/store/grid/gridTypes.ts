@@ -1,4 +1,3 @@
-/* eslint-disable jsdoc/no-undefined-types */
 import type { Module } from "@/types/tech";
 
 /**
@@ -120,8 +119,8 @@ export interface GridActions {
 	 *
 	 * @returns {void} Side-effects only.
 	 *
-	 * @see {@link validateToggleActive} for single-tap validation rules.
-	 * @see {@link validateToggleSupercharged} for double-tap validation rules.
+	 * @see validateToggleActive in gridRules.ts for single-tap validation rules.
+	 * @see validateToggleSupercharged in gridRules.ts for double-tap validation rules.
 	 * @see {@link ./registerCellTap.test.ts Unit Tests} for timing validation and rollback tests.
 	 *
 	 * @category Actions
@@ -156,7 +155,7 @@ export interface GridActions {
 	 *
 	 * @returns True if the active status was successfully set; false otherwise.
 	 *
-	 * @see {@link validateToggleActive} for active state validation rules.
+	 * @see validateToggleActive in gridRules.ts for active state validation rules.
 	 *
 	 * @category Actions
 	 */
@@ -175,7 +174,7 @@ export interface GridActions {
 	 *
 	 * @returns True if the supercharged status was successfully set; false otherwise.
 	 *
-	 * @see {@link validateToggleSupercharged} for supercharged state validation rules.
+	 * @see validateToggleSupercharged in gridRules.ts for supercharged state validation rules.
 	 *
 	 * @category Actions
 	 */
@@ -217,7 +216,7 @@ export interface GridActions {
 	 *
 	 * @returns True if the active status was successfully toggled; false otherwise.
 	 *
-	 * @see {@link validateToggleActive} for active state validation rules.
+	 * @see validateToggleActive in gridRules.ts for active state validation rules.
 	 *
 	 * @category Actions
 	 */
@@ -235,7 +234,7 @@ export interface GridActions {
 	 *
 	 * @returns True if the supercharged status was successfully toggled; false otherwise.
 	 *
-	 * @see {@link validateToggleSupercharged} for supercharged state validation rules.
+	 * @see validateToggleSupercharged in gridRules.ts for supercharged state validation rules.
 	 *
 	 * @category Actions
 	 */

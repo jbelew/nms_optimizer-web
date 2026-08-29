@@ -96,3 +96,5 @@ Summary: Renamed the factory function `baseMockMockGridStoreState` typo to `crea
 Key Learnings:
 - Renaming utility helpers to explicitly declare their factory intent (e.g. `createMockGridStoreState`) clarifies test code readability.
 - Chained test run tasks in npm/bun scripts can forward file arguments to all sub-commands; when running tests on single Vitest files, calling `vitest run` directly is cleaner than chaining through scripts that forward parameters to Bun's native runner.
+
+2026-08-29: fix(grid): remove eslint-disable by fixing JSDoc references in gridTypes.ts (#732)
