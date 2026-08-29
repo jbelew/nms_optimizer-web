@@ -10,11 +10,10 @@ if [[ "$1" =~ ^[0-9]+$ ]]; then
 	shift
 fi
 
-# Query GitHub CLI to find the next issue if not specified
+# Query GitHub CLI via promote_issues.py to find the next unblocked issue if not specified
 if [ -z "$ISSUE_NUM" ]; then
 	echo "Querying GitHub for the next 'ready-for-agent' issue..."
-	# 2>/dev/null to hide GitHub GraphQL deprecation warnings
-	NEXT_ISSUE=$(gh issue list --state open --label "ready-for-agent" --json number,title,body --jq '.[0]' 2>/dev/null || true)
+	NEXT_ISSUE=$(python3 ./scripts/promote_issues.py --next)
 
 	if [ -z "$NEXT_ISSUE" ] || [ "$NEXT_ISSUE" = "null" ]; then
 		echo "========================================="

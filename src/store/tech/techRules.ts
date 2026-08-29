@@ -13,11 +13,19 @@
 /**
  * Order of module ranks, from highest rank to lowest rank.
  * Deselecting a higher rank cascades to all lower ranks in the same module category.
+ *
+ * @category Rules
+ *
+ * @type {readonly ["Theta", "Tau", "Sigma"]}
  */
 export const MODULE_RANK_ORDER = ["Theta", "Tau", "Sigma"] as const;
 
 /**
  * Groups/types of modules that are subject to rank order hierarchy validation.
+ *
+ * @category Rules
+ *
+ * @type {readonly ["atlantid", "cosmetic", "reactor", "upgrade"]}
  */
 export const VALIDATION_GROUPS = ["atlantid", "cosmetic", "reactor", "upgrade"] as const;
 
@@ -33,6 +41,12 @@ export const VALIDATION_GROUPS = ["atlantid", "cosmetic", "reactor", "upgrade"] 
  * @param {Array<{ id: string; label: string; type?: string }>} modules - All available modules for the technology category.
  *
  * @returns {string[]} The validated and adjusted list of checked module IDs.
+ *
+ * @see {@link MODULE_RANK_ORDER}
+ * @see {@link VALIDATION_GROUPS}
+ * @see {@link ./techRules.test.ts Unit Tests}
+ *
+ * @category Rules
  *
  * @example Validating deselection of a Theta module
  * ```ts
