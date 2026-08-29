@@ -72,15 +72,19 @@ export const SharedModuleSelectionDialog: React.FC = () => {
 	const techImage = selectedTechData?.techImage ?? null;
 
 	// Read module data from the tech store for the active tech
-	const { techGroup } = useTechStore(
+	const { activeGroupType, techGroup } = useTechStore(
 		useShallow((state) => ({
-			techGroup: state.techGroups[activeTech],
+			activeGroupType: state.activeGroups?.[activeTech] || "normal",
+			techGroup: state.techGroups?.[activeTech],
 		}))
 	);
 
 	const hasTechInGrid = useGridStore((state) => state.activeTechs?.has(activeTech) ?? false);
 
-	const modules = techGroup?.[0]?.modules || EMPTY_MODULES_ARRAY;
+	const activeGroup = techGroup?.length
+		? techGroup.find((g) => g.type === activeGroupType) || techGroup[0]
+		: null;
+	const modules = activeGroup?.modules || EMPTY_MODULES_ARRAY;
 
 	// Reuse the existing module management hook
 	const {

@@ -398,5 +398,503 @@ describe("TechStore", () => {
 			// Check that Tau and Sigma are also deselected
 			expect(useTechStore.getState().checkedModules["test-tech"]).toEqual([]);
 		});
+
+		it("should cascade deselection from Tau to Sigma, leaving Theta intact", () => {
+			const { initializeTechTree, setCheckedModules } = useTechStore.getState();
+			const mockTechGroups = {
+				"test-tech": [
+					{
+						color: "blue" as const,
+						image: null,
+						key: "test-tech",
+						label: "Test",
+						module_count: 3,
+						modules: [
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 5,
+								checked: true,
+								id: "theta_id",
+								image: "",
+								label: "Theta Upgrade",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 10,
+							},
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 3,
+								checked: true,
+								id: "tau_id",
+								image: "",
+								label: "Tau Upgrade",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 8,
+							},
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 3,
+								checked: true,
+								id: "sigma_id",
+								image: "",
+								label: "Sigma Upgrade",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 8,
+							},
+						],
+					},
+				],
+			};
+
+			initializeTechTree(
+				{},
+				mockTechGroups,
+				{},
+				{ "test-tech": ["theta_id", "tau_id", "sigma_id"] }
+			);
+
+			// Deselect Tau
+			setCheckedModules("test-tech", (prev) => (prev || []).filter((id) => id !== "tau_id"));
+
+			// Check that Sigma is deselected, but Theta is kept
+			expect(useTechStore.getState().checkedModules["test-tech"]).toEqual(["theta_id"]);
+		});
+
+		it("should not cascade when Sigma is deselected", () => {
+			const { initializeTechTree, setCheckedModules } = useTechStore.getState();
+			const mockTechGroups = {
+				"test-tech": [
+					{
+						color: "blue" as const,
+						image: null,
+						key: "test-tech",
+						label: "Test",
+						module_count: 3,
+						modules: [
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 5,
+								checked: true,
+								id: "theta_id",
+								image: "",
+								label: "Theta Upgrade",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 10,
+							},
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 3,
+								checked: true,
+								id: "tau_id",
+								image: "",
+								label: "Tau Upgrade",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 8,
+							},
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 3,
+								checked: true,
+								id: "sigma_id",
+								image: "",
+								label: "Sigma Upgrade",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 8,
+							},
+						],
+					},
+				],
+			};
+
+			initializeTechTree(
+				{},
+				mockTechGroups,
+				{},
+				{ "test-tech": ["theta_id", "tau_id", "sigma_id"] }
+			);
+
+			// Deselect Sigma
+			setCheckedModules("test-tech", (prev) =>
+				(prev || []).filter((id) => id !== "sigma_id")
+			);
+
+			// Check that Theta and Tau are kept
+			expect(useTechStore.getState().checkedModules["test-tech"]).toEqual([
+				"theta_id",
+				"tau_id",
+			]);
+		});
+
+		it("should not cascade if a module in a non-validation group is deselected", () => {
+			const { initializeTechTree, setCheckedModules } = useTechStore.getState();
+			const mockTechGroups = {
+				"test-tech": [
+					{
+						color: "blue" as const,
+						image: null,
+						key: "test-tech",
+						label: "Test",
+						module_count: 4,
+						modules: [
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 10,
+								checked: true,
+								id: "core_id",
+								image: "",
+								label: "Core Module",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "core",
+								value: 20,
+							},
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 5,
+								checked: true,
+								id: "theta_id",
+								image: "",
+								label: "Theta Upgrade",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 10,
+							},
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 3,
+								checked: true,
+								id: "tau_id",
+								image: "",
+								label: "Tau Upgrade",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 8,
+							},
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 3,
+								checked: true,
+								id: "sigma_id",
+								image: "",
+								label: "Sigma Upgrade",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 8,
+							},
+						],
+					},
+				],
+			};
+
+			initializeTechTree(
+				{},
+				mockTechGroups,
+				{},
+				{ "test-tech": ["core_id", "theta_id", "tau_id", "sigma_id"] }
+			);
+
+			// Deselect Core
+			setCheckedModules("test-tech", (prev) => (prev || []).filter((id) => id !== "core_id"));
+
+			// Check that Theta, Tau, and Sigma are kept
+			expect(useTechStore.getState().checkedModules["test-tech"]).toEqual([
+				"theta_id",
+				"tau_id",
+				"sigma_id",
+			]);
+		});
+
+		it("should cascade deselection when multiple variant groups are defined and the active variant is selected", () => {
+			const { initializeTechTree, setActiveGroup, setCheckedModules } =
+				useTechStore.getState();
+			const mockTechGroups = {
+				"test-tech": [
+					{
+						color: "blue" as const,
+						image: null,
+						key: "test-tech",
+						label: "Test Normal",
+						module_count: 3,
+						modules: [
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 5,
+								checked: true,
+								id: "theta_normal",
+								image: "",
+								label: "Theta Upgrade",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 10,
+							},
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 3,
+								checked: true,
+								id: "tau_normal",
+								image: "",
+								label: "Tau Upgrade",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 8,
+							},
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 3,
+								checked: true,
+								id: "sigma_normal",
+								image: "",
+								label: "Sigma Upgrade",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 8,
+							},
+						],
+						type: "normal",
+					},
+					{
+						color: "blue" as const,
+						image: null,
+						key: "test-tech",
+						label: "Test Photonix",
+						module_count: 3,
+						modules: [
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 15,
+								checked: true,
+								id: "theta_photonix",
+								image: "",
+								label: "Theta Upgrade",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 20,
+							},
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 9,
+								checked: true,
+								id: "tau_photonix",
+								image: "",
+								label: "Tau Upgrade",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 16,
+							},
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 9,
+								checked: true,
+								id: "sigma_photonix",
+								image: "",
+								label: "Sigma Upgrade",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 16,
+							},
+						],
+						type: "photonix",
+					},
+				],
+			};
+
+			initializeTechTree(
+				{},
+				mockTechGroups,
+				{ "test-tech": "photonix" },
+				{ "test-tech": ["theta_photonix", "tau_photonix", "sigma_photonix"] }
+			);
+
+			// Deselect Theta Photonix
+			setCheckedModules("test-tech", (prev) =>
+				(prev || []).filter((id) => id !== "theta_photonix")
+			);
+
+			// Check that Tau and Sigma Photonix are also deselected
+			expect(useTechStore.getState().checkedModules["test-tech"]).toEqual([]);
+
+			// Switch to normal
+			setActiveGroup("test-tech", "normal");
+			setCheckedModules("test-tech", () => ["theta_normal", "tau_normal", "sigma_normal"]);
+
+			// Deselect Theta Normal
+			setCheckedModules("test-tech", (prev) =>
+				(prev || []).filter((id) => id !== "theta_normal")
+			);
+
+			// Check that Tau and Sigma Normal are also deselected
+			expect(useTechStore.getState().checkedModules["test-tech"]).toEqual([]);
+		});
+
+		it("should respect active variant groups in clearAllCheckedModules", () => {
+			const { clearAllCheckedModules, initializeTechTree } = useTechStore.getState();
+			const mockTechGroups = {
+				"test-tech": [
+					{
+						color: "blue" as const,
+						image: null,
+						key: "test-tech",
+						label: "Test Normal",
+						module_count: 2,
+						modules: [
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 5,
+								checked: true,
+								id: "mod_normal_checked",
+								image: "",
+								label: "Mod Normal Checked",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 10,
+							},
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 3,
+								checked: false,
+								id: "mod_normal_unchecked",
+								image: "",
+								label: "Mod Normal Unchecked",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 8,
+							},
+						],
+						type: "normal",
+					},
+					{
+						color: "blue" as const,
+						image: null,
+						key: "test-tech",
+						label: "Test Photonix",
+						module_count: 2,
+						modules: [
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 15,
+								checked: false,
+								id: "mod_photonix_unchecked",
+								image: "",
+								label: "Mod Photonix Unchecked",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 20,
+							},
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 9,
+								checked: true,
+								id: "mod_photonix_checked",
+								image: "",
+								label: "Mod Photonix Checked",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 16,
+							},
+						],
+						type: "photonix",
+					},
+				],
+			};
+
+			initializeTechTree(
+				{},
+				mockTechGroups,
+				{ "test-tech": "photonix" },
+				{ "test-tech": ["mod_photonix_unchecked", "mod_photonix_checked"] }
+			);
+
+			// Reset
+			clearAllCheckedModules();
+
+			// Should reset to only the default checked ones for "photonix" variant
+			expect(useTechStore.getState().checkedModules["test-tech"]).toEqual([
+				"mod_photonix_checked",
+			]);
+		});
 	});
 });

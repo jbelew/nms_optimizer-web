@@ -72,17 +72,21 @@ export const useTechTreeRow = ({
 	// State from stores
 	const hasTechInGrid = useGridStore((state) => state.activeTechs.has(tech));
 
-	const { techGroup, techMaxBonus, techSolvedBonus } = useTechStore(
+	const { activeGroupType, techGroup, techMaxBonus, techSolvedBonus } = useTechStore(
 		useShallow((state) => ({
-			techGroup: state.techGroups[tech],
+			activeGroupType: state.activeGroups?.[tech] || "normal",
+			techGroup: state.techGroups?.[tech],
 			techMaxBonus: state.maxBonus?.[tech] ?? 0,
 			techSolvedBonus: state.solvedBonus?.[tech] ?? 0,
 		}))
 	);
 
 	// Derived state
-	const modules = techGroup?.[0]?.modules || EMPTY_MODULES_ARRAY;
-	const moduleCount = techGroup?.[0]?.module_count || 0;
+	const activeGroup = techGroup?.length
+		? techGroup.find((g) => g.type === activeGroupType) || techGroup[0]
+		: null;
+	const modules = activeGroup?.modules || EMPTY_MODULES_ARRAY;
+	const moduleCount = activeGroup?.module_count || 0;
 
 	// Specialized hooks
 	const { handleOptimizeClick, handleReset, isResetting } = useTechOptimization(

@@ -87,7 +87,15 @@ export interface TechStore {
 	checkedModules: { [key: string]: string[] };
 	/** Resets all technology status mappings. */
 	clearAllBonusStatus: () => void;
-	/** Resets all technologies to their default module selections as defined in the tech tree. */
+	/**
+	 * Resets all technologies to their default module selections.
+	 *
+	 * @remarks
+	 * Automatically respects the active group variant for each technology
+	 * to fetch the correct default checked module states.
+	 *
+	 * @returns {void} Updates the store state in place.
+	 */
 	clearAllCheckedModules: () => void;
 	/** Resets the entire module selection registry. */
 	clearAllModuleSelections: () => void;
@@ -202,8 +210,17 @@ export interface TechStore {
 	/**
 	 * Functional update for a technology's checked modules.
 	 *
+	 * @remarks
+	 * Runs the proposed module selection updates through the validation rules engine
+	 * (`validateModuleSelections`) to handle cascading de-selections. This action
+	 * dynamically queries the active variant's full module list from the store.
+	 *
 	 * @param {string} tech - The technology key.
 	 * @param {function(string[]): string[]} updater - Function that receives current modules and returns updated ones.
+	 *
+	 * @returns {void} Updates the store state in place.
+	 *
+	 * @see {@link validateModuleSelections} for the validation rules logic.
 	 */
 	setCheckedModules: (tech: string, updater: (prev?: string[]) => string[]) => void;
 	/** Updates the selected modules for a specific technology. */
@@ -309,10 +326,17 @@ export const useTechStore = create<TechStore>()(
 				set((state: TechStore) => {
 					const resetCheckedModules = Object.keys(state.techGroups).reduce(
 						(acc, tech) => {
-							const group = state.techGroups[tech]?.[0];
+							const activeGroupType = state.activeGroups[tech] || "normal";
+							const groups = state.techGroups[tech] || [];
+							const activeGroup =
+								groups.length > 1
+									? groups.find((g) => g.type === activeGroupType) || groups[0]
+									: groups[0];
 
-							if (group) {
-								acc[tech] = group.modules.filter((m) => m.checked).map((m) => m.id);
+							if (activeGroup) {
+								acc[tech] = activeGroup.modules
+									.filter((m) => m.checked)
+									.map((m) => m.id);
 							}
 
 							return acc;
