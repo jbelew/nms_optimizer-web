@@ -68,3 +68,10 @@ Summary: Migrated `useGridCellInteraction` from a fat hook with validation, metr
 Key Learnings:
 - Thinning out React hooks into pure DOM adapters enforces strict module boundaries and guarantees store state consistency, regardless of where or how mutations are triggered.
 - Moving touch-timing and validation constraints into store-level transactions allows for direct unit testing of invariants without simulating fragile browser events.
+
+Date: 2026-08-29
+Task: Implement GitHub issue #729: "fix(session): reset validation violation counters on grid reset"
+Summary: Integrated `useUiStore` inside the `sessionCoordinator`'s `resetSession` method, calling `useUiStore.getState().resetSession()` to clear all session violation counters (such as grid fixed count, module locked count, row limit count, supercharged fixed count, and supercharged limit count) and the shake timer. Added corresponding mocks and unit test assertions in `src/store/sessionCoordinator.test.ts` to verify the integration.
+Key Learnings:
+- Global state coordinators should orchestrate clear-downs across all consolidated stores (domain stores like Grid/Tech and UI presentation stores) during global operations like a session reset.
+- Mocking consolidated stores selectively in orchestrator test suites using `vi.mock` prevents side-effects and isolates test assertions.

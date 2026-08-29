@@ -45,6 +45,16 @@ vi.mock("./app/platformStore", () => ({
 	},
 }));
 
+const mockUiStore = {
+	resetSession: vi.fn(),
+};
+
+vi.mock("./ui/uiStore", () => ({
+	useUiStore: {
+		getState: vi.fn(() => mockUiStore),
+	},
+}));
+
 describe("computeBonusStatus rounding", () => {
 	it("correctly rounds numbers that would fail with the scientific notation hack", () => {
 		// Example: 99.995 should round to 100.00
@@ -96,6 +106,7 @@ describe("sessionCoordinator", () => {
 		expect(mockTechStore.clearAllCheckedModules).toHaveBeenCalled();
 		expect(mockTechStore.clearAllBonusStatus).toHaveBeenCalled();
 		expect(mockTechStore.clearAllModuleSelections).not.toHaveBeenCalled();
+		expect(mockUiStore.resetSession).toHaveBeenCalled();
 	});
 
 	describe("syncStateFromUrl", () => {

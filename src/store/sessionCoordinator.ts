@@ -7,6 +7,7 @@ import { Logger } from "@/utils/system/monitoring";
 import { usePlatformStore } from "./app/platformStore";
 import { createGrid, useGridStore } from "./grid/gridStore";
 import { useTechStore } from "./tech/techStore";
+import { useUiStore } from "./ui/uiStore";
 
 /**
  * Orchestrates the calculation of bonus status data based on max bonus.
@@ -142,6 +143,9 @@ export const sessionCoordinator = {
 		techStore.clearResult();
 		techStore.clearAllCheckedModules();
 		techStore.clearAllBonusStatus();
+
+		// 3. Reset UI session violation counters
+		useUiStore.getState().resetSession();
 	},
 
 	/**
