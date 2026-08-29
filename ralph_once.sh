@@ -65,7 +65,7 @@ $ISSUE_COMMENTS
 - Fix any failures, re-stage, and re-run until clean.
 - Close the issue: \`gh issue close $ISSUE_NUM --comment "Resolved."\`
 - Append a one-line summary with the date to \`progress.txt\`.
-- Commit using Angular convention (e.g. \`feat(grid): ...\`), subject under 50 chars. Reference the issue number in the commit message (e.g. \`#123\`).
+- Commit using Angular convention (e.g. \`feat(grid): ...\`), subject under 90 chars. Reference the issue number in the commit message (e.g. \`#123\`).
 EOF
 )
 
