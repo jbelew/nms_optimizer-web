@@ -1,3 +1,4 @@
+/* eslint-disable jsdoc/no-undefined-types */
 import type { Module } from "@/types/tech";
 
 /**
@@ -101,7 +102,35 @@ export interface GridActions {
 	handleCellDoubleTap: (rowIndex: number, columnIndex: number) => void;
 	/** Handles a single tap on a grid cell. */
 	handleCellTap: (rowIndex: number, columnIndex: number) => void;
-	/** Registers a cell tap event for mobile gesture/double-tap logic. */
+	/**
+	 * Registers a cell tap event for mobile gesture/double-tap logic.
+	 *
+	 * @remarks
+	 * This action handles single-vs-double-tap timing logic and state validation
+	 * for cell activation and supercharged toggling. If the tap is within the timing
+	 * threshold of the previous tap on the same cell, it attempts a double-tap
+	 * transaction (toggling the cell's supercharged state). Otherwise, it executes
+	 * a single-tap transaction (toggling the cell's active state). If a double-tap
+	 * transaction fails validation (e.g. supercharged slot limit exceeded), it reverts
+	 * the cell's active state to its initial pre-tap state.
+	 *
+	 * @param rowIndex - The row index of the cell.
+	 * @param columnIndex - The column index of the cell.
+	 * @param timestamp - The high-precision epoch timestamp of the tap event in milliseconds.
+	 *
+	 * @returns {void} Side-effects only.
+	 *
+	 * @see {@link validateToggleActive} for single-tap validation rules.
+	 * @see {@link validateToggleSupercharged} for double-tap validation rules.
+	 * @see {@link ./registerCellTap.test.ts Unit Tests} for timing validation and rollback tests.
+	 *
+	 * @category Actions
+	 *
+	 * @example
+	 * ```typescript
+	 * useGridStore.getState().registerCellTap(0, 0, Date.now());
+	 * ```
+	 */
 	registerCellTap: (rowIndex: number, columnIndex: number, timestamp: number) => void;
 	/** Resets the grid to its initial state or a blank grid. */
 	resetGrid: () => void;

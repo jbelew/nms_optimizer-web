@@ -2,11 +2,6 @@
 
 This document captures project-specific protocols and configurations for AI agents.
 
-## Learning Protocol
-
-- **Learning Log**: Maintain `LEARNINGS.gemini.md` in the root directory.
-- **Record Cycles**: Summarize each PRAR cycle at the end of the log. Do not modify or remove past entries; only append.
-
 ## JSDoc Guidelines
 
 - Ensure all public APIs, functions, classes, and complex variables are documented with JSDoc conforming to the **agentic-jsdoc** skill.

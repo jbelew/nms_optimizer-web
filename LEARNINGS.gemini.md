@@ -1769,3 +1769,61 @@ Google Search Console reported the critical error: "Review has multiple aggregat
   - Encapsulating validation logic inside store actions rather than hooks ensures that grid state invariants are protected regardless of the calling context (hooks, CLI, imports, or sync actions).
   - Isolating test files that use Zustand store instances is critical. Calling reset actions like `clearInteractionState` inside `beforeEach` prevents subtle temporal coupling/leakage issues across unit tests.
 
+## PRAR Cycle: Update ralph_once.sh Verification Step to use Lefthook (2026-08-29)
+
+### Perceive & Understand
+- **Request**: The user asked whether section #2 of the agent prompt in `ralph_once.sh` should be updated to run `lefthook` instead of individual verification steps, since the pre-commit hooks in `lefthook` are more comprehensive.
+- **Context**: 
+  - `ralph_once.sh` currently lists individual commands: `bun run typecheck`, `bun run test`, and `bun run lint`.
+  - `lefthook.yml` runs a wider set of checks (e.g. beads policy enforcement, oxlint + eslint, stylelint, prettier, circular dependency checks, knip dead code checks, script tests, unit tests, and typechecks).
+  - Many of the lefthook hooks target `{staged_files}`, which requires staging the changes (`git add .`) before running `lefthook`.
+
+### Reason & Plan
+- **Plan**:
+  - We decided that using `lefthook` is highly beneficial:
+    1. It delegates the verification commands directly to the environment's config (`lefthook.yml`), keeping the prompt clean and preventing validation-script drift (complying with the "Environment as Source of Truth" pruning principle).
+    2. It provides comprehensive coverage (linters, formatters, tests, circular dependencies, dead code).
+    3. It enforces beads policies before committing.
+  - To make it work correctly with files target-scoped in lefthook, we instructed the agent to run `git add .` to stage files before running `bunx lefthook run pre-commit`.
+  - Update `ralph_once.sh` to change step 2's instructions.
+  - Verify overall correctness by inspecting `git diff`.
+
+### Act & Implement
+- **Action**:
+  - Modified `/home/jbelew/projects/nms_optimizer-web/ralph_once.sh` to update step 2's verification steps.
+  - Inspected the diff via `git diff` to ensure accuracy.
+
+### Refine & Reflect
+- **Reflection**:
+  - Delegating verification tasks to local tools like `lefthook` aligns with the principle of using the environment as the single source of truth rather than caching individual commands inside prompt scripts.
+  - Staging files with `git add .` first is required so that file-scoped/staged-only pre-commit commands in `lefthook` are not skipped.
+
+## PRAR Cycle: Implement Tap Transaction Action registerCellTap in useGridStore (2026-08-29)
+
+### Perceive & Understand
+- **Request**: Implement GitHub issue #727 to expose a new store action `registerCellTap(rowIndex, columnIndex, timestamp)` in `useGridStore` and write comprehensive tests.
+- **Context**: The action is part of the refactoring to move the touch timing/gesture transaction logic directly into the store.
+- **Details**:
+  - The implementation is already in place as part of the consolidation and thin DOM adapter migration in the previous PRAR cycle.
+  - To finalize this issue, we verified the implementation, improved the JSDoc on the interface in `gridTypes.ts` to strictly comply with `agentic-jsdoc` standards, verified that all tests in `src/store/grid/registerCellTap.test.ts` pass, and closed the issue.
+
+### Reason & Plan
+- **Plan**:
+  - Add highly detailed TypeDoc/JSDoc block to `registerCellTap` in `gridTypes.ts` adhering to `agentic-jsdoc` hierarchical style guidelines.
+  - Run the `registerCellTap.test.ts` suite to verify 100% test coverage.
+  - Stage changes, run pre-commit checks with `lefthook` to ensure all quality gates pass.
+  - Close GitHub issue #727 with a summary comment.
+  - Record the progress in `progress.txt`.
+  - Commit the documentation updates using Angular conventions.
+
+### Act & Implement
+- **Action**:
+  - Added hierarchical JSDoc to `registerCellTap` in `src/store/grid/gridTypes.ts`.
+  - Run the test suite of `registerCellTap.test.ts` using vitest and confirmed all 9 tests pass.
+  - Formatted the code and validated the files.
+  - Verified pre-commit validation checks using `bunx lefthook run pre-commit`.
+
+### Refine & Reflect
+- **Reflection**:
+  - Standardizing store actions with comprehensive JSDocs conforming to `agentic-jsdoc` rules improves readability and assists the agent and development environment in performing semantic analysis and auto-completion.
+  - Consolidating issues systematically ensures no redundant work is done and quality checks verify the completeness of each development cycle.
