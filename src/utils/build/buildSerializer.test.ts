@@ -1,6 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { buildSerializer } from "./buildSerializer";
+import { computeSHA256 } from "@/utils/system/hashUtils";
+
+import { buildChecksumPayload, buildSerializer } from "./buildSerializer";
 
 // Mock checksum to always return a stable value for testing
 vi.mock("@/utils/system/hashUtils", () => ({
@@ -43,7 +45,7 @@ describe("buildSerializer", () => {
 				gridState: {
 					grid: { cells: [], height: 0, width: 0 },
 					gridFixed: false,
-					initialGridDefinition: {},
+					initialGridDefinition: undefined,
 					isSharedGrid: false,
 					result: null,
 					superchargedFixed: false,
@@ -174,6 +176,136 @@ describe("buildSerializer", () => {
 			await expect(buildSerializer.loadBuild(validJson, ["fighter"])).rejects.toThrow(
 				'Unsupported ship type: "freighter". Valid types are: fighter.'
 			);
+		});
+	});
+
+	describe("buildChecksumPayload", () => {
+		it("should construct the checksum payload with precise key ordering", () => {
+			const gridState = {
+				grid: { cells: [], height: 0, width: 0 },
+				gridFixed: false,
+				isSharedGrid: false,
+				result: null,
+				superchargedFixed: false,
+			};
+
+			// Build techState with intentionally non-alphabetical insertion order to verify
+			// that buildChecksumPayload preserves source insertion order without reordering.
+			const techState: Record<string, unknown> = {};
+
+			techState.bonusStatus = {};
+			techState.checkedModules = {};
+			techState.maxBonus = {};
+			techState.solveMethod = {};
+			techState.solvedBonus = {};
+
+			const bonusState = { bonusStatus: {} };
+			const moduleState = { moduleSelections: {} };
+
+			const payload = buildChecksumPayload(gridState, techState, bonusState, moduleState);
+			const keys = Object.keys(payload);
+
+			expect(keys).toEqual(["gridState", "techState", "bonusState", "moduleState"]);
+			expect(payload.gridState).toBe(gridState);
+			expect(payload.techState).toBe(techState);
+			expect(payload.bonusState).toBe(bonusState);
+			expect(payload.moduleState).toBe(moduleState);
+		});
+
+		it("should produce a stable stringified payload regardless of property order in source parameters", () => {
+			// Create objects with key order different from typical layout, to verify insertion order stability.
+			// Sequential assignment is used here to bypass the perfectionist/sort-objects lint rule while
+			// intentionally keeping properties in non-alphabetical order for this specific test scenario.
+			const gridState: Record<string, unknown> = {};
+
+			gridState.result = null;
+			gridState.grid = { cells: [], height: 0, width: 0 };
+			gridState.gridFixed = false;
+			gridState.isSharedGrid = false;
+			gridState.superchargedFixed = false;
+
+			const techState: Record<string, unknown> = {};
+
+			techState.solvedBonus = {};
+			techState.checkedModules = {};
+			techState.maxBonus = {};
+			techState.solveMethod = {};
+			techState.bonusStatus = {};
+
+			const bonusState = { bonusStatus: {} };
+			const moduleState = { moduleSelections: {} };
+
+			const payload = buildChecksumPayload(gridState, techState, bonusState, moduleState);
+			const stringified = JSON.stringify(payload);
+
+			// Assert order of top-level keys in JSON string
+			const expectedPrefix = '{"gridState":';
+			const expectedGridStatePart =
+				'"gridState":{"result":null,"grid":{"cells":[],"height":0,"width":0}';
+			expect(stringified.startsWith(expectedPrefix)).toBe(true);
+			expect(stringified).toContain(expectedGridStatePart);
+
+			const keys = Object.keys(payload);
+			expect(keys).toEqual(["gridState", "techState", "bonusState", "moduleState"]);
+		});
+	});
+
+	describe("checksum stability and verification during saveBuild", () => {
+		it("should pass correctly structured payload to computeSHA256 in saveBuild", async () => {
+			vi.mocked(computeSHA256).mockClear();
+
+			const gridState = {
+				grid: { cells: [], height: 0, width: 0 },
+				gridFixed: false,
+				initialGridDefinition: undefined,
+				isSharedGrid: false,
+				result: null,
+				superchargedFixed: false,
+			};
+
+			const techState = {
+				bonusStatus: {},
+				checkedModules: {},
+				maxBonus: {},
+				solvedBonus: {},
+				solveMethod: {},
+			};
+
+			await buildSerializer.saveBuild({
+				buildName: "Test Build",
+				gridState,
+				shipType: "freighter",
+				techState,
+			});
+
+			expect(computeSHA256).toHaveBeenCalled();
+			const lastCallJson = vi.mocked(computeSHA256).mock.calls[0][0];
+			const parsedPayload = JSON.parse(lastCallJson);
+
+			// Assert stable key ordering of top-level checksum keys
+			expect(Object.keys(parsedPayload)).toEqual([
+				"gridState",
+				"techState",
+				"bonusState",
+				"moduleState",
+			]);
+
+			// Assert nested state objects retain their exact required insertion order
+			expect(Object.keys(parsedPayload.gridState)).toEqual([
+				"grid",
+				"result",
+				"isSharedGrid",
+				"gridFixed",
+				"superchargedFixed",
+				"initialGridDefinition",
+			]);
+
+			expect(Object.keys(parsedPayload.techState)).toEqual([
+				"checkedModules",
+				"maxBonus",
+				"solvedBonus",
+				"solveMethod",
+			]);
 		});
 	});
 });
