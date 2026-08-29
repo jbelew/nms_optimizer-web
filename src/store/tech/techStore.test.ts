@@ -320,4 +320,83 @@ describe("TechStore", () => {
 			expect(state.bonusStatus).toEqual({});
 		});
 	});
+
+	describe("cascading de-selection rules integration", () => {
+		it("should cascade deselection when setCheckedModules is called", () => {
+			const { initializeTechTree, setCheckedModules } = useTechStore.getState();
+			const mockTechGroups = {
+				"test-tech": [
+					{
+						color: "blue" as const,
+						image: null,
+						key: "test-tech",
+						label: "Test",
+						module_count: 3,
+						modules: [
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 5,
+								checked: true,
+								id: "theta_id",
+								image: "",
+								label: "Theta Upgrade",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 10,
+							},
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 3,
+								checked: true,
+								id: "tau_id",
+								image: "",
+								label: "Tau Upgrade",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 8,
+							},
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 3,
+								checked: true,
+								id: "sigma_id",
+								image: "",
+								label: "Sigma Upgrade",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "test-tech",
+								type: "upgrade",
+								value: 8,
+							},
+						],
+					},
+				],
+			};
+
+			initializeTechTree(
+				{},
+				mockTechGroups,
+				{},
+				{ "test-tech": ["theta_id", "tau_id", "sigma_id"] }
+			);
+
+			// Deselect Theta
+			setCheckedModules("test-tech", (prev) =>
+				(prev || []).filter((id) => id !== "theta_id")
+			);
+
+			// Check that Tau and Sigma are also deselected
+			expect(useTechStore.getState().checkedModules["test-tech"]).toEqual([]);
+		});
+	});
 });

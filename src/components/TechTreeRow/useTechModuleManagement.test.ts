@@ -1,13 +1,9 @@
-import type { Mock } from "vitest";
 import { act, renderHook } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 import { useTechStore } from "@/store/tech/techStore";
 
 import { useTechModuleManagement } from "./useTechModuleManagement";
-
-// Mock the tech store
-vi.mock("@/store/tech/techStore");
 
 const mockModules = [
 	{ id: "core1", image: "", label: "Core 1", type: "core" },
@@ -20,20 +16,15 @@ const mockModules = [
 ];
 
 describe("useTechModuleManagement", () => {
-	it("should group modules correctly", () => {
-		(useTechStore as unknown as Mock).mockImplementation(
-			(
-				selector: (state: {
-					checkedModules: { [key: string]: string[] };
-					setCheckedModules: () => void;
-				}) => unknown
-			) =>
-				selector({
-					checkedModules: {},
-					setCheckedModules: vi.fn(),
-				})
-		);
+	beforeEach(() => {
+		useTechStore.setState(() => ({
+			activeGroups: {},
+			checkedModules: {},
+			techGroups: {},
+		}));
+	});
 
+	it("should group modules correctly", () => {
 		const { result } = renderHook(() => useTechModuleManagement("testTech", mockModules));
 
 		expect(result.current.groupedModules.core).toHaveLength(1);
@@ -44,29 +35,40 @@ describe("useTechModuleManagement", () => {
 	});
 
 	it("should handle selecting and deselecting all non-core modules", () => {
-		const setCheckedModules = vi.fn();
-		(useTechStore as unknown as Mock).mockImplementation(
-			(
-				selector: (state: {
-					checkedModules: { [key: string]: string[] };
-					setCheckedModules: () => void;
-				}) => unknown
-			) =>
-				selector({
-					checkedModules: { testTech: ["core1"] },
-					setCheckedModules,
-				})
-		);
+		// Mock techGroups in store
+		useTechStore.setState({
+			techGroups: {
+				testTech: [
+					{
+						color: "blue" as const,
+						image: null,
+						key: "testTech",
+						label: "Test",
+						module_count: mockModules.length,
+						modules: mockModules.map((m) => ({
+							...m,
+							active: true,
+							adjacency: "",
+							adjacency_bonus: 0,
+							bonus: 0,
+							sc_eligible: false,
+							supercharged: false,
+							tech: "testTech",
+							value: 0,
+						})),
+					},
+				],
+			},
+		});
 
 		const { result } = renderHook(() => useTechModuleManagement("testTech", mockModules));
 
+		// Select all non-core
 		act(() => {
 			result.current.handleSelectAllChange(true);
 		});
 
-		expect(setCheckedModules).toHaveBeenCalledWith("testTech", expect.any(Function));
-		const updater = setCheckedModules.mock.calls[0][1];
-		expect(updater()).toEqual(
+		expect(useTechStore.getState().checkedModules["testTech"]).toEqual(
 			expect.arrayContaining([
 				"core1",
 				"bonus1",
@@ -78,40 +80,91 @@ describe("useTechModuleManagement", () => {
 			])
 		);
 
+		// Deselect all non-core
 		act(() => {
 			result.current.handleSelectAllChange(false);
 		});
 
-		const updater2 = setCheckedModules.mock.calls[1][1];
-		expect(updater2()).toEqual(["core1"]);
+		expect(useTechStore.getState().checkedModules["testTech"]).toEqual(["core1"]);
 	});
 
-	it("should handle dependency chains for upgrades", () => {
-		const setCheckedModules = vi.fn();
-		(useTechStore as unknown as Mock).mockImplementation(
-			(
-				selector: (state: {
-					checkedModules: { [key: string]: string[] };
-					setCheckedModules: () => void;
-				}) => unknown
-			) =>
-				selector({
-					checkedModules: { testTech: ["core1", "upgradeC", "upgradeB"] },
-					setCheckedModules,
-				})
-		);
+	it("should handle dependency chains for upgrades end-to-end", () => {
+		// Set up state in the actual store
+		useTechStore.setState({
+			checkedModules: {
+				testTech: ["core1", "upgradeC", "upgradeB", "upgradeA"],
+			},
+			techGroups: {
+				testTech: [
+					{
+						color: "blue" as const,
+						image: null,
+						key: "testTech",
+						label: "Test",
+						module_count: mockModules.length,
+						modules: mockModules.map((m) => ({
+							...m,
+							active: true,
+							adjacency: "",
+							adjacency_bonus: 0,
+							bonus: 0,
+							sc_eligible: false,
+							supercharged: false,
+							tech: "testTech",
+							value: 0,
+						})),
+					},
+				],
+			},
+		});
 
 		const { result } = renderHook(() => useTechModuleManagement("testTech", mockModules));
 
-		// Deselecting Tau should also deselect Theta
+		// Deselecting Tau (upgradeB) should also deselect Sigma (upgradeC)
 		act(() => {
-			result.current.handleValueChange(["core1", "upgradeC"]); // Simulates unchecking Tau
+			result.current.handleValueChange(["core1", "upgradeC", "upgradeA"]); // upgradeB removed
 		});
 
-		const updater = setCheckedModules.mock.calls[0][1];
-		// This is a simplified check. The actual implementation deselects dependent modules.
-		// A more robust test would check the final state.
-		// For now, we trust the implementation detail we are about to test more directly.
-		expect(updater).toBeInstanceOf(Function);
+		// Expect both upgradeB and upgradeC to be removed from the checkedModules
+		expect(useTechStore.getState().checkedModules["testTech"]).toEqual(["core1", "upgradeA"]);
+	});
+
+	it("should cascade deselection from Theta to Tau and Sigma", () => {
+		useTechStore.setState({
+			checkedModules: {
+				testTech: ["core1", "upgradeC", "upgradeB", "upgradeA"],
+			},
+			techGroups: {
+				testTech: [
+					{
+						color: "blue" as const,
+						image: null,
+						key: "testTech",
+						label: "Test",
+						module_count: mockModules.length,
+						modules: mockModules.map((m) => ({
+							...m,
+							active: true,
+							adjacency: "",
+							adjacency_bonus: 0,
+							bonus: 0,
+							sc_eligible: false,
+							supercharged: false,
+							tech: "testTech",
+							value: 0,
+						})),
+					},
+				],
+			},
+		});
+
+		const { result } = renderHook(() => useTechModuleManagement("testTech", mockModules));
+
+		// Deselecting Theta (upgradeA) should also deselect Tau (upgradeB) and Sigma (upgradeC)
+		act(() => {
+			result.current.handleValueChange(["core1", "upgradeC", "upgradeB"]); // upgradeA removed
+		});
+
+		expect(useTechStore.getState().checkedModules["testTech"]).toEqual(["core1"]);
 	});
 });

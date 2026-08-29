@@ -8,6 +8,8 @@ import { immer } from "zustand/middleware/immer";
 import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
 import { Logger } from "@/utils/system/monitoring";
 
+import { validateModuleSelections } from "./techRules";
+
 /**
  * Metadata representing the calculated bonus status for a specific technology.
  */
@@ -427,7 +429,18 @@ export const useTechStore = create<TechStore>()(
 			},
 			setCheckedModules: (tech, updater) =>
 				set((state: TechStore) => {
-					state.checkedModules[tech] = updater(state.checkedModules[tech]);
+					const prev = state.checkedModules[tech] || [];
+					const updated = updater(prev);
+
+					const activeGroupType = state.activeGroups[tech] || "normal";
+					const groups = state.techGroups[tech] || [];
+					const activeGroup =
+						groups.length > 1
+							? groups.find((g) => g.type === activeGroupType) || groups[0]
+							: groups[0];
+					const modules = activeGroup ? activeGroup.modules : [];
+
+					state.checkedModules[tech] = validateModuleSelections(prev, updated, modules);
 					syncAliases(state);
 				}),
 			setModuleSelection: (tech, moduleIds) => {

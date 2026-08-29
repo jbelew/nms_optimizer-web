@@ -99,4 +99,5 @@ Key Learnings:
 
 2026-08-29: fix(grid): remove eslint-disable by fixing JSDoc references in gridTypes.ts (#732)
 2026-08-29: refactor(grid): extract applyValidationFeedback helper and refactor store actions (#731)
+2026-08-29: refactor(tech): refactor useTechModuleManagement and Dialogs to delegate to deep techStore (#737)
 

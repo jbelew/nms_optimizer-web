@@ -9,18 +9,19 @@ import { useTechStore } from "@/store/tech/techStore";
  * @remarks
  * Coordinates useTechStore state to:
  * 1. **Grouping Logic**: Segregates modules into semantic categories (e.g., 'core', 'upgrade', 'figurines').
- * 2. **Hierarchical Selection**: Enforces tier-based constraints (e.g., removing a 'Theta' module deselects its 'Tau' and 'Sigma' counterparts).
+ * 2. **Delegated Selection**: Delegates selection state and cascading rules to the store.
  * 3. **Interaction State**: Derives indeterminate and "select all" states for complex checkbox interfaces.
  *
  * @param {string} tech - The unique technology identifier (e.g., 'pulse').
- * @param {Array<{ label: string, id: string, image: string, type?: string }>} modules - The full list of available modules.
+ * @param {Array<{ id: string; label: string; type?: string }>} modules - The full list of available modules.
  *
  * @returns {object} Module management state and handlers.
  * @returns {boolean} returns.allModulesSelected - Whether all available non-core modules are checked.
  * @returns {Array} returns.currentCheckedModules - IDs of currently selected modules.
  * @returns {object} returns.groupedModules - Modules grouped by their `type` property.
+ * @returns {function} returns.handleAllCheckboxesChange - Handler to replace the entire selection list.
  * @returns {function} returns.handleSelectAllChange - Handler for the "Select All" toggle.
- * @returns {function} returns.handleValueChange - Handler for batch checkbox updates with hierarchy logic.
+ * @returns {function} returns.handleValueChange - Handler for batch checkbox updates delegating to store.
  * @returns {boolean} returns.isIndeterminate - Whether some but not all modules are selected.
  *
  * @see {@link useTechStore} for the source of truth and persistence logic.
@@ -80,19 +81,6 @@ export const useTechModuleManagement = (
 	}, [modules]);
 
 	/**
-	 * Toggles the selection status of a single module.
-	 */
-	const handleCheckboxChange = (moduleId: string) => {
-		setCheckedModules(tech, (prevChecked = []) => {
-			const isChecked = prevChecked.includes(moduleId);
-
-			return isChecked
-				? prevChecked.filter((id) => id !== moduleId)
-				: [...prevChecked, moduleId];
-		});
-	};
-
-	/**
 	 * Replaces the entire selection list for this technology.
 	 */
 	const handleAllCheckboxesChange = (moduleIds: string[]) => {
@@ -114,51 +102,11 @@ export const useTechModuleManagement = (
 	 * Processes a batch value change from the checkbox group.
 	 *
 	 * @remarks
-	 * Enforces tier-based de-selection logic (Theta > Tau > Sigma). Removing
-	 * a higher-tier module automatically deselects dependent lower-tier ones.
+	 * Directly delegates the new list of checked IDs to the store action,
+	 * allowing the store's validation engine to handle cascading selections.
 	 */
 	const handleValueChange = (newValues: string[]) => {
-		const oldValues = new Set(currentCheckedModules);
-		const newValuesSet = new Set(newValues);
-
-		const added = [...newValuesSet].filter((id) => !oldValues.has(id));
-		const removed = [...oldValues].filter((id) => !newValuesSet.has(id));
-
-		if (added.length > 0) {
-			handleCheckboxChange(added[0]);
-		} else if (removed.length > 0) {
-			const finalNewValues = new Set(newValuesSet);
-
-			for (const removedId of removed) {
-				const module = modules.find((m) => m.id === removedId);
-
-				if (module) {
-					const groupName = module.type || "upgrade";
-
-					if (["atlantid", "cosmetic", "reactor", "upgrade"].includes(groupName)) {
-						const label = module.label || "";
-
-						if (label.includes("Theta")) {
-							const tauModule = groupedModules[groupName].find((m) =>
-								m.label?.includes("Tau")
-							);
-							const sigmaModule = groupedModules[groupName].find((m) =>
-								m.label?.includes("Sigma")
-							);
-							if (tauModule) finalNewValues.delete(tauModule.id);
-							if (sigmaModule) finalNewValues.delete(sigmaModule.id);
-						} else if (label.includes("Tau")) {
-							const sigmaModule = groupedModules[groupName].find((m) =>
-								m.label?.includes("Sigma")
-							);
-							if (sigmaModule) finalNewValues.delete(sigmaModule.id);
-						}
-					}
-				}
-			}
-
-			handleAllCheckboxesChange(Array.from(finalNewValues));
-		}
+		handleAllCheckboxesChange(newValues);
 	};
 
 	const allModulesSelected = nonCoreModuleIds.every((id) => currentCheckedModules.includes(id));
