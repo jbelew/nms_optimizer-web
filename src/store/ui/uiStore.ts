@@ -25,6 +25,60 @@ export interface ErrorMessage {
 }
 
 /**
+ * Actions shape for the UI store.
+ *
+ * @category Actions
+ */
+export interface UiActions {
+	/** Adds a new error message to the global queue. */
+	addError: (message: string, type?: ErrorMessage["type"]) => string;
+	/** Clears all active error messages from the store. */
+	clearErrors: () => void;
+	/** Close the module selection dialog and clear its state. */
+	closeModuleSelectionDialog: () => void;
+	/** Increments the `gridFixedCount` counter. */
+	incrementGridFixedCount: () => void;
+	/** Increments the `moduleLockedCount` counter. */
+	incrementModuleLockedCount: () => void;
+	/** Increments the `rowLimitCount` counter. */
+	incrementRowLimitCount: () => void;
+	/** Increments the `superchargedFixedCount` counter. */
+	incrementSuperchargedFixedCount: () => void;
+	/** Increments the `superchargedLimitCount` counter. */
+	incrementSuperchargedLimitCount: () => void;
+	/** Open the module selection dialog with specific tech data. */
+	openModuleSelectionDialog: (data: SelectedTechData) => void;
+	/** Removes a specific error message from the queue by its ID. */
+	removeError: (id: string) => void;
+	/** Resets all session violation counters to zero. */
+	resetSession: () => void;
+	/** Sets the accessibility mode to a specific state. */
+	setA11yMode: (a11yMode: boolean) => void;
+	/** Sets the theme appearance. */
+	setAppearance: (appearance: ThemeAppearance) => void;
+	/** Sets the grid section height. */
+	setGridSectionHeight: (height: null | number) => void;
+	/** Sets the grid table total width. */
+	setGridTableWidth: (width: number | undefined) => void;
+	/** Sets or clears the current "Pattern No Fit" technology warning. */
+	setPatternNoFitTech: (tech: null | string) => void;
+	/** Updates the optimization progress percentage. */
+	setProgressPercent: (percent: number) => void;
+	/** Updates the error visibility and metadata. */
+	setShowError: (show: boolean, severity?: OptimizeErrorType, details?: Error | null) => void;
+	/** Updates the "solving" status. */
+	setSolving: (solving: boolean) => void;
+	/** Sets the tech tree loading state. */
+	setTechTreeLoading: (isLoading: boolean) => void;
+	/** Toggles the accessibility mode between `true` and `false`. */
+	toggleA11yMode: () => void;
+	/** Toggles the theme appearance between light and dark. */
+	toggleAppearance: () => void;
+	/** Throttled function to trigger a UI shake. */
+	triggerShake: () => void;
+}
+
+/**
  * Combined type representing both the state and actions of the global UI store.
  *
  * @remarks
@@ -98,60 +152,6 @@ interface SelectedTechData {
  * @category State
  */
 type ThemeAppearance = "dark" | "light";
-
-/**
- * Actions shape for the UI store.
- *
- * @category Actions
- */
-interface UiActions {
-	/** Adds a new error message to the global queue. */
-	addError: (message: string, type?: ErrorMessage["type"]) => string;
-	/** Clears all active error messages from the store. */
-	clearErrors: () => void;
-	/** Close the module selection dialog and clear its state. */
-	closeModuleSelectionDialog: () => void;
-	/** Increments the `gridFixedCount` counter. */
-	incrementGridFixedCount: () => void;
-	/** Increments the `moduleLockedCount` counter. */
-	incrementModuleLockedCount: () => void;
-	/** Increments the `rowLimitCount` counter. */
-	incrementRowLimitCount: () => void;
-	/** Increments the `superchargedFixedCount` counter. */
-	incrementSuperchargedFixedCount: () => void;
-	/** Increments the `superchargedLimitCount` counter. */
-	incrementSuperchargedLimitCount: () => void;
-	/** Open the module selection dialog with specific tech data. */
-	openModuleSelectionDialog: (data: SelectedTechData) => void;
-	/** Removes a specific error message from the queue by its ID. */
-	removeError: (id: string) => void;
-	/** Resets all session violation counters to zero. */
-	resetSession: () => void;
-	/** Sets the accessibility mode to a specific state. */
-	setA11yMode: (a11yMode: boolean) => void;
-	/** Sets the theme appearance. */
-	setAppearance: (appearance: ThemeAppearance) => void;
-	/** Sets the grid section height. */
-	setGridSectionHeight: (height: null | number) => void;
-	/** Sets the grid table total width. */
-	setGridTableWidth: (width: number | undefined) => void;
-	/** Sets or clears the current "Pattern No Fit" technology warning. */
-	setPatternNoFitTech: (tech: null | string) => void;
-	/** Updates the optimization progress percentage. */
-	setProgressPercent: (percent: number) => void;
-	/** Updates the error visibility and metadata. */
-	setShowError: (show: boolean, severity?: OptimizeErrorType, details?: Error | null) => void;
-	/** Updates the "solving" status. */
-	setSolving: (solving: boolean) => void;
-	/** Sets the tech tree loading state. */
-	setTechTreeLoading: (isLoading: boolean) => void;
-	/** Toggles the accessibility mode between `true` and `false`. */
-	toggleA11yMode: () => void;
-	/** Toggles the theme appearance between light and dark. */
-	toggleAppearance: () => void;
-	/** Throttled function to trigger a UI shake. */
-	triggerShake: () => void;
-}
 
 /**
  * State shape for the UI store.

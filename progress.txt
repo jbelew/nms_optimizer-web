@@ -98,3 +98,5 @@ Key Learnings:
 - Chained test run tasks in npm/bun scripts can forward file arguments to all sub-commands; when running tests on single Vitest files, calling `vitest run` directly is cleaner than chaining through scripts that forward parameters to Bun's native runner.
 
 2026-08-29: fix(grid): remove eslint-disable by fixing JSDoc references in gridTypes.ts (#732)
+2026-08-29: refactor(grid): extract applyValidationFeedback helper and refactor store actions (#731)
+

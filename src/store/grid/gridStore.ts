@@ -9,9 +9,12 @@ import { useUiStore } from "@/store/ui/uiStore";
 import { resolveInitialPlatform } from "@/utils/browser/platformResolver";
 import { Logger } from "@/utils/system/monitoring";
 
+import { applyValidationFeedback } from "./applyValidationFeedback";
 import { createCellFromModuleData, createGrid, resetCellContent } from "./gridFactories";
 import { debouncedStorage } from "./gridPersistence";
 import { validateToggleActive, validateToggleSupercharged } from "./gridRules";
+
+export * from "./applyValidationFeedback";
 
 export * from "./gridFactories";
 
@@ -305,21 +308,7 @@ export const useGridStore = create<GridStore>()(
 							});
 
 							if (!validation.valid) {
-								const uiState = useUiStore.getState();
-
-								if (validation.reason === "superchargedLimit") {
-									uiState.incrementSuperchargedLimitCount();
-								} else if (validation.reason === "superchargedFixed") {
-									uiState.incrementSuperchargedFixedCount();
-								} else if (validation.reason === "gridFixed") {
-									uiState.incrementGridFixedCount();
-								} else if (validation.reason === "rowLimit") {
-									uiState.incrementRowLimitCount();
-								} else if (validation.reason === "moduleLocked") {
-									uiState.incrementModuleLockedCount();
-								}
-
-								uiState.triggerShake();
+								applyValidationFeedback(validation);
 
 								if (state._initialCellStateForTap) {
 									const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
@@ -366,15 +355,7 @@ export const useGridStore = create<GridStore>()(
 							});
 
 							if (!validation.valid) {
-								const uiState = useUiStore.getState();
-
-								if (validation.reason === "gridFixed") {
-									uiState.incrementGridFixedCount();
-								} else if (validation.reason === "moduleLocked") {
-									uiState.incrementModuleLockedCount();
-								}
-
-								uiState.triggerShake();
+								applyValidationFeedback(validation);
 								state._initialCellStateForTap = null;
 							} else {
 								state._initialCellStateForTap = { ...cell };
@@ -472,15 +453,7 @@ export const useGridStore = create<GridStore>()(
 								});
 
 								if (!validation.valid) {
-									const uiState = useUiStore.getState();
-
-									if (validation.reason === "gridFixed") {
-										uiState.incrementGridFixedCount();
-									} else if (validation.reason === "moduleLocked") {
-										uiState.incrementModuleLockedCount();
-									}
-
-									uiState.triggerShake();
+									applyValidationFeedback(validation);
 
 									return;
 								}
@@ -518,21 +491,7 @@ export const useGridStore = create<GridStore>()(
 								});
 
 								if (!validation.valid) {
-									const uiState = useUiStore.getState();
-
-									if (validation.reason === "superchargedLimit") {
-										uiState.incrementSuperchargedLimitCount();
-									} else if (validation.reason === "superchargedFixed") {
-										uiState.incrementSuperchargedFixedCount();
-									} else if (validation.reason === "gridFixed") {
-										uiState.incrementGridFixedCount();
-									} else if (validation.reason === "rowLimit") {
-										uiState.incrementRowLimitCount();
-									} else if (validation.reason === "moduleLocked") {
-										uiState.incrementModuleLockedCount();
-									}
-
-									uiState.triggerShake();
+									applyValidationFeedback(validation);
 
 									return;
 								}
@@ -617,15 +576,7 @@ export const useGridStore = create<GridStore>()(
 						});
 
 						if (!validation.valid) {
-							const uiState = useUiStore.getState();
-
-							if (validation.reason === "gridFixed") {
-								uiState.incrementGridFixedCount();
-							} else if (validation.reason === "moduleLocked") {
-								uiState.incrementModuleLockedCount();
-							}
-
-							uiState.triggerShake();
+							applyValidationFeedback(validation);
 
 							return;
 						}
@@ -665,21 +616,7 @@ export const useGridStore = create<GridStore>()(
 						});
 
 						if (!validation.valid) {
-							const uiState = useUiStore.getState();
-
-							if (validation.reason === "superchargedLimit") {
-								uiState.incrementSuperchargedLimitCount();
-							} else if (validation.reason === "superchargedFixed") {
-								uiState.incrementSuperchargedFixedCount();
-							} else if (validation.reason === "gridFixed") {
-								uiState.incrementGridFixedCount();
-							} else if (validation.reason === "rowLimit") {
-								uiState.incrementRowLimitCount();
-							} else if (validation.reason === "moduleLocked") {
-								uiState.incrementModuleLockedCount();
-							}
-
-							uiState.triggerShake();
+							applyValidationFeedback(validation);
 
 							return;
 						}
