@@ -460,6 +460,7 @@ export const useGridStore = create<GridStore>()(
 					}),
 
 				setCellActive: (rowIndex, columnIndex, active) => {
+					let success = false;
 					set((state) => {
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
 
@@ -490,13 +491,18 @@ export const useGridStore = create<GridStore>()(
 							if (!active && !state.superchargedFixed) {
 								cell.supercharged = false;
 							}
+
+							success = true;
 						}
 
 						recomputeDerivedState(state);
 					});
+
+					return success;
 				},
 
 				setCellSupercharged: (rowIndex, columnIndex, supercharged) => {
+					let success = false;
 					set((state) => {
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
 
@@ -533,10 +539,13 @@ export const useGridStore = create<GridStore>()(
 							}
 
 							cell.supercharged = supercharged;
+							success = true;
 						}
 
 						recomputeDerivedState(state);
 					});
+
+					return success;
 				},
 
 				setGrid: (grid) =>
@@ -592,6 +601,7 @@ export const useGridStore = create<GridStore>()(
 				superchargedFixed: false,
 
 				toggleCellActive: (rowIndex, columnIndex) => {
+					let success = false;
 					set((state) => {
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
 
@@ -628,11 +638,15 @@ export const useGridStore = create<GridStore>()(
 							cell.active = !cell.active;
 						}
 
+						success = true;
 						recomputeDerivedState(state);
 					});
+
+					return success;
 				},
 
-				toggleCellSupercharged: (rowIndex, columnIndex) =>
+				toggleCellSupercharged: (rowIndex, columnIndex) => {
+					let success = false;
 					set((state) => {
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
 
@@ -675,8 +689,12 @@ export const useGridStore = create<GridStore>()(
 						}
 
 						cell.supercharged = !cell.supercharged;
+						success = true;
 						recomputeDerivedState(state);
-					}),
+					});
+
+					return success;
+				},
 
 				totalSuperchargedCells: 0,
 

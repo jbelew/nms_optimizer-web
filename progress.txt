@@ -82,3 +82,10 @@ Summary: Verified the existing implementation of the touch sequence transaction 
 Key Learnings:
 - Standardizing store actions with clean TypeDoc/JSDoc structures conforming to `agentic-jsdoc` improves developer/LLM comprehension.
 - Cross-verifying and closing related sub-issues helps maintain issue tracker health and ensures all validation rules and rollback paths are properly tested.
+
+Date: 2026-08-29
+Task: Implement GitHub issue #726: "Consolidate Grid Layout Validations inside useGridStore"
+Summary: Refactored `toggleCellActive`, `toggleCellSupercharged`, `setCellActive`, and `setCellSupercharged` actions in `useGridStore` to enforce layout-lock, module-lock, row-limit, and supercharged-limit validations, trigger the UI shake animation, increment uiStore violation counters, and return a boolean success status. Added the test suite `actionsValidation.test.ts` to verify the validations and return values.
+Key Learnings:
+- Standardizing store actions to run their own invariants and return a transaction status simplifies client hooks and guarantees state safety.
+- Spying on global store methods in Vitest allows for reliable assertions on global state telemetry and side-effects.

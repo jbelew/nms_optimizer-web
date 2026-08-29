@@ -142,10 +142,44 @@ export interface GridActions {
 	revertCellTap: (rowIndex: number, columnIndex: number, originalState: Cell) => void;
 	/** Updates the current build name. */
 	setBuildName: (name: null | string) => void;
-	/** Sets the active status of a specific cell. */
-	setCellActive: (rowIndex: number, columnIndex: number, active: boolean) => void;
-	/** Sets the supercharged status of a specific cell. */
-	setCellSupercharged: (rowIndex: number, columnIndex: number, supercharged: boolean) => void;
+	/**
+	 * Sets the active status of a specific cell.
+	 *
+	 * @remarks
+	 * This action modifies the active state of a grid cell after validating the change.
+	 * If the validation fails, it triggers the shake animation and increments the appropriate
+	 * violation count in the UI store, and returns false.
+	 *
+	 * @param rowIndex - The row index of the cell.
+	 * @param columnIndex - The column index of the cell.
+	 * @param active - The target active status.
+	 *
+	 * @returns True if the active status was successfully set; false otherwise.
+	 *
+	 * @see {@link validateToggleActive} for active state validation rules.
+	 *
+	 * @category Actions
+	 */
+	setCellActive: (rowIndex: number, columnIndex: number, active: boolean) => boolean;
+	/**
+	 * Sets the supercharged status of a specific cell.
+	 *
+	 * @remarks
+	 * This action modifies the supercharged state of a grid cell after validating the change.
+	 * If the validation fails, it triggers the shake animation and increments the appropriate
+	 * violation count in the UI store, and returns false.
+	 *
+	 * @param rowIndex - The row index of the cell.
+	 * @param columnIndex - The column index of the cell.
+	 * @param supercharged - The target supercharged status.
+	 *
+	 * @returns True if the supercharged status was successfully set; false otherwise.
+	 *
+	 * @see {@link validateToggleSupercharged} for supercharged state validation rules.
+	 *
+	 * @category Actions
+	 */
+	setCellSupercharged: (rowIndex: number, columnIndex: number, supercharged: boolean) => boolean;
 	/** Replaces the entire grid object. */
 	setGrid: (grid: Grid) => void;
 	/** Toggles the grid layout lock. */
@@ -170,10 +204,42 @@ export interface GridActions {
 	setResult: (result: ApiResponse | null) => void;
 	/** Toggles the supercharged slot lock. */
 	setSuperchargedFixed: (fixed: boolean) => void;
-	/** Toggles the active status of a cell. */
-	toggleCellActive: (rowIndex: number, columnIndex: number) => void;
-	/** Toggles the supercharged status of a cell. */
-	toggleCellSupercharged: (rowIndex: number, columnIndex: number) => void;
+	/**
+	 * Toggles the active status of a cell.
+	 *
+	 * @remarks
+	 * Toggles the active state of a grid cell after validating the change.
+	 * If the validation fails, it triggers the shake animation and increments the appropriate
+	 * violation count in the UI store, and returns false.
+	 *
+	 * @param rowIndex - The row index of the cell.
+	 * @param columnIndex - The column index of the cell.
+	 *
+	 * @returns True if the active status was successfully toggled; false otherwise.
+	 *
+	 * @see {@link validateToggleActive} for active state validation rules.
+	 *
+	 * @category Actions
+	 */
+	toggleCellActive: (rowIndex: number, columnIndex: number) => boolean;
+	/**
+	 * Toggles the supercharged status of a cell.
+	 *
+	 * @remarks
+	 * Toggles the supercharged state of a grid cell after validating the change.
+	 * If the validation fails, it triggers the shake animation and increments the appropriate
+	 * violation count in the UI store, and returns false.
+	 *
+	 * @param rowIndex - The row index of the cell.
+	 * @param columnIndex - The column index of the cell.
+	 *
+	 * @returns True if the supercharged status was successfully toggled; false otherwise.
+	 *
+	 * @see {@link validateToggleSupercharged} for supercharged state validation rules.
+	 *
+	 * @category Actions
+	 */
+	toggleCellSupercharged: (rowIndex: number, columnIndex: number) => boolean;
 	/** Manually triggers recomputation of derived state. */
 	triggerRecompute: () => void;
 }
