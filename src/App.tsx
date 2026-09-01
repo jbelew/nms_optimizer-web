@@ -25,6 +25,7 @@ import { useUrlNormalization, useUrlValidation } from "./hooks/useValidation/use
 import { isBot } from "./utils/browser/environment";
 import { useDialog } from "./utils/system/dialogUtils";
 import { lazyNamed } from "./utils/system/lazyNamed";
+import { lifecycleCoordinator } from "./utils/system/lifecycleCoordinator";
 import { Logger } from "./utils/system/monitoring";
 import { hideSplashScreenAndShowBackground } from "./utils/system/splashScreen";
 
@@ -234,6 +235,9 @@ const App: FC = () => {
 
 	// Mount-time operations
 	useEffect(() => {
+		// Signal primary view readiness to the Lifecycle Coordinator
+		lifecycleCoordinator.markReady();
+
 		// P0 Optimization: Prefetch tech tree data if platform is in URL
 		// This eliminates the waterfall between fetchShipTypes and tech leaf fetches.
 		const params = new URLSearchParams(window.location.search);

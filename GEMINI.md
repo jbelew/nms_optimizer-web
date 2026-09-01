@@ -14,6 +14,7 @@ This document captures project-specific protocols and configurations for AI agen
 ## Graphify (Knowledge Graph)
 
 This project has a knowledge graph at `graphify-out/`.
+
 - For codebase questions, run `graphify query "<question>"` when `graphify-out/graph.json` exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts.
 - If `graphify-out/wiki/index.md` exists, use it for broad navigation instead of raw source browsing.
 - Read `graphify-out/GRAPH_REPORT.md` only for broad architecture review.

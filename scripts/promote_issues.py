@@ -64,7 +64,12 @@ def main():
         body = issue.get("body") or ""
         labels = [l["name"] for l in issue.get("labels", [])]
 
-        is_spec = title.lower().startswith("spec:") or number == 717
+        is_spec = (
+            title.lower().startswith("spec:")
+            or title.lower().startswith("spec(")
+            or any("spec" in l.lower() for l in labels)
+            or number == 717
+        )
         blockers = extract_blockers(body)
         active_blockers = [b for b in blockers if b in open_issue_numbers]
 

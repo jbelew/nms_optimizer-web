@@ -73,7 +73,7 @@ EOF
 # Pass any extra arguments from user (e.g., --model, --effort) to agy
 agy \
 	--mode=accept-edits \
-	--model="Gemini 3.5 Flash (High)" \
+	--model="Gemini 3.7 Flash (High)" \
 	--dangerously-skip-permissions \
 	--project="$(pwd)" \
 	--print-timeout=20m \

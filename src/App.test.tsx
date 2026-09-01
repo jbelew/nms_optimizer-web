@@ -16,6 +16,7 @@ import { useOptimizeStore } from "@/store/ui/uiStore";
 import { routes } from "./routes";
 import { usePlatformStore } from "./store/app/platformStore";
 import { sendEvent } from "./utils/analytics/tracking";
+import { lifecycleCoordinator } from "./utils/system/lifecycleCoordinator";
 import { hideSplashScreenAndShowBackground } from "./utils/system/splashScreen";
 
 /** Mock the splash screen utility */
@@ -273,6 +274,17 @@ describe("App", () => {
 				// Component renders without error
 				expect(true).toBe(true);
 			});
+		});
+
+		test("should signal markReady to LifecycleCoordinator on mount", async () => {
+			const markReadySpy = vi.spyOn(lifecycleCoordinator, "markReady");
+			renderApp(["/"]);
+
+			await vi.waitFor(() => {
+				expect(markReadySpy).toHaveBeenCalled();
+			});
+
+			markReadySpy.mockRestore();
 		});
 	});
 
