@@ -66,8 +66,8 @@
 				});
 
 				// E2E Test hook for deterministic error triggering.
-				// Fire synchronously so the recovery wins the race against main.tsx's
-				// app-ready handler (which clears the recovery marker on boot).
+				// Fire synchronously so the recovery wins the race against
+				// readiness initialization (which clears the recovery marker on boot).
 				try {
 					if (sessionStorage.getItem("__TEST_TRIGGER_ERROR__")) {
 						sessionStorage.removeItem("__TEST_TRIGGER_ERROR__");

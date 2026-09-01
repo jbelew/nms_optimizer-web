@@ -104,3 +104,4 @@ Key Learnings:
 2026-08-29: feat(tech): implement validation rules engine (#735)
 2026-09-01: feat(core): end-to-end boot pipeline and lifecycle coordinator tracer bullet (#739)
 2026-09-01: feat(core): deferred background service registry and idle pipeline (#740)
+2026-09-01: refactor(core): route readiness migration and legacy splash seam contraction (#741)

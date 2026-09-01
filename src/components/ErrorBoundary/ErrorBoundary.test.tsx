@@ -9,6 +9,8 @@ import { Suspense } from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { lifecycleCoordinator } from "@/utils/system/lifecycleCoordinator";
+
 import ErrorBoundary from "./ErrorBoundary";
 import * as errorHandler from "./errorHandler";
 
@@ -103,8 +105,9 @@ describe("ErrorBoundary", () => {
 	});
 
 	describe("error handling", () => {
-		it("should call handleError when error is caught", () => {
+		it("should call handleError and lifecycleCoordinator.markReady when error is caught", () => {
 			const handleErrorSpy = vi.spyOn(errorHandler, "handleError");
+			const markReadySpy = vi.spyOn(lifecycleCoordinator, "markReady");
 
 			render(
 				<ErrorBoundary>
@@ -113,6 +116,7 @@ describe("ErrorBoundary", () => {
 			);
 
 			expect(handleErrorSpy).toHaveBeenCalled();
+			expect(markReadySpy).toHaveBeenCalled();
 			const [error, errorInfo] = handleErrorSpy.mock.calls[0];
 			expect(error.message).toContain("Test error from child component");
 			expect(errorInfo).toBeDefined();

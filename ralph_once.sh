@@ -40,9 +40,20 @@ fi
 # Fetch comments for context
 ISSUE_COMMENTS=$(gh issue view "$ISSUE_NUM" --json comments --jq '.comments[].body' 2>/dev/null || echo "")
 
+# Check if this issue is part of a parent spec/epic (e.g., "Part of #738")
+PARENT_NUM=$(echo "$ISSUE_BODY" | grep -oEi '(Part of|Parent:?|Parent issue:?) *#([0-9]+)' | grep -oE '[0-9]+' | head -n 1 || true)
+PARENT_SPEC=""
+if [ -n "$PARENT_NUM" ]; then
+	echo "Detected parent spec #$PARENT_NUM. Fetching specification context..."
+	PARENT_SPEC=$(gh issue view "$PARENT_NUM" --json number,title,body --jq '"### Parent Spec #\(.number): \(.title)\n\n\(.body)"' 2>/dev/null || echo "")
+fi
+
 echo "========================================="
 echo "Claiming and starting issue #$ISSUE_NUM"
 echo "Title: $ISSUE_TITLE"
+if [ -n "$PARENT_NUM" ]; then
+	echo "Parent Spec: #$PARENT_NUM"
+fi
 echo "========================================="
 
 # Claim the issue by assigning to me (@me)
@@ -56,6 +67,7 @@ Implement GitHub issue #$ISSUE_NUM: "$ISSUE_TITLE".
 ## Issue Description:
 $ISSUE_BODY
 
+$([ -n "$PARENT_SPEC" ] && echo -e "## Parent Specification & Architecture Guardrails:\n$PARENT_SPEC\n")
 ## Comments & Context:
 $ISSUE_COMMENTS
 
@@ -65,7 +77,7 @@ $ISSUE_COMMENTS
 - Fix any failures, re-stage, and re-run until clean.
 - Close the issue: \`gh issue close $ISSUE_NUM --comment "Resolved."\`
 - Append a one-line summary with the date to \`progress.txt\`.
-- Commit using Angular convention (e.g. \`feat(grid): ...\`), subject under 90 chars. Reference the issue number in the commit message (e.g. \`#123\`).
+- Commit using Angular convention (e.g. \`feat(grid): ...\`), subject under 90 chars. Reference the issue number in the commit message (e.g. \`#$ISSUE_NUM\`).
 EOF
 )
 

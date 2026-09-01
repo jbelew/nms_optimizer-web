@@ -17,12 +17,6 @@ import { routes } from "./routes";
 import { usePlatformStore } from "./store/app/platformStore";
 import { sendEvent } from "./utils/analytics/tracking";
 import { lifecycleCoordinator } from "./utils/system/lifecycleCoordinator";
-import { hideSplashScreenAndShowBackground } from "./utils/system/splashScreen";
-
-/** Mock the splash screen utility */
-vi.mock("./utils/system/splashScreen", () => ({
-	hideSplashScreenAndShowBackground: vi.fn(),
-}));
 
 /** Mock URL normalization and validation to prevent remounts */
 vi.mock("./hooks/useValidation/useValidation", () => ({
@@ -213,12 +207,13 @@ describe("App", () => {
 			expect(backToMainLink.closest("a")).toHaveAttribute("href", "/");
 		});
 
-		test("should call hideSplashScreenAndShowBackground and sendEvent when 404 page is rendered", async () => {
+		test("should signal markReady to LifecycleCoordinator and sendEvent when 404 page is rendered", async () => {
+			const markReadySpy = vi.spyOn(lifecycleCoordinator, "markReady");
 			renderApp(["/unknown-route"]);
 
 			// Wait for the NotFound component to render and its useEffect to run
 			await vi.waitFor(() => {
-				expect(hideSplashScreenAndShowBackground).toHaveBeenCalledTimes(1);
+				expect(markReadySpy).toHaveBeenCalled();
 				expect(sendEvent).toHaveBeenCalledWith(
 					expect.objectContaining({
 						action: "page_view",
@@ -233,19 +228,22 @@ describe("App", () => {
 					})
 				);
 			});
+			markReadySpy.mockRestore();
 		});
 	});
 
 	describe("AppContent component", () => {
-		test("should hide splash screen when status is error", async () => {
+		test("should signal markReady to LifecycleCoordinator when status is error", async () => {
+			const markReadySpy = vi.spyOn(lifecycleCoordinator, "markReady");
 			useOptimizeStore.setState({
 				status: { details: null, severity: "recoverable", type: "error" },
 			});
 			renderApp(["/"]);
 
 			await vi.waitFor(() => {
-				expect(hideSplashScreenAndShowBackground).toHaveBeenCalled();
+				expect(markReadySpy).toHaveBeenCalled();
 			});
+			markReadySpy.mockRestore();
 		});
 
 		test("should render Outlet and UpdatePrompt", async () => {

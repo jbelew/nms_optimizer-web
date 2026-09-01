@@ -59,7 +59,7 @@ test.describe("UpdatePrompt Suppression", () => {
 		await page.goto("/");
 
 		// 3. Wait for app to be ready
-		await page.waitForFunction(() => (window as unknown as { __APP_READY__: boolean }).__APP_READY__);
+		await page.waitForFunction(() => window.lifecycleCoordinator?.isReady());
 
 		// 4. Dispatch the event after a tiny delay to ensure listeners are active
 		await page.waitForTimeout(100);

@@ -14,6 +14,8 @@
 import type { ErrorInfo, ReactNode } from "react";
 import { Component } from "react";
 
+import { lifecycleCoordinator } from "@/utils/system/lifecycleCoordinator";
+
 import { ErrorContent } from "./ErrorContent";
 import { handleError } from "./errorHandler";
 
@@ -61,6 +63,7 @@ interface State {
  *
  * @see {@link handleError}
  * @see {@link ErrorContent}
+ * @see {@link lifecycleCoordinator}
  *
  * @component
  *
@@ -119,6 +122,7 @@ class ErrorBoundary extends Component<Props, State> {
 	 */
 	componentDidCatch(error: Error, errorInfo: ErrorInfo) {
 		handleError(error, errorInfo);
+		lifecycleCoordinator.markReady();
 		this.setState({ errorInfo });
 	}
 

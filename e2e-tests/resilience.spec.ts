@@ -49,7 +49,7 @@ test.describe("Application Resilience & Recovery", () => {
 			//   2. MARKER is unset → set MARKER, bump __recovery_attempts__, and
 			//      cache-bust reload to /?_cb=...
 			//   3. On the cache-busted page, no trigger fires; the app boots and
-			//      main.tsx clears MARKER on `app-ready`.
+			//      clears MARKER on ready phase transition.
 			void page.goto("/").catch(() => {});
 
 			// Wait for the recovery to fire AND the app to fully boot.
@@ -57,7 +57,7 @@ test.describe("Application Resilience & Recovery", () => {
 			await page.waitForFunction(
 				() => {
 					const attempts = sessionStorage.getItem("__recovery_attempts__");
-					const isReady = (window as Window & { __APP_READY__?: boolean }).__APP_READY__;
+					const isReady = window.lifecycleCoordinator?.isReady();
 
 					// Success condition: we had at least one recovery attempt and the app is ready.
 					return attempts === "1" && isReady === true;
@@ -143,10 +143,9 @@ test.describe("Application Resilience & Recovery", () => {
 
 			await page.goto("/", { timeout: 60000 });
 
-			await page.waitForFunction(
-				() => (window as typeof window & { __APP_READY__?: boolean }).__APP_READY__,
-				{ timeout: 30000 }
-			);
+			await page.waitForFunction(() => window.lifecycleCoordinator?.isReady(), {
+				timeout: 30000,
+			});
 
 			const grid = page.locator(".gridTable");
 			await expect(grid).toBeVisible();
@@ -191,10 +190,9 @@ test.describe("Application Resilience & Recovery", () => {
 
 			await page.goto("/");
 
-			await page.waitForFunction(
-				() => (window as typeof window & { __APP_READY__?: boolean }).__APP_READY__,
-				{ timeout: 30000 }
-			);
+			await page.waitForFunction(() => window.lifecycleCoordinator?.isReady(), {
+				timeout: 30000,
+			});
 
 			const markerValue = await page.evaluate((m) => sessionStorage.getItem(m), MARKER);
 			expect(markerValue).toBeNull();

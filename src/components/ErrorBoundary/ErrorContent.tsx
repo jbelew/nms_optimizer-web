@@ -19,7 +19,6 @@ import { Button, Link, ScrollArea, Separator } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
-import { hideSplashScreenAndShowBackground } from "@/utils/system/splashScreen";
 
 import { ErrorDisplay } from "./ErrorDisplay";
 
@@ -92,7 +91,6 @@ const InsetMessage = () => (
  * @returns {JSX.Element} The rendered error UI.
  *
  * @see {@link ErrorDisplay}
- * @see {@link hideSplashScreenAndShowBackground}
  *
  * @component
  *
@@ -110,7 +108,6 @@ export const ErrorContent = ({ children, error, errorInfo, variant }: ErrorConte
 	const [isResetting, setIsResetting] = useState(false);
 
 	useEffect(() => {
-		hideSplashScreenAndShowBackground();
 		document.body.classList.add("error-boundary-visible");
 
 		return () => {

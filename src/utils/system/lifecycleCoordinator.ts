@@ -130,6 +130,12 @@ export class LifecycleCoordinator {
 	 */
 	constructor(options: LifecycleCoordinatorOptions = {}) {
 		this.options = options;
+
+		if (typeof window !== "undefined") {
+			(
+				window as Window & { lifecycleCoordinator?: LifecycleCoordinator }
+			).lifecycleCoordinator = this;
+		}
 	}
 
 	/**
@@ -644,7 +650,7 @@ export class LifecycleCoordinator {
 	 * Executes side-effects for the `READY` phase transition:
 	 * 1. Dismiss splash screen
 	 * 2. Cleanup pre-rendered SSG fallback elements
-	 * 3. Set global compatibility flag & dispatch `app-ready` event
+	 * 3. Clear recovery marker from session storage
 	 * 4. Schedule transition to `IDLE`
 	 *
 	 * @private
@@ -664,17 +670,13 @@ export class LifecycleCoordinator {
 			this.defaultCleanupSsgFallback();
 		}
 
-		// 3. Set global compatibility flag & dispatch legacy event
+		// 3. Clear preload recovery attempt marker
 		if (typeof window !== "undefined") {
-			(window as typeof window & { __APP_READY__?: boolean }).__APP_READY__ = true;
-
 			try {
 				sessionStorage.removeItem("__preload_recovery__");
 			} catch (_e) {
 				// ignore
 			}
-
-			window.dispatchEvent(new Event("app-ready"));
 		}
 
 		// 4. Schedule transition to IDLE
@@ -698,3 +700,8 @@ export class LifecycleCoordinator {
  * @category Utilities
  */
 export const lifecycleCoordinator = new LifecycleCoordinator();
+
+if (typeof window !== "undefined") {
+	(window as Window & { lifecycleCoordinator?: LifecycleCoordinator }).lifecycleCoordinator =
+		lifecycleCoordinator;
+}

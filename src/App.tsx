@@ -27,7 +27,6 @@ import { useDialog } from "./utils/system/dialogUtils";
 import { lazyNamed } from "./utils/system/lazyNamed";
 import { lifecycleCoordinator } from "./utils/system/lifecycleCoordinator";
 import { Logger } from "./utils/system/monitoring";
-import { hideSplashScreenAndShowBackground } from "./utils/system/splashScreen";
 
 const IS_DOCKER_BUILD = import.meta.env.VITE_DOCKER === "true";
 
@@ -226,10 +225,10 @@ const App: FC = () => {
 	// Initialize file handling for PWA file association
 	useFileHandling();
 
-	// Automatically hide splash screen if a global error occurs
+	// Automatically signal readiness to dismiss splash screen if a global error occurs
 	useEffect(() => {
 		if (showError) {
-			hideSplashScreenAndShowBackground();
+			lifecycleCoordinator.markReady();
 		}
 	}, [showError]);
 

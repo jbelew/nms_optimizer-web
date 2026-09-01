@@ -115,7 +115,7 @@ bun run build && bun run lighthouse:ci
 To achieve peak SEO and support for clients without JavaScript, this project uses a build-time Static Site Generation approach:
 
 - **Build Time (SSG)**: Markdown content (instructions, about, changelog) is pre-rendered into static HTML blocks (with the `.ssg-fallback` class) via `scripts/generate-ssg.mjs`.
-- **Client Hydration & Cleanup**: During bootstrap, the application extracts the static content to render it instantly (avoiding network requests), and subsequently prunes the static DOM nodes on `app-ready` to prevent memory leaks.
+- **Client Hydration & Cleanup**: During bootstrap, the application extracts the static content to render it instantly (avoiding network requests), and subsequently prunes the static DOM nodes during the Lifecycle Coordinator `READY` phase to prevent memory leaks.
 - **Search Optimization**: This ensures that search engine crawlers and browsers with JavaScript disabled can access the full content of the application's informational pages.
 
 ### Bundle Strategy & Resilience

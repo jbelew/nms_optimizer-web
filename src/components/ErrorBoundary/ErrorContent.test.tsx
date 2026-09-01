@@ -3,7 +3,6 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
-import { hideSplashScreenAndShowBackground } from "@/utils/system/splashScreen";
 
 import { ErrorContent } from "./ErrorContent";
 
@@ -12,19 +11,19 @@ vi.mock("@/hooks/useBreakpoint/useBreakpoint", () => ({
 	useBreakpoint: vi.fn(),
 }));
 
-// Mock splashScreen utility
-vi.mock("@/utils/system/splashScreen", () => ({
-	hideSplashScreenAndShowBackground: vi.fn(),
-}));
-
 describe("ErrorContent", () => {
 	const mockError = new Error("Test error");
 	const mockErrorInfo = { componentStack: "Test stack" };
 
-	it("should call hideSplashScreenAndShowBackground on mount", () => {
-		render(<ErrorContent error={mockError} errorInfo={mockErrorInfo} variant="page" />);
+	it("should toggle error-boundary-visible class on document.body during lifecycle", () => {
+		const { unmount } = render(
+			<ErrorContent error={mockError} errorInfo={mockErrorInfo} variant="page" />
+		);
 
-		expect(hideSplashScreenAndShowBackground).toHaveBeenCalledTimes(1);
+		expect(document.body.classList.contains("error-boundary-visible")).toBe(true);
+
+		unmount();
+		expect(document.body.classList.contains("error-boundary-visible")).toBe(false);
 	});
 
 	it("should render page variant correctly", () => {

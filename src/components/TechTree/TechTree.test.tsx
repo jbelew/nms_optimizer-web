@@ -89,11 +89,6 @@ vi.mock("@/store/app/platformStore", () => ({
 	}),
 }));
 
-// Mock utility
-vi.mock("@/utils/system/splashScreen", () => ({
-	hideSplashScreenAndShowBackground: vi.fn(),
-}));
-
 describe("TechTree", () => {
 	const mockHandleOptimize = vi.fn();
 

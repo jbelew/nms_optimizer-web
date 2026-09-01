@@ -25,7 +25,6 @@ import { Button, Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { ErrorDisplay } from "@/components/ErrorBoundary/ErrorDisplay";
-import { hideSplashScreenAndShowBackground } from "@/utils/system/splashScreen";
 
 /**
  * Props for the `NmsToast` component.
@@ -58,7 +57,6 @@ type ToastProps = {
  * @returns {JSX.Element} The rendered toast notification.
  *
  * @see {@link ErrorDisplay}
- * @see {@link hideSplashScreenAndShowBackground}
  * @see {@link ./Toast.stories.tsx Storybook}
  *
  * @component

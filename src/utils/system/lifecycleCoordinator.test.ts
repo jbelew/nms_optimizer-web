@@ -157,9 +157,7 @@ describe("LifecycleCoordinator", () => {
 			coordinator.markReady();
 
 			expect(document.documentElement.classList.contains("background-visible")).toBe(true);
-			expect((window as typeof window & { __APP_READY__?: boolean }).__APP_READY__).toBe(
-				true
-			);
+			expect(coordinator.isReady()).toBe(true);
 		});
 
 		it("should clean up .ssg-fallback elements from DOM on READY", () => {
@@ -179,16 +177,18 @@ describe("LifecycleCoordinator", () => {
 			expect(document.querySelectorAll(".ssg-fallback").length).toBe(0);
 		});
 
-		it("should dispatch legacy app-ready custom event on READY", () => {
+		it("should clear preload recovery marker from sessionStorage on READY and not dispatch app-ready event", () => {
 			const dispatchSpy = vi.spyOn(window, "dispatchEvent");
+			sessionStorage.setItem("__preload_recovery__", "1");
 			const coordinator = new LifecycleCoordinator();
 
 			coordinator.markReady();
 
-			expect(dispatchSpy).toHaveBeenCalled();
-			expect(
-				dispatchSpy.mock.calls.find((call) => call[0].type === "app-ready")
-			).toBeDefined();
+			expect(sessionStorage.getItem("__preload_recovery__")).toBeNull();
+			const appReadyCalls = dispatchSpy.mock.calls.filter(
+				(call) => call[0].type === "app-ready"
+			);
+			expect(appReadyCalls).toHaveLength(0);
 		});
 
 		it("should invoke custom dismissal and cleanup callbacks if provided", () => {

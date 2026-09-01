@@ -6,7 +6,6 @@ import { vi } from "vitest";
 import { registerToolbarForceShow } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useSessionStore } from "@/store/ui/uiStore";
-import { hideSplashScreenAndShowBackground } from "@/utils/system/splashScreen";
 
 import { useMainAppLogic } from "./useMainAppLogic";
 
@@ -93,10 +92,6 @@ vi.mock("@/store/grid/gridStore", () => ({
 		selector({ hasModulesInGrid: true, isSharedGrid: false }),
 }));
 
-vi.mock("@/utils/system/splashScreen", () => ({
-	hideSplashScreenAndShowBackground: vi.fn(),
-}));
-
 vi.mock("@/store/app/platformStore", () => ({
 	usePlatformStore: vi.fn((selector: (state: unknown) => unknown) =>
 		selector({ selectedPlatform: "standard" })
@@ -145,11 +140,6 @@ describe("useMainAppLogic", () => {
 		rerender();
 
 		expect(resetSession).toHaveBeenCalledTimes(2);
-	});
-
-	it("should hide splash screen on mount", () => {
-		renderHook(() => useMainAppLogic());
-		expect(hideSplashScreenAndShowBackground).toHaveBeenCalled();
 	});
 
 	it("should register toolbar force show on mount", () => {

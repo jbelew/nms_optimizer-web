@@ -15,7 +15,6 @@ import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useSessionStore } from "@/store/ui/uiStore";
 import { useDialog } from "@/utils/system/dialogUtils";
-import { hideSplashScreenAndShowBackground } from "@/utils/system/splashScreen";
 
 /**
  * Custom hook that consolidates the high-level orchestration logic for the main application view.
@@ -23,8 +22,7 @@ import { hideSplashScreenAndShowBackground } from "@/utils/system/splashScreen";
  * @remarks
  * It aggregates multiple specialized hooks (layout, optimization, persistence,
  * notifications) into a single unified interface for the `MainAppContent` component.
- * It also manages global lifecycle events like resetting sessions and dismissing
- * the splash screen.
+ * It also manages global lifecycle events like resetting sessions on platform change.
  *
  * @returns {object} A complex object containing state flags, sub-hook results, and event handlers.
  *
@@ -87,11 +85,6 @@ export const useMainAppLogic = () => {
 	useEffect(() => {
 		registerToolbarForceShow(forceShow);
 	}, [forceShow]);
-
-	// Hide splash screen once main app content is mounted
-	useEffect(() => {
-		hideSplashScreenAndShowBackground();
-	}, []);
 
 	/**
 	 * Opens the application changelog modal.

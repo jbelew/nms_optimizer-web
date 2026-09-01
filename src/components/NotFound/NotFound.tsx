@@ -6,6 +6,7 @@
  * themed fallback for all undefined application routes.
  *
  * @see {@link NotFound}
+ * @see {@link ./NotFound.test.tsx Unit Tests}
  *
  * @category Components
  */
@@ -16,7 +17,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { sendEvent } from "@/utils/analytics/tracking";
-import { hideSplashScreenAndShowBackground } from "@/utils/system/splashScreen";
+import { lifecycleCoordinator } from "@/utils/system/lifecycleCoordinator";
 
 import "./NotFound.scss";
 
@@ -28,12 +29,14 @@ import { Button } from "@radix-ui/themes";
  * @remarks
  * It provides a stylized "Atlas" interface to inform users that the requested
  * page doesn't exist. It also handles automatic SEO title updates, analytics
- * tracking for broken links, and ensuring the splash screen is dismissed.
+ * tracking for broken links, and ensuring the splash screen is dismissed by
+ * signaling readiness to the {@link lifecycleCoordinator}.
  *
  * @returns {JSX.Element} The rendered 404 page.
  *
  * @see {@link sendEvent}
- * @see {@link hideSplashScreenAndShowBackground}
+ * @see {@link lifecycleCoordinator}
+ * @see {@link ./NotFound.test.tsx Unit Tests}
  *
  * @component
  *
@@ -49,7 +52,7 @@ const NotFound: FC = () => {
 	const { t } = useTranslation();
 
 	useEffect(() => {
-		hideSplashScreenAndShowBackground();
+		lifecycleCoordinator.markReady();
 
 		const pageTitle = `404 - ${t("notFound.title")}`;
 		document.title = pageTitle;

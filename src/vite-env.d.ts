@@ -25,8 +25,8 @@ declare const __BUILD_DATE__: string;
  * Global `Window` extension for development and testing utilities.
  */
 interface Window {
-	/** Indicates if the application has completed its initial mount and is ready. */
-	__APP_READY__?: boolean;
+	/** Lifecycle coordinator instance governing application lifecycle phases. */
+	lifecycleCoordinator?: import("./utils/system/lifecycleCoordinator").LifecycleCoordinator;
 
 	/** Build date of the application. */
 	__BUILD_DATE__?: string;
