@@ -24,18 +24,26 @@ import { createAppRouter } from "@/utils/system/monitoring";
 /**
  * Root component that manages global theme and provider orchestration.
  *
+ * @remarks
+ * Sets up StrictMode, global ErrorBoundary, Radix UI Theme, tooltip provider,
+ * toast provider, and router provider while synchronizing theme and accessibility classes.
+ *
  * @returns {JSX.Element} The rendered root component with all providers.
  *
  * @see {@link useThemeStore}
+ * @see {@link useA11yStore}
  * @see {@link ErrorBoundary}
  * @see {@link TooltipProvider}
  * @see {@link ToastProvider}
+ *
+ * @component
  *
  * @category Components
  *
  * @example
  * ```tsx
  * <Root />
+ * // mounts Root application tree
  * ```
  */
 export const Root = () => {

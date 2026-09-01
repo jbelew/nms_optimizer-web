@@ -232,7 +232,7 @@ describe("LifecycleCoordinator", () => {
 	});
 
 	describe("Fatal Error Handling", () => {
-		it("should transition to FATAL and record fatal error", () => {
+		it("should transition to FATAL, record fatal error, and report diagnostics", () => {
 			const onFatal = vi.fn();
 			const coordinator = new LifecycleCoordinator({ onFatal });
 			const error = new Error("Bootstrap crash");
@@ -242,7 +242,52 @@ describe("LifecycleCoordinator", () => {
 			expect(coordinator.getPhase()).toBe("FATAL");
 			expect(coordinator.isFatal()).toBe(true);
 			expect(coordinator.getFatalError()).toBe(error);
+			expect(Logger.error).toHaveBeenCalledWith("Fatal lifecycle error:", error);
+			expect(captureException).toHaveBeenCalledWith(error, {
+				level: "fatal",
+				tags: { area: "lifecycle-coordinator" },
+			});
 			expect(onFatal).toHaveBeenCalledWith(error);
+		});
+
+		it("should support dynamic fatal handler assignment via setOnFatal", () => {
+			const coordinator = new LifecycleCoordinator();
+			const dynamicOnFatal = vi.fn();
+			coordinator.setOnFatal(dynamicOnFatal);
+
+			const error = new Error("Dynamic error");
+			coordinator.markFatal(error);
+
+			expect(coordinator.isFatal()).toBe(true);
+			expect(dynamicOnFatal).toHaveBeenCalledWith(error);
+		});
+
+		it("should redirect to /500.html when markFatal is called without custom onFatal handler", () => {
+			const replaceMock = vi.fn();
+			const originalLocation = window.location;
+			Object.defineProperty(window, "location", {
+				configurable: true,
+				value: {
+					...originalLocation,
+					replace: replaceMock,
+				},
+				writable: true,
+			});
+
+			const coordinator = new LifecycleCoordinator();
+			coordinator.markFatal(new Error("Default Fatal Error"));
+
+			expect(replaceMock).toHaveBeenCalledWith(
+				expect.stringContaining(
+					"/500.html?error_type=initialization_error&error_cause=Default%20Fatal%20Error"
+				)
+			);
+
+			Object.defineProperty(window, "location", {
+				configurable: true,
+				value: originalLocation,
+				writable: true,
+			});
 		});
 
 		it("should prevent further phase transitions once in FATAL", () => {

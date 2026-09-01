@@ -5,6 +5,8 @@
  * Encapsulates the end-to-end application startup sequence: pre-mount storage migrations,
  * telemetry initialization, scoped error trapping, React root mounting, and lifecycle transitions.
  *
+ * @see {@link ./bootPipeline.test.tsx Unit Tests}
+ *
  * @category Utilities
  */
 
@@ -13,14 +15,18 @@ import type { setupServiceWorkerRegistration } from "@/utils/system/setupService
 import type { Root as ReactRoot } from "react-dom/client";
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 import { Root } from "@/Root";
 import { initializeAnalytics, initializeAnalyticsClient } from "@/utils/analytics/tracking";
 import { preloadInitialState } from "@/utils/api/apiPreload";
 import { performBootstrapMigrations } from "@/utils/system/bootstrap";
-import { lifecycleCoordinator } from "@/utils/system/lifecycleCoordinator";
+import {
+	handleFatalBootstrapError,
+	lifecycleCoordinator,
+} from "@/utils/system/lifecycleCoordinator";
 import { initializeSentry, Logger } from "@/utils/system/monitoring";
+
+export { handleFatalBootstrapError };
 
 /**
  * Configuration options for the application {@link bootApp} pipeline.
@@ -81,43 +87,6 @@ export interface BootResult {
 	 */
 	unmount: () => void;
 }
-
-/**
- * Handles fatal application bootstrap and initialization failures.
- *
- * @remarks
- * If an error or unhandled promise rejection occurs during the initial application mount
- * or data loading sequence (before reaching the `READY` phase), this handler:
- * 1. Purges the splash screen components (`#vpss`, `#vpss-style`) to clean up the DOM.
- * 2. Redirects the browser to the static `/500.html` error recovery page, passing the error description.
- *
- * @param {unknown} error - The error or rejection reason captured during bootstrap.
- *
- * @returns {void} Side-effects only.
- *
- * @see {@link bootApp}
- *
- * @category Utilities
- *
- * @example
- * ```ts
- * handleFatalBootstrapError(new TypeError("Failed to initialize store"));
- * // redirects browser to /500.html?error_type=initialization_error&error_cause=...
- * ```
- */
-export const handleFatalBootstrapError = (error: unknown): void => {
-	if (typeof window !== "undefined") {
-		try {
-			hideSplashScreen();
-		} catch (_e) {
-			// ignore
-		}
-
-		const errorMessage = error instanceof Error ? error.message : String(error);
-		const errorUrl = `/500.html?error_type=initialization_error&error_cause=${encodeURIComponent(errorMessage)}`;
-		window.location.replace(errorUrl);
-	}
-};
 
 /**
  * Registers default background capabilities into the {@link LifecycleCoordinator} deferred task registry.
@@ -216,16 +185,15 @@ export const bootApp = async (options: BootOptions = {}): Promise<BootResult> =>
 		coordinator.reset();
 	}
 
+	if (options.onFatalError) {
+		coordinator.setOnFatal(options.onFatalError);
+	}
+
 	const cleanupFns: Array<() => void> = [];
 
 	const handleFatal = (error: unknown) => {
-		Logger.error("Fatal bootstrap error:", error);
-		coordinator.markFatal(error);
-
-		if (options.onFatalError) {
-			options.onFatalError(error);
-		} else {
-			handleFatalBootstrapError(error);
+		if (coordinator.getPhase() !== "FATAL") {
+			coordinator.markFatal(error);
 		}
 	};
 

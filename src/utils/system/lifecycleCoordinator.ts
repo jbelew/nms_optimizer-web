@@ -5,6 +5,8 @@
  * Manages discrete application lifecycle phases (`BOOTING` -> `HYDRATED` -> `READY` -> `IDLE` -> `FATAL`).
  * Orchestrates splash screen dismissal, pre-rendered SSG fallback cleanup, and phase transitions.
  *
+ * @see {@link ./lifecycleCoordinator.test.ts Unit Tests}
+ *
  * @category Utilities
  */
 
@@ -308,6 +310,7 @@ export class LifecycleCoordinator {
 			this.transitionTo("HYDRATED");
 		}
 	}
+
 	/**
 	 * Signals that the primary application view has mounted and rendered, transitioning to `READY`.
 	 *
@@ -357,7 +360,6 @@ export class LifecycleCoordinator {
 			set.delete(callback);
 		};
 	}
-
 	/**
 	 * Registers a task to execute during the `IDLE` lifecycle phase.
 	 *
@@ -414,7 +416,6 @@ export class LifecycleCoordinator {
 			this.unregisterDeferredTask(task.name);
 		};
 	}
-
 	/**
 	 * Resets the coordinator to its initial `BOOTING` state and clears all listeners and tasks.
 	 * Useful for isolating test cases.
@@ -433,6 +434,24 @@ export class LifecycleCoordinator {
 		this.phaseOnceListeners.clear();
 		this.deferredTasks.clear();
 		this.executedTaskNames.clear();
+	}
+
+	/**
+	 * Sets or overrides the fatal error handler callback.
+	 *
+	 * @param {(error: unknown) => void} handler - Custom fatal error callback to execute when entering `FATAL`.
+	 *
+	 * @returns {void}
+	 *
+	 * @example
+	 * ```ts
+	 * lifecycleCoordinator.setOnFatal((error) => {
+	 *   console.error("Fatal boot failure", error);
+	 * });
+	 * ```
+	 */
+	public setOnFatal(handler: (error: unknown) => void): void {
+		this.options.onFatal = handler;
 	}
 
 	/**
@@ -624,26 +643,24 @@ export class LifecycleCoordinator {
 	/**
 	 * Executes fatal error handling.
 	 *
+	 * @param {unknown} error - The fatal error to process.
+	 *
 	 * @private
 	 */
 	private handleFatal(error: unknown): void {
+		Logger.error("Fatal lifecycle error:", error);
+		captureException(error, {
+			level: "fatal",
+			tags: { area: "lifecycle-coordinator" },
+		});
+
 		if (this.options.onFatal) {
 			this.options.onFatal(error);
 
 			return;
 		}
 
-		if (typeof window !== "undefined") {
-			try {
-				hideSplashScreen();
-			} catch (_e) {
-				// ignore
-			}
-
-			const errorMessage = error instanceof Error ? error.message : String(error);
-			const errorUrl = `/500.html?error_type=initialization_error&error_cause=${encodeURIComponent(errorMessage)}`;
-			window.location.replace(errorUrl);
-		}
+		handleFatalBootstrapError(error);
 	}
 
 	/**
@@ -693,6 +710,43 @@ export class LifecycleCoordinator {
 		}
 	}
 }
+
+/**
+ * Handles fatal application bootstrap and initialization failures.
+ *
+ * @remarks
+ * If an error or unhandled promise rejection occurs during the initial application mount
+ * or data loading sequence (before reaching the `READY` phase), this handler:
+ * 1. Purges the splash screen components (`#vpss`, `#vpss-style`) to clean up the DOM.
+ * 2. Redirects the browser to the static `/500.html` error recovery page, passing the error description.
+ *
+ * @param {unknown} error - The fatal error or rejection reason captured during startup.
+ *
+ * @returns {void} Side-effects only.
+ *
+ * @see {@link LifecycleCoordinator}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * handleFatalBootstrapError(new TypeError("Failed to initialize store"));
+ * // redirects browser to /500.html?error_type=initialization_error&error_cause=...
+ * ```
+ */
+export const handleFatalBootstrapError = (error: unknown): void => {
+	if (typeof window !== "undefined") {
+		try {
+			hideSplashScreen();
+		} catch (_e) {
+			// ignore
+		}
+
+		const errorMessage = error instanceof Error ? error.message : String(error);
+		const errorUrl = `/500.html?error_type=initialization_error&error_cause=${encodeURIComponent(errorMessage)}`;
+		window.location.replace(errorUrl);
+	}
+};
 
 /**
  * Global singleton instance of the {@link LifecycleCoordinator}.
