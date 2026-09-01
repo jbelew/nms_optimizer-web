@@ -9,19 +9,18 @@
  */
 
 import type { LifecycleCoordinator } from "@/utils/system/lifecycleCoordinator";
+import type { setupServiceWorkerRegistration } from "@/utils/system/setupServiceWorker";
 import type { Root as ReactRoot } from "react-dom/client";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
-import { UI_TIMING } from "@/constants";
 import { Root } from "@/Root";
 import { initializeAnalytics, initializeAnalyticsClient } from "@/utils/analytics/tracking";
 import { preloadInitialState } from "@/utils/api/apiPreload";
 import { performBootstrapMigrations } from "@/utils/system/bootstrap";
-import { runWhenIdle } from "@/utils/system/idle";
 import { lifecycleCoordinator } from "@/utils/system/lifecycleCoordinator";
-import { captureException, initializeSentry, Logger } from "@/utils/system/monitoring";
+import { initializeSentry, Logger } from "@/utils/system/monitoring";
 
 /**
  * Configuration options for the application {@link bootApp} pipeline.
@@ -44,6 +43,12 @@ export interface BootOptions {
 	 * Optional custom root React node to render instead of the standard `<Root />`.
 	 */
 	rootComponent?: React.ReactNode;
+	/**
+	 * If true, skips registering default background capabilities (analytics, SW, API preload).
+	 *
+	 * @default false
+	 */
+	skipDeferredServices?: boolean;
 	/**
 	 * If true, skips attaching global `window.addEventListener("error")` and `"unhandledrejection"` interceptors.
 	 *
@@ -112,6 +117,64 @@ export const handleFatalBootstrapError = (error: unknown): void => {
 		const errorUrl = `/500.html?error_type=initialization_error&error_cause=${encodeURIComponent(errorMessage)}`;
 		window.location.replace(errorUrl);
 	}
+};
+
+/**
+ * Registers default background capabilities into the {@link LifecycleCoordinator} deferred task registry.
+ *
+ * @remarks
+ * Registers three non-critical background services to run during browser idle cycles once the application
+ * enters the `IDLE` phase:
+ * 1. `api-preload`: Initial state preloading for platforms and tech tree (priority 10).
+ * 2. `ga4-analytics`: GA4 analytics client and event tracker initialization (priority 5).
+ * 3. `service-worker`: PWA service worker registration and update listeners (priority 0).
+ *
+ * @param {LifecycleCoordinator} coordinator - The lifecycle coordinator instance to register tasks on.
+ *
+ * @returns {void} Side-effects only.
+ *
+ * @see {@link preloadInitialState}
+ * @see {@link initializeAnalyticsClient}
+ * @see {@link initializeAnalytics}
+ * @see {@link setupServiceWorkerRegistration}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * registerDefaultDeferredServices(lifecycleCoordinator);
+ * ```
+ */
+export const registerDefaultDeferredServices = (coordinator: LifecycleCoordinator): void => {
+	// 1. Initial API state preloading (priority 10)
+	coordinator.registerDeferredTask({
+		name: "api-preload",
+		priority: 10,
+		run: () => {
+			preloadInitialState();
+		},
+	});
+
+	// 2. GA4 analytics client and tracker initialization (priority 5)
+	coordinator.registerDeferredTask({
+		name: "ga4-analytics",
+		priority: 5,
+		run: async () => {
+			initializeAnalyticsClient();
+			await initializeAnalytics();
+		},
+	});
+
+	// 3. PWA Service Worker setup (priority 0)
+	coordinator.registerDeferredTask({
+		name: "service-worker",
+		priority: 0,
+		run: async () => {
+			const { setupServiceWorkerRegistration } =
+				await import("@/utils/system/setupServiceWorker");
+			setupServiceWorkerRegistration();
+		},
+	});
 };
 
 /**
@@ -272,33 +335,10 @@ export const bootApp = async (options: BootOptions = {}): Promise<BootResult> =>
 			(window as typeof window & { __BUILD_DATE__?: string }).__BUILD_DATE__ = __BUILD_DATE__;
 		}
 
-		// 6. Hook deferred services onto READY / IDLE lifecycle
-		coordinator.onPhase("READY", () => {
-			const initDeferredServices = async () => {
-				try {
-					preloadInitialState();
-					initializeAnalyticsClient();
-					await initializeAnalytics();
-
-					const { setupServiceWorkerRegistration } =
-						await import("@/utils/system/setupServiceWorker");
-					setupServiceWorkerRegistration();
-				} catch (error) {
-					Logger.error("Failed to initialize deferred services:", error);
-					captureException(error, {
-						level: "error",
-						tags: { area: "initialization" },
-					});
-				}
-			};
-
-			runWhenIdle(
-				() => {
-					void initDeferredServices();
-				},
-				{ timeout: UI_TIMING.IDLE_TIMEOUT_MS }
-			);
-		});
+		// 6. Register deferred background services onto coordinator
+		if (!options.skipDeferredServices) {
+			registerDefaultDeferredServices(coordinator);
+		}
 
 		// 7. Mount React tree
 		const root = createRoot(targetElement);

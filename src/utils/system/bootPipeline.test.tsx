@@ -2,13 +2,34 @@ import React from "react";
 import { act, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { bootApp, handleFatalBootstrapError } from "./bootPipeline";
+import { initializeAnalytics, initializeAnalyticsClient } from "@/utils/analytics/tracking";
+import { preloadInitialState } from "@/utils/api/apiPreload";
+import { setupServiceWorkerRegistration } from "@/utils/system/setupServiceWorker";
+
+import {
+	bootApp,
+	handleFatalBootstrapError,
+	registerDefaultDeferredServices,
+} from "./bootPipeline";
 import { performBootstrapMigrations } from "./bootstrap";
 import { LifecycleCoordinator } from "./lifecycleCoordinator";
 import { initializeSentry } from "./monitoring";
 
 vi.mock("./bootstrap", () => ({
 	performBootstrapMigrations: vi.fn(),
+}));
+
+vi.mock("@/utils/analytics/tracking", () => ({
+	initializeAnalytics: vi.fn(),
+	initializeAnalyticsClient: vi.fn(),
+}));
+
+vi.mock("@/utils/api/apiPreload", () => ({
+	preloadInitialState: vi.fn(),
+}));
+
+vi.mock("@/utils/system/setupServiceWorker", () => ({
+	setupServiceWorkerRegistration: vi.fn(),
 }));
 
 vi.mock("./monitoring", () => ({
@@ -255,6 +276,83 @@ describe("bootPipeline", () => {
 
 			await act(async () => {
 				result.unmount();
+			});
+		});
+	});
+
+	describe("Deferred Services Registration & Execution", () => {
+		it("should register default deferred background services on coordinator", () => {
+			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
+			registerDefaultDeferredServices(coordinator);
+
+			expect(coordinator.hasDeferredTask("api-preload")).toBe(true);
+			expect(coordinator.hasDeferredTask("ga4-analytics")).toBe(true);
+			expect(coordinator.hasDeferredTask("service-worker")).toBe(true);
+
+			const tasks = coordinator.getDeferredTasks();
+			expect(tasks.map((t) => t.name)).toEqual([
+				"api-preload",
+				"ga4-analytics",
+				"service-worker",
+			]);
+		});
+
+		it("should execute registered deferred services when IDLE is reached or flushed", async () => {
+			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
+			registerDefaultDeferredServices(coordinator);
+
+			expect(preloadInitialState).not.toHaveBeenCalled();
+			expect(initializeAnalyticsClient).not.toHaveBeenCalled();
+			expect(initializeAnalytics).not.toHaveBeenCalled();
+			expect(setupServiceWorkerRegistration).not.toHaveBeenCalled();
+
+			await coordinator.flushDeferredTasks();
+
+			expect(preloadInitialState).toHaveBeenCalledTimes(1);
+			expect(initializeAnalyticsClient).toHaveBeenCalledTimes(1);
+			expect(initializeAnalytics).toHaveBeenCalledTimes(1);
+			expect(setupServiceWorkerRegistration).toHaveBeenCalledTimes(1);
+		});
+
+		it("should register default deferred services in bootApp unless skipDeferredServices is true", async () => {
+			const coordinator1 = new LifecycleCoordinator({ autoTransitionToIdle: false });
+
+			let res1!: Awaited<ReturnType<typeof bootApp>>;
+			await act(async () => {
+				res1 = await bootApp({
+					coordinator: coordinator1,
+					rootComponent: <div>App</div>,
+					skipGlobalErrorHandlers: true,
+					target: container,
+				});
+			});
+
+			expect(coordinator1.hasDeferredTask("api-preload")).toBe(true);
+			expect(coordinator1.hasDeferredTask("ga4-analytics")).toBe(true);
+			expect(coordinator1.hasDeferredTask("service-worker")).toBe(true);
+
+			await act(async () => {
+				res1.unmount();
+			});
+
+			const coordinator2 = new LifecycleCoordinator({ autoTransitionToIdle: false });
+			let res2!: Awaited<ReturnType<typeof bootApp>>;
+			await act(async () => {
+				res2 = await bootApp({
+					coordinator: coordinator2,
+					rootComponent: <div>App</div>,
+					skipDeferredServices: true,
+					skipGlobalErrorHandlers: true,
+					target: container,
+				});
+			});
+
+			expect(coordinator2.hasDeferredTask("api-preload")).toBe(false);
+			expect(coordinator2.hasDeferredTask("ga4-analytics")).toBe(false);
+			expect(coordinator2.hasDeferredTask("service-worker")).toBe(false);
+
+			await act(async () => {
+				res2.unmount();
 			});
 		});
 	});

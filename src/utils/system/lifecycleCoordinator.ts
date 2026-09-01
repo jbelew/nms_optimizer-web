@@ -12,7 +12,7 @@ import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 import { UI_TIMING } from "@/constants";
 import { runWhenIdle } from "@/utils/system/idle";
-import { Logger } from "@/utils/system/monitoring";
+import { captureException, Logger } from "@/utils/system/monitoring";
 
 /**
  * Discrete lifecycle phases of the application.
@@ -25,6 +25,33 @@ import { Logger } from "@/utils/system/monitoring";
  * - `FATAL`: A fatal initialization or mounting error occurred before reaching `READY`.
  */
 export type AppLifecyclePhase = "BOOTING" | "FATAL" | "HYDRATED" | "IDLE" | "READY";
+
+/**
+ * Task definition for deferred execution in the {@link LifecycleCoordinator} idle pipeline.
+ */
+export interface DeferredTask {
+	/**
+	 * Unique identifier for the deferred task (e.g., `"api-preload"`, `"ga4-analytics"`, `"service-worker"`).
+	 */
+	name: string;
+	/**
+	 * Execution priority for the task. Higher numbers execute before lower numbers.
+	 *
+	 * @default 0
+	 */
+	priority?: number;
+	/**
+	 * Asynchronous or synchronous task function executed when entering the `IDLE` phase.
+	 */
+	run: DeferredTaskHandler;
+}
+
+/**
+ * Handler callback for a registered deferred task.
+ *
+ * @returns {Promise<void> | void} A promise that resolves when the task finishes, or void.
+ */
+export type DeferredTaskHandler = () => Promise<void> | void;
 
 /**
  * Configuration options for initializing a {@link LifecycleCoordinator} instance.
@@ -88,6 +115,8 @@ export type LifecycleListener = (phase: AppLifecyclePhase, prevPhase: AppLifecyc
  * ```
  */
 export class LifecycleCoordinator {
+	private deferredTasks = new Map<string, DeferredTask>();
+	private executedTaskNames = new Set<string>();
 	private fatalError: unknown = null;
 	private listeners = new Set<LifecycleListener>();
 	private options: LifecycleCoordinatorOptions;
@@ -101,6 +130,55 @@ export class LifecycleCoordinator {
 	 */
 	constructor(options: LifecycleCoordinatorOptions = {}) {
 		this.options = options;
+	}
+
+	/**
+	 * Deterministically executes all registered deferred tasks that have not yet run.
+	 *
+	 * @remarks
+	 * Tasks are executed sequentially in descending order of priority.
+	 * If a task fails or throws an exception, the error is logged and captured via Sentry,
+	 * but execution continues for all remaining registered deferred tasks.
+	 *
+	 * @returns {Promise<void>} Resolves when all registered deferred tasks have settled.
+	 *
+	 * @see {@link registerDeferredTask}
+	 *
+	 * @category Utilities
+	 *
+	 * @example
+	 * ```ts
+	 * await lifecycleCoordinator.flushDeferredTasks();
+	 * // returns Promise<void>
+	 * ```
+	 */
+	public async flushDeferredTasks(): Promise<void> {
+		const tasks = this.getDeferredTasks();
+
+		for (const task of tasks) {
+			if (!this.executedTaskNames.has(task.name)) {
+				await this.executeDeferredTask(task);
+			}
+		}
+	}
+
+	/**
+	 * Retrieves all registered deferred tasks, sorted by priority in descending order.
+	 *
+	 * @returns {DeferredTask[]} Array of registered deferred tasks.
+	 *
+	 * @category Utilities
+	 *
+	 * @example
+	 * ```ts
+	 * const tasks = lifecycleCoordinator.getDeferredTasks();
+	 * // returns DeferredTask[]
+	 * ```
+	 */
+	public getDeferredTasks(): DeferredTask[] {
+		return Array.from(this.deferredTasks.values()).sort(
+			(a, b) => (b.priority ?? 0) - (a.priority ?? 0)
+		);
 	}
 
 	/**
@@ -125,6 +203,26 @@ export class LifecycleCoordinator {
 	 */
 	public getPhase(): AppLifecyclePhase {
 		return this.phase;
+	}
+
+	/**
+	 * Checks if a deferred task with the given name is currently registered.
+	 *
+	 * @param {string} name - Name of the deferred task.
+	 *
+	 * @returns {boolean} True if registered, false otherwise.
+	 *
+	 * @category Utilities
+	 *
+	 * @example
+	 * ```ts
+	 * if (lifecycleCoordinator.hasDeferredTask("service-worker")) {
+	 *   // Task is registered
+	 * }
+	 * ```
+	 */
+	public hasDeferredTask(name: string): boolean {
+		return this.deferredTasks.has(name);
 	}
 
 	/**
@@ -204,7 +302,6 @@ export class LifecycleCoordinator {
 			this.transitionTo("HYDRATED");
 		}
 	}
-
 	/**
 	 * Signals that the primary application view has mounted and rendered, transitioning to `READY`.
 	 *
@@ -220,7 +317,6 @@ export class LifecycleCoordinator {
 			this.transitionTo("READY");
 		}
 	}
-
 	/**
 	 * Registers a one-shot callback to be executed when the specified lifecycle phase is reached.
 	 * If the coordinator is already in the target phase, the callback executes synchronously.
@@ -257,7 +353,64 @@ export class LifecycleCoordinator {
 	}
 
 	/**
-	 * Resets the coordinator to its initial `BOOTING` state and clears all listeners.
+	 * Registers a task to execute during the `IDLE` lifecycle phase.
+	 *
+	 * @remarks
+	 * If the coordinator has already reached the `IDLE` phase, the registered task
+	 * executes asynchronously. Tasks are executed in descending order of their
+	 * `priority` values (higher priority runs first).
+	 *
+	 * @param {DeferredTask | string} taskOrName - The deferred task descriptor or the task name string.
+	 * @param {DeferredTaskHandler} [run] - The task execution handler (if task name string is provided).
+	 * @param {number} [priority=0] - Optional execution priority (if task name string is provided).
+	 *
+	 * @returns {() => void} Unsubscribe function to unregister the task before execution.
+	 *
+	 * @see {@link DeferredTask}
+	 * @see {@link flushDeferredTasks}
+	 *
+	 * @category Utilities
+	 *
+	 * @example
+	 * ```ts
+	 * const unregister = lifecycleCoordinator.registerDeferredTask({
+	 *   name: "ga4-analytics",
+	 *   priority: 5,
+	 *   run: async () => {
+	 *     await initializeAnalytics();
+	 *   },
+	 * });
+	 * ```
+	 */
+	public registerDeferredTask(task: DeferredTask): () => void;
+	public registerDeferredTask(
+		name: string,
+		run: DeferredTaskHandler,
+		priority?: number
+	): () => void;
+	public registerDeferredTask(
+		taskOrName: DeferredTask | string,
+		run?: DeferredTaskHandler,
+		priority?: number
+	): () => void {
+		const task: DeferredTask =
+			typeof taskOrName === "string"
+				? { name: taskOrName, priority: priority ?? 0, run: run! }
+				: { ...taskOrName, priority: taskOrName.priority ?? 0 };
+
+		this.deferredTasks.set(task.name, task);
+
+		if (this.phase === "IDLE" && !this.executedTaskNames.has(task.name)) {
+			void this.executeDeferredTask(task);
+		}
+
+		return () => {
+			this.unregisterDeferredTask(task.name);
+		};
+	}
+
+	/**
+	 * Resets the coordinator to its initial `BOOTING` state and clears all listeners and tasks.
 	 * Useful for isolating test cases.
 	 *
 	 * @returns {void} Side-effects only.
@@ -272,6 +425,8 @@ export class LifecycleCoordinator {
 		this.fatalError = null;
 		this.listeners.clear();
 		this.phaseOnceListeners.clear();
+		this.deferredTasks.clear();
+		this.executedTaskNames.clear();
 	}
 
 	/**
@@ -325,6 +480,8 @@ export class LifecycleCoordinator {
 			this.handleFatal(errorContext);
 		} else if (nextPhase === "READY") {
 			this.handleReady();
+		} else if (nextPhase === "IDLE") {
+			void this.flushDeferredTasks();
 		}
 
 		// Notify global subscribers
@@ -350,6 +507,25 @@ export class LifecycleCoordinator {
 				}
 			});
 		}
+	}
+
+	/**
+	 * Unregisters a deferred task by name.
+	 *
+	 * @param {string} name - Name of the deferred task to unregister.
+	 *
+	 * @returns {boolean} True if the task was found and removed, false otherwise.
+	 *
+	 * @category Utilities
+	 *
+	 * @example
+	 * ```ts
+	 * lifecycleCoordinator.unregisterDeferredTask("ga4-analytics");
+	 * // returns boolean
+	 * ```
+	 */
+	public unregisterDeferredTask(name: string): boolean {
+		return this.deferredTasks.delete(name);
 	}
 
 	/**
@@ -408,6 +584,34 @@ export class LifecycleCoordinator {
 			} else {
 				setTimeout(removeVpssElements, 1000);
 			}
+		}
+	}
+
+	/**
+	 * Executes a single deferred task with isolated error trapping.
+	 *
+	 * @param {DeferredTask} task - The deferred task descriptor to execute.
+	 *
+	 * @returns {Promise<void>} Resolves when task execution completes or fails safely.
+	 *
+	 * @private
+	 *
+	 */
+	private async executeDeferredTask(task: DeferredTask): Promise<void> {
+		if (this.executedTaskNames.has(task.name)) {
+			return;
+		}
+
+		this.executedTaskNames.add(task.name);
+
+		try {
+			await task.run();
+		} catch (error) {
+			Logger.error(`Deferred task "${task.name}" failed:`, error);
+			captureException(error, {
+				level: "error",
+				tags: { area: "deferred-services", task: task.name },
+			});
 		}
 	}
 

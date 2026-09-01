@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { captureException, Logger } from "@/utils/system/monitoring";
+
 import { LifecycleCoordinator, lifecycleCoordinator } from "./lifecycleCoordinator";
 
 // Mock the vite-plugin-splash-screen/runtime
@@ -12,6 +14,16 @@ vi.mock("@/utils/system/idle", () => ({
 	runWhenIdle: vi.fn((cb: () => void) => {
 		cb();
 	}),
+}));
+
+// Mock monitoring logger and error capture
+vi.mock("@/utils/system/monitoring", () => ({
+	captureException: vi.fn(),
+	Logger: {
+		error: vi.fn(),
+		info: vi.fn(),
+		warn: vi.fn(),
+	},
 }));
 
 describe("LifecycleCoordinator", () => {
@@ -259,6 +271,181 @@ describe("LifecycleCoordinator", () => {
 			expect(coordinator.getPhase()).toBe("BOOTING");
 			expect(coordinator.isFatal()).toBe(false);
 			expect(coordinator.getFatalError()).toBeNull();
+		});
+	});
+
+	describe("Deferred Task Registry & IDLE Pipeline", () => {
+		it("should register tasks using object or parameter overloads", () => {
+			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
+			const task1 = vi.fn();
+			const task2 = vi.fn();
+
+			coordinator.registerDeferredTask({
+				name: "task-1",
+				priority: 10,
+				run: task1,
+			});
+
+			coordinator.registerDeferredTask("task-2", task2, 5);
+
+			expect(coordinator.hasDeferredTask("task-1")).toBe(true);
+			expect(coordinator.hasDeferredTask("task-2")).toBe(true);
+			expect(coordinator.hasDeferredTask("non-existent")).toBe(false);
+
+			const tasks = coordinator.getDeferredTasks();
+			expect(tasks).toHaveLength(2);
+			expect(tasks[0].name).toBe("task-1");
+			expect(tasks[1].name).toBe("task-2");
+		});
+
+		it("should unregister a task by name or via returned unsubscribe callback", () => {
+			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
+			const unregister = coordinator.registerDeferredTask("task-1", vi.fn());
+			coordinator.registerDeferredTask("task-2", vi.fn());
+
+			expect(coordinator.hasDeferredTask("task-1")).toBe(true);
+			expect(coordinator.hasDeferredTask("task-2")).toBe(true);
+
+			unregister();
+			expect(coordinator.hasDeferredTask("task-1")).toBe(false);
+
+			const deleted = coordinator.unregisterDeferredTask("task-2");
+			expect(deleted).toBe(true);
+			expect(coordinator.hasDeferredTask("task-2")).toBe(false);
+		});
+
+		it("should NOT execute deferred tasks during BOOTING, HYDRATED, or READY phases", () => {
+			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
+			const taskFn = vi.fn();
+			coordinator.registerDeferredTask("test-task", taskFn);
+
+			expect(taskFn).not.toHaveBeenCalled();
+
+			coordinator.markHydrated();
+			expect(taskFn).not.toHaveBeenCalled();
+
+			coordinator.markReady();
+			expect(taskFn).not.toHaveBeenCalled();
+		});
+
+		it("should execute deferred tasks when entering IDLE phase in descending priority order", async () => {
+			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
+			const executionOrder: string[] = [];
+
+			coordinator.registerDeferredTask({
+				name: "low-priority",
+				priority: 1,
+				run: () => {
+					executionOrder.push("low");
+				},
+			});
+
+			coordinator.registerDeferredTask({
+				name: "high-priority",
+				priority: 10,
+				run: () => {
+					executionOrder.push("high");
+				},
+			});
+
+			coordinator.registerDeferredTask({
+				name: "mid-priority",
+				priority: 5,
+				run: () => {
+					executionOrder.push("mid");
+				},
+			});
+
+			coordinator.markReady();
+			expect(executionOrder).toEqual([]);
+
+			coordinator.transitionTo("IDLE");
+			await coordinator.flushDeferredTasks();
+
+			expect(executionOrder).toEqual(["high", "mid", "low"]);
+		});
+
+		it("should flush deferred tasks deterministically without phase transition", async () => {
+			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
+			const taskFn = vi.fn();
+
+			coordinator.registerDeferredTask("deterministic-task", taskFn);
+			expect(taskFn).not.toHaveBeenCalled();
+
+			await coordinator.flushDeferredTasks();
+			expect(taskFn).toHaveBeenCalledTimes(1);
+
+			// Calling flush again should not re-execute already completed tasks
+			await coordinator.flushDeferredTasks();
+			expect(taskFn).toHaveBeenCalledTimes(1);
+		});
+
+		it("should execute a task immediately if registered when already in IDLE phase", async () => {
+			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
+			coordinator.transitionTo("IDLE");
+
+			const lateTaskFn = vi.fn();
+			coordinator.registerDeferredTask("late-task", lateTaskFn);
+
+			await coordinator.flushDeferredTasks();
+			expect(lateTaskFn).toHaveBeenCalledTimes(1);
+		});
+
+		it("should isolate errors in deferred tasks, log them, capture via Sentry, and continue remaining tasks", async () => {
+			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
+			const executionOrder: string[] = [];
+			const failingError = new Error("Background task failure");
+
+			coordinator.registerDeferredTask({
+				name: "failing-task",
+				priority: 10,
+				run: () => {
+					executionOrder.push("fail");
+					throw failingError;
+				},
+			});
+
+			coordinator.registerDeferredTask({
+				name: "healthy-task",
+				priority: 5,
+				run: () => {
+					executionOrder.push("healthy");
+				},
+			});
+
+			coordinator.transitionTo("IDLE");
+			await coordinator.flushDeferredTasks();
+
+			expect(executionOrder).toEqual(["fail", "healthy"]);
+			expect(Logger.error).toHaveBeenCalledWith(
+				'Deferred task "failing-task" failed:',
+				failingError
+			);
+			expect(captureException).toHaveBeenCalledWith(failingError, {
+				level: "error",
+				tags: { area: "deferred-services", task: "failing-task" },
+			});
+		});
+
+		it("should clear registered tasks and execution history on reset()", async () => {
+			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
+			const taskFn = vi.fn();
+
+			coordinator.registerDeferredTask("task-1", taskFn);
+			coordinator.transitionTo("IDLE");
+			await coordinator.flushDeferredTasks();
+			expect(taskFn).toHaveBeenCalledTimes(1);
+
+			coordinator.reset();
+			expect(coordinator.hasDeferredTask("task-1")).toBe(false);
+			expect(coordinator.getDeferredTasks()).toHaveLength(0);
+
+			// Re-registering after reset allows execution again
+			const newTaskFn = vi.fn();
+			coordinator.registerDeferredTask("task-1", newTaskFn);
+			coordinator.transitionTo("IDLE");
+			await coordinator.flushDeferredTasks();
+			expect(newTaskFn).toHaveBeenCalledTimes(1);
 		});
 	});
 });
