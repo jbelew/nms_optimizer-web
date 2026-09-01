@@ -12,15 +12,17 @@ import "@/i18n/i18n"; // Initialize i18next
 import React from "react";
 
 import { Root } from "@/Root";
-import { bootApp } from "@/utils/system/bootPipeline";
+import { bootApp, handleFatalBootstrapError } from "@/utils/system/bootPipeline";
 
 export { Root };
 
 // Delegate application mounting to the boot pipeline without side-effects during test imports.
 if (typeof document !== "undefined" && !import.meta.env.VITEST) {
-	const target = document.getElementById("root");
-
-	if (target) {
-		void bootApp({ rootComponent: <Root />, target });
+	try {
+		void bootApp({ rootComponent: <Root /> }).catch((error: unknown) => {
+			handleFatalBootstrapError(error);
+		});
+	} catch (error: unknown) {
+		handleFatalBootstrapError(error);
 	}
 }
