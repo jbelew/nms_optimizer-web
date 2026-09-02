@@ -1,3 +1,25 @@
+# [7.6.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.5.2...v7.6.0) (2026-09-02)
+
+
+### Bug Fixes
+
+* **core:** delegate bootstrap root resolution and wrap fatal error fallback in main ([#738](https://github.com/jbelew/nms_optimizer-web/issues/738)) ([1be7214](https://github.com/jbelew/nms_optimizer-web/commit/1be7214ab17ea743dca54f2860e72ba38c165710))
+* **core:** unify fatal lifecycle error handling and align jsdoc standards ([#738](https://github.com/jbelew/nms_optimizer-web/issues/738)) ([bffd467](https://github.com/jbelew/nms_optimizer-web/commit/bffd467c95e88a4e7c4c518a01fdf7184cefc41d))
+* **grid:** fix JSDoc links in gridTypes ([#732](https://github.com/jbelew/nms_optimizer-web/issues/732)) ([1a78644](https://github.com/jbelew/nms_optimizer-web/commit/1a786440cec9074fb6bc90b4215e6f869a63d57e))
+* **session:** reset counters on grid reset ([cf92afb](https://github.com/jbelew/nms_optimizer-web/commit/cf92afbd1fa91e1c7f0f89ed1783a48afe3d6ed2))
+* **test:** rename baseMockMockGridStoreState [#733](https://github.com/jbelew/nms_optimizer-web/issues/733) ([e21ad03](https://github.com/jbelew/nms_optimizer-web/commit/e21ad0317157f4736a19d335f4a2d662c60a0ad8))
+
+
+### Features
+
+* **core:** add llms.txt for NMS Optimizer documentation and caching headers ([95e0c60](https://github.com/jbelew/nms_optimizer-web/commit/95e0c60c1c63021bbb3364de5fd6c13e5accce47))
+* **core:** deferred background service registry and idle pipeline ([#740](https://github.com/jbelew/nms_optimizer-web/issues/740)) ([321b433](https://github.com/jbelew/nms_optimizer-web/commit/321b4331cfff32a4a2aa3fac551be83a88c37132))
+* **core:** end-to-end boot pipeline and lifecycle coordinator ([#739](https://github.com/jbelew/nms_optimizer-web/issues/739)) ([2186605](https://github.com/jbelew/nms_optimizer-web/commit/218660553ce50767f77f2cca1b9937d447163a8f))
+* **grid:** consolidate store validations ([1b054de](https://github.com/jbelew/nms_optimizer-web/commit/1b054de528b7c1cb4fca7dcb14b3255a2bff80a9))
+* **grid:** migrate cell hook to thin DOM adapter ([e0bc695](https://github.com/jbelew/nms_optimizer-web/commit/e0bc695ca3efa4794dab1eff5ae019efa65ebf69))
+* **tech:** implement validation rules engine ([#735](https://github.com/jbelew/nms_optimizer-web/issues/735)) ([f099902](https://github.com/jbelew/nms_optimizer-web/commit/f0999029cc38c812e1ab56aae906cc4f0788681d))
+* **tech:** integrate rules engine ([#736](https://github.com/jbelew/nms_optimizer-web/issues/736)) ([b0f6bec](https://github.com/jbelew/nms_optimizer-web/commit/b0f6becc4a2740bd977d1eda439ab50cf3b72acb))
+
 ## [7.5.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.5.1...v7.5.2) (2026-08-12)
 
 ### Bug Fixes
