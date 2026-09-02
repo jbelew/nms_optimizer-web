@@ -1,0 +1,35 @@
+# NMS Optimizer
+
+> Free, open-source technology layout optimizer for No Man's Sky that calculates mathematically optimal technology module placements to maximize adjacency bonuses and supercharged slot multipliers.
+
+NMS Optimizer (https://nms-optimizer.app) is an endgame optimization tool designed to solve complex inventory grid layouts for players of *No Man's Sky*. The solver uses a hybrid optimization pipeline—combining community-proven placement heuristics, a TensorFlow machine learning model trained on 16,000+ top layouts, and a Rust-powered simulated annealing engine—to evaluate combinatorial configurations (up to ~8.32 × 10⁸¹ permutations) in milliseconds. Optimized layouts routinely achieve 15–20% higher effective performance than manual arrangements.
+
+## Key Game Concepts
+
+- **Adjacency Bonuses**: Compatible technology modules placed adjacent to each other on the grid receive compounding stat multipliers based on shared edges.
+- **Supercharged Slots**: Limited high-potency grid slots (~25–30% stat boost). The optimizer balances placing core technology versus top-tier upgrade modules in these slots.
+- **Upgrade Tiers (Theta / Tau / Sigma)**: Procedural upgrades are ranked strictly by evaluated stats rather than class letters (X-Class can beat S-Class):
+  - **Theta**: Highest-rolled stats
+  - **Tau**: Mid-tier stats
+  - **Sigma**: Lowest-rolled stats
+- **Supported Platforms**: Starships (Standard, Sentinel Interceptor, Solar, Living, Exotic), Multi-Tools (including Staves), Freighters, Corvettes (Cosmetic and Reactor tech sets), Exosuits, and Exocraft.
+- **Interoperability**: Layouts can be exported and imported as `.nms` JSON files, shared via URL hashes, or rendered to image cards.
+
+## Documentation & Guides
+
+- [User Instructions & Strategy Guide](https://nms-optimizer.app/instructions/): Comprehensive gameplay guide covering grid setup, supercharged slot allocation strategy, row toggles, and platform constraints.
+  - Raw Markdown: [instructions.md](https://nms-optimizer.app/assets/locales/en/instructions.md)
+- [About & Engine Architecture](https://nms-optimizer.app/about/): In-depth documentation on the four-step solver pipeline, permutation scale, supported equipment, and tech stack.
+  - Raw Markdown: [about.md](https://nms-optimizer.app/assets/locales/en/about.md)
+- [Changelog & Update History](https://nms-optimizer.app/changelog/): Release notes, game update compatibility (e.g. Worlds Part I & II), new technology modules, and performance optimizations.
+  - Raw Markdown: [changelog.md](https://nms-optimizer.app/assets/locales/en/changelog.md)
+- [User Statistics](https://nms-optimizer.app/userstats/): Aggregate optimization statistics and platform usage metrics.
+  - Raw Markdown: [userstats.md](https://nms-optimizer.app/assets/locales/en/userstats.md)
+- [Privacy Policy](https://nms-optimizer.app/privacy/): Information regarding local storage usage and anonymous telemetry.
+  - Raw Markdown: [privacy.md](https://nms-optimizer.app/assets/locales/en/privacy.md)
+
+## Optional & Repository Resources
+
+- [GitHub Repository](https://github.com/jbelew/nms_optimizer-web): Source code, issue tracker, and feature requests.
+- [Community Discussions](https://github.com/jbelew/nms_optimizer-web/discussions): Community layouts, build sharing, and feedback.
+- [Sitemap](https://nms-optimizer.app/sitemap.xml): Machine-readable index of all localized routes.

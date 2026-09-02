@@ -68,6 +68,8 @@
   Cache-Control: public, max-age=86400, stale-while-revalidate=3600
 /manifest.json
   Cache-Control: public, max-age=86400, stale-while-revalidate=3600
+/llms.txt
+  Cache-Control: public, max-age=86400, stale-while-revalidate=3600
 
 # Immutable build output: Vite JS/CSS with content hashes (e.g. vendor-core-Ab12Cd.js).
 # Safe to cache forever — a new deploy produces new filenames.
