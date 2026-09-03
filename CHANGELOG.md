@@ -1,3 +1,10 @@
+## [7.7.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.7.0...v7.7.1) (2026-09-03)
+
+
+### Bug Fixes
+
+* **screenshot:** preserve populated grid in tablet and mobile screenshots ([adc7cbb](https://github.com/jbelew/nms_optimizer-web/commit/adc7cbbdb7ae969b98aeebc4168054e24a2c15bb))
+
 # [7.7.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.6.1...v7.7.0) (2026-09-03)
 
 
