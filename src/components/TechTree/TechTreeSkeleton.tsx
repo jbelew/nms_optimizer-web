@@ -26,7 +26,7 @@ export const TechTreeSkeleton: React.FC<{ height?: null | number }> = ({ height 
 					<MessageSpinner initialMessage="Loading Tech" isInlay={true} isVisible={true} />
 				</ScrollArea>
 			) : (
-				<aside className="w-full grow pt-8" style={{ minHeight: "50vh" }}>
+				<aside className="w-full grow pt-4" style={{ minHeight: "50vh" }}>
 					<Box className="flex flex-col gap-2">
 						{Array.from({ length: 5 }).map((_, i) => (
 							<React.Fragment key={i}>
