@@ -59,7 +59,15 @@ export const getLocalizedSchema = (t, lang, url) => {
 			name: "jbelew",
 			url: "https://github.com/jbelew",
 		},
+		browserRequirements: "Requires JavaScript. Requires HTML5.",
 		description: appDescription,
+		featureList: [
+			"Simulated annealing and ML layout optimization",
+			"Adjacency bonus calculation and visualization",
+			"Supercharged slot prioritization",
+			"Support for Starships, Multi-tools, Corvettes, Freighters, Exosuits, and Exocrafts",
+			"Offline Progressive Web App (PWA) support",
+		],
 		genre: t("seo.genre", { defaultValue: "Game Tool" }),
 		inLanguage: lang,
 		name: appName,
@@ -68,7 +76,9 @@ export const getLocalizedSchema = (t, lang, url) => {
 			price: "0",
 			priceCurrency: "USD",
 		},
-		operatingSystem: "Web",
+		operatingSystem: "All modern web browsers",
+		screenshot: `${baseUrl}/assets/img/screenshots/screenshot.png`,
+		softwareVersion: "7.6.0",
 		url: url,
 	};
 

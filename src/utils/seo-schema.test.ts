@@ -29,6 +29,11 @@ describe("seo-schema.js", () => {
 		expect(softwareApp.url).toBe(url);
 		expect(softwareApp["@id"]).toBe(`${url}#software`);
 		expect(softwareApp.inLanguage).toBe(lang);
+		expect(softwareApp.screenshot).toBe(
+			"https://nms-optimizer.app/assets/img/screenshots/screenshot.png"
+		);
+		expect(softwareApp.softwareVersion).toBe("7.6.0");
+		expect(Array.isArray(softwareApp.featureList)).toBe(true);
 
 		const webSite = schemas.find((s) => s["@type"] === "WebSite") as Record<string, unknown>;
 		expect(webSite).toBeDefined();
