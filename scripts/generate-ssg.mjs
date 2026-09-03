@@ -71,7 +71,7 @@ export function generateNavigationLinks(lang, currentPage, t) {
 
 	const links = pages
 		.map(({ descKey, key, path }) => {
-			const href = path === "/" ? langPrefix || "/" : `${langPrefix}${path}/`;
+			const href = path === "/" ? (langPrefix ? `${langPrefix}/` : "/") : `${langPrefix}${path}/`;
 			const label = t(key, { defaultValue: path.slice(1) || "Home" });
 			const desc = t(descKey, { defaultValue: "" });
 			const currentPath = currentPage === "" ? "/" : `/${currentPage}`;
@@ -83,7 +83,7 @@ export function generateNavigationLinks(lang, currentPage, t) {
 
 	return `
     <nav aria-label="Site navigation">
-      <h2>Navigation</h2>
+      <h2>${t("seo.nav.title", { defaultValue: "Navigation" })}</h2>
       <ul>
         ${links}
       </ul>
@@ -124,8 +124,10 @@ export async function generatePage(
 	const schemas = getLocalizedSchema(t, lang, canonicalUrl);
 	const softwareSchema = schemas.find((s) => s["@type"] === "SoftwareApplication");
 	const websiteSchema = schemas.find((s) => s["@type"] === "WebSite");
+	const webPageSchema = schemas.find((s) => s["@type"] === "WebPage");
 	const orgSchema = schemas.find((s) => s["@type"] === "Organization");
 	const breadcrumbSchema = schemas.find((s) => s["@type"] === "BreadcrumbList");
+	const navSchema = schemas.find((s) => s["@type"] === "ItemList");
 
 	// Prepare noscript content
 	const markdownFileName = PAGE_TO_MARKDOWN_MAPPING[pageName] || pageName;
@@ -154,7 +156,7 @@ export async function generatePage(
 
 		// Single Source of Truth: Localize the subtitle in the header extracted from the template
 		const localizedHeader = ssgHeader.replace(
-			/<h2 class="app-header-static__title">[\s\S]*?<\/h2>/,
+			/<(h2|div) class="app-header-static__title">[\s\S]*?<\/\1>/,
 			`<h2 class="app-header-static__title">${subTitle}</h2>`
 		);
 
@@ -218,6 +220,11 @@ export async function generatePage(
 				el.setAttribute("content", ogImageAlt);
 			},
 		})
+		.on('meta[property="og:image"]', {
+			element(el) {
+				el.setAttribute("content", `${baseUrl}/assets/img/screenshots/screenshot.png`);
+			},
+		})
 		.on('meta[name="twitter:title"]', {
 			element(el) {
 				el.setAttribute("content", pageTitle);
@@ -226,6 +233,11 @@ export async function generatePage(
 		.on('meta[name="twitter:description"]', {
 			element(el) {
 				el.setAttribute("content", pageDescription);
+			},
+		})
+		.on('meta[name="twitter:image"]', {
+			element(el) {
+				el.setAttribute("content", `${baseUrl}/assets/img/screenshots/screenshot.png`);
 			},
 		})
 		.on('meta[name="twitter:image:alt"]', {
@@ -250,6 +262,11 @@ export async function generatePage(
 						`<script type="application/ld+json" id="website-schema">${JSON.stringify(websiteSchema)}</script>`,
 						{ html: true }
 					);
+				if (webPageSchema)
+					el.append(
+						`<script type="application/ld+json" id="webpage-schema">${JSON.stringify(webPageSchema)}</script>`,
+						{ html: true }
+					);
 				if (orgSchema)
 					el.append(
 						`<script type="application/ld+json" id="organization-schema">${JSON.stringify(orgSchema)}</script>`,
@@ -258,6 +275,11 @@ export async function generatePage(
 				if (breadcrumbSchema)
 					el.append(
 						`<script type="application/ld+json" id="breadcrumblist-schema">${JSON.stringify(breadcrumbSchema)}</script>`,
+						{ html: true }
+					);
+				if (navSchema)
+					el.append(
+						`<script type="application/ld+json" id="itemlist-schema">${JSON.stringify(navSchema)}</script>`,
 						{ html: true }
 					);
 			},

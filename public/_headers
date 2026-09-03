@@ -56,10 +56,13 @@
 # Error Pages: Cache for 1 day, purged automatically by Cloudflare on deploy.
 /404.html
   Cache-Control: public, max-age=86400
+  X-Robots-Tag: noindex, nofollow
 /500.html
   Cache-Control: public, max-age=86400
+  X-Robots-Tag: noindex, nofollow
 /maintenance.html
   Cache-Control: public, max-age=86400
+  X-Robots-Tag: noindex, nofollow
 
 # SEO and Bot files
 /robots.txt

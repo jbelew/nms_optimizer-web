@@ -28,51 +28,44 @@ export const Seo: React.FC = () => {
 	const location = useLocation();
 	const supportedLangs = useSupportedLanguages();
 
-	const {
-		canonicalUrl,
-		cleanPath,
-		currentPath,
-		pageDescription,
-		pageKeywords,
-		pageTitle,
-		schemas,
-	} = useMemo(() => {
-		// Handle language-prefixed routes to determine the base path
-		const pathParts = location.pathname.split("/").filter(Boolean);
-		const basePath = supportedLangs.includes(pathParts[0])
-			? `/${pathParts.slice(1).join("/")}${pathParts.length > 1 ? "/" : ""}`
-			: location.pathname;
+	const { canonicalUrl, cleanPath, pageDescription, pageKeywords, pageTitle, schemas } =
+		useMemo(() => {
+			// Handle language-prefixed routes to determine the base path
+			const pathParts = location.pathname.split("/").filter(Boolean);
+			const basePath = supportedLangs.includes(pathParts[0])
+				? `/${pathParts.slice(1).join("/")}${pathParts.length > 1 ? "/" : ""}`
+				: location.pathname;
 
-		// Normalize: ensure trailing slash for lookup (except root)
-		const currentPath = basePath === "/" || basePath === "" ? "/" : normalizePath(basePath);
+			// Normalize: ensure trailing slash for lookup (except root)
+			const currentPath = basePath === "/" || basePath === "" ? "/" : normalizePath(basePath);
 
-		// Look up metadata for the current path, falling back to root metadata
-		const metadata = seoMetadata[currentPath as keyof typeof seoMetadata] || seoMetadata["/"];
+			// Look up metadata for the current path, falling back to root metadata
+			const metadata =
+				seoMetadata[currentPath as keyof typeof seoMetadata] || seoMetadata["/"];
 
-		const pageTitle = t(metadata.titleKey, { defaultValue: "NMS Optimizer" });
-		const pageDescription = t(metadata.descriptionKey);
-		const pageKeywords = t("seo.keywords", { defaultValue: "" });
+			const pageTitle = t(metadata.titleKey, { defaultValue: "NMS Optimizer" });
+			const pageDescription = t(metadata.descriptionKey);
+			const pageKeywords = t("seo.keywords", { defaultValue: "" });
 
-		const cleanPath = currentPath === "/" ? "" : currentPath;
+			const cleanPath = currentPath === "/" ? "" : currentPath;
 
-		const canonicalPath =
-			i18n.language === "en"
-				? normalizePath(currentPath)
-				: `/${i18n.language}${normalizePath(cleanPath)}`;
-		const canonicalUrl = `${BASE_URL}${canonicalPath}`;
+			const canonicalPath =
+				i18n.language === "en"
+					? normalizePath(currentPath)
+					: `/${i18n.language}${normalizePath(cleanPath)}`;
+			const canonicalUrl = `${BASE_URL}${canonicalPath}`;
 
-		const schemas = getLocalizedSchema(t, i18n.language, canonicalUrl);
+			const schemas = getLocalizedSchema(t, i18n.language, canonicalUrl);
 
-		return {
-			canonicalUrl,
-			cleanPath,
-			currentPath,
-			pageDescription,
-			pageKeywords,
-			pageTitle,
-			schemas,
-		};
-	}, [location.pathname, i18n.language, t, supportedLangs]);
+			return {
+				canonicalUrl,
+				cleanPath,
+				pageDescription,
+				pageKeywords,
+				pageTitle,
+				schemas,
+			};
+		}, [location.pathname, i18n.language, t, supportedLangs]);
 
 	useEffect(() => {
 		// Clean up any existing JSON-LD schema scripts (from SSG or previous client-side routes)
@@ -81,6 +74,7 @@ export const Seo: React.FC = () => {
 			"software-schema",
 			"softwareapplication-schema",
 			"website-schema",
+			"webpage-schema",
 			"org-schema",
 			"organization-schema",
 			"breadcrumb-schema",
@@ -100,7 +94,6 @@ export const Seo: React.FC = () => {
 		const activeScripts: HTMLScriptElement[] = [];
 		schemas.forEach((schema) => {
 			const type = (schema as { "@type": string })["@type"];
-			if (type === "FAQPage" && currentPath !== "/") return;
 
 			const id = `${type?.toLowerCase()}-schema`;
 			const script = document.createElement("script");
@@ -119,7 +112,7 @@ export const Seo: React.FC = () => {
 				}
 			});
 		};
-	}, [schemas, currentPath]);
+	}, [schemas]);
 
 	const ogImageUrl = `${BASE_URL}${OG_IMAGE_PATH}`;
 	const ogImageAlt = t("seo.ogImageAlt", { defaultValue: "NMS Optimizer Screenshot" });
@@ -149,6 +142,9 @@ export const Seo: React.FC = () => {
 			<meta content={pageTitle} property="og:title" />
 			<meta content={pageDescription} property="og:description" />
 			<meta content={ogImageUrl} property="og:image" />
+			<meta content="image/png" property="og:image:type" />
+			<meta content="1280" property="og:image:width" />
+			<meta content="880" property="og:image:height" />
 			<meta content={ogImageAlt} property="og:image:alt" />
 			<meta content={canonicalUrl} property="og:url" />
 			<meta content={getOgLocale(i18n.language)} property="og:locale" />

@@ -69,6 +69,7 @@ describe("seo-schema.js", () => {
 
 		const itemListElement = breadcrumbs.itemListElement as Array<Record<string, unknown>>;
 		expect(itemListElement).toHaveLength(2);
+		expect(itemListElement[0].item).toBe("https://nms-optimizer.app/");
 		expect(itemListElement[1].name).toBe("About");
 		expect(itemListElement[1].item).toBe(url);
 	});
@@ -86,6 +87,36 @@ describe("seo-schema.js", () => {
 
 		const itemListElement = breadcrumbs.itemListElement as Array<Record<string, unknown>>;
 		expect(itemListElement).toHaveLength(2);
+		expect(itemListElement[0].item).toBe("https://nms-optimizer.app/es/");
 		expect(itemListElement[1].item).toBe(url);
+	});
+
+	it("does not include unverified aggregateRating and contains no double slash URLs", () => {
+		const lang = "es";
+		const url = "https://nms-optimizer.app/es/about/";
+		const schemas = getLocalizedSchema(mockT, lang, url);
+
+		const softwareApp = schemas.find((s) => s["@type"] === "SoftwareApplication") as Record<
+			string,
+			unknown
+		>;
+		expect(softwareApp.aggregateRating).toBeUndefined();
+
+		// Check every URL property in all schemas for unwanted double slashes
+		const jsonString = JSON.stringify(schemas);
+		const doubleSlashMatches = jsonString.match(/https:\/\/[^"]*\/\/[^"]*/g);
+		expect(doubleSlashMatches).toBeNull();
+	});
+
+	it("generates WebPage schema for subpages linking to root WebSite", () => {
+		const lang = "en";
+		const url = "https://nms-optimizer.app/about/";
+		const schemas = getLocalizedSchema(mockT, lang, url);
+
+		const webPage = schemas.find((s) => s["@type"] === "WebPage") as Record<string, unknown>;
+		expect(webPage).toBeDefined();
+		expect(webPage.url).toBe(url);
+		expect(webPage["@id"]).toBe(`${url}#webpage`);
+		expect(webPage.isPartOf).toEqual({ "@id": "https://nms-optimizer.app/#website" });
 	});
 });

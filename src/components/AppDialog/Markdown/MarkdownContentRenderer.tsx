@@ -71,11 +71,25 @@ const H2Context = createContext<null | {
 const LinkRenderer: React.FC<{ children?: React.ReactNode; href?: string }> = ({
 	children,
 	href,
-}) => (
-	<Link href={href} rel="noopener noreferrer" target="_blank" underline="always" weight="bold">
-		{children}
-	</Link>
-);
+}) => {
+	const isInternal =
+		typeof href === "string" &&
+		(href.startsWith("/") ||
+			href.startsWith("#") ||
+			href.startsWith("https://nms-optimizer.app"));
+
+	return (
+		<Link
+			href={href}
+			rel={isInternal ? undefined : "noopener noreferrer"}
+			target={isInternal ? undefined : "_blank"}
+			underline="always"
+			weight="bold"
+		>
+			{children}
+		</Link>
+	);
+};
 
 /**
  * Custom renderer for blockquote elements.

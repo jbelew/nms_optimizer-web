@@ -37,13 +37,13 @@ Entender os padrões da comunidade pode ajudar a informar suas próprias decisõ
 
 ## Começando
 
-Depois de revisar as escolhas populares aqui, vá para o [otimizador](/pt) para criar sua própria build otimizada. Você pode:
+Depois de revisar as escolhas populares aqui, vá para o [otimizador](/pt/) para criar sua própria build otimizada. Você pode:
 
 1. Selecionar sua plataforma (Nave, Multiferramenta, Corveta, Exotraje ou Exonave)
 2. Configurar seus **espaços sobrecarregados** e **células ativas**
 3. Executar o otimizador para encontrar seu layout perfeito
 
-Para instruções detalhadas sobre o uso do otimizador, visite a [página de instruções](/pt/instructions).
+Para instruções detalhadas sobre o uso do otimizador, visite a [página de instruções](/pt/instructions/).
 
 ## Coleta De Dados
 

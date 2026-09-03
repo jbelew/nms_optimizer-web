@@ -1,35 +1,59 @@
 User-agent: *
 Allow: /
+Disallow: /performance
 Disallow: /performance/
+Disallow: /*/performance
+Disallow: /*/performance/
 Crawl-delay: 1
 
 # Explicitly allow AI and Search crawlers
 User-agent: Googlebot
 Allow: /
+Disallow: /performance
 Disallow: /performance/
+Disallow: /*/performance
+Disallow: /*/performance/
 
 User-agent: Bingbot
 Allow: /
+Disallow: /performance
 Disallow: /performance/
+Disallow: /*/performance
+Disallow: /*/performance/
 
 User-agent: GPTBot
 Allow: /
+Disallow: /performance
 Disallow: /performance/
+Disallow: /*/performance
+Disallow: /*/performance/
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /performance
 Disallow: /performance/
+Disallow: /*/performance
+Disallow: /*/performance/
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /performance
 Disallow: /performance/
+Disallow: /*/performance
+Disallow: /*/performance/
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /performance
 Disallow: /performance/
+Disallow: /*/performance
+Disallow: /*/performance/
 
 User-agent: anthropic-ai
 Allow: /
+Disallow: /performance
 Disallow: /performance/
+Disallow: /*/performance
+Disallow: /*/performance/
 
 Sitemap: https://nms-optimizer.app/sitemap.xml

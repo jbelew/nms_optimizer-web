@@ -37,13 +37,13 @@ Comprender los patrones de la comunidad puede ayudarte a informar tus propias de
 
 ## Primeros Pasos
 
-Una vez que hayas revisado las opciones populares aquí, dirígete al [optimizador](/es) para crear tu propio diseño optimizado. Puedes:
+Una vez que hayas revisado las opciones populares aquí, dirígete al [optimizador](/es/) para crear tu propio diseño optimizado. Puedes:
 
 1. Seleccionar tu plataforma (Nave espacial, Multiherramienta, Corbeta, Exotraje o Exonave).
 2. Configurar tus **ranuras potenciadas** y **celdas activas**.
 3. Ejecutar el optimizador para encontrar tu diseño perfecto.
 
-Para obtener instrucciones detalladas sobre el uso del optimizador, visita la [página de instrucciones](/es/instructions).
+Para obtener instrucciones detalladas sobre el uso del optimizador, visita la [página de instrucciones](/es/instructions/).
 
 ## Recopilación de Datos
 

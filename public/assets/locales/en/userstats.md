@@ -37,13 +37,13 @@ Understanding community patterns can help inform your own build decisions:
 
 ## Getting Started
 
-Once you've reviewed the popular choices here, head to the [optimizer](/en) to create your own optimized build. You can:
+Once you've reviewed the popular choices here, head to the [optimizer](/) to create your own optimized build. You can:
 
 1. Select your platform (Starship, Multi-tool, Corvette, Exosuit, or Exocraft)
 2. Configure your **supercharged slots** and **active cells**
 3. Run the solver to find your perfect layout
 
-For detailed instructions on using the optimizer, visit the [instructions page](/en/instructions).
+For detailed instructions on using the optimizer, visit the [instructions page](/instructions/).
 
 ## Data Collection
 

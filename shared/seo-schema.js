@@ -41,22 +41,18 @@ export const getOgLocale = (lang) => OG_LOCALE_MAP[lang] || "en_US";
  * ```
  */
 export const getLocalizedSchema = (t, lang, url) => {
-	const baseUrl = "https://nms-optimizer.app/";
+	const baseUrl = "https://nms-optimizer.app";
 	const appName = t("appName", { defaultValue: "NMS Optimizer" });
 	const appDescription = t("seo.appDescription");
 
-	// 1. SoftwareApplication
+	const urlObj = new URL(url);
+	const isHomePage = urlObj.pathname === "/" || urlObj.pathname === `/${lang}/`;
+
+	// 1. SoftwareApplication (without unverified/hidden aggregateRating)
 	const softwareApp = {
 		"@context": "https://schema.org",
 		"@id": `${url}#software`,
 		"@type": "SoftwareApplication",
-		aggregateRating: {
-			"@type": "AggregateRating",
-			bestRating: "5",
-			ratingCount: "28",
-			ratingValue: "4.9",
-			worstRating: "1",
-		},
 		applicationCategory: "UtilitiesApplication",
 		author: {
 			"@type": "Person",
@@ -79,41 +75,40 @@ export const getLocalizedSchema = (t, lang, url) => {
 	// 2. Organization
 	const organization = {
 		"@context": "https://schema.org",
-		"@id": `${baseUrl}#organization`,
+		"@id": `${baseUrl}/#organization`,
 		"@type": "Organization",
-		logo: `${baseUrl}logo.svg`,
+		logo: `${baseUrl}/logo.svg`,
 		name: appName,
 		sameAs: ["https://github.com/jbelew/nms_optimizer-web"],
-		url: baseUrl,
+		url: `${baseUrl}/`,
 	};
 
-	// 3. WebSite
+	// 3. WebSite (anchored to site/locale root)
 	const webSite = {
 		"@context": "https://schema.org",
-		"@id": `${url}#website`,
+		"@id": isHomePage ? `${url}#website` : `${baseUrl}/#website`,
 		"@type": "WebSite",
 		alternateName: [appName, "No Man's Sky Technology Layout Optimizer"],
 		description: appDescription,
 		inLanguage: lang,
 		name: appName,
-		publisher: { "@id": `${baseUrl}#organization` },
-		url: url,
+		publisher: { "@id": `${baseUrl}/#organization` },
+		url: isHomePage ? url : `${baseUrl}/`,
 	};
 
-	// 5. BreadcrumbList
-	const urlObj = new URL(url);
+	// 4. BreadcrumbList (with localized home URL and no double slashes)
 	const pathParts = urlObj.pathname.split("/").filter(Boolean);
+	const homeUrl = lang === "en" ? `${baseUrl}/` : `${baseUrl}/${lang}/`;
 	const itemListElement = [
 		{
 			"@type": "ListItem",
-			item: `${baseUrl}/`,
+			item: homeUrl,
 			name: t("seo.nav.home", { defaultValue: "Home" }),
 			position: 1,
 		},
 	];
 
-	// Simple breadcrumb logic for secondary pages
-	// Handle both /page/ and /lang/page/
+	// Breadcrumb logic for secondary pages
 	let pageName = "";
 
 	if (pathParts.length > 0 && pathParts[0] !== lang) {
@@ -131,13 +126,30 @@ export const getLocalizedSchema = (t, lang, url) => {
 		});
 	}
 
-	// 6. SiteNavigationElement
+	// 5. WebPage schema for subpages
+	let webPage = null;
+
+	if (!isHomePage) {
+		webPage = {
+			"@context": "https://schema.org",
+			"@id": `${url}#webpage`,
+			"@type": "WebPage",
+			description: appDescription,
+			inLanguage: lang,
+			isPartOf: { "@id": `${baseUrl}/#website` },
+			name: pageName ? t(`seo.${pageName}PageTitle`, { defaultValue: appName }) : appName,
+			url: url,
+		};
+	}
+
+	// 6. SiteNavigationElement (localized URLs without double slashes)
+	const langPrefix = lang === "en" ? "" : `/${lang}`;
 	const navPaths = [
-		{ name: t("seo.nav.instructions"), url: `${baseUrl}/instructions/` },
-		{ name: t("seo.nav.about"), url: `${baseUrl}/about/` },
-		{ name: t("seo.nav.changelog"), url: `${baseUrl}/changelog/` },
-		{ name: t("seo.nav.userstats"), url: `${baseUrl}/userstats/` },
-		{ name: t("seo.nav.privacy"), url: `${baseUrl}/privacy/` },
+		{ name: t("seo.nav.instructions"), url: `${baseUrl}${langPrefix}/instructions/` },
+		{ name: t("seo.nav.about"), url: `${baseUrl}${langPrefix}/about/` },
+		{ name: t("seo.nav.changelog"), url: `${baseUrl}${langPrefix}/changelog/` },
+		{ name: t("seo.nav.userstats"), url: `${baseUrl}${langPrefix}/userstats/` },
+		{ name: t("seo.nav.privacy"), url: `${baseUrl}${langPrefix}/privacy/` },
 	];
 
 	const siteNavigation = {
@@ -153,6 +165,10 @@ export const getLocalizedSchema = (t, lang, url) => {
 	};
 
 	const schemas = [softwareApp, organization, webSite, siteNavigation];
+
+	if (webPage) {
+		schemas.push(webPage);
+	}
 
 	// Per Google's structured-data guidance, BreadcrumbList must contain at
 	// least 2 items. Emitting a single-item breadcrumb (e.g. on the homepage)

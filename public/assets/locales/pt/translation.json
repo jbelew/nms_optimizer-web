@@ -703,6 +703,7 @@
 		"privacyDescription": "Leia sobre nosso compromisso com sua privacidade. Usamos análises anônimas para melhorar o otimizador sem nunca rastrear sua identidade ou dados de jogo.",
 		"ogImageAlt": "Uma captura de tela detalhada do aplicativo NMS Optimizer mostrando uma grade de nave otimizada com bônus de adjacência elevados.",
 		"nav": {
+			"title": "Navegação",
 			"home": "Início",
 			"instructions": "Instruções",
 			"about": "Sobre",

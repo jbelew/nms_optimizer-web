@@ -723,6 +723,7 @@
 		"performanceDescription": "Metriche di performance in tempo reale e Core Web Vitals per l'applicazione NMS Optimizer.",
 		"ogImageAlt": "Uno screenshot dettagliato dell'applicazione NMS Optimizer che mostra una griglia tecnologica ottimizzata con elevati Bonus di Adiacenza.",
 		"nav": {
+			"title": "Navigazione",
 			"home": "Calcolatore Layout Tecnologico",
 			"instructions": "Come Usare",
 			"about": "Informazioni sugli Algoritmi",

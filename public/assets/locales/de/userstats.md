@@ -37,13 +37,13 @@ Das Verständnis von Community-Mustern kann dir bei deinen eigenen Build-Entsche
 
 ## Erste Schritte
 
-Sobald du dir hier einen Überblick verschafft hast, gehe zum [Optimierer](/de) um deinen eigenen optimierten Build zu erstellen. Du kannst:
+Sobald du dir hier einen Überblick verschafft hast, gehe zum [Optimierer](/de/) um deinen eigenen optimierten Build zu erstellen. Du kannst:
 
 1. Deine Plattform auswählen (Raumschiff, Multitool, Korvette, Exo-Anzug oder Exofahrzeug).
 2. Deine **überladenen Slots** und **aktiven Zellen** konfigurieren.
 3. Den Optimierer starten, um dein perfektes Layout zu finden.
 
-Für detaillierte Anweisungen zur Nutzung besuche die [Anleitungsseite](/de/instructions).
+Für detaillierte Anweisungen zur Nutzung besuche die [Anleitungsseite](/de/instructions/).
 
 ## Datenerfassung
 

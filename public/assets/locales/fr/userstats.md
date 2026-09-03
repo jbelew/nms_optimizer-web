@@ -37,13 +37,13 @@ L'analyse des tendances de la communauté peut guider vos propres choix de build
 
 ## Pour Commencer
 
-Une fois ces statistiques consultées, rendez-vous sur l'[optimiseur](/fr) pour créer votre propre build. Vous pourrez :
+Une fois ces statistiques consultées, rendez-vous sur l'[optimiseur](/fr/) pour créer votre propre build. Vous pourrez :
 
 1. Choisir votre plateforme (Vaisseau, Multi-outil, Corvette, Exocombinaison ou Exonef).
 2. Configurer vos **emplacements surchargés** et vos **cellules actives**.
 3. Lancer le moteur de calcul pour trouver votre disposition parfaite.
 
-Pour des instructions détaillées, consultez la [page d'aide](/fr/instructions).
+Pour des instructions détaillées, consultez la [page d'aide](/fr/instructions/).
 
 ## Collecte Des Données
 

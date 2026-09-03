@@ -37,13 +37,13 @@ Comprendere i modelli della community può aiutare a informare le tue decisioni 
 
 ## Per Iniziare
 
-Una volta esaminate le scelte popolari qui, vai all'[optimizer](/en) per creare la tua configurazione ottimizzata. Puoi:
+Una volta esaminate le scelte popolari qui, vai all'[optimizer](/it/) per creare la tua configurazione ottimizzata. Puoi:
 
 1. Seleziona la tua piattaforma (Starship, Multi-tool, Corvette, Exosuit o Exocraft)
 2. Configura i tuoi **supercharged slots** e le **active cells**
 3. Esegui il risolutore per trovare il tuo layout perfetto
 
-Per istruzioni dettagliate sull'uso dell'optimizer, visita la [pagina delle istruzioni](/en/instructions).
+Per istruzioni dettagliate sull'uso dell'optimizer, visita la [pagina delle istruzioni](/it/instructions/).
 
 ## Raccolta Dati
 

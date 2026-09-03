@@ -67,6 +67,12 @@ describe("generate-ssg.mjs", () => {
 			expect(html).toContain('href="/about/"');
 			expect(html).toContain('href="/"');
 		});
+
+		it("generates links with correct prefixes for Spanish", () => {
+			const html = generateSsgModule.generateNavigationLinks("es", "about", t);
+			expect(html).toContain('href="/es/about/"');
+			expect(html).toContain('href="/es/"');
+		});
 	});
 
 	describe("readMarkdownFile", () => {

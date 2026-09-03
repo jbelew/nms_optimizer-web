@@ -703,6 +703,7 @@
 		"privacyDescription": "Découvrez notre engagement pour votre vie privée. Nous utilisons des analyses anonymes pour améliorer l'outil sans jamais suivre votre identité ou vos sauvegardes.",
 		"ogImageAlt": "Une capture d'écran détaillée de l'application NMS Optimizer montrant une grille de vaisseau optimisée avec des bonus d'adjacence élevés.",
 		"nav": {
+			"title": "Navigation",
 			"home": "Calculateur de Disposition",
 			"instructions": "Comment Utiliser",
 			"about": "À Propos des Algorithmes",

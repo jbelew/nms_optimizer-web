@@ -75,6 +75,7 @@ const NotFound: FC = () => {
 
 	return (
 		<div className="not-found w-full">
+			<meta content="noindex, nofollow" name="robots" />
 			<div className="not-found__logo mb-4">
 				<svg viewBox="0 0 126.75 126.77" xmlns="http://www.w3.org/2000/svg">
 					<g className="layer">
