@@ -117,52 +117,34 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 			path: "public/assets/img/screenshots/screenshot_desktop.png",
 		});
 
-		console.log("Taking mobile screenshot ...");
-		await page.setViewportSize({ height: 600, width: 375 });
-		await page.goto(baseUrl, {
-			waitUntil: "networkidle",
-		});
-		// Wait for the tech tree to fully load and animations to settle
-		await page.waitForSelector(".tech-tree-content", { timeout: 15000 });
-		await page.waitForTimeout(1000);
-		// Inject CSS to hide scrollbars for the mobile screenshot
+		// Inject CSS to hide scrollbars for viewport screenshots
 		await page.addStyleTag({
 			content: `
-			body::-webkit-scrollbar {
+			body::-webkit-scrollbar, html::-webkit-scrollbar {
 				display: none;
 			}
-			html::-webkit-scrollbar {
-				display: none;
+			body, html {
+				scrollbar-width: none;
 			}
 		`,
-		});
-		await page.screenshot({
-			fullPage: false,
-			path: "public/assets/img/screenshots/screenshot_mobile.png",
 		});
 
 		console.log("Taking tablet screenshot ...");
 		await page.setViewportSize({ height: 1280, width: 800 });
-		await page.goto(baseUrl, {
-			waitUntil: "networkidle",
-		});
-		// Wait for the tech tree to fully load and animations to settle
-		await page.waitForSelector(".tech-tree-content", { timeout: 15000 });
+		await page.evaluate(() => window.scrollTo(0, 0));
 		await page.waitForTimeout(1000);
-		// Inject CSS to hide scrollbars for the tablet screenshot
-		await page.addStyleTag({
-			content: `
-			body::-webkit-scrollbar {
-				display: none;
-			}
-			html::-webkit-scrollbar {
-				display: none;
-			}
-		`,
-		});
 		await page.screenshot({
 			fullPage: false,
 			path: "public/assets/img/screenshots/screenshot_tablet.png",
+		});
+
+		console.log("Taking mobile screenshot ...");
+		await page.setViewportSize({ height: 600, width: 375 });
+		await page.evaluate(() => window.scrollTo(0, 0));
+		await page.waitForTimeout(1000);
+		await page.screenshot({
+			fullPage: false,
+			path: "public/assets/img/screenshots/screenshot_mobile.png",
 		});
 	} catch (error) {
 		console.error("Screenshot script failed:", error);
