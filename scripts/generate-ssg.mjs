@@ -9,6 +9,7 @@ import fs from "node:fs/promises";
 import i18next from "i18next";
 import i18nextFsBackend from "i18next-fs-backend";
 
+import packageJson from "../package.json" with { type: "json" };
 import { KNOWN_DIALOGS, SUPPORTED_LANGUAGES, TARGET_HOST } from "../shared/config.js";
 import { seoMetadata } from "../shared/seo-metadata.js";
 import { getLocalizedSchema, getOgLocale, OG_LOCALE_MAP } from "../shared/seo-schema.js";
@@ -121,7 +122,7 @@ export async function generatePage(
 	const seoTags = generateSeoTags(pathname, lang, baseUrl, t);
 
 	// Prepare JSON-LD Schemas
-	const schemas = getLocalizedSchema(t, lang, canonicalUrl);
+	const schemas = getLocalizedSchema(t, lang, canonicalUrl, packageJson.version);
 	const softwareSchema = schemas.find((s) => s["@type"] === "SoftwareApplication");
 	const websiteSchema = schemas.find((s) => s["@type"] === "WebSite");
 	const webPageSchema = schemas.find((s) => s["@type"] === "WebPage");

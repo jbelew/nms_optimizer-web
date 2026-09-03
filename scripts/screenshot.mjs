@@ -85,6 +85,28 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 		const moduleCount = await page.locator(".gridCell img").count();
 		console.log(`✅ Build loaded successfully. Found ${moduleCount} modules in the grid.`);
 
+		// Wait for the tech tree to update and fully load for the newly loaded platform
+		await page.locator("text=Loading Tech").waitFor({ state: "detached", timeout: 15000 }).catch(() => {});
+		await page.waitForSelector(".tech-tree-content", { state: "visible", timeout: 15000 });
+		await page.waitForSelector(".tech-tree-content .optimizationButton", { state: "visible", timeout: 15000 });
+
+		// Wait for tech tree avatar images to load
+		await page.waitForFunction(() => {
+			const images = Array.from(document.querySelectorAll(".tech-tree-content img"));
+
+			return images.length > 0 && images.every((img) => img.complete && img.naturalHeight !== 0);
+		}, { timeout: 15000 }).catch(() => {});
+
+		// Dismiss the build loaded toast so it does not obstruct the screenshot
+		const toastClose = page.locator(".Toast__close");
+
+		if ((await toastClose.count()) > 0) {
+			await toastClose.first().click();
+			await page.locator(".Toast").waitFor({ state: "detached", timeout: 5000 }).catch(() => {});
+		}
+
+		await page.waitForTimeout(1000);
+
 		console.log("Taking standard screenshot ...");
 		await page.screenshot({
 			fullPage: true,

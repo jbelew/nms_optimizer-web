@@ -28,11 +28,29 @@ export const OG_LOCALE_MAP = {
 export const getOgLocale = (lang) => OG_LOCALE_MAP[lang] || "en_US";
 
 /**
+ * Resolves the application version dynamically from the environment
+ * or explicit parameter, normalizing any leading 'v' character.
+ *
+ * @param {string} [version] - Optional explicit version string
+ * @returns {string | undefined} Normalized version string
+ */
+const resolveAppVersion = (version) => {
+	if (version) return String(version).replace(/^v/, "");
+
+	if (typeof __APP_VERSION__ !== "undefined") {
+		return String(__APP_VERSION__).replace(/^v/, "");
+	}
+
+	return undefined;
+};
+
+/**
  * Generates the full set of localized structured data for a given page.
  *
  * @param {import('i18next').TFunction} t - Translation function (i18next-compatible)
  * @param {string} lang - Current language code (e.g., 'en', 'fr')
  * @param {string} url - Current page canonical URL
+ * @param {string} [version] - Optional explicit application version
  * @returns {Array<Record<string, unknown>>} Array of schema.org objects
  *
  * @example
@@ -40,7 +58,7 @@ export const getOgLocale = (lang) => OG_LOCALE_MAP[lang] || "en_US";
  * const schemas = getLocalizedSchema(t, "en", "https://nms-optimizer.app/");
  * ```
  */
-export const getLocalizedSchema = (t, lang, url) => {
+export const getLocalizedSchema = (t, lang, url, version) => {
 	const baseUrl = "https://nms-optimizer.app";
 	const appName = t("appName", { defaultValue: "NMS Optimizer" });
 	const appDescription = t("seo.appDescription");
@@ -78,7 +96,7 @@ export const getLocalizedSchema = (t, lang, url) => {
 		},
 		operatingSystem: "All modern web browsers",
 		screenshot: `${baseUrl}/assets/img/screenshots/screenshot.png`,
-		softwareVersion: "7.6.0",
+		...(resolveAppVersion(version) ? { softwareVersion: resolveAppVersion(version) } : {}),
 		url: url,
 	};
 
