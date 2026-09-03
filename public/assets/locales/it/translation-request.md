@@ -22,31 +22,31 @@ Tuttavia, l'IA non è perfetta. Ci affidiamo alla comunità per identificare e c
 
 Il modo più semplice per contribuire è direttamente tramite GitHub. Non è necessario saper programmare per suggerire una traduzione migliore.
 
-1.  **Trova il file**: Tutti i file di localizzazione si trovano in `/public/assets/locales/[language_code]/`.
-    -   `translation.json`: Etichette UI, tooltip e messaggi di stato.
-    -   `*.md`: Contenuto per dialoghi più ampi (About, Instructions, ecc.).
-2.  **Modifica direttamente su GitHub**:
-    -   Naviga al file per la tua lingua (es. `/public/assets/locales/es/translation.json`).
-    -   Clicca sull'**icona della matita (Edit this file)**.
-    -   Apporta le tue modifiche.
-    -   Clicca su **Commit changes...** e GitHub creerà automaticamente una Pull Request per te.
-3.  **Attendi l'unione**: Una volta che avrò unito la tua PR, lo script AI rileverà automaticamente le tue modifiche umane e si assicurerà che vengano preservate durante i futuri aggiornamenti.
+1. **Trova il file**: Tutti i file di localizzazione si trovano in `/public/assets/locales/[language_code]/`.
+    - `translation.json`: Etichette UI, tooltip e messaggi di stato.
+    - `*.md`: Contenuto per dialoghi più ampi (About, Instructions, ecc.).
+2. **Modifica direttamente su GitHub**:
+    - Naviga al file per la tua lingua (es. `/public/assets/locales/es/translation.json`).
+    - Clicca sull'**icona della matita (Edit this file)**.
+    - Apporta le tue modifiche.
+    - Clicca su **Commit changes...** e GitHub creerà automaticamente una Pull Request per te.
+3. **Attendi l'unione**: Una volta che avrò unito la tua PR, lo script AI rileverà automaticamente le tue modifiche umane e si assicurerà che vengano preservate durante i futuri aggiornamenti.
 
 ## Lingue Supportate
 
 Attualmente supportiamo:
 
--   `en` (Inglese - Sorgente)
--   `es` (Spagnolo)
--   `fr` (Francese)
--   `de` (Tedesco)
--   `pt` (Portoghese)
+- `en` (Inglese - Sorgente)
+- `es` (Spagnolo)
+- `fr` (Francese)
+- `de` (Tedesco)
+- `pt` (Portoghese)
 
 Se desideri aggiungere una **nuova lingua**, crea semplicemente una nuova cartella con il codice [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) appropriato e la aggiungerò alla rotazione dell'IA!
 
 ## Note
 
--   **Interpolazione**: Vedrai tag come `<1></1>` o `{{techName}}` — **ti preghiamo di mantenerli esattamente come sono**, poiché l'app li usa per inserire contenuti dinamici o stili.
--   **Priorità Umana**: Lo script di traduzione è progettato per rispettare le modifiche umane. Se modifichi un valore in un file JSON, l'IA non lo sovrascriverà durante la successiva esecuzione automatica.
+- **Interpolazione**: Vedrai tag come `<1></1>` o `{{techName}}` — **ti preghiamo di mantenerli esattamente come sono**, poiché l'app li usa per inserire contenuti dinamici o stili.
+- **Priorità Umana**: Lo script di traduzione è progettato per rispettare le modifiche umane. Se modifichi un valore in un file JSON, l'IA non lo sovrascriverà durante la successiva esecuzione automatica.
 
 Grazie per aver contribuito a rendere No Man's Sky Technology Layout Optimizer migliore per tutti! Fammi sapere se hai domande — sono felice di aiutare.

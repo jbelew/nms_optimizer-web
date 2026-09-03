@@ -17,10 +17,10 @@ Trouver le meilleur arrangement absolu signifie tester des combinaisons sur des 
 
 Nous ne comptons pas sur des suppositions. Le moteur de l'NMS Optimizer utilise un flux de travail sophistiqué en quatre étapes pour trouver automatiquement votre meilleur build :
 
-1.  **Reconnaissance de Modèles :** Le solveur commence avec des arrangements testés manuellement et approuvés par la communauté qui obtiennent de manière fiable de bons scores pour des ensembles de modules communs.
-2.  **Apprentissage Automatique (IA) :** Si votre grille a des emplacements suralimentés uniques, un modèle d'apprentissage automatique TensorFlow — entraîné sur plus de 16 000 dispositions à haut score — prédit les placements les plus intelligents pour vos technologies principales par rapport à vos modules d'amélioration.
-3.  **Recuit Simulé (Simulated Annealing) :** Notre moteur d'optimisation central, construit en Rust, échange rapidement les modules et teste des milliers d'arrangements en quelques millisecondes pour grimper vers le score le plus élevé absolu possible.
-4.  **Affichage des Résultats :** Vous voyez immédiatement la disposition gagnante aux côtés d'une ventilation complète des multiplicateurs d'adjacence.
+1. **Reconnaissance de Modèles :** Le solveur commence avec des arrangements testés manuellement et approuvés par la communauté qui obtiennent de manière fiable de bons scores pour des ensembles de modules communs.
+2. **Apprentissage Automatique (IA) :** Si votre grille a des emplacements suralimentés uniques, un modèle d'apprentissage automatique TensorFlow — entraîné sur plus de 16 000 dispositions à haut score — prédit les placements les plus intelligents pour vos technologies principales par rapport à vos modules d'amélioration.
+3. **Recuit Simulé (Simulated Annealing) :** Notre moteur d'optimisation central, construit en Rust, échange rapidement les modules et teste des milliers d'arrangements en quelques millisecondes pour grimper vers le score le plus élevé absolu possible.
+4. **Affichage des Résultats :** Vous voyez immédiatement la disposition gagnante aux côtés d'une ventilation complète des multiplicateurs d'adjacence.
 
 ## Équipements Pris en Charge
 

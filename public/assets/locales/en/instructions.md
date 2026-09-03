@@ -73,7 +73,7 @@ For **Exosuits** and **Exocraft**, supercharged slots are fixed and viable layou
 The tool provides **hand-curated recommended builds** reflecting optimal combinations.
 
 Suggestions and alternate layouts are welcome via the project discussions:
-https://github.com/jbelew/nms_optimizer-web/discussions
+<https://github.com/jbelew/nms_optimizer-web/discussions>
 
 ## Saving, Loading, and Sharing
 

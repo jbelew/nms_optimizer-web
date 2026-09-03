@@ -73,7 +73,7 @@ Per le **Exosuit** e gli **Exocraft**, gli slot sovraccarichi sono fissi e i lay
 Lo strumento fornisce **costruzioni raccomandate curate manualmente** che riflettono le combinazioni ottimali.
 
 Suggerimenti e layout alternativi sono benvenuti tramite le discussioni del progetto:
-https://github.com/jbelew/nms_optimizer-web/discussions
+<https://github.com/jbelew/nms_optimizer-web/discussions>
 
 ## Salvataggio, Caricamento e Condivisione
 

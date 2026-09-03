@@ -73,7 +73,7 @@ Para **Exotrajes** e **Exonaves**, os espaços sobrecarregados são fixos e os l
 A ferramenta fornece **builds recomendadas selecionadas manualmente** que refletem as combinações ideais.
 
 Sugestões e layouts alternativos são bem-vindos através das discussões do projeto:
-https://github.com/jbelew/nms_optimizer-web/discussions
+<https://github.com/jbelew/nms_optimizer-web/discussions>
 
 ## Salvando, Carregando E Compartilhando
 

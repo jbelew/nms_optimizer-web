@@ -28,9 +28,9 @@ Der NMS-Optimierer bietet dynamische Lösungsfindung und handverlesene empfohlen
 
 Wir raten nicht nur. Die Engine des NMS-Optimierers nutzt eine ausgeklügelte Pipeline, um die besten Ergebnisse zu garantieren:
 
-1.  **Mustererkennung:** Wir beginnen mit manuell getesteten, von der Community bewährten Anordnungen.
-2.  **Maschinelles Lernen (KI):** Ein neuronales Netzwerk von TensorFlow, trainiert mit über 16.000 Layouts mit hohen Punktzahlen, sagt die intelligentesten Platzierungen für deine aufgeladenen Plätze voraus.
-3.  **Simulated Annealing:** Unser blitzschnelles Backend, entwickelt in Rust, tauscht Module rasant aus, um die höchstmöglichen Werte zu erreichen.
+1. **Mustererkennung:** Wir beginnen mit manuell getesteten, von der Community bewährten Anordnungen.
+2. **Maschinelles Lernen (KI):** Ein neuronales Netzwerk von TensorFlow, trainiert mit über 16.000 Layouts mit hohen Punktzahlen, sagt die intelligentesten Platzierungen für deine aufgeladenen Plätze voraus.
+3. **Simulated Annealing:** Unser blitzschnelles Backend, entwickelt in Rust, tauscht Module rasant aus, um die höchstmöglichen Werte zu erreichen.
 
 ## Datenschutz zuerst & Community-gesteuert
 

@@ -73,7 +73,7 @@ Para los **exotrajes** y las **exonaves**, las ranuras potenciadas son fijas y l
 La herramienta proporciona **diseños recomendados seleccionados a mano** que reflejan las combinaciones óptimas.
 
 Las sugerencias y diseños alternativos son bienvenidos a través de las discusiones del proyecto:
-https://github.com/jbelew/nms_optimizer-web/discussions
+<https://github.com/jbelew/nms_optimizer-web/discussions>
 
 ## Guardar, Cargar y Compartir
 

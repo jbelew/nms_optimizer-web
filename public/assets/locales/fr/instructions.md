@@ -73,7 +73,7 @@ Pour l'**Exocombinaison** et les **Exonefs**, les slots surchargés sont fixes e
 L'outil propose des **builds recommandées sélectionnées à la main** qui reflètent les combinaisons optimales.
 
 Vos suggestions et variantes sont les bienvenues sur les discussions du projet :
-https://github.com/jbelew/nms_optimizer-web/discussions
+<https://github.com/jbelew/nms_optimizer-web/discussions>
 
 ## Sauvegarder, Charger Et Partager
 

@@ -17,10 +17,10 @@ Die absolut beste Anordnung herauszufinden, bedeutet, Kombinationen über Millio
 
 Wir verlassen uns nicht auf Vermutungen. Die Engine des NMS-Optimierers nutzt eine ausgeklügelte vierstufige Pipeline, um automatisch deinen besten Build zu finden:
 
-1.  **Mustererkennung:** Der Solver beginnt mit manuell getesteten, von der Community bewährten Anordnungen, die für gängige Modulsätze zuverlässig gute Ergebnisse erzielen.
-2.  **Maschinelles Lernen (KI):** Wenn dein Raster einzigartige aufgeladene Plätze hat, sagt ein TensorFlow-Modell für maschinelles Lernen — trainiert mit über 16.000 Layouts mit hohen Punktzahlen — die intelligentesten Platzierungen für deine Kerntechnologien im Vergleich zu deinen Upgrade-Modulen voraus.
-3.  **Simulated Annealing:** Unsere Kern-Optimierungs-Engine, entwickelt in Rust, tauscht Module rasant aus und testet Tausende von Anordnungen in Millisekunden, um zur absolut höchstmöglichen Punktzahl aufzusteigen.
-4.  **Ergebnisanzeige:** Du siehst sofort das Gewinner-Layout zusammen mit einer vollständigen Aufschlüsselung der Adjazenz-Multiplikatoren.
+1. **Mustererkennung:** Der Solver beginnt mit manuell getesteten, von der Community bewährten Anordnungen, die für gängige Modulsätze zuverlässig gute Ergebnisse erzielen.
+2. **Maschinelles Lernen (KI):** Wenn dein Raster einzigartige aufgeladene Plätze hat, sagt ein TensorFlow-Modell für maschinelles Lernen — trainiert mit über 16.000 Layouts mit hohen Punktzahlen — die intelligentesten Platzierungen für deine Kerntechnologien im Vergleich zu deinen Upgrade-Modulen voraus.
+3. **Simulated Annealing:** Unsere Kern-Optimierungs-Engine, entwickelt in Rust, tauscht Module rasant aus und testet Tausende von Anordnungen in Millisekunden, um zur absolut höchstmöglichen Punktzahl aufzusteigen.
+4. **Ergebnisanzeige:** Du siehst sofort das Gewinner-Layout zusammen mit einer vollständigen Aufschlüsselung der Adjazenz-Multiplikatoren.
 
 ## Unterstützte Ausrüstung
 

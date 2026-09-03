@@ -38,10 +38,15 @@ pre-commit:
       run: bunx stylelint --fix {staged_files}
       stage_fixed: true
 
+    lint-md:
+      tags: lint
+      glob: "{README.md,public/assets/**/*.md}"
+      run: bunx markdownlint-cli2 --no-globs --fix {staged_files}
+      stage_fixed: true
+
     prettier:
       tags: format
-      # Mirrors `bun run format` which only targets ./src
-      glob: "src/**/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,md,json,html}"
+      glob: "{src/**/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},README.md,public/assets/**/*.md}"
       run: bunx prettier --write {staged_files}
       stage_fixed: true
 

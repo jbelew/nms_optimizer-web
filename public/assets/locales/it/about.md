@@ -8,8 +8,8 @@ Bilanciando perfettamente le meccaniche di gioco, un layout ottimizzato ottiene 
 
 _No Man's Sky_ non spiega esplicitamente gli Adjacency Bonuses e non offre alcuna guida sulla strategia dei Supercharged Slots. Massimizzare la manovrabilità della tua astronave o il danno del tuo Multi-Strumento significa destreggiarsi tra due sistemi complessi:
 
--   **Adjacency Bonuses:** Quando posizioni moduli tecnologici compatibili uno accanto all'altro sulla griglia dell'inventario, ottengono un potenziamento delle statistiche. Diverse tecnologie hanno diversi partner di adiacenza—i potenziamenti delle armi si potenziano a vicenda, la tecnologia di movimento potenzia altra tecnologia di movimento, e più bordi condivisi crei, maggiore sarà il bonus cumulativo.
--   **Supercharged Slots:** Questi rari slot dell'inventario (solitamente fino a 4 per griglia) conferiscono un massiccio moltiplicatore di statistiche di circa 25-30% a qualsiasi modulo vi sia posizionato all'interno.
+- **Adjacency Bonuses:** Quando posizioni moduli tecnologici compatibili uno accanto all'altro sulla griglia dell'inventario, ottengono un potenziamento delle statistiche. Diverse tecnologie hanno diversi partner di adiacenza—i potenziamenti delle armi si potenziano a vicenda, la tecnologia di movimento potenzia altra tecnologia di movimento, e più bordi condivisi crei, maggiore sarà il bonus cumulativo.
+- **Supercharged Slots:** Questi rari slot dell'inventario (solitamente fino a 4 per griglia) conferiscono un massiccio moltiplicatore di statistiche di circa 25-30% a qualsiasi modulo vi sia posizionato all'interno.
 
 Capire la disposizione migliore in assoluto significa testare combinazioni attraverso milioni di possibili permutazioni—fino a circa 8.32 × 10⁸¹ per una griglia completamente espansa. Nessuno può risolverlo manualmente.
 
@@ -17,20 +17,20 @@ Capire la disposizione migliore in assoluto significa testare combinazioni attra
 
 Non ci affidiamo a congetture. Il motore di NMS Optimizer utilizza una sofisticata pipeline a quattro fasi per trovare automaticamente la tua migliore configurazione:
 
-1.  **Corrispondenza di Modelli:** Il solutore inizia con disposizioni testate manualmente e comprovate dalla community che ottengono punteggi affidabilmente elevati per set di moduli comuni.
-2.  **Machine Learning (AI):** Se la tua griglia ha Supercharged Slots unici, un modello di machine learning TensorFlow—addestrato su oltre 16.000 layout con punteggi elevati—predice i posizionamenti più intelligenti per le tue tecnologie principali rispetto ai tuoi moduli di potenziamento.
-3.  **Simulated Annealing:** Il nostro motore di ottimizzazione principale, costruito in Rust, scambia rapidamente moduli e testa migliaia di disposizioni in millisecondi per raggiungere il punteggio più alto possibile.
-4.  **Visualizzazione dei Risultati:** Vedi immediatamente il layout vincente insieme a un'analisi dettagliata del moltiplicatore di adiacenza.
+1. **Corrispondenza di Modelli:** Il solutore inizia con disposizioni testate manualmente e comprovate dalla community che ottengono punteggi affidabilmente elevati per set di moduli comuni.
+2. **Machine Learning (AI):** Se la tua griglia ha Supercharged Slots unici, un modello di machine learning TensorFlow—addestrato su oltre 16.000 layout con punteggi elevati—predice i posizionamenti più intelligenti per le tue tecnologie principali rispetto ai tuoi moduli di potenziamento.
+3. **Simulated Annealing:** Il nostro motore di ottimizzazione principale, costruito in Rust, scambia rapidamente moduli e testa migliaia di disposizioni in millisecondi per raggiungere il punteggio più alto possibile.
+4. **Visualizzazione dei Risultati:** Vedi immediatamente il layout vincente insieme a un'analisi dettagliata del moltiplicatore di adiacenza.
 
 ## Equipaggiamento Supportato
 
 NMS Optimizer fornisce una soluzione dinamica per ogni piattaforma principale del gioco:
 
--   **Starships:** Navi Standard, Exotic, Sentinel Interceptor, Solar, Fighter, Living e Atlantid.
--   **Multi-Tools:** Tutte le varianti per armi e estrazione, inclusi gli Staves.
--   **Exosuits & Exocraft:** Tutte le tecnologie Exosuit e i tipi di veicoli (Nomad, Colossus, Pilgrim, Roamer, Minotaur, Nautilon).
--   **Freighters:** Hyperdrive della Nave Capitale e tecnologia di coordinamento della flotta.
--   **Corvettes:** Supporto per layout complessi, inclusi moduli reattore unici e slot tecnologici cosmetici.
+- **Starships:** Navi Standard, Exotic, Sentinel Interceptor, Solar, Fighter, Living e Atlantid.
+- **Multi-Tools:** Tutte le varianti per armi e estrazione, inclusi gli Staves.
+- **Exosuits & Exocraft:** Tutte le tecnologie Exosuit e i tipi di veicoli (Nomad, Colossus, Pilgrim, Roamer, Minotaur, Nautilon).
+- **Freighters:** Hyperdrive della Nave Capitale e tecnologia di coordinamento della flotta.
+- **Corvettes:** Supporto per layout complessi, inclusi moduli reattore unici e slot tecnologici cosmetici.
 
 ## Domande Frequenti (FAQ)
 
@@ -53,18 +53,18 @@ NMS Optimizer supporta pienamente tutte le **Expedition e Expedition-Redux Rewar
 
 Per gli sviluppatori e gli appassionati di dati, ecco lo stack tecnologico che alimenta NMS Optimizer:
 
--   **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
--   **Backend Solver:** Python, Flask, TensorFlow, NumPy, Rust (alimenta il motore di simulated annealing e di calcolo del punteggio)
--   **Testing:** Vitest, Python Unittest
--   **Deployment & Hosting:** Heroku (API hosting), Cloudflare (DNS/CDN), Docker
--   **CI/CD:** GitHub Actions
+- **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
+- **Backend Solver:** Python, Flask, TensorFlow, NumPy, Rust (alimenta il motore di simulated annealing e di calcolo del punteggio)
+- **Testing:** Vitest, Python Unittest
+- **Deployment & Hosting:** Heroku (API hosting), Cloudflare (DNS/CDN), Docker
+- **CI/CD:** GitHub Actions
 
 ### Repository Open Source
 
 Vuoi contribuire? NMS Optimizer è completamente open-source.
 
--   Web UI: [github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
--   Backend: [github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
+- Web UI: [github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
+- Backend: [github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
 
 ## Un Enorme Ringraziamento alla Community
 

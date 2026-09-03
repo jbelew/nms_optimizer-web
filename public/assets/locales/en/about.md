@@ -17,10 +17,10 @@ Figuring out the absolute best arrangement means testing combinations across mil
 
 We don't rely on guesswork. The NMS Optimizer engine uses a sophisticated four-step pipeline to automatically find your best build:
 
-1.  **Pattern Matching:** The solver starts with hand-tested, community-proven arrangements that reliably score well for common module sets.
-2.  **Machine Learning (AI):** If your grid has unique supercharged slots, a TensorFlow machine learning model—trained on over 16,000 high-scoring layouts—predicts the smartest placements for your core technologies versus your upgrade modules.
-3.  **Simulated Annealing:** Our core optimization engine, built in Rust, rapidly swaps modules and tests thousands of arrangements in milliseconds to climb toward the absolute highest possible score.
-4.  **Result Display:** You immediately see the winning layout alongside a full adjacency multiplier breakdown.
+1. **Pattern Matching:** The solver starts with hand-tested, community-proven arrangements that reliably score well for common module sets.
+2. **Machine Learning (AI):** If your grid has unique supercharged slots, a TensorFlow machine learning model—trained on over 16,000 high-scoring layouts—predicts the smartest placements for your core technologies versus your upgrade modules.
+3. **Simulated Annealing:** Our core optimization engine, built in Rust, rapidly swaps modules and tests thousands of arrangements in milliseconds to climb toward the absolute highest possible score.
+4. **Result Display:** You immediately see the winning layout alongside a full adjacency multiplier breakdown.
 
 ## Supported Equipment
 

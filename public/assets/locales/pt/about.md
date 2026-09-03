@@ -17,10 +17,10 @@ Descobrir o melhor arranjo absoluto significa testar combinações em milhões d
 
 Nós não dependemos de adivinhação. O motor do NMS Optimizer usa um sofisticado fluxo de trabalho de quatro etapas para encontrar automaticamente sua melhor build:
 
-1.  **Reconhecimento de Padrões:** O solucionador começa com arranjos testados manualmente e aprovados pela comunidade que obtêm boas pontuações de forma confiável para conjuntos de módulos comuns.
-2.  **Aprendizado de Máquina (IA):** Se sua grade possui espaços superalimentados únicos, um modelo de aprendizado de máquina TensorFlow — treinado em mais de 16.000 layouts de alta pontuação — prevê os posicionamentos mais inteligentes para suas tecnologias principais em relação aos seus módulos de atualização.
-3.  **Recozimento Simulado (Simulated Annealing):** Nosso principal motor de otimização, construído em Rust, troca rapidamente os módulos e testa milhares de arranjos em milissegundos para escalar em direção à pontuação mais alta absoluta possível.
-4.  **Exibição de Resultados:** Você vê imediatamente o layout vencedor ao lado de um detalhamento completo dos multiplicadores de adjacência.
+1. **Reconhecimento de Padrões:** O solucionador começa com arranjos testados manualmente e aprovados pela comunidade que obtêm boas pontuações de forma confiável para conjuntos de módulos comuns.
+2. **Aprendizado de Máquina (IA):** Se sua grade possui espaços superalimentados únicos, um modelo de aprendizado de máquina TensorFlow — treinado em mais de 16.000 layouts de alta pontuação — prevê os posicionamentos mais inteligentes para suas tecnologias principais em relação aos seus módulos de atualização.
+3. **Recozimento Simulado (Simulated Annealing):** Nosso principal motor de otimização, construído em Rust, troca rapidamente os módulos e testa milhares de arranjos em milissegundos para escalar em direção à pontuação mais alta absoluta possível.
+4. **Exibição de Resultados:** Você vê imediatamente o layout vencedor ao lado de um detalhamento completo dos multiplicadores de adjacência.
 
 ## Equipamentos Suportados
 

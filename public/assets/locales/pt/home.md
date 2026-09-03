@@ -28,9 +28,9 @@ O NMS Optimizer fornece resolução dinâmica e builds recomendadas selecionadas
 
 Nós não estamos apenas adivinhando. O motor do NMS Optimizer usa um fluxo de trabalho sofisticado para garantir os melhores resultados:
 
-1.  **Reconhecimento de Padrões:** Começamos com arranjos testados manualmente e aprovados pela comunidade.
-2.  **Aprendizado de Máquina (IA):** Uma rede neural do TensorFlow, treinada em mais de 16.000 layouts de alta pontuação, prevê os posicionamentos mais inteligentes para seus espaços superalimentados.
-3.  **Recozimento Simulado (Simulated Annealing):** Nosso backend ultrarrápido, construído em Rust, troca rapidamente os módulos para escalar em direção às estatísticas mais altas possíveis.
+1. **Reconhecimento de Padrões:** Começamos com arranjos testados manualmente e aprovados pela comunidade.
+2. **Aprendizado de Máquina (IA):** Uma rede neural do TensorFlow, treinada em mais de 16.000 layouts de alta pontuação, prevê os posicionamentos mais inteligentes para seus espaços superalimentados.
+3. **Recozimento Simulado (Simulated Annealing):** Nosso backend ultrarrápido, construído em Rust, troca rapidamente os módulos para escalar em direção às estatísticas mais altas possíveis.
 
 ## Privacidade em Primeiro Lugar & Focado na Comunidade
 

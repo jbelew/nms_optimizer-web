@@ -28,9 +28,9 @@ The NMS Optimizer provides dynamic solving and hand-curated recommended builds f
 
 We don't just guess. The NMS Optimizer engine uses a sophisticated pipeline to guarantee the best results:
 
-1.  **Pattern Matching:** We start with hand-tested, community-proven arrangements.
-2.  **Machine Learning (AI):** A TensorFlow neural network, trained on over 16,000 high-scoring layouts, predicts the smartest placements for your supercharged slots.
-3.  **Simulated Annealing:** Our lightning-fast backend, built in Rust, rapidly swaps modules to climb toward the highest possible stats.
+1. **Pattern Matching:** We start with hand-tested, community-proven arrangements.
+2. **Machine Learning (AI):** A TensorFlow neural network, trained on over 16,000 high-scoring layouts, predicts the smartest placements for your supercharged slots.
+3. **Simulated Annealing:** Our lightning-fast backend, built in Rust, rapidly swaps modules to climb toward the highest possible stats.
 
 ## Privacy-First & Community Driven
 

@@ -1,0 +1,6 @@
+{
+  "globs": [
+    "README.md",
+    "public/assets/**/*.md"
+  ]
+}

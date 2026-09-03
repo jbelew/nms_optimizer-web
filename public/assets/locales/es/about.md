@@ -17,10 +17,10 @@ Descubrir el mejor arreglo absoluto significa probar combinaciones a lo largo de
 
 No dependemos de conjeturas. El motor del NMS Optimizer utiliza un sofisticado flujo de trabajo de cuatro pasos para encontrar automáticamente tu mejor construcción:
 
-1.  **Reconocimiento de Patrones:** El solucionador comienza con arreglos probados a mano y comprobados por la comunidad que de manera confiable obtienen buenas puntuaciones para conjuntos de módulos comunes.
-2.  **Aprendizaje Automático (IA):** Si tu cuadrícula tiene ranuras potenciadas únicas, un modelo de aprendizaje automático de TensorFlow, entrenado en más de 16,000 diseños de alta puntuación, predice las colocaciones más inteligentes para tus tecnologías principales frente a tus módulos de actualización.
-3.  **Recocido Simulado (Simulated Annealing):** Nuestro motor principal de optimización, construido en Rust, intercambia módulos rápidamente y prueba miles de arreglos en milisegundos para escalar hacia la puntuación más alta absoluta posible.
-4.  **Visualización de Resultados:** Inmediatamente ves el diseño ganador junto con un desglose completo de los multiplicadores de adyacencia.
+1. **Reconocimiento de Patrones:** El solucionador comienza con arreglos probados a mano y comprobados por la comunidad que de manera confiable obtienen buenas puntuaciones para conjuntos de módulos comunes.
+2. **Aprendizaje Automático (IA):** Si tu cuadrícula tiene ranuras potenciadas únicas, un modelo de aprendizaje automático de TensorFlow, entrenado en más de 16,000 diseños de alta puntuación, predice las colocaciones más inteligentes para tus tecnologías principales frente a tus módulos de actualización.
+3. **Recocido Simulado (Simulated Annealing):** Nuestro motor principal de optimización, construido en Rust, intercambia módulos rápidamente y prueba miles de arreglos en milisegundos para escalar hacia la puntuación más alta absoluta posible.
+4. **Visualización de Resultados:** Inmediatamente ves el diseño ganador junto con un desglose completo de los multiplicadores de adyacencia.
 
 ## Equipos Compatibles
 

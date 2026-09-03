@@ -1,2 +1,12 @@
 # Auto-generated — do not format
 src/assets/css/radix-colors/radix-colors.css
+CHANGELOG.md
+graphify-out/
+dist/
+coverage/
+venv/
+node_modules/
+.agents/
+.beads/
+.lighthouseci/
+.wrangler/
