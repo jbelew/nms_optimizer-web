@@ -1,3 +1,10 @@
+## [7.7.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.7.1...v7.7.2) (2026-09-03)
+
+
+### Bug Fixes
+
+* **H2Renderer:** simplify return structure by removing unnecessary separator ([dd7a035](https://github.com/jbelew/nms_optimizer-web/commit/dd7a0351bd4b3d012b78682b824f39e8072050d1))
+
 ## [7.7.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.7.0...v7.7.1) (2026-09-03)
 
 
