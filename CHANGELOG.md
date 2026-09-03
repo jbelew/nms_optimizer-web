@@ -1,3 +1,10 @@
+## [7.6.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.6.0...v7.6.1) (2026-09-03)
+
+
+### Bug Fixes
+
+* **seo:** resolve structured data, meta descriptions, open graph, and crawler issues ([7021b55](https://github.com/jbelew/nms_optimizer-web/commit/7021b5575989c4f0f593b21416ebc62d9e17106a))
+
 # [7.6.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.5.2...v7.6.0) (2026-09-02)
 
 
