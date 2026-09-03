@@ -1,3 +1,15 @@
+# [7.7.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.6.1...v7.7.0) (2026-09-03)
+
+
+### Bug Fixes
+
+* **screenshot:** wait for tech tree to finish loading before capture ([f5a6b19](https://github.com/jbelew/nms_optimizer-web/commit/f5a6b1900554058b82eb3380bfad6a58f58b6c01))
+
+
+### Features
+
+* **seo:** add git-backed sitemap timestamps, image sitemap, and HSTS ([51a0a7d](https://github.com/jbelew/nms_optimizer-web/commit/51a0a7d501dee7f2ec744ab1b519ea58d8219703))
+
 ## [7.6.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.6.0...v7.6.1) (2026-09-03)
 
 
