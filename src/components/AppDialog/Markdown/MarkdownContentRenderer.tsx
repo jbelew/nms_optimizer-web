@@ -174,6 +174,7 @@ const H2Renderer: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
 				className="text-base! font-bold! sm:text-lg!"
 				id={id}
 				mb="3"
+				mt={id !== "section-1" ? "3" : "0"}
 				style={{ color: "var(--accent-a11)" }}
 				trim="end"
 			>
