@@ -120,7 +120,7 @@ export const AppDialogTitle: React.FC<{
 				)}
 				<span className={headerIcon || IconComponent ? "mr-6" : ""}>{displayTitle}</span>
 			</span>
-			<Separator decorative mt="2" orientation="horizontal" size="4" />
+			<Separator color="cyan" decorative mt="2" orientation="horizontal" size="4" />
 			<DialogDescription className="sr-only">{displayTitle}</DialogDescription>
 		</DialogTitle>
 	);

@@ -168,16 +168,19 @@ const H2Renderer: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
 	const id = context.getOrGenerateId(children);
 
 	return (
-		<Heading
-			as="h2"
-			className="text-base! font-bold! sm:text-lg!"
-			id={id}
-			mb="3"
-			style={{ color: "var(--accent-a11)" }}
-			trim="end"
-		>
-			{children}
-		</Heading>
+		<>
+			<Heading
+				as="h2"
+				className="text-base! font-bold! sm:text-lg!"
+				id={id}
+				mb="3"
+				style={{ color: "var(--accent-a11)" }}
+				trim="end"
+			>
+				{children}
+			</Heading>
+			<Separator decorative mb="2" mt="2" orientation="horizontal" size="4" />
+		</>
 	);
 };
 
