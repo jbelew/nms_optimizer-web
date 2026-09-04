@@ -33,7 +33,7 @@ Supercharged slots are limited — placement matters.
 
 If space becomes tight, you may need to reset and solve technologies in a different order to avoid an **Optimization Alert**.
 
-## Pro Tip
+### Pro Tip
 
 The solver uses fixed windows sized to each technology’s module count to find space-efficient placements.
 If results aren’t ideal, **temporarily disable slots** to guide the solver toward a better layout.

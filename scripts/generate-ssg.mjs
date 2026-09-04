@@ -158,7 +158,7 @@ export async function generatePage(
 		// Single Source of Truth: Localize the subtitle in the header extracted from the template
 		const localizedHeader = ssgHeader.replace(
 			/<(h2|div) class="app-header-static__title">[\s\S]*?<\/\1>/,
-			`<h2 class="app-header-static__title">${subTitle}</h2>`
+			`<div class="app-header-static__title">${subTitle}</div>`
 		);
 
 		noscriptBlock = `

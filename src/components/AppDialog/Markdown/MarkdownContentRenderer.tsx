@@ -194,7 +194,7 @@ const H2Renderer: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
  * @returns A Radix UI Heading component representing an h3 section.
  */
 const H3Renderer: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
-	<Heading as="h3" className="text-sm! sm:text-base!" style={{ color: "var(--accent-a11)" }}>
+	<Heading className="text-sm! sm:text-base!" mb="1" style={{ color: "var(--accent-a11)" }}>
 		{children}
 	</Heading>
 );
