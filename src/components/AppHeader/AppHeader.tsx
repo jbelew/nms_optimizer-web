@@ -143,7 +143,13 @@ const AppHeaderLogo: React.FC = () => {
 			my="1"
 			width="100%"
 		>
-			<Separator className="flex-1" decorative orientation="horizontal" size="1" />
+			<Separator
+				className="flex-1"
+				color="cyan"
+				decorative
+				orientation="horizontal"
+				size="1"
+			/>
 
 			<Popover.Root>
 				<Popover.Trigger>
@@ -177,7 +183,13 @@ const AppHeaderLogo: React.FC = () => {
 				</Popover.Content>
 			</Popover.Root>
 
-			<Separator className="flex-1" decorative orientation="horizontal" size="1" />
+			<Separator
+				className="flex-1"
+				color="cyan"
+				decorative
+				orientation="horizontal"
+				size="1"
+			/>
 		</Flex>
 	);
 };
