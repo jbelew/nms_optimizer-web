@@ -11,7 +11,7 @@ interface EmptyStateProps {
 	title: string;
 }
 
-const DEFAULT_ICON = <InfoCircledIcon height="40" width="40" />;
+const DEFAULT_ICON = <InfoCircledIcon height="40" style={{ color: "var(--red-9)" }} width="40" />;
 
 /**
  * A standardized component for displaying empty states across the application.
@@ -32,14 +32,12 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 			gap="4"
 			justify="center"
 			style={{
-				backgroundColor: "var(--gray-a2)",
-				border: "1px dashed var(--gray-a6)",
-				borderRadius: "var(--radius-3)",
+				height: "100%",
 				minHeight: "200px",
 				textAlign: "center",
 			}}
 		>
-			<Box style={{ color: "var(--gray-9)", opacity: 0.5 }}>{icon}</Box>
+			<Box>{icon}</Box>
 			<Flex direction="column" gap="1">
 				<Text color="gray" size="4" weight="bold">
 					{title}
