@@ -1,3 +1,10 @@
+## [7.7.3](https://github.com/jbelew/nms_optimizer-web/compare/v7.7.2...v7.7.3) (2026-09-04)
+
+
+### Performance Improvements
+
+* **ui:** optimize INP with grid cell containment and non-modal dropdowns ([a6a5824](https://github.com/jbelew/nms_optimizer-web/commit/a6a5824fe7a9f768782dbebca7cb20e7c9036461))
+
 ## [7.7.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.7.1...v7.7.2) (2026-09-03)
 
 
