@@ -172,7 +172,7 @@ export const LanguageSelector: React.FC = () => {
 		supportedLanguages.find((lang) => lang.code === currentLanguage)?.flagPath || xxFlagPath;
 
 	return (
-		<DropdownMenu.Root>
+		<DropdownMenu.Root modal={false}>
 			<DropdownMenu.Trigger>
 				{!isSm || isMd ? (
 					<Button

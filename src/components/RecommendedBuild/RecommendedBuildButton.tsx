@@ -19,7 +19,7 @@ export const RecommendedBuildButton: React.FC<React.ComponentProps<typeof Button
 
 	if (builds.length > 1) {
 		return (
-			<DropdownMenu.Root>
+			<DropdownMenu.Root modal={false}>
 				<DropdownMenu.Trigger>
 					<Button {...buttonProps}>
 						<MagicWandIcon />

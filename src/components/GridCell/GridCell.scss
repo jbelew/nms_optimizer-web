@@ -1,6 +1,7 @@
 .gridCell {
 	background-color: var(--accent-a2);
 	border-radius: 2px;
+	contain: layout style;
 	height: var(--grid-cell-size);
 	position: relative;
 	touch-action: manipulation;
