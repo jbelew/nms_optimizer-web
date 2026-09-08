@@ -1,3 +1,10 @@
+## [7.7.4](https://github.com/jbelew/nms_optimizer-web/compare/v7.7.3...v7.7.4) (2026-09-08)
+
+
+### Bug Fixes
+
+* **seo:** front-load page titles and isolate landmark headings in SSG ([0d83430](https://github.com/jbelew/nms_optimizer-web/commit/0d8343098ab553320f35813d104c6a718282dea4))
+
 ## [7.7.3](https://github.com/jbelew/nms_optimizer-web/compare/v7.7.2...v7.7.3) (2026-09-04)
 
 
