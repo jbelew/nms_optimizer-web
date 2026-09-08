@@ -8,7 +8,7 @@ import {
 	PieChartIcon,
 	RocketIcon,
 } from "@radix-ui/react-icons";
-import { Box, Flex, Heading, IconButton, Popover, Separator, Switch } from "@radix-ui/themes";
+import { Flex, Heading, IconButton, Popover, Separator, Switch } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 import nmslogo from "@/assets/img/nms-icon.svg";
@@ -27,9 +27,9 @@ const AppHeaderRoot: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 	const { i18n } = useTranslation();
 
 	return (
-		<Box className="app-header" key={i18n.language}>
+		<header className="app-header" key={i18n.language} role="banner">
 			{children}
-		</Box>
+		</header>
 	);
 };
 
@@ -126,7 +126,11 @@ const AppHeaderPerformanceButton: React.FC = () => {
  * Logo Text component ("NO MAN'S SKY").
  */
 const AppHeaderLogoText: React.FC = () => {
-	return <div className="app-header__logo-text">NO MAN'S SKY</div>;
+	return (
+		<div aria-label="No Man's Sky Logo" className="app-header__logo-text" role="img">
+			NO MAN'S SKY
+		</div>
+	);
 };
 
 /**

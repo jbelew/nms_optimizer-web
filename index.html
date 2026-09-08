@@ -219,9 +219,9 @@
 	<body class="background-visible">
 		<div id="root"></div>
 
-		<main class="ssg-fallback" data-ssg-template="">
-			<header class="app-header-static">
-				<div class="app-header-static__logo-text" style="margin-bottom: 4px" aria-hidden="true">NO MAN'S SKY</div>
+		<div class="ssg-fallback" data-ssg-template="">
+			<header class="app-header-static" role="banner">
+				<div class="app-header-static__logo-text" role="img" aria-label="No Man's Sky Logo" style="margin-bottom: 4px">NO MAN'S SKY</div>
 				<div class="app-header-static__separator-container" aria-hidden="true">
 					<span class="app-header-static__separator"></span>
 					<img alt="" width="16" height="20" src="/assets/img/nms-icon.webp" />
@@ -230,7 +230,7 @@
 				<div class="app-header-static__title">Technology Layout Optimizer <span style="color: #4ccce6">ML/RUST</span></div>
 			</header>
 			<!-- SSG content and navigation are injected here during the build process -->
-		</main>
+		</div>
 
 		<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "614f4aacf3d1446bae6719e156ecc36e", "spa": true}'></script>
 	</body>

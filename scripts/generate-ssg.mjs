@@ -29,14 +29,10 @@ export const PAGE_TO_MARKDOWN_MAPPING = {
  * Extract SSG template blocks from source index.html
  */
 export async function extractSsgTemplate(sourceIndexHtml) {
-	const sourceSsgBlockMatch = sourceIndexHtml.match(
-		/<main\s+[^>]*?class="ssg-fallback"[^>]*?data-ssg-template[^>]*?>([\s\S]*?)<\/main>/
-	);
-	if (!sourceSsgBlockMatch) return { ssgHeader: "" };
+	const hasTemplate = /<(?:main|div)\s+[^>]*?data-ssg-template/i.test(sourceIndexHtml);
+	if (!hasTemplate) return { ssgHeader: "" };
 
-	const sourceSsgBlock = sourceSsgBlockMatch[1];
-
-	const ssgHeaderMatch = sourceSsgBlock.match(
+	const ssgHeaderMatch = sourceIndexHtml.match(
 		/(<header[^>]*?class="app-header-static"[^>]*?>[\s\S]*?<\/header>)/
 	);
 	const ssgHeader = ssgHeaderMatch ? ssgHeaderMatch[1].trim() : "";
@@ -139,12 +135,13 @@ export async function generatePage(
 		let renderedHtml = mdProcessor(markdownContent);
 		const navigationHtml = generateNavigationLinks(lang, pageName, t);
 
+		const contentHeading = pageTitle.replace(/\s*\|\s*.*$/, "").trim() || pageTitle;
 		const h1Regex = /<h1[^>]*?>([\s\S]*?)<\/h1>/i;
 
 		if (h1Regex.test(renderedHtml)) {
-			renderedHtml = renderedHtml.replace(h1Regex, `<h1>${pageTitle}</h1>`);
+			renderedHtml = renderedHtml.replace(h1Regex, `<h1>${contentHeading}</h1>`);
 		} else {
-			renderedHtml = `<h1>${pageTitle}</h1>\n${renderedHtml}`;
+			renderedHtml = `<h1>${contentHeading}</h1>\n${renderedHtml}`;
 		}
 
 		const subTitleRaw = t("appHeader.subTitle", {
@@ -162,12 +159,14 @@ export async function generatePage(
 		);
 
 		noscriptBlock = `
-		<main class="ssg-fallback" data-prerendered-markdown="true">
+		<div class="ssg-fallback" data-prerendered-markdown="true">
 			${localizedHeader}
-			${renderedHtml}
-			${navigationHtml}
+			<main>
+				${renderedHtml}
+				${navigationHtml}
+			</main>
 			${fontStyles ? `<style>${fontStyles}</style>` : ""}
-		</main>`;
+		</div>`;
 	}
 
 	const rewriter = new HTMLRewriter()
@@ -291,7 +290,7 @@ export async function generatePage(
 				// Strip old fallback blocks in body
 			},
 		})
-		.on("main.ssg-fallback", {
+		.on(".ssg-fallback", {
 			element(el) {
 				el.remove();
 			},

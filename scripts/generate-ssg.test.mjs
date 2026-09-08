@@ -28,9 +28,9 @@ describe("generate-ssg.mjs", () => {
 			const sourceHtml = `
                 <html>
                 <body>
-                <main class="ssg-fallback" data-ssg-template>
+                <div class="ssg-fallback" data-ssg-template>
                     <header class="app-header-static">Header Content</header>
-                </main>
+                </div>
                 </body>
                 </html>
             `;
@@ -192,7 +192,28 @@ describe("generate-ssg.mjs", () => {
 				"",
 				""
 			);
-			expect(result).toContain('<div id="root"></div>\n\t\t<main class="ssg-fallback" data-prerendered-markdown="true">');
+			expect(result).toContain('<div id="root"></div>\n\t\t<div class="ssg-fallback" data-prerendered-markdown="true">');
+		});
+
+		it("strips brand suffix from H1 heading in content", async () => {
+			const tWithPipe = vi.fn((key, options) => {
+				if (key === "seo.instructionsPageTitle") {
+					return "How to Optimize Your Tech Layout | NMS Optimizer";
+				}
+
+				return options?.defaultValue || key;
+			});
+			const result = await generateSsgModule.generatePage(
+				indexHtml,
+				"en",
+				"instructions",
+				baseUrl,
+				mdProcessor,
+				tWithPipe
+			);
+			expect(result).toContain("<title>How to Optimize Your Tech Layout | NMS Optimizer</title>");
+			expect(result).toContain("<h1>How to Optimize Your Tech Layout</h1>");
+			expect(result).not.toContain("<h1>How to Optimize Your Tech Layout | NMS Optimizer</h1>");
 		});
 	});
 });

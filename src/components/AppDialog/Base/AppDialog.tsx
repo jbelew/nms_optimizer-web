@@ -110,19 +110,25 @@ export const AppDialogTitle: React.FC<{
 	const displayTitle = children || (titleKey ? t(titleKey) : title);
 
 	return (
-		<DialogTitle className="mr-2">
-			<span className="heading-styled flex items-start gap-2 text-xl sm:text-2xl">
-				{(headerIcon || IconComponent) && (
-					<div className="mt-px shrink-0 sm:mt-[4px]">
-						{headerIcon ||
-							(IconComponent && <IconComponent className="h-6 w-6" style={style} />)}
-					</div>
-				)}
-				<span className={headerIcon || IconComponent ? "mr-6" : ""}>{displayTitle}</span>
-			</span>
+		<div className="mr-2">
+			<DialogTitle asChild>
+				<h1 className="heading-styled flex items-start gap-2 text-xl sm:text-2xl">
+					{(headerIcon || IconComponent) && (
+						<div className="mt-px shrink-0 sm:mt-[4px]">
+							{headerIcon ||
+								(IconComponent && (
+									<IconComponent className="h-6 w-6" style={style} />
+								))}
+						</div>
+					)}
+					<span className={headerIcon || IconComponent ? "mr-6" : ""}>
+						{displayTitle}
+					</span>
+				</h1>
+			</DialogTitle>
 			<Separator color="cyan" decorative mt="2" orientation="horizontal" size="4" />
 			<DialogDescription className="sr-only">{displayTitle}</DialogDescription>
-		</DialogTitle>
+		</div>
 	);
 };
 
