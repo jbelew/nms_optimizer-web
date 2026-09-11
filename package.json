@@ -121,7 +121,7 @@
 		"@typescript/native-preview": "^7.0.0-dev.20260707.2",
 		"@vitejs/plugin-react": "^6.1.1",
 		"@vitest/browser": "^4.1.11",
-		"@vitest/browser-playwright": "^4.1.11",
+		"@vitest/browser-playwright": "^5.0.0",
 		"@vitest/coverage-v8": "^4.1.11",
 		"@vitest/ui": "^4.1.11",
 		"babel-plugin-react-compiler": "^1.0.0",
