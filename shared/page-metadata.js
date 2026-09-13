@@ -133,12 +133,10 @@ export const extractContentHeading = (rawTitle = "", appName = "NMS Optimizer") 
  * Formats a topic into the standard document title according to the brand formatting policy.
  *
  * @remarks
- * Enforces the `"<Topic> | <Brand>"` formatting invariant across all pages while preserving
- * custom branding on the root calculator route.
+ * Enforces the `"<Topic> | <Brand>"` formatting invariant across all pages.
  *
  * @param {string} [topic=""] - The topic heading or naked page title.
  * @param {string} [appName="NMS Optimizer"] - The application brand name.
- * @param {boolean} [isRoot=false] - Whether the route is the root application path.
  * @returns {string} The fully formatted document title.
  *
  * @example
@@ -147,11 +145,10 @@ export const extractContentHeading = (rawTitle = "", appName = "NMS Optimizer") 
  * // returns "How to Optimize Your Tech Layout | NMS Optimizer"
  * ```
  */
-export const formatDocumentTitle = (topic = "", appName = "NMS Optimizer", isRoot = false) => {
+export const formatDocumentTitle = (topic = "", appName = "NMS Optimizer") => {
 	const trimmedTopic = String(topic).trim();
 
 	if (!trimmedTopic) return appName;
-	if (isRoot) return trimmedTopic;
 	if (trimmedTopic === appName) return appName;
 
 	// Check if already formatted with brand suffix
@@ -215,11 +212,9 @@ export const getPageMetadata = (options) => {
 		? t(metadata.titleKey, { defaultValue: isRoot ? appName : "" })
 		: appName;
 
-	const heading = isRoot
-		? rawTitle || appName
-		: extractContentHeading(rawTitle, appName) || appName;
+	const heading = extractContentHeading(rawTitle, appName) || appName;
 
-	const title = isRoot ? rawTitle || appName : formatDocumentTitle(heading, appName, false);
+	const title = formatDocumentTitle(heading, appName);
 
 	const description = metadata.descriptionKey ? t(metadata.descriptionKey) : "";
 	const keywords = t("seo.keywords", { defaultValue: "" });

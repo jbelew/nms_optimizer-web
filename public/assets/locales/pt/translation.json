@@ -687,20 +687,20 @@
 		"aboutUpgradeLabelsTooltip": "Sobre Rótulos de Melhoria"
 	},
 	"seo": {
-		"mainPageTitle": "NMS Optimizer: Calculadora de Tecnologia e Adjacência NMS",
+		"mainPageTitle": "Calculadora de Tecnologia e Adjacência de No Man's Sky",
 		"appDescription": "Otimize layouts de tecnologia no No Man's Sky. Maximize bônus de adjacência e slots sobrecarregados para naves, multiferramentas e mais com algoritmos avançados.",
 		"keywords": "NMS Optimizer, No Man's Sky, bônus de adjacência, espaços sobrecarregados, ferramenta de layout NMS, layout técnico de naves, build de multiferramenta, calculadora de espaço sobrecarregado",
 		"instructionsPageTitle": "Como otimizar seu layout técnico",
 		"instructionsDescription": "Aprenda a usar a grade, gerenciar espaços sobrecarregados e o sistema Theta/Tau/Sigma para builds de No Man's Sky.",
-		"aboutPageTitle": "Sobre os algoritmos de otimização | NMS Optimizer",
+		"aboutPageTitle": "Sobre os algoritmos de otimização",
 		"aboutDescription": "Descubra como o NMS Optimizer usa algoritmos e Rust para calcular o melhor posicionamento de módulos para seu equipamento.",
-		"changelogPageTitle": "Últimas novidades e atualizações | NMS Optimizer",
+		"changelogPageTitle": "Últimas novidades e atualizações",
 		"changelogDescription": "Fique por dentro das últimas funcionalidades, correções e melhorias no algoritmo do NMS Optimizer. Conheça a melhor ferramenta de layout para No Man's Sky.",
-		"userstatsPageTitle": "Meta da comunidade e estatísticas | NMS Optimizer",
+		"userstatsPageTitle": "Meta da comunidade e estatísticas",
 		"userstatsDescription": "Explore o meta de No Man's Sky. Veja as tecnologias sobrecarregadas mais populares da comunidade.",
 		"translationPageTitle": "Ajude a traduzir o NMS Optimizer: Una-se à equipe",
 		"translationDescription": "Contribua com a comunidade de No Man's Sky ajudando a traduzir o NMS Optimizer. Torne a melhor ferramenta de layout acessível a todos os viajantes.",
-		"privacyPageTitle": "Política de Privacidade | NMS Optimizer",
+		"privacyPageTitle": "Política de Privacidade",
 		"privacyDescription": "Leia sobre nosso compromisso com sua privacidade. Usamos análises anônimas para melhorar o otimizador sem nunca rastrear sua identidade ou dados de jogo.",
 		"ogImageAlt": "Uma captura de tela detalhada do aplicativo NMS Optimizer mostrando uma grade de nave otimizada com bônus de adjacência elevados.",
 		"nav": {
@@ -725,7 +725,7 @@
 			"performance": "Métricas de desempenho do aplicativo"
 		},
 		"genre": "Ferramenta de Jogo",
-		"performancePageTitle": "NMS Optimizer: Métricas de Desempenho",
+		"performancePageTitle": "Métricas de Desempenho",
 		"performanceDescription": "Métricas de desempenho em tempo real e Core Web Vitals para o aplicativo NMS Optimizer."
 	},
 	"installPrompt": {

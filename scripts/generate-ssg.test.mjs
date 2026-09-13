@@ -136,7 +136,8 @@ describe("generate-ssg.mjs", () => {
 				mdProcessor,
 				t
 			);
-			expect(result).toContain("<title>Home Title</title>");
+			expect(result).toContain("<title>Home Title | NMS Optimizer</title>");
+			expect(result).toContain("<h1>Home Title</h1>");
 			expect(result).toContain('<meta name="description" content="App Description"');
 		});
 

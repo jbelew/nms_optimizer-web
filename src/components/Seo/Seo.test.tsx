@@ -63,4 +63,37 @@ describe("Seo Component", () => {
 		renderSeo("/instructions/");
 		expect(document.title).toBe("How to Optimize Your Tech Layout | NMS Optimizer");
 	});
+
+	it("should render formatted title for the root home page", () => {
+		i18n.addResource(
+			"en",
+			"translation",
+			"seo.mainPageTitle",
+			"No Man's Sky Tech Layout & Adjacency Calculator"
+		);
+		i18n.addResource("en", "translation", "appName", "NMS Optimizer");
+		renderSeo("/");
+		expect(document.title).toBe(
+			"No Man's Sky Tech Layout & Adjacency Calculator | NMS Optimizer"
+		);
+	});
+
+	it("should render formatted title for the translation contributor route", () => {
+		i18n.addResource(
+			"en",
+			"translation",
+			"seo.translationPageTitle",
+			"Help Translate NMS Optimizer: Join the Team"
+		);
+		i18n.addResource("en", "translation", "appName", "NMS Optimizer");
+		renderSeo("/translation/");
+		expect(document.title).toBe("Help Translate NMS Optimizer: Join the Team | NMS Optimizer");
+	});
+
+	it("should render formatted title for the performance metrics route", () => {
+		i18n.addResource("en", "translation", "seo.performancePageTitle", "Performance Metrics");
+		i18n.addResource("en", "translation", "appName", "NMS Optimizer");
+		renderSeo("/performance/");
+		expect(document.title).toBe("Performance Metrics | NMS Optimizer");
+	});
 });

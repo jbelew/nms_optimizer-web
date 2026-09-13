@@ -687,20 +687,20 @@
 		"aboutUpgradeLabelsTooltip": "Über Upgrade-Bezeichnungen"
 	},
 	"seo": {
-		"mainPageTitle": "NMS Optimizer: Tech-Layout- & Adjazenzbonus-Rechner",
+		"mainPageTitle": "No Man's Sky Tech-Layout- & Adjazenzbonus-Rechner",
 		"appDescription": "Optimiere No Man's Sky Technologie-Layouts. Maximiere Adjazenzboni und Boosts für überladene Slots bei Raumschiffen, Multitools und mehr dank smarter Algorithmen.",
 		"keywords": "NMS-Optimierer, No Man's Sky, Adjazenzbonus, überladene Slots, NMS-Layout-Tool, Raumschiff-Tech-Layout, Multitool-Build, Rechner für überladene Slots",
 		"instructionsPageTitle": "So optimierst du dein Tech-Layout",
 		"instructionsDescription": "Lerne das Raster, überladene Slots und das Theta/Tau/Sigma-System für optimale No Man's Sky Builds kennen.",
-		"aboutPageTitle": "Über die Optimierungsalgorithmen | NMS Optimizer",
+		"aboutPageTitle": "Über die Optimierungsalgorithmen",
 		"aboutDescription": "Erfahre, wie der NMS-Optimierer mit Algorithmen und Rust die absolut besten Modulplatzierungen für dein Gear berechnet.",
-		"changelogPageTitle": "Neueste Funktionen und Updates | NMS Optimizer",
+		"changelogPageTitle": "Neueste Funktionen und Updates",
 		"changelogDescription": "Bleibe auf dem Laufenden mit den neuesten Funktionen, Fehlerbehebungen und Algorithmus-Verbesserungen des NMS-Optimierers. Entdecke das beste Layout-Tool für No Man's Sky.",
-		"userstatsPageTitle": "Community-Meta & Tech-Statistiken | NMS Optimizer",
+		"userstatsPageTitle": "Community-Meta & Tech-Statistiken",
 		"userstatsDescription": "Entdecke das No Man's Sky Meta. Sieh dir die beliebtesten überladenen Technologien der Community an.",
 		"translationPageTitle": "Hilf beim Übersetzen: Werde Teil von NMS Optimizer",
 		"translationDescription": "Trage zur No Man's Sky Community bei, indem du bei der Übersetzung des NMS-Optimierers hilfst. Mache das beste Layout-Tool für Reisende in jeder Sprache zugänglich.",
-		"privacyPageTitle": "Datenschutzrichtlinie | NMS Optimizer",
+		"privacyPageTitle": "Datenschutzrichtlinie",
 		"privacyDescription": "Lies unser Versprechen zum Datenschutz. Wir nutzen anonyme Analysen, um den Optimierer zu verbessern, ohne jemals deine Identität oder Spieldaten zu verfolgen.",
 		"ogImageAlt": "Ein detaillierter Screenshot des NMS-Optimierers, der ein optimiertes Raumschiff-Gitter mit hohen Adjazenzboni zeigt.",
 		"nav": {
@@ -725,7 +725,7 @@
 			"performance": "Leistungsmetriken der Anwendung"
 		},
 		"genre": "Spielwerkzeug",
-		"performancePageTitle": "NMS Optimizer: Leistungsmetriken",
+		"performancePageTitle": "Leistungsmetriken",
 		"performanceDescription": "Echtzeit-Leistungsmetriken und Core Web Vitals für die NMS Optimizer-Anwendung."
 	},
 	"installPrompt": {
