@@ -1,13 +1,10 @@
 import React, { useEffect, useMemo } from "react";
-import { seoMetadata } from "@shared/seo-metadata.js";
-import { getLocalizedSchema, getOgLocale, OG_LOCALE_MAP } from "@shared/seo-schema.js";
+import { DEFAULT_BASE_URL, getPageMetadata } from "@shared/page-metadata.js";
+import { OG_LOCALE_MAP } from "@shared/seo-schema.js";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
 import { useSupportedLanguages } from "@/hooks/useSupportedLanguages";
-
-const BASE_URL = "https://nms-optimizer.app";
-const OG_IMAGE_PATH = "/assets/img/screenshots/screenshot.png";
 
 /**
  * Normalizes a path to ensure it ends with a trailing slash.
@@ -28,44 +25,24 @@ export const Seo: React.FC = () => {
 	const location = useLocation();
 	const supportedLangs = useSupportedLanguages();
 
-	const { canonicalUrl, cleanPath, pageDescription, pageKeywords, pageTitle, schemas } =
-		useMemo(() => {
-			// Handle language-prefixed routes to determine the base path
-			const pathParts = location.pathname.split("/").filter(Boolean);
-			const basePath = supportedLangs.includes(pathParts[0])
-				? `/${pathParts.slice(1).join("/")}${pathParts.length > 1 ? "/" : ""}`
-				: location.pathname;
-
-			// Normalize: ensure trailing slash for lookup (except root)
-			const currentPath = basePath === "/" || basePath === "" ? "/" : normalizePath(basePath);
-
-			// Look up metadata for the current path, falling back to root metadata
-			const metadata =
-				seoMetadata[currentPath as keyof typeof seoMetadata] || seoMetadata["/"];
-
-			const pageTitle = t(metadata.titleKey, { defaultValue: "NMS Optimizer" });
-			const pageDescription = t(metadata.descriptionKey);
-			const pageKeywords = t("seo.keywords", { defaultValue: "" });
-
-			const cleanPath = currentPath === "/" ? "" : currentPath;
-
-			const canonicalPath =
-				i18n.language === "en"
-					? normalizePath(currentPath)
-					: `/${i18n.language}${normalizePath(cleanPath)}`;
-			const canonicalUrl = `${BASE_URL}${canonicalPath}`;
-
-			const schemas = getLocalizedSchema(t, i18n.language, canonicalUrl);
-
-			return {
-				canonicalUrl,
-				cleanPath,
-				pageDescription,
-				pageKeywords,
-				pageTitle,
-				schemas,
-			};
-		}, [location.pathname, i18n.language, t, supportedLangs]);
+	const {
+		canonicalUrl,
+		cleanPath,
+		description: pageDescription,
+		keywords: pageKeywords,
+		ogImageAlt,
+		ogImageUrl,
+		ogLocale,
+		schemas,
+		title: pageTitle,
+	} = useMemo(() => {
+		return getPageMetadata({
+			lang: i18n.language,
+			pathname: location.pathname,
+			supportedLanguages: supportedLangs,
+			t,
+		});
+	}, [location.pathname, i18n.language, t, supportedLangs]);
 
 	useEffect(() => {
 		// Clean up any existing JSON-LD schema scripts (from SSG or previous client-side routes)
@@ -114,9 +91,6 @@ export const Seo: React.FC = () => {
 		};
 	}, [schemas]);
 
-	const ogImageUrl = `${BASE_URL}${OG_IMAGE_PATH}`;
-	const ogImageAlt = t("seo.ogImageAlt", { defaultValue: "NMS Optimizer Screenshot" });
-
 	return (
 		<>
 			<title>{pageTitle}</title>
@@ -125,7 +99,11 @@ export const Seo: React.FC = () => {
 			<link href={canonicalUrl} rel="canonical" />
 
 			{/* hreflang tags */}
-			<link href={`${BASE_URL}${cleanPath || "/"}`} hrefLang="x-default" rel="alternate" />
+			<link
+				href={`${DEFAULT_BASE_URL}${cleanPath || "/"}`}
+				hrefLang="x-default"
+				rel="alternate"
+			/>
 			{supportedLangs.map((lang) => {
 				const path =
 					lang === "en"
@@ -133,7 +111,12 @@ export const Seo: React.FC = () => {
 						: `/${lang}${normalizePath(cleanPath)}`;
 
 				return (
-					<link href={`${BASE_URL}${path}`} hrefLang={lang} key={lang} rel="alternate" />
+					<link
+						href={`${DEFAULT_BASE_URL}${path}`}
+						hrefLang={lang}
+						key={lang}
+						rel="alternate"
+					/>
 				);
 			})}
 
@@ -147,7 +130,7 @@ export const Seo: React.FC = () => {
 			<meta content="880" property="og:image:height" />
 			<meta content={ogImageAlt} property="og:image:alt" />
 			<meta content={canonicalUrl} property="og:url" />
-			<meta content={getOgLocale(i18n.language)} property="og:locale" />
+			<meta content={ogLocale} property="og:locale" />
 			{Object.entries(OG_LOCALE_MAP).map(([code, locale]) => {
 				if (code === i18n.language) return null;
 

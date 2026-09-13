@@ -404,7 +404,8 @@
 		"corvette": {
 			"cockpit": "Corvette Cockpit",
 			"ceto": "Ceto-Class Reactor",
-			"habitation": "Habitation Modules"
+			"habitation": "Habitation Modules",
+			"tractor": "Tractor Beam"
 		}
 	},
 	"modules": {
@@ -707,7 +708,7 @@
 		"appDescription": "Optimize No Man's Sky technology layouts using advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, Corvettes, and more.",
 		"genre": "Game Tool",
 		"keywords": "NMS Optimizer, No Man's Sky, adjacency bonus, supercharged slots, NMS layout tool, starship tech layout, multitool build, supercharged slot calculator",
-		"instructionsPageTitle": "How to Optimize Your Tech Layout | NMS Optimizer",
+		"instructionsPageTitle": "How to Optimize Your Tech Layout",
 		"instructionsDescription": "Learn how to use the grid, manage supercharged slots, and understand the Theta/Tau/Sigma module ranking system for optimal No Man's Sky builds.",
 		"aboutPageTitle": "About the Optimization Algorithms | NMS Optimizer",
 		"aboutDescription": "Discover how NMS Optimizer uses advanced algorithms and a high-performance Rust solver to calculate the absolute best module placements for your gear.",

@@ -387,7 +387,8 @@
 		"corvette": {
 			"cockpit": "Korvetten-Cockpit",
 			"ceto": "Ceto-Klasse-Reaktor",
-			"habitation": "Wohnmodule"
+			"habitation": "Wohnmodule",
+			"tractor": "Traktorstrahl"
 		}
 	},
 	"modules": {
@@ -689,7 +690,7 @@
 		"mainPageTitle": "NMS Optimizer: Tech-Layout- & Adjazenzbonus-Rechner",
 		"appDescription": "Optimiere No Man's Sky Technologie-Layouts. Maximiere Adjazenzboni und Boosts für überladene Slots bei Raumschiffen, Multitools und mehr dank smarter Algorithmen.",
 		"keywords": "NMS-Optimierer, No Man's Sky, Adjazenzbonus, überladene Slots, NMS-Layout-Tool, Raumschiff-Tech-Layout, Multitool-Build, Rechner für überladene Slots",
-		"instructionsPageTitle": "So optimierst du dein Tech-Layout | NMS Optimizer",
+		"instructionsPageTitle": "So optimierst du dein Tech-Layout",
 		"instructionsDescription": "Lerne das Raster, überladene Slots und das Theta/Tau/Sigma-System für optimale No Man's Sky Builds kennen.",
 		"aboutPageTitle": "Über die Optimierungsalgorithmen | NMS Optimizer",
 		"aboutDescription": "Erfahre, wie der NMS-Optimierer mit Algorithmen und Rust die absolut besten Modulplatzierungen für dein Gear berechnet.",

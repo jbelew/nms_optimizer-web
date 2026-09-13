@@ -387,7 +387,8 @@
 		"corvette": {
 			"cockpit": "Cabina de Corbeta",
 			"ceto": "Reactor de Clase Ceto",
-			"habitation": "Módulos de Habitabilidad"
+			"habitation": "Módulos de Habitabilidad",
+			"tractor": "Rayo Tractor"
 		}
 	},
 	"modules": {
@@ -689,7 +690,7 @@
 		"mainPageTitle": "NMS Optimizer: Calculadora de Tecnología y Adyacencia NMS",
 		"appDescription": "Optimiza diseños de tecnología de No Man's Sky. Maximiza bonus de adyacencia y ranuras potenciadas para naves, multiherramientas y más con algoritmos avanzados.",
 		"keywords": "NMS Optimizer, No Man's Sky, bonus de adyacencia, ranuras potenciadas, herramienta de diseño NMS, diseño técnico de naves, construcción de multiherramientas, calculadora de ranuras potenciadas",
-		"instructionsPageTitle": "Cómo optimizar tu diseño técnico | NMS Optimizer",
+		"instructionsPageTitle": "Cómo optimizar tu diseño técnico",
 		"instructionsDescription": "Aprende a usar la cuadrícula, gestionar ranuras potenciadas y el sistema Theta/Tau/Sigma para diseños óptimos en No Man's Sky.",
 		"aboutPageTitle": "Sobre los algoritmos de optimización | NMS Optimizer",
 		"aboutDescription": "Descubre cómo NMS Optimizer usa algoritmos avanzados y Rust para calcular la mejor ubicación de módulos para tu equipo.",

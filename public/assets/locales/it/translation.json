@@ -404,7 +404,8 @@
 		"corvette": {
 			"cockpit": "Cabina di Pilotaggio Corvette",
 			"ceto": "Reattore Classe Ceto",
-			"habitation": "Moduli di Abitazione"
+			"habitation": "Moduli di Abitazione",
+			"tractor": "Raggio Traente"
 		}
 	},
 	"modules": {
@@ -707,7 +708,7 @@
 		"appDescription": "Ottimizza i layout tecnologici di No Man's Sky. Massimizza i bonus di adiacenza e gli slot sovraccarichi per Navi Stellari, Multitool e altro ancora.",
 		"genre": "Strumento di Gioco",
 		"keywords": "NMS Optimizer, No Man's Sky, bonus adiacenza, slot sovraccarichi, strumento layout NMS, layout tecnologia nave stellare, configurazione multitool, calcolatore slot sovraccarichi",
-		"instructionsPageTitle": "Come Ottimizzare il Tuo Layout Tecnologico | NMS Optimizer",
+		"instructionsPageTitle": "Come Ottimizzare il Tuo Layout Tecnologico",
 		"instructionsDescription": "Scopri come usare la griglia, gestire gli slot sovraccarichi e comprendere il sistema di classificazione dei moduli Theta/Tau/Sigma per configurazioni ottimali di No Man's Sky.",
 		"aboutPageTitle": "Informazioni sugli Algoritmi di Ottimizzazione | NMS Optimizer",
 		"aboutDescription": "Scopri come NMS Optimizer utilizza algoritmi avanzati e un risolutore Rust ad alte prestazioni per calcolare i migliori posizionamenti assoluti dei moduli per il tuo equipaggiamento.",

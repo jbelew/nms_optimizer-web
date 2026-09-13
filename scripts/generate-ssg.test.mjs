@@ -195,10 +195,14 @@ describe("generate-ssg.mjs", () => {
 			expect(result).toContain('<div id="root"></div>\n\t\t<div class="ssg-fallback" data-prerendered-markdown="true">');
 		});
 
-		it("strips brand suffix from H1 heading in content", async () => {
-			const tWithPipe = vi.fn((key, options) => {
+		it("renders formatted title in head and clean topic in H1 heading for instructions", async () => {
+			const tClean = vi.fn((key, options) => {
 				if (key === "seo.instructionsPageTitle") {
-					return "How to Optimize Your Tech Layout | NMS Optimizer";
+					return "How to Optimize Your Tech Layout";
+				}
+
+				if (key === "appName") {
+					return "NMS Optimizer";
 				}
 
 				return options?.defaultValue || key;
@@ -209,11 +213,35 @@ describe("generate-ssg.mjs", () => {
 				"instructions",
 				baseUrl,
 				mdProcessor,
-				tWithPipe
+				tClean
 			);
 			expect(result).toContain("<title>How to Optimize Your Tech Layout | NMS Optimizer</title>");
 			expect(result).toContain("<h1>How to Optimize Your Tech Layout</h1>");
 			expect(result).not.toContain("<h1>How to Optimize Your Tech Layout | NMS Optimizer</h1>");
+		});
+
+		it("handles legacy un-migrated titles by extracting clean heading", async () => {
+			const tLegacy = vi.fn((key, options) => {
+				if (key === "seo.instructionsPageTitle") {
+					return "How to Optimize Your Tech Layout | NMS Optimizer";
+				}
+
+				if (key === "appName") {
+					return "NMS Optimizer";
+				}
+
+				return options?.defaultValue || key;
+			});
+			const result = await generateSsgModule.generatePage(
+				indexHtml,
+				"en",
+				"instructions",
+				baseUrl,
+				mdProcessor,
+				tLegacy
+			);
+			expect(result).toContain("<title>How to Optimize Your Tech Layout | NMS Optimizer</title>");
+			expect(result).toContain("<h1>How to Optimize Your Tech Layout</h1>");
 		});
 	});
 });

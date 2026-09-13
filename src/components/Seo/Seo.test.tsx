@@ -51,4 +51,16 @@ describe("Seo Component", () => {
 		expect(script).not.toBeNull();
 		expect(script?.textContent).toContain("WebSite");
 	});
+
+	it("should render formatted title for the instructions tracer route", () => {
+		i18n.addResource(
+			"en",
+			"translation",
+			"seo.instructionsPageTitle",
+			"How to Optimize Your Tech Layout"
+		);
+		i18n.addResource("en", "translation", "appName", "NMS Optimizer");
+		renderSeo("/instructions/");
+		expect(document.title).toBe("How to Optimize Your Tech Layout | NMS Optimizer");
+	});
 });

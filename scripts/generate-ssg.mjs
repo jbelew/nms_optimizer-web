@@ -11,8 +11,8 @@ import i18nextFsBackend from "i18next-fs-backend";
 
 import packageJson from "../package.json" with { type: "json" };
 import { KNOWN_DIALOGS, SUPPORTED_LANGUAGES, TARGET_HOST } from "../shared/config.js";
-import { seoMetadata } from "../shared/seo-metadata.js";
-import { getLocalizedSchema, getOgLocale, OG_LOCALE_MAP } from "../shared/seo-schema.js";
+import { getPageMetadata } from "../shared/page-metadata.js";
+import { getOgLocale, OG_LOCALE_MAP } from "../shared/seo-schema.js";
 import { createMarkdownProcessor } from "./markdown-processor.mjs";
 
 const DIST_DIR = path.resolve("dist");
@@ -101,24 +101,24 @@ export async function generatePage(
 	ssgHeader = ""
 ) {
 	const pathname = pageName === "" ? "/" : `/${pageName}/`;
-	const metadata = seoMetadata[pathname];
+	const pageMetadata = getPageMetadata({
+		baseUrl,
+		lang,
+		pathname,
+		t,
+		version: packageJson.version,
+	});
 
 	const appName = t("appName");
-	const pageTitle = metadata ? t(metadata.titleKey, { defaultValue: appName }) : appName;
-	const pageDescription = metadata ? t(metadata.descriptionKey) : "";
-	const pageKeywords = t("seo.keywords", { defaultValue: "" });
-	const ogImageAlt = t("seo.ogImageAlt", { defaultValue: "NMS Optimizer Screenshot" });
-
-	const cleanPath = pathname === "/" ? "" : pathname;
-	const normalizePath = (p) => (p.endsWith("/") ? p : `${p}/`);
-	const canonicalPath =
-		lang === "en" ? normalizePath(cleanPath || "/") : `/${lang}${normalizePath(cleanPath || "/")}`;
-	const canonicalUrl = new URL(canonicalPath, baseUrl).href;
+	const pageTitle = pageMetadata.title;
+	const pageDescription = pageMetadata.description;
+	const pageKeywords = pageMetadata.keywords;
+	const ogImageAlt = pageMetadata.ogImageAlt;
 
 	const seoTags = generateSeoTags(pathname, lang, baseUrl, t);
 
 	// Prepare JSON-LD Schemas
-	const schemas = getLocalizedSchema(t, lang, canonicalUrl, packageJson.version);
+	const schemas = pageMetadata.schemas;
 	const softwareSchema = schemas.find((s) => s["@type"] === "SoftwareApplication");
 	const websiteSchema = schemas.find((s) => s["@type"] === "WebSite");
 	const webPageSchema = schemas.find((s) => s["@type"] === "WebPage");
@@ -135,7 +135,7 @@ export async function generatePage(
 		let renderedHtml = mdProcessor(markdownContent);
 		const navigationHtml = generateNavigationLinks(lang, pageName, t);
 
-		const contentHeading = pageTitle.replace(/\s*\|\s*.*$/, "").trim() || pageTitle;
+		const contentHeading = pageMetadata.heading;
 		const h1Regex = /<h1[^>]*?>([\s\S]*?)<\/h1>/i;
 
 		if (h1Regex.test(renderedHtml)) {

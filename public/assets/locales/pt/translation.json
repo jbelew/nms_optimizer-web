@@ -387,7 +387,8 @@
 		"corvette": {
 			"cockpit": "Cabine de Corveta",
 			"ceto": "Reator Classe-Ceto",
-			"habitation": "Módulos de Habitação"
+			"habitation": "Módulos de Habitação",
+			"tractor": "Raio Trator"
 		}
 	},
 	"modules": {
@@ -689,7 +690,7 @@
 		"mainPageTitle": "NMS Optimizer: Calculadora de Tecnologia e Adjacência NMS",
 		"appDescription": "Otimize layouts de tecnologia no No Man's Sky. Maximize bônus de adjacência e slots sobrecarregados para naves, multiferramentas e mais com algoritmos avançados.",
 		"keywords": "NMS Optimizer, No Man's Sky, bônus de adjacência, espaços sobrecarregados, ferramenta de layout NMS, layout técnico de naves, build de multiferramenta, calculadora de espaço sobrecarregado",
-		"instructionsPageTitle": "Como otimizar seu layout técnico | NMS Optimizer",
+		"instructionsPageTitle": "Como otimizar seu layout técnico",
 		"instructionsDescription": "Aprenda a usar a grade, gerenciar espaços sobrecarregados e o sistema Theta/Tau/Sigma para builds de No Man's Sky.",
 		"aboutPageTitle": "Sobre os algoritmos de otimização | NMS Optimizer",
 		"aboutDescription": "Descubra como o NMS Optimizer usa algoritmos e Rust para calcular o melhor posicionamento de módulos para seu equipamento.",
