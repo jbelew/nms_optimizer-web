@@ -19,7 +19,12 @@ vi.mock("vite-plugin-splash-screen/runtime", () => ({
 // Mock translation
 vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
-		t: (key: string) => key,
+		t: (key: string, options?: { defaultValue?: string }) => {
+			if (key === "appName") return "NMS Optimizer";
+			if (key === "notFound.pageTitle") return options?.defaultValue || "404: Not Found";
+
+			return options?.defaultValue || key;
+		},
 	}),
 }));
 
@@ -31,6 +36,7 @@ vi.mock("@/utils/analytics/tracking", () => ({
 describe("NotFound component", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
+		document.title = "";
 	});
 
 	it("should render the 404 page content, logo, and navigation link", () => {
@@ -59,20 +65,20 @@ describe("NotFound component", () => {
 		markReadySpy.mockRestore();
 	});
 
-	it("should set document title and track analytics page_view and not_found events", () => {
+	it("should render declarative title and track analytics page_view and not_found events", () => {
 		render(
 			<MemoryRouter>
 				<NotFound />
 			</MemoryRouter>
 		);
 
-		expect(document.title).toBe("404 - notFound.title");
+		expect(document.title).toBe("404: Not Found | NMS Optimizer");
 		expect(sendEvent).toHaveBeenCalledWith(
 			expect.objectContaining({
 				action: "page_view",
 				category: "navigation",
 				nonInteraction: true,
-				page_title: "404 - notFound.title",
+				page_title: "404: Not Found | NMS Optimizer",
 			})
 		);
 		expect(sendEvent).toHaveBeenCalledWith({

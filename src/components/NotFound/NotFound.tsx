@@ -13,6 +13,7 @@
 
 import type { FC } from "react";
 import { useEffect } from "react";
+import { formatDocumentTitle } from "@shared/page-metadata.js";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -28,12 +29,14 @@ import { Button } from "@radix-ui/themes";
  *
  * @remarks
  * It provides a stylized "Atlas" interface to inform users that the requested
- * page doesn't exist. It also handles automatic SEO title updates, analytics
- * tracking for broken links, and ensuring the splash screen is dismissed by
- * signaling readiness to the {@link lifecycleCoordinator}.
+ * page doesn't exist. It resolves its document title and analytics payload
+ * through the unified Page Metadata Module, renders declarative title and
+ * meta tags, tracks broken link navigation via analytics, and ensures the splash
+ * screen is dismissed by signaling readiness to the {@link lifecycleCoordinator}.
  *
  * @returns {JSX.Element} The rendered 404 page.
  *
+ * @see {@link formatDocumentTitle}
  * @see {@link sendEvent}
  * @see {@link lifecycleCoordinator}
  * @see {@link ./NotFound.test.tsx Unit Tests}
@@ -51,11 +54,12 @@ import { Button } from "@radix-ui/themes";
 const NotFound: FC = () => {
 	const { t } = useTranslation();
 
+	const appName = t("appName", { defaultValue: "NMS Optimizer" });
+	const notFoundTopic = t("notFound.pageTitle", { defaultValue: "404: Not Found" });
+	const pageTitle = formatDocumentTitle(notFoundTopic, appName);
+
 	useEffect(() => {
 		lifecycleCoordinator.markReady();
-
-		const pageTitle = `404 - ${t("notFound.title")}`;
-		document.title = pageTitle;
 
 		sendEvent({
 			action: "page_view",
@@ -71,10 +75,11 @@ const NotFound: FC = () => {
 			category: "navigation",
 			nonInteraction: true,
 		});
-	}, [t]);
+	}, [pageTitle]);
 
 	return (
 		<div className="not-found w-full">
+			<title>{pageTitle}</title>
 			<meta content="noindex, nofollow" name="robots" />
 			<div className="not-found__logo mb-4">
 				<svg viewBox="0 0 126.75 126.77" xmlns="http://www.w3.org/2000/svg">

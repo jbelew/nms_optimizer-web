@@ -45,7 +45,12 @@ vi.mock("react-i18next", async () => {
 					},
 				},
 			},
-			t: (str: string) => str,
+			t: (str: string, options?: { defaultValue?: string }) => {
+				if (str === "appName") return "NMS Optimizer";
+				if (str === "notFound.pageTitle") return options?.defaultValue || "404: Not Found";
+
+				return options?.defaultValue || str;
+			},
 		}),
 	};
 });
@@ -217,7 +222,7 @@ describe("App", () => {
 				expect(sendEvent).toHaveBeenCalledWith(
 					expect.objectContaining({
 						action: "page_view",
-						page_title: expect.stringContaining("404"),
+						page_title: "404: Not Found | NMS Optimizer",
 					})
 				);
 				expect(sendEvent).toHaveBeenCalledWith(
@@ -264,13 +269,23 @@ describe("App", () => {
 			});
 		});
 
-		test("should show error when showError is true and errorType is fatal", async () => {
-			// We can't easily test this without modifying the actual store mock,
-			// but we verify that the component structure is correct
+		test("should dispatch telemetry and format document title when status is fatal error", async () => {
+			useOptimizeStore.setState({
+				status: { details: null, severity: "fatal", type: "error" },
+			});
 			renderApp(["/"]);
+
 			await vi.waitFor(() => {
-				// Component renders without error
-				expect(true).toBe(true);
+				expect(sendEvent).toHaveBeenCalledWith(
+					expect.objectContaining({
+						action: "page_view",
+						category: "engagement",
+						nonInteraction: true,
+						page: "/#error",
+						page_title: "dialogs.titles.serverError | NMS Optimizer",
+					})
+				);
+				expect(document.title).toBe("dialogs.titles.serverError | NMS Optimizer");
 			});
 		});
 

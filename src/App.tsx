@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { Button } from "@radix-ui/themes";
+import { formatDocumentTitle } from "@shared/page-metadata.js";
 import { useTranslation } from "react-i18next";
 import { Outlet, useLocation } from "react-router-dom";
 
@@ -78,6 +79,7 @@ const PerformanceRoute = lazyNamed(() => import("./routes/PerformanceRoute"), "P
  *
  * @see {@link App}
  * @see {@link useDialog}
+ * @see {@link formatDocumentTitle}
  *
  * @category Components
  *
@@ -122,13 +124,18 @@ const AppContent: FC = () => {
 	// Track error screen if shown
 	useEffect(() => {
 		if (status.type === "error" && status.severity === "fatal") {
+			const appName = t("appName", { defaultValue: "NMS Optimizer" });
+			const errorTopic = t("dialogs.titles.serverError");
+			const pageTitle = formatDocumentTitle(errorTopic, appName);
+			document.title = pageTitle;
+
 			sendEvent({
 				action: "page_view",
 				category: "engagement",
 				nonInteraction: true,
 				page: `${location.pathname}${location.search}#error`,
 				page_location: window.location.href,
-				page_title: `NMS Optimizer: ${t("dialogs.titles.serverError")}`,
+				page_title: pageTitle,
 			});
 		}
 	}, [status, sendEvent, t, location.pathname, location.search]);

@@ -125,6 +125,24 @@ describe("page-metadata.js", () => {
 			expect(formatDocumentTitle("", "NMS Optimizer")).toBe("NMS Optimizer");
 			expect(formatDocumentTitle("NMS Optimizer", "NMS Optimizer")).toBe("NMS Optimizer");
 		});
+
+		it("formats error routes and status codes according to brand convention", () => {
+			expect(formatDocumentTitle("404: Not Found", "NMS Optimizer")).toBe(
+				"404: Not Found | NMS Optimizer"
+			);
+			expect(formatDocumentTitle("500: Application Error", "NMS Optimizer")).toBe(
+				"500: Application Error | NMS Optimizer"
+			);
+			expect(formatDocumentTitle("Server Error!", "NMS Optimizer")).toBe(
+				"Server Error! | NMS Optimizer"
+			);
+			expect(formatDocumentTitle("404: Nicht gefunden", "NMS Optimizer")).toBe(
+				"404: Nicht gefunden | NMS Optimizer"
+			);
+			expect(formatDocumentTitle("¡Error del Servidor!", "NMS Optimizer")).toBe(
+				"¡Error del Servidor! | NMS Optimizer"
+			);
+		});
 	});
 
 	describe("getPageMetadata", () => {
