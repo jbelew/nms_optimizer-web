@@ -1,3 +1,10 @@
+## [7.8.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.8.0...v7.8.1) (2026-09-14)
+
+
+### Bug Fixes
+
+* **seo:** pull sitemap image titles dynamically from getPageMetadata ([574d3e9](https://github.com/jbelew/nms_optimizer-web/commit/574d3e9a19cedab10cc157e6d29a35bc597569ae))
+
 # [7.8.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.7.4...v7.8.0) (2026-09-14)
 
 
