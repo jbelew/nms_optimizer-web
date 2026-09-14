@@ -16,6 +16,10 @@ updates:
           - "bun"
           - "javascript"
       groups:
+          vitest:
+              patterns:
+                  - "vitest*"
+                  - "@vitest/*"
           dev-dependencies:
               dependency-type: "development"
               update-types: ["minor", "patch"]
