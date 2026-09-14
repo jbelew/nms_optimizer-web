@@ -217,6 +217,84 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://nms-optimizer.app/changelog/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/changelog/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/changelog/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/changelog/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/changelog/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/changelog/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/changelog/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/changelog/" />
+    <lastmod>2026-09-03</lastmod>
+    <priority>0.5</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/es/changelog/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/changelog/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/changelog/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/changelog/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/changelog/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/changelog/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/changelog/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/changelog/" />
+    <lastmod>2026-09-03</lastmod>
+    <priority>0.5</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/fr/changelog/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/changelog/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/changelog/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/changelog/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/changelog/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/changelog/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/changelog/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/changelog/" />
+    <lastmod>2026-09-03</lastmod>
+    <priority>0.5</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/de/changelog/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/changelog/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/changelog/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/changelog/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/changelog/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/changelog/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/changelog/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/changelog/" />
+    <lastmod>2026-09-03</lastmod>
+    <priority>0.5</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/pt/changelog/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/changelog/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/changelog/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/changelog/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/changelog/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/changelog/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/changelog/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/changelog/" />
+    <lastmod>2026-09-03</lastmod>
+    <priority>0.5</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/it/changelog/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/changelog/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/changelog/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/changelog/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/changelog/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/changelog/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/changelog/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/changelog/" />
+    <lastmod>2026-09-03</lastmod>
+    <priority>0.5</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://nms-optimizer.app/instructions/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/instructions/" />
     <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/instructions/" />
@@ -325,80 +403,80 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://nms-optimizer.app/changelog/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/changelog/" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/changelog/" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/changelog/" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/changelog/" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/changelog/" />
-    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/changelog/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/changelog/" />
-    <lastmod>2026-09-03</lastmod>
+    <loc>https://nms-optimizer.app/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/privacy/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/privacy/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/privacy/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/privacy/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/privacy/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/privacy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/privacy/" />
+    <lastmod>2026-04-21</lastmod>
     <priority>0.5</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://nms-optimizer.app/es/changelog/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/changelog/" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/changelog/" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/changelog/" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/changelog/" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/changelog/" />
-    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/changelog/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/changelog/" />
-    <lastmod>2026-09-03</lastmod>
+    <loc>https://nms-optimizer.app/es/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/privacy/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/privacy/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/privacy/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/privacy/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/privacy/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/privacy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/privacy/" />
+    <lastmod>2026-04-21</lastmod>
     <priority>0.5</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://nms-optimizer.app/fr/changelog/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/changelog/" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/changelog/" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/changelog/" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/changelog/" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/changelog/" />
-    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/changelog/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/changelog/" />
-    <lastmod>2026-09-03</lastmod>
+    <loc>https://nms-optimizer.app/fr/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/privacy/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/privacy/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/privacy/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/privacy/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/privacy/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/privacy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/privacy/" />
+    <lastmod>2026-04-21</lastmod>
     <priority>0.5</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://nms-optimizer.app/de/changelog/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/changelog/" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/changelog/" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/changelog/" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/changelog/" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/changelog/" />
-    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/changelog/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/changelog/" />
-    <lastmod>2026-09-03</lastmod>
+    <loc>https://nms-optimizer.app/de/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/privacy/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/privacy/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/privacy/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/privacy/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/privacy/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/privacy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/privacy/" />
+    <lastmod>2026-04-21</lastmod>
     <priority>0.5</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://nms-optimizer.app/pt/changelog/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/changelog/" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/changelog/" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/changelog/" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/changelog/" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/changelog/" />
-    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/changelog/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/changelog/" />
-    <lastmod>2026-09-03</lastmod>
+    <loc>https://nms-optimizer.app/pt/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/privacy/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/privacy/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/privacy/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/privacy/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/privacy/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/privacy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/privacy/" />
+    <lastmod>2026-04-21</lastmod>
     <priority>0.5</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://nms-optimizer.app/it/changelog/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/changelog/" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/changelog/" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/changelog/" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/changelog/" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/changelog/" />
-    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/changelog/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/changelog/" />
-    <lastmod>2026-09-03</lastmod>
+    <loc>https://nms-optimizer.app/it/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/privacy/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/privacy/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/privacy/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/privacy/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/privacy/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/privacy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/privacy/" />
+    <lastmod>2026-04-21</lastmod>
     <priority>0.5</priority>
     <changefreq>monthly</changefreq>
   </url>
@@ -494,7 +572,7 @@
       <image:title>NMS Optimizer: Community Meta Stats</image:title>
       <image:caption>Community statistics and supercharged slot tech meta for No Man&apos;s Sky.</image:caption>
     </image:image>
-    <lastmod>2026-05-19</lastmod>
+    <lastmod>2026-09-13</lastmod>
     <priority>0.5</priority>
     <changefreq>monthly</changefreq>
   </url>
@@ -512,7 +590,7 @@
       <image:title>NMS Optimizer: Community Meta Stats</image:title>
       <image:caption>Community statistics and supercharged slot tech meta for No Man&apos;s Sky.</image:caption>
     </image:image>
-    <lastmod>2026-05-19</lastmod>
+    <lastmod>2026-09-13</lastmod>
     <priority>0.5</priority>
     <changefreq>monthly</changefreq>
   </url>
@@ -530,7 +608,7 @@
       <image:title>NMS Optimizer: Community Meta Stats</image:title>
       <image:caption>Community statistics and supercharged slot tech meta for No Man&apos;s Sky.</image:caption>
     </image:image>
-    <lastmod>2026-05-19</lastmod>
+    <lastmod>2026-09-13</lastmod>
     <priority>0.5</priority>
     <changefreq>monthly</changefreq>
   </url>
@@ -548,7 +626,7 @@
       <image:title>NMS Optimizer: Community Meta Stats</image:title>
       <image:caption>Community statistics and supercharged slot tech meta for No Man&apos;s Sky.</image:caption>
     </image:image>
-    <lastmod>2026-05-19</lastmod>
+    <lastmod>2026-09-13</lastmod>
     <priority>0.5</priority>
     <changefreq>monthly</changefreq>
   </url>
@@ -566,7 +644,7 @@
       <image:title>NMS Optimizer: Community Meta Stats</image:title>
       <image:caption>Community statistics and supercharged slot tech meta for No Man&apos;s Sky.</image:caption>
     </image:image>
-    <lastmod>2026-05-19</lastmod>
+    <lastmod>2026-09-13</lastmod>
     <priority>0.5</priority>
     <changefreq>monthly</changefreq>
   </url>
@@ -584,85 +662,7 @@
       <image:title>NMS Optimizer: Community Meta Stats</image:title>
       <image:caption>Community statistics and supercharged slot tech meta for No Man&apos;s Sky.</image:caption>
     </image:image>
-    <lastmod>2026-05-19</lastmod>
-    <priority>0.5</priority>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>https://nms-optimizer.app/privacy/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/privacy/" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/privacy/" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/privacy/" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/privacy/" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/privacy/" />
-    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/privacy/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/privacy/" />
-    <lastmod>2026-04-21</lastmod>
-    <priority>0.5</priority>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>https://nms-optimizer.app/es/privacy/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/privacy/" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/privacy/" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/privacy/" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/privacy/" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/privacy/" />
-    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/privacy/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/privacy/" />
-    <lastmod>2026-04-21</lastmod>
-    <priority>0.5</priority>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>https://nms-optimizer.app/fr/privacy/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/privacy/" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/privacy/" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/privacy/" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/privacy/" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/privacy/" />
-    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/privacy/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/privacy/" />
-    <lastmod>2026-04-21</lastmod>
-    <priority>0.5</priority>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>https://nms-optimizer.app/de/privacy/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/privacy/" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/privacy/" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/privacy/" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/privacy/" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/privacy/" />
-    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/privacy/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/privacy/" />
-    <lastmod>2026-04-21</lastmod>
-    <priority>0.5</priority>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>https://nms-optimizer.app/pt/privacy/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/privacy/" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/privacy/" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/privacy/" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/privacy/" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/privacy/" />
-    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/privacy/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/privacy/" />
-    <lastmod>2026-04-21</lastmod>
-    <priority>0.5</priority>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>https://nms-optimizer.app/it/privacy/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/privacy/" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/privacy/" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/privacy/" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/privacy/" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/privacy/" />
-    <xhtml:link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/privacy/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/privacy/" />
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-09-13</lastmod>
     <priority>0.5</priority>
     <changefreq>monthly</changefreq>
   </url>
