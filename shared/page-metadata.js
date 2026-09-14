@@ -8,8 +8,10 @@
  */
 
 import { SUPPORTED_LANGUAGES, TARGET_HOST } from "./config.js";
-import { seoMetadata } from "./seo-metadata.js";
+import { getPageByPath, PAGE_REGISTRY, parseRoutePath } from "./page-registry.js";
 import { getLocalizedSchema, getOgLocale } from "./seo-schema.js";
+
+export { parseRoutePath };
 
 /**
  * Default base URL for production metadata and canonical links.
@@ -52,46 +54,38 @@ export const DEFAULT_OG_IMAGE_PATH = "/assets/img/screenshots/screenshot.png";
  */
 
 /**
- * @typedef {Object} ParsedRoutePath
- * @property {string} cleanPath - Normalized route path without language prefix, e.g. "/instructions/" or "/".
- * @property {string} lang - Detected language code from path prefix or default "en".
- */
-
-/**
- * Parses and normalizes a pathname, extracting any language prefix and ensuring consistent trailing slashes.
+ * Formats an error code and message into a standardized document title according to the error title policy.
  *
  * @remarks
- * Handles paths with or without leading slashes, language prefixes (e.g. `/es/instructions/`),
- * and bare route names (e.g. `instructions`).
+ * Enforces the `"${code}: ${message} | ${appName}"` invariant for application error pages.
  *
- * @param {string} [pathname=""] - The raw pathname or route identifier.
- * @param {string[]} [supportedLanguages=SUPPORTED_LANGUAGES] - Array of supported language codes.
- * @returns {ParsedRoutePath} The parsed route path object.
+ * @param {number | string} code - The HTTP or application error status code (e.g., 404, 500).
+ * @param {string} [message=""] - The localized error message or description.
+ * @param {string} [appName="NMS Optimizer"] - The application brand name.
+ * @returns {string} The fully formatted error document title.
+ *
+ * @category Utilities
  *
  * @example
  * ```ts
- * parseRoutePath("/es/instructions/");
- * // returns { cleanPath: "/instructions/", lang: "es" }
+ * formatErrorDocumentTitle(404, "Not Found", "NMS Optimizer");
+ * // returns "404: Not Found | NMS Optimizer"
  * ```
  */
-export const parseRoutePath = (pathname = "", supportedLanguages = SUPPORTED_LANGUAGES) => {
-	const raw = String(pathname).trim().split("?")[0].split("#")[0];
-	const parts = raw.split("/").filter(Boolean);
+export const formatErrorDocumentTitle = (code, message = "", appName = "NMS Optimizer") => {
+	const trimmed = String(message).trim();
+	const codeStr = code ? String(code) : "";
+	const prefix = codeStr ? `${codeStr}: ` : "";
 
-	let lang = "en";
-	let pathParts = parts;
+	const topic = extractContentHeading(trimmed, appName) || trimmed;
+	const cleanTopic =
+		codeStr && topic.startsWith(prefix) ? topic.slice(prefix.length).trim() : topic;
 
-	if (parts.length > 0 && supportedLanguages.includes(parts[0])) {
-		lang = parts[0];
-		pathParts = parts.slice(1);
+	if (!cleanTopic) {
+		return codeStr ? `${codeStr} | ${appName}` : appName;
 	}
 
-	const cleanPath = pathParts.length === 0 ? "/" : `/${pathParts.join("/")}/`;
-
-	return {
-		cleanPath,
-		lang,
-	};
+	return `${prefix}${cleanTopic} | ${appName}`;
 };
 
 /**
@@ -176,8 +170,10 @@ export const formatDocumentTitle = (topic = "", appName = "NMS Optimizer") => {
  * @param {PageMetadataOptions} options - Configuration options and translation functions.
  * @returns {PageMetadata} The resolved page metadata record.
  *
+ * @see {@link formatErrorDocumentTitle}
  * @see {@link getLocalizedSchema}
- * @see {@link seoMetadata}
+ * @see {@link getPageByPath}
+ * @see {@link PAGE_REGISTRY}
  *
  * @example
  * ```ts
@@ -204,19 +200,19 @@ export const getPageMetadata = (options) => {
 	const cleanPath = parsed.cleanPath;
 	const lookupPath = cleanPath;
 
-	const metadata = seoMetadata[lookupPath] || seoMetadata["/"] || {};
+	const page = getPageByPath(lookupPath, supportedLanguages) || PAGE_REGISTRY.home;
 	const appName = t("appName", { defaultValue: "NMS Optimizer" });
 	const isRoot = lookupPath === "/";
 
-	const rawTitle = metadata.titleKey
-		? t(metadata.titleKey, { defaultValue: isRoot ? appName : "" })
+	const rawTitle = page.seoTitleKey
+		? t(page.seoTitleKey, { defaultValue: isRoot ? appName : "" })
 		: appName;
 
 	const heading = extractContentHeading(rawTitle, appName) || appName;
 
 	const title = formatDocumentTitle(heading, appName);
 
-	const description = metadata.descriptionKey ? t(metadata.descriptionKey) : "";
+	const description = page.seoDescriptionKey ? t(page.seoDescriptionKey) : "";
 	const keywords = t("seo.keywords", { defaultValue: "" });
 
 	const canonicalPath =

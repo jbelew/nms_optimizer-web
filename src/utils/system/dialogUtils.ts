@@ -1,4 +1,5 @@
 // src/utils/system/dialogUtils.ts
+import type { PageName } from "@/routeConfig";
 import { createContext, use } from "react";
 
 /**
@@ -40,21 +41,14 @@ export interface DialogContextType {
 }
 
 /**
- * Union type of all valid routed dialog identifiers.
+ * Union type of all valid routed dialog identifiers derived from the Unified Page Registry.
  *
  * @see {@link import('@/context/dialogContext').DialogProvider}
+ * @see {@link PageName}
  *
  * @category Dialog
  */
-export type DialogType =
-	| "about"
-	| "changelog"
-	| "instructions"
-	| "performance"
-	| "privacy"
-	| "translation"
-	| "userstats"
-	| null;
+export type DialogType = null | PageName;
 
 /**
  * React Context for managing and providing global dialog-related state.

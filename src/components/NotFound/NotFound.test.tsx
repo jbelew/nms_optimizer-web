@@ -21,7 +21,7 @@ vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
 		t: (key: string, options?: { defaultValue?: string }) => {
 			if (key === "appName") return "NMS Optimizer";
-			if (key === "notFound.pageTitle") return options?.defaultValue || "404: Not Found";
+			if (key === "notFound.pageTitle") return options?.defaultValue || "Not Found";
 
 			return options?.defaultValue || key;
 		},

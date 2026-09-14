@@ -2,11 +2,13 @@ import {
 	CounterClockwiseClockIcon,
 	DownloadIcon,
 	ExclamationTriangleIcon,
+	EyeNoneIcon,
 	GlobeIcon,
 	InfoCircledIcon,
 	PieChartIcon,
 	QuestionMarkCircledIcon,
 	ReloadIcon,
+	RocketIcon,
 	Share1Icon,
 } from "@radix-ui/react-icons";
 import { describe, expect, test } from "vitest";
@@ -63,6 +65,19 @@ describe("iconRegistry", () => {
 			const result = getDialogIconAndStyle("dialogs.titles.userStats");
 
 			expect(result.IconComponent).toBe(PieChartIcon);
+		});
+
+		test("should return RocketIcon for performance dialog", () => {
+			const result = getDialogIconAndStyle("dialogs.titles.performance");
+
+			expect(result.IconComponent).toBe(RocketIcon);
+			expect(result.style).toEqual({ color: "var(--cyan-track)" });
+		});
+
+		test("should return EyeNoneIcon for privacy dialog", () => {
+			const result = getDialogIconAndStyle("dialogs.titles.privacy");
+
+			expect(result.IconComponent).toBe(EyeNoneIcon);
 		});
 
 		test("should return ExclamationTriangleIcon for optimizationAlert dialog", () => {

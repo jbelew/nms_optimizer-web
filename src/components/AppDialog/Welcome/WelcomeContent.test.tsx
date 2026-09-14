@@ -9,10 +9,11 @@ import { DialogContext } from "@/utils/system/dialogUtils";
 
 import WelcomeContent from "./WelcomeContent";
 
+const mockSendEvent = vi.fn();
 vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
 	useAnalytics: () => ({
 		sendDeferredEvent: vi.fn(),
-		sendEvent: vi.fn(),
+		sendEvent: mockSendEvent,
 	}),
 }));
 
@@ -59,6 +60,29 @@ const mockDialogContext: DialogContextType = {
 };
 
 describe("WelcomeContent", () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
+	it("dispatches page view analytics with standardized title on mount", () => {
+		const onClose = vi.fn();
+		render(
+			<DialogContext.Provider value={mockDialogContext}>
+				<Theme>
+					<WelcomeContent onClose={onClose} />
+				</Theme>
+			</DialogContext.Provider>
+		);
+
+		expect(mockSendEvent).toHaveBeenCalledWith(
+			expect.objectContaining({
+				action: "page_view",
+				category: "engagement",
+				page_title: "dialogs.titles.welcome | appName",
+			})
+		);
+	});
+
 	it("renders correctly with BEM classes", () => {
 		const onClose = vi.fn();
 		const { container } = render(

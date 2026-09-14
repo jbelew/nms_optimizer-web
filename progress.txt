@@ -108,3 +108,4 @@ Key Learnings:
 2026-09-13: feat(seo): establish deep page metadata module with tracer-bullet route (#753)
 2026-09-13: feat(seo): migrate all content and dialog routes to naked topics and deep metadata (#754)
 2026-09-13: feat(seo): unify 404, fatal error, and static fallback metadata behind deep seam (#755)
+2026-09-13: refactor(routing): consolidate routed dialog definitions into unified page registry (#756)

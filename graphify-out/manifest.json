@@ -550,8 +550,8 @@
     "semantic_hash": ""
   },
   "scripts/generate-ssg.mjs": {
-    "mtime": 1789337772.8725328,
-    "ast_hash": "e0fb270ac7773291c376aca906eb1d57",
+    "mtime": 1789344192.2418408,
+    "ast_hash": "213a8ca1fc40e427af9fdce9d3e59054",
     "semantic_hash": ""
   },
   "scripts/generate-ssg.test.mjs": {
@@ -630,8 +630,8 @@
     "semantic_hash": ""
   },
   "scripts/spa-routes.test.mjs": {
-    "mtime": 1778893059.0,
-    "ast_hash": "1d4ab18fabf752f4bd902660f5cc15ab",
+    "mtime": 1789343966.9953625,
+    "ast_hash": "259f58d7dd4dbaca59bbcd8034ab64fd",
     "semantic_hash": ""
   },
   "scripts/tachometer/fcp.json": {
@@ -675,13 +675,8 @@
     "semantic_hash": ""
   },
   "shared/config.js": {
-    "mtime": 1778893059.0,
-    "ast_hash": "cd687da49c40c8bc2585bf1287dc7dc5",
-    "semantic_hash": ""
-  },
-  "shared/seo-metadata.js": {
-    "mtime": 1778893059.0,
-    "ast_hash": "89fd17b0fb128b3e75bbf78fd352c444",
+    "mtime": 1789344760.141334,
+    "ast_hash": "66a6d516e42b67400b8886a917a26475",
     "semantic_hash": ""
   },
   "shared/seo-schema.js": {
@@ -705,13 +700,13 @@
     "semantic_hash": ""
   },
   "src/components/AppDialog/Base/AppDialog.test.tsx": {
-    "mtime": 1779145165.0,
-    "ast_hash": "e76850ab25787e40375e0eea677f35f0",
+    "mtime": 1789344361.743283,
+    "ast_hash": "be6e0c11d0efc81d0f6d1dadf54ddc58",
     "semantic_hash": ""
   },
   "src/components/AppDialog/Base/AppDialog.tsx": {
-    "mtime": 1788891714.6400673,
-    "ast_hash": "1d3570f63e773061e3f0121c5150e639",
+    "mtime": 1789344361.81766,
+    "ast_hash": "112912d94356465e9e692dde8b6fa678",
     "semantic_hash": ""
   },
   "src/components/AppDialog/BuildName/BuildNameContent.tsx": {
@@ -810,8 +805,8 @@
     "semantic_hash": ""
   },
   "src/components/AppDialog/Performance/PerformanceDialog.tsx": {
-    "mtime": 1779308864.0,
-    "ast_hash": "c1430a21d3b8ff0e0f4a4bae6d2faa79",
+    "mtime": 1789343950.5066454,
+    "ast_hash": "429c0d3ae05d99d689111c3dfa0b85bb",
     "semantic_hash": ""
   },
   "src/components/AppDialog/Performance/PerformanceLayout.tsx": {
@@ -885,8 +880,8 @@
     "semantic_hash": ""
   },
   "src/components/AppDialog/UserStats/UserStatsDialog.tsx": {
-    "mtime": 1779308864.0,
-    "ast_hash": "887db4cef0d786656a6d66065f5da47d",
+    "mtime": 1789343946.2952306,
+    "ast_hash": "fe3f87a6377f382190338843a6771a41",
     "semantic_hash": ""
   },
   "src/components/AppDialog/UserStats/userStatsContent.test.tsx": {
@@ -1360,8 +1355,8 @@
     "semantic_hash": ""
   },
   "src/components/RoutedDialogs/RoutedDialogs.tsx": {
-    "mtime": 1779308864.0,
-    "ast_hash": "80607545c3d38460234229e5d2cb219b",
+    "mtime": 1789343942.2626734,
+    "ast_hash": "c5394108749b6bb60516a3b93c098f47",
     "semantic_hash": ""
   },
   "src/components/Seo/Seo.test.tsx": {
@@ -1630,8 +1625,8 @@
     "semantic_hash": ""
   },
   "src/context/dialogContext.tsx": {
-    "mtime": 1779308864.0,
-    "ast_hash": "e10c67b3f80d5be41c203751ccf1f4fc",
+    "mtime": 1789344365.8222706,
+    "ast_hash": "d631ddfea59933418ebf9bd0c38c0c8d",
     "semantic_hash": ""
   },
   "src/hooks/useAnalytics/useAnalytics.test.ts": {
@@ -1905,13 +1900,13 @@
     "semantic_hash": ""
   },
   "src/routeConfig.ts": {
-    "mtime": 1779145165.0,
-    "ast_hash": "c491604661f806ec913ee030dc4059ba",
+    "mtime": 1789344763.9413972,
+    "ast_hash": "538285db32c13f14e91aa31cca397837",
     "semantic_hash": ""
   },
   "src/routes.tsx": {
-    "mtime": 1779145165.0,
-    "ast_hash": "b04b3708eda810ab0cc0ed040a4234cf",
+    "mtime": 1789343923.2169456,
+    "ast_hash": "2d639f0a152bba9147b409529a608950",
     "semantic_hash": ""
   },
   "src/routes/PerformanceRoute.tsx": {
@@ -2190,13 +2185,13 @@
     "semantic_hash": ""
   },
   "src/utils/icons/iconRegistry.test.ts": {
-    "mtime": 1779145165.0,
-    "ast_hash": "abcfaecd49c85db0d7c47f8f3576812e",
+    "mtime": 1789343999.1141713,
+    "ast_hash": "7f797484b2e3f4b696cc208c809a4b48",
     "semantic_hash": ""
   },
   "src/utils/icons/iconRegistry.ts": {
-    "mtime": 1779145165.0,
-    "ast_hash": "f7902c65c9c45eddf7320ae6b88400ad",
+    "mtime": 1789344090.0992348,
+    "ast_hash": "9fbdf9a7489159d2dde3b53d4f246ebc",
     "semantic_hash": ""
   },
   "src/utils/optimization/buildNameGenerator.test.ts": {
@@ -2235,8 +2230,8 @@
     "semantic_hash": ""
   },
   "src/utils/system/dialogUtils.ts": {
-    "mtime": 1779145165.0,
-    "ast_hash": "36e70635a225b852934404af6a66197b",
+    "mtime": 1789344368.6444051,
+    "ast_hash": "5397b4309753d82c22eb6b2410e95cc8",
     "semantic_hash": ""
   },
   "src/utils/system/hashUtils.test.ts": {
@@ -6930,8 +6925,8 @@
     "semantic_hash": ""
   },
   "progress.txt": {
-    "mtime": 1789339494.2575343,
-    "ast_hash": "458cb8d8a086fdb18c04c9e9fa96c039",
+    "mtime": 1789344484.2660222,
+    "ast_hash": "51aad249f9d2b414dbfcb80ff9a90ec0",
     "semantic_hash": ""
   },
   "public/404.html": {
@@ -13600,13 +13595,23 @@
     "semantic_hash": ""
   },
   "shared/page-metadata.js": {
-    "mtime": 1789339167.8421466,
-    "ast_hash": "15c22e1d6357a10e25bcc7371e493f3b",
+    "mtime": 1789344317.75777,
+    "ast_hash": "5907ecd956079653ef48ea243d45281a",
     "semantic_hash": ""
   },
   "src/utils/page-metadata.test.ts": {
-    "mtime": 1789343028.8013783,
-    "ast_hash": "3bb0c5e660ac3dc4e42abe03688b5459",
+    "mtime": 1789344571.0559406,
+    "ast_hash": "817bc74b29465276a4cf38f4d98e8c82",
+    "semantic_hash": ""
+  },
+  "shared/page-registry.js": {
+    "mtime": 1789344360.1735795,
+    "ast_hash": "610e6756eb847c6791747ac4ef028738",
+    "semantic_hash": ""
+  },
+  "src/components/RoutedDialogs/RoutedDialogs.integration.test.tsx": {
+    "mtime": 1789344364.90626,
+    "ast_hash": "7cf545c0452c6f27c1e6f3e24bd63b40",
     "semantic_hash": ""
   }
 }

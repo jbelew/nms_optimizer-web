@@ -6,9 +6,20 @@ import {
 	DEFAULT_OG_IMAGE_PATH,
 	extractContentHeading,
 	formatDocumentTitle,
+	formatErrorDocumentTitle,
 	getPageMetadata,
 	parseRoutePath,
 } from "../../shared/page-metadata.js";
+import {
+	getAllPages,
+	getPageById,
+	getPageByPath,
+	getRoutedDialogs,
+	PAGE_IDS,
+	PAGE_REGISTRY,
+	ROUTED_DIALOG_IDS,
+	SSG_DIALOG_IDS,
+} from "../../shared/page-registry.js";
 
 describe("page-metadata.js", () => {
 	describe("parseRoutePath", () => {
@@ -142,6 +153,37 @@ describe("page-metadata.js", () => {
 			expect(formatDocumentTitle("¡Error del Servidor!", "NMS Optimizer")).toBe(
 				"¡Error del Servidor! | NMS Optimizer"
 			);
+		});
+	});
+
+	describe("formatErrorDocumentTitle", () => {
+		it("formats error routes and status codes according to ${code}: ${message} | ${appName}", () => {
+			expect(formatErrorDocumentTitle(404, "Not Found", "NMS Optimizer")).toBe(
+				"404: Not Found | NMS Optimizer"
+			);
+			expect(formatErrorDocumentTitle(500, "Application Error", "NMS Optimizer")).toBe(
+				"500: Application Error | NMS Optimizer"
+			);
+			expect(formatErrorDocumentTitle(500, "Server Error!", "NMS Optimizer")).toBe(
+				"500: Server Error! | NMS Optimizer"
+			);
+			expect(formatErrorDocumentTitle(404, "Nicht gefunden", "NMS Optimizer")).toBe(
+				"404: Nicht gefunden | NMS Optimizer"
+			);
+		});
+
+		it("handles legacy prefixed error topics without duplicate codes or brand suffixes", () => {
+			expect(formatErrorDocumentTitle(404, "404: Not Found", "NMS Optimizer")).toBe(
+				"404: Not Found | NMS Optimizer"
+			);
+			expect(
+				formatErrorDocumentTitle(404, "404: Not Found | NMS Optimizer", "NMS Optimizer")
+			).toBe("404: Not Found | NMS Optimizer");
+		});
+
+		it("falls back to code | appName or appName when message is empty", () => {
+			expect(formatErrorDocumentTitle(404, "", "NMS Optimizer")).toBe("404 | NMS Optimizer");
+			expect(formatErrorDocumentTitle("", "", "NMS Optimizer")).toBe("NMS Optimizer");
 		});
 	});
 
@@ -423,6 +465,86 @@ describe("page-metadata.js", () => {
 				expect(meta.heading).toBe("No Man's Sky Tech Layout & Adjacency Calculator");
 				expect(meta.canonicalUrl).toBe("https://nms-optimizer.app/some-unknown-route/");
 			});
+		});
+	});
+
+	describe("page-registry.js", () => {
+		it("declares all expected page definitions with complete properties", () => {
+			const expectedPages = [
+				"about",
+				"changelog",
+				"home",
+				"instructions",
+				"performance",
+				"privacy",
+				"translation",
+				"userstats",
+			];
+
+			expect(PAGE_IDS).toEqual(expectedPages);
+
+			expectedPages.forEach((id) => {
+				const page = PAGE_REGISTRY[id];
+				expect(page).toBeDefined();
+				expect(page.id).toBe(id);
+				expect(page.routePath.startsWith("/")).toBe(true);
+				expect(page.routePath.endsWith("/")).toBe(true);
+				expect(page.seoTitleKey).toBeTruthy();
+				expect(page.seoDescriptionKey).toBeTruthy();
+
+				if (page.isDialog) {
+					expect(page.dialogTitleKey).toBeTruthy();
+					expect(page.iconName).toBeTruthy();
+				}
+			});
+		});
+
+		it("correctly identifies routed modal dialogs", () => {
+			const expectedRouted = [
+				"about",
+				"changelog",
+				"instructions",
+				"performance",
+				"privacy",
+				"translation",
+				"userstats",
+			];
+			expect(ROUTED_DIALOG_IDS).toEqual(expectedRouted);
+
+			const dialogs = getRoutedDialogs();
+			expect(dialogs.map((d) => d.id)).toEqual(expectedRouted);
+			dialogs.forEach((d) => expect(d.isDialog).toBe(true));
+		});
+
+		it("filters SSG dialogs excluding client-only routes", () => {
+			expect(SSG_DIALOG_IDS).not.toContain("performance");
+			expect(SSG_DIALOG_IDS).toContain("about");
+			expect(SSG_DIALOG_IDS).toContain("instructions");
+		});
+
+		it("resolves pages by ID via getPageById", () => {
+			expect(getPageById("about")?.id).toBe("about");
+			expect(getPageById("instructions")?.routePath).toBe("/instructions/");
+			expect(getPageById("non-existent")).toBeUndefined();
+		});
+
+		it("resolves pages by path via getPageByPath across locales and formats", () => {
+			expect(getPageByPath("/")?.id).toBe("home");
+			expect(getPageByPath("")?.id).toBe("home");
+			expect(getPageByPath("/about/")?.id).toBe("about");
+			expect(getPageByPath("/about")?.id).toBe("about");
+			expect(getPageByPath("about")?.id).toBe("about");
+			expect(getPageByPath("/fr/instructions/")?.id).toBe("instructions");
+			expect(getPageByPath("/de/changelog")?.id).toBe("changelog");
+			expect(getPageByPath("/es/")?.id).toBe("home");
+			expect(getPageByPath("/unknown-page")?.id).toBe("home");
+		});
+
+		it("returns all pages via getAllPages", () => {
+			const all = getAllPages();
+			expect(all.length).toBe(8);
+			expect(all.map((p) => p.id)).toContain("home");
+			expect(all.map((p) => p.id)).toContain("about");
 		});
 	});
 });

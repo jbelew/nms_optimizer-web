@@ -22,8 +22,8 @@ interface PerformanceDialogProps {
  *
  * @remarks
  * This component acts as a container for the `PerformanceContent`. It is designed
- * to be code-split along with its charting dependencies. It uses a `wide`
- * layout to accommodate the timeseries Area chart.
+ * to be code-split along with its charting dependencies. It uses configuration
+ * derived from the Unified Page Registry.
  *
  * @param {PerformanceDialogProps} props - Component properties.
  *
@@ -59,9 +59,7 @@ const PerformanceDialog: FC<PerformanceDialogProps> = ({ isOpen, onClose }) => {
 				footer={footer}
 				isOpen={isOpen}
 				onClose={onClose}
-				size="wide"
-				title={t("dialogs.titles.performance", "Performance Metrics")}
-				titleKey="dialogs.titles.performance"
+				pageId="performance"
 			/>
 		</Suspense>
 	);

@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { Button } from "@radix-ui/themes";
-import { formatDocumentTitle } from "@shared/page-metadata.js";
+import { formatErrorDocumentTitle } from "@shared/page-metadata.js";
 import { useTranslation } from "react-i18next";
 import { Outlet, useLocation } from "react-router-dom";
 
@@ -79,7 +79,7 @@ const PerformanceRoute = lazyNamed(() => import("./routes/PerformanceRoute"), "P
  *
  * @see {@link App}
  * @see {@link useDialog}
- * @see {@link formatDocumentTitle}
+ * @see {@link formatErrorDocumentTitle}
  *
  * @category Components
  *
@@ -126,8 +126,7 @@ const AppContent: FC = () => {
 		if (status.type === "error" && status.severity === "fatal") {
 			const appName = t("appName", { defaultValue: "NMS Optimizer" });
 			const errorTopic = t("dialogs.titles.serverError");
-			const pageTitle = formatDocumentTitle(errorTopic, appName);
-			document.title = pageTitle;
+			const pageTitle = formatErrorDocumentTitle(500, errorTopic, appName);
 
 			sendEvent({
 				action: "page_view",
@@ -142,7 +141,16 @@ const AppContent: FC = () => {
 
 	// If an API error occurred during loading, don't render the main app
 	if (isFatal) {
-		return null;
+		const appName = t("appName", { defaultValue: "NMS Optimizer" });
+		const errorTopic = t("dialogs.titles.serverError");
+		const pageTitle = formatErrorDocumentTitle(500, errorTopic, appName);
+
+		return (
+			<>
+				<title>{pageTitle}</title>
+				<meta content="noindex, nofollow" name="robots" />
+			</>
+		);
 	}
 
 	return (

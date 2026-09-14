@@ -2,6 +2,9 @@
  * @file Route configuration constants and metadata.
  */
 
+import { SUPPORTED_LANGUAGES } from "@shared/config.js";
+import { ROUTED_DIALOG_IDS } from "@shared/page-registry.js";
+
 /**
  * The semantic version string of the current build.
  *
@@ -14,20 +17,13 @@ export const build: string = import.meta.env.VITE_BUILD_VERSION ?? "devmode";
 
 /**
  * List of valid page identifiers that can be navigated to as routed modals.
+ * Derived from the Unified Page Registry.
  *
  * @see {@link PageName}
  *
  * @category Routing
  */
-export const pages = [
-	"changelog",
-	"instructions",
-	"about",
-	"translation",
-	"userstats",
-	"privacy",
-	"performance",
-];
+const pages = ROUTED_DIALOG_IDS;
 
 /**
  * List of ISO language codes supported by the router's path prefixing.
@@ -36,7 +32,16 @@ export const pages = [
  *
  * @category Routing
  */
-export const languages = ["en", "es", "fr", "de", "pt", "it"];
+export const languages = SUPPORTED_LANGUAGES;
+
+/**
+ * Union type of all valid page identifiers.
+ *
+ * @see {@link pages}
+ *
+ * @category Routing
+ */
+export type PageName = (typeof pages)[number];
 
 /**
  * Union type of all supported language codes.
@@ -46,15 +51,6 @@ export const languages = ["en", "es", "fr", "de", "pt", "it"];
  * @category Routing
  */
 type LanguageCode = (typeof languages)[number];
-
-/**
- * Union type of all valid page identifiers.
- *
- * @see {@link pages}
- *
- * @category Routing
- */
-type PageName = (typeof pages)[number];
 
 /**
  * Retrieves the application build date string defined at compile time.

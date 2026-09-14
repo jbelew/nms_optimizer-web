@@ -1,6 +1,7 @@
 // src/context/dialogContext.tsx
 import type { DialogType } from "@/utils/system/dialogUtils";
 import React, { useState } from "react";
+import { parseRoutePath, ROUTED_DIALOG_IDS } from "@shared/page-registry.js";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -8,16 +9,8 @@ import { getSupportedLanguages } from "@/hooks/useSupportedLanguages";
 import { safeGetItem, safeSetItem } from "@/utils/browser/environment";
 import { DialogContext } from "@/utils/system/dialogUtils";
 
-/** Set of valid routed dialog identifiers for efficient lookup. */
-const VALID_DIALOGS = new Set<DialogType>([
-	"about",
-	"changelog",
-	"instructions",
-	"performance",
-	"privacy",
-	"translation",
-	"userstats",
-]);
+/** Set of valid routed dialog identifiers for efficient lookup derived from Unified Page Registry. */
+const VALID_DIALOGS = new Set<string>(ROUTED_DIALOG_IDS);
 
 /**
  * Resolves the active dialog type from the given URL pathname.
@@ -45,12 +38,11 @@ const VALID_DIALOGS = new Set<DialogType>([
  * ```
  */
 const getActiveDialogFromPathname = (pathname: string, supportedLangs: string[]): DialogType => {
-	const pathParts = pathname.split("/").filter(Boolean);
-	if (pathParts.length === 0) return null;
-	const firstPart = pathParts[0];
-	const dialogPath = supportedLangs.includes(firstPart) ? pathParts[1] || null : firstPart;
+	const { cleanPath } = parseRoutePath(pathname, supportedLangs);
+	if (cleanPath === "/") return null;
+	const dialogPath = cleanPath.slice(1, -1);
 
-	return VALID_DIALOGS.has(dialogPath as DialogType) ? (dialogPath as DialogType) : null;
+	return VALID_DIALOGS.has(dialogPath) ? (dialogPath as NonNullable<DialogType>) : null;
 };
 
 /**

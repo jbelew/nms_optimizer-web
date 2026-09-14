@@ -1,5 +1,7 @@
 import type { FC } from "react";
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { formatDocumentTitle } from "@shared/page-metadata.js";
+import { useTranslation } from "react-i18next";
 
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useUpdateCheck } from "@/hooks/useUpdateCheck/useUpdateCheck";
@@ -31,6 +33,7 @@ const UpdatePrompt = lazy(() => import("./UpdatePrompt"));
  * ```
  */
 export const UpdatePromptWrapper: FC = () => {
+	const { t } = useTranslation();
 	const { sendEvent } = useAnalytics();
 	const [showUpdatePrompt, setShowUpdatePrompt] = useState(false);
 	const updateSWRef = useRef<((reloadPage?: boolean) => Promise<void>) | undefined>(undefined);
@@ -38,16 +41,22 @@ export const UpdatePromptWrapper: FC = () => {
 	// Centralized update prompt tracking
 	useEffect(() => {
 		if (showUpdatePrompt) {
+			const appName = t("appName", { defaultValue: "NMS Optimizer" });
+			const updateTopic = t("dialogs.titles.updatePrompt", {
+				defaultValue: "Update Available",
+			});
+			const pageTitle = formatDocumentTitle(updateTopic, appName);
+
 			sendEvent({
 				action: "page_view",
 				category: "engagement",
 				nonInteraction: true,
 				page: `${window.location.pathname}${window.location.search}#update`,
 				page_location: window.location.href,
-				page_title: "NMS Optimizer: Update Available",
+				page_title: pageTitle,
 			});
 		}
-	}, [showUpdatePrompt, sendEvent]);
+	}, [showUpdatePrompt, sendEvent, t]);
 
 	useUpdateCheck(
 		useCallback((updateSW: (reloadPage?: boolean) => Promise<void>) => {

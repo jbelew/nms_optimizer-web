@@ -734,7 +734,7 @@
 	},
 	"notFound": {
 		"title": "–kzzkt– 404 –kzzkt–",
-		"pageTitle": "404: Non trouvé",
+		"pageTitle": "Non trouvé",
 		"message": "La page que vous recherchez est introuvable.",
 		"backToMain": "Retour à l'Accueil"
 	},

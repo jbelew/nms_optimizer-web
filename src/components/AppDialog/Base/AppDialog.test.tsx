@@ -169,6 +169,17 @@ describe("AppDialog", () => {
 		});
 	});
 
+	test("should derive titleKey, title, and size from pageId when provided", () => {
+		render(<AppDialog {...defaultProps} pageId="performance" />);
+
+		// Should derive dialogs.titles.performance as titleKey from Page Registry
+		expect(screen.getAllByText("dialogs.titles.performance").length).toBeGreaterThanOrEqual(1);
+
+		// The scrollable section should have pr-4 padding class for routed dialogs
+		const scrollableSection = screen.getByText("Test Content").closest("section");
+		expect(scrollableSection?.className).toContain("pr-4");
+	});
+
 	test("should render Separator element", () => {
 		const { container } = render(<AppDialog {...defaultProps} />);
 

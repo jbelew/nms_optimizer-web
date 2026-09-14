@@ -1,5 +1,6 @@
 import React from "react";
 import { Flex, Text } from "@radix-ui/themes";
+import { formatDocumentTitle } from "@shared/page-metadata.js";
 import { Trans, useTranslation } from "react-i18next";
 
 import DynamicRadixIcon from "@/components/AppDialog/Common/DynamicRadixIcon";
@@ -51,15 +52,19 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onClose }) => {
 
 	// Track welcome screen view on mount
 	React.useEffect(() => {
+		const appName = t("appName", { defaultValue: "NMS Optimizer" });
+		const welcomeTopic = t("dialogs.titles.welcome", { defaultValue: "Welcome" });
+		const pageTitle = formatDocumentTitle(welcomeTopic, appName);
+
 		sendEvent({
 			action: "page_view",
 			category: "engagement",
 			nonInteraction: true,
 			page: `${window.location.pathname}${window.location.search}#welcome`,
 			page_location: window.location.href,
-			page_title: "NMS Optimizer: Welcome",
+			page_title: pageTitle,
 		});
-	}, [sendEvent]);
+	}, [sendEvent, t]);
 
 	/**
 	 * Closes the welcome dialog and immediately opens the instructions dialog.

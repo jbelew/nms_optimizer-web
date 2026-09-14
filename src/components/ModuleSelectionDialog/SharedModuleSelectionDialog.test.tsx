@@ -140,6 +140,7 @@ describe("SharedModuleSelectionDialog", () => {
 			expect.objectContaining({
 				action: "page_view",
 				category: "engagement",
+				page_title: "technologies.hyperdrive Selection | appName",
 			})
 		);
 	});

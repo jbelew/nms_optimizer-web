@@ -4,11 +4,12 @@
  */
 
 import type { RouteObject } from "react-router-dom";
+import { getRoutedDialogs } from "@shared/page-registry.js";
 
 import App from "./App";
 import { RouteError } from "./components/ErrorBoundary/RouteError";
 import { MainAppContent } from "./components/MainAppContent/MainAppContent";
-import { languages, pages } from "./routeConfig";
+import { languages } from "./routeConfig";
 
 /**
  * Lazily loads the 404 Not Found component.
@@ -22,31 +23,32 @@ const NotFound = async () => {
 };
 
 /**
+ * Subpage route patterns derived from the Unified Page Registry.
+ */
+const DIALOG_ROUTE_PATHS: string[] = getRoutedDialogs().flatMap((dialog) => [
+	`${dialog.id}/`,
+	...(dialog.additionalRoutes || []),
+]);
+
+/**
  * Generates route objects for each functional page (about, instructions, etc.).
  *
  * @remarks
  * These are rendered via the `MainAppContent` component which handles modal display.
- *
- * @see {@link pages}
+ * Consumes the Unified Page Registry dynamically.
  *
  * @category Routing
  */
-const pageRoutes: RouteObject[] = [
-	...pages.map((page) => ({
-		Component: MainAppContent,
-		path: `${page}/`,
-	})),
-	{
-		Component: MainAppContent,
-		path: "performance/:metric/",
-	},
-];
+const pageRoutes: RouteObject[] = DIALOG_ROUTE_PATHS.map((path) => ({
+	Component: MainAppContent,
+	path,
+}));
 
 /**
  * Generates language-prefixed versions of all application routes.
  *
  * @remarks
- * This enables deep-linking to specific languages (e.g., /fr/instructions).
+ * This enables deep-linking to specific languages (e.g., /fr/instructions/).
  *
  * @see {@link languages}
  *
@@ -57,14 +59,10 @@ const languageRoutes: RouteObject[] = languages.flatMap((lang) => [
 		Component: MainAppContent,
 		path: `${lang}/`,
 	},
-	...pages.map((page) => ({
+	...DIALOG_ROUTE_PATHS.map((path) => ({
 		Component: MainAppContent,
-		path: `${lang}/${page}/`,
+		path: `${lang}/${path}`,
 	})),
-	{
-		Component: MainAppContent,
-		path: `${lang}/performance/:metric/`,
-	},
 ]);
 
 /**

@@ -282,10 +282,10 @@ describe("App", () => {
 						category: "engagement",
 						nonInteraction: true,
 						page: "/#error",
-						page_title: "dialogs.titles.serverError | NMS Optimizer",
+						page_title: "500: dialogs.titles.serverError | NMS Optimizer",
 					})
 				);
-				expect(document.title).toBe("dialogs.titles.serverError | NMS Optimizer");
+				expect(document.title).toBe("500: dialogs.titles.serverError | NMS Optimizer");
 			});
 		});
 

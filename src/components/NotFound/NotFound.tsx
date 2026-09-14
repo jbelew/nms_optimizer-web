@@ -13,7 +13,7 @@
 
 import type { FC } from "react";
 import { useEffect } from "react";
-import { formatDocumentTitle } from "@shared/page-metadata.js";
+import { formatErrorDocumentTitle } from "@shared/page-metadata.js";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -36,7 +36,7 @@ import { Button } from "@radix-ui/themes";
  *
  * @returns {JSX.Element} The rendered 404 page.
  *
- * @see {@link formatDocumentTitle}
+ * @see {@link formatErrorDocumentTitle}
  * @see {@link sendEvent}
  * @see {@link lifecycleCoordinator}
  * @see {@link ./NotFound.test.tsx Unit Tests}
@@ -55,8 +55,8 @@ const NotFound: FC = () => {
 	const { t } = useTranslation();
 
 	const appName = t("appName", { defaultValue: "NMS Optimizer" });
-	const notFoundTopic = t("notFound.pageTitle", { defaultValue: "404: Not Found" });
-	const pageTitle = formatDocumentTitle(notFoundTopic, appName);
+	const notFoundTopic = t("notFound.pageTitle", { defaultValue: "Not Found" });
+	const pageTitle = formatErrorDocumentTitle(404, notFoundTopic, appName);
 
 	useEffect(() => {
 		lifecycleCoordinator.markReady();

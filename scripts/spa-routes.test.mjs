@@ -20,27 +20,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
+import { ROUTED_DIALOG_IDS } from "../shared/page-registry.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const DIST = path.join(ROOT, "dist");
 const FN_PATH = path.join(ROOT, "functions/[[path]].js");
-const ROUTE_CONFIG_PATH = path.join(ROOT, "src/routeConfig.ts");
-
-/**
- * Extract the `pages` array from `src/routeConfig.ts` via a regex (TS import in
- * a node-vitest config is more friction than it's worth here).
- */
-function readPages() {
-	const src = fs.readFileSync(ROUTE_CONFIG_PATH, "utf-8");
-	const match = src.match(/export const pages\s*=\s*\[([^\]]*)\]/);
-	if (!match) throw new Error("Could not find `pages` in src/routeConfig.ts");
-
-	return match[1]
-		.split(",")
-		.map((s) => s.trim().replace(/^["']|["']$/g, ""))
-		.filter(Boolean);
-}
 
 /**
  * Extract the SPA_ROUTES literal set from the Function source without importing it
@@ -67,7 +52,7 @@ const hasSsgOutput = (page) => fs.existsSync(path.join(DIST, page, "index.html")
 
 describe("SPA_ROUTES ↔ pages ↔ SSG output consistency", () => {
 	const spaRoutes = readSpaRoutes();
-	const pages = readPages();
+	const pages = ROUTED_DIALOG_IDS;
 
 	it("every SPA_ROUTES entry is a declared page", () => {
 		for (const route of spaRoutes) {

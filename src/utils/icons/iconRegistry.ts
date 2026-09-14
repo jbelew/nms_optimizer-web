@@ -4,7 +4,7 @@
  * @remarks
  * This module centralizes the selection and management of icons used across the
  * application. It includes a registry for Radix UI icons to optimize bundle size
- * and a mapping utility for dialog-specific icons and styles.
+ * and integrates with the Unified Page Registry for dialog-specific icons and styles.
  *
  * @category Utilities
  */
@@ -28,6 +28,7 @@ import {
 	RocketIcon,
 	Share1Icon,
 } from "@radix-ui/react-icons";
+import { PAGE_REGISTRY } from "@shared/page-registry.js";
 
 /**
  * A registry of Radix UI icons used throughout the application.
@@ -44,6 +45,7 @@ export const radixIconRegistry: Record<string, ElementType> = {
 	CounterClockwiseClockIcon,
 	DownloadIcon,
 	ExclamationTriangleIcon,
+	EyeNoneIcon,
 	EyeOpenIcon,
 	FileIcon,
 	GearIcon,
@@ -62,7 +64,7 @@ export const radixIconRegistry: Record<string, ElementType> = {
  *
  * @category Utilities
  */
-interface DialogIconAndStyle {
+export interface DialogIconAndStyle {
 	/** The React component used to render the icon. */
 	IconComponent: ElementType | null;
 	/** The CSS properties to apply to the icon container or component. */
@@ -70,36 +72,56 @@ interface DialogIconAndStyle {
 }
 
 /**
- * A map of dialog title translation keys to their corresponding Radix UI icon components.
+ * Static map of non-routed dialog title translation keys to their Radix UI icon components.
  *
  * @category Utilities
  */
-const iconMap: Record<string, ElementType> = {
+const staticIconMap: Record<string, ElementType> = {
 	"dialog.buildName.title": DownloadIcon,
-	"dialogs.titles.about": QuestionMarkCircledIcon,
-	"dialogs.titles.changelog": CounterClockwiseClockIcon,
-	"dialogs.titles.instructions": InfoCircledIcon,
 	"dialogs.titles.optimizationAlert": ExclamationTriangleIcon,
-	"dialogs.titles.performance": RocketIcon,
-	"dialogs.titles.privacy": EyeNoneIcon,
 	"dialogs.titles.serverError": ExclamationTriangleIcon,
 	"dialogs.titles.shareLink": Share1Icon,
-	"dialogs.titles.translationRequest": GlobeIcon,
 	"dialogs.titles.updatePrompt": ReloadIcon,
-	"dialogs.titles.userStats": PieChartIcon,
 	"dialogs.titles.welcome": InfoCircledIcon,
 };
 
 /**
- * A map of dialog title translation keys to their corresponding CSS styles.
+ * Static map of non-routed dialog title translation keys to their CSS styles.
+ *
+ * @category Utilities
+ */
+const staticIconStyle: Record<string, CSSProperties> = {
+	default: { color: "var(--accent-track)" },
+	"dialogs.titles.optimizationAlert": { color: "var(--red-track)" },
+	"dialogs.titles.serverError": { color: "var(--red-track)" },
+};
+
+/**
+ * Complete icon map combining static dialogs and Unified Page Registry definitions.
+ *
+ * @category Utilities
+ */
+const iconMap: Record<string, ElementType> = {
+	...staticIconMap,
+	...Object.fromEntries(
+		Object.values(PAGE_REGISTRY)
+			.filter((p) => p.dialogTitleKey && p.iconName && radixIconRegistry[p.iconName])
+			.map((p) => [p.dialogTitleKey as string, radixIconRegistry[p.iconName as string]])
+	),
+};
+
+/**
+ * Complete icon style map combining static styles and Unified Page Registry definitions.
  *
  * @category Utilities
  */
 const iconStyle: Record<string, CSSProperties> = {
-	default: { color: "var(--accent-track)" },
-	"dialogs.titles.optimizationAlert": { color: "var(--red-track)" },
-	"dialogs.titles.performance": { color: "var(--cyan-track)" },
-	"dialogs.titles.serverError": { color: "var(--red-track)" },
+	...staticIconStyle,
+	...Object.fromEntries(
+		Object.values(PAGE_REGISTRY)
+			.filter((p) => p.dialogTitleKey && p.iconStyle)
+			.map((p) => [p.dialogTitleKey as string, p.iconStyle as CSSProperties])
+	),
 };
 
 /**
@@ -107,13 +129,15 @@ const iconStyle: Record<string, CSSProperties> = {
  *
  * @remarks
  * This utility helps maintain visual consistency across different dialog types by
- * centralizing the icon selection logic. It defaults to an accent color if
+ * centralizing the icon selection logic. It dynamically resolves icons and styles
+ * defined in the Unified Page Registry, defaulting to an accent color if
  * no specific style is mapped.
  *
  * @param {string} [titleKey] - The translation key for the dialog title.
  *
  * @returns {DialogIconAndStyle} An object containing the `IconComponent` and its `style`.
  *
+ * @see {@link PAGE_REGISTRY}
  * @see {@link iconMap}
  * @see {@link iconStyle}
  *
@@ -122,7 +146,7 @@ const iconStyle: Record<string, CSSProperties> = {
  * @example
  * ```ts
  * const { IconComponent, style } = getDialogIconAndStyle("dialogs.titles.about");
- * // returns DialogIconAndStyle
+ * // returns DialogIconAndStyle with QuestionMarkCircledIcon
  * ```
  */
 export const getDialogIconAndStyle = (titleKey: string | undefined): DialogIconAndStyle => {

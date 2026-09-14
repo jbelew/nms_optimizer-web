@@ -15,6 +15,7 @@
  */
 
 import React, { useCallback, useEffect, useRef, useState, useTransition } from "react";
+import { formatDocumentTitle } from "@shared/page-metadata.js";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
@@ -113,13 +114,16 @@ export const SharedModuleSelectionDialog: React.FC = () => {
 			setTimeout(() => setInitialModules(currentCheckedModules), 0);
 			optimizeClickedRef.current = false;
 
+			const appName = t("appName", { defaultValue: "NMS Optimizer" });
+			const pageTitle = formatDocumentTitle(`${translatedTechName} Selection`, appName);
+
 			sendDeferredEvent({
 				action: "page_view",
 				category: "engagement",
 				nonInteraction: true,
 				page: `${window.location.pathname}${window.location.search}#module-selection-${activeTech}`,
 				page_location: window.location.href,
-				page_title: `NMS Optimizer: ${translatedTechName} Selection`,
+				page_title: pageTitle,
 			});
 		}
 		// Only run when the dialog opens — intentionally excluding currentCheckedModules

@@ -12,6 +12,7 @@ import i18nextFsBackend from "i18next-fs-backend";
 import packageJson from "../package.json" with { type: "json" };
 import { KNOWN_DIALOGS, SUPPORTED_LANGUAGES, TARGET_HOST } from "../shared/config.js";
 import { getPageMetadata } from "../shared/page-metadata.js";
+import { PAGE_REGISTRY } from "../shared/page-registry.js";
 import { getOgLocale, OG_LOCALE_MAP } from "../shared/seo-schema.js";
 import { createMarkdownProcessor } from "./markdown-processor.mjs";
 
@@ -19,11 +20,12 @@ const DIST_DIR = path.resolve("dist");
 const LOCALES_DIR = path.resolve("public/assets/locales");
 const FONTS_CSS_PATH = path.resolve("src/assets/css/fonts.css");
 
-// Map route names to markdown filenames when they differ
-export const PAGE_TO_MARKDOWN_MAPPING = {
-	"": "home",
-	translation: "translation-request",
-};
+// Map route names to markdown filenames derived from Unified Page Registry
+export const PAGE_TO_MARKDOWN_MAPPING = Object.fromEntries(
+	Object.values(PAGE_REGISTRY)
+		.filter((p) => p.markdownFileName)
+		.map((p) => [p.id === "home" ? "" : p.id, p.markdownFileName])
+);
 
 /**
  * Extract SSG template blocks from source index.html

@@ -13,20 +13,10 @@ import {
 } from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { IconButton, Separator, Theme } from "@radix-ui/themes";
+import { getPageByDialogTitleKey, getPageById } from "@shared/page-registry.js";
 import { useTranslation } from "react-i18next";
 
 import { getDialogIconAndStyle } from "@/utils/icons/iconRegistry";
-
-/**
- * List of dialog title keys that require extra padding.
- */
-const ROUTED_DIALOG_TITLE_KEYS = [
-	"about",
-	"instructions",
-	"userStats",
-	"changelog",
-	"translations",
-];
 
 interface AppDialogContextValue {
 	isOpen: boolean;
@@ -96,18 +86,41 @@ export const AppDialogRoot: React.FC<AppDialogProps> = ({
 };
 
 /**
- * Title component for AppDialog.
+ * Props for the {@link AppDialogTitle} component.
  */
-export const AppDialogTitle: React.FC<{
+export interface AppDialogTitleProps {
 	children?: ReactNode;
 	headerIcon?: ReactNode;
+	pageId?: string;
 	title?: string;
 	titleKey?: string;
-}> = ({ children, headerIcon, title, titleKey }) => {
-	const { t } = useTranslation();
-	const { IconComponent, style } = getDialogIconAndStyle(titleKey);
+}
 
-	const displayTitle = children || (titleKey ? t(titleKey) : title);
+/**
+ * Title component for AppDialog.
+ *
+ * @remarks
+ * Resolves header title text and icon directly from the Page Registry when `pageId` or `titleKey` is provided.
+ *
+ * @param {AppDialogTitleProps} props - The component props.
+ *
+ * @returns {JSX.Element} The rendered dialog title.
+ *
+ * @category Components
+ */
+export const AppDialogTitle: React.FC<AppDialogTitleProps> = ({
+	children,
+	headerIcon,
+	pageId,
+	title,
+	titleKey,
+}) => {
+	const { t } = useTranslation();
+	const page = pageId ? getPageById(pageId) : undefined;
+	const resolvedTitleKey = titleKey || page?.dialogTitleKey;
+	const { IconComponent, style } = getDialogIconAndStyle(resolvedTitleKey);
+
+	const displayTitle = children || (resolvedTitleKey ? t(resolvedTitleKey) : title);
 
 	return (
 		<div className="mr-2">
@@ -133,13 +146,29 @@ export const AppDialogTitle: React.FC<{
 };
 
 /**
- * Content component for AppDialog.
+ * Props for the {@link AppDialogBody} component.
  */
-export const AppDialogBody: React.FC<{ children: ReactNode; titleKey?: string }> = ({
-	children,
-	titleKey,
-}) => {
-	const isRouted = ROUTED_DIALOG_TITLE_KEYS.includes((titleKey || "").split(".").pop() || "");
+export interface AppDialogBodyProps {
+	children: ReactNode;
+	pageId?: string;
+	titleKey?: string;
+}
+
+/**
+ * Content component for AppDialog.
+ *
+ * @remarks
+ * Encapsulates the scrollable body content of the modal dialog and applies routed dialog padding.
+ *
+ * @param {AppDialogBodyProps} props - The component props.
+ *
+ * @returns {JSX.Element} The rendered dialog body section.
+ *
+ * @category Components
+ */
+export const AppDialogBody: React.FC<AppDialogBodyProps> = ({ children, pageId, titleKey }) => {
+	const page = pageId ? getPageById(pageId) : getPageByDialogTitleKey(titleKey);
+	const isRouted = page?.isDialog ?? false;
 
 	return (
 		<section
@@ -151,9 +180,22 @@ export const AppDialogBody: React.FC<{ children: ReactNode; titleKey?: string }>
 };
 
 /**
- * Footer component for AppDialog.
+ * Props for the {@link AppDialogFooter} component.
  */
-export const AppDialogFooter: React.FC<{ children: ReactNode }> = ({ children }) => {
+export interface AppDialogFooterProps {
+	children: ReactNode;
+}
+
+/**
+ * Footer component for AppDialog.
+ *
+ * @param {AppDialogFooterProps} props - The component props.
+ *
+ * @returns {JSX.Element} The rendered dialog footer.
+ *
+ * @category Components
+ */
+export const AppDialogFooter: React.FC<AppDialogFooterProps> = ({ children }) => {
 	return <div className="appDialog__footer">{children}</div>;
 };
 
@@ -167,6 +209,7 @@ interface LegacyAppDialogProps {
 	headerIcon?: ReactNode;
 	isOpen: boolean;
 	onClose: () => void;
+	pageId?: string;
 	size?: "default" | "full" | "wide";
 	title?: string;
 	titleKey?: string;
@@ -179,14 +222,26 @@ const LegacyAppDialog: React.FC<LegacyAppDialogProps> = ({
 	headerIcon,
 	isOpen,
 	onClose,
+	pageId,
 	size,
 	title,
 	titleKey,
 }) => {
+	const page = pageId ? getPageById(pageId) : undefined;
+	const resolvedTitleKey = titleKey || page?.dialogTitleKey;
+	const resolvedSize = size || page?.dialogSize || "default";
+
 	return (
-		<AppDialogRoot className={className} isOpen={isOpen} onClose={onClose} size={size}>
-			<AppDialogTitle headerIcon={headerIcon} title={title} titleKey={titleKey} />
-			<AppDialogBody titleKey={titleKey}>{content}</AppDialogBody>
+		<AppDialogRoot className={className} isOpen={isOpen} onClose={onClose} size={resolvedSize}>
+			<AppDialogTitle
+				headerIcon={headerIcon}
+				pageId={pageId}
+				title={title}
+				titleKey={resolvedTitleKey}
+			/>
+			<AppDialogBody pageId={pageId} titleKey={resolvedTitleKey}>
+				{content}
+			</AppDialogBody>
 			{footer && <AppDialogFooter>{footer}</AppDialogFooter>}
 		</AppDialogRoot>
 	);

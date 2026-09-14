@@ -23,7 +23,7 @@ interface UserStatsDialogProps {
  * @remarks
  * This component uses React `lazy` and `Suspense` to dynamically load the heavy chart-related
  * content only when the dialog is requested, minimizing the initial bundle size.
- * It wraps the dynamic content in a standard {@link AppDialog}.
+ * It wraps the dynamic content in a standard {@link AppDialog} configured via the Unified Page Registry.
  *
  * @param {UserStatsDialogProps} props - Component properties.
  *
@@ -63,8 +63,7 @@ const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 				footer={footer}
 				isOpen={isOpen}
 				onClose={onClose}
-				title={t("dialogs.titles.userStats")}
-				titleKey="dialogs.titles.userStats"
+				pageId="userstats"
 			/>
 		</Suspense>
 	);
