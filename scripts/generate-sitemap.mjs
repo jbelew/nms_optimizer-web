@@ -4,6 +4,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 import { KNOWN_DIALOGS, SUPPORTED_LANGUAGES, TARGET_HOST } from "../shared/config.js";
+import { getPageMetadata } from "../shared/page-metadata.js";
+import { initI18n } from "./generate-ssg.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,29 +44,55 @@ const CHANGE_FREQUENCIES = {
 	userstats: "monthly",
 };
 
-/** Route key to screenshot image mapping for Google Image Sitemap indexing */
-const PAGE_IMAGES = {
+/** Route key to screenshot image metadata configuration for Google Image Sitemap indexing */
+export const PAGE_IMAGE_CONFIG = {
 	about: {
 		caption: "No Man's Sky technology layout optimization algorithms and architecture.",
 		loc: `${baseUrl}/assets/img/screenshots/screenshot_desktop.png`,
-		title: "NMS Optimizer: Engine Architecture",
 	},
 	instructions: {
 		caption: "How to use the grid, manage supercharged slots, and place technology modules.",
 		loc: `${baseUrl}/assets/img/screenshots/screenshot_desktop.png`,
-		title: "NMS Optimizer: Instructions & Layout Strategy",
 	},
 	root: {
-		caption: "A detailed screenshot of the NMS Optimizer application showing an optimized technology grid with high adjacency bonuses.",
+		caption:
+			"A detailed screenshot of the NMS Optimizer application showing an optimized technology grid with high adjacency bonuses.",
 		loc: `${baseUrl}/assets/img/screenshots/screenshot.png`,
-		title: "NMS Optimizer: Tech Layout & Adjacency Bonus Calculator",
 	},
 	userstats: {
 		caption: "Community statistics and supercharged slot tech meta for No Man's Sky.",
 		loc: `${baseUrl}/assets/img/screenshots/screenshot_desktop.png`,
-		title: "NMS Optimizer: Community Meta Stats",
 	},
 };
+
+/**
+ * Resolves screenshot image objects with page titles dynamically pulled from getPageMetadata.
+ *
+ * @param {import("i18next").TFunction} t - Translation function (i18next-compatible).
+ * @param {string} [customBaseUrl] - Base URL override.
+ * @returns {Record<string, { caption: string, loc: string, title: string }>} Map of route keys to image definitions.
+ */
+export const getPageImages = (t, customBaseUrl = baseUrl) =>
+	Object.fromEntries(
+		Object.entries(PAGE_IMAGE_CONFIG).map(([key, config]) => {
+			const pathname = key === "root" ? "/" : `/${key}/`;
+			const { title } = getPageMetadata({
+				baseUrl: customBaseUrl,
+				lang: "en",
+				pathname,
+				t,
+			});
+
+			return [
+				key,
+				{
+					caption: config.caption,
+					loc: config.loc,
+					title,
+				},
+			];
+		})
+	);
 
 /**
  * Escapes XML special characters for sitemap output.
@@ -118,59 +146,74 @@ const getFileLastMod = (relPath) => {
 // or are client-only utility routes that should not be indexed.
 const EXCLUDED_FROM_SITEMAP = new Set(["performance"]);
 
-const pages = [
-	{
-		changefreq: "weekly",
-		key: "root",
-		path: "public/assets/locales/en/home.md",
-		priority: PRIORITIES.root,
-		url: `${baseUrl}/`,
-	},
-	...KNOWN_DIALOGS.filter((page) => !EXCLUDED_FROM_SITEMAP.has(page)).map((page) => ({
-		changefreq: CHANGE_FREQUENCIES[page] || "weekly",
-		key: page,
-		path: PAGE_TO_FILE_MAPPING[page],
-		priority: PRIORITIES[page] || "0.5",
-		url: `${baseUrl}/${page}`,
-	})),
-];
+/**
+ * Generates the complete XML sitemap content and optionally writes it to public/sitemap.xml.
+ *
+ * @param {Object} [options] - Options.
+ * @param {boolean} [options.write=true] - Whether to write the generated sitemap to disk.
+ * @returns {Promise<string>} The generated XML sitemap.
+ */
+export async function generateSitemap({ write = true } = {}) {
+	const i18nInstance = await initI18n();
+	const t = i18nInstance.getFixedT("en", "translation");
+	const pageImages = getPageImages(t, baseUrl);
 
-const languages = SUPPORTED_LANGUAGES;
+	const pages = [
+		{
+			changefreq: "weekly",
+			key: "root",
+			path: "public/assets/locales/en/home.md",
+			priority: PRIORITIES.root,
+			url: `${baseUrl}/`,
+		},
+		...KNOWN_DIALOGS.filter((page) => !EXCLUDED_FROM_SITEMAP.has(page)).map((page) => ({
+			changefreq: CHANGE_FREQUENCIES[page] || "weekly",
+			key: page,
+			path: PAGE_TO_FILE_MAPPING[page],
+			priority: PRIORITIES[page] || "0.5",
+			url: `${baseUrl}/${page}`,
+		})),
+	];
 
-const urlEntries = pages.flatMap((page) => {
-	const lastmod = page.lastmod || getFileLastMod(page.path);
+	const languages = SUPPORTED_LANGUAGES;
 
-	// 1. Generate all alternate URLs for this page
-	const alternateUrls = languages.map((lang) => {
-		const url = new URL(page.url);
-		const normalizePath = (p) => (p.endsWith("/") ? p : `${p}/`);
+	const urlEntries = pages.flatMap((page) => {
+		const lastmod = page.lastmod || getFileLastMod(page.path);
 
-		if (lang !== "en") {
-			url.pathname = `/${lang}${normalizePath(url.pathname === "/" ? "" : url.pathname)}`;
-		} else {
-			url.pathname = normalizePath(url.pathname);
-		}
+		// 1. Generate all alternate URLs for this page
+		const alternateUrls = languages.map((lang) => {
+			const url = new URL(page.url);
+			const normalizePath = (p) => (p.endsWith("/") ? p : `${p}/`);
 
-		return { href: url.href, lang };
-	});
+			if (lang !== "en") {
+				url.pathname = `/${lang}${normalizePath(url.pathname === "/" ? "" : url.pathname)}`;
+			} else {
+				url.pathname = normalizePath(url.pathname);
+			}
 
-	const image = PAGE_IMAGES[page.key];
-	const imageXml = image
-		? `    <image:image>\n      <image:loc>${image.loc}</image:loc>\n      <image:title>${escapeXml(image.title)}</image:title>\n      <image:caption>${escapeXml(image.caption)}</image:caption>\n    </image:image>\n`
-		: "";
+			return { href: url.href, lang };
+		});
 
-	// 2. For each alternate URL, create a <url> entry
-	return alternateUrls.map(({ href }) => {
-		// 3. Inside each <url> entry, list all other alternates
-		const hreflangLinks = alternateUrls
-			.map((alt) => `    <xhtml:link rel="alternate" hreflang="${alt.lang}" href="${alt.href}" />`)
-			.join("\n");
+		const image = pageImages[page.key];
+		const imageXml = image
+			? `    <image:image>\n      <image:loc>${image.loc}</image:loc>\n      <image:title>${escapeXml(image.title)}</image:title>\n      <image:caption>${escapeXml(image.caption)}</image:caption>\n    </image:image>\n`
+			: "";
 
-		// Add x-default pointing to the 'en' version
-		const enUrl = alternateUrls.find((alt) => alt.lang === "en").href;
-		const xDefaultLink = `    <xhtml:link rel="alternate" hreflang="x-default" href="${enUrl}" />`;
+		// 2. For each alternate URL, create a <url> entry
+		return alternateUrls.map(({ href }) => {
+			// 3. Inside each <url> entry, list all other alternates
+			const hreflangLinks = alternateUrls
+				.map(
+					(alt) =>
+						`    <xhtml:link rel="alternate" hreflang="${alt.lang}" href="${alt.href}" />`
+				)
+				.join("\n");
 
-		return `  <url>
+			// Add x-default pointing to the 'en' version
+			const enUrl = alternateUrls.find((alt) => alt.lang === "en").href;
+			const xDefaultLink = `    <xhtml:link rel="alternate" hreflang="x-default" href="${enUrl}" />`;
+
+			return `  <url>
     <loc>${href}</loc>
 ${hreflangLinks}
 ${xDefaultLink}
@@ -178,14 +221,22 @@ ${imageXml}    <lastmod>${lastmod}</lastmod>
     <priority>${page.priority}</priority>
     <changefreq>${page.changefreq}</changefreq>
   </url>`;
+		});
 	});
-});
 
-const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+	const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${urlEntries.join("\n")}
 </urlset>`;
 
-fs.writeFileSync(path.join(__dirname, "..", "public", "sitemap.xml"), sitemap);
+	if (write) {
+		fs.writeFileSync(path.join(__dirname, "..", "public", "sitemap.xml"), sitemap);
+		console.log("Sitemap generated successfully!");
+	}
 
-console.log("Sitemap generated successfully!");
+	return sitemap;
+}
+
+if (import.meta.main) {
+	await generateSitemap();
+}
