@@ -1,3 +1,13 @@
+# [7.8.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.7.4...v7.8.0) (2026-09-14)
+
+
+### Features
+
+* **seo:** establish deep page metadata module with tracer-bullet route ([#753](https://github.com/jbelew/nms_optimizer-web/issues/753)) ([bf2fccf](https://github.com/jbelew/nms_optimizer-web/commit/bf2fccf7fc295be7c8b1364f8d95119804254832))
+* **seo:** migrate all content and dialog routes to naked topics and deep metadata ([#754](https://github.com/jbelew/nms_optimizer-web/issues/754)) ([fbbcc7d](https://github.com/jbelew/nms_optimizer-web/commit/fbbcc7dbf4c146d2072fce0a4f3cd70903e53958))
+* **seo:** unify 404, fatal error, and static fallback metadata behind deep seam ([#755](https://github.com/jbelew/nms_optimizer-web/issues/755)) ([a5ced2b](https://github.com/jbelew/nms_optimizer-web/commit/a5ced2b9ba8747637e76b3a261ccb1750c900bb5))
+* **ui:** added Tractor Beam images ([835e908](https://github.com/jbelew/nms_optimizer-web/commit/835e90816d8aed0e4c7443829cd23cd645a01612))
+
 ## [7.7.4](https://github.com/jbelew/nms_optimizer-web/compare/v7.7.3...v7.7.4) (2026-09-08)
 
 
