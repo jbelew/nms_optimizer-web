@@ -1,3 +1,10 @@
+# [7.10.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.9.1...v7.10.0) (2026-09-15)
+
+
+### Features
+
+* **analytics:** add fallback target for unmounted INP interaction elements ([b7b95c2](https://github.com/jbelew/nms_optimizer-web/commit/b7b95c2a0179b98738af38a5ed882a34dc3db258))
+
 ## [7.9.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.9.0...v7.9.1) (2026-09-15)
 
 
