@@ -536,8 +536,14 @@ describe("page-metadata.js", () => {
 			expect(getPageByPath("about")?.id).toBe("about");
 			expect(getPageByPath("/fr/instructions/")?.id).toBe("instructions");
 			expect(getPageByPath("/de/changelog")?.id).toBe("changelog");
+			expect(getPageByPath("/performance/")?.id).toBe("performance");
+			expect(getPageByPath("/performance/inp/")?.id).toBe("performance");
+			expect(getPageByPath("/performance/lcp")?.id).toBe("performance");
+			expect(getPageByPath("/fr/performance/cls/")?.id).toBe("performance");
 			expect(getPageByPath("/es/")?.id).toBe("home");
 			expect(getPageByPath("/unknown-page")?.id).toBe("home");
+			expect(getPageByPath("/about/invalid-subpath")?.id).toBe("home");
+			expect(getPageByPath("/performance/inp/extra-segment")?.id).toBe("home");
 		});
 
 		it("returns all pages via getAllPages", () => {

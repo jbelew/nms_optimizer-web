@@ -1,7 +1,7 @@
 // src/context/dialogContext.tsx
 import type { DialogType } from "@/utils/system/dialogUtils";
 import React, { useState } from "react";
-import { parseRoutePath, ROUTED_DIALOG_IDS } from "@shared/page-registry.js";
+import { getPageByPath, ROUTED_DIALOG_IDS } from "@shared/page-registry.js";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -16,10 +16,10 @@ const VALID_DIALOGS = new Set<string>(ROUTED_DIALOG_IDS);
  * Resolves the active dialog type from the given URL pathname.
  *
  * @remarks
- * This function processes the URL path parts to check if the first part or second part
- * (if a language prefix is present) corresponds to a valid routed dialog.
- * It ensures that routed dialogs are correctly matched regardless of whether the URL
- * path includes a supported language prefix.
+ * Uses the Unified Page Registry to resolve the page definition for the current
+ * URL pathname (handling language prefixes, canonical paths, and additional
+ * sub-routes like performance metrics). If the matching page is a routed modal
+ * dialog (`isDialog: true`), its identifier is returned.
  *
  * @param {string} pathname - The current URL pathname to parse.
  * @param {string[]} supportedLangs - The list of language codes currently supported by the app.
@@ -28,6 +28,7 @@ const VALID_DIALOGS = new Set<string>(ROUTED_DIALOG_IDS);
  *
  * @see {@link DialogType}
  * @see {@link VALID_DIALOGS}
+ * @see {@link getPageByPath}
  *
  * @category Utilities
  *
@@ -38,11 +39,11 @@ const VALID_DIALOGS = new Set<string>(ROUTED_DIALOG_IDS);
  * ```
  */
 const getActiveDialogFromPathname = (pathname: string, supportedLangs: string[]): DialogType => {
-	const { cleanPath } = parseRoutePath(pathname, supportedLangs);
-	if (cleanPath === "/") return null;
-	const dialogPath = cleanPath.slice(1, -1);
+	const page = getPageByPath(pathname, supportedLangs);
 
-	return VALID_DIALOGS.has(dialogPath) ? (dialogPath as NonNullable<DialogType>) : null;
+	return page?.isDialog && VALID_DIALOGS.has(page.id)
+		? (page.id as NonNullable<DialogType>)
+		: null;
 };
 
 /**

@@ -259,7 +259,7 @@ export const parseRoutePath = (
  *
  * @remarks
  * Handles trailing slashes, leading slashes, language prefixes (e.g., "/es/instructions/"),
- * and bare route names (e.g., "instructions").
+ * bare route names (e.g., "instructions"), and additional sub-route patterns (e.g., "/performance/inp/").
  *
  * @param {string} [pathname=""] - The raw URL path or route identifier to look up.
  * @param {string[]} [supportedLanguages=["en", "es", "fr", "de", "pt", "it"]] - Supported language codes.
@@ -286,13 +286,27 @@ export const getPageByPath = (
 	const routeSegment = cleanPath.slice(1, -1);
 	const normalizedPath = `/${routeSegment}/`;
 
-	return (
+	const directMatch =
 		PAGE_REGISTRY[routeSegment] ||
 		Object.values(PAGE_REGISTRY).find(
 			(page) => page.routePath === normalizedPath || page.id === routeSegment
-		) ||
-		PAGE_REGISTRY.home
+		);
+
+	if (directMatch) return directMatch;
+
+	const cleanLookup = cleanPath.replace(/^\/|\/$/g, "");
+	const patternMatch = Object.values(PAGE_REGISTRY).find((page) =>
+		page.additionalRoutes?.some((pattern) => {
+			const cleanPattern = pattern.replace(/^\/|\/$/g, "");
+			const regexStr = cleanPattern.replace(/:[a-zA-Z0-9_]+/g, "[^/]+");
+
+			return new RegExp(`^${regexStr}$`).test(cleanLookup);
+		})
 	);
+
+	if (patternMatch) return patternMatch;
+
+	return PAGE_REGISTRY.home;
 };
 
 /**

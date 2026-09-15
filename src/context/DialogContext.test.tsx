@@ -223,6 +223,21 @@ describe("DialogProvider Component", () => {
 		expect(screen.getByTestId("activeDialog")).toHaveTextContent("about");
 	});
 
+	it("should recognize performance dialog from path", () => {
+		renderWithProviders("/performance");
+		expect(screen.getByTestId("activeDialog")).toHaveTextContent("performance");
+	});
+
+	it("should recognize performance dialog with metric subroute from path", () => {
+		renderWithProviders("/performance/inp/");
+		expect(screen.getByTestId("activeDialog")).toHaveTextContent("performance");
+	});
+
+	it("should recognize performance dialog with localized metric subroute from path", () => {
+		renderWithProviders("/fr/performance/lcp/");
+		expect(screen.getByTestId("activeDialog")).toHaveTextContent("performance");
+	});
+
 	it("should ignore unknown paths", () => {
 		renderWithProviders("/unknown");
 		expect(screen.getByTestId("activeDialog")).toHaveTextContent("null");

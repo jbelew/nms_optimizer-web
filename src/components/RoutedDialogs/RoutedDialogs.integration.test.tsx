@@ -22,6 +22,7 @@ import { RoutedDialogs } from "@/components/RoutedDialogs/RoutedDialogs";
 import { DialogProvider } from "@/context/dialogContext";
 import i18n from "@/test/i18n";
 import { getDialogIconAndStyle, radixIconRegistry } from "@/utils/icons/iconRegistry";
+import { useDialog } from "@/utils/system/dialogUtils";
 
 // Mock MarkdownContentRenderer to avoid async file loads in unit/integration test
 vi.mock("@/components/AppDialog/Markdown/MarkdownContentRenderer", () => ({
@@ -169,6 +170,26 @@ describe("Routed Dialogs & Page Registry Integration", () => {
 			const matchingElements = await screen.findAllByText(expectedTitle);
 			expect(matchingElements.length).toBeGreaterThanOrEqual(1);
 			expect(screen.getByTestId("performance-content")).toBeInTheDocument();
+		});
+
+		it("maintains activeDialog as performance when deep-linked or navigated to metric sub-routes", async () => {
+			const ActiveDialogSpy: React.FC = () => {
+				const { activeDialog } = useDialog();
+
+				return <div data-testid="active-dialog-spy">{activeDialog || "null"}</div>;
+			};
+
+			render(
+				<MemoryRouter initialEntries={["/performance/inp/"]}>
+					<I18nextProvider i18n={i18n}>
+						<DialogProvider>
+							<ActiveDialogSpy />
+						</DialogProvider>
+					</I18nextProvider>
+				</MemoryRouter>
+			);
+
+			expect(screen.getByTestId("active-dialog-spy")).toHaveTextContent("performance");
 		});
 	});
 });
