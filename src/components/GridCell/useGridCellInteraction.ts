@@ -1,5 +1,5 @@
 import type { Cell } from "@/store/grid/gridStore";
-import { useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 
 import { useGridStore } from "@/store/grid/gridStore";
 
@@ -39,6 +39,7 @@ export const useGridCellInteraction = (
 	isSharedGrid: boolean
 ) => {
 	const [isTouching, setIsTouching] = useState(false);
+	const [, startTransition] = useTransition();
 
 	// Refs to track gestures (scroll, zoom) vs taps
 	const gestureStartRef = useRef<null | { x: number; y: number }>(null);
@@ -100,7 +101,9 @@ export const useGridCellInteraction = (
 		if (isSharedGrid) return;
 
 		const currentTime = Date.now();
-		useGridStore.getState().registerCellTap(rowIndex, columnIndex, currentTime);
+		startTransition(() => {
+			useGridStore.getState().registerCellTap(rowIndex, columnIndex, currentTime);
+		});
 	};
 
 	/**
@@ -120,14 +123,16 @@ export const useGridCellInteraction = (
 
 		const gridState = useGridStore.getState();
 
-		// Mouse-specific logic (Ctrl/Cmd + Click)
-		if (event.ctrlKey || event.metaKey) {
-			// Ctrl/Cmd + Click: Toggle Active
-			gridState.toggleCellActive(rowIndex, columnIndex);
-		} else {
-			// Normal Click: Toggle Supercharged
-			gridState.toggleCellSupercharged(rowIndex, columnIndex);
-		}
+		startTransition(() => {
+			// Mouse-specific logic (Ctrl/Cmd + Click)
+			if (event.ctrlKey || event.metaKey) {
+				// Ctrl/Cmd + Click: Toggle Active
+				gridState.toggleCellActive(rowIndex, columnIndex);
+			} else {
+				// Normal Click: Toggle Supercharged
+				gridState.toggleCellSupercharged(rowIndex, columnIndex);
+			}
+		});
 	};
 
 	/**
@@ -145,7 +150,9 @@ export const useGridCellInteraction = (
 			event.preventDefault();
 			if (isSharedGrid) return;
 
-			useGridStore.getState().toggleCellActive(rowIndex, columnIndex);
+			startTransition(() => {
+				useGridStore.getState().toggleCellActive(rowIndex, columnIndex);
+			});
 		}
 	};
 

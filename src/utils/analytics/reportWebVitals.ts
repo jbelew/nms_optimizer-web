@@ -13,8 +13,10 @@
  */
 
 import type { GA4Event } from "@/types/analytics";
-import type { Metric } from "web-vitals";
-import { onCLS, onFCP, onINP, onLCP, onTTFB } from "web-vitals";
+import type { INPMetricWithAttribution, Metric } from "web-vitals/attribution";
+import { onCLS, onFCP, onINP, onLCP, onTTFB } from "web-vitals/attribution";
+
+import { Logger } from "@/utils/system/monitoring";
 
 declare const __APP_VERSION__: string;
 
@@ -26,7 +28,9 @@ type SendEventFunction = (event: GA4Event) => void;
  *
  * @remarks
  * Converts the metric value to numerical event parameters suitable for GA4 custom metrics.
- * Ensures metrics are tracked as non-interactive events.
+ * Ensures metrics are tracked as non-interactive events. For INP metrics with attribution,
+ * detailed subpart breakdowns (input delay, processing duration, presentation delay) and
+ * target element selectors are captured.
  *
  * @param {Metric} metric - The web vitals metric to send.
  * @param {SendEventFunction} sendEvent - The function to send the event.
@@ -42,7 +46,7 @@ type SendEventFunction = (event: GA4Event) => void;
  * ```
  */
 const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
-	sendEvent({
+	const event: GA4Event = {
 		action: "performance_metric",
 		app_version: __APP_VERSION__,
 		category: "performance",
@@ -50,7 +54,50 @@ const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
 		metric_name: metric.name,
 		nonInteraction: true,
 		value: Math.round(metric.name === "CLS" ? metric.delta * 1000 : metric.delta),
-	});
+	};
+
+	if (metric.name === "INP" && "attribution" in metric) {
+		const inpMetric = metric as INPMetricWithAttribution;
+		const attribution = inpMetric.attribution;
+
+		if (attribution) {
+			if (attribution.interactionTarget) {
+				event.interaction_target = attribution.interactionTarget;
+				event.label = attribution.interactionTarget;
+			}
+
+			if (attribution.interactionType) {
+				event.interaction_type = attribution.interactionType;
+			}
+
+			if (typeof attribution.inputDelay === "number") {
+				event.input_delay = Math.round(attribution.inputDelay);
+			}
+
+			if (typeof attribution.processingDuration === "number") {
+				event.processing_duration = Math.round(attribution.processingDuration);
+			}
+
+			if (typeof attribution.presentationDelay === "number") {
+				event.presentation_delay = Math.round(attribution.presentationDelay);
+			}
+
+			if (attribution.loadState) {
+				event.load_state = attribution.loadState;
+			}
+
+			Logger.info(`[Web Vitals INP] ${Math.round(metric.value)}ms (${metric.rating})`, {
+				inputDelay: Math.round(attribution.inputDelay),
+				loadState: attribution.loadState,
+				presentationDelay: Math.round(attribution.presentationDelay),
+				processingDuration: Math.round(attribution.processingDuration),
+				target: attribution.interactionTarget,
+				type: attribution.interactionType,
+			});
+		}
+	}
+
+	sendEvent(event);
 };
 
 /**

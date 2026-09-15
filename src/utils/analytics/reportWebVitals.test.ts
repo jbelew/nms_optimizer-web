@@ -1,11 +1,11 @@
 import type { GA4Event } from "./tracking";
 import { vi } from "vitest";
-import { onCLS, onFCP, onINP, onLCP, onTTFB } from "web-vitals";
+import { onCLS, onFCP, onINP, onLCP, onTTFB } from "web-vitals/attribution";
 
 import { reportWebVitals } from "./reportWebVitals";
 
-// Mock web-vitals library
-vi.mock("web-vitals", () => ({
+// Mock web-vitals/attribution library
+vi.mock("web-vitals/attribution", () => ({
 	onCLS: vi.fn(),
 	onFCP: vi.fn(),
 	onINP: vi.fn(),
@@ -119,6 +119,46 @@ describe("reportWebVitals", () => {
 			metric_name: "INP",
 			nonInteraction: true,
 			value: 151, // Math.round(150.5)
+		});
+	});
+
+	test("should send INP metric with attribution details when present", () => {
+		reportWebVitals(mockSendEvent);
+
+		const inpCallback = (onINP as ReturnType<typeof vi.fn>).mock.calls[0][0];
+
+		const mockMetricWithAttribution = {
+			attribution: {
+				inputDelay: 24.2,
+				interactionTarget: "button.gridCell",
+				interactionType: "pointer",
+				loadState: "complete",
+				presentationDelay: 18.9,
+				processingDuration: 85.4,
+			},
+			delta: 128.5,
+			id: "v3-9876543210",
+			name: "INP",
+			rating: "good" as const,
+			value: 128.5,
+		};
+
+		inpCallback(mockMetricWithAttribution);
+
+		expect(mockSendEvent).toHaveBeenCalledWith({
+			action: "performance_metric",
+			app_version: expect.any(String),
+			category: "performance",
+			input_delay: 24,
+			interaction_target: "button.gridCell",
+			interaction_type: "pointer",
+			label: "button.gridCell",
+			load_state: "complete",
+			metric_name: "INP",
+			nonInteraction: true,
+			presentation_delay: 19,
+			processing_duration: 85,
+			value: 129,
 		});
 	});
 

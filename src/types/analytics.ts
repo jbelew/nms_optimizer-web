@@ -44,21 +44,30 @@ export interface GA4Event {
 	/** Screen name for screen_view events. */
 	firebase_screen?: string;
 
-	/** The identifier of the selected item. */
+	// --- INP Attribution Parameters ---
+	/** Input delay duration in milliseconds for INP. */
+	input_delay?: number;
+	/** Target element CSS selector or descriptor for INP. */
+	interaction_target?: string;
+	/** Interaction type for INP (e.g. 'pointer', 'keyboard'). */
+	interaction_type?: string;
+	/** Target identifier for selected item. */
 	item_id?: string;
-	/** Optional event label (legacy/custom). */
+	/** Optional event label (legacy/custom or INP target element). */
 	label?: string;
+	/** Document load state during the interaction (e.g. 'loading', 'dom-interactive', 'complete'). */
+	load_state?: string;
 	/** The method used for the action (e.g., 'nms_file', 'url', 'png'). */
 	method?: string;
 	/** Metric name for web vitals. */
 	metric_name?: string;
 	/** Whether the event is non-interactive. */
 	nonInteraction?: boolean;
-
 	/** Page identifier. */
 	page?: string;
 	/** Page location URL. */
 	page_location?: string;
+
 	/** Referrer URL. */
 	page_referrer?: string;
 	/** SEO page title. */
@@ -66,6 +75,10 @@ export interface GA4Event {
 	// --- Custom Dimensions (Mapped in GA4) ---
 	/** Platform identifier (e.g., 'starship', 'multitool'). Maps to customEvent:platform. */
 	platform?: string;
+	/** Presentation delay duration in milliseconds for INP. */
+	presentation_delay?: number;
+	/** Processing duration in milliseconds for INP. */
+	processing_duration?: number;
 	/** Screen class for screen_view events. */
 	screen_class?: string;
 	/** Ship type category. */
