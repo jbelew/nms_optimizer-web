@@ -142,26 +142,50 @@ def report_device_summary(
     """Queries and prints high-level INP summary grouped by device category."""
     print(f"\n{BOLD}{CYAN}📊 INP Overview by Device Category (Last {days} days){RESET}\n")
 
-    request = RunReportRequest(
+    # 1. Total baseline overview (all interactions)
+    overview_req = RunReportRequest(
         property=f"properties/{property_id}",
         dimensions=[Dimension(name="deviceCategory")],
         metrics=[
             Metric(name="eventCount"),
             Metric(name="averageCustomEvent:value"),
-            Metric(name="averageCustomEvent:input_delay"),
-            Metric(name="averageCustomEvent:processing_duration"),
-            Metric(name="averageCustomEvent:presentation_delay"),
         ],
         date_ranges=[DateRange(start_date=f"{days}daysAgo", end_date="today")],
         dimension_filter=get_base_inp_filter(device_filter),
         order_bys=[OrderBy(metric=OrderBy.MetricOrderBy(metric_name="eventCount"), desc=True)],
     )
+    overview_resp = client.run_report(overview_req)
 
-    response = client.run_report(request)
-
-    if not response.rows:
+    if not overview_resp.rows:
         print("  No INP data recorded in this period.")
         return
+
+    # 2. Attribution subparts where custom metrics are available
+    subpart_data = {}
+    try:
+        subpart_req = RunReportRequest(
+            property=f"properties/{property_id}",
+            dimensions=[Dimension(name="deviceCategory")],
+            metrics=[
+                Metric(name="eventCount"),
+                Metric(name="averageCustomEvent:input_delay"),
+                Metric(name="averageCustomEvent:processing_duration"),
+                Metric(name="averageCustomEvent:presentation_delay"),
+            ],
+            date_ranges=[DateRange(start_date=f"{days}daysAgo", end_date="today")],
+            dimension_filter=get_base_inp_filter(device_filter),
+        )
+        subpart_resp = client.run_report(subpart_req)
+        for row in subpart_resp.rows:
+            dev = row.dimension_values[0].value
+            subpart_data[dev] = {
+                "count": int(row.metric_values[0].value),
+                "input": float(row.metric_values[1].value) if row.metric_values[1].value else 0.0,
+                "proc": float(row.metric_values[2].value) if row.metric_values[2].value else 0.0,
+                "pres": float(row.metric_values[3].value) if row.metric_values[3].value else 0.0,
+            }
+    except Exception:
+        pass
 
     header = (
         f"{'Device':<10} | {'Interactions':<12} | {'Avg INP':<22} | "
@@ -170,22 +194,23 @@ def report_device_summary(
     print(header)
     print("-" * 88)
 
-    for row in response.rows:
+    for row in overview_resp.rows:
         device = row.dimension_values[0].value
         count = int(row.metric_values[0].value)
         avg_val = float(row.metric_values[1].value) if row.metric_values[1].value else 0.0
-        avg_input = float(row.metric_values[2].value) if row.metric_values[2].value else 0.0
-        avg_proc = float(row.metric_values[3].value) if row.metric_values[3].value else 0.0
-        avg_pres = float(row.metric_values[4].value) if row.metric_values[4].value else 0.0
+
+        sub = subpart_data.get(device)
+        input_str = f"{sub['input']:.0f}ms" if sub and sub["count"] > 0 and sub["input"] > 0 else "-"
+        proc_str = f"{sub['proc']:.0f}ms" if sub and sub["count"] > 0 and sub["proc"] > 0 else "-"
+        pres_str = f"{sub['pres']:.0f}ms" if sub and sub["count"] > 0 and sub["pres"] > 0 else "-"
 
         status_str = format_status(avg_val)
-        # Pad formatting considering ANSI escape codes
         plain_len = len(f"{avg_val:.0f}ms (Needs Imp)") if 200 < avg_val <= 500 else len(f"{avg_val:.0f}ms (Good)")
         extra_padding = " " * max(0, 22 - plain_len)
 
         print(
             f"{device:<10} | {count:<12} | {status_str}{extra_padding} | "
-            f"{avg_input:<10.0f}ms | {avg_proc:<10.0f}ms | {avg_pres:<10.0f}ms"
+            f"{input_str:<12} | {proc_str:<12} | {pres_str:<12}"
         )
 
 
@@ -209,9 +234,6 @@ def report_target_breakdown(
         metrics=[
             Metric(name="eventCount"),
             Metric(name="averageCustomEvent:value"),
-            Metric(name="averageCustomEvent:input_delay"),
-            Metric(name="averageCustomEvent:processing_duration"),
-            Metric(name="averageCustomEvent:presentation_delay"),
         ],
         date_ranges=[DateRange(start_date=f"{days}daysAgo", end_date="today")],
         dimension_filter=get_base_inp_filter(device_filter),
@@ -225,6 +247,34 @@ def report_target_breakdown(
         print("  No target element data available yet.")
         return
 
+    # Try to fetch subpart averages keyed by target
+    target_subparts = {}
+    try:
+        sub_req = RunReportRequest(
+            property=f"properties/{property_id}",
+            dimensions=[
+                Dimension(name="deviceCategory"),
+                Dimension(name="customEvent:interaction_target"),
+            ],
+            metrics=[
+                Metric(name="averageCustomEvent:input_delay"),
+                Metric(name="averageCustomEvent:processing_duration"),
+                Metric(name="averageCustomEvent:presentation_delay"),
+            ],
+            date_ranges=[DateRange(start_date=f"{days}daysAgo", end_date="today")],
+            dimension_filter=get_base_inp_filter(device_filter),
+        )
+        sub_resp = client.run_report(sub_req)
+        for r in sub_resp.rows:
+            key = f"{r.dimension_values[0].value}:{r.dimension_values[1].value}"
+            target_subparts[key] = {
+                "input": float(r.metric_values[0].value) if r.metric_values[0].value else 0.0,
+                "proc": float(r.metric_values[1].value) if r.metric_values[1].value else 0.0,
+                "pres": float(r.metric_values[2].value) if r.metric_values[2].value else 0.0,
+            }
+    except Exception:
+        pass
+
     header = (
         f"{'Device':<8} | {'Type':<7} | {'Interactions':<12} | {'Avg INP':<22} | "
         f"{'Input':<8} | {'Proc':<8} | {'Pres':<8} | {'Target Element Selector'}"
@@ -235,15 +285,18 @@ def report_target_breakdown(
     has_attributed_rows = False
     for row in response.rows:
         device = row.dimension_values[0].value
-        target = row.dimension_values[1].value or "(not set / prior to attribution deploy)"
+        raw_target = row.dimension_values[1].value
+        target = raw_target if raw_target else "(not set / prior to attribution deploy)"
         itype = row.dimension_values[2].value or "-"
         count = int(row.metric_values[0].value)
         avg_val = float(row.metric_values[1].value) if row.metric_values[1].value else 0.0
-        avg_input = float(row.metric_values[2].value) if row.metric_values[2].value else 0.0
-        avg_proc = float(row.metric_values[3].value) if row.metric_values[3].value else 0.0
-        avg_pres = float(row.metric_values[4].value) if row.metric_values[4].value else 0.0
 
-        if target != "(not set / prior to attribution deploy)":
+        sub = target_subparts.get(f"{device}:{raw_target}")
+        input_str = f"{sub['input']:.0f}ms" if sub and sub["input"] > 0 else "-"
+        proc_str = f"{sub['proc']:.0f}ms" if sub and sub["proc"] > 0 else "-"
+        pres_str = f"{sub['pres']:.0f}ms" if sub and sub["pres"] > 0 else "-"
+
+        if raw_target:
             has_attributed_rows = True
 
         status_str = format_status(avg_val)
@@ -252,7 +305,7 @@ def report_target_breakdown(
 
         print(
             f"{device:<8} | {itype:<7} | {count:<12} | {status_str}{extra_padding} | "
-            f"{avg_input:<6.0f}ms | {avg_proc:<6.0f}ms | {avg_pres:<6.0f}ms | {target}"
+            f"{input_str:<8} | {proc_str:<8} | {pres_str:<8} | {target}"
         )
 
     if not has_attributed_rows:
