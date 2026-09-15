@@ -1,3 +1,10 @@
+## [7.9.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.9.0...v7.9.1) (2026-09-15)
+
+
+### Bug Fixes
+
+* **perf:** preserve total baseline counts in INP report query ([e9c0c29](https://github.com/jbelew/nms_optimizer-web/commit/e9c0c290feb9d52aa975af68913de9ae9d9c5e91))
+
 # [7.9.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.8.2...v7.9.0) (2026-09-15)
 
 
