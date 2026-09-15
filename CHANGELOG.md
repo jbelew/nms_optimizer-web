@@ -1,3 +1,10 @@
+# [7.9.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.8.2...v7.9.0) (2026-09-15)
+
+
+### Features
+
+* **perf:** add CLI report script to query GA4 INP telemetry ([d456ce4](https://github.com/jbelew/nms_optimizer-web/commit/d456ce49e135c442c8ec0fa35a8e86a624ff6314))
+
 ## [7.8.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.8.1...v7.8.2) (2026-09-15)
 
 
