@@ -1,3 +1,10 @@
+## [7.10.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.10.0...v7.10.1) (2026-09-15)
+
+
+### Bug Fixes
+
+* **routing:** preserve active dialog state and metadata on metric sub-routes ([2c49e0a](https://github.com/jbelew/nms_optimizer-web/commit/2c49e0ab1e909984f857a6275080c718b140214e))
+
 # [7.10.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.9.1...v7.10.0) (2026-09-15)
 
 
