@@ -1,3 +1,10 @@
+## [7.8.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.8.1...v7.8.2) (2026-09-15)
+
+
+### Performance Improvements
+
+* **grid:** defer cell interactions via transition and track INP attribution ([b6ea379](https://github.com/jbelew/nms_optimizer-web/commit/b6ea3791ded6cbafc02c1eb7a0626f5305f89b35))
+
 ## [7.8.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.8.0...v7.8.1) (2026-09-14)
 
 
