@@ -162,6 +162,46 @@ describe("reportWebVitals", () => {
 		});
 	});
 
+	test("should fallback to '(unmounted element)' when interactionTarget is empty", () => {
+		reportWebVitals(mockSendEvent);
+
+		const inpCallback = (onINP as ReturnType<typeof vi.fn>).mock.calls[0][0];
+
+		const mockMetricWithEmptyTarget = {
+			attribution: {
+				inputDelay: 0,
+				interactionTarget: "",
+				interactionType: "pointer",
+				loadState: "complete",
+				presentationDelay: 50,
+				processingDuration: 30,
+			},
+			delta: 80,
+			id: "v3-unmounted-test",
+			name: "INP",
+			rating: "good" as const,
+			value: 80,
+		};
+
+		inpCallback(mockMetricWithEmptyTarget);
+
+		expect(mockSendEvent).toHaveBeenCalledWith({
+			action: "performance_metric",
+			app_version: expect.any(String),
+			category: "performance",
+			input_delay: 0,
+			interaction_target: "(unmounted element)",
+			interaction_type: "pointer",
+			label: "(unmounted element)",
+			load_state: "complete",
+			metric_name: "INP",
+			nonInteraction: true,
+			presentation_delay: 50,
+			processing_duration: 30,
+			value: 80,
+		});
+	});
+
 	test("should send FCP metric with delta in milliseconds", () => {
 		reportWebVitals(mockSendEvent);
 

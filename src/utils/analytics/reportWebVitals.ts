@@ -61,10 +61,9 @@ const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
 		const attribution = inpMetric.attribution;
 
 		if (attribution) {
-			if (attribution.interactionTarget) {
-				event.interaction_target = attribution.interactionTarget;
-				event.label = attribution.interactionTarget;
-			}
+			const target = attribution.interactionTarget || "(unmounted element)";
+			event.interaction_target = target;
+			event.label = target;
 
 			if (attribution.interactionType) {
 				event.interaction_type = attribution.interactionType;
@@ -91,7 +90,7 @@ const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
 				loadState: attribution.loadState,
 				presentationDelay: Math.round(attribution.presentationDelay),
 				processingDuration: Math.round(attribution.processingDuration),
-				target: attribution.interactionTarget,
+				target,
 				type: attribution.interactionType,
 			});
 		}
