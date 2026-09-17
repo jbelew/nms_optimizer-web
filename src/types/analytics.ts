@@ -53,12 +53,14 @@ export interface GA4Event {
 	interaction_type?: string;
 	/** Target identifier for selected item. */
 	item_id?: string;
-	/** Optional event label (legacy/custom or INP target element). */
+	/** Optional event label (legacy/custom or web-vitals metric ID). */
 	label?: string;
 	/** Document load state during the interaction (e.g. 'loading', 'dom-interactive', 'complete'). */
 	load_state?: string;
 	/** The method used for the action (e.g., 'nms_file', 'url', 'png'). */
 	method?: string;
+	/** Unique metric ID from web-vitals for delta deduplication. */
+	metric_id?: string;
 	/** Metric name for web vitals. */
 	metric_name?: string;
 	/** Whether the event is non-interactive. */

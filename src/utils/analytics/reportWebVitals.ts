@@ -63,7 +63,6 @@ const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
 		if (attribution) {
 			const target = attribution.interactionTarget || "(unmounted element)";
 			event.interaction_target = target;
-			event.label = target;
 
 			if (attribution.interactionType) {
 				event.interaction_type = attribution.interactionType;
