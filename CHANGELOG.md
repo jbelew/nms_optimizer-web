@@ -1,3 +1,10 @@
+## [7.10.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.10.1...v7.10.2) (2026-09-17)
+
+
+### Bug Fixes
+
+* **perf:** preserve metric ID in event label during INP attribution reporting ([#760](https://github.com/jbelew/nms_optimizer-web/issues/760)) ([1f55565](https://github.com/jbelew/nms_optimizer-web/commit/1f5556571acde808c57aa033d4464610a7722fef))
+
 ## [7.10.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.10.0...v7.10.1) (2026-09-15)
 
 
