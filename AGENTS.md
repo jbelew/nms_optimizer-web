@@ -2,40 +2,43 @@
 
 NMS Optimizer Web is a React-based frontend application for optimizing technology layouts (adjacency bonuses and supercharged slots) in No Man's Sky.
 
-## Package Manager
+## Core Directives
 
-This project uses **Bun** (version 1.2.0+) as its package manager instead of npm/pnpm. Always run commands using `bun`.
+- **Package Manager**: Exclusively use **Bun** (version 1.2.0+). Always invoke scripts with `bun`.
+- **Strict TypeScript**: Write explicit types, interfaces, and discriminated unions. The `any` type is strictly prohibited.
+- **Zero Linter Suppressions**: Resolve underlying type or logic issues; inline `eslint-disable` comments are disallowed.
+- **Documentation**: Document all public APIs, functions, and complex utilities with JSDoc containing `@param` and `@returns` types.
+- **Knowledge Graph**: Check `graphify-out/` for codebase navigation (`graphify query "<question>"`). Always run `graphify update .` after modifying code.
 
-## Core Constraints
+## Verification Gate (Definition of Done)
 
-- **Strict TypeScript**: This is a strict TypeScript project. The use of `any` is never permitted.
+Before marking any code task complete, execute this sequence:
 
-## Build & Test Commands
+1. `bun run typecheck` — Must report 0 TypeScript diagnostics (`tsgo`).
+2. `bun run test -- <path>` or `bun run test` — Ensure targeted unit/component tests pass.
+3. `bun run lint` — Must report 0 oxlint/ESLint errors.
+4. `graphify update .` — Synchronize the knowledge graph.
 
-- **Dev**: `bun run dev` (starts development server at <http://localhost:5173>, expects Python API at <http://127.0.0.1:5000>)
-- **Build**: `bun run build` (production build, includes static site generation)
-- **Test all**: `bun run test` (Vitest unit and component tests with coverage)
-- **Test single file**: `bun run test -- src/path/to/file.test.tsx`
-- **Test watch**: `bun run test -- --watch`
-- **Storybook tests**: `bun run test:storybook` (runs story-based tests with Vitest)
-- **Storybook watch**: `bun run test:storybook:watch`
-  **Storybook a11y**: `bun run test:storybook:a11y` (accessibility violations check via CLI)
-- **Lint**: `bun run lint` (ESLint 10 check) and `bun run lint:fix` (auto-fix)
-- **Format**: `bun run format` (formats the `src/` directory using Prettier)
-- **Type check**: `bun run typecheck` (TypeScript 6.0+ type checking)
+## Key Commands & Gotchas
+
+- **Dev**: `bun run dev` (starts dev server on <http://localhost:5173>; requires Python backend running on <http://127.0.0.1:5000>).
+- **Build**: `bun run build` (production build, includes static site pre-rendering via SSG).
+- **Single Test**: `bun run test -- src/path/to/file.test.tsx`.
+- **Storybook**: `bun run test:storybook` (unit test stories) and `bun run test:storybook:a11y` (CLI a11y audit).
+- **Format**: `bun run format` (formats `src/`, `README.md`, and markdown assets).
 
 ## Reference Guides (Progressive Disclosure)
 
-For detailed instructions and constraints, refer to the following guides:
+Read these specialized guides when working on matching branches:
 
-- 🏗️ **[System Architecture](file:///home/jbelew/projects/nms_optimizer-web/docs/agents/architecture.md)** — Hybrid rendering (SSG + client fallback), directory structure, and Vite 8/Rolldown build settings.
-- 🎨 **[Code Style Guidelines](file:///home/jbelew/projects/nms_optimizer-web/docs/agents/code-style.md)** — TypeScript conventions, Zustand/Immer patterns, Tailwind v4 setups, React hooks, and error handling.
-- 🧪 **[Testing Guidelines](file:///home/jbelew/projects/nms_optimizer-web/docs/agents/testing.md)** — Vitest mocking patterns, console log bans, and Storybook build limits.
-- 📐 **[Component Architecture](file:///home/jbelew/projects/nms_optimizer-web/docs/agents/component-architecture.md)** — Prevention of prop drilling and use of the Colocated Hook Pattern.
-- 🚨 **[Project Safeguards & Rules](file:///home/jbelew/projects/nms_optimizer-web/docs/agents/project-rules.md)** — Critical warnings for iOS Safari GPU rendering bugs, SEO metadata, and Angular commit formatting.
+- **When writing CSS, SEO metadata, or commit messages**: Read [`docs/agents/project-rules.md`](docs/agents/project-rules.md) for critical iOS Safari GPU rendering workarounds, `<meta>` description preservation, and Angular commit conventions.
+- **When creating or refactoring UI components**: Read [`docs/agents/component-architecture.md`](docs/agents/component-architecture.md) for prop drilling prevention and the Colocated Hook Pattern.
+- **When writing Zustand stores, React hooks, or Tailwind styling**: Read [`docs/agents/code-style.md`](docs/agents/code-style.md) for Immer deep mutation rules, Tailwind v4 CSS-first config, and hook error handling.
+- **When writing or fixing tests or Storybook stories**: Read [`docs/agents/testing.md`](docs/agents/testing.md) for module mocking, console log bans, and Storybook bundle cache safeguards.
+- **When modifying Vite build config, SSG scripts, or server routing**: Read [`docs/agents/architecture.md`](docs/agents/architecture.md) for hybrid rendering flow and Rolldown chunking groups.
 
-### Agent Workflow References
+### Workflow References
 
-- 🎫 **[Issue Tracker Conventions](file:///home/jbelew/projects/nms_optimizer-web/docs/agents/issue-tracker.md)** — Creating, reading, wayfinding, and resolving issues via the `gh` CLI.
-- 🏷️ **[Triage Labels Map](file:///home/jbelew/projects/nms_optimizer-web/docs/agents/triage-labels.md)** — Canonical roles mapped to GitHub label strings.
-- 📖 **[Domain Documentation Map](file:///home/jbelew/projects/nms_optimizer-web/docs/agents/domain.md)** — How to read and apply the domain context glossary.
+- **When interacting with GitHub issues, PRs, or `/wayfinder`**: Read [`docs/agents/issue-tracker.md`](docs/agents/issue-tracker.md).
+- **When updating issue labels or triage states**: Read [`docs/agents/triage-labels.md`](docs/agents/triage-labels.md).
+- **When referencing domain terminology or ADRs**: Read [`docs/agents/domain.md`](docs/agents/domain.md) and [`CONTEXT.md`](CONTEXT.md).
