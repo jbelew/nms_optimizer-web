@@ -256,6 +256,19 @@ body.a11y-font .heading-styled {
 /* PERFORMANCE OPTIMIZATIONS                   */
 /* ============================================ */
 
+/* Enforce pointer event delegation for child SVG icons inside interactive controls */
+/* to eliminate vector hit-testing and event bubbling overhead on touch devices. */
+button svg,
+button svg *,
+[role="button"] svg,
+[role="button"] svg *,
+[role="menuitem"] svg,
+[role="menuitem"] svg *,
+.rt-BaseButton svg,
+.rt-BaseButton svg * {
+	pointer-events: none;
+}
+
 /* Reduce animation overhead when page is hidden */
 @media (prefers-reduced-motion: reduce) {
 	*,

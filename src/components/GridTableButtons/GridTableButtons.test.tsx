@@ -226,4 +226,33 @@ describe("GridTableButtons", () => {
 		expect(mockUpdateUrlForReset).toHaveBeenCalled();
 		expect(mockSetIsSharedGrid).toHaveBeenCalledWith(false);
 	});
+
+	it("triggers instructions action handler when clicking its child SVG icon", () => {
+		renderComponent(false);
+		const button = screen.getByLabelText("buttons.instructions");
+		const svg = button.querySelector("svg");
+		expect(svg).toBeInTheDocument();
+		fireEvent.click(svg!);
+
+		expect(openDialogMock).toHaveBeenCalledWith("instructions");
+		expect(markTutorialFinishedMock).toHaveBeenCalled();
+	});
+
+	it("triggers reset grid action handler when clicking its child SVG icon", () => {
+		renderComponent(false);
+		const button = screen.getByText("Reset Grid Button").closest("button");
+		const svg = button?.querySelector("svg");
+		expect(svg).toBeInTheDocument();
+		fireEvent.click(svg!);
+
+		expect(mockSendEvent).toHaveBeenCalledWith({
+			action: "reset_grid",
+			category: "ui",
+			nonInteraction: false,
+			value: 1,
+		});
+		expect(mockResetGrid).toHaveBeenCalled();
+		expect(mockUpdateUrlForReset).toHaveBeenCalled();
+		expect(mockSetIsSharedGrid).toHaveBeenCalledWith(false);
+	});
 });

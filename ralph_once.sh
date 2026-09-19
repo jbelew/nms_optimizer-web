@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Exit immediately if any command fails
-set -e
+# Exit immediately if any command fails, and preserve pipeline exit codes
+set -eo pipefail
 
 # Support overriding the issue number via argument
 ISSUE_NUM=""
@@ -40,8 +40,8 @@ fi
 # Fetch comments for context
 ISSUE_COMMENTS=$(gh issue view "$ISSUE_NUM" --json comments --jq '.comments[].body' 2>/dev/null || echo "")
 
-# Check if this issue is part of a parent spec/epic (e.g., "Part of #738")
-PARENT_NUM=$(echo "$ISSUE_BODY" | grep -oEi '(Part of|Parent:?|Parent issue:?) *#([0-9]+)' | grep -oE '[0-9]+' | head -n 1 || true)
+# Check if this issue is part of a parent spec/epic (e.g., "Part of #738" or "## Parent\n\n#738")
+PARENT_NUM=$(python3 -c "import sys, re; m = re.search(r'(?:Part of|Parent(?: issue)?:?)\s*(?:[\r\n]+\s*)?#(\d+)', sys.stdin.read(), re.I); print(m.group(1) if m else '')" <<< "$ISSUE_BODY")
 PARENT_SPEC=""
 if [ -n "$PARENT_NUM" ]; then
 	echo "Detected parent spec #$PARENT_NUM. Fetching specification context..."
@@ -62,7 +62,7 @@ gh issue edit "$ISSUE_NUM" --add-assignee @me 2>/dev/null || echo "Note: Could n
 # Construct the prompt for the Antigravity CLI agent
 PROMPT=$(
 	cat <<EOF
-Implement GitHub issue #$ISSUE_NUM: "$ISSUE_TITLE".
+/implement GitHub issue #$ISSUE_NUM: "$ISSUE_TITLE".
 
 ## Issue Description:
 $ISSUE_BODY
@@ -71,26 +71,64 @@ $([ -n "$PARENT_SPEC" ] && echo -e "## Parent Specification & Architecture Guard
 ## Comments & Context:
 $ISSUE_COMMENTS
 
+## Autonomous Execution Guardrails:
+- You are running in autonomous batch mode. You MUST complete the entire task in this session.
+- Do NOT output an intermediate status message and stop calling tools.
+- Do NOT run the entire test suite upfront in the background. Use targeted tests (\`bun run test -- <path>\`) and typechecking (\`bun run typecheck\`) which complete quickly.
+- When executing commands, set \`WaitMsBeforeAsync: 10000\` so commands run synchronously. Do not background commands and wait.
+- You are only finished when all code is written, verified, committed, and the issue is closed.
+
 ## After implementation:
 - Stage changes: \`git add .\`
 - Run verification: \`bunx lefthook run pre-commit\`
 - Fix any failures, re-stage, and re-run until clean.
 - Close the issue: \`gh issue close $ISSUE_NUM --comment "Resolved."\`
 - Append a one-line summary with the date to \`progress.txt\`.
-- Commit using Angular convention (e.g. \`feat(grid): ...\`), subject under 90 chars. Reference the issue number in the commit message (e.g. \`#$ISSUE_NUM\`).
+- Commit using Angular convention (matching ticket prefix, e.g. \`perf(grid): ...\`), subject under 90 chars. Reference the issue number in the commit message (e.g. \`#$ISSUE_NUM\`).
 EOF
 )
 
-# Run agy in headless mode with the generated prompt
+# Run agy in headless mode with live stream formatting
 # Pass any extra arguments from user (e.g., --model, --effort) to agy
 agy \
 	--mode=accept-edits \
-	--model="Gemini 3.7 Flash (High)" \
+	--model="Gemini 3.8 Flash (High)" \
 	--dangerously-skip-permissions \
 	--project="$(pwd)" \
 	--print-timeout=20m \
+	--output-format=stream-json \
 	--prompt "$PROMPT" \
-	"$@"
+	"$@" | python3 ./scripts/format_stream.py
+
+# Verify that the issue was actually resolved and closed
+ISSUE_STATE=$(gh issue view "$ISSUE_NUM" --json state --jq .state 2>/dev/null || echo "OPEN")
+RETRY=1
+MAX_RETRIES=5
+
+while [ "$ISSUE_STATE" = "OPEN" ] && [ $RETRY -le $MAX_RETRIES ]; do
+	echo ""
+	echo "⚠️  Issue #$ISSUE_NUM is still OPEN (attempt $RETRY / $MAX_RETRIES). Resuming conversation to complete work..."
+	echo ""
+
+	agy \
+		--continue \
+		--mode=accept-edits \
+		--model="Gemini 3.8 Flash (High)" \
+		--dangerously-skip-permissions \
+		--project="$(pwd)" \
+		--print-timeout=20m \
+		--output-format=stream-json \
+		--prompt "Continue implementing GitHub issue #$ISSUE_NUM. You MUST complete the implementation, run verification (bunx lefthook run pre-commit), commit your changes, and close the issue with 'gh issue close $ISSUE_NUM --comment \"Resolved.\"'. Do not stop until the issue is closed." \
+		"$@" | python3 ./scripts/format_stream.py
+
+	ISSUE_STATE=$(gh issue view "$ISSUE_NUM" --json state --jq .state 2>/dev/null || echo "OPEN")
+	RETRY=$((RETRY + 1))
+done
+
+if [ "$ISSUE_STATE" = "OPEN" ]; then
+	echo "❌ Error: Issue #$ISSUE_NUM was not resolved after $MAX_RETRIES continuation attempts."
+	exit 1
+fi
 
 # Automatically promote any issues that are now unblocked by the completion of this issue
 ./scripts/promote_issues.py
