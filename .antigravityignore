@@ -1,0 +1,43 @@
+# Antigravity agent ignore patterns
+# Prevents agent tools from searching, indexing, or loading large, generated, or sensitive files.
+
+# Huge graph outputs (use `graphify query` instead of loading 5MB JSON into context)
+graphify-out/graph.json
+graphify-out/graph.html
+graphify-out/cache/
+graphify-out/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/
+
+# Build and analysis artifacts
+bundle/
+dist/
+dist-ssr/
+storybook-static/
+coverage/
+playwright-report/
+test-results/
+.playwright-mcp/
+.lighthouseci/
+
+# Dependencies & Environments
+node_modules/
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+
+# Binary dumps & video recordings
+*.nms
+*.mp4
+*.mov
+*.webm
+
+# Database & Agent Tool States
+.beads/
+.dolt/
+.wrangler/
+.git/
+
+# Secrets & Local Env
+.env*
+*.key
+*.pid
