@@ -38,6 +38,8 @@ interface GridTableButtonsProps {
 	solving: boolean;
 }
 
+const SCROLL_OPTIONS = { skipOnLargeScreens: true };
+
 /**
  * A container component for the various action buttons located below the technology grid.
  */
@@ -64,9 +66,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	} = useSaveBuild();
 	const { fileInputRef, handleFileSelect, handleLoadBuild, isLoadPending } = useLoadBuild();
 	const { handleScreenshot, isCapturing } = useScreenshot();
-	const isAbove1024 = useBreakpoint("1024px");
-	const scrollOptions = { skipOnLargeScreens: false };
-	const { scrollIntoView } = useScrollGridIntoView(scrollOptions);
+	const { scrollIntoView } = useScrollGridIntoView(SCROLL_OPTIONS);
 
 	/**
 	 * Handles the screenshot capture of the grid section.
@@ -120,12 +120,13 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 
 	/**
 	 * Purges the current grid state and resets the URL.
+	 *
+	 * @remarks
+	 * Programmatic scrolling to the grid container uses deferred post-paint scheduling,
+	 * preventing synchronous DOM layout queries during the click tick.
 	 */
 	const handleResetGrid = () => {
-		// Scroll immediately before computations on screens < 1024px
-		if (!isAbove1024) {
-			scrollIntoView();
-		}
+		scrollIntoView();
 
 		sendEvent({ action: "reset_grid", category: "ui", nonInteraction: false, value: 1 });
 

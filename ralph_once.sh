@@ -153,10 +153,24 @@ Please fix these errors, verify with targeted tests, and stage your changes ('gi
 	GATE_ATTEMPT=$((GATE_ATTEMPT + 1))
 done
 
-# Commit the verified changes using Angular convention
-COMMIT_MSG="${ISSUE_TITLE} (#${ISSUE_NUM})"
+# Commit the verified changes using Angular convention, ensuring header <= 95 chars for commitlint
+COMMIT_MSG=$(python3 -c "
+title = '''$ISSUE_TITLE'''.strip()
+issue = '$ISSUE_NUM'
+suffix = f' (#{issue})'
+max_header = 95
+if len(title) + len(suffix) <= max_header:
+    print(f'{title}{suffix}')
+else:
+    avail = max_header - len(suffix) - 3
+    short_title = title[:avail].rsplit(' ', 1)[0] + '...'
+    header = f'{short_title}{suffix}'
+    print(f'{header}\n\n{title}')
+")
+
 echo ""
-echo "Committing: $COMMIT_MSG"
+echo "Committing:"
+echo "$COMMIT_MSG"
 git commit -m "$COMMIT_MSG"
 
 # Close the issue on GitHub

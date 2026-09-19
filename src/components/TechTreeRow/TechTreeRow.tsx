@@ -135,6 +135,7 @@ const TechTreeRowActions: React.FC = () => {
 		handleOptimizeClick,
 		handleReset,
 		hasTechInGrid,
+		isOptimizing,
 		isResetting,
 		tech,
 		translatedTechName,
@@ -150,7 +151,10 @@ const TechTreeRowActions: React.FC = () => {
 
 	const OptimizeIconComponent = hasTechInGrid ? UpdateIcon : MagicWandIcon;
 	const isOptimizeButtonDisabled =
-		(isGridFull && !hasTechInGrid) || solving || currentCheckedModules.length === 0;
+		(isGridFull && !hasTechInGrid) ||
+		solving ||
+		isOptimizing ||
+		currentCheckedModules.length === 0;
 
 	return (
 		<>
@@ -170,7 +174,7 @@ const TechTreeRowActions: React.FC = () => {
 				<IconButton
 					aria-label={`${t("techTree.tooltips.reset")} ${translatedTechName}`}
 					className={`techRow__resetButton${hasTechInGrid && !solving ? "cursor-pointer!" : ""}`}
-					disabled={!hasTechInGrid || solving || isResetting}
+					disabled={!hasTechInGrid || solving || isResetting || isOptimizing}
 					onClick={handleReset}
 				>
 					<ResetIcon />

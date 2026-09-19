@@ -31,6 +31,7 @@ const EMPTY_MODULES_ARRAY: { id: string; image: string; label: string; type?: st
  * @returns {string} returns.imagePath2x - Path to the 2x resolution technology icon.
  * @returns {number} returns.techMaxBonus - The maximum possible efficiency score.
  * @returns {number} returns.techSolvedBonus - The current solved efficiency score.
+ * @returns {boolean} returns.isOptimizing - Whether an optimize operation is in progress.
  * @returns {boolean} returns.isResetting - Whether a reset operation is in progress.
  *
  * @see {@link import('./TechTreeRow').TechTreeRow} for the consuming component.
@@ -89,7 +90,7 @@ export const useTechTreeRow = ({
 	const moduleCount = activeGroup?.module_count || 0;
 
 	// Specialized hooks
-	const { handleOptimizeClick, handleReset, isResetting } = useTechOptimization(
+	const { handleOptimizeClick, handleReset, isOptimizing, isResetting } = useTechOptimization(
 		tech,
 		handleOptimize,
 		isGridFull,
@@ -139,7 +140,7 @@ export const useTechTreeRow = ({
 		imagePath,
 		imagePath2x,
 		isIndeterminate,
-
+		isOptimizing,
 		isResetting,
 		moduleCount,
 		modules,

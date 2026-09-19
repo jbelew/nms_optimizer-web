@@ -87,4 +87,42 @@ describe("useTechOptimization", () => {
 		expect(mockClearTechMaxBonus).toHaveBeenCalledWith("testTech");
 		expect(mockClearTechSolvedBonus).toHaveBeenCalledWith("testTech");
 	});
+
+	it("initiates reset and optimize transitions without blocking the immediate frame", async () => {
+		const handleOptimize = vi.fn().mockImplementation(async () => {
+			await new Promise((resolve) => setTimeout(resolve, 10));
+		});
+		const { result } = renderHook(() =>
+			useTechOptimization("testTech", handleOptimize, false, false)
+		);
+
+		expect(result.current.isOptimizing).toBe(false);
+		expect(result.current.isResetting).toBe(false);
+
+		await act(async () => {
+			result.current.handleOptimizeClick();
+		});
+
+		expect(mockResetGridTech).toHaveBeenCalledWith("testTech");
+		expect(mockClearTechMaxBonus).toHaveBeenCalledWith("testTech");
+		expect(mockClearTechSolvedBonus).toHaveBeenCalledWith("testTech");
+		expect(handleOptimize).toHaveBeenCalledWith("testTech");
+	});
+
+	it("initiates reset transition without blocking the immediate frame on handleReset", () => {
+		const handleOptimize = vi.fn();
+		const { result } = renderHook(() =>
+			useTechOptimization("testTech", handleOptimize, false, true)
+		);
+
+		expect(result.current.isResetting).toBe(false);
+
+		act(() => {
+			result.current.handleReset();
+		});
+
+		expect(mockResetGridTech).toHaveBeenCalledWith("testTech");
+		expect(mockClearTechMaxBonus).toHaveBeenCalledWith("testTech");
+		expect(mockClearTechSolvedBonus).toHaveBeenCalledWith("testTech");
+	});
 });
