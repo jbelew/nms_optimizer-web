@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 
 const GRID_SCROLL_OFFSET_SMALL = 40; // < 640px
@@ -38,11 +40,14 @@ export const registerToolbarForceShow = (fn: () => void) => {
  * Custom hook for managing grid scrolling with responsive offsets.
  *
  * @remarks
- * It maintains a singleton ref to the grid container, allowing multiple
+ * Maintains a singleton ref to the grid container, allowing multiple
  * components (like the optimizer and recommended build list) to trigger
  * smooth scrolling to the grid. On screens smaller than 1024px, it ensures
  * the grid is correctly positioned near the top of the viewport with
- * responsive offsets.
+ * responsive offsets. DOM layout measurements and smooth scrolling are
+ * scheduled across two animation frames (double `requestAnimationFrame`)
+ * to prevent interaction latency (INP) by allowing the active interaction
+ * frame to paint first.
  *
  * @param {object} [options] - Configuration for the scroll behavior.
  * @param {boolean} [options.skipOnLargeScreens=false] - Whether to ignore scroll requests on viewports >= 1024px.
@@ -91,32 +96,43 @@ export const useScrollGridIntoView = (options?: { skipOnLargeScreens?: boolean }
 	 * Performs a smooth scroll to the grid container with the appropriate responsive offset.
 	 *
 	 * @remarks
-	 * Also triggers the registered toolbar `forceShow` function.
+	 * Defers DOM measurement and scrolling across two animation frames (double `requestAnimationFrame`)
+	 * so the browser can complete style recalculation and paint immediate visual feedback before executing
+	 * layout queries. Also triggers the registered toolbar `forceShow` function.
 	 *
 	 * @returns {void} Side-effects only.
 	 *
 	 * @example
 	 * ```typescript
 	 * scrollIntoView();
-	 * // returns void, side-effect: scrolls window to grid
+	 * // returns void, side-effect: scrolls window to grid across animation frames
 	 * ```
 	 */
-	const scrollIntoView = () => {
+	const scrollIntoView = useCallback(() => {
 		// Skip scrolling on large screens if configured to do so
 		if (options?.skipOnLargeScreens && isAbove1024) {
 			return;
 		}
 
-		if (!gridContainerRef.current) return;
+		if (!sharedGridContainerRef.current) return;
 
 		sharedForceShow?.();
 
-		const element = gridContainerRef.current;
+		if (typeof window === "undefined" || typeof requestAnimationFrame === "undefined") {
+			return;
+		}
+
 		requestAnimationFrame(() => {
-			const top = element.getBoundingClientRect().top + window.pageYOffset - offset;
-			window.scrollTo({ behavior: "smooth", top });
+			requestAnimationFrame(() => {
+				const element = sharedGridContainerRef.current;
+				if (!element) return;
+
+				const scrollY = window.pageYOffset ?? window.scrollY ?? 0;
+				const top = element.getBoundingClientRect().top + scrollY - offset;
+				window.scrollTo({ behavior: "smooth", top });
+			});
 		});
-	};
+	}, [isAbove1024, offset, options?.skipOnLargeScreens]);
 
 	return { gridContainerRef, scrollIntoView };
 };
@@ -124,16 +140,21 @@ export const useScrollGridIntoView = (options?: { skipOnLargeScreens?: boolean }
 /**
  * Reset the shared grid container ref. Used for testing.
  *
+ * @remarks
+ * Resets both the container ref singleton and the shared toolbar force-show callback
+ * to ensure complete isolation between test runs.
+ *
  * @returns {void} Side-effects only.
  *
  * @example Internal reset
  * ```typescript
  * __resetScrollGridIntoViewRef();
- * // returns void, side-effect: resets singleton ref
+ * // returns void, side-effect: resets singleton ref and callbacks
  * ```
  *
  * @internal
  */
 export const __resetScrollGridIntoViewRef = () => {
 	sharedGridContainerRef = { current: null } as React.MutableRefObject<HTMLDivElement | null>;
+	sharedForceShow = null;
 };
