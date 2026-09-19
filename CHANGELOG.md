@@ -1,3 +1,23 @@
+# [7.11.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.10.2...v7.11.0) (2026-09-19)
+
+
+### Bug Fixes
+
+* **security:** resolve CodeQL alerts and enable Sentry for production ([7735a65](https://github.com/jbelew/nms_optimizer-web/commit/7735a658e13e4c1b6450d274a5b82ec67edff1c4)), closes [#38](https://github.com/jbelew/nms_optimizer-web/issues/38) [#39](https://github.com/jbelew/nms_optimizer-web/issues/39) [#37](https://github.com/jbelew/nms_optimizer-web/issues/37)
+
+
+### Features
+
+* **tooling:** add early commitlint validation in pre-commit hook ([cb8a562](https://github.com/jbelew/nms_optimizer-web/commit/cb8a5621d52bdedb203b45f39f048666db7082c1))
+
+
+### Performance Improvements
+
+* **buttons:** enforce global SVG icon pointer-event delegation across interactive controls ([#767](https://github.com/jbelew/nms_optimizer-web/issues/767)) ([ebda2b9](https://github.com/jbelew/nms_optimizer-web/commit/ebda2b90bfa9faf71ec59b3253b428762767da12))
+* decouple Reset Grid and Technology Category solve interactions from... ([#769](https://github.com/jbelew/nms_optimizer-web/issues/769)) ([bbce37c](https://github.com/jbelew/nms_optimizer-web/commit/bbce37c87fade9cb573911531c7d971902d43090))
+* **hooks:** track async solve transition and handle errors in hooks ([ea4a85e](https://github.com/jbelew/nms_optimizer-web/commit/ea4a85e3ded6ed5d6d2d618c34ce224ddc257c71))
+* implement post-paint animation frame scheduling for programmatic scrolling ([#768](https://github.com/jbelew/nms_optimizer-web/issues/768)) ([98dabc4](https://github.com/jbelew/nms_optimizer-web/commit/98dabc4eb311679c25fd6312ada7f510c7fe6c75))
+
 ## [7.10.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.10.1...v7.10.2) (2026-09-17)
 
 
