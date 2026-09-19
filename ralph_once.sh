@@ -173,6 +173,16 @@ echo "Committing:"
 echo "$COMMIT_MSG"
 git commit -m "$COMMIT_MSG"
 
+# Check off all acceptance criteria in the issue body
+UPDATED_BODY=$(python3 -c "
+import sys, re
+body = sys.stdin.read()
+checked_body = re.sub(r'^- \[ \]', '- [x]', body, flags=re.MULTILINE)
+print(checked_body)
+" <<< "$ISSUE_BODY")
+
+gh issue edit "$ISSUE_NUM" --body "$UPDATED_BODY" 2>/dev/null || echo "Note: Could not update issue task list (continuing anyway)."
+
 # Close the issue on GitHub
 gh issue close "$ISSUE_NUM" --comment "Resolved."
 
