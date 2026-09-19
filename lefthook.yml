@@ -7,6 +7,11 @@
 pre-commit:
   parallel: false
   commands:
+    # ----- Early commit message check (catches commitlint errors immediately) -----
+    commitlint-early:
+      tags: lint
+      run: bun scripts/check-commit-msg-early.mjs
+
     # ----- Policy gate (always runs) -----
     beads-enforcement:
       tags: policy
