@@ -1,16 +1,16 @@
 # Graph Report - nms_optimizer-web  (2026-09-19)
 
 ## Corpus Check
-- 815 files · ~3,289,530 words
+- 815 files · ~3,290,589 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 4974 nodes · 6941 edges · 589 communities (373 shown, 216 thin omitted)
-- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 86 edges (avg confidence: 0.63)
+- 4946 nodes · 6906 edges · 577 communities (361 shown, 216 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 75 edges (avg confidence: 0.6)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c10e76f4`
+- Built from commit: `eef93457`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -19,15 +19,15 @@
 - performanceChart.tsx
 - useAnalytics
 - main.js
-- GridTableButtons.tsx
+- useBreakpoint
 - dependencies
 - Dependency Types Guide
 - rules
 - Changelog
 - scripts
-- TechTree.tsx
-- App.tsx
-- UpdatePromptWrapper.tsx
+- useTechTree.tsx
+- Logger
+- UpdatePrompt.tsx
 - tracking.ts
 - Troubleshooting Guide
 - Issue tracker: GitHub
@@ -39,13 +39,13 @@
 - MainAppLayout.tsx
 - Triage
 - React View Transitions
-- ShipSelection.tsx
+- ShipSelectionProvider.tsx
 - [7.1.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.8...v7.1.0) (2026-05-04)
 - teach/SKILL.md
 - Process
-- useMainAppLogic.ts
+- MainAppGridSection.tsx
 - No Man's Sky Technology Layout Optimizer (Web UI)
-- page-registry.js
+- RoutedDialogs.integration.test.tsx
 - Codebase Design
 - preview.tsx
 - userStatsData.tsx
@@ -59,13 +59,12 @@
 - RESUMABILITY.md
 - environment.ts
 - Global Flags
-- useOptimizeStore
+- App.tsx
 - HTML Report Format
 - Test API
 - dataValidation.ts
 - techStore.ts
-- AppHeader.tsx
-- ConditionalTooltip.tsx
+- Root.tsx
 - template.sh
 - devDependencies
 - CHANGELOG.md
@@ -78,13 +77,13 @@
 - [6.36.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.8...v6.36.0) (2026-04-26)
 - Track Learnings: inp_regression_fix_20260414
 - entry
-- generate-ssg.mjs
-- src/constants.ts
+- generate-sitemap.mjs
+- useOptimize.test.tsx
 - Health & Status
 - React Composition Patterns
 - Code Coverage
 - [6.32.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.7...v6.32.0) (2026-04-18)
-- lifecycleCoordinator.ts
+- ErrorBoundary.tsx
 - agentic-jsdoc/package.json
 - Ask Matt
 - 5. Re-render Optimization
@@ -94,8 +93,8 @@
 - Type Testing
 - Vi Utilities
 - Test Filtering
-- dialogContext.tsx
-- monitoring.ts
+- Seo.tsx
+- bootPipeline.tsx
 - Chemistry Patterns
 - Diagnosing Bugs
 - 7. JavaScript Performance
@@ -106,7 +105,7 @@
 - Lifecycle Hooks
 - Test Context & Fixtures
 - vite.config.ts
-- useTechTree.tsx
+- network.ts
 - AppFooter.tsx
 - Beads Skill for Claude Code
 - React View Transitions
@@ -116,10 +115,10 @@
 - Snapshot Testing
 - Track Specification: Improve Web App Observability
 - Implementation Plan: Core Web Vitals Performance Audit & Optimization
-- useBreakpoint
-- routes.tsx
+- ErrorBoundary/ErrorContent.tsx
+- TechTree.tsx
 - ModuleSelectionDialog.tsx
-- sessionCoordinator.ts
+- Cell
 - Test-Driven Development
 - Process
 - View Transitions in Next.js
@@ -129,8 +128,8 @@
 - writing-for-agents/SKILL.md
 - Plan: Improve TTFB (Time to First Byte)
 - format_tool_detail
-- Development Commands
-- DynamicRadixIcon.tsx
+- lifecycleCoordinator.ts
+- dialogUtils.ts
 - What to verify in the output
 - Async Gates for Workflow Coordination
 - 6. Rendering Performance
@@ -138,12 +137,12 @@
 - Rolldown Migration (Vite 8)
 - wayfinder/SKILL.md
 - Codebase Patterns (Inherited)
-- i18next-browser-languagedetector
+- techRules.ts
 - package.json
 - generate-radix-colors.mjs
 - OptimizationAlertDialog.tsx
-- i18next-http-backend
-- useToast.ts
+- [7.2.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.1.1...v7.2.0) (2026-05-04)
+- useOptimizeStore
 - sentryMock.ts
 - ADR-0001: Use bd prime as CLI Reference Source of Truth
 - React Composition Patterns
@@ -177,11 +176,11 @@
 - Informazioni su NMS Optimizer: Il Calcolatore Definitivo per il Layout Tecnologico di No Man's Sky
 - Sobre o NMS Optimizer: A Calculadora Definitiva de Layouts de Tecnologia para No Man's Sky
 - create_screenshot_video.py
-- spa-routes.test.mjs
+- page-metadata.js
 - update-lighthouse-history.mjs
-- reportWebVitals.ts
+- vite-env.d.ts
 - ShareLinkDialog.tsx
-- html-to-image
+- Deployment Workflow
 - uiStore.ts
 - AppDialog.tsx
 - Filtering & Search
@@ -253,7 +252,7 @@
 - Issue tracker: GitHub
 - Tachometer benchmarks
 - Database Management
-- page-metadata.js
+- generate-ssg.mjs
 - Using bd for Static Reference Data
 - Sections
 - React Best Practices
@@ -290,14 +289,14 @@
 - performance-check.mjs
 - run-bench.mjs
 - verify-routes-consistency.mjs
-- OfflineBanner.tsx
+- OfflineBanner.stories.tsx
 - LifecycleCoordinator
 - Getting Help
 - Common Patterns for AI Agents
 - [7.7.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.6.1...v7.7.0) (2026-09-03)
 - 8. Advanced Patterns
 - Web Interface Guidelines
-- @radix-ui/react-dialog
+- useShipTypes.test.tsx
 - Track Learnings: ga4_standardization_20260420
 - Specification: UI Integration & Stability
 - Specification: Final App Review (Frontend, State, Testing)
@@ -309,12 +308,12 @@
 - Project Safeguards & Preferences
 - Testing Guidelines
 - Gemini Agent: Core Directives & Protocols
-- @radix-ui/react-icons
+- [6.26.11](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.10...v6.26.11) (2026-04-12)
 - Database Errors on Cloud Storage
 - eslint-plugin-import-x
 - eslint-plugin-react-hooks
 - markdownlint-cli2
-- @radix-ui/react-toolbar
+- [6.26.12](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.11...v6.26.12) (2026-04-12)
 - @tailwindcss/vite
 - @testing-library/jest-dom
 - vite
@@ -323,34 +322,36 @@
 - Dependencies & Labels
 - Output Formats
 - vitest/SKILL.md
-- AppHeader.stories.tsx
-- TechTreeSection.tsx
+- [6.26.13](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.12...v6.26.13) (2026-04-12)
+- [6.26.14](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.13...v6.26.14) (2026-04-12)
 - MainAppContent.stories.tsx
-- useMarkdownContent.ts
+- [6.26.15](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.14...v6.26.15) (2026-04-13)
 - [7.9.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.8.2...v7.9.0) (2026-09-15)
 - jest-dom-vitest.d.ts
-- youTubeEmbed.tsx
-- immer
-- @radix-ui/react-toast
-- react-router-dom
-- recharts
-- @radix-ui/themes
-- playwright
-- @storybook/test
-- @testing-library/user-event
-- vitest
-- @vitest/browser
-- react
-- react-dom
-- react-ga4
-- react-i18next
-- react-is
-- react-markdown
-- rehype-raw
-- remark-gfm
-- @sentry/react
-- socket.io-client
-- web-vitals
+- [6.26.16](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.15...v6.26.16) (2026-04-13)
+- [6.26.17](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.16...v6.26.17) (2026-04-14)
+- [6.26.19](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.18...v6.26.19) (2026-04-14)
+- [6.26.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.0...v6.26.1) (2026-04-11)
+- [6.26.20](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.19...v6.26.20) (2026-04-14)
+- [6.26.21](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.20...v6.26.21) (2026-04-15)
+- [6.26.22](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.21...v6.26.22) (2026-04-15)
+- [6.26.23](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.22...v6.26.23) (2026-04-16)
+- [6.26.24](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.23...v6.26.24) (2026-04-16)
+- [6.26.26](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.25...v6.26.26) (2026-04-16)
+- [6.26.27](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.26...v6.26.27) (2026-04-16)
+- [6.26.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.1...v6.26.2) (2026-04-11)
+- [6.26.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.2...v6.26.3) (2026-04-11)
+- [6.26.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.3...v6.26.4) (2026-04-11)
+- [6.26.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.4...v6.26.5) (2026-04-12)
+- [6.26.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.5...v6.26.6) (2026-04-12)
+- [6.26.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.6...v6.26.7) (2026-04-12)
+- [6.26.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.7...v6.26.8) (2026-04-12)
+- knip
+- @playwright/test
+- stylelint
+- @types/react
+- @vitest/ui
+- generate-ssg.test.mjs
 - Security Policy
 - good_react_context.tsx
 - test_fixture.tsx — Expected Review Findings
@@ -559,27 +560,27 @@
 
 ## God Nodes (most connected - your core abstractions)
 1. `NMS Optimizer Changelog: Latest Updates, Features & Improvements` - 116 edges
-2. `useGridStore` - 89 edges
-3. `scripts` - 47 edges
-4. `usePlatformStore` - 47 edges
+2. `Logger` - 83 edges
+3. `useGridStore` - 81 edges
+4. `scripts` - 47 edges
 5. `useBreakpoint()` - 43 edges
-6. `Logger` - 41 edges
+6. `usePlatformStore` - 43 edges
 7. `LifecycleCoordinator` - 40 edges
 8. `useAnalytics()` - 39 edges
-9. `useTechStore` - 35 edges
+9. `useTechStore` - 33 edges
 10. `useDialog()` - 32 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `getPageImages()` --calls--> `getPageMetadata()`  [EXTRACTED]
-  scripts/generate-sitemap.mjs → shared/page-metadata.js
-- `generatePage()` --calls--> `getPageMetadata()`  [EXTRACTED]
-  scripts/generate-ssg.mjs → shared/page-metadata.js
-- `generateSeoTags()` --calls--> `getOgLocale()`  [EXTRACTED]
-  scripts/generate-ssg.mjs → shared/seo-schema.js
-- `AppContent()` --calls--> `formatErrorDocumentTitle()`  [EXTRACTED]
-  src/App.tsx → shared/page-metadata.js
-- `NotFound()` --calls--> `formatErrorDocumentTitle()`  [EXTRACTED]
-  src/components/NotFound/NotFound.tsx → shared/page-metadata.js
+- `SplashHider()` --references--> `react`  [EXTRACTED]
+  .storybook/SplashHider.tsx → package.json
+- `StoreResetWrapper()` --references--> `react`  [EXTRACTED]
+  .storybook/decorators.tsx → package.json
+- `MarkdownContentRenderer()` --references--> `react`  [EXTRACTED]
+  src/components/AppDialog/Markdown/MarkdownContentRenderer.tsx → package.json
+- `WelcomeContent()` --references--> `react`  [EXTRACTED]
+  src/components/AppDialog/Welcome/WelcomeContent.tsx → package.json
+- `GridTableContent()` --references--> `react`  [EXTRACTED]
+  src/components/GridTable/GridTableContent.tsx → package.json
 
 ## Import Cycles
 - 2-file cycle: `src/components/RecommendedBuild/RecommendedBuild.tsx -> src/components/RecommendedBuild/RecommendedBuildButton.tsx -> src/components/RecommendedBuild/RecommendedBuild.tsx`
@@ -587,7 +588,7 @@
 - 2-file cycle: `src/components/GridTable/GridTable.tsx -> src/components/GridTable/GridTableGrid.tsx -> src/components/GridTable/GridTable.tsx`
 - 3-file cycle: `src/components/ErrorBoundary/ErrorBoundary.tsx -> src/components/ErrorBoundary/ErrorContent.tsx -> src/components/ErrorBoundary/ErrorDisplay.tsx -> src/components/ErrorBoundary/ErrorBoundary.tsx`
 
-## Communities (589 total, 216 thin omitted)
+## Communities (577 total, 216 thin omitted)
 
 ### Community 0 - "NMS Optimizer Changelog: Latest Updates, Features & Improvements"
 Cohesion: 0.02
@@ -598,20 +599,28 @@ Cohesion: 0.07
 Nodes (43): ACTIVE_DOT_STYLE, CHART_MARGIN, CHART_TICK_STYLE, ChartTooltipContent, ChartTooltipContentProps, MetricSummaryCardProps, OVERALL_DOT_STYLE, OVERALL_Y_DOMAIN (+35 more)
 
 ### Community 2 - "useAnalytics"
-Cohesion: 0.08
-Nodes (35): AppContent(), UserStatsRoute, BuildNameContent(), BuildNameContentProps, UserStatsDialog(), mockDialogContext, mockSendEvent, TransProps (+27 more)
+Cohesion: 0.07
+Nodes (29): AppHeader, AppHeaderAccessibilityToggle(), AppHeaderChangelogButton(), AppHeaderContainer(), AppHeaderLogo(), AppHeaderPerformanceButton(), AppHeaderSubtitle(), AppHeaderUserStatsButton() (+21 more)
 
 ### Community 3 - "main.js"
 Cohesion: 0.08
-Nodes (48): add(), Ae(), at(), Be(), Ce(), constructor(), createComponents(), De() (+40 more)
+Nodes (47): add(), Ae(), at(), Be(), Ce(), constructor(), createComponents(), De() (+39 more)
 
-### Community 4 - "GridTableButtons.tsx"
-Cohesion: 0.13
-Nodes (18): GridContext, GridContextValue, GridProvider(), useGridContext(), GridTableButtons(), GridTableButtonsProps, Default, meta (+10 more)
+### Community 4 - "useBreakpoint"
+Cohesion: 0.11
+Nodes (31): useGridContext(), BuildNameDialog, GridTableButtons(), GridTableButtonsProps, SCROLL_OPTIONS, {
+	markTutorialFinishedMock,
+	mockResetGrid,
+	mockSendEvent,
+	mockSetIsSharedGrid,
+	mockUpdateUrlForReset,
+	mockUpdateUrlForShare,
+	openDialogMock,
+}, mockGridRef, { setGridStoreState, useGridStore } (+23 more)
 
 ### Community 5 - "dependencies"
-Cohesion: 0.29
-Nodes (7): i18next-fs-backend, dependencies, i18next, i18next-fs-backend, zustand, i18next, zustand
+Cohesion: 0.04
+Nodes (49): html-to-image, i18next, i18next-browser-languagedetector, i18next-fs-backend, i18next-http-backend, immer, dependencies, html-to-image (+41 more)
 
 ### Community 6 - "Dependency Types Guide"
 Cohesion: 0.04
@@ -629,13 +638,13 @@ Nodes (42): 1.0.0 (2026-03-21), [1.0.1](https://github.com/jbelew/agentic-jsdoc/
 Cohesion: 0.04
 Nodes (47): scripts, bench, bench:build, build, build:docker, build:e2e, build:images, build-storybook (+39 more)
 
-### Community 10 - "TechTree.tsx"
+### Community 10 - "useTechTree.tsx"
 Cohesion: 0.07
-Nodes (30): EmptyState(), EmptyStateProps, RecommendedBuild(), RecommendedBuildProps, Desktop, meta, Mobile, mockTechTree (+22 more)
+Nodes (43): EmptyState(), EmptyStateProps, RecommendedBuild(), RecommendedBuildProps, Desktop, Mobile, mockTechTree, Story (+35 more)
 
-### Community 11 - "App.tsx"
-Cohesion: 0.11
-Nodes (29): App(), WelcomeContent, ShipSelectionProvider(), RouteContext, RouteContextType, useRouteContext(), {
+### Community 11 - "Logger"
+Cohesion: 0.08
+Nodes (34): App(), WS_URL, RouteContext, RouteContextType, useRouteContext(), {
 	mockGetGridState,
 	mockGetPlatformState,
 	mockGetTechState,
@@ -643,15 +652,15 @@ Nodes (29): App(), WelcomeContent, ShipSelectionProvider(), RouteContext, RouteC
 	mockRestoreTechState,
 	mockSetSelectedPlatform,
 	mockSetTechState,
-}, useBuildFileManager() (+21 more)
+}, useBuildFileManager(), useFileHandling() (+26 more)
 
-### Community 12 - "UpdatePromptWrapper.tsx"
-Cohesion: 0.22
-Nodes (8): Default, meta, Story, UpdatePrompt(), UpdatePromptProps, UpdatePrompt, UpdatePromptWrapper(), useUpdateCheck()
+### Community 12 - "UpdatePrompt.tsx"
+Cohesion: 0.38
+Nodes (4): Default, Story, UpdatePrompt(), UpdatePromptProps
 
 ### Community 13 - "tracking.ts"
-Cohesion: 0.13
-Nodes (18): PerformanceRoute, NotFound(), useSeoAndTitle(), NotFound(), PerformanceRoute(), AnalyticsEventParams, AnalyticsEventPayload, detectAdBlocker() (+10 more)
+Cohesion: 0.12
+Nodes (20): TRACKING_ID, routes, AnalyticsEventParams, GA4Event, reportTBT(), reportWebVitals(), SendEventFunction, sendVitalsMetric() (+12 more)
 
 ### Community 14 - "Troubleshooting Guide"
 Cohesion: 0.08
@@ -662,8 +671,8 @@ Cohesion: 0.06
 Nodes (30): Before exploring, read these, Domain Docs, File structure, Flag ADR conflicts, Use the glossary's vocabulary, Conventions, Issue tracker: GitHub, Pull requests as a triage surface (+22 more)
 
 ### Community 16 - "GridCell.tsx"
-Cohesion: 0.16
-Nodes (12): GridCell(), GridCellProps, ModuleContent(), stripLabel(), mockRegisterCellTap, mockToggleCellActive, mockToggleCellSupercharged, useGridCellInteraction() (+4 more)
+Cohesion: 0.12
+Nodes (15): GridCell(), GridCellProps, ModuleContent(), stripLabel(), mockCellState, mockRegisterCellTap, mockToggleCellActive, mockToggleCellSupercharged (+7 more)
 
 ### Community 17 - "Molecules and Wisps Reference"
 Cohesion: 0.06
@@ -682,8 +691,8 @@ Cohesion: 0.06
 Nodes (32): dom, dom.iterable, esnext, scripts, ./shared/*, src, .storybook, @testing-library/jest-dom (+24 more)
 
 ### Community 21 - "MainAppLayout.tsx"
-Cohesion: 0.13
-Nodes (23): MainAppGridSection(), InstallPrompt, MainAppBackgroundServices(), MainAppFooter(), MainAppHeader(), MainAppLayoutContent(), MainAppMobileToolbar(), MainAppSidebarContent() (+15 more)
+Cohesion: 0.12
+Nodes (23): MainAppGridSection(), BuildNameDialog, ErrorMessageRenderer, InstallPrompt, MainAppBackgroundServices(), MainAppFooter(), MainAppHeader(), MainAppLayoutContent() (+15 more)
 
 ### Community 22 - "Triage"
 Cohesion: 0.06
@@ -693,9 +702,9 @@ Nodes (29): Bad agent brief, Behavioral, not procedural, Complete acceptance cri
 Cohesion: 0.06
 Nodes (30): Accessibility, Animation Triggers, Availability, Choosing Animation Style, Common Patterns, Composing Shared Elements with List Identity, Core Concepts, Critical Placement Rule (+22 more)
 
-### Community 24 - "ShipSelection.tsx"
-Cohesion: 0.24
-Nodes (9): ShipSelectionProps, ShipSelectionContent(), ShipSelectionRoot(), ShipSelectionTrigger(), GroupedShipType, ShipSelectionContext, ShipSelectionContextValue, useShipSelectionContext() (+1 more)
+### Community 24 - "ShipSelectionProvider.tsx"
+Cohesion: 0.13
+Nodes (18): ErrorMessageRenderer(), mockUseTranslation, ShipSelection(), ShipSelectionProps, Default, Story, ShipSelectionContent(), ShipSelectionProvider() (+10 more)
 
 ### Community 25 - "[7.1.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.8...v7.1.0) (2026-05-04)"
 Cohesion: 0.07
@@ -709,37 +718,37 @@ Nodes (25): Learning Record Format, Numbering, Optional sections, Supersession, 
 Cohesion: 0.07
 Nodes (25): 1. State the question, 2. Isolate the logic in a portable module, 3. Build the shareable HTML file, 4. Hand it over, 5. Capture the answer and the prototype, Anti-patterns, Logic Prototype, Process (+17 more)
 
-### Community 28 - "useMainAppLogic.ts"
-Cohesion: 0.17
-Nodes (15): ErrorMessageRenderer(), mockUseTranslation, MainAppProvider(), ErrorMessageRenderer, useMainAppLogic(), useAppLayout(), ERROR_THRESHOLDS, useErrorDispatcher() (+7 more)
+### Community 28 - "MainAppGridSection.tsx"
+Cohesion: 0.13
+Nodes (15): GridControlButtons(), RowControlButtonProps, selectHasAnyActiveCells(), mockActivateRow, mockDeActivateRow, useGridRowState(), GridContext, GridContextValue (+7 more)
 
 ### Community 29 - "No Man's Sky Technology Layout Optimizer (Web UI)"
 Cohesion: 0.08
 Nodes (24): Agentic JSDoc, Auto-Translation Workflow, Bundle Strategy & Resilience, CI/CD Status, Commit Convention, Component Architecture (Colocated Hooks), 🚀 Development Workflow, 🐳 Docker (+16 more)
 
-### Community 30 - "page-registry.js"
-Cohesion: 0.15
-Nodes (16): getAllPages(), getRoutedDialogs(), PAGE_IDS, PAGE_REGISTRY, RoutedDialogs, supportedLanguages, MARKDOWN_DIALOGS, MarkdownContentRenderer (+8 more)
+### Community 30 - "RoutedDialogs.integration.test.tsx"
+Cohesion: 0.17
+Nodes (12): PAGE_REGISTRY, supportedLanguages, MARKDOWN_DIALOGS, MarkdownContentRenderer, RoutedDialogs(), DialogIconAndStyle, getDialogIconAndStyle(), iconMap (+4 more)
 
 ### Community 31 - "Codebase Design"
 Cohesion: 0.09
 Nodes (21): 1. In-process, 2. Local-substitutable, 3. Remote but owned (Ports & Adapters), 4. True external (Mock), Deepening, Dependency categories, Seam discipline, Testing strategy: replace, don't layer (+13 more)
 
 ### Community 32 - "preview.tsx"
-Cohesion: 0.14
-Nodes (9): TooltipProvider(), hideSplashScreenAndShowBackground(), BackgroundWrapper(), BackgroundWrapperProps, ThemeWrapper(), customViewports, globalTypes, preview (+1 more)
+Cohesion: 0.12
+Nodes (11): react, react, DialogProvider(), getActiveDialogFromPathname(), VALID_DIALOGS, BackgroundWrapper(), BackgroundWrapperProps, ThemeWrapper() (+3 more)
 
 ### Community 33 - "userStatsData.tsx"
-Cohesion: 0.17
-Nodes (13): UserStatsContent(), UserStatsContentProps, COLORS, LazyRechartsChart, PieLabelRenderProps, UserStatsData(), UserStatsDialogProps, useTechTreeColors() (+5 more)
+Cohesion: 0.19
+Nodes (12): UserStatsContent(), UserStatsContentProps, COLORS, LazyRechartsChart, PieLabelRenderProps, UserStatsData(), useTechTreeColors(), useUserStats() (+4 more)
 
 ### Community 34 - "MarkdownContentRenderer.tsx"
-Cohesion: 0.09
-Nodes (5): LoremIpsumSkeleton(), H2Context, LazyReactMarkdown, MARKDOWN_COMPONENTS, MarkdownContentRendererProps
+Cohesion: 0.07
+Nodes (12): LoremIpsumSkeleton(), H2Context, LazyReactMarkdown, MARKDOWN_COMPONENTS, MarkdownContentRenderer(), MarkdownContentRendererProps, PrerenderedMarkdownRenderer, YouTubeEmbed() (+4 more)
 
 ### Community 35 - "gridStore.ts"
-Cohesion: 0.09
-Nodes (31): GridControlButtons(), RowControlButtonProps, selectHasAnyActiveCells(), mockActivateRow, mockDeActivateRow, useGridRowState(), GridTable, GridTableProps (+23 more)
+Cohesion: 0.14
+Nodes (18): AppLayout, useAppLayout(), createGrid(), createCellFromModuleData(), createEmptyCell(), createGrid(), resetCellContent(), useGridStore (+10 more)
 
 ### Community 36 - "Agentic JSDoc: Enhanced JSDoc Patterns for LLM Workflows"
 Cohesion: 0.09
@@ -766,16 +775,16 @@ Cohesion: 0.04
 Nodes (45): ACCEPTANCE CRITERIA (WHAT SUCCESS LOOKS LIKE):, Ask the user before creating when:, Contents, Create directly when:, DESIGN field (HOW to build it):, Design vs Acceptance Criteria (Critical Distinction) {#design-vs-acceptance}, Example of correct structure, Example pattern: (+37 more)
 
 ### Community 42 - "environment.ts"
-Cohesion: 0.22
-Nodes (12): InstallPrompt(), debouncedStorage, SetItemFunction, isTouchDevice(), safeClear(), safeGetItem(), safeRemoveItem(), safeSetItem() (+4 more)
+Cohesion: 0.21
+Nodes (15): InstallPrompt(), BonusStatusIcon(), renderIcon(), UI_TIMING, debouncedStorage, debounceSetItem(), SetItemFunction, isTouchDevice() (+7 more)
 
 ### Community 43 - "Global Flags"
 Cohesion: 0.40
 Nodes (5): Force Import, Global Flags, Other Global Flags, Sandbox Mode, Staleness Control
 
-### Community 44 - "useOptimizeStore"
-Cohesion: 0.27
-Nodes (7): ErrorContent(), ErrorDialog(), ErrorDialogProps, Default, meta, Story, useOptimizeStore
+### Community 44 - "App.tsx"
+Cohesion: 0.15
+Nodes (18): AppContent(), OfflineBanner, PerformanceRoute, RoutedDialogs, ShareLinkDialog, UserStatsRoute, WelcomeContent, PerformanceDialog() (+10 more)
 
 ### Community 45 - "HTML Report Format"
 Cohesion: 0.10
@@ -786,20 +795,16 @@ Cohesion: 0.10
 Nodes (19): Async Tests, Basic Test, Concurrent Tests, Custom Test with Fixtures, Failing Tests, Focus Tests, Key Points, Parameterized Tests (+11 more)
 
 ### Community 47 - "dataValidation.ts"
-Cohesion: 0.21
-Nodes (11): SHIP_NAME_PREFIXES_COMPOUND, SHIP_NAME_PREFIXES_SIMPLE, SHIP_NAME_SUFFIXES, generateBuildNameWithType(), getShipTypeName(), SHIP_TYPE_NAMES, BuildFile, FILENAME_REGEX (+3 more)
+Cohesion: 0.19
+Nodes (14): BuildNameContent(), BuildNameContentProps, SHIP_NAME_PREFIXES_COMPOUND, SHIP_NAME_PREFIXES_SIMPLE, SHIP_NAME_SUFFIXES, useDebouncedValidation(), generateBuildNameWithType(), getShipTypeName() (+6 more)
 
 ### Community 48 - "techStore.ts"
-Cohesion: 0.09
-Nodes (35): mockCellState, EMPTY_MODULES_ARRAY, SharedModuleSelectionDialog(), MockPresentationalProps, TechTreeProvider(), TechTreeContext, TechTreeContextValue, useTechTree() (+27 more)
+Cohesion: 0.11
+Nodes (29): EMPTY_MODULES_ARRAY, SharedModuleSelectionDialog(), MockPresentationalProps, TechTreeProvider(), TechTreeContext, TechTreeContextValue, useTechTree(), TechTreeRowContext (+21 more)
 
-### Community 49 - "AppHeader.tsx"
+### Community 50 - "Root.tsx"
 Cohesion: 0.18
-Nodes (9): AppHeaderAccessibilityToggle(), AppHeaderChangelogButton(), AppHeaderContainer(), AppHeaderLogo(), AppHeaderPerformanceButton(), AppHeaderSubtitle(), AppHeaderUserStatsButton(), EasterEggCoordinates (+1 more)
-
-### Community 50 - "ConditionalTooltip.tsx"
-Cohesion: 0.25
-Nodes (9): ConditionalTooltip, ConditionalTooltipProps, TooltipManager(), TooltipActions, TooltipActionsContext, TooltipState, TooltipStateContext, useTooltipActions() (+1 more)
+Nodes (13): ConditionalTooltip, ConditionalTooltipProps, TooltipManager(), TooltipProvider(), Root(), useThemeStore, createAppRouter(), TooltipActions (+5 more)
 
 ### Community 51 - "template.sh"
 Cohesion: 0.22
@@ -807,11 +812,11 @@ Nodes (16): ask(), ask_secret(), banner(), _clear(), finish(), note(), open_url(
 
 ### Community 52 - "devDependencies"
 Cohesion: 0.11
-Nodes (19): @babel/core, eslint-plugin-jsdoc, lefthook, devDependencies, @babel/core, eslint-plugin-jsdoc, knip, lefthook (+11 more)
+Nodes (19): @babel/core, eslint-plugin-jsdoc, lefthook, devDependencies, @babel/core, eslint-plugin-jsdoc, lefthook, playwright (+11 more)
 
 ### Community 53 - "CHANGELOG.md"
-Cohesion: 0.07
-Nodes (27): [6.24.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.24.1...v6.24.2) (2026-04-11), [6.25.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.24.2...v6.25.0) (2026-04-11), [6.26.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.25.1...v6.26.0) (2026-04-11), [6.28.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.27.0...v6.28.0) (2026-04-17), [6.28.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.28.0...v6.28.1) (2026-04-17), [6.29.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.28.1...v6.29.0) (2026-04-17), [6.33.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.32.0...v6.33.0) (2026-04-18), [7.10.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.9.1...v7.10.0) (2026-09-15) (+19 more)
+Cohesion: 0.09
+Nodes (22): [6.24.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.24.1...v6.24.2) (2026-04-11), [6.25.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.24.2...v6.25.0) (2026-04-11), [6.26.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.25.1...v6.26.0) (2026-04-11), [6.28.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.27.0...v6.28.0) (2026-04-17), [6.28.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.28.0...v6.28.1) (2026-04-17), [6.29.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.28.1...v6.29.0) (2026-04-17), [6.33.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.32.0...v6.33.0) (2026-04-18), [7.10.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.9.1...v7.10.0) (2026-09-15) (+14 more)
 
 ### Community 54 - "Common Usage Patterns"
 Cohesion: 0.11
@@ -849,13 +854,13 @@ Nodes (17): [2026-04-14 17:15] - Phase 1: Baseline & Sentry Restoration, [2026-0
 Cohesion: 0.12
 Nodes (17): entry, ignore, ignoreDependencies, project, $schema, e2e-tests/**/*.{ts,js}, functions/**/*.{ts,js}, scripts/**/*.{js,mjs,cjs} (+9 more)
 
-### Community 63 - "generate-ssg.mjs"
-Cohesion: 0.09
-Nodes (31): CHANGE_FREQUENCIES, __dirname, escapeXml(), EXCLUDED_FROM_SITEMAP, __filename, generateSitemap(), getFileLastMod(), getPageImages() (+23 more)
+### Community 63 - "generate-sitemap.mjs"
+Cohesion: 0.14
+Nodes (19): CHANGE_FREQUENCIES, __dirname, escapeXml(), EXCLUDED_FROM_SITEMAP, __filename, generateSitemap(), getFileLastMod(), getPageImages() (+11 more)
 
-### Community 64 - "src/constants.ts"
-Cohesion: 0.19
-Nodes (11): TRACKING_ID, UI_TIMING, WS_URL, ApiResponse, createSocket(), SOCKET_OPTIONS, TRANSPORT_ERROR_MESSAGES, isApiResponse() (+3 more)
+### Community 64 - "useOptimize.test.tsx"
+Cohesion: 0.14
+Nodes (16): mockCreateSocket, mockUseAnalytics, mockUseBreakpoint, mockUseGridStore, mockUsePlatformStore, mockUseTechStore, PlatformState, ApiResponse (+8 more)
 
 ### Community 65 - "Health & Status"
 Cohesion: 0.50
@@ -873,9 +878,9 @@ Nodes (16): CI Integration, Code Coverage, Configuration, Coverage with Sharding
 Cohesion: 0.12
 Nodes (17): [6.31.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.0...v6.31.1) (2026-04-18), [6.31.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.1...v6.31.2) (2026-04-18), [6.31.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.2...v6.31.3) (2026-04-18), [6.31.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.3...v6.31.4) (2026-04-18), [6.31.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.4...v6.31.5) (2026-04-18), [6.31.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.5...v6.31.6) (2026-04-18), [6.31.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.6...v6.31.7) (2026-04-18), [6.32.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.7...v6.32.0) (2026-04-18) (+9 more)
 
-### Community 69 - "lifecycleCoordinator.ts"
-Cohesion: 0.13
-Nodes (11): ErrorBoundary, Props, State, handleError(), RouteError(), AppLifecyclePhase, DeferredTask, DeferredTaskHandler (+3 more)
+### Community 69 - "ErrorBoundary.tsx"
+Cohesion: 0.18
+Nodes (6): ErrorBoundary, Props, State, handleError(), RouteError(), captureException()
 
 ### Community 70 - "agentic-jsdoc/package.json"
 Cohesion: 0.12
@@ -894,7 +899,7 @@ Cohesion: 0.12
 Nodes (15): Animation Timing, Card Expand/Collapse with `startTransition`, Cross-Fade Without Remount, Exclude Elements with `useOptimistic`, Floating Elements, Isolate Elements from Parent Animations, Patterns and Guidelines, Persistent Layout Elements (+7 more)
 
 ### Community 74 - "Test Environments"
-Cohesion: 0.13
+Cohesion: 0.12
 Nodes (15): Available Environments, Browser Mode (Separate from Environments), Configuration, CSS and Assets, Custom Environment, Environment with VM, Fixing External Dependencies, happy-dom Environment (+7 more)
 
 ### Community 75 - "Configuration"
@@ -913,13 +918,13 @@ Nodes (16): Dynamic Mocking, Fake Timers, Global/Env Mocking, Global Mock Manage
 Cohesion: 0.12
 Nodes (16): By File Path, By Test Name, Changed Files, CLI Filtering, Combining Filters, Environment-based Filtering, Focus Tests (.only), Include/Exclude Patterns (+8 more)
 
-### Community 79 - "dialogContext.tsx"
-Cohesion: 0.22
-Nodes (5): DialogProvider(), getActiveDialogFromPathname(), VALID_DIALOGS, useLanguage(), getSupportedLanguages()
+### Community 79 - "Seo.tsx"
+Cohesion: 0.29
+Nodes (6): DEFAULT_BASE_URL, normalizePath(), Seo(), useLanguage(), getSupportedLanguages(), useSupportedLanguages()
 
-### Community 80 - "monitoring.ts"
-Cohesion: 0.15
-Nodes (19): Root(), useThemeStore, initializeAnalytics(), initializeAnalyticsClient(), isBot(), registerDefaultDeferredServices(), handleFatalBootstrapError(), createAppRouter() (+11 more)
+### Community 80 - "bootPipeline.tsx"
+Cohesion: 0.25
+Nodes (12): fetchShipTypes(), initializeAnalytics(), initializeAnalyticsClient(), preloadInitialState(), isBot(), bootApp(), registerDefaultDeferredServices(), handleFatalBootstrapError() (+4 more)
 
 ### Community 81 - "Chemistry Patterns"
 Cohesion: 0.13
@@ -961,13 +966,13 @@ Nodes (14): Auto Fixtures, Built-in Context, Composing Fixtures, Context Propert
 Cohesion: 0.15
 Nodes (5): __dirname, LOCALES_DIR, markdownBundlePlugin(), COMPONENT_CSS_MAP, purgeRadixCss()
 
-### Community 91 - "useTechTree.tsx"
-Cohesion: 0.12
-Nodes (26): API_URL, compressRLE(), decompressRLE(), deserialize(), GRID_SERIALIZATION_CONSTANTS, serialize(), fixturePath, nmsFixture (+18 more)
+### Community 91 - "network.ts"
+Cohesion: 0.43
+Nodes (5): apiCall(), ApiCallOptions, fetchJson(), fetchWithTimeout(), HttpError
 
 ### Community 92 - "AppFooter.tsx"
-Cohesion: 0.16
-Nodes (12): AppFooter, AppFooterContent(), AppFooterRating(), AppFooterRoot(), Desktop, meta, Mobile, Story (+4 more)
+Cohesion: 0.12
+Nodes (15): AppFooter, AppFooterContent(), AppFooterRating(), AppFooterRoot(), Desktop, Mobile, Story, Tablet (+7 more)
 
 ### Community 93 - "Beads Skill for Claude Code"
 Cohesion: 0.14
@@ -1001,21 +1006,21 @@ Nodes (11): Track improve_observability_20260218 Context, Implementation Plan - 
 Cohesion: 0.14
 Nodes (11): Track performance_audit_20260204 Context, Implementation Plan: Core Web Vitals Performance Audit & Optimization, Phase 1: Baseline Audit & Analysis [checkpoint: a4fe73f], Phase 2: LCP and CLS Optimizations [checkpoint: a4fe73f], Phase 3: INP and Main-Thread Optimizations, Phase 4: Final Validation [checkpoint: a4fe73f], 1. Goal, 2. Scope (+3 more)
 
-### Community 101 - "useBreakpoint"
-Cohesion: 0.07
-Nodes (29): ErrorContent(), ErrorContentProps, meta, PageVariant, Story, WithComponentStack, WithErrorMessage, WithStackTrace (+21 more)
+### Community 101 - "ErrorBoundary/ErrorContent.tsx"
+Cohesion: 0.20
+Nodes (7): ErrorContent(), ErrorContentProps, PageVariant, Story, WithComponentStack, WithErrorMessage, WithStackTrace
 
-### Community 102 - "routes.tsx"
-Cohesion: 0.36
-Nodes (6): MainAppContent(), languages, DIALOG_ROUTE_PATHS, languageRoutes, pageRoutes, routes
+### Community 102 - "TechTree.tsx"
+Cohesion: 0.13
+Nodes (13): MessageSpinner(), MessageSpinnerProps, SharedModuleSelectionDialog, Desktop, Mobile, Story, Tablet, TechTree() (+5 more)
 
 ### Community 103 - "ModuleSelectionDialog.tsx"
 Cohesion: 0.09
-Nodes (26): MODULE_GROUP_ORDER, MODULE_RANK_ORDER, ModuleSelectionContext, ModuleSelectionContextValue, ModuleSelectionProvider(), DialogBody(), DialogFooter(), formatLabel() (+18 more)
+Nodes (23): MODULE_GROUP_ORDER, MODULE_RANK_ORDER, ModuleSelectionContext, ModuleSelectionContextValue, ModuleSelectionProvider(), DialogBody(), DialogFooter(), formatLabel() (+15 more)
 
-### Community 104 - "sessionCoordinator.ts"
-Cohesion: 0.15
-Nodes (15): createGrid(), createCellFromModuleData(), GridActions, GridComputed, GridState, computeBonusStatus(), sessionCoordinator, mockGridStore (+7 more)
+### Community 104 - "Cell"
+Cohesion: 0.21
+Nodes (12): applyValidationFeedback(), feedbackMap, ValidationReason, validateToggleActive(), validateToggleSupercharged(), ValidationResult, Cell, GridActions (+4 more)
 
 ### Community 105 - "Test-Driven Development"
 Cohesion: 0.15
@@ -1053,9 +1058,13 @@ Nodes (12): 1. Cloudflare Cache Rule Optimization, 2. Express Server Optimizatio
 Cohesion: 0.50
 Nodes (4): format_tool_detail(), main(), Any, Extract a concise, human-readable summary of tool arguments.
 
-### Community 114 - "Development Commands"
-Cohesion: 0.50
-Nodes (4): Before Committing, Daily Development, Development Commands, Setup
+### Community 114 - "lifecycleCoordinator.ts"
+Cohesion: 0.21
+Nodes (8): runWhenIdle(), AppLifecyclePhase, DeferredTask, DeferredTaskHandler, LifecycleCoordinatorOptions, LifecycleListener, hideSplashScreenAndShowBackground(), SplashHider()
+
+### Community 115 - "dialogUtils.ts"
+Cohesion: 0.21
+Nodes (10): formatDocumentTitle(), DynamicRadixIcon(), DynamicRadixIconProps, mockDialogContext, mockSendEvent, TransProps, WelcomeContent(), WelcomeContentProps (+2 more)
 
 ### Community 116 - "What to verify in the output"
 Cohesion: 0.17
@@ -1085,6 +1094,10 @@ Nodes (11): Chart the map, Fog of war, Invocation, Out of scope, Plan, don't do,
 Cohesion: 0.17
 Nodes (11): [2026-05-17 13:20] - Phase 1 Task 2: Refactor Grid/Optimizer Components to Compound Pattern, [2026-05-17 14:15] - Phase 2 Task 1: INP Profiling and Long Task Mitigation, [2026-05-17 19:55] - Phase 1 Task 1: Audit and Refactor Layout Components, Codebase Patterns (Inherited), Lighthouse-style Scoring, Mixed Visual Charts (Recharts), Modular Flask Blueprints, Multi-line Custom Tooltips (+3 more)
 
+### Community 123 - "techRules.ts"
+Cohesion: 0.60
+Nodes (4): MODULE_RANK_ORDER, mockModules, validateModuleSelections(), VALIDATION_GROUPS
+
 ### Community 124 - "package.json"
 Cohesion: 0.17
 Nodes (11): engines, bun, node, name, private, sideEffects, type, version (+3 more)
@@ -1094,12 +1107,16 @@ Cohesion: 0.17
 Nodes (10): ALL_RADIX_COLORS, baseInputPath, colors, concatenatedContent, concatenatedPath, __dirname, optimizedColorContents, outputDir (+2 more)
 
 ### Community 126 - "OptimizationAlertDialog.tsx"
-Cohesion: 0.19
-Nodes (8): OptimizationAlertContent(), OptimizationAlertContentProps, OptimizationAlertDialog(), OptimizationAlertDialogProps, Default, meta, Story, OptimizationAlertDialog
+Cohesion: 0.23
+Nodes (6): OptimizationAlertContent(), OptimizationAlertContentProps, OptimizationAlertDialog(), OptimizationAlertDialogProps, Default, Story
 
-### Community 128 - "useToast.ts"
-Cohesion: 0.09
-Nodes (22): ErrorDisplay(), ErrorDisplayProps, Default, meta, Story, ToastRenderer, ShipSelection(), Default (+14 more)
+### Community 127 - "[7.2.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.1.1...v7.2.0) (2026-05-04)"
+Cohesion: 0.40
+Nodes (5): [7.1.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.1.0...v7.1.1) (2026-05-04), [7.2.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.1.1...v7.2.0) (2026-05-04), Bug Fixes, Bug Fixes, Features
+
+### Community 128 - "useOptimizeStore"
+Cohesion: 0.11
+Nodes (17): ErrorContent(), ErrorDialog(), ErrorDialogProps, Default, Story, ErrorDisplay(), ErrorDisplayProps, Default (+9 more)
 
 ### Community 130 - "ADR-0001: Use bd prime as CLI Reference Source of Truth"
 Cohesion: 0.18
@@ -1195,7 +1212,7 @@ Nodes (9): Final Review & Cleanup, Objectives, Overview, Phase 4.1: Component De
 
 ### Community 154 - "Project Workflow"
 Cohesion: 0.20
-Nodes (10): Code Review Process, Continuous Improvement, Definition of Done, Deployment Steps, Deployment Workflow, Guiding Principles, Post-Deployment, Pre-Deployment Checklist (+2 more)
+Nodes (10): Before Committing, Code Review Process, Continuous Improvement, Daily Development, Definition of Done, Development Commands, Guiding Principles, Project Workflow (+2 more)
 
 ### Community 155 - "Key Configurations"
 Cohesion: 0.20
@@ -1229,29 +1246,33 @@ Nodes (9): Como o Motor de Otimização de Layout Funciona, Equipamentos Suporta
 Cohesion: 0.29
 Nodes (9): calculate_durations(), create_video(), extract_versions(), get_screenshot_history(), main(), Create video with crossfades by pre-rendering each transition., Get all commits that modified the screenshot in reverse chronological order., Extract each version of the screenshot from git history. (+1 more)
 
-### Community 163 - "spa-routes.test.mjs"
-Cohesion: 0.22
-Nodes (6): __dirname, DIST, FN_PATH, HYBRID_ROUTES, ROOT, ROUTED_DIALOG_IDS
+### Community 163 - "page-metadata.js"
+Cohesion: 0.10
+Nodes (24): __dirname, DIST, FN_PATH, HYBRID_ROUTES, ROOT, DEFAULT_OG_IMAGE_PATH, extractContentHeading(), formatErrorDocumentTitle() (+16 more)
 
 ### Community 164 - "update-lighthouse-history.mjs"
 Cohesion: 0.20
 Nodes (9): dataPath, existingIndex, fontsDestDir, history, manifest, manifestPath, newData, reportPath (+1 more)
 
-### Community 165 - "reportWebVitals.ts"
-Cohesion: 0.26
-Nodes (9): AppFooterContextValue, AppHeaderContext, AppHeaderContextValue, GA4Event, reportTBT(), reportWebVitals(), SendEventFunction, sendVitalsMetric() (+1 more)
+### Community 165 - "vite-env.d.ts"
+Cohesion: 0.40
+Nodes (3): ImportMeta, ImportMetaEnv, Window
 
 ### Community 166 - "ShareLinkDialog.tsx"
-Cohesion: 0.24
-Nodes (6): ShareLinkDialog, ShareLinkContent(), ShareLinkContentProps, mockClipboard, ShareLinkDialog(), ShareLinkDialogProps
+Cohesion: 0.27
+Nodes (5): ShareLinkContent(), ShareLinkContentProps, mockClipboard, ShareLinkDialog(), ShareLinkDialogProps
+
+### Community 167 - "Deployment Workflow"
+Cohesion: 0.50
+Nodes (4): Deployment Steps, Deployment Workflow, Post-Deployment, Pre-Deployment Checklist
 
 ### Community 168 - "uiStore.ts"
-Cohesion: 0.07
-Nodes (26): GridShake(), GridShakeProps, GridTableRoot(), defaultProps, mockUseGridStore, mockUseModuleSelectionDialogStore, mockUseShakeStore, mockUseTechStore (+18 more)
+Cohesion: 0.08
+Nodes (27): GridShake(), GridShakeProps, defaultProps, mockClearTechMaxBonus, mockClearTechSolvedBonus, mockResetGridTech, mockUseGridStore, mockUseModuleSelectionDialogStore (+19 more)
 
 ### Community 169 - "AppDialog.tsx"
-Cohesion: 0.09
-Nodes (25): getPageByDialogTitleKey(), getPageById(), AppDialog, AppDialogBody(), AppDialogBodyProps, AppDialogContext, AppDialogContextValue, AppDialogFooter() (+17 more)
+Cohesion: 0.10
+Nodes (22): getPageByDialogTitleKey(), getPageById(), AppDialog, AppDialogBody(), AppDialogBodyProps, AppDialogContext, AppDialogContextValue, AppDialogFooter() (+14 more)
 
 ### Community 170 - "Filtering & Search"
 Cohesion: 0.22
@@ -1278,8 +1299,8 @@ Cohesion: 0.22
 Nodes (8): Beads - AI-Native Issue Tracking, Essential Commands, Get Started with Beads, Learn More, Quick Start, What is Beads?, Why Beads?, Working with Issues
 
 ### Community 176 - "[6.27.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.27...v6.27.0) (2026-04-16)"
-Cohesion: 0.04
-Nodes (55): [6.26.10](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.9...v6.26.10) (2026-04-12), [6.26.11](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.10...v6.26.11) (2026-04-12), [6.26.12](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.11...v6.26.12) (2026-04-12), [6.26.13](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.12...v6.26.13) (2026-04-12), [6.26.14](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.13...v6.26.14) (2026-04-12), [6.26.15](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.14...v6.26.15) (2026-04-13), [6.26.16](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.15...v6.26.16) (2026-04-13), [6.26.17](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.16...v6.26.17) (2026-04-14) (+47 more)
+Cohesion: 0.22
+Nodes (9): [6.26.10](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.9...v6.26.10) (2026-04-12), [6.26.25](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.24...v6.26.25) (2026-04-16), [6.26.9](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.8...v6.26.9) (2026-04-12), [6.27.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.27...v6.27.0) (2026-04-16), Bug Fixes, Bug Fixes, Bug Fixes, Bug Fixes (+1 more)
 
 ### Community 177 - "Google JavaScript Style Guide Summary"
 Cohesion: 0.22
@@ -1529,9 +1550,9 @@ Nodes (6): Customizing, Quick start, Reading the output, Tachometer benchmarks, 
 Cohesion: 0.50
 Nodes (4): Database Management, Import/Export, Migration, Sync Operations
 
-### Community 239 - "page-metadata.js"
-Cohesion: 0.23
-Nodes (15): DEFAULT_BASE_URL, DEFAULT_OG_IMAGE_PATH, extractContentHeading(), formatDocumentTitle(), formatErrorDocumentTitle(), getPageMetadata(), getPageByPath(), parseRoutePath() (+7 more)
+### Community 239 - "generate-ssg.mjs"
+Cohesion: 0.18
+Nodes (16): DIST_DIR, extractSsgTemplate(), FONTS_CSS_PATH, generateNavigationLinks(), generatePage(), generateSeoTags(), generateSsg(), LOCALES_DIR (+8 more)
 
 ### Community 241 - "Using bd for Static Reference Data"
 Cohesion: 0.33
@@ -1638,8 +1659,8 @@ Cohesion: 0.33
 Nodes (5): Before exploring, read these, Domain Docs, File structure, Flag ADR conflicts, Use the glossary's vocabulary
 
 ### Community 267 - "[[path]].js"
-Cohesion: 0.33
-Nodes (4): LOCALE_LANGS, NOTE: Some routes may be "Hybrid" (have SSG output for the base path but, SPA_ROUTES, SUPPORTED_LANGS
+Cohesion: 0.53
+Nodes (5): LOCALE_LANGS, onRequest(), NOTE: Some routes may be "Hybrid" (have SSG output for the base path but, SPA_ROUTES, SUPPORTED_LANGS
 
 ### Community 268 - "NMS-Optimierer: Technologie-Layout-Generator & Adjazenz-Rechner"
 Cohesion: 0.33
@@ -1677,13 +1698,13 @@ Nodes (3): configPath, __dirname, repoRoot
 Cohesion: 0.40
 Nodes (5): __dirname, DIST, getAllHtmlFiles(), ROUTES_JSON, verify()
 
-### Community 277 - "OfflineBanner.tsx"
-Cohesion: 0.32
-Nodes (5): OfflineBanner, OfflineBanner(), meta, Offline, Story
+### Community 277 - "OfflineBanner.stories.tsx"
+Cohesion: 0.47
+Nodes (3): OfflineBanner(), Offline, Story
 
 ### Community 278 - "LifecycleCoordinator"
-Cohesion: 0.12
-Nodes (4): bootApp(), BootOptions, BootResult, LifecycleCoordinator
+Cohesion: 0.11
+Nodes (3): BootOptions, BootResult, LifecycleCoordinator
 
 ### Community 279 - "Getting Help"
 Cohesion: 0.50
@@ -1704,6 +1725,10 @@ Nodes (5): 8.1 Do Not Put Effect Events in Dependency Arrays, 8.2 Initialize App
 ### Community 283 - "Web Interface Guidelines"
 Cohesion: 0.40
 Nodes (4): Guidelines Source, How It Works, Usage, Web Interface Guidelines
+
+### Community 284 - "useShipTypes.test.tsx"
+Cohesion: 0.50
+Nodes (3): localStorageMock, mockPushState, mockReplaceState
 
 ### Community 285 - "Track Learnings: ga4_standardization_20260420"
 Cohesion: 0.40
@@ -1773,21 +1798,9 @@ Nodes (3): Human-Readable Output, JSON Output (Recommended for Agents), Output F
 Cohesion: 0.29
 Nodes (3): Advanced, Core, Features
 
-### Community 310 - "AppHeader.stories.tsx"
-Cohesion: 0.22
-Nodes (6): AppHeader, Desktop, meta, Mobile, Story, Tablet
-
-### Community 311 - "TechTreeSection.tsx"
-Cohesion: 0.27
-Nodes (6): TechTreeSection(), TechTreeSectionProps, TechTreeSectionHeader(), TypeImageMap, TechTreeSectionList(), TechTreeRow
-
 ### Community 312 - "MainAppContent.stories.tsx"
-Cohesion: 0.25
-Nodes (6): Desktop, meta, Mobile, Story, StorybookWrapper(), Tablet
-
-### Community 313 - "useMarkdownContent.ts"
-Cohesion: 0.39
-Nodes (4): MarkdownContentRenderer(), MarkdownContentState, useMarkdownContent(), Window
+Cohesion: 0.13
+Nodes (15): Default, Solving, Story, Default, meta, Story, Desktop, Mobile (+7 more)
 
 ### Community 314 - "[7.9.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.8.2...v7.9.0) (2026-09-15)"
 Cohesion: 0.33
@@ -1898,24 +1911,24 @@ Cohesion: 0.16
 Nodes (17): BetaAnalyticsDataClient, FilterExpression, Namespace, Path, get_unique_characters(), Reads all .json and .md files in the specified directory, extracts all unique…, create_client(), format_status() (+9 more)
 
 ## Knowledge Gaps
-- **2706 isolated node(s):** `ButtonProps`, `ButtonProps`, `ThemeContextValue`, `ThemeContext`, `ParsedRow` (+2701 more)
+- **2709 isolated node(s):** `ButtonProps`, `ButtonProps`, `ThemeContextValue`, `ThemeContext`, `ParsedRow` (+2704 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **216 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `devDependencies` connect `devDependencies` to `browserslist`, `@chromatic-com/storybook`, `@commitlint/cli`, `@commitlint/config-conventional`, `eslint`, `eslint-config-prettier`, `@eslint/js`, `eslint-plugin-perfectionist`, `eslint-plugin-react-refresh`, `eslint-plugin-storybook`, `globals`, `@ianvs/prettier-plugin-sort-imports`, `eslint-plugin-import-x`, `eslint-plugin-react-hooks`, `jsdom`, `@lhci/cli`, `lightningcss`, `madge`, `markdownlint-cli2`, `marked`, `oxlint`, `@tailwindcss/vite`, `prettier`, `prettier-plugin-tailwindcss`, `@radix-ui/react-tooltip`, `@rolldown/plugin-babel`, `rollup-plugin-visualizer`, `sass`, `semantic-release`, `@semantic-release/changelog`, `@semantic-release/exec`, `@semantic-release/git`, `@semantic-release/github`, `@sentry/vite-plugin`, `sharp`, `size-limit`, `playwright`, `@size-limit/file`, `storybook`, `@storybook/addon-a11y`, `@storybook/addon-docs`, `@storybook/addon-vitest`, `@storybook/react`, `@storybook/react-vite`, `@storybook/test`, `stylelint-config-standard-scss`, `stylelint-order`, `tachometer`, `@testing-library/dom`, `@testing-library/react`, `typedoc`, `@types/node`, `@types/react-dom`, `typescript`, `@typescript/native-preview`, `vite-plugin-pwa`, `vite-plugin-splash-screen`, `@vitejs/plugin-react`, `@vitest/browser-playwright`, `@vitest/coverage-v8`, `@testing-library/user-event`, `vitest`, `@vitest/browser`, `babel-plugin-react-compiler`, `@babel/runtime`, `@testing-library/jest-dom`, `vite`, `package.json`?**
-  _High betweenness centrality (0.015) - this node is a cross-community bridge._
-- **Why does `LifecycleCoordinator` connect `LifecycleCoordinator` to `preview.tsx`, `lifecycleCoordinator.ts`, `routes.tsx`, `App.tsx`, `tracking.ts`, `monitoring.ts`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
-- **Why does `Logger` connect `App.tsx` to `src/constants.ts`, `gridStore.ts`, `GridTableButtons.tsx`, `lifecycleCoordinator.ts`, `ShareLinkDialog.tsx`, `useBreakpoint`, `sessionCoordinator.ts`, `reportWebVitals.ts`, `TechTree.tsx`, `environment.ts`, `UpdatePromptWrapper.tsx`, `tracking.ts`, `dataValidation.ts`, `techStore.ts`, `monitoring.ts`, `DynamicRadixIcon.tsx`, `useMarkdownContent.ts`, `useTechTree.tsx`?**
-  _High betweenness centrality (0.006) - this node is a cross-community bridge._
+- **Why does `devDependencies` connect `devDependencies` to `browserslist`, `@chromatic-com/storybook`, `@commitlint/cli`, `@commitlint/config-conventional`, `eslint`, `eslint-config-prettier`, `@eslint/js`, `@vitest/ui`, `eslint-plugin-perfectionist`, `eslint-plugin-react-refresh`, `eslint-plugin-storybook`, `globals`, `@ianvs/prettier-plugin-sort-imports`, `eslint-plugin-import-x`, `eslint-plugin-react-hooks`, `jsdom`, `@lhci/cli`, `lightningcss`, `madge`, `markdownlint-cli2`, `marked`, `oxlint`, `@tailwindcss/vite`, `prettier`, `prettier-plugin-tailwindcss`, `@radix-ui/react-tooltip`, `@rolldown/plugin-babel`, `rollup-plugin-visualizer`, `sass`, `semantic-release`, `@semantic-release/changelog`, `@semantic-release/exec`, `@semantic-release/git`, `@semantic-release/github`, `@sentry/vite-plugin`, `sharp`, `size-limit`, `@size-limit/file`, `storybook`, `@storybook/addon-a11y`, `@storybook/addon-docs`, `@storybook/addon-vitest`, `@storybook/react`, `@storybook/react-vite`, `stylelint-config-standard-scss`, `stylelint-order`, `tachometer`, `@testing-library/dom`, `@testing-library/react`, `knip`, `@playwright/test`, `stylelint`, `typedoc`, `@types/node`, `@types/react`, `@types/react-dom`, `typescript`, `@typescript/native-preview`, `vite-plugin-pwa`, `vite-plugin-splash-screen`, `@vitejs/plugin-react`, `@vitest/browser-playwright`, `@vitest/coverage-v8`, `babel-plugin-react-compiler`, `@babel/runtime`, `@testing-library/jest-dom`, `vite`, `package.json`?**
+  _High betweenness centrality (0.014) - this node is a cross-community bridge._
+- **Why does `Logger` connect `Logger` to `useAnalytics`, `useBreakpoint`, `useTechTree.tsx`, `tracking.ts`, `LifecycleCoordinator`, `ShipSelectionProvider.tsx`, `MarkdownContentRenderer.tsx`, `gridStore.ts`, `ShareLinkDialog.tsx`, `environment.ts`, `App.tsx`, `dataValidation.ts`, `techStore.ts`, `useOptimize.test.tsx`, `ErrorBoundary.tsx`, `bootPipeline.tsx`, `network.ts`, `lifecycleCoordinator.ts`, `dialogUtils.ts`?**
+  _High betweenness centrality (0.013) - this node is a cross-community bridge._
+- **Why does `react` connect `preview.tsx` to `MarkdownContentRenderer.tsx`, `gridStore.ts`, `dependencies`, `Root.tsx`, `dialogUtils.ts`, `lifecycleCoordinator.ts`, `MainAppContent.stories.tsx`, `MainAppGridSection.tsx`?**
+  _High betweenness centrality (0.011) - this node is a cross-community bridge._
 - **What connects `ButtonProps`, `ButtonProps`, `ThemeContextValue` to the rest of the system?**
-  _2706 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _2709 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `NMS Optimizer Changelog: Latest Updates, Features & Improvements` be split into smaller, more focused modules?**
   _Cohesion score 0.017391304347826087 - nodes in this community are weakly interconnected._
 - **Should `performanceChart.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.07043650793650794 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06845238095238096 - nodes in this community are weakly interconnected._
 - **Should `useAnalytics` be split into smaller, more focused modules?**
-  _Cohesion score 0.0784313725490196 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07058823529411765 - nodes in this community are weakly interconnected._
