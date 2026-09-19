@@ -72,19 +72,13 @@ $([ -n "$PARENT_SPEC" ] && echo -e "## Parent Specification & Architecture Guard
 $ISSUE_COMMENTS
 
 ## Autonomous Execution Guardrails:
-- You are running in autonomous batch mode. You MUST complete the entire task in this session.
-- Do NOT output an intermediate status message and stop calling tools.
-- Do NOT run the entire test suite upfront in the background. Use targeted tests (\`bun run test -- <path>\`) and typechecking (\`bun run typecheck\`) which complete quickly.
-- When executing commands, set \`WaitMsBeforeAsync: 10000\` so commands run synchronously. Do not background commands and wait.
-- You are only finished when all code is written, verified, committed, and the issue is closed.
-
-## After implementation:
-- Stage changes: \`git add .\`
-- Run verification: \`bunx lefthook run pre-commit\`
-- Fix any failures, re-stage, and re-run until clean.
-- Close the issue: \`gh issue close $ISSUE_NUM --comment "Resolved."\`
+- You are running in autonomous batch mode.
+- Implement the necessary changes and write/update unit tests.
+- Verify your work using targeted test commands (\`bunx vitest run <path>\`) and typechecking (\`bun run typecheck\`).
+- When executing commands, set \`WaitMsBeforeAsync: 10000\` so commands run synchronously. Do NOT background commands.
+- Stage all your changes (\`git add .\`).
 - Append a one-line summary with the date to \`progress.txt\`.
-- Commit using Angular convention (matching ticket prefix, e.g. \`perf(grid): ...\`), subject under 90 chars. Reference the issue number in the commit message (e.g. \`#$ISSUE_NUM\`).
+- NOTE: Do NOT run \`lefthook\`, \`git commit\`, or \`gh issue close\` yourself. The runner harness will execute the pre-commit verification gate, commit, and close the issue automatically once verified.
 EOF
 )
 
@@ -100,14 +94,44 @@ agy \
 	--prompt "$PROMPT" \
 	"$@" | python3 ./scripts/format_stream.py
 
-# Verify that the issue was actually resolved and closed
-ISSUE_STATE=$(gh issue view "$ISSUE_NUM" --json state --jq .state 2>/dev/null || echo "OPEN")
-RETRY=1
-MAX_RETRIES=5
+# Ensure any changes made by the agent are staged
+git add .
 
-while [ "$ISSUE_STATE" = "OPEN" ] && [ $RETRY -le $MAX_RETRIES ]; do
+# Check if there are any staged changes
+if git diff --cached --quiet; then
+	echo "⚠️  Warning: No staged changes found for issue #$ISSUE_NUM."
+fi
+
+# Outer verification gate: run lefthook in native bash (handles 1-3min runtimes without timeout)
+echo ""
+echo "========================================="
+echo "Running pre-commit verification gate..."
+echo "========================================="
+
+GATE_MAX_RETRIES=3
+GATE_ATTEMPT=1
+
+while [ $GATE_ATTEMPT -le $GATE_MAX_RETRIES ]; do
+	set +e
+	GATE_OUTPUT=$(bunx lefthook run pre-commit 2>&1)
+	GATE_STATUS=$?
+	set -e
+
+	if [ $GATE_STATUS -eq 0 ]; then
+		echo "✔️  Pre-commit verification passed."
+		break
+	fi
+
+	echo "❌ Pre-commit verification failed (attempt $GATE_ATTEMPT / $GATE_MAX_RETRIES):"
+	echo "$GATE_OUTPUT"
+
+	if [ $GATE_ATTEMPT -eq $GATE_MAX_RETRIES ]; then
+		echo "❌ Verification gate failed after $GATE_MAX_RETRIES attempts. Aborting."
+		exit 1
+	fi
+
 	echo ""
-	echo "⚠️  Issue #$ISSUE_NUM is still OPEN (attempt $RETRY / $MAX_RETRIES). Resuming conversation to complete work..."
+	echo "Resuming agent with failure output to fix issues..."
 	echo ""
 
 	agy \
@@ -118,21 +142,29 @@ while [ "$ISSUE_STATE" = "OPEN" ] && [ $RETRY -le $MAX_RETRIES ]; do
 		--project="$(pwd)" \
 		--print-timeout=20m \
 		--output-format=stream-json \
-		--prompt "Continue implementing GitHub issue #$ISSUE_NUM. You MUST complete the implementation, run verification (bunx lefthook run pre-commit), commit your changes, and close the issue with 'gh issue close $ISSUE_NUM --comment \"Resolved.\"'. Do not stop until the issue is closed." \
+		--prompt "Pre-commit verification failed with the following errors:
+
+$GATE_OUTPUT
+
+Please fix these errors, verify with targeted tests, and stage your changes ('git add .'). Do NOT run lefthook yourself." \
 		"$@" | python3 ./scripts/format_stream.py
 
-	ISSUE_STATE=$(gh issue view "$ISSUE_NUM" --json state --jq .state 2>/dev/null || echo "OPEN")
-	RETRY=$((RETRY + 1))
+	git add .
+	GATE_ATTEMPT=$((GATE_ATTEMPT + 1))
 done
 
-if [ "$ISSUE_STATE" = "OPEN" ]; then
-	echo "❌ Error: Issue #$ISSUE_NUM was not resolved after $MAX_RETRIES continuation attempts."
-	exit 1
-fi
+# Commit the verified changes using Angular convention
+COMMIT_MSG="${ISSUE_TITLE} (#${ISSUE_NUM})"
+echo ""
+echo "Committing: $COMMIT_MSG"
+git commit -m "$COMMIT_MSG"
+
+# Close the issue on GitHub
+gh issue close "$ISSUE_NUM" --comment "Resolved."
 
 # Automatically promote any issues that are now unblocked by the completion of this issue
 ./scripts/promote_issues.py
 
 echo "========================================="
-echo "Finished iteration for issue #$ISSUE_NUM"
+echo "Successfully completed issue #$ISSUE_NUM"
 echo "========================================="
