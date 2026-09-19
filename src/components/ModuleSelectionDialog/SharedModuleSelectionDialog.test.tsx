@@ -29,6 +29,7 @@ vi.mock("@/hooks/useAnalytics/useAnalytics");
 
 interface MockPresentationalProps {
 	handleOptimizeClick: () => void;
+	isContentReady?: boolean;
 	isOpen: boolean;
 	onClose: () => void;
 	tech: string;
@@ -38,12 +39,14 @@ interface MockPresentationalProps {
 vi.mock("./ModuleSelectionDialog", () => ({
 	ModuleSelectionDialog: ({
 		handleOptimizeClick,
+		isContentReady,
 		isOpen,
 		onClose,
 		tech,
 	}: MockPresentationalProps) => (
 		<div data-testid="mock-presentational-dialog">
 			<span>IsOpen: {isOpen ? "yes" : "no"}</span>
+			<span>IsContentReady: {isContentReady ? "yes" : "no"}</span>
 			<span>Tech: {tech}</span>
 			<button onClick={handleOptimizeClick}>Optimize Button</button>
 			<button onClick={onClose}>Cancel Button</button>
@@ -121,6 +124,28 @@ describe("SharedModuleSelectionDialog", () => {
 		expect(dialog).toBeInTheDocument();
 		expect(screen.getByText("Tech: hyperdrive")).toBeInTheDocument();
 		expect(screen.getByText("IsOpen: yes")).toBeInTheDocument();
+	});
+
+	test("updates dialog open state immediately and defers heavy content rendering", async () => {
+		vi.mocked(useModuleSelectionDialogStore).mockReturnValue({
+			closeDialog: mockCloseDialog,
+			isOpen: true,
+			selectedTechData: {
+				tech: "hyperdrive",
+				techColor: "blue",
+				techImage: "hyperdrive.webp",
+			},
+		} as unknown as ReturnType<typeof useModuleSelectionDialogStore>);
+
+		render(<SharedModuleSelectionDialog />);
+
+		// Open state updates immediately
+		expect(screen.getByText("IsOpen: yes")).toBeInTheDocument();
+
+		// Content readiness transition resolves
+		await waitFor(() => {
+			expect(screen.getByText("IsContentReady: yes")).toBeInTheDocument();
+		});
 	});
 
 	test("sends page view analytics when dialog is opened", () => {

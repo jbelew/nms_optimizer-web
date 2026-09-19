@@ -2,7 +2,7 @@
  * Interactive technology module configuration dialog module.
  */
 
-import React, { memo, Suspense } from "react";
+import React, { memo, Suspense, useEffect, useMemo, useState, useTransition } from "react";
 import { CheckCircledIcon, InfoCircledIcon, MagicWandIcon } from "@radix-ui/react-icons";
 import {
 	Avatar,
@@ -13,6 +13,7 @@ import {
 	CheckboxGroup,
 	Code,
 	Separator,
+	Skeleton,
 	Text,
 } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
@@ -391,6 +392,60 @@ const DialogBody: React.FC = () => {
 /**
  * The action bar component for the module selection dialog.
  *
+/**
+ * A lightweight placeholder skeleton displayed while the heavy module list is hydrating.
+ *
+ * @remarks
+ * Renders an accessible placeholder with animated skeleton bars mirroring
+ * the module selection layout (description, select all, and module rows).
+ *
+ * @returns {JSX.Element} The rendered skeleton layout.
+ *
+ * @see {@link ModuleSelectionDialog}
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <ModuleSelectionSkeleton />
+ * // mounts placeholder skeleton with aria-busy="true"
+ * ```
+ */
+const ModuleSelectionSkeleton: React.FC = () => {
+	return (
+		<div
+			aria-busy="true"
+			aria-live="polite"
+			className="flex flex-col gap-2"
+			data-testid="module-selection-skeleton"
+		>
+			<Skeleton height="1.25rem" mb="3" width="75%" />
+			<div className="flex items-center gap-2">
+				<Skeleton height="1.25rem" width="1.25rem" />
+				<Skeleton height="1.25rem" width="6rem" />
+			</div>
+			<Separator className="mt-2" mb="3" size="4" />
+			<div className="flex flex-col gap-3">
+				<Skeleton height="1.25rem" width="35%" />
+				{Array.from({ length: 6 }).map((_, index) => (
+					<div className="flex items-center gap-2" key={index}>
+						<Skeleton height="1.25rem" width="1.25rem" />
+						<Skeleton className="rounded-full!" height="1.5rem" width="1.5rem" />
+						<Skeleton height="1.25rem" width={`${50 + (index % 4) * 12}%`} />
+					</div>
+				))}
+			</div>
+		</div>
+	);
+};
+
+ModuleSelectionSkeleton.displayName = "ModuleSelectionSkeleton";
+
+/**
+ * The action bar component for the module selection dialog.
+ *
  * @returns {JSX.Element} The rendered dialog footer with Cancel and Optimize buttons.
  *
  * @component
@@ -399,8 +454,9 @@ const DialogBody: React.FC = () => {
  */
 const DialogFooter: React.FC = () => {
 	const { t } = useTranslation();
-	const { currentCheckedModules, handleOptimizeClick, onClose } = useModuleSelectionContext();
-	const isOptimizeDisabled = currentCheckedModules.length === 0;
+	const { currentCheckedModules, handleOptimizeClick, isContentReady, onClose } =
+		useModuleSelectionContext();
+	const isOptimizeDisabled = isContentReady === false || currentCheckedModules.length === 0;
 
 	return (
 		<div className="mb-1 flex justify-end gap-2">
@@ -452,13 +508,38 @@ const DialogFooter: React.FC = () => {
  */
 export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = memo((props) => {
 	const { t } = useTranslation();
-	const { isOpen, onClose, translatedTechName } = props;
+	const { isContentReady: propIsContentReady, isOpen, onClose, translatedTechName } = props;
+	const [internalContentReady, setInternalContentReady] = useState(false);
+	const [, startTransition] = useTransition();
+
+	useEffect(() => {
+		if (isOpen) {
+			startTransition(() => {
+				setInternalContentReady(true);
+			});
+		} else {
+			startTransition(() => {
+				setInternalContentReady(false);
+			});
+		}
+	}, [isOpen]);
+
+	const isContentReady =
+		propIsContentReady !== undefined ? propIsContentReady : internalContentReady;
+
+	const providerProps = useMemo(
+		() => ({
+			...props,
+			isContentReady,
+		}),
+		[props, isContentReady]
+	);
 
 	return (
-		<ModuleSelectionProvider props={props}>
+		<ModuleSelectionProvider props={providerProps}>
 			<Suspense fallback={null}>
 				<AppDialog
-					content={<DialogBody />}
+					content={isContentReady ? <DialogBody /> : <ModuleSelectionSkeleton />}
 					footer={<DialogFooter />}
 					headerIcon={
 						<CheckCircledIcon

@@ -100,6 +100,7 @@ export const SharedModuleSelectionDialog: React.FC = () => {
 
 	// Snapshot of initial module selections when dialog opens (for cancel/revert)
 	const [initialModules, setInitialModules] = useState<string[]>([]);
+	const [isContentReady, setIsContentReady] = useState(false);
 	const optimizeClickedRef = useRef(false);
 
 	// Compute translated tech name
@@ -107,6 +108,19 @@ export const SharedModuleSelectionDialog: React.FC = () => {
 		? techImage.replace(/\.\w+$/, "").replace(/\//g, ".")
 		: activeTech;
 	const translatedTechName = activeTech ? t(`technologies.${translationKeyPart}`) : "";
+
+	// Defer heavy content rendering across non-blocking transitions when dialog opens
+	useEffect(() => {
+		if (isOpen && activeTech) {
+			startTransition(() => {
+				setIsContentReady(true);
+			});
+		} else {
+			startTransition(() => {
+				setIsContentReady(false);
+			});
+		}
+	}, [isOpen, activeTech]);
 
 	// Snapshot initial modules and fire analytics when dialog opens
 	useEffect(() => {
@@ -176,6 +190,7 @@ export const SharedModuleSelectionDialog: React.FC = () => {
 			handleOptimizeClick={handleOptimizeClick}
 			handleSelectAllChange={handleSelectAllChange}
 			handleValueChange={handleValueChange}
+			isContentReady={isContentReady}
 			isIndeterminate={isIndeterminate}
 			isOpen={isOpen}
 			onClose={handleClose}

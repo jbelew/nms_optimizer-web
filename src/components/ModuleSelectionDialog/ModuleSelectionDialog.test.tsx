@@ -194,4 +194,26 @@ describe("ModuleSelectionDialog", () => {
 			expect(defaultProps.handleOptimizeClick).toHaveBeenCalled();
 		});
 	});
+
+	it("renders lightweight skeleton placeholder with accessible attributes when content is not ready", () => {
+		renderDialog({ isContentReady: false });
+		const skeleton = screen.getByTestId("module-selection-skeleton");
+		expect(skeleton).toBeInTheDocument();
+		expect(skeleton).toHaveAttribute("aria-busy", "true");
+		expect(skeleton).toHaveAttribute("aria-live", "polite");
+		expect(screen.queryByText("Bonus Modules")).not.toBeInTheDocument();
+	});
+
+	it("renders child checkboxes once transition resolves and removes skeleton", async () => {
+		renderDialog();
+		expect(await screen.findByText("Bonus Modules")).toBeInTheDocument();
+		expect(screen.getByText("Alpha Bonus")).toBeInTheDocument();
+		expect(screen.queryByTestId("module-selection-skeleton")).not.toBeInTheDocument();
+	});
+
+	it("disables the optimize button while content is hydrating even if modules are selected", () => {
+		renderDialog({ currentCheckedModules: ["bonus1"], isContentReady: false });
+		const optimizeButton = screen.getByRole("button", { name: "optimizeButton" });
+		expect(optimizeButton).toBeDisabled();
+	});
 });
