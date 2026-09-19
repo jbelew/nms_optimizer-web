@@ -29,14 +29,6 @@ export interface ModuleSelectionDialogProps {
 	handleSelectAllChange: (checked: "indeterminate" | boolean) => void;
 	/** Callback for individual module selection changes. */
 	handleValueChange: (newValues: string[]) => void;
-	/**
-	 * Whether the heavy checkbox list and module avatars are ready to be mounted.
-	 * When `false`, a lightweight skeleton placeholder is displayed.
-	 * If omitted, the component manages deferred mounting internally via `useTransition`.
-	 *
-	 * @default true
-	 */
-	isContentReady?: boolean;
 	/** Whether the "Select All" checkbox is in an indeterminate state. */
 	isIndeterminate: boolean;
 	/** Whether the dialog is currently visible. */
