@@ -73,9 +73,10 @@ export function createMarkdownProcessor() {
 	// Override link
 	renderer.link = (token) => {
 		const isInternal =
-			token.href.startsWith("/") ||
+			(token.href.startsWith("/") && !token.href.startsWith("//")) ||
 			token.href.startsWith("#") ||
-			token.href.startsWith("https://nms-optimizer.app");
+			token.href === "https://nms-optimizer.app" ||
+			token.href.startsWith("https://nms-optimizer.app/");
 		const targetAttr = isInternal ? "" : ' target="_blank" rel="noopener noreferrer"';
 
 		return `<a href="${token.href}"${targetAttr} style="color: #4CCCE6; text-decoration: underline;">${token.text}</a>`;
