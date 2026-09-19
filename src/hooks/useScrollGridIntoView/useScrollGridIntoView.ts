@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
+import { Logger } from "@/utils/system/monitoring";
 
 const GRID_SCROLL_OFFSET_SMALL = 40; // < 640px
 const GRID_SCROLL_OFFSET_MEDIUM = 0; // 640px - 768px
@@ -116,7 +117,11 @@ export const useScrollGridIntoView = (options?: { skipOnLargeScreens?: boolean }
 
 		if (!sharedGridContainerRef.current) return;
 
-		sharedForceShow?.();
+		try {
+			sharedForceShow?.();
+		} catch (error) {
+			Logger.error("Failed to show toolbar during scroll:", error);
+		}
 
 		if (typeof window === "undefined" || typeof requestAnimationFrame === "undefined") {
 			return;
@@ -124,12 +129,16 @@ export const useScrollGridIntoView = (options?: { skipOnLargeScreens?: boolean }
 
 		requestAnimationFrame(() => {
 			requestAnimationFrame(() => {
-				const element = sharedGridContainerRef.current;
-				if (!element) return;
+				try {
+					const element = sharedGridContainerRef.current;
+					if (!element) return;
 
-				const scrollY = window.pageYOffset ?? window.scrollY ?? 0;
-				const top = element.getBoundingClientRect().top + scrollY - offset;
-				window.scrollTo({ behavior: "smooth", top });
+					const scrollY = window.pageYOffset ?? window.scrollY ?? 0;
+					const top = element.getBoundingClientRect().top + scrollY - offset;
+					window.scrollTo({ behavior: "smooth", top });
+				} catch (error) {
+					Logger.error("Failed to scroll grid into view:", error);
+				}
 			});
 		});
 	}, [isAbove1024, offset, options?.skipOnLargeScreens]);

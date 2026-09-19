@@ -3,6 +3,7 @@ import { useTransition } from "react";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
 import { useShakeStore } from "@/store/ui/uiStore";
+import { Logger } from "@/utils/system/monitoring";
 
 /**
  * Manages the optimization and reset lifecycle of a technology.
@@ -69,9 +70,13 @@ export const useTechOptimization = (
 	const handleReset = () => {
 		performance.mark("reset-start");
 		startResetTransition(() => {
-			handleResetGridTech(tech);
-			clearTechMaxBonus(tech);
-			clearTechSolvedBonus(tech);
+			try {
+				handleResetGridTech(tech);
+				clearTechMaxBonus(tech);
+				clearTechSolvedBonus(tech);
+			} catch (error) {
+				Logger.error("Failed to reset technology in grid:", error);
+			}
 		});
 		performance.mark("reset-end");
 		performance.measure("reset-duration", "reset-start", "reset-end");
@@ -99,8 +104,12 @@ export const useTechOptimization = (
 		} else {
 			// We need to reset everything before optimizing
 			handleReset();
-			startOptimizeTransition(() => {
-				void handleOptimize(tech);
+			startOptimizeTransition(async () => {
+				try {
+					await handleOptimize(tech);
+				} catch (error) {
+					Logger.error("Failed to optimize technology:", error);
+				}
 			});
 		}
 	};

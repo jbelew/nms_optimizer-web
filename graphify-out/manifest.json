@@ -1520,13 +1520,13 @@
     "semantic_hash": ""
   },
   "src/components/TechTreeRow/useTechOptimization.test.ts": {
-    "mtime": 1789850264.2122428,
-    "ast_hash": "cf356bdfcc06a812ef7e37d7cad2bab9",
+    "mtime": 1789858374.85894,
+    "ast_hash": "42bd9d134a4a197f2fb2fe02fc762334",
     "semantic_hash": ""
   },
   "src/components/TechTreeRow/useTechOptimization.ts": {
-    "mtime": 1789850223.5486908,
-    "ast_hash": "10274cf53f8c082593d918f70b2f9981",
+    "mtime": 1789858348.548481,
+    "ast_hash": "b9c9c3ad6daf0fcd59309c2bc3ade01f",
     "semantic_hash": ""
   },
   "src/components/TechTreeRow/useTechTreeRow.test.ts": {
@@ -1790,8 +1790,8 @@
     "semantic_hash": ""
   },
   "src/hooks/useScrollGridIntoView/useScrollGridIntoView.ts": {
-    "mtime": 1789849641.3897247,
-    "ast_hash": "8a73f58de253027683b109bf89473d7d",
+    "mtime": 1789858355.3604987,
+    "ast_hash": "18d91441bdbca33047c4cc14e4547aa7",
     "semantic_hash": ""
   },
   "src/hooks/useScrollHide/useScrollHide.ts": {
@@ -3520,7 +3520,7 @@
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
-    "mtime": 1789846836.5071638,
+    "mtime": 1789857567.401534,
     "ast_hash": "30a30853c5a95ce5b36d2cc95831fdb7",
     "semantic_hash": ""
   },
@@ -6920,8 +6920,8 @@
     "semantic_hash": ""
   },
   "lefthook.yml": {
-    "mtime": 1789854060.2603986,
-    "ast_hash": "8cb53831b141b9e09cf9a6a44d120184",
+    "mtime": 1789856270.0963497,
+    "ast_hash": "139882c08011916250ab6fd6a6aa4c31",
     "semantic_hash": ""
   },
   "progress.txt": {
@@ -13670,8 +13670,8 @@
     "semantic_hash": ""
   },
   "src/hooks/useScrollGridIntoView/useScrollGridIntoView.test.ts": {
-    "mtime": 1789849649.7208557,
-    "ast_hash": "b9864cab8d36cadae6eab26e8a5eae14",
+    "mtime": 1789858388.7372494,
+    "ast_hash": "de6a6da538ef45071e2ac5f4dd6672f1",
     "semantic_hash": ""
   },
   "scripts/check-commit-msg-early.mjs": {

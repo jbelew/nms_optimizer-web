@@ -3,6 +3,7 @@ import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
+import { Logger } from "@/utils/system/monitoring";
 
 import {
 	__resetScrollGridIntoViewRef,
@@ -272,5 +273,51 @@ describe("useScrollGridIntoView", () => {
 
 		newResult.current.scrollIntoView();
 		expect(forceShowMock).not.toHaveBeenCalled();
+	});
+
+	it("handles errors gracefully when forceShow callback throws", () => {
+		const loggerSpy = vi.spyOn(Logger, "error").mockImplementation(() => {});
+		const throwingForceShow = vi.fn().mockImplementation(() => {
+			throw new Error("Toolbar error");
+		});
+		registerToolbarForceShow(throwingForceShow);
+
+		const { result } = renderHook(() => useScrollGridIntoView());
+		result.current.gridContainerRef.current = mockElement;
+
+		expect(() => result.current.scrollIntoView()).not.toThrow();
+		expect(loggerSpy).toHaveBeenCalledWith(
+			"Failed to show toolbar during scroll:",
+			expect.any(Error)
+		);
+		loggerSpy.mockRestore();
+	});
+
+	it("handles errors gracefully when getBoundingClientRect or scrollTo throws", () => {
+		const loggerSpy = vi.spyOn(Logger, "error").mockImplementation(() => {});
+		getBoundingClientRectMock.mockImplementation(() => {
+			throw new Error("DOM measurement error");
+		});
+
+		const { result } = renderHook(() => useScrollGridIntoView());
+		result.current.gridContainerRef.current = mockElement;
+
+		result.current.scrollIntoView();
+
+		// Flush frame 1
+		act(() => {
+			rafCallbacks.shift()?.(performance.now());
+		});
+
+		// Flush frame 2
+		act(() => {
+			rafCallbacks.shift()?.(performance.now());
+		});
+
+		expect(loggerSpy).toHaveBeenCalledWith(
+			"Failed to scroll grid into view:",
+			expect.any(Error)
+		);
+		loggerSpy.mockRestore();
 	});
 });

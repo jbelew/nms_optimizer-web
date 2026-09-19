@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
 import { useShakeStore } from "@/store/ui/uiStore";
+import { Logger } from "@/utils/system/monitoring";
 
 import { useTechOptimization } from "./useTechOptimization";
 
@@ -124,5 +125,41 @@ describe("useTechOptimization", () => {
 		expect(mockResetGridTech).toHaveBeenCalledWith("testTech");
 		expect(mockClearTechMaxBonus).toHaveBeenCalledWith("testTech");
 		expect(mockClearTechSolvedBonus).toHaveBeenCalledWith("testTech");
+	});
+
+	it("handles errors gracefully when handleOptimize rejects", async () => {
+		const loggerSpy = vi.spyOn(Logger, "error").mockImplementation(() => {});
+		const handleOptimize = vi.fn().mockRejectedValue(new Error("Optimization failed"));
+		const { result } = renderHook(() =>
+			useTechOptimization("testTech", handleOptimize, false, false)
+		);
+
+		await act(async () => {
+			result.current.handleOptimizeClick();
+		});
+
+		expect(loggerSpy).toHaveBeenCalledWith("Failed to optimize technology:", expect.any(Error));
+		loggerSpy.mockRestore();
+	});
+
+	it("handles errors gracefully when handleReset throws", () => {
+		const loggerSpy = vi.spyOn(Logger, "error").mockImplementation(() => {});
+		mockResetGridTech.mockImplementationOnce(() => {
+			throw new Error("Reset failed");
+		});
+		const handleOptimize = vi.fn();
+		const { result } = renderHook(() =>
+			useTechOptimization("testTech", handleOptimize, false, true)
+		);
+
+		act(() => {
+			result.current.handleReset();
+		});
+
+		expect(loggerSpy).toHaveBeenCalledWith(
+			"Failed to reset technology in grid:",
+			expect.any(Error)
+		);
+		loggerSpy.mockRestore();
 	});
 });
