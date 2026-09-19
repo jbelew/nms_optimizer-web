@@ -515,8 +515,8 @@
     "semantic_hash": ""
   },
   "ralph_once.sh": {
-    "mtime": 1789850827.093426,
-    "ast_hash": "3e7776d02797114db2d98375a7f6d9b6",
+    "mtime": 1789854755.8283195,
+    "ast_hash": "f3df68ebb2faf648969d7ef8f4e32c3e",
     "semantic_hash": ""
   },
   "scripts/analyze-stats.py": {
@@ -600,8 +600,8 @@
     "semantic_hash": ""
   },
   "scripts/promote_issues.py": {
-    "mtime": 1788384701.9681585,
-    "ast_hash": "1107e2decae3b132e247bbd7c74e57ca",
+    "mtime": 1789854747.207152,
+    "ast_hash": "1195e8e7e91761f0e3fba4e5438d6230",
     "semantic_hash": ""
   },
   "scripts/refactor_imports.py": {
@@ -13660,8 +13660,8 @@
     "semantic_hash": ""
   },
   "scripts/format_stream.py": {
-    "mtime": 1789848283.740861,
-    "ast_hash": "1b9358ad27300dccb3f76fc125f93e81",
+    "mtime": 1789854650.03264,
+    "ast_hash": "742b90e08c6fc35b0c1edc290c89d6d9",
     "semantic_hash": ""
   },
   "src/components/SvgPointerEvents.test.tsx": {
@@ -13677,6 +13677,66 @@
   "scripts/check-commit-msg-early.mjs": {
     "mtime": 1789854087.884763,
     "ast_hash": "599086ea484ed9fd887e29260d86cbad",
+    "semantic_hash": ""
+  },
+  "scripts/ralph/__init__.py": {
+    "mtime": 1789854623.7389045,
+    "ast_hash": "5f0afe29639e555f9dac778647c1f6a0",
+    "semantic_hash": ""
+  },
+  "scripts/ralph/adapters.py": {
+    "mtime": 1789855270.806831,
+    "ast_hash": "1eb78459beaa9c32a3312f3965045de2",
+    "semantic_hash": ""
+  },
+  "scripts/ralph/agent.py": {
+    "mtime": 1789855286.589741,
+    "ast_hash": "1c764701da4e87c8ba477e42477d2a38",
+    "semantic_hash": ""
+  },
+  "scripts/ralph/gate.py": {
+    "mtime": 1789855247.1190178,
+    "ast_hash": "427510f9f9fd68d71705e00a800e2073",
+    "semantic_hash": ""
+  },
+  "scripts/ralph/git.py": {
+    "mtime": 1789854672.484775,
+    "ast_hash": "49ecb8c431dad26a7d3aeafbfbf1a8e7",
+    "semantic_hash": ""
+  },
+  "scripts/ralph/issues.py": {
+    "mtime": 1789854789.508952,
+    "ast_hash": "2276025792696361f47e0a503936012b",
+    "semantic_hash": ""
+  },
+  "scripts/ralph/runner.py": {
+    "mtime": 1789855294.8536365,
+    "ast_hash": "35847d8ca5cf9ede730319388aafae8a",
+    "semantic_hash": ""
+  },
+  "scripts/ralph_runner.py": {
+    "mtime": 1789854732.7096062,
+    "ast_hash": "c022cd0738f94fa4821a0f16bff96fb8",
+    "semantic_hash": ""
+  },
+  "tests/scripts/test_gate.py": {
+    "mtime": 1789855301.2421215,
+    "ast_hash": "7421d7d7430ff4e52cce2f15fe26209b",
+    "semantic_hash": ""
+  },
+  "tests/scripts/test_git.py": {
+    "mtime": 1789854762.484542,
+    "ast_hash": "24ed4ee5dc6b71db04c8285103f23551",
+    "semantic_hash": ""
+  },
+  "tests/scripts/test_issues.py": {
+    "mtime": 1789854770.2228117,
+    "ast_hash": "b27fb281a69081e46d8cffb99f9330a5",
+    "semantic_hash": ""
+  },
+  "tests/scripts/test_runner.py": {
+    "mtime": 1789855308.740073,
+    "ast_hash": "b7f05c1eccad95a94e36b7db95631d08",
     "semantic_hash": ""
   }
 }

@@ -47,14 +47,18 @@ def format_tool_detail(tool_name: str, params: Dict[str, Any]) -> str:
     return ""
 
 
-def main():
-    if hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(line_buffering=True)
+def process_stream(stream, out=None) -> bool:
+    """Process an NDJSON stream from agy and format it to out (default: sys.stdout)."""
+    if out is None:
+        out = sys.stdout
+
+    if hasattr(out, "reconfigure"):
+        out.reconfigure(line_buffering=True)
 
     is_streaming_text = False
     success = True
 
-    for line in sys.stdin:
+    for line in stream:
         line = line.strip()
         if not line:
             continue
@@ -63,14 +67,14 @@ def main():
             data = json.loads(line)
         except json.JSONDecodeError:
             # Print non-JSON lines directly
-            print(line)
+            print(line, file=out)
             continue
 
         event = data.get("event")
 
         if event == "init":
             conv_id = data.get("conversation_id", "")
-            print(f"{GRAY}🚀 Session initialized (Conversation ID: {conv_id}){RESET}")
+            print(f"{GRAY}🚀 Session initialized (Conversation ID: {conv_id}){RESET}", file=out)
 
         elif event == "step_update":
             update = data.get("step_update", {})
@@ -79,7 +83,7 @@ def main():
 
             if step_type == "tool":
                 if is_streaming_text:
-                    print()
+                    print(file=out)
                     is_streaming_text = False
 
                 tool_name = update.get("tool_name") or update.get("tool_info", {}).get("name", "tool")
@@ -88,27 +92,27 @@ def main():
 
                 if state == "ACTIVE":
                     detail = format_tool_detail(tool_name, params)
-                    print(f"{CYAN}🔧 [{tool_name}]{RESET} {detail}")
+                    print(f"{CYAN}🔧 [{tool_name}]{RESET} {detail}", file=out)
                 elif state == "DONE":
                     dur = update.get("duration_seconds", 0)
-                    print(f"   {GRAY}↳ completed in {dur:.2f}s{RESET}")
+                    print(f"   {GRAY}↳ completed in {dur:.2f}s{RESET}", file=out)
 
             elif step_type == "agent_response":
                 text_delta = update.get("text_delta")
                 if text_delta:
                     if not is_streaming_text:
-                        print(f"{BOLD}💬 Agent:{RESET} ", end="")
+                        print(f"{BOLD}💬 Agent:{RESET} ", end="", file=out)
                         is_streaming_text = True
-                    print(text_delta, end="", flush=True)
+                    print(text_delta, end="", flush=True, file=out)
                 elif state == "DONE" and not is_streaming_text:
                     dur = update.get("duration_seconds", 0)
                     thinking = update.get("usage", {}).get("thinking_tokens", 0)
                     if thinking > 0:
-                        print(f"{GRAY}🤖 Thinking... ({dur:.1f}s, {thinking} tokens){RESET}")
+                        print(f"{GRAY}🤖 Thinking... ({dur:.1f}s, {thinking} tokens){RESET}", file=out)
 
         elif event == "result":
             if is_streaming_text:
-                print()
+                print(file=out)
                 is_streaming_text = False
 
             res = data.get("result", {})
@@ -118,12 +122,16 @@ def main():
             total_tokens = usage.get("total_tokens", 0)
 
             if status == "SUCCESS":
-                print(f"\n{GREEN}{BOLD}✅ Session completed successfully in {dur:.1f}s (Tokens: {total_tokens:,}){RESET}")
+                print(f"\n{GREEN}{BOLD}✅ Session completed successfully in {dur:.1f}s (Tokens: {total_tokens:,}){RESET}", file=out)
             else:
                 success = False
-                print(f"\n{RED}{BOLD}❌ Session finished with status '{status}' in {dur:.1f}s{RESET}")
+                print(f"\n{RED}{BOLD}❌ Session finished with status '{status}' in {dur:.1f}s{RESET}", file=out)
 
-    if not success:
+    return success
+
+
+def main():
+    if not process_stream(sys.stdin):
         sys.exit(1)
 
 
