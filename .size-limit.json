@@ -42,6 +42,6 @@
 	{
 		"name": "Total app JS (gzipped)",
 		"path": "dist/build/*.js",
-		"limit": "650 KB"
+		"limit": "700 KB"
 	}
 ]

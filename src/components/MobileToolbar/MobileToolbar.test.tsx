@@ -147,4 +147,29 @@ describe("MobileToolbar", () => {
 		expect(loadButton.hasAttribute("disabled")).toBe(true);
 		expect(saveButton.hasAttribute("disabled")).toBe(true);
 	});
+
+	it("should call onLoadBuild when the child SVG icon of the load button is clicked", () => {
+		render(
+			<I18nextProvider i18n={i18n}>
+				<Theme>
+					<MobileToolbar
+						gridRef={mockGridRef}
+						hasModulesInGrid={true}
+						isVisible={true}
+						onLoadBuild={mockOnLoadBuild}
+						onSaveBuild={mockOnSaveBuild}
+						onShowChangelog={mockOnShowChangelog}
+						solving={false}
+					/>
+				</Theme>
+			</I18nextProvider>
+		);
+
+		const loadButton = screen.getByLabelText("buttons.loadBuild");
+		const svg = loadButton.querySelector("svg");
+		expect(svg).toBeInTheDocument();
+		fireEvent.click(svg!);
+
+		expect(mockOnLoadBuild).toHaveBeenCalledTimes(1);
+	});
 });

@@ -72,11 +72,27 @@ const LinkRenderer: React.FC<{ children?: React.ReactNode; href?: string }> = ({
 	children,
 	href,
 }) => {
-	const isInternal =
-		typeof href === "string" &&
-		(href.startsWith("/") ||
-			href.startsWith("#") ||
-			href.startsWith("https://nms-optimizer.app"));
+	const isInternal = (() => {
+		if (typeof href !== "string") return false;
+		if (href.startsWith("#")) return true;
+		if (href.startsWith("/") && !href.startsWith("//")) return true;
+
+		try {
+			const baseOrigin =
+				typeof window !== "undefined"
+					? window.location.origin
+					: "https://nms-optimizer.app";
+			const parsed = new URL(href, baseOrigin);
+
+			return (
+				parsed.origin === baseOrigin ||
+				parsed.hostname === "nms-optimizer.app" ||
+				parsed.hostname.endsWith(".nms-optimizer.app")
+			);
+		} catch {
+			return false;
+		}
+	})();
 
 	return (
 		<Link

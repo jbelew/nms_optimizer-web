@@ -1,11 +1,15 @@
 /// <reference types="@testing-library/jest-dom" />
 import type { Mock } from "vitest";
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, renderHook, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { GridProvider } from "@/components/GridTable/GridContext";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
+import {
+	__resetScrollGridIntoViewRef,
+	useScrollGridIntoView,
+} from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
 
 import GridTableButtons from "./GridTableButtons";
 
@@ -136,6 +140,7 @@ const renderComponent = (solving = false) => {
 describe("GridTableButtons", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
+		__resetScrollGridIntoViewRef();
 		(useBreakpoint as Mock).mockReturnValue(true); // Default to smallAndUp
 		setGridStoreState(false, true); // Default to not shared, has modules
 	});
@@ -225,5 +230,100 @@ describe("GridTableButtons", () => {
 		expect(mockResetGrid).toHaveBeenCalled();
 		expect(mockUpdateUrlForReset).toHaveBeenCalled();
 		expect(mockSetIsSharedGrid).toHaveBeenCalledWith(false);
+	});
+
+	it("triggers instructions action handler when clicking its child SVG icon", () => {
+		renderComponent(false);
+		const button = screen.getByLabelText("buttons.instructions");
+		const svg = button.querySelector("svg");
+		expect(svg).toBeInTheDocument();
+		fireEvent.click(svg!);
+
+		expect(openDialogMock).toHaveBeenCalledWith("instructions");
+		expect(markTutorialFinishedMock).toHaveBeenCalled();
+	});
+
+	it("triggers reset grid action handler when clicking its child SVG icon", () => {
+		renderComponent(false);
+		const button = screen.getByText("Reset Grid Button").closest("button");
+		const svg = button?.querySelector("svg");
+		expect(svg).toBeInTheDocument();
+		fireEvent.click(svg!);
+
+		expect(mockSendEvent).toHaveBeenCalledWith({
+			action: "reset_grid",
+			category: "ui",
+			nonInteraction: false,
+			value: 1,
+		});
+		expect(mockResetGrid).toHaveBeenCalled();
+		expect(mockUpdateUrlForReset).toHaveBeenCalled();
+		expect(mockSetIsSharedGrid).toHaveBeenCalledWith(false);
+	});
+
+	it("initiates reset transition immediately and delegates scrolling asynchronously on mobile", () => {
+		// Mock mobile breakpoint (< 1024px and < 640px)
+		(useBreakpoint as Mock).mockImplementation((_bp: string) => false);
+
+		const rafCallbacks: Array<FrameRequestCallback> = [];
+		vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb: FrameRequestCallback) => {
+			rafCallbacks.push(cb);
+
+			return rafCallbacks.length;
+		});
+		const scrollToMock = vi.fn();
+		Object.defineProperty(window, "scrollTo", {
+			configurable: true,
+			value: scrollToMock,
+			writable: true,
+		});
+
+		const mockElement = document.createElement("div");
+		const getBoundingClientRectMock = vi.fn().mockReturnValue({
+			bottom: 250,
+			height: 100,
+			left: 0,
+			right: 100,
+			toJSON: () => {},
+			top: 150,
+			width: 100,
+			x: 0,
+			y: 150,
+		});
+		mockElement.getBoundingClientRect = getBoundingClientRectMock;
+
+		// Set the shared grid container ref
+		const { result: scrollHook } = renderHook(() => useScrollGridIntoView());
+		scrollHook.current.gridContainerRef.current = mockElement;
+
+		renderComponent(false);
+		const resetButton = screen.getByLabelText("Reset Grid Button");
+		fireEvent.click(resetButton);
+
+		// 1. Reset state transitions must be initiated immediately
+		expect(mockResetGrid).toHaveBeenCalled();
+		expect(mockUpdateUrlForReset).toHaveBeenCalled();
+		expect(mockSetIsSharedGrid).toHaveBeenCalledWith(false);
+
+		// 2. Synchronous layout measurement and scrolling must NOT occur in the click tick
+		expect(getBoundingClientRectMock).not.toHaveBeenCalled();
+		expect(scrollToMock).not.toHaveBeenCalled();
+
+		// 3. Animation frame is scheduled
+		expect(window.requestAnimationFrame).toHaveBeenCalledTimes(1);
+
+		// Step 2: Flush pre-paint frame
+		act(() => {
+			rafCallbacks.shift()?.(performance.now());
+		});
+		expect(getBoundingClientRectMock).not.toHaveBeenCalled();
+		expect(scrollToMock).not.toHaveBeenCalled();
+
+		// Step 3: Flush post-paint frame
+		act(() => {
+			rafCallbacks.shift()?.(performance.now());
+		});
+		expect(getBoundingClientRectMock).toHaveBeenCalledTimes(1);
+		expect(scrollToMock).toHaveBeenCalledTimes(1);
 	});
 });

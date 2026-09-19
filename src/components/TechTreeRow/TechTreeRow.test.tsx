@@ -62,6 +62,10 @@ const renderWithProviders = (ui: React.ReactElement) => {
 	return render(ui);
 };
 
+const mockResetGridTech = vi.fn();
+const mockClearTechMaxBonus = vi.fn();
+const mockClearTechSolvedBonus = vi.fn();
+
 // Helper to set up the default store mocks
 /**
  *
@@ -77,7 +81,7 @@ const setupMocks = (hasTechInGrid: boolean, solving = false) => {
 	mockUseGridStore.mockImplementation((selector?: (state: GridStore) => unknown) => {
 		const state: Partial<GridStore> = {
 			activeTechs: hasTechInGrid ? new Set(["testTech"]) : new Set(),
-			resetGridTech: vi.fn(),
+			resetGridTech: mockResetGridTech,
 		};
 
 		return selector ? selector(state as GridStore) : (state as GridStore);
@@ -87,9 +91,9 @@ const setupMocks = (hasTechInGrid: boolean, solving = false) => {
 		const state: Partial<TechStore> = {
 			checkedModules: { testTech: ["module1"] },
 
-			clearTechMaxBonus: vi.fn(),
+			clearTechMaxBonus: mockClearTechMaxBonus,
 
-			clearTechSolvedBonus: vi.fn(),
+			clearTechSolvedBonus: mockClearTechSolvedBonus,
 
 			getBonusStatus: vi.fn(() => null),
 
@@ -232,5 +236,48 @@ describe("TechTreeRow", () => {
 		const resetButton = screen.getByRole("button", { name: "Reset Test Tech Name" });
 		expect(updateButton).toBeDisabled();
 		expect(resetButton).toBeDisabled();
+	});
+
+	it("should call handleReset and initiate reset transition when the reset button is clicked", () => {
+		// Arrange
+		setupMocks(true);
+		renderWithProviders(<TechTreeRow {...defaultProps} />);
+
+		// Act
+		const resetButton = screen.getByRole("button", { name: "Reset Test Tech Name" });
+		fireEvent.click(resetButton);
+
+		// Assert
+		expect(mockResetGridTech).toHaveBeenCalledWith("testTech");
+		expect(mockClearTechMaxBonus).toHaveBeenCalledWith("testTech");
+		expect(mockClearTechSolvedBonus).toHaveBeenCalledWith("testTech");
+	});
+
+	it("should initiate solve transition without executing synchronous layout queries", () => {
+		// Arrange
+		const handleOptimizeMock = vi.fn();
+		setupMocks(false);
+		mockUseTechTree.mockReturnValue({
+			handleOptimize: handleOptimizeMock,
+			isGridFull: false,
+			solving: false,
+		});
+
+		const scrollToMock = vi.fn();
+		Object.defineProperty(window, "scrollTo", {
+			configurable: true,
+			value: scrollToMock,
+			writable: true,
+		});
+
+		renderWithProviders(<TechTreeRow {...defaultProps} />);
+
+		// Act
+		const solveButton = screen.getByRole("button", { name: "Solve Test Tech Name" });
+		fireEvent.click(solveButton);
+
+		// Assert
+		expect(handleOptimizeMock).toHaveBeenCalledWith("testTech");
+		expect(scrollToMock).not.toHaveBeenCalled();
 	});
 });

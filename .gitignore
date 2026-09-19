@@ -1,6 +1,7 @@
 # Logs
 logs
 *.log
+*.pid
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -14,6 +15,7 @@ node_modules
 dist
 dist-ssr
 *.local
+bundle/
 
 # Coverage
 coverage/*
@@ -21,18 +23,21 @@ coverage/*
 # Testing
 playwright-report
 test-results
+.playwright-mcp/
 *storybook.log
 storybook-static
 
 # TypeScript build info
-tsconfig.node.tsbuildinfo
-tsconfig.tsbuildinfo
+*.tsbuildinfo
 
 # Environment & Python
 .env
 .venv/
 venv/
-__pycache__
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
 
 # Generated/temporary files
 lighthouse-report.html
@@ -58,20 +63,23 @@ seo_report/*
 .gemini
 .amp
 .claude
+
+# Graphify
 **/graphify-out/cache/
+**/graphify-out/.graphify_python
+**/graphify-out/.graphify_uncached.txt
+**/graphify-out/.graphify_root
+**/graphify-out/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/
 
 # Lighthouse temporary directories
 .lighthouseci/
-
-# Cloudflare API scripts
-scripts/cloudflare/*
 
 # Dolt database files (added by bd init)
 .dolt/
 *.db
 
 # Beads / Dolt files (added by bd init)
-.beads-credential-key
+**/.beads-credential-key
 docs/nestjs-replatform-analysis.md
 
 # Cloudflare Scripts

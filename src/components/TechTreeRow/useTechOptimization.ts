@@ -3,6 +3,7 @@ import { useTransition } from "react";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
 import { useShakeStore } from "@/store/ui/uiStore";
+import { Logger } from "@/utils/system/monitoring";
 
 /**
  * Manages the optimization and reset lifecycle of a technology.
@@ -23,6 +24,7 @@ import { useShakeStore } from "@/store/ui/uiStore";
  * @returns {object} Handlers for optimization and reset UI actions.
  * @returns {Function} returns.handleOptimizeClick - Initiates the optimization process.
  * @returns {Function} returns.handleReset - Clears the technology from the grid and resets bonuses.
+ * @returns {boolean} returns.isOptimizing - Whether an optimize transition is currently pending.
  * @returns {boolean} returns.isResetting - Whether a reset transition is currently pending.
  *
  * @see {@link useGridStore} for grid layout state.
@@ -36,7 +38,7 @@ import { useShakeStore } from "@/store/ui/uiStore";
  *
  * @example
  * ```tsx
- * const { handleOptimizeClick } = useTechOptimization("shield", solveFn, false, true);
+ * const { handleOptimizeClick, handleReset, isOptimizing, isResetting } = useTechOptimization("shield", solveFn, false, true);
  * ```
  */
 export const useTechOptimization = (
@@ -50,6 +52,7 @@ export const useTechOptimization = (
 	const clearTechSolvedBonus = useTechStore((state) => state.clearTechSolvedBonus);
 	const { triggerShake } = useShakeStore();
 	const [isResetting, startResetTransition] = useTransition();
+	const [isOptimizing, startOptimizeTransition] = useTransition();
 
 	/**
 	 * Clears the technology from the grid and resets its efficiency scores.
@@ -67,9 +70,13 @@ export const useTechOptimization = (
 	const handleReset = () => {
 		performance.mark("reset-start");
 		startResetTransition(() => {
-			handleResetGridTech(tech);
-			clearTechMaxBonus(tech);
-			clearTechSolvedBonus(tech);
+			try {
+				handleResetGridTech(tech);
+				clearTechMaxBonus(tech);
+				clearTechSolvedBonus(tech);
+			} catch (error) {
+				Logger.error("Failed to reset technology in grid:", error);
+			}
 		});
 		performance.mark("reset-end");
 		performance.measure("reset-duration", "reset-start", "reset-end");
@@ -81,6 +88,8 @@ export const useTechOptimization = (
 	 * @remarks
 	 * If the grid is full and the technology isn't already placed, it triggers
 	 * a shake animation instead of starting the solver.
+	 * Both the preliminary reset and solver initiation are wrapped in transitions
+	 * to prevent blocking immediate frame presentation.
 	 *
 	 * @returns {void} Side-effects only.
 	 *
@@ -95,9 +104,15 @@ export const useTechOptimization = (
 		} else {
 			// We need to reset everything before optimizing
 			handleReset();
-			handleOptimize(tech);
+			startOptimizeTransition(async () => {
+				try {
+					await handleOptimize(tech);
+				} catch (error) {
+					Logger.error("Failed to optimize technology:", error);
+				}
+			});
 		}
 	};
 
-	return { handleOptimizeClick, handleReset, isResetting };
+	return { handleOptimizeClick, handleReset, isOptimizing, isResetting };
 };

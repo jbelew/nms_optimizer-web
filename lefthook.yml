@@ -7,12 +7,17 @@
 pre-commit:
   parallel: false
   commands:
+    # ----- Early commit message check (catches commitlint errors immediately) -----
+    commitlint-early:
+      tags: lint
+      run: bun scripts/check-commit-msg-early.mjs
+
     # ----- Policy gate (always runs) -----
     beads-enforcement:
       tags: policy
       run: |
         STAGED_FILES=$(git diff --cached --name-only)
-        BEADS_MATCHES=$(printf '%s\n' "$STAGED_FILES" | grep -cE "^\.beads/" || true)
+        BEADS_MATCHES=$(printf '%s\n' "$STAGED_FILES" | grep -E "^\.beads/" | grep -vE "(\.pid|\.beads-credential-key)$" | wc -l || true)
         CONDUCTOR_MATCHES=$(printf '%s\n' "$STAGED_FILES" | grep -cE "^conductor/|^plan\.md|^task\.md" || true)
         if [ "$BEADS_MATCHES" -gt 0 ] && [ "$CONDUCTOR_MATCHES" -eq 0 ]; then
           ACTIVE_TRACKS=$(grep -r "\"status\": \"in-progress\"" conductor/tracks/ 2>/dev/null | wc -l)
