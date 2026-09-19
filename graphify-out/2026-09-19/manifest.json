@@ -1265,23 +1265,23 @@
     "semantic_hash": ""
   },
   "src/components/ModuleSelectionDialog/ModuleSelectionDialog.test.tsx": {
-    "mtime": 1789851117.8403518,
-    "ast_hash": "8f512eca0b6c1182b6363a3535ca0d23",
+    "mtime": 1789852805.8502734,
+    "ast_hash": "12d10ea79a65a981b234ce21e73815d6",
     "semantic_hash": ""
   },
   "src/components/ModuleSelectionDialog/ModuleSelectionDialog.tsx": {
-    "mtime": 1789851309.4568172,
-    "ast_hash": "0fe7320361fa3f8d18f0b1106fcebf80",
+    "mtime": 1789852805.8502734,
+    "ast_hash": "077c3afa5a92046a9b6db5a109dce1a2",
     "semantic_hash": ""
   },
   "src/components/ModuleSelectionDialog/SharedModuleSelectionDialog.test.tsx": {
-    "mtime": 1789851112.7525263,
-    "ast_hash": "0efe385420da200bda4ee42864e997d5",
+    "mtime": 1789852805.8502734,
+    "ast_hash": "8fc46b4e4e456380cc5246dfa69c2897",
     "semantic_hash": ""
   },
   "src/components/ModuleSelectionDialog/SharedModuleSelectionDialog.tsx": {
-    "mtime": 1789851192.9084623,
-    "ast_hash": "4472adde0d4772fb46608da13e378447",
+    "mtime": 1789852805.8502734,
+    "ast_hash": "32103ef90ebfe478cf4847f9fcc0b360",
     "semantic_hash": ""
   },
   "src/components/ModuleSelectionDialog/constants.ts": {
@@ -2070,8 +2070,8 @@
     "semantic_hash": ""
   },
   "src/types/props.ts": {
-    "mtime": 1789851067.4478128,
-    "ast_hash": "72f476d2d9012571c7090a51f3e9a275",
+    "mtime": 1789852805.8502734,
+    "ast_hash": "0b19866d2c0c5d0af672acdf739cc0ec",
     "semantic_hash": ""
   },
   "src/types/tech.ts": {
