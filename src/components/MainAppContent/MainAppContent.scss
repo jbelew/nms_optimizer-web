@@ -38,7 +38,7 @@ $panel-border: 1px solid var(--gray-6);
 		}
 
 		@media (width >= 1024px) {
-			border-radius: var(--radius-5);
+			border-radius: var(--radius-4);
 
 			/* Theme-aware inset shadow + allow Tailwind shadow */
 			box-shadow:
