@@ -1,0 +1,10 @@
+# Exclude non-code JSON data, configuration, and metadata files
+*.json
+**/*.json
+
+# Exclude agent metadata and conductor task files
+.agents/
+conductor/
+
+# Exclude graphify backups
+graphify-out/*/
