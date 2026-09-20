@@ -230,7 +230,11 @@ export const MainAppSidebarSection: React.FC = () => {
 
 	return (
 		<Flex
-			className={`main-app__tech-tree-section${isEntering ? "main-app__tech-tree-section--entering" : ""}`}
+			className={
+				isEntering
+					? "main-app__tech-tree-section main-app__tech-tree-section--entering"
+					: "main-app__tech-tree-section"
+			}
 			direction="column"
 			minHeight="0"
 			ml={{ md: "5" }}
