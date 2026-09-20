@@ -2125,8 +2125,8 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1789846836.5071638,
-    "ast_hash": "d87f3b0fdafb2dfbacc48579dca6e5a3",
+    "mtime": 1789863638.614451,
+    "ast_hash": "a47ef7912cb121807258d39e9eaa44e6",
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
@@ -2135,8 +2135,8 @@
     "semantic_hash": ""
   },
   "GEMINI.md": {
-    "mtime": 1788384701.8762481,
-    "ast_hash": "67847dc7653dd2f8e1792af885b86b9c",
+    "mtime": 1789863630.5451655,
+    "ast_hash": "207f978b9f655768f7cb115edc5bff03",
     "semantic_hash": ""
   },
   "README.md": {
@@ -5172,191 +5172,6 @@
   "public/500.html": {
     "mtime": 1789846836.632263,
     "ast_hash": "28a1696e7cd3edb29a593721f938a88a",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/de/about.md": {
-    "mtime": 1789846836.6685822,
-    "ast_hash": "cc283f954c4c7e396c9027862eddc59e",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/de/home.md": {
-    "mtime": 1789846836.6685822,
-    "ast_hash": "903d334e8b10919406df26ad53b1c50d",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/de/instructions.md": {
-    "mtime": 1789846836.6726177,
-    "ast_hash": "c94a5a95cb9542c0c4d240174133b673",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/de/privacy.md": {
-    "mtime": 1776879975.0,
-    "ast_hash": "0ebd2bbd1481819cfab37ac0f61c0af3",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/de/translation-request.md": {
-    "mtime": 1777867327.0,
-    "ast_hash": "b529d4dd6f3e5ddc02e6f1edf685bcd0",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/de/userstats.md": {
-    "mtime": 1789846836.6726177,
-    "ast_hash": "f6d53d290cb53b2d27f03083f7785404",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/en/about.md": {
-    "mtime": 1789846836.6726177,
-    "ast_hash": "36e3cb12b2516103c44aadf9579f587f",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/en/changelog.md": {
-    "mtime": 1789862942.0314841,
-    "ast_hash": "6d44a779bb530f21052286c905b6c33a",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/en/home.md": {
-    "mtime": 1789846836.676653,
-    "ast_hash": "71f3f7151359603e58a7c1cb8ce03693",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/en/instructions.md": {
-    "mtime": 1789846836.676653,
-    "ast_hash": "50ccbab836dc9d810bd373ab88ad6d91",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/en/privacy.md": {
-    "mtime": 1776879975.0,
-    "ast_hash": "9696b2ab79ae0a7a61120984b2b9e29c",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/en/translation-request.md": {
-    "mtime": 1776879975.0,
-    "ast_hash": "d42ecbf92d0f40b6440cf763ba50ba35",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/en/userstats.md": {
-    "mtime": 1789846836.676653,
-    "ast_hash": "aea83339676433a3e0b02592e6003679",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/es/about.md": {
-    "mtime": 1789846836.6927948,
-    "ast_hash": "b4d29b5e975f940cb7c1ccb750db7f6c",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/es/home.md": {
-    "mtime": 1789846836.6927948,
-    "ast_hash": "02c8dfcc6caca22b577e09f4f464bec6",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/es/instructions.md": {
-    "mtime": 1789846836.6927948,
-    "ast_hash": "c1798865944e4cadbe9fb94c51d8cc2f",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/es/privacy.md": {
-    "mtime": 1777867327.0,
-    "ast_hash": "8763743e2f69dc6d90b8fb1fc6a7ca75",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/es/translation-request.md": {
-    "mtime": 1777867327.0,
-    "ast_hash": "4125ac17079bb90c64df006258b060bd",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/es/userstats.md": {
-    "mtime": 1789846836.6927948,
-    "ast_hash": "145dfb9dd4f649dba07d7a7171dcb56b",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/fr/about.md": {
-    "mtime": 1789846836.6927948,
-    "ast_hash": "97bd47ff6eef6789c150bab874c7337b",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/fr/home.md": {
-    "mtime": 1789846836.6968303,
-    "ast_hash": "958cd7bbda0c015ff4eb7a633844d30f",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/fr/instructions.md": {
-    "mtime": 1789846836.6968303,
-    "ast_hash": "1fc75cfe62911cbf939a4bb5c9f72032",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/fr/privacy.md": {
-    "mtime": 1777867327.0,
-    "ast_hash": "462a04c31bb7bd68d4666a3527e5108b",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/fr/translation-request.md": {
-    "mtime": 1777867327.0,
-    "ast_hash": "1ddd6329ccc9367ab38c84286448cbb7",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/fr/userstats.md": {
-    "mtime": 1789846836.6968303,
-    "ast_hash": "bfda8e70264329d7c80b1e4a0b128aee",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/it/about.md": {
-    "mtime": 1789846836.6968303,
-    "ast_hash": "24907cc9735da8a1ed47c7920c6cc2be",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/it/home.md": {
-    "mtime": 1789846836.6968303,
-    "ast_hash": "c35f08394a815967bd1230a970f8fcfd",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/it/instructions.md": {
-    "mtime": 1789846836.7008657,
-    "ast_hash": "1d7d661e2e92fb2fcaf1a6eed24971b1",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/it/privacy.md": {
-    "mtime": 1789846836.7008657,
-    "ast_hash": "9261a3bac3039ed89123c530a67bdd40",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/it/translation-request.md": {
-    "mtime": 1789846836.7008657,
-    "ast_hash": "b06f6e83bc278b5164ff44f40108b247",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/it/userstats.md": {
-    "mtime": 1789846836.7008657,
-    "ast_hash": "9a75307561458a0c729d5dfe436a1505",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/pt/about.md": {
-    "mtime": 1789846836.7008657,
-    "ast_hash": "b632efc329953dd05050d580e16bd60e",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/pt/home.md": {
-    "mtime": 1789846836.721043,
-    "ast_hash": "be46b1e72d012ddad59006a56b67792c",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/pt/instructions.md": {
-    "mtime": 1789846836.721043,
-    "ast_hash": "890e12216968cde7b0111c89116e2d0c",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/pt/privacy.md": {
-    "mtime": 1777867327.0,
-    "ast_hash": "b7d8c07632a50972cdbcfdf4b566a272",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/pt/translation-request.md": {
-    "mtime": 1777867327.0,
-    "ast_hash": "ca8ebbacdc761498be67e577bb656b2b",
-    "semantic_hash": ""
-  },
-  "public/assets/locales/pt/userstats.md": {
-    "mtime": 1789846836.721043,
-    "ast_hash": "f5ef3365c23421b5c0ef4c66f9aa61e2",
     "semantic_hash": ""
   },
   "public/maintenance.html": {

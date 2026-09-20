@@ -8,3 +8,6 @@ conductor/
 
 # Exclude graphify backups
 graphify-out/*/
+
+# Exclude localization assets (markdown and text content, not code)
+public/assets/locales/

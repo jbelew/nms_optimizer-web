@@ -8,7 +8,7 @@ NMS Optimizer Web is a React-based frontend application for optimizing technolog
 - **Strict TypeScript**: Write explicit types, interfaces, and discriminated unions. The `any` type is strictly prohibited.
 - **Zero Linter Suppressions**: Resolve underlying type or logic issues; inline `eslint-disable` comments are disallowed.
 - **Documentation**: Document all public APIs, functions, and complex utilities with JSDoc containing `@param` and `@returns` types.
-- **Knowledge Graph**: Check `graphify-out/` for codebase navigation (`graphify query "<question>"`). Always run `graphify update .` after modifying code.
+- **Knowledge Graph**: Check `graphify-out/` for codebase navigation (`venv/bin/graphify query "<question>"`). Broad `grep`/`find` across `src/` is prohibited unless `graphify query` returns no results. Always run `venv/bin/graphify update .` after modifying code.
 
 ## Verification Gate (Definition of Done)
 
@@ -17,7 +17,7 @@ Before marking any code task complete, execute this sequence:
 1. `bun run typecheck` — Must report 0 TypeScript diagnostics (`tsgo`).
 2. `bun run test -- <path>` or `bun run test` — Ensure targeted unit/component tests pass.
 3. `bun run lint` — Must report 0 oxlint/ESLint errors.
-4. `graphify update .` — Synchronize the knowledge graph.
+4. `venv/bin/graphify update .` — Synchronize the knowledge graph.
 
 ## Key Commands & Gotchas
 

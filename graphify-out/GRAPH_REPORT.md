@@ -1,57 +1,57 @@
 # Graph Report - nms_optimizer-web  (2026-09-19)
 
 ## Corpus Check
-- 499 files · ~3,133,772 words
+- 462 files · ~3,105,587 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2507 nodes · 4856 edges · 245 communities (183 shown, 62 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 112 edges (avg confidence: 0.57)
+- 2063 nodes · 4449 edges · 209 communities (147 shown, 62 thin omitted)
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 112 edges (avg confidence: 0.57)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5952d18a`
+- Built from commit: `47cdfcc5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- NMS Optimizer Changelog: Latest Updates, Features & Improvements
+- ModuleSelectionDialog.stories.tsx
 - performanceChart.tsx
 - sessionCoordinator.ts
 - main.js
-- useMainAppLogic.ts
+- useTechTreeRow.ts
 - GridCell.tsx
-- useAnalytics
-- lifecycleCoordinator.ts
-- useMainAppContext.ts
-- platformStore.ts
+- Logger
+- monitoring.ts
+- MainAppLayout.tsx
+- fetchTechTreeAsync
 - useTechTree.tsx
 - usePlatformStore
 - page-metadata.js
 - tracking.ts
-- BuildNameContent.tsx
+- TechTreeRow.tsx
 - dialogUtils.ts
 - gridStore.ts
-- monitoring.ts
+- Root.tsx
 - ShipSelection.tsx
-- gridTypes.ts
+- useSeoAndTitle.ts
 - vitest.setup.ts
-- MainAppLayout.tsx
+- useTechOptimization.ts
 - bootPipeline.tsx
 - TechTree
 - techStore.ts
 - [7.1.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.8...v7.1.0) (2026-05-04)
-- GridControlButtons.tsx
+- useGridStore
 - RecommendedBuild.tsx
-- uiStore.ts
+- TechTreeRow.test.tsx
 - No Man's Sky Technology Layout Optimizer (Web UI)
 - TechTreeSection.tsx
-- Seo.tsx
+- generate-ssg.mjs
 - ShareLinkDialog.tsx
 - userStatsData.tsx
 - MarkdownContentRenderer.tsx
 - IssueLifecycle
-- Logger
+- userStatsContent.tsx
 - RecommendedBuild.stories.tsx
 - [7.3.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.9...v7.3.0) (2026-05-16)
 - [7.4.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.9...v7.4.0) (2026-06-12)
@@ -61,25 +61,27 @@
 - [7.11.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.10.2...v7.11.0) (2026-09-19)
 - App.tsx
 - MainAppContent.stories.tsx
-- UpdatePrompt.tsx
+- AppDialog
 - dataValidation.ts
-- UpdatePromptWrapper.tsx
-- ErrorContent.stories.tsx
-- src/constants.ts
-- splashScreen.ts
+- useAnalytics
+- AppHeader.stories.tsx
+- useMarkdownContent.ts
+- preview.tsx
 - CHANGELOG.md
+- useOptimize.test.tsx
+- youTubeEmbed.tsx
 - translate.py
 - [6.35.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.8...v6.35.0) (2026-04-26)
 - [6.36.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.8...v6.36.0) (2026-04-26)
-- generate-ssg.mjs
+- generate-sitemap.mjs
 - useBreakpoint
 - [6.32.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.7...v6.32.0) (2026-04-18)
 - OptimizationAlertDialog.tsx
-- GridTableButtons.test.tsx
+- GridTableButtons.stories.tsx
 - vite.config.ts
 - ModuleSelectionDialog.tsx
 - AppFooter.tsx
-- dialogContext.tsx
+- Seo.tsx
 - AppHeader.tsx
 - __init__.py
 - process_stream
@@ -87,23 +89,11 @@
 - MobileToolbar.tsx
 - generate-radix-colors.mjs
 - useToast.ts
-- useOptimizeStore
+- uiStore.ts
 - sentryMock.ts
 - [6.34.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.33.4...v6.34.0) (2026-04-20)
 - store-helpers.ts
-- NMS Optimizer Anweisungen: Modules & Supercharged Slots
-- NMS Optimizer Instructions: Modules & Supercharged Slots
-- Instrucciones del NMS Optimizer: Módulos y Ranuras Potenciadas
-- Instructions de l'NMS Optimizer : Modules et Emplacements Surchargés
-- Istruzioni NMS Optimizer: Moduli e Slot Sovraccarichi
-- Instruções do NMS Optimizer: Módulos e Espaços Sobrecarregados
 - Key Configurations
-- Über den NMS-Optimierer: Der ultimative No Man's Sky Technologie-Layout-Rechner
-- About NMS Optimizer: The Ultimate No Man's Sky Tech Layout Calculator
-- Acerca del NMS Optimizer: La Calculadora Definitiva de Diseños de Tecnología para No Man's Sky
-- À Propos de l'NMS Optimizer : Le Calculateur de Disposition de Technologie Ultime pour No Man's Sky
-- Informazioni su NMS Optimizer: Il Calcolatore Definitivo per il Layout Tecnologico di No Man's Sky
-- Sobre o NMS Optimizer: A Calculadora Definitiva de Layouts de Tecnologia para No Man's Sky
 - create_screenshot_video.py
 - TechTree.stories.tsx
 - update-lighthouse-history.mjs
@@ -114,45 +104,21 @@
 - AppDialog.tsx
 - Beads - AI-Native Issue Tracking
 - [6.27.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.27...v6.27.0) (2026-04-16)
-- NMS Optimizer Datenschutzrichtlinie: Ihre Daten & Sicherheit
-- NMS-Optimierer Statistiken: Community-Daten zu überladenen Technologien
-- NMS Optimizer Privacy Policy: Your Data & Security
-- NMS Optimizer Stats: Most Popular Technology Layouts
-- Política de Privacidad del NMS Optimizer: Tus Datos y Seguridad
-- Estadísticas del NMS Optimizer: Datos de la Comunidad Sobre Tecnologías Potenciadas
-- Politique de Confidentialité de l'NMS Optimizer : Vos Données et Sécurité
-- Stats de l'NMS Optimizer : Données Communautaires sur les Technologies
-- Informativa sulla Privacy di NMS Optimizer: I Tuoi Dati e la Sicurezza
-- Statistiche NMS Optimizer: Layout di Tecnologia Più Popolari
-- Política de Privacidade do NMS Optimizer: Seus Dados e Segurança
-- Estatísticas do NMS Optimizer: Dados da Comunidade sobre Tecnologias
 - [7.6.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.5.2...v7.6.0) (2026-09-02)
 - [7.8.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.7.4...v7.8.0) (2026-09-14)
 - [7.5.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.4.3...v7.5.0) (2026-08-07)
-- Hilf bei der Übersetzung des NMS Optimizers: Werde Teil unserer Community-Lokalisierung
-- Help Translate NMS Optimizer: Join Our Community Localization
-- Ayuda a Traducir el NMS Optimizer: Únete a Nuestra Localización Comunitaria
-- Aidez à Traduire l'NMS Optimizer : Rejoignez la Localisation Communautaire
-- Aiuta a Tradurre NMS Optimizer: Unisciti alla Nostra Localizzazione di Comunità
-- Ajude a Traduzir o NMS Optimizer: Participe da Localização Comunitária
 - AGENTS.md
 - Agent Guidelines
 - Code Style Guidelines
 - Issue tracker: GitHub
 - Tachometer benchmarks
-- TechTree.tsx
+- useTechTreeContext.ts
 - [6.30.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.29.2...v6.30.0) (2026-04-17)
 - [6.31.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.30.2...v6.31.0) (2026-04-18)
 - [6.37.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.36.2...v6.37.0) (2026-04-27)
 - Architecture Guidelines
 - Domain Docs
 - [[path]].js
-- NMS-Optimierer: Technologie-Layout-Generator & Adjazenz-Rechner
-- NMS Optimizer: Tech Layout Builder & Adjacency Calculator
-- NMS Optimizer: Creador de Diseños de Tecnología y Calculadora de Adyacencia
-- NMS Optimizer : Créateur de Dispositions de Technologie & Calculateur d'Adjacence
-- NMS Optimizer: Costruttore di Layout Tecnologici e Calcolatore di Adjacency
-- NMS Optimizer: Criador de Layouts de Tecnologia & Calculadora de Adjacência
 - performance-check.mjs
 - run-bench.mjs
 - verify-routes-consistency.mjs
@@ -197,7 +163,6 @@
 - Security Policy
 - eslint.config.js
 - react-i18next.tsx
-- Version 5.0 (2025-11-06)
 - process-images.mjs
 - check_all_tasks
 - serve-ssg.mjs
@@ -209,7 +174,6 @@
 - [6.26.18](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.17...v6.26.18) (2026-04-14)
 - Component Architecture
 - icons.js
-- Version 3.8 (2025-08-20)
 - cloudflare-function.test.mjs
 - report-inp.py
 - PrerenderedMarkdownRenderer.tsx
@@ -241,16 +205,16 @@
 - vitest.config.ts
 
 ## God Nodes (most connected - your core abstractions)
-1. `NMS Optimizer Changelog: Latest Updates, Features & Improvements` - 120 edges
-2. `Logger` - 89 edges
-3. `useGridStore` - 81 edges
-4. `useBreakpoint()` - 43 edges
-5. `usePlatformStore` - 43 edges
-6. `LifecycleCoordinator` - 40 edges
-7. `useAnalytics()` - 39 edges
-8. `useTechStore` - 33 edges
-9. `useDialog()` - 32 edges
-10. `createGrid()` - 30 edges
+1. `Logger` - 89 edges
+2. `useGridStore` - 81 edges
+3. `useBreakpoint()` - 43 edges
+4. `usePlatformStore` - 43 edges
+5. `LifecycleCoordinator` - 40 edges
+6. `useAnalytics()` - 39 edges
+7. `useTechStore` - 33 edges
+8. `useDialog()` - 32 edges
+9. `createGrid()` - 30 edges
+10. `[6.27.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.27...v6.27.0) (2026-04-16)` - 30 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `TestGate` --uses--> `FakeCommandRunnerAdapter`  [INFERRED]
@@ -270,11 +234,11 @@
 - 2-file cycle: `src/components/GridTable/GridTable.tsx -> src/components/GridTable/GridTableGrid.tsx -> src/components/GridTable/GridTable.tsx`
 - 3-file cycle: `src/components/ErrorBoundary/ErrorBoundary.tsx -> src/components/ErrorBoundary/ErrorContent.tsx -> src/components/ErrorBoundary/ErrorDisplay.tsx -> src/components/ErrorBoundary/ErrorBoundary.tsx`
 
-## Communities (245 total, 62 thin omitted)
+## Communities (209 total, 62 thin omitted)
 
-### Community 0 - "NMS Optimizer Changelog: Latest Updates, Features & Improvements"
-Cohesion: 0.02
-Nodes (118): Corvettes Coming Soon (2025-08-31), NMS Optimizer Changelog: Latest Updates, Features & Improvements, Version 0.90α (2025-03-24), Version 0.91α (2025-03-25), Version 0.93 (2025-03-26), Version 0.94 (2025-03-26), Version 0.95 (2025-03-27), Version 0.96 (2025-03-27) (+110 more)
+### Community 0 - "ModuleSelectionDialog.stories.tsx"
+Cohesion: 0.14
+Nodes (10): ModuleSelectionDialog, Corvette, Default, meta, Story, defaultProps, MockAppDialogProps, mockGroupedModules (+2 more)
 
 ### Community 1 - "performanceChart.tsx"
 Cohesion: 0.07
@@ -282,107 +246,115 @@ Nodes (43): ACTIVE_DOT_STYLE, CHART_MARGIN, CHART_TICK_STYLE, ChartTooltipConten
 
 ### Community 2 - "sessionCoordinator.ts"
 Cohesion: 0.22
-Nodes (9): createGrid(), Grid, computeBonusStatus(), sessionCoordinator, mockGridStore, mockPlatformStoreState, mockTechStore, mockUiStore (+1 more)
+Nodes (8): createGrid(), computeBonusStatus(), sessionCoordinator, mockGridStore, mockPlatformStoreState, mockTechStore, mockUiStore, BonusStatusData
 
 ### Community 3 - "main.js"
 Cohesion: 0.08
 Nodes (47): add(), Ae(), at(), Be(), Ce(), constructor(), createComponents(), De() (+39 more)
 
-### Community 4 - "useMainAppLogic.ts"
-Cohesion: 0.17
-Nodes (15): ErrorMessageRenderer(), mockUseTranslation, MainAppProvider(), useMainAppLogic(), ERROR_THRESHOLDS, useErrorDispatcher(), useOptimize(), registerToolbarForceShow() (+7 more)
+### Community 4 - "useTechTreeRow.ts"
+Cohesion: 0.27
+Nodes (8): TechTreeRowContext, TechTreeRowContextValue, EMPTY_MODULES_ARRAY, mockProps, useTechTreeRow(), SelectedTechData, TechTreeRowProps, TechColor
 
 ### Community 5 - "GridCell.tsx"
-Cohesion: 0.13
-Nodes (16): GridCell(), GridCellProps, ModuleContent(), stripLabel(), mockCellState, mockRegisterCellTap, mockToggleCellActive, mockToggleCellSupercharged (+8 more)
-
-### Community 6 - "useAnalytics"
-Cohesion: 0.19
-Nodes (17): BuyMeACoffee(), useGridContext(), BuildNameDialog, GridTableButtons(), GridTableButtonsProps, SCROLL_OPTIONS, RecommendedBuildProvider(), useAnalytics() (+9 more)
-
-### Community 7 - "lifecycleCoordinator.ts"
 Cohesion: 0.15
-Nodes (9): ErrorBoundary, Props, State, handleError(), RouteError(), AppLifecyclePhase, DeferredTaskHandler, LifecycleListener (+1 more)
+Nodes (13): GridCell(), GridCellProps, ModuleContent(), stripLabel(), mockRegisterCellTap, mockToggleCellActive, mockToggleCellSupercharged, useGridCellInteraction() (+5 more)
 
-### Community 8 - "useMainAppContext.ts"
-Cohesion: 0.27
-Nodes (12): MainAppGridSection(), MainAppHeader(), MainAppSidebarContent(), MainAppSidebarSection(), SharedBuildCallout(), ShipSelectionHeading(), useMainAppGlobal(), useMainAppLayout() (+4 more)
+### Community 6 - "Logger"
+Cohesion: 0.18
+Nodes (19): App(), useGridContext(), BuildNameDialog, GridTableButtons(), GridTableButtonsProps, SCROLL_OPTIONS, {
+	mockGetGridState,
+	mockGetPlatformState,
+	mockGetTechState,
+	mockRestoreGridState,
+	mockRestoreTechState,
+	mockSetSelectedPlatform,
+	mockSetTechState,
+}, useBuildFileManager() (+11 more)
 
-### Community 9 - "platformStore.ts"
-Cohesion: 0.30
-Nodes (7): fetchShipTypes(), PlatformState, preloadInitialState(), getPlatformFromStorage(), getPlatformFromUrl(), PLATFORM_STORAGE_KEY, resolveInitialPlatform()
+### Community 7 - "monitoring.ts"
+Cohesion: 0.10
+Nodes (17): ErrorBoundary, Props, State, handleError(), RouteError(), AppLifecyclePhase, DeferredTask, DeferredTaskHandler (+9 more)
+
+### Community 8 - "MainAppLayout.tsx"
+Cohesion: 0.14
+Nodes (24): MainAppGridSection(), BuildNameDialog, ErrorMessageRenderer, InstallPrompt, MainAppBackgroundServices(), MainAppFooter(), MainAppHeader(), MainAppLayoutContent() (+16 more)
+
+### Community 9 - "fetchTechTreeAsync"
+Cohesion: 0.36
+Nodes (8): API_URL, fetchShipTypes(), fetchTechTreeAsync(), preloadInitialState(), getPlatformFromStorage(), getPlatformFromUrl(), PLATFORM_STORAGE_KEY, resolveInitialPlatform()
 
 ### Community 10 - "useTechTree.tsx"
-Cohesion: 0.19
-Nodes (16): TechTree(), useRecommendedBuild(), MockGridStoreState, MockTechStoreState, MockTechTreeLoadingState, cache, clearTechTreeCache(), fetchTechTree() (+8 more)
+Cohesion: 0.23
+Nodes (12): MockGridStoreState, MockTechStoreState, MockTechTreeLoadingState, cache, clearTechTreeCache(), fetchTechTree(), GridActions, GridState (+4 more)
 
 ### Community 11 - "usePlatformStore"
-Cohesion: 0.18
-Nodes (17): ShipSelectionProvider(), GroupedShipType, ShipSelectionContext, ShipSelectionContextValue, RouteContext, RouteContextType, useRouteContext(), useGridDeserializer() (+9 more)
+Cohesion: 0.21
+Nodes (14): ShipSelectionProvider(), RouteContext, RouteContextType, useRouteContext(), useGridDeserializer(), cache, ShipTypes, ShipTypesState (+6 more)
 
 ### Community 12 - "page-metadata.js"
-Cohesion: 0.23
-Nodes (17): DEFAULT_BASE_URL, DEFAULT_OG_IMAGE_PATH, extractContentHeading(), formatDocumentTitle(), formatErrorDocumentTitle(), getPageMetadata(), getAllPages(), getPageByPath() (+9 more)
+Cohesion: 0.24
+Nodes (16): DEFAULT_BASE_URL, DEFAULT_OG_IMAGE_PATH, extractContentHeading(), formatDocumentTitle(), formatErrorDocumentTitle(), getPageMetadata(), getAllPages(), getPageByPath() (+8 more)
 
 ### Community 13 - "tracking.ts"
 Cohesion: 0.11
 Nodes (20): AppHeaderContext, AppHeaderContextValue, NotFound(), NotFound(), AnalyticsEventParams, GA4Event, reportTBT(), reportWebVitals() (+12 more)
 
-### Community 14 - "BuildNameContent.tsx"
-Cohesion: 0.20
-Nodes (11): AppDialogRoot(), BuildNameContent(), BuildNameContentProps, BuildNameContentRef, BuildNameDialog(), BuildNameDialogProps, Default, Story (+3 more)
+### Community 14 - "TechTreeRow.tsx"
+Cohesion: 0.30
+Nodes (10): useTechTree(), BonusStatusIcon(), BonusStatusIconProps, renderIcon(), TechTreeRowActions(), TechTreeRowAvatar(), TechTreeRowBadges(), TechTreeRowLabel() (+2 more)
 
 ### Community 15 - "dialogUtils.ts"
-Cohesion: 0.20
-Nodes (10): DynamicRadixIcon(), DynamicRadixIconProps, mockDialogContext, mockSendEvent, TransProps, WelcomeContent(), WelcomeContentProps, PageName (+2 more)
+Cohesion: 0.13
+Nodes (15): DynamicRadixIcon(), DynamicRadixIconProps, mockDialogContext, mockSendEvent, TransProps, WelcomeContent(), WelcomeContentProps, DialogIconAndStyle (+7 more)
 
 ### Community 16 - "gridStore.ts"
-Cohesion: 0.16
-Nodes (14): GridTable, GridTableProps, Default, Solving, Story, GridTableContent(), GridTableGrid(), createCellFromModuleData() (+6 more)
+Cohesion: 0.14
+Nodes (17): useRecommendedBuild(), applyValidationFeedback(), feedbackMap, ValidationReason, createCellFromModuleData(), createEmptyCell(), createGrid(), resetCellContent() (+9 more)
 
-### Community 17 - "monitoring.ts"
-Cohesion: 0.22
-Nodes (10): Root(), useThemeStore, createAppRouter(), LogEntry, LogLevel, logs, SentryIntegration, SentrySDK (+2 more)
+### Community 17 - "Root.tsx"
+Cohesion: 0.18
+Nodes (12): ConditionalTooltip, ConditionalTooltipProps, TooltipManager(), Root(), useThemeStore, createAppRouter(), TooltipActions, TooltipActionsContext (+4 more)
 
 ### Community 18 - "ShipSelection.tsx"
-Cohesion: 0.24
-Nodes (8): ShipSelection(), ShipSelectionProps, Default, Story, ShipSelectionContent(), ShipSelectionRoot(), ShipSelectionTrigger(), useShipSelectionContext()
+Cohesion: 0.18
+Nodes (12): ShipSelection(), ShipSelectionProps, Default, Story, ShipSelectionContent(), ShipSelectionRoot(), ShipSelectionTrigger(), GroupedShipType (+4 more)
 
-### Community 19 - "gridTypes.ts"
-Cohesion: 0.23
-Nodes (9): applyValidationFeedback(), feedbackMap, ValidationReason, validateToggleActive(), validateToggleSupercharged(), ValidationResult, GridComputed, GridStore (+1 more)
+### Community 19 - "useSeoAndTitle.ts"
+Cohesion: 0.29
+Nodes (6): PerformanceDialog(), PerformanceDialogProps, UserStatsDialog(), useSeoAndTitle(), PerformanceRoute(), UserStatsRoute()
 
-### Community 21 - "MainAppLayout.tsx"
-Cohesion: 0.13
-Nodes (16): MainAppContent(), BuildNameDialog, ErrorMessageRenderer, InstallPrompt, MainAppBackgroundServices(), MainAppFooter(), MainAppLayoutContent(), MainAppMobileToolbar() (+8 more)
+### Community 21 - "useTechOptimization.ts"
+Cohesion: 0.36
+Nodes (5): GridShake(), GridShakeProps, GridTableRoot(), useTechOptimization(), useShakeStore
 
 ### Community 22 - "bootPipeline.tsx"
-Cohesion: 0.35
-Nodes (9): initializeAnalytics(), initializeAnalyticsClient(), isBot(), registerDefaultDeferredServices(), handleFatalBootstrapError(), initializeSentry(), setupServiceWorkerRegistration(), mockRegisterSW (+1 more)
+Cohesion: 0.31
+Nodes (10): initializeAnalytics(), initializeAnalyticsClient(), isBot(), BootOptions, registerDefaultDeferredServices(), handleFatalBootstrapError(), initializeSentry(), setupServiceWorkerRegistration() (+2 more)
 
 ### Community 23 - "TechTree"
-Cohesion: 0.26
-Nodes (8): EmptyState(), EmptyStateProps, RecommendedBuildProps, RecommendedBuildContextValue, TechTreeProps, TechTreeContent(), TechTreeContentProps, TechTree
+Cohesion: 0.21
+Nodes (11): EmptyState(), EmptyStateProps, SharedModuleSelectionDialog, TechTree(), TechTreeProps, TechTreeContent(), TechTreeContentProps, TechTreeList() (+3 more)
 
 ### Community 24 - "techStore.ts"
-Cohesion: 0.12
-Nodes (27): EMPTY_MODULES_ARRAY, SharedModuleSelectionDialog(), MockPresentationalProps, TechTreeContext, TechTreeContextValue, useTechTree(), TechTreeRowContext, TechTreeRowContextValue (+19 more)
+Cohesion: 0.21
+Nodes (12): mockCellState, EMPTY_MODULES_ARRAY, SharedModuleSelectionDialog(), MockPresentationalProps, mockModules, useTechModuleManagement(), debouncedStorage, debounceSetItem() (+4 more)
 
 ### Community 25 - "[7.1.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.8...v7.1.0) (2026-05-04)"
 Cohesion: 0.07
 Nodes (30): [6.37.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.37.0...v6.37.1) (2026-04-28), [6.37.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.37.1...v6.37.2) (2026-04-29), [6.37.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.37.2...v6.37.3) (2026-04-29), [6.37.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.37.3...v6.37.4) (2026-04-29), [6.37.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.37.4...v6.37.5) (2026-04-29), [6.37.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.37.5...v6.37.6) (2026-04-29), [7.0.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.0...v7.0.1) (2026-05-01), [7.0.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.1...v7.0.2) (2026-05-02) (+22 more)
 
-### Community 26 - "GridControlButtons.tsx"
-Cohesion: 0.29
-Nodes (7): GridControlButtons(), RowControlButtonProps, selectHasAnyActiveCells(), mockActivateRow, mockDeActivateRow, useGridRowState(), useTechTreeLoadingStore
+### Community 26 - "useGridStore"
+Cohesion: 0.16
+Nodes (15): GridControlButtons(), RowControlButtonProps, selectHasAnyActiveCells(), mockActivateRow, mockDeActivateRow, useGridRowState(), GridTable, GridTableProps (+7 more)
 
 ### Community 27 - "RecommendedBuild.tsx"
-Cohesion: 0.44
-Nodes (5): RecommendedBuildButton(), RecommendedBuildInfo(), RecommendedBuildRoot(), RecommendedBuildContext, useRecommendedBuildContext()
+Cohesion: 0.29
+Nodes (8): RecommendedBuild(), RecommendedBuildProps, RecommendedBuildButton(), RecommendedBuildInfo(), RecommendedBuildRoot(), RecommendedBuildContext, RecommendedBuildContextValue, useRecommendedBuildContext()
 
-### Community 28 - "uiStore.ts"
-Cohesion: 0.08
-Nodes (27): GridShake(), GridShakeProps, GridTableRoot(), defaultProps, mockClearTechMaxBonus, mockClearTechSolvedBonus, mockResetGridTech, mockUseGridStore (+19 more)
+### Community 28 - "TechTreeRow.test.tsx"
+Cohesion: 0.14
+Nodes (11): defaultProps, mockClearTechMaxBonus, mockClearTechSolvedBonus, mockResetGridTech, mockUseGridStore, mockUseModuleSelectionDialogStore, mockUseShakeStore, mockUseTechStore (+3 more)
 
 ### Community 29 - "No Man's Sky Technology Layout Optimizer (Web UI)"
 Cohesion: 0.08
@@ -392,41 +364,33 @@ Nodes (24): Agentic JSDoc, Auto-Translation Workflow, Bundle Strategy & Resilien
 Cohesion: 0.27
 Nodes (6): TechTreeSection(), TechTreeSectionProps, TechTreeSectionHeader(), TypeImageMap, TechTreeSectionList(), TechTreeRow
 
-### Community 31 - "Seo.tsx"
-Cohesion: 0.33
-Nodes (6): getLocalizedSchema(), OG_LOCALE_MAP, resolveAppVersion(), normalizePath(), Seo(), useSupportedLanguages()
+### Community 31 - "generate-ssg.mjs"
+Cohesion: 0.17
+Nodes (16): DIST_DIR, extractSsgTemplate(), FONTS_CSS_PATH, generateNavigationLinks(), generatePage(), generateSeoTags(), generateSsg(), initI18n() (+8 more)
 
 ### Community 32 - "ShareLinkDialog.tsx"
 Cohesion: 0.27
 Nodes (5): ShareLinkContent(), ShareLinkContentProps, mockClipboard, ShareLinkDialog(), ShareLinkDialogProps
 
 ### Community 33 - "userStatsData.tsx"
-Cohesion: 0.17
-Nodes (14): UserStatsContent(), UserStatsContentProps, COLORS, LazyRechartsChart, PieLabelRenderProps, UserStatsData(), API_URL, fetchTechTreeAsync() (+6 more)
+Cohesion: 0.25
+Nodes (10): COLORS, LazyRechartsChart, PieLabelRenderProps, UserStatsData(), useTechTreeColors(), useUserStats(), UserStat, fetchTechTreeColors() (+2 more)
 
 ### Community 34 - "MarkdownContentRenderer.tsx"
-Cohesion: 0.07
-Nodes (12): LoremIpsumSkeleton(), H2Context, LazyReactMarkdown, MARKDOWN_COMPONENTS, MarkdownContentRenderer(), MarkdownContentRendererProps, PrerenderedMarkdownRenderer, YouTubeEmbed() (+4 more)
+Cohesion: 0.08
+Nodes (6): LoremIpsumSkeleton(), H2Context, LazyReactMarkdown, MARKDOWN_COMPONENTS, MarkdownContentRendererProps, PrerenderedMarkdownRenderer
 
 ### Community 35 - "IssueLifecycle"
 Cohesion: 0.13
 Nodes (15): main(), FakeAgentRunnerAdapter, FakeIssueTrackerAdapter, In-memory fake IssueTrackerAdapter for testing., Fake AgentRunnerAdapter for testing., VerificationResult, IssueLifecycle, Assign issue to indicate work has started. (+7 more)
 
-### Community 36 - "Logger"
-Cohesion: 0.42
-Nodes (6): App(), {
-	mockGetGridState,
-	mockGetPlatformState,
-	mockGetTechState,
-	mockRestoreGridState,
-	mockRestoreTechState,
-	mockSetSelectedPlatform,
-	mockSetTechState,
-}, useBuildFileManager(), useFileHandling(), debounceSetItem(), Logger
+### Community 36 - "userStatsContent.tsx"
+Cohesion: 0.32
+Nodes (3): UserStatsContent(), UserStatsContentProps, UserStatsDialogProps
 
 ### Community 37 - "RecommendedBuild.stories.tsx"
-Cohesion: 0.22
-Nodes (6): RecommendedBuild(), Desktop, Mobile, mockTechTree, Story, Tablet
+Cohesion: 0.25
+Nodes (5): Desktop, Mobile, mockTechTree, Story, Tablet
 
 ### Community 38 - "[7.3.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.9...v7.3.0) (2026-05-16)"
 Cohesion: 0.09
@@ -437,52 +401,60 @@ Cohesion: 0.09
 Nodes (22): [7.3.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.0...v7.3.1) (2026-05-16), [7.3.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.1...v7.3.2) (2026-05-18), [7.3.3](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.2...v7.3.3) (2026-05-18), [7.3.4](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.3...v7.3.4) (2026-05-20), [7.3.5](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.4...v7.3.5) (2026-05-21), [7.3.6](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.5...v7.3.6) (2026-05-22), [7.3.7](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.6...v7.3.7) (2026-05-22), [7.3.8](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.7...v7.3.8) (2026-06-05) (+14 more)
 
 ### Community 40 - "gridSerializer.ts"
-Cohesion: 0.31
-Nodes (7): compressRLE(), decompressRLE(), deserialize(), GRID_SERIALIZATION_CONSTANTS, serialize(), fixturePath, nmsFixture
+Cohesion: 0.29
+Nodes (8): compressRLE(), decompressRLE(), deserialize(), GRID_SERIALIZATION_CONSTANTS, serialize(), fixturePath, nmsFixture, getTechTreeMaps()
 
 ### Community 41 - "network.ts"
 Cohesion: 0.39
 Nodes (5): apiCall(), ApiCallOptions, fetchJson(), fetchWithTimeout(), HttpError
 
 ### Community 42 - "environment.ts"
-Cohesion: 0.21
-Nodes (14): InstallPrompt(), UI_TIMING, debouncedStorage, debounceSetItem(), SetItemFunction, isTouchDevice(), safeClear(), safeGetItem() (+6 more)
+Cohesion: 0.14
+Nodes (18): InstallPrompt(), TRACKING_ID, UI_TIMING, DialogProvider(), getActiveDialogFromPathname(), VALID_DIALOGS, debouncedStorage, debounceSetItem() (+10 more)
 
 ### Community 43 - "[7.11.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.10.2...v7.11.0) (2026-09-19)"
 Cohesion: 0.25
 Nodes (8): [7.10.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.10.0...v7.10.1) (2026-09-15), [7.10.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.10.1...v7.10.2) (2026-09-17), [7.11.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.10.2...v7.11.0) (2026-09-19), Bug Fixes, Bug Fixes, Bug Fixes, Features, Performance Improvements
 
 ### Community 44 - "App.tsx"
-Cohesion: 0.12
-Nodes (21): AppContent(), OfflineBanner, PerformanceRoute, RoutedDialogs, ShareLinkDialog, UserStatsRoute, WelcomeContent, AppDialogFooter() (+13 more)
+Cohesion: 0.14
+Nodes (18): AppContent(), OfflineBanner, PerformanceRoute, RoutedDialogs, ShareLinkDialog, UserStatsRoute, WelcomeContent, BuildNameContent() (+10 more)
 
 ### Community 45 - "MainAppContent.stories.tsx"
-Cohesion: 0.29
-Nodes (5): Desktop, Mobile, Story, StorybookWrapper(), Tablet
+Cohesion: 0.22
+Nodes (7): MainAppContent(), Desktop, Mobile, Story, StorybookWrapper(), Tablet, ShipTypesLoader()
 
-### Community 46 - "UpdatePrompt.tsx"
-Cohesion: 0.38
-Nodes (4): Default, Story, UpdatePrompt(), UpdatePromptProps
+### Community 46 - "AppDialog"
+Cohesion: 0.28
+Nodes (5): AppDialog, Default, Story, UpdatePrompt(), UpdatePromptProps
 
 ### Community 47 - "dataValidation.ts"
-Cohesion: 0.23
-Nodes (10): SHIP_NAME_PREFIXES_COMPOUND, SHIP_NAME_PREFIXES_SIMPLE, SHIP_NAME_SUFFIXES, generateBuildNameWithType(), getShipTypeName(), SHIP_TYPE_NAMES, BuildFile, isValidBuildFile() (+2 more)
+Cohesion: 0.21
+Nodes (12): SHIP_NAME_PREFIXES_COMPOUND, SHIP_NAME_PREFIXES_SIMPLE, SHIP_NAME_SUFFIXES, generateBuildNameWithType(), getShipTypeName(), SHIP_TYPE_NAMES, BuildFile, FILENAME_REGEX (+4 more)
 
-### Community 48 - "UpdatePromptWrapper.tsx"
-Cohesion: 0.57
-Nodes (3): UpdatePrompt, UpdatePromptWrapper(), useUpdateCheck()
+### Community 48 - "useAnalytics"
+Cohesion: 0.29
+Nodes (8): BuyMeACoffee(), RecommendedBuildProvider(), UpdatePrompt, UpdatePromptWrapper(), useAnalytics(), useUpdateCheck(), sendDeferredEvent(), sendEvent()
 
-### Community 50 - "ErrorContent.stories.tsx"
-Cohesion: 0.33
-Nodes (5): PageVariant, Story, WithComponentStack, WithErrorMessage, WithStackTrace
+### Community 50 - "AppHeader.stories.tsx"
+Cohesion: 0.25
+Nodes (5): AppHeader, Desktop, Mobile, Story, Tablet
 
-### Community 51 - "src/constants.ts"
-Cohesion: 0.60
-Nodes (3): TRACKING_ID, WS_URL, SOCKET_OPTIONS
+### Community 51 - "useMarkdownContent.ts"
+Cohesion: 0.43
+Nodes (4): MarkdownContentRenderer(), MarkdownContentState, useMarkdownContent(), Window
+
+### Community 52 - "preview.tsx"
+Cohesion: 0.14
+Nodes (9): TooltipProvider(), hideSplashScreenAndShowBackground(), BackgroundWrapper(), BackgroundWrapperProps, ThemeWrapper(), customViewports, globalTypes, preview (+1 more)
 
 ### Community 53 - "CHANGELOG.md"
 Cohesion: 0.11
 Nodes (18): [6.24.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.24.1...v6.24.2) (2026-04-11), [6.25.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.24.2...v6.25.0) (2026-04-11), [6.26.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.25.1...v6.26.0) (2026-04-11), [6.28.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.27.0...v6.28.0) (2026-04-17), [6.28.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.28.0...v6.28.1) (2026-04-17), [6.29.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.28.1...v6.29.0) (2026-04-17), [6.33.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.32.0...v6.33.0) (2026-04-18), [7.10.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.9.1...v7.10.0) (2026-09-15) (+10 more)
+
+### Community 54 - "useOptimize.test.tsx"
+Cohesion: 0.29
+Nodes (6): mockCreateSocket, mockUseAnalytics, mockUseBreakpoint, mockUseGridStore, mockUsePlatformStore, mockUseTechStore
 
 ### Community 58 - "translate.py"
 Cohesion: 0.18
@@ -496,13 +468,21 @@ Nodes (18): [6.34.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.0
 Cohesion: 0.11
 Nodes (18): [6.35.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.0...v6.35.1) (2026-04-26), [6.35.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.1...v6.35.2) (2026-04-26), [6.35.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.2...v6.35.3) (2026-04-26), [6.35.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.3...v6.35.4) (2026-04-26), [6.35.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.4...v6.35.5) (2026-04-26), [6.35.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.5...v6.35.6) (2026-04-26), [6.35.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.6...v6.35.7) (2026-04-26), [6.35.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.7...v6.35.8) (2026-04-26) (+10 more)
 
-### Community 63 - "generate-ssg.mjs"
-Cohesion: 0.10
-Nodes (30): CHANGE_FREQUENCIES, __dirname, escapeXml(), EXCLUDED_FROM_SITEMAP, __filename, generateSitemap(), getFileLastMod(), getPageImages() (+22 more)
+### Community 63 - "generate-sitemap.mjs"
+Cohesion: 0.14
+Nodes (18): CHANGE_FREQUENCIES, __dirname, escapeXml(), EXCLUDED_FROM_SITEMAP, __filename, generateSitemap(), getFileLastMod(), getPageImages() (+10 more)
 
 ### Community 64 - "useBreakpoint"
-Cohesion: 0.19
-Nodes (8): AppHeaderProvider(), ErrorContent(), ErrorContentProps, ShipSelectionSkeleton(), TechTreeRoot(), AppLayout, useAppLayout(), useBreakpoint()
+Cohesion: 0.11
+Nodes (19): ErrorContent(), {
+	markTutorialFinishedMock,
+	mockResetGrid,
+	mockSendEvent,
+	mockSetIsSharedGrid,
+	mockUpdateUrlForReset,
+	mockUpdateUrlForShare,
+	openDialogMock,
+}, mockGridRef, { setGridStoreState, useGridStore }, MainAppProvider(), useMainAppLogic(), ShipSelectionSkeleton(), TechTreeRoot() (+11 more)
 
 ### Community 68 - "[6.32.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.7...v6.32.0) (2026-04-18)"
 Cohesion: 0.12
@@ -512,37 +492,29 @@ Nodes (17): [6.31.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.0
 Cohesion: 0.23
 Nodes (6): OptimizationAlertContent(), OptimizationAlertContentProps, OptimizationAlertDialog(), OptimizationAlertDialogProps, Default, Story
 
-### Community 79 - "GridTableButtons.test.tsx"
-Cohesion: 0.17
-Nodes (9): GridContext, GridContextValue, GridProvider(), Default, meta, Story, {
-	markTutorialFinishedMock,
-	mockResetGrid,
-	mockSendEvent,
-	mockSetIsSharedGrid,
-	mockUpdateUrlForReset,
-	mockUpdateUrlForShare,
-	openDialogMock,
-}, mockGridRef (+1 more)
+### Community 79 - "GridTableButtons.stories.tsx"
+Cohesion: 0.27
+Nodes (6): GridContext, GridContextValue, GridProvider(), Default, meta, Story
 
 ### Community 90 - "vite.config.ts"
 Cohesion: 0.15
 Nodes (5): __dirname, LOCALES_DIR, markdownBundlePlugin(), COMPONENT_CSS_MAP, purgeRadixCss()
 
 ### Community 91 - "ModuleSelectionDialog.tsx"
-Cohesion: 0.05
-Nodes (40): ConditionalTooltip, ConditionalTooltipProps, MODULE_GROUP_ORDER, MODULE_RANK_ORDER, ModuleSelectionContext, ModuleSelectionContextValue, ModuleSelectionProvider(), DialogBody() (+32 more)
+Cohesion: 0.18
+Nodes (13): MODULE_GROUP_ORDER, MODULE_RANK_ORDER, ModuleSelectionContext, ModuleSelectionContextValue, ModuleSelectionProvider(), DialogBody(), DialogFooter(), formatLabel() (+5 more)
 
 ### Community 92 - "AppFooter.tsx"
 Cohesion: 0.15
 Nodes (13): AppFooter, AppFooterContent(), AppFooterRating(), AppFooterRoot(), Desktop, Mobile, Story, Tablet (+5 more)
 
-### Community 101 - "dialogContext.tsx"
-Cohesion: 0.23
-Nodes (5): DialogProvider(), getActiveDialogFromPathname(), VALID_DIALOGS, useLanguage(), getSupportedLanguages()
+### Community 101 - "Seo.tsx"
+Cohesion: 0.33
+Nodes (5): normalizePath(), Seo(), useLanguage(), getSupportedLanguages(), useSupportedLanguages()
 
 ### Community 102 - "AppHeader.tsx"
-Cohesion: 0.11
-Nodes (14): AppHeader, AppHeaderAccessibilityToggle(), AppHeaderChangelogButton(), AppHeaderContainer(), AppHeaderLogo(), AppHeaderPerformanceButton(), AppHeaderSubtitle(), AppHeaderUserStatsButton() (+6 more)
+Cohesion: 0.20
+Nodes (9): AppHeaderAccessibilityToggle(), AppHeaderChangelogButton(), AppHeaderContainer(), AppHeaderLogo(), AppHeaderPerformanceButton(), AppHeaderSubtitle(), AppHeaderUserStatsButton(), EasterEggCoordinates (+1 more)
 
 ### Community 103 - "__init__.py"
 Cohesion: 0.17
@@ -557,8 +529,8 @@ Cohesion: 0.10
 Nodes (10): CliIssueTrackerAdapter, IssueTrackerAdapter, Any, Interface for querying and updating GitHub issues., List open issues with number, title, body, and labels., Fetch details for a single issue (number, title, body)., Fetch comments for an issue., Edit an issue's assignee, labels, or body. (+2 more)
 
 ### Community 115 - "MobileToolbar.tsx"
-Cohesion: 0.21
-Nodes (9): LanguageFlagPaths, LanguageSelector(), MobileToolbar(), MobileToolbarProps, Default, Story, languages, nativeLanguageNames (+1 more)
+Cohesion: 0.23
+Nodes (7): AppHeaderProvider(), LanguageSelector(), MobileToolbar(), MobileToolbarProps, Default, Story, useA11yStore
 
 ### Community 125 - "generate-radix-colors.mjs"
 Cohesion: 0.17
@@ -568,9 +540,9 @@ Nodes (10): ALL_RADIX_COLORS, baseInputPath, colors, concatenatedContent, concat
 Cohesion: 0.16
 Nodes (13): Default, Story, NmsToast(), Default, Error, Story, Success, ToastProps (+5 more)
 
-### Community 128 - "useOptimizeStore"
-Cohesion: 0.22
-Nodes (8): ErrorContent(), ErrorDialog(), ErrorDialogProps, Default, Story, ErrorDisplay(), ErrorDisplayProps, useOptimizeStore
+### Community 128 - "uiStore.ts"
+Cohesion: 0.06
+Nodes (35): ErrorContent(), ErrorDialog(), ErrorDialogProps, Default, Story, ErrorContentProps, PageVariant, Story (+27 more)
 
 ### Community 135 - "[6.34.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.33.4...v6.34.0) (2026-04-20)"
 Cohesion: 0.18
@@ -580,57 +552,9 @@ Nodes (11): [6.33.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.33.0
 Cohesion: 0.31
 Nodes (5): getShakeCount(), resetGrid(), waitForOptimization(), waitForStore(), waitForTechTree()
 
-### Community 140 - "NMS Optimizer Anweisungen: Modules & Supercharged Slots"
-Cohesion: 0.18
-Nodes (10): Bevor Sie beginnen, Corvettes, Empfohlene Builds, Erste Schritte mit dem Raster, In-Game Vergleich, NMS Optimizer Anweisungen: Modules & Supercharged Slots, Nutzungstipps, Pro-Tipp (+2 more)
-
-### Community 141 - "NMS Optimizer Instructions: Modules & Supercharged Slots"
-Cohesion: 0.18
-Nodes (10): Before You Begin, Corvettes, Getting Started with the Grid, In-Game Comparison, NMS Optimizer Instructions: Modules & Supercharged Slots, Pro Tip, Recommended Builds, Saving, Loading, and Sharing (+2 more)
-
-### Community 142 - "Instrucciones del NMS Optimizer: Módulos y Ranuras Potenciadas"
-Cohesion: 0.18
-Nodes (10): Antes de Empezar, Comparación en el Juego, Consejo Profesional, Consejos de Uso, Corbetas, Diseños Recomendados, Etiquetas Theta / Tau / Sigma, Guardar, Cargar y Compartir (+2 more)
-
-### Community 143 - "Instructions de l'NMS Optimizer : Modules et Emplacements Surchargés"
-Cohesion: 0.18
-Nodes (10): Astuce De Pro, Avant De Commencer, Builds Recommandées, Comparaison En Jeu, Conseils d'Utilisation, Corvettes, Instructions de l'NMS Optimizer : Modules et Emplacements Surchargés, Premiers Pas Avec La Grille (+2 more)
-
-### Community 144 - "Istruzioni NMS Optimizer: Moduli e Slot Sovraccarichi"
-Cohesion: 0.18
-Nodes (10): Confronto nel Gioco, Consigli d'Uso, Corvette, Costruzioni Raccomandate, Etichette Theta / Tau / Sigma, Iniziare con la Griglia, Istruzioni NMS Optimizer: Moduli e Slot Sovraccarichi, Prima di Iniziare (+2 more)
-
-### Community 145 - "Instruções do NMS Optimizer: Módulos e Espaços Sobrecarregados"
-Cohesion: 0.18
-Nodes (10): Antes De Começar, Builds Recomendadas, Comparação No Jogo, Corbetas, Dica Profissional, Dicas De Uso, Instruções do NMS Optimizer: Módulos e Espaços Sobrecarregados, Primeiros Passos Com A Grade (+2 more)
-
 ### Community 155 - "Key Configurations"
 Cohesion: 0.20
 Nodes (9): 1. Procfile & Environment, 2. package.json Scripts, 3. Server Entry Point (Express), 4. Build-Time Compression (Vite), 5. GitHub Actions Deployment, Heritage: Heroku & Express Stack (Deprecated 2026-05-15), Key Configurations, Rationale (+1 more)
-
-### Community 156 - "Über den NMS-Optimierer: Der ultimative No Man's Sky Technologie-Layout-Rechner"
-Cohesion: 0.20
-Nodes (9): Das Problem: Maximierung von Adjazenz-Boni (Adjacency Bonuses) & aufgeladenen Plätzen, Ein riesiges Dankeschön an die Community, Ein Rückblick: Frühe Versionen, Häufig gestellte Fragen (FAQ), Open-Source-Repositories, Unter der Haube: Unser Tech-Stack, Unterstützte Ausrüstung, Wie die Layout-Optimierungs-Engine funktioniert (+1 more)
-
-### Community 157 - "About NMS Optimizer: The Ultimate No Man's Sky Tech Layout Calculator"
-Cohesion: 0.20
-Nodes (9): A Huge Thank You to the Community, A Look Back: Early Versions, About NMS Optimizer: The Ultimate No Man's Sky Tech Layout Calculator, Frequently Asked Questions (FAQ), How the Layout Optimization Engine Works, Open Source Repositories, Supported Equipment, The Problem: Maximizing Adjacency Bonuses & Supercharged Slots (+1 more)
-
-### Community 158 - "Acerca del NMS Optimizer: La Calculadora Definitiva de Diseños de Tecnología para No Man's Sky"
-Cohesion: 0.20
-Nodes (9): Acerca del NMS Optimizer: La Calculadora Definitiva de Diseños de Tecnología para No Man's Sky, Bajo el Capó: Nuestra Pila Tecnológica, Cómo Funciona el Motor de Optimización de Diseños, El Problema: Maximizar las Bonificaciones de Adyacencia (Adjacency Bonuses) y las Ranuras Potenciadas, Equipos Compatibles, Mirando Atrás: Primeras Versiones, Preguntas Frecuentes (FAQ), Repositorios de Código Abierto (+1 more)
-
-### Community 159 - "À Propos de l'NMS Optimizer : Le Calculateur de Disposition de Technologie Ultime pour No Man's Sky"
-Cohesion: 0.20
-Nodes (9): Comment Fonctionne le Moteur d'Optimisation de Disposition, Dépôts Open Source, Foire Aux Questions (FAQ), Le Problème : Maximiser les Bonus d'Adjacence (Adjacency Bonuses) & les Emplacements Suralimentés, Sous le Capot : Notre Pile Technologique, Un Grand Merci à la Communauté, Un Regard en Arrière : Les Premières Versions, À Propos de l'NMS Optimizer : Le Calculateur de Disposition de Technologie Ultime pour No Man's Sky (+1 more)
-
-### Community 160 - "Informazioni su NMS Optimizer: Il Calcolatore Definitivo per il Layout Tecnologico di No Man's Sky"
-Cohesion: 0.20
-Nodes (9): Come Funziona il Motore di Ottimizzazione del Layout, Domande Frequenti (FAQ), Equipaggiamento Supportato, Il Problema: Massimizzare gli Adjacency Bonuses e i Supercharged Slots, Informazioni su NMS Optimizer: Il Calcolatore Definitivo per il Layout Tecnologico di No Man's Sky, Repository Open Source, Sotto il Cofano: Il Nostro Stack Tecnologico, Un Enorme Ringraziamento alla Community (+1 more)
-
-### Community 161 - "Sobre o NMS Optimizer: A Calculadora Definitiva de Layouts de Tecnologia para No Man's Sky"
-Cohesion: 0.20
-Nodes (9): Como o Motor de Otimização de Layout Funciona, Equipamentos Suportados, O Problema: Maximizando Bônus de Adjacência (Adjacency Bonuses) & Espaços Superalimentados, Perguntas Frecuentes (FAQ), Repositórios de Código Aberto, Sob o Capô: Nossa Pilha de Tecnologia, Sobre o NMS Optimizer: A Calculadora Definitiva de Layouts de Tecnologia para No Man's Sky, Um Enorme Muito Obrigado à Comunidade (+1 more)
 
 ### Community 162 - "create_screenshot_video.py"
 Cohesion: 0.29
@@ -661,8 +585,8 @@ Cohesion: 0.24
 Nodes (3): FakeCommandRunnerAdapter, In-memory fake CommandRunnerAdapter for testing., TestGit
 
 ### Community 169 - "AppDialog.tsx"
-Cohesion: 0.12
-Nodes (20): getPageByDialogTitleKey(), getPageById(), AppDialog, AppDialogBody(), AppDialogBodyProps, AppDialogContext, AppDialogContextValue, AppDialogFooterProps (+12 more)
+Cohesion: 0.13
+Nodes (20): getPageByDialogTitleKey(), getPageById(), AppDialogBody(), AppDialogBodyProps, AppDialogContext, AppDialogContextValue, AppDialogFooter(), AppDialogFooterProps (+12 more)
 
 ### Community 175 - "Beads - AI-Native Issue Tracking"
 Cohesion: 0.22
@@ -671,54 +595,6 @@ Nodes (8): Beads - AI-Native Issue Tracking, Essential Commands, Get Started wit
 ### Community 176 - "[6.27.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.27...v6.27.0) (2026-04-16)"
 Cohesion: 0.22
 Nodes (9): [6.26.10](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.9...v6.26.10) (2026-04-12), [6.26.25](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.24...v6.26.25) (2026-04-16), [6.26.9](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.8...v6.26.9) (2026-04-12), [6.27.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.27...v6.27.0) (2026-04-16), Bug Fixes, Bug Fixes, Bug Fixes, Bug Fixes (+1 more)
-
-### Community 180 - "NMS Optimizer Datenschutzrichtlinie: Ihre Daten & Sicherheit"
-Cohesion: 0.22
-Nodes (8): 1. Datenerfassung, 2. Technische Infrastruktur & Überwachung, 3. Datenverarbeitung (Interne API), 4. Datensicherheit, 5. Ihre Kontrolle, 6. Änderungen dieser Richtlinie, 7. Kontakt, NMS Optimizer Datenschutzrichtlinie: Ihre Daten & Sicherheit
-
-### Community 181 - "NMS-Optimierer Statistiken: Community-Daten zu überladenen Technologien"
-Cohesion: 0.22
-Nodes (8): Bedeutung Der Diagramme, Benutzerstatistiken Und Beliebte Layouts, Datenerfassung, Diagramme Lesen, Die Daten Verstehen, Erste Schritte, NMS-Optimierer Statistiken: Community-Daten zu überladenen Technologien, Warum Das Wichtig Ist
-
-### Community 182 - "NMS Optimizer Privacy Policy: Your Data & Security"
-Cohesion: 0.22
-Nodes (8): 1. Information Collection, 2. Technical Infrastructure & Monitoring, 3. Data Processing (Internal API), 4. Data Security, 5. Your Control, 6. Changes to This Policy, 7. Contact Us, NMS Optimizer Privacy Policy: Your Data & Security
-
-### Community 183 - "NMS Optimizer Stats: Most Popular Technology Layouts"
-Cohesion: 0.22
-Nodes (8): Data Collection, Getting Started, NMS Optimizer Stats: Most Popular Technology Layouts, Reading the Charts, Understanding the Data, User Statistics & Popular Layouts, What These Charts Mean, Why This Matters
-
-### Community 184 - "Política de Privacidad del NMS Optimizer: Tus Datos y Seguridad"
-Cohesion: 0.22
-Nodes (8): 1. Recopilación de Información, 2. Infraestructura Técnica y Supervisión, 3. Procesamiento de Datos (API Interna), 4. Seguridad de los Datos, 5. Tu Control, 6. Cambios en Esta Política, 7. Contacto, Política de Privacidad del NMS Optimizer: Tus Datos y Seguridad
-
-### Community 185 - "Estadísticas del NMS Optimizer: Datos de la Comunidad Sobre Tecnologías Potenciadas"
-Cohesion: 0.22
-Nodes (8): Comprensión de los Datos, Estadísticas de Usuario y Diseños Populares, Estadísticas del NMS Optimizer: Datos de la Comunidad Sobre Tecnologías Potenciadas, Lectura de los Gráficos, Por Qué Es Importante, Primeros Pasos, Qué Significan Estos Gráficos, Recopilación de Datos
-
-### Community 186 - "Politique de Confidentialité de l'NMS Optimizer : Vos Données et Sécurité"
-Cohesion: 0.22
-Nodes (8): 1. Collecte des Informations, 2. Infrastructure Technique Et Surveillance, 3. Traitement Des Données (API Interne), 4. Sécurité Des Données, 5. Votre Contrôle, 6. Modifications De Cette Politique, 7. Nous Contacter, Politique de Confidentialité de l'NMS Optimizer : Vos Données et Sécurité
-
-### Community 187 - "Stats de l'NMS Optimizer : Données Communautaires sur les Technologies"
-Cohesion: 0.22
-Nodes (8): Collecte Des Données, Comprendre Les Données, Lecture Des Graphiques, Pour Commencer, Pourquoi Est-ce Important ?, Que Signifient Ces Graphiques, Statistiques Utilisateur Et Layouts Populaires, Stats de l'NMS Optimizer : Données Communautaires sur les Technologies
-
-### Community 188 - "Informativa sulla Privacy di NMS Optimizer: I Tuoi Dati e la Sicurezza"
-Cohesion: 0.22
-Nodes (8): 1. Raccolta delle Informazioni, 2. Infrastruttura Tecnica e Monitoraggio, 3. Elaborazione dei Dati (API Interna), 4. Sicurezza dei Dati, 5. Il Tuo Controllo, 6. Modifiche a Questa Informativa, 7. Contattaci, Informativa sulla Privacy di NMS Optimizer: I Tuoi Dati e la Sicurezza
-
-### Community 189 - "Statistiche NMS Optimizer: Layout di Tecnologia Più Popolari"
-Cohesion: 0.22
-Nodes (8): Comprendere i Dati, Cosa Significano Questi Grafici, Leggere i Grafici, Per Iniziare, Perché Questo è Importante, Raccolta Dati, Statistiche NMS Optimizer: Layout di Tecnologia Più Popolari, Statistiche Utente e Layout Popolari
-
-### Community 190 - "Política de Privacidade do NMS Optimizer: Seus Dados e Segurança"
-Cohesion: 0.22
-Nodes (8): 1. Coleta De Informações, 2. Infraestrutura Técnica E Monitoramento, 3. Processamento De Dados (API Interna), 4. Segurança De Dados, 5. Seu Controle, 6. Alterações Nesta Política, 7. Contato, Política de Privacidade do NMS Optimizer: Seus Dados e Segurança
-
-### Community 191 - "Estatísticas do NMS Optimizer: Dados da Comunidade sobre Tecnologias"
-Cohesion: 0.22
-Nodes (8): Coleta De Dados, Começando, Entendendo Os Dados, Estatísticas de Usuário E Layouts Populares, Estatísticas do NMS Optimizer: Dados da Comunidade sobre Tecnologias, Lendo Os Gráficos, O Que Estes Gráficos Significam, Por Que Isso Importa
 
 ### Community 192 - "[7.6.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.5.2...v7.6.0) (2026-09-02)"
 Cohesion: 0.29
@@ -731,30 +607,6 @@ Nodes (10): [7.7.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.7.0..
 ### Community 199 - "[7.5.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.4.3...v7.5.0) (2026-08-07)"
 Cohesion: 0.25
 Nodes (8): [7.4.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.4.0...v7.4.1) (2026-06-19), [7.4.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.4.1...v7.4.2) (2026-07-12), [7.4.3](https://github.com/jbelew/nms_optimizer-web/compare/v7.4.2...v7.4.3) (2026-08-07), [7.5.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.4.3...v7.5.0) (2026-08-07), Bug Fixes, Bug Fixes, Bug Fixes, Features
-
-### Community 202 - "Hilf bei der Übersetzung des NMS Optimizers: Werde Teil unserer Community-Lokalisierung"
-Cohesion: 0.25
-Nodes (7): Der Arbeitsablauf, Hilf bei der Übersetzung des NMS Optimizers, Hilf bei der Übersetzung des NMS Optimizers: Werde Teil unserer Community-Lokalisierung, Hinweise, Unterstützte Sprachen, Wie du beitragen kannst, Wie du helfen kannst
-
-### Community 203 - "Help Translate NMS Optimizer: Join Our Community Localization"
-Cohesion: 0.25
-Nodes (7): Help Translate NMS Optimizer: Join Our Community Localization, Help Translate the NMS Optimizer, How to Contribute, How You Can Help, Notes, Supported Languages, The Workflow
-
-### Community 204 - "Ayuda a Traducir el NMS Optimizer: Únete a Nuestra Localización Comunitaria"
-Cohesion: 0.25
-Nodes (7): Ayuda a Traducir el NMS Optimizer, Ayuda a Traducir el NMS Optimizer: Únete a Nuestra Localización Comunitaria, Cómo Contribuir, Cómo Puedes Ayudar, El Flujo de Trabajo, Idiomas Admitidos, Notas
-
-### Community 205 - "Aidez à Traduire l'NMS Optimizer : Rejoignez la Localisation Communautaire"
-Cohesion: 0.25
-Nodes (7): Aidez à Traduire l'NMS Optimizer : Rejoignez la Localisation Communautaire, Comment Contribuer, Comment Vous Pouvez Aider, Langues Supportées, Le Flux de Travail, Notes, Participez à la Traduction de l'NMS Optimizer
-
-### Community 206 - "Aiuta a Tradurre NMS Optimizer: Unisciti alla Nostra Localizzazione di Comunità"
-Cohesion: 0.25
-Nodes (7): Aiuta a Tradurre NMS Optimizer, Aiuta a Tradurre NMS Optimizer: Unisciti alla Nostra Localizzazione di Comunità, Come Contribuire, Come Puoi Aiutare, Il Flusso di Lavoro, Lingue Supportate, Note
-
-### Community 207 - "Ajude a Traduzir o NMS Optimizer: Participe da Localização Comunitária"
-Cohesion: 0.25
-Nodes (7): Ajude a Traduzir o NMS Optimizer, Ajude a Traduzir o NMS Optimizer: Participe da Localização Comunitária, Como Contribuir, Como Você Pode Ajudar, Idiomas Suportados, Notas, O Fluxo de Trabalho
 
 ### Community 209 - "AGENTS.md"
 Cohesion: 0.29
@@ -776,9 +628,9 @@ Nodes (6): Conventions, Issue tracker: GitHub, Pull requests as a triage surface
 Cohesion: 0.29
 Nodes (6): Customizing, Quick start, Reading the output, Tachometer benchmarks, What it measures, When to run
 
-### Community 239 - "TechTree.tsx"
-Cohesion: 0.24
-Nodes (7): MessageSpinner(), MessageSpinnerProps, SharedModuleSelectionDialog, TechTreeList(), TechTreeProvider(), TechTreeRecommended(), TechTreeSkeleton()
+### Community 239 - "useTechTreeContext.ts"
+Cohesion: 0.50
+Nodes (3): TechTreeProvider(), TechTreeContext, TechTreeContextValue
 
 ### Community 248 - "[6.30.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.29.2...v6.30.0) (2026-04-17)"
 Cohesion: 0.33
@@ -804,30 +656,6 @@ Nodes (5): Before exploring, read these, Domain Docs, File structure, Flag ADR c
 Cohesion: 0.53
 Nodes (5): LOCALE_LANGS, onRequest(), NOTE: Some routes may be "Hybrid" (have SSG output for the base path but, SPA_ROUTES, SUPPORTED_LANGS
 
-### Community 268 - "NMS-Optimierer: Technologie-Layout-Generator & Adjazenz-Rechner"
-Cohesion: 0.33
-Nodes (5): Angetrieben durch KI & fortschrittliche Algorithmen, Datenschutz zuerst & Community-gesteuert, Maximiere Adjazenz-Boni (Adjacency Bonuses) & aufgeladene Plätze, NMS-Optimierer: Technologie-Layout-Generator & Adjazenz-Rechner, Unterstützte Plattformen & Ausrüstung
-
-### Community 269 - "NMS Optimizer: Tech Layout Builder & Adjacency Calculator"
-Cohesion: 0.33
-Nodes (5): Maximize Adjacency Bonuses & Supercharged Slots, NMS Optimizer: Tech Layout Builder & Adjacency Calculator, Powered by AI & Advanced Algorithms, Privacy-First & Community Driven, Supported Platforms & Equipment
-
-### Community 270 - "NMS Optimizer: Creador de Diseños de Tecnología y Calculadora de Adyacencia"
-Cohesion: 0.33
-Nodes (5): Impulsado por IA y Algoritmos Avanzados, Maximiza las Bonificaciones de Adyacencia (Adjacency Bonuses) y las Ranuras Potenciadas, NMS Optimizer: Creador de Diseños de Tecnología y Calculadora de Adyacencia, Plataformas y Equipos Compatibles, Privacidad Primero e Impulsado por la Comunidad
-
-### Community 271 - "NMS Optimizer : Créateur de Dispositions de Technologie & Calculateur d'Adjacence"
-Cohesion: 0.33
-Nodes (5): Confidentialité d'Abord & Axé sur la Communauté, Maximisez les Bonus d'Adjacence (Adjacency Bonuses) & les Emplacements Suralimentés, NMS Optimizer : Créateur de Dispositions de Technologie & Calculateur d'Adjacence, Plateformes & Équipements Pris en Charge, Propulsé par l'IA & des Algorithmes Avancés
-
-### Community 272 - "NMS Optimizer: Costruttore di Layout Tecnologici e Calcolatore di Adjacency"
-Cohesion: 0.33
-Nodes (5): Alimentato da AI e Algoritmi Avanzati, Massimizza gli Adjacency Bonuses e i Supercharged Slots, NMS Optimizer: Costruttore di Layout Tecnologici e Calcolatore di Adjacency, Piattaforme ed Equipaggiamento Supportati, Priorità alla Privacy e Guidato dalla Community
-
-### Community 273 - "NMS Optimizer: Criador de Layouts de Tecnologia & Calculadora de Adjacência"
-Cohesion: 0.33
-Nodes (5): Alimentado por IA & Algoritmos Avançados, Maximize Bônus de Adjacência (Adjacency Bonuses) & Espaços Superalimentados, NMS Optimizer: Criador de Layouts de Tecnologia & Calculadora de Adjacência, Plataformas & Equipamentos Suportados, Privacidade em Primeiro Lugar & Focado na Comunidade
-
 ### Community 274 - "performance-check.mjs"
 Cohesion: 0.47
 Nodes (5): analyzeBundle(), __dirname, distDir, formatSize(), main()
@@ -845,8 +673,8 @@ Cohesion: 0.47
 Nodes (3): OfflineBanner(), Offline, Story
 
 ### Community 278 - "LifecycleCoordinator"
-Cohesion: 0.11
-Nodes (6): bootApp(), BootOptions, BootResult, DeferredTask, LifecycleCoordinator, LifecycleCoordinatorOptions
+Cohesion: 0.12
+Nodes (4): bootApp(), BootResult, LifecycleCoordinator, LifecycleCoordinatorOptions
 
 ### Community 281 - "[7.7.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.6.1...v7.7.0) (2026-09-03)"
 Cohesion: 0.40
@@ -869,8 +697,8 @@ Cohesion: 0.40
 Nodes (4): Gemini Agent: Core Directives & Protocols, Graphify (Knowledge Graph), JSDoc Guidelines, Tool Protocols
 
 ### Community 305 - "useOptimize.tsx"
-Cohesion: 0.13
-Nodes (16): useLatest(), SCROLL_OPTIONS, mockCreateSocket, mockUseAnalytics, mockUseBreakpoint, mockUseGridStore, mockUsePlatformStore, mockUseTechStore (+8 more)
+Cohesion: 0.18
+Nodes (12): WS_URL, useLatest(), SCROLL_OPTIONS, UseOptimizeReturn, ApiResponse, createSocket(), SOCKET_OPTIONS, TRANSPORT_ERROR_MESSAGES (+4 more)
 
 ### Community 309 - "AgentClient"
 Cohesion: 0.12
@@ -890,7 +718,7 @@ Nodes (3): Assertion, AsymmetricMatchersContaining, vitest
 
 ### Community 340 - "routes.tsx"
 Cohesion: 0.12
-Nodes (13): __dirname, DIST, FN_PATH, HYBRID_ROUTES, ROOT, ROUTED_DIALOG_IDS, build, LanguageCode (+5 more)
+Nodes (13): __dirname, DIST, FN_PATH, HYBRID_ROUTES, ROOT, ROUTED_DIALOG_IDS, LanguageCode, languages (+5 more)
 
 ### Community 359 - "Security Policy"
 Cohesion: 0.40
@@ -899,10 +727,6 @@ Nodes (4): Our Response Process, Reporting a Vulnerability, Security Policy, Sup
 ### Community 382 - "eslint.config.js"
 Cohesion: 0.50
 Nodes (3): blankLineRules, jsdocRules, shared
-
-### Community 384 - "Version 5.0 (2025-11-06)"
-Cohesion: 0.50
-Nodes (4): 🛠 Fixes, 🧠 Improvements, 🚀 Major Update, Version 5.0 (2025-11-06)
 
 ### Community 386 - "check_all_tasks"
 Cohesion: 0.12
@@ -928,32 +752,28 @@ Nodes (3): RegisterSWOptions, virtual:markdown-bundle, virtual:pwa-register
 Cohesion: 0.67
 Nodes (3): [6.26.18](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.17...v6.26.18) (2026-04-14), Bug Fixes, Performance Improvements
 
-### Community 411 - "Version 3.8 (2025-08-20)"
-Cohesion: 0.67
-Nodes (3): Bug Fixes, Performance Improvements, Version 3.8 (2025-08-20)
-
 ### Community 413 - "report-inp.py"
 Cohesion: 0.16
 Nodes (17): BetaAnalyticsDataClient, FilterExpression, Namespace, Path, get_unique_characters(), Reads all .json and .md files in the specified directory, extracts all unique…, create_client(), format_status() (+9 more)
 
 ## Knowledge Gaps
-- **924 isolated node(s):** `husky.sh script`, `BackgroundWrapperProps`, `config`, `customViewports`, `globalTypes` (+919 more)
+- **575 isolated node(s):** `husky.sh script`, `BackgroundWrapperProps`, `config`, `customViewports`, `globalTypes` (+570 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **62 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Logger` connect `Logger` to `sessionCoordinator.ts`, `useMainAppLogic.ts`, `useAnalytics`, `lifecycleCoordinator.ts`, `platformStore.ts`, `useTechTree.tsx`, `usePlatformStore`, `tracking.ts`, `dialogUtils.ts`, `gridStore.ts`, `monitoring.ts`, `bootPipeline.tsx`, `TechTree`, `techStore.ts`, `LifecycleCoordinator`, `uiStore.ts`, `ShareLinkDialog.tsx`, `userStatsData.tsx`, `MarkdownContentRenderer.tsx`, `gridSerializer.ts`, `network.ts`, `environment.ts`, `App.tsx`, `dataValidation.ts`, `UpdatePromptWrapper.tsx`, `useOptimize.tsx`, `src/constants.ts`?**
-  _High betweenness centrality (0.028) - this node is a cross-community bridge._
-- **Why does `useGridStore` connect `gridStore.ts` to `sessionCoordinator.ts`, `useMainAppLogic.ts`, `GridCell.tsx`, `useAnalytics`, `useMainAppContext.ts`, `useTechTree.tsx`, `usePlatformStore`, `BuildNameContent.tsx`, `MainAppLayout.tsx`, `techStore.ts`, `GridControlButtons.tsx`, `uiStore.ts`, `Logger`, `RecommendedBuild.stories.tsx`, `environment.ts`, `MainAppContent.stories.tsx`, `useOptimize.tsx`, `useBreakpoint`, `GridTableButtons.test.tsx`, `AppHeader.tsx`, `TechTree.tsx`, `MobileToolbar.tsx`?**
-  _High betweenness centrality (0.018) - this node is a cross-community bridge._
-- **Why does `usePlatformStore` connect `usePlatformStore` to `sessionCoordinator.ts`, `TechTree.stories.tsx`, `useMainAppLogic.ts`, `RecommendedBuild.stories.tsx`, `useAnalytics`, `Logger`, `useMainAppContext.ts`, `platformStore.ts`, `useTechTree.tsx`, `App.tsx`, `MainAppContent.stories.tsx`, `BuildNameContent.tsx`, `TechTree.tsx`, `gridStore.ts`, `useOptimize.tsx`, `ShipSelection.tsx`, `ModuleSelectionDialog.tsx`?**
-  _High betweenness centrality (0.012) - this node is a cross-community bridge._
+- **Why does `Logger` connect `Logger` to `sessionCoordinator.ts`, `monitoring.ts`, `fetchTechTreeAsync`, `useTechTree.tsx`, `usePlatformStore`, `tracking.ts`, `dialogUtils.ts`, `gridStore.ts`, `useTechOptimization.ts`, `bootPipeline.tsx`, `TechTree`, `techStore.ts`, `LifecycleCoordinator`, `ShareLinkDialog.tsx`, `gridSerializer.ts`, `network.ts`, `environment.ts`, `App.tsx`, `dataValidation.ts`, `useAnalytics`, `useOptimize.tsx`, `useMarkdownContent.ts`, `useBreakpoint`?**
+  _High betweenness centrality (0.038) - this node is a cross-community bridge._
+- **Why does `useGridStore` connect `useGridStore` to `sessionCoordinator.ts`, `useTechTreeRow.ts`, `GridCell.tsx`, `Logger`, `MainAppLayout.tsx`, `useTechTree.tsx`, `usePlatformStore`, `gridStore.ts`, `useTechOptimization.ts`, `TechTree`, `techStore.ts`, `TechTreeRow.test.tsx`, `RecommendedBuild.stories.tsx`, `environment.ts`, `App.tsx`, `MainAppContent.stories.tsx`, `useOptimize.tsx`, `AppHeader.stories.tsx`, `useOptimize.test.tsx`, `useBreakpoint`, `GridTableButtons.stories.tsx`, `MobileToolbar.tsx`?**
+  _High betweenness centrality (0.024) - this node is a cross-community bridge._
+- **Why does `usePlatformStore` connect `usePlatformStore` to `useBreakpoint`, `ModuleSelectionDialog.stories.tsx`, `sessionCoordinator.ts`, `TechTree.stories.tsx`, `RecommendedBuild.stories.tsx`, `Logger`, `MainAppLayout.tsx`, `App.tsx`, `MainAppContent.stories.tsx`, `useAnalytics`, `useOptimize.tsx`, `ShipSelection.tsx`, `gridStore.ts`, `useOptimize.test.tsx`, `TechTree`, `ModuleSelectionDialog.tsx`?**
+  _High betweenness centrality (0.016) - this node is a cross-community bridge._
 - **What connects `husky.sh script`, `BackgroundWrapperProps`, `config` to the rest of the system?**
-  _924 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `NMS Optimizer Changelog: Latest Updates, Features & Improvements` be split into smaller, more focused modules?**
-  _Cohesion score 0.01680672268907563 - nodes in this community are weakly interconnected._
+  _575 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `ModuleSelectionDialog.stories.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.14285714285714285 - nodes in this community are weakly interconnected._
 - **Should `performanceChart.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.06845238095238096 - nodes in this community are weakly interconnected._
 - **Should `main.js` be split into smaller, more focused modules?**
