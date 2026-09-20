@@ -692,7 +692,7 @@
 		"cosmetic": "Cosmetic Modules",
 		"trails": "Starship Trails",
 		"figurines": "Figurines",
-		"title": "{{techName}} MODULE SELECTION",
+		"title": "{{techName}} Module Selection",
 		"tooltip": "{{techName}} Module Selection",
 		"warning": "<p>Default Corvette selections are <i>suggestions</i>. Procedural upgrade modules generally provide greater benefit than cosmetic items or reactor upgrades and should be prioritized.</p><p style=\"margin-top: .5rem\">Use <strong>Select All</strong> to maximize this technology; however, most layouts only have room for <strong>3–4</strong> fully maxed technologies.</p>",
 		"selectAll": "Select All",

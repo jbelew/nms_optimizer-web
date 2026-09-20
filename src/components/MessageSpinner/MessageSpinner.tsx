@@ -141,7 +141,7 @@ export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 
 					<div className="w-3/4 sm:w-1/2">
 						{progressPercent !== undefined && showProgress ? (
-							<div className="mb-10 lg:mb-18">
+							<div>
 								<Progress
 									aria-label={
 										initialMessage || t("messageSpinner.loadingProgress")

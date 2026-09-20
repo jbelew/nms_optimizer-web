@@ -46,7 +46,7 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ isOpen }) => {
 
 	return (
 		<>
-			<Text as="p" mb="4" size={{ initial: "2", sm: "3" }}>
+			<Text as="p" className="text-sm! sm:text-base!" mb="4">
 				{t("dialogs.userStats.description")}
 			</Text>
 

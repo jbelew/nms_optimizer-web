@@ -196,7 +196,7 @@ const H2Renderer: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
 			>
 				{children}
 			</Heading>
-			<Separator decorative mb="2" mt="2" orientation="horizontal" size="4" />
+			<Separator decorative mb="2" mt="2" orientation="horizontal" size="3" />
 		</>
 	);
 };

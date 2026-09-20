@@ -53,7 +53,7 @@ export const TechTreeSectionHeader: React.FC<{ type: string }> = ({ type }) => {
 					/>
 				)}
 			<h2 className="heading-styled text-xl sm:text-2xl">
-				{t(`techTree.categories.${type}`).toUpperCase()}
+				{t(`techTree.categories.${type}`)}
 			</h2>
 		</div>
 	);

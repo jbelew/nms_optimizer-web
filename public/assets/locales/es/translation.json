@@ -674,7 +674,7 @@
 		"cosmetic": "Módulos cosméticos",
 		"trails": "Estelas de nave",
 		"figurines": "Estatuillas",
-		"title": "SELECCIÓN DE MÓDULOS DE {{techName}}",
+		"title": "Selección de Módulos de {{techName}}",
 		"warning": "<p>Las selecciones predeterminadas de Corbeta son <i>sugerencias</i>. Los módulos de mejora procedimentales generalmente proporcionan un mayor beneficio que los objetos cosméticos o las mejoras del reactor y deben ser priorizados.</p><p style=\"margin-top: .5rem\">Usa <strong>Seleccionar Todo</strong> para maximizar esta tecnología; sin embargo, la mayoría de los diseños solo tienen espacio para <strong>3–4</strong> tecnologías maximizadas por completo.</p>",
 		"selectAll": "Seleccionar todo",
 		"closeDialogLabel": "Cerrar diálogo",

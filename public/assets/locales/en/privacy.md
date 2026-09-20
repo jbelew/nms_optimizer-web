@@ -4,8 +4,6 @@
 
 Your privacy is important to us. This Privacy Policy explains how **NMS Optimizer** ("we", "us", or "our") collects, uses, and protects your information when you use our web application and its associated optimization engine.
 
----
-
 ## 1. Information Collection
 
 NMS Optimizer is designed to be a privacy-focused tool.

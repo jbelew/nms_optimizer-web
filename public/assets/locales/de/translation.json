@@ -674,7 +674,7 @@
 		"cosmetic": "Kosmetische Module",
 		"trails": "Antriebsspuren",
 		"figurines": "Wackelfiguren",
-		"title": "MODULAUSWAHL FÜR {{techName}}",
+		"title": "Modulauswahl Für {{techName}}",
 		"warning": "<p>Die Standard-Auswahl für Korvetten sind <i>Vorschläge</i>. Prozedurale Upgrade-Module bieten in der Regel einen größeren Vorteil als kosmetische Items oder Reaktor-Upgrades und sollten priorisiert werden.</p><p style=\"margin-top: .5rem\">Nutze <strong>Alle Auswählen</strong>, um diese Technologie zu maximieren; jedoch haben die meisten Layouts nur Platz für <strong>3–4</strong> vollständig maximierte Technologien.</p>",
 		"selectAll": "Alle Auswählen",
 		"closeDialogLabel": "Dialog Schließen",

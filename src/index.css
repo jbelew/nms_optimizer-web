@@ -128,6 +128,7 @@ html.background-visible :is(#root, #storybook-root) .radix-themes {
 body.a11y-font .radix-themes {
 	--default-font-family: Atkinson, Helvetica, Arial, sans-serif;
 	--accent-9: #11809c;
+	font-weight: 300;
 }
 
 :root {
@@ -232,11 +233,11 @@ body {
 
 body.a11y-font .heading-styled {
 	font-family: var(--default-font-family);
-	font-weight: 600;
+	font-weight: 500;
 	word-spacing: normal;
 	letter-spacing: normal;
 	-webkit-text-stroke: 0;
-	text-transform: uppercase;
+	text-transform: none;
 }
 
 @media (width >= 640px) {

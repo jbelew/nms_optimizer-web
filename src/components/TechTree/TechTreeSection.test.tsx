@@ -57,8 +57,8 @@ describe("TechTreeSection", () => {
 	test("should render section with correct type", () => {
 		render(<TechTreeSection index={0} technologies={mockTechnologies} type="Weaponry" />);
 
-		// The text gets converted to uppercase
-		expect(screen.getByText("TECHTREE.CATEGORIES.WEAPONRY")).toBeInTheDocument();
+		// The text gets converted to uppercase visually via CSS
+		expect(screen.getByText(/techTree\.categories\.Weaponry/i)).toBeInTheDocument();
 	});
 
 	test("should render TechTreeRow for each technology", () => {
@@ -138,7 +138,7 @@ describe("TechTreeSection", () => {
 	test("should handle empty technologies array", () => {
 		render(<TechTreeSection index={0} technologies={[]} type="Weaponry" />);
 
-		expect(screen.getByText("TECHTREE.CATEGORIES.WEAPONRY")).toBeInTheDocument();
+		expect(screen.getByText(/techTree\.categories\.Weaponry/i)).toBeInTheDocument();
 		expect(screen.queryByTestId(/tech-tree-row/)).not.toBeInTheDocument();
 	});
 

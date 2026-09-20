@@ -36,24 +36,31 @@ export const MainAppGridSection: React.FC = () => {
 		>
 			{isSharedGrid && <SharedBuildCallout />}
 
-			{!isSharedGrid && (
-				<MessageSpinner
-					initialMessage={
-						isTechTreeLoading ? t("techTree.loading") : t("gridTable.optimizing")
-					}
-					isVisible={solving}
-					progressPercent={progressPercent}
-					showProgress={!isTechTreeLoading}
-				/>
-			)}
-
 			<ShipSelectionHeading />
 
 			<GridProvider gridRef={gridTableRef as React.RefObject<HTMLDivElement | null>}>
 				<GridTableRoot>
-					<GridTableGrid gridHeight={gridHeight} gridRef={gridTableRef} solving={solving}>
-						<GridTableContent gridHeight={gridHeight} />
-					</GridTableGrid>
+					<div className="relative">
+						{!isSharedGrid && (
+							<MessageSpinner
+								initialMessage={
+									isTechTreeLoading
+										? t("techTree.loading")
+										: t("gridTable.optimizing")
+								}
+								isVisible={solving}
+								progressPercent={progressPercent}
+								showProgress={!isTechTreeLoading}
+							/>
+						)}
+						<GridTableGrid
+							gridHeight={gridHeight}
+							gridRef={gridTableRef}
+							solving={solving}
+						>
+							<GridTableContent gridHeight={gridHeight} />
+						</GridTableGrid>
+					</div>
 					<GridTableButtons solving={solving} />
 				</GridTableRoot>
 			</GridProvider>

@@ -4,8 +4,6 @@
 
 La tua privacy è importante per noi. Questa Informativa sulla Privacy spiega come **NMS Optimizer** ("noi" o "nostro") raccoglie, utilizza e protegge le tue informazioni quando usi la nostra applicazione web e il suo motore di ottimizzazione associato.
 
----
-
 ## 1. Raccolta delle Informazioni
 
 NMS Optimizer è progettato per essere uno strumento attento alla privacy.

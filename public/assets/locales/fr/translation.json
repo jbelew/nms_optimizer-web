@@ -674,7 +674,7 @@
 		"cosmetic": "Modules Cosmétiques",
 		"trails": "Traînées de Vaisseau",
 		"figurines": "Figurines",
-		"title": "SÉLECTION DE MODULES : {{techName}}",
+		"title": "Sélection de Modules: {{techName}}",
 		"warning": "<p>Les sélections par défaut pour les Corvettes sont des <i>suggestions</i>. Les modules d'amélioration procéduraux offrent généralement un meilleur bonus que les objets cosmétiques ou les réacteurs et doivent être prioritaires.</p><p style=\"margin-top: .5rem\">Utilisez <strong>Tout Sélectionner</strong> pour maximiser cette technologie ; cependant, la plupart des dispositions ne permettent de maximiser que <strong>3–4</strong> technologies.</p>",
 		"selectAll": "Tout Sélectionner",
 		"closeDialogLabel": "Fermer le dialogue",

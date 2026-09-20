@@ -692,7 +692,7 @@
 		"cosmetic": "Moduli Estetici",
 		"trails": "Scie di Nave Stellare",
 		"figurines": "Statuette",
-		"title": "SELEZIONE MODULI {{techName}}",
+		"title": "Selezione Moduli {{techName}}",
 		"tooltip": "Selezione Moduli {{techName}}",
 		"warning": "<p>Le selezioni predefinite per la Corvette sono <i>suggerimenti</i>. I moduli di potenziamento procedurali generalmente offrono un beneficio maggiore rispetto agli oggetti estetici o ai potenziamenti del reattore e dovrebbero essere prioritari.</p><p style=\"margin-top: .5rem\">Usa <strong>Seleziona Tutto</strong> per massimizzare questa tecnologia; tuttavia, la maggior parte delle configurazioni ha spazio solo per <strong>3–4</strong> tecnologie completamente massimizzate.</p>",
 		"selectAll": "Seleziona Tutto",

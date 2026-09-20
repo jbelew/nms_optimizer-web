@@ -2,8 +2,6 @@
 
 The full commit history for this project is available on [GitHub](https://github.com/jbelew/nms_optimizer-web/blob/main/CHANGELOG.md). A special thanks to [mateo-leal](https://github.com/mateo-leal) for the Spanish translation updates.
 
----
-
 ## Version 7.11 – Navigation Fixes & Stability (2026-09-19)
 
 This update fixes dialog behavior during page navigation and includes stability improvements.

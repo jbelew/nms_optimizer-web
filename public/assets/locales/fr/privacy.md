@@ -4,8 +4,6 @@
 
 Votre vie privée est importante pour nous. Cette politique de confidentialité explique comment **NMS Optimizer** ("nous" ou "notre") collecte, utilise et protège vos informations lorsque vous utilisez notre application web et son moteur d'optimisation associé.
 
----
-
 ## 1. Collecte des Informations
 
 NMS Optimizer est conçu pour être un outil respectueux de la vie privée.

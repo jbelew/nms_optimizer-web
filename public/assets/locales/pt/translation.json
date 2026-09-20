@@ -674,7 +674,7 @@
 		"cosmetic": "Módulos Cosméticos",
 		"trails": "Rastros da Nave",
 		"figurines": "Bonecos",
-		"title": "SELEÇÃO DE MÓDULOS DE {{techName}}",
+		"title": "Seleção de Módulos de {{techName}}",
 		"warning": "<p>Seleções padrão de Corveta são <i>sugestões</i>. Módulos de melhoria procedimentais geralmente fornecem benefícios maiores que itens cosméticos ou reatores e devem ser priorizados.</p><p style=\"margin-top: .5rem\">Use <strong>Selecionar Tudo</strong> para maximizar esta tecnologia; no entanto, a maioria dos layouts só tem espaço para <strong>3–4</strong> tecnologias totalmente maximizadas.</p>",
 		"selectAll": "Selecionar Tudo",
 		"closeDialogLabel": "Fechar diálogo",

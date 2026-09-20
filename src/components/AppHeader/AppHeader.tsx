@@ -207,7 +207,7 @@ const AppHeaderSubtitle: React.FC = () => {
 	return (
 		<Heading
 			align="center"
-			as="h2"
+			as="h1"
 			className="app-header__title"
 			mt="1"
 			size={isSm ? "3" : "2"}
