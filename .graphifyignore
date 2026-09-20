@@ -2,12 +2,44 @@
 *.json
 **/*.json
 
-# Exclude agent metadata and conductor task files
+# Exclude agent metadata and task tracking files
 .agents/
 conductor/
+.beads/
 
 # Exclude graphify backups
 graphify-out/*/
 
 # Exclude localization assets (markdown and text content, not code)
 public/assets/locales/
+
+# Exclude root changelog (creates nodes for all old versions)
+CHANGELOG.md
+
+# Exclude generated TypeDoc files (already captured by TypeScript AST)
+docs/api/
+
+# Exclude media and static visual assets
+public/assets/
+source_images/
+src/assets/
+audio/
+*.png
+*.ico
+*.svg
+*.webp
+*.mp3
+*.mp4
+
+# Exclude CI workflows and GitHub configs
+.github/
+
+# Exclude operational configs, text, and html files
+*.yml
+*.yaml
+*.txt
+*.html
+
+# Exclude historical/benchmarking docs
+docs/heritage/
+scripts/tachometer/
