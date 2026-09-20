@@ -5,7 +5,13 @@ Thin CLI adapter delegating to scripts.ralph.issues.IssueLifecycle.
 """
 
 import json
+from pathlib import Path
 import sys
+
+# Ensure project root is in sys.path when invoked directly as a script
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from scripts.ralph.issues import IssueLifecycle
 

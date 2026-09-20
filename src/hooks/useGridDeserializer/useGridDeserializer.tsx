@@ -88,7 +88,8 @@ export const useGridDeserializer = () => {
 	 */
 	const deserializeGrid = useCallback(
 		async (serializedGrid: string) => {
-			const newGrid = await deserialize(serializedGrid, selectedPlatform, setTechColors);
+			const targetPlatform = usePlatformStore.getState().selectedPlatform || selectedPlatform;
+			const newGrid = await deserialize(serializedGrid, targetPlatform, setTechColors);
 
 			if (newGrid) {
 				setGrid(newGrid); // Update grid state

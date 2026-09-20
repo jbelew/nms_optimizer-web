@@ -4,4 +4,5 @@
 set -eo pipefail
 
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export PYTHONPATH="$PROJECT_ROOT:${PYTHONPATH:-}"
 exec python3 "$PROJECT_ROOT/scripts/ralph_runner.py" "$@"

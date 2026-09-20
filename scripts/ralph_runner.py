@@ -4,9 +4,19 @@ CLI entrypoint for the Ralph autonomous issue task runner.
 """
 
 import argparse
+from pathlib import Path
 import sys
 
+# Ensure project root is in sys.path when invoked directly as a script
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 from scripts.ralph.runner import TaskRunner
+
+
+def parse_issue_number(val: str) -> int:
+    return int(val.lstrip("#"))
 
 
 def main():
@@ -17,9 +27,9 @@ def main():
     parser.add_argument(
         "issue_number",
         nargs="?",
-        type=int,
+        type=parse_issue_number,
         default=None,
-        help="Optional issue number to run. If omitted, picks next 'ready-for-agent' issue.",
+        help="Optional issue number to run (e.g. 773 or #773). If omitted, picks next 'ready-for-agent' issue.",
     )
     parser.add_argument(
         "--max-retries",

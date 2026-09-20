@@ -157,5 +157,60 @@ describe("sessionCoordinator", () => {
 
 			switchPlatformSpy.mockRestore();
 		});
+
+		it("should trigger resetSession when transitioning from a shared grid to a URL without grid param", () => {
+			mockGridStore.isSharedGrid = true;
+			const resetSessionSpy = vi
+				.spyOn(sessionCoordinator, "resetSession")
+				.mockImplementation(() => {});
+
+			sessionCoordinator.syncStateFromUrl({
+				deserializeGrid: vi.fn(),
+				gridFromUrl: null,
+				isKnownRoute: true,
+				platformFromUrl: null,
+				validShipTypes: ["test-platform"],
+			});
+
+			expect(resetSessionSpy).toHaveBeenCalled();
+			resetSessionSpy.mockRestore();
+		});
+
+		it("should not trigger resetSession when URL has no grid param and workspace is not a shared grid", () => {
+			mockGridStore.isSharedGrid = false;
+			const resetSessionSpy = vi
+				.spyOn(sessionCoordinator, "resetSession")
+				.mockImplementation(() => {});
+
+			sessionCoordinator.syncStateFromUrl({
+				deserializeGrid: vi.fn(),
+				gridFromUrl: null,
+				isKnownRoute: true,
+				platformFromUrl: null,
+				validShipTypes: ["test-platform"],
+			});
+
+			expect(resetSessionSpy).not.toHaveBeenCalled();
+			resetSessionSpy.mockRestore();
+		});
+
+		it("should trigger resetSession when transitioning from a shared grid to a different platform without grid param", () => {
+			mockGridStore.isSharedGrid = true;
+			mockPlatformStoreState.selectedPlatform = "old-platform";
+			const resetSessionSpy = vi
+				.spyOn(sessionCoordinator, "resetSession")
+				.mockImplementation(() => {});
+
+			sessionCoordinator.syncStateFromUrl({
+				deserializeGrid: vi.fn(),
+				gridFromUrl: null,
+				isKnownRoute: true,
+				platformFromUrl: "new-platform",
+				validShipTypes: ["old-platform", "new-platform"],
+			});
+
+			expect(resetSessionSpy).toHaveBeenCalled();
+			resetSessionSpy.mockRestore();
+		});
 	});
 });

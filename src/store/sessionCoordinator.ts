@@ -188,7 +188,11 @@ export const sessionCoordinator = {
 	/**
 	 * Synchronizes application state with values retrieved from the browser URL.
 	 *
+	 * @remarks
 	 * Handles conditional ship platform switches and grid layout deserialization.
+	 * When navigating via browser history (`popstate`) from a state that held a
+	 * Shared Grid to a URL without a `grid` parameter, triggers a full session
+	 * reset to return the workspace to an empty grid layout.
 	 *
 	 * @param {object} params - The search parameter values and deserializer.
 	 * @param {string | null} params.platformFromUrl - The platform query parameter.
@@ -196,6 +200,8 @@ export const sessionCoordinator = {
 	 * @param {string[]} params.validShipTypes - Array of supported ship type identifiers.
 	 * @param {boolean} params.isKnownRoute - True if route is standard/known.
 	 * @param {(serialized: string) => void} params.deserializeGrid - Callback to deserialize grid string.
+	 *
+	 * @returns {void}
 	 */
 	syncStateFromUrl(params: {
 		deserializeGrid: (serialized: string) => void;
@@ -208,6 +214,7 @@ export const sessionCoordinator = {
 			params;
 		const platformStore = usePlatformStore.getState();
 		const currentPlatform = platformStore.selectedPlatform;
+		const wasSharedGrid = useGridStore.getState().isSharedGrid;
 
 		// Sync platform first to avoid grid deserialization conflicts
 		if (platformFromUrl && platformFromUrl !== currentPlatform) {
@@ -232,11 +239,10 @@ export const sessionCoordinator = {
 		if (gridFromUrl) {
 			deserializeGrid(gridFromUrl);
 		} else {
-			const { isSharedGrid: currentIsSharedGrid, setIsSharedGrid: storeSetIsSharedGrid } =
-				useGridStore.getState();
+			const { isSharedGrid: currentIsSharedGrid } = useGridStore.getState();
 
-			if (currentIsSharedGrid) {
-				storeSetIsSharedGrid(false);
+			if (currentIsSharedGrid || wasSharedGrid) {
+				sessionCoordinator.resetSession();
 			}
 		}
 	},

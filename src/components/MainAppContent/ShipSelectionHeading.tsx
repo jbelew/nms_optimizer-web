@@ -31,18 +31,16 @@ export const ShipSelectionHeading: React.FC = () => {
 			}}
 			wrap="wrap"
 		>
-			{!isSharedGrid && (
-				<span className="main-app__ship-selection">
-					<Suspense fallback={<ShipSelectionSkeleton />}>
-						<ShipSelectionProvider solving={solving}>
-							<ShipSelectionRoot>
-								<ShipSelectionTrigger />
-								<ShipSelectionContent />
-							</ShipSelectionRoot>
-						</ShipSelectionProvider>
-					</Suspense>
-				</span>
-			)}
+			<span className="main-app__ship-selection">
+				<Suspense fallback={<ShipSelectionSkeleton />}>
+					<ShipSelectionProvider disabled={isSharedGrid} solving={solving}>
+						<ShipSelectionRoot>
+							<ShipSelectionTrigger />
+							<ShipSelectionContent />
+						</ShipSelectionRoot>
+					</ShipSelectionProvider>
+				</Suspense>
+			</span>
 
 			<Text
 				className="main-app__ship-label"

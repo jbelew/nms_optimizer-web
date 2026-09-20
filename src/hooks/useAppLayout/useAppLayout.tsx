@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
-import { useGridStore } from "@/store/grid/gridStore";
 import { useUiStore } from "@/store/ui/uiStore";
 
 /**
@@ -36,9 +35,8 @@ const GRID_TABLE_WIDTH_ADJUSTMENT = 0;
  *
  * @returns {AppLayout} Layout state including refs and calculated dimensions.
  *
- * @see {@link useGridStore} for shared grid state.
+ * @see {@link useUiStore} for layout store state.
  * @see {@link useBreakpoint} for responsive logic.
- * @see {@link ../../store/grid/gridStore.ts GridStore Source}
  *
  * @category Hooks
  *
@@ -63,7 +61,6 @@ export const useAppLayout = (): AppLayout => {
 	const setGridTableWidth = useUiStore((s) => s.setGridTableWidth);
 
 	const isLarge = useBreakpoint("1024px");
-	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 
 	useEffect(() => {
 		const containerElement = containerRef.current;
@@ -74,7 +71,7 @@ export const useAppLayout = (): AppLayout => {
 			window.requestAnimationFrame(() => {
 				for (const entry of entries) {
 					if (entry.target === containerElement) {
-						if (isLarge && !isSharedGrid) {
+						if (isLarge) {
 							setGridHeight(Math.round(entry.contentRect.height));
 						} else {
 							setGridHeight(null);
@@ -99,7 +96,7 @@ export const useAppLayout = (): AppLayout => {
 		return () => {
 			observer.disconnect();
 		};
-	}, [isLarge, isSharedGrid, setGridHeight, setGridTableWidth]);
+	}, [isLarge, setGridHeight, setGridTableWidth]);
 
 	return {
 		containerRef,

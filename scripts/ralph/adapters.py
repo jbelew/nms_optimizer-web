@@ -243,34 +243,58 @@ class AgentRunnerAdapter(Protocol):
         ...
 
 
+_BAKED_EFFORT_SUFFIXES: Tuple[str, ...] = ("(high)", "(medium)", "(low)", "-high", "-medium", "-low")
+_UNSUPPORTED_EFFORT_FAMILIES: Tuple[str, ...] = ("claude",)
+
+
+def model_supports_effort(model_name: str) -> bool:
+    """Check if a model identifier accepts the --effort flag in agy."""
+    lowered = model_name.lower()
+    if any(suffix in lowered for suffix in _BAKED_EFFORT_SUFFIXES):
+        return False
+    if any(family in lowered for family in _UNSUPPORTED_EFFORT_FAMILIES):
+        return False
+    return True
+
+
 class CliAgentRunnerAdapter:
     """Real adapter running `agy` and formatting the NDJSON stream in-process."""
 
     def __init__(self, project_dir: Optional[str] = None):
         self.project_dir = project_dir or os.getcwd()
 
-    def run_agent(
+    def build_cmd(
         self,
         prompt: str,
         continue_session: bool = False,
         effort: str = "high",
         extra_args: Optional[List[str]] = None,
-    ) -> bool:
+    ) -> List[str]:
         cmd = ["agy"]
         if continue_session:
             cmd.append("--continue")
 
         cmd.extend([
             "--mode=accept-edits",
-            '--model=Gemini 3.8 Flash (High)',
             "--dangerously-skip-permissions",
             f"--project={self.project_dir}",
             "--print-timeout=20m",
             "--output-format=stream-json",
         ])
 
+        model_val = None
+        for i, arg in enumerate(extra_args or []):
+            if arg.startswith("--model="):
+                model_val = arg.split("=", 1)[1]
+            elif arg == "--model" and i + 1 < len(extra_args or []):
+                model_val = (extra_args or [])[i + 1]
+
+        if not model_val:
+            cmd.append("--model=gemini-3.8-flash")
+            model_val = "gemini-3.8-flash"
+
         has_effort_override = any(arg.startswith("--effort") for arg in (extra_args or []))
-        if not has_effort_override:
+        if not has_effort_override and model_supports_effort(model_val) and effort:
             cmd.append(f"--effort={effort}")
 
         cmd.extend([
@@ -280,6 +304,22 @@ class CliAgentRunnerAdapter:
 
         if extra_args:
             cmd.extend(extra_args)
+
+        return cmd
+
+    def run_agent(
+        self,
+        prompt: str,
+        continue_session: bool = False,
+        effort: str = "high",
+        extra_args: Optional[List[str]] = None,
+    ) -> bool:
+        cmd = self.build_cmd(
+            prompt=prompt,
+            continue_session=continue_session,
+            effort=effort,
+            extra_args=extra_args,
+        )
 
         proc = subprocess.Popen(
             cmd,

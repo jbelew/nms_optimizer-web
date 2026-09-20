@@ -28,7 +28,8 @@ test.describe("Application Resilience & Recovery", () => {
 	test.afterEach(async ({ page }) => {
 		try {
 			await page.evaluate(() => sessionStorage.clear());
-		} catch (_e) {			// Context might be gone
+		} catch (_e) {
+			// Context might be gone
 		}
 	});
 
@@ -56,11 +57,15 @@ test.describe("Application Resilience & Recovery", () => {
 			// WebKit can be extremely slow with the cache-busting reload.
 			await page.waitForFunction(
 				() => {
-					const attempts = sessionStorage.getItem("__recovery_attempts__");
-					const isReady = window.lifecycleCoordinator?.isReady();
+					try {
+						const attempts = sessionStorage.getItem("__recovery_attempts__");
+						const isReady = window.lifecycleCoordinator?.isReady();
 
-					// Success condition: we had at least one recovery attempt and the app is ready.
-					return attempts === "1" && isReady === true;
+						// Success condition: we had at least one recovery attempt and the app is ready.
+						return attempts === "1" && isReady === true;
+					} catch {
+						return false;
+					}
 				},
 				{ polling: 500, timeout: 45000 }
 			);
@@ -108,7 +113,9 @@ test.describe("Application Resilience & Recovery", () => {
 			await refreshButton.click();
 
 			// 500.html redirects to /?reload=<timestamp>
-			await page.waitForFunction(() => window.location.search.includes("reload="), { timeout: 15000 });
+			await page.waitForFunction(() => window.location.search.includes("reload="), {
+				timeout: 15000,
+			});
 		});
 	});
 

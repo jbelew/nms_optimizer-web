@@ -13,7 +13,6 @@ import { MessageSpinner } from "@/components/MessageSpinner/MessageSpinner";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechTreeLoadingStore } from "@/store/ui/uiStore";
 
-import { SharedBuildCallout } from "./SharedBuildCallout";
 import { ShipSelectionHeading } from "./ShipSelectionHeading";
 import { useMainAppGlobal, useMainAppLayout, useMainAppOptimization } from "./useMainAppContext";
 
@@ -34,8 +33,6 @@ export const MainAppGridSection: React.FC = () => {
 			flexShrink={{ initial: "1", md: "0" }}
 			ref={containerRef}
 		>
-			{isSharedGrid && <SharedBuildCallout />}
-
 			<ShipSelectionHeading />
 
 			<GridProvider gridRef={gridTableRef as React.RefObject<HTMLDivElement | null>}>

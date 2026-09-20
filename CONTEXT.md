@@ -15,3 +15,11 @@ _Avoid_: tech group, ship component, system type
 **Module Selection**:
 The set of user-checked modules within a Technology Category that are selected as inputs for layout optimization.
 _Avoid_: selected modules, checked upgrades
+
+**Shared Grid**:
+A technology layout imported into the workspace from an encoded URL query parameter rather than configured manually or loaded from a saved file.
+_Avoid_: shared build, imported layout, URL grid
+
+**Session Reset**:
+The action of restoring the workspace to an empty, unconfigured layout and clearing all active module selections and URL parameters.
+_Avoid_: rest grid, wipe grid, clear board
