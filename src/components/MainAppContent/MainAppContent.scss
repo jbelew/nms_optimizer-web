@@ -81,11 +81,11 @@ $panel-border: 1px solid var(--gray-6);
 	// Ship selector header
 	&__ship-selector {
 		font-size: 1.25rem;
-		min-height: 1.5rem;
+		min-height: 1.25rem;
 
 		@media (width >= 640px) {
 			font-size: 1.5rem;
-			min-height: 2rem;
+			min-height: 1.5rem;
 		}
 
 		@media (width > 1024px) {
