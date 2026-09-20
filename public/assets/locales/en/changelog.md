@@ -4,6 +4,33 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 7.11 – Navigation Fixes & Stability (2026-09-19)
+
+This update fixes dialog behavior during page navigation and includes stability improvements.
+
+- **Dialog Navigation:** Fixed an issue where switching views or navigating sub-routes could unexpectedly close active dialogs.
+
+## Version 7.8 – Corvette Tractor Beam & Grid Polish (2026-09-15)
+
+This update adds Corvette Tractor Beam imagery and improves responsiveness when interacting with grid cells.
+
+- **Corvette Tractor Beam Graphics:** Added in-game images and icons for the Corvette Tractor Beam technology.
+- **Smoother Grid Selection:** Improved responsiveness when clicking and selecting cells on the grid.
+
+## Version 7.7 – Mobile Screenshots & Snappier Controls (2026-09-08)
+
+This update resolves mobile screenshot issues, improves grid interaction speed, and refines mobile spacing.
+
+- **Screenshot Tool Fixes:** Screenshots now wait for the technology tree to finish loading before capturing, and tablet and mobile captures properly include the populated grid layout.
+- **Snappier Grid & Dropdowns:** Made tapping grid cells and opening dropdown menus more responsive.
+- **Mobile & Visual Polish:** Reduced unnecessary spacing at the top of the technology list on mobile devices and updated divider accent colors to cyan.
+
+## Version 7.6 – Grid Reset Fix & Stability (2026-09-02)
+
+This update fixes counter behavior when resetting the grid and includes internal stability improvements.
+
+- **Grid Reset Fix:** Resetting the grid now properly resets all session counters.
+
 ## Version 7.5 – Anniversary Celebrations & Grid Control (2026-08-12)
 
 This update introduces seasonal celebration visuals and enhances interactive control on restricted layouts.
