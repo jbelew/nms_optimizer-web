@@ -345,8 +345,8 @@
     "semantic_hash": ""
   },
   "src/components/AppDialog/Markdown/MarkdownContentRenderer.tsx": {
-    "mtime": 1789862941.802469,
-    "ast_hash": "ce41f5c573ab3150bfdade329bc226cb",
+    "mtime": 1789927281.9067743,
+    "ast_hash": "f8d9bb7254e007082c64565a7aee71e4",
     "semantic_hash": ""
   },
   "src/components/AppDialog/Markdown/PrerenderedMarkdownRenderer.tsx": {
@@ -470,8 +470,8 @@
     "semantic_hash": ""
   },
   "src/components/AppDialog/UserStats/userStatsContent.tsx": {
-    "mtime": 1779145165.0,
-    "ast_hash": "1cb101f9f888569b6ebc18d6e3f7ff30",
+    "mtime": 1789930549.8557913,
+    "ast_hash": "00cd7ab5f35067e0ea098b2cfe090e4b",
     "semantic_hash": ""
   },
   "src/components/AppDialog/UserStats/userStatsData.tsx": {
@@ -525,8 +525,8 @@
     "semantic_hash": ""
   },
   "src/components/AppHeader/AppHeader.tsx": {
-    "mtime": 1789919173.9807918,
-    "ast_hash": "fcad2b3b9e969223b6518b2bcb4ecddd",
+    "mtime": 1789924550.1847162,
+    "ast_hash": "6d704eb4611f7a6083677fd13e6f1f3f",
     "semantic_hash": ""
   },
   "src/components/AppHeader/AppHeaderProvider.tsx": {
@@ -775,8 +775,8 @@
     "semantic_hash": ""
   },
   "src/components/MainAppContent/MainAppGridSection.tsx": {
-    "mtime": 1779308864.0,
-    "ast_hash": "4a380acb8d9c042e327257608a89699e",
+    "mtime": 1789931097.6074576,
+    "ast_hash": "e257d395c208123f11d109f17557f9c3",
     "semantic_hash": ""
   },
   "src/components/MainAppContent/MainAppLayout.test.tsx": {
@@ -815,8 +815,8 @@
     "semantic_hash": ""
   },
   "src/components/MessageSpinner/MessageSpinner.tsx": {
-    "mtime": 1787940776.9299421,
-    "ast_hash": "00a6b718a7e4b16cc60c09cd1c39f1d9",
+    "mtime": 1789931028.4953694,
+    "ast_hash": "5208229d86ba8a73ce0be31abe1ec5b6",
     "semantic_hash": ""
   },
   "src/components/MobileToolbar/MobileToolbar.stories.tsx": {
@@ -830,8 +830,8 @@
     "semantic_hash": ""
   },
   "src/components/MobileToolbar/MobileToolbar.tsx": {
-    "mtime": 1789919686.5023134,
-    "ast_hash": "86e01f329b7089d342b7db65e40e5fc4",
+    "mtime": 1789921039.2399864,
+    "ast_hash": "1b145b09fd0649f5b40911414f87ff9a",
     "semantic_hash": ""
   },
   "src/components/ModuleSelectionDialog/ModuleSelectionContext.tsx": {
@@ -1030,13 +1030,13 @@
     "semantic_hash": ""
   },
   "src/components/TechTree/TechTreeRoot.tsx": {
-    "mtime": 1789918857.1309865,
+    "mtime": 1789924697.0908973,
     "ast_hash": "98337390a1a140eb75e012aa7ce13bdd",
     "semantic_hash": ""
   },
   "src/components/TechTree/TechTreeSection.test.tsx": {
-    "mtime": 1779145164.0,
-    "ast_hash": "30186d93c620c9fa5d43f0f1d0a6415f",
+    "mtime": 1789931027.2560096,
+    "ast_hash": "9c54909557db56c0c61824b5727e52b7",
     "semantic_hash": ""
   },
   "src/components/TechTree/TechTreeSection.tsx": {
@@ -1045,8 +1045,8 @@
     "semantic_hash": ""
   },
   "src/components/TechTree/TechTreeSectionHeader.tsx": {
-    "mtime": 1779308864.0,
-    "ast_hash": "7fcdf36738b31cfac9ed78f8787adcaf",
+    "mtime": 1789924983.8689752,
+    "ast_hash": "d3de913be0c9bc6b32a6a5cd1a0a700f",
     "semantic_hash": ""
   },
   "src/components/TechTree/TechTreeSectionList.tsx": {
@@ -1055,8 +1055,8 @@
     "semantic_hash": ""
   },
   "src/components/TechTree/TechTreeSkeleton.tsx": {
-    "mtime": 1789846836.817894,
-    "ast_hash": "78cd0a82c325b8a0631197dbd3308d69",
+    "mtime": 1789920636.4360638,
+    "ast_hash": "b8a2857264119ed774e322a56c9718a2",
     "semantic_hash": ""
   },
   "src/components/TechTree/useTechTreeContext.ts": {
@@ -2065,8 +2065,8 @@
     "semantic_hash": ""
   },
   "CONTEXT.md": {
-    "mtime": 1788384701.8762481,
-    "ast_hash": "9921fda6441dacba53242499e53f8c62",
+    "mtime": 1789933441.0494196,
+    "ast_hash": "17781b17bb341fe01b5d085b288f5c6a",
     "semantic_hash": ""
   },
   "shared/page-metadata.js": {
