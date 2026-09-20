@@ -730,7 +730,7 @@
     "semantic_hash": ""
   },
   "src/components/GridTableButtons/GridTableButtons.tsx": {
-    "mtime": 1789862941.802469,
+    "mtime": 1789944814.5163534,
     "ast_hash": "090b87e9d8bf6e407145ae0853685aa4",
     "semantic_hash": ""
   },
@@ -780,13 +780,13 @@
     "semantic_hash": ""
   },
   "src/components/MainAppContent/MainAppLayout.test.tsx": {
-    "mtime": 1789943144.401938,
-    "ast_hash": "fbb087d5f63721be3282d10c9e7e9dd7",
+    "mtime": 1789944791.815935,
+    "ast_hash": "2bfff70fee850a866bfff19573a50622",
     "semantic_hash": ""
   },
   "src/components/MainAppContent/MainAppLayout.tsx": {
-    "mtime": 1789942976.855076,
-    "ast_hash": "6de647a78c3c4395d263a9b5d7581660",
+    "mtime": 1789944791.9169083,
+    "ast_hash": "3867e7b72455285db6e9a5f2bc0d8011",
     "semantic_hash": ""
   },
   "src/components/MainAppContent/ShipSelectionHeading.tsx": {
@@ -2182,16 +2182,6 @@
   "src/components/MainAppContent/useMainAppLogic.tsx": {
     "mtime": 1789940560.067973,
     "ast_hash": "274faa552bf31944a81bfff5888170d0",
-    "semantic_hash": ""
-  },
-  "src/components/MainAppContent/useTechTreeEnterAnimation.test.ts": {
-    "mtime": 1789942015.4537868,
-    "ast_hash": "bb4b0b109e9c6bd46706a2992592de67",
-    "semantic_hash": ""
-  },
-  "src/components/MainAppContent/useTechTreeEnterAnimation.ts": {
-    "mtime": 1789942362.0009959,
-    "ast_hash": "54f726aabc12fe0eabaf688ae80696f1",
     "semantic_hash": ""
   }
 }
