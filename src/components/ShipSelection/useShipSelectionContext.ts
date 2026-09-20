@@ -14,6 +14,8 @@ export interface GroupedShipType {
  * Context interface for the ship selection component.
  */
 export interface ShipSelectionContextValue {
+	/** Whether the selector is disabled. */
+	disabled: boolean;
 	/** Map of grouped ship type data for rendering sections. */
 	groupedShipTypes: Record<string, GroupedShipType[]>;
 	/** Callback function for when a new type is selected. */

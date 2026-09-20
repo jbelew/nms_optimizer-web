@@ -1,6 +1,6 @@
-// src/components/MainAppContent/useMainAppLogic.ts
+// src/components/MainAppContent/useMainAppLogic.tsx
 import { useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 import { useAppLayout } from "@/hooks/useAppLayout/useAppLayout";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
@@ -10,6 +10,7 @@ import { useOptimize } from "@/hooks/useOptimize/useOptimize";
 import { useSaveBuild } from "@/hooks/useSaveBuild/useSaveBuild";
 import { registerToolbarForceShow } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { useScrollHide } from "@/hooks/useScrollHide/useScrollHide";
+import { useToast } from "@/hooks/useToast/useToast";
 import { build, getBuildDate } from "@/routeConfig";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
@@ -62,6 +63,7 @@ export const useMainAppLogic = () => {
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const { forceShow, isVisible, toolbarRef } = useScrollHide(80);
 	const { resetSession } = useSessionStore();
+	const { showInfo } = useToast();
 
 	const optimize = useOptimize();
 
@@ -70,6 +72,16 @@ export const useMainAppLogic = () => {
 	const saveBuild = useSaveBuild();
 
 	const loadBuild = useLoadBuild();
+
+	// Show information toast when viewing a read-only shared grid
+	useEffect(() => {
+		if (isSharedGrid) {
+			showInfo(
+				t("common.information", "Information"),
+				<Trans components={{ strong: <strong /> }} i18nKey="mainApp.viewingSharedBuild" />
+			);
+		}
+	}, [isSharedGrid, showInfo, t]);
 
 	// Reset error counts when ship type changes
 	useEffect(() => {

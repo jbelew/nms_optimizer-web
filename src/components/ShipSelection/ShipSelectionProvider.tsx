@@ -17,18 +17,29 @@ const DEFAULT_GRID_HEIGHT = 10;
 const DEFAULT_GRID_WIDTH = 6;
 
 /**
+ * Props for the `ShipSelectionProvider` component.
+ */
+export interface ShipSelectionProviderProps {
+	/** Child elements. */
+	children: React.ReactNode;
+	/** Whether the selector is disabled. */
+	disabled?: boolean;
+	/** Whether an optimization solve is currently active. */
+	solving: boolean;
+}
+
+/**
  * Provider for the ShipSelection component.
  *
- * @param {object} props - Component properties.
- * @param {React.ReactNode} props.children - Child elements.
- * @param {boolean} props.solving - True if an optimization is in progress.
+ * @param {ShipSelectionProviderProps} props - Component properties.
  *
  * @returns {JSX.Element} The context provider.
  */
-export const ShipSelectionProvider: React.FC<{
-	children: React.ReactNode;
-	solving: boolean;
-}> = ({ children, solving }) => {
+export const ShipSelectionProvider: React.FC<ShipSelectionProviderProps> = ({
+	children,
+	disabled = false,
+	solving,
+}) => {
 	const { t } = useTranslation();
 	const shipTypes = useFetchShipTypesSuspense();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
@@ -93,12 +104,13 @@ export const ShipSelectionProvider: React.FC<{
 
 	const value = useMemo(
 		() => ({
+			disabled,
 			groupedShipTypes,
 			handleOptionSelect,
 			isPending: isPending || solving,
 			selectedShipType,
 		}),
-		[groupedShipTypes, handleOptionSelect, isPending, solving, selectedShipType]
+		[disabled, groupedShipTypes, handleOptionSelect, isPending, selectedShipType, solving]
 	);
 
 	return <ShipSelectionContext.Provider value={value}>{children}</ShipSelectionContext.Provider>;

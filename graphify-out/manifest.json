@@ -775,28 +775,23 @@
     "semantic_hash": ""
   },
   "src/components/MainAppContent/MainAppGridSection.tsx": {
-    "mtime": 1789933639.9428344,
-    "ast_hash": "e257d395c208123f11d109f17557f9c3",
+    "mtime": 1789938220.6666472,
+    "ast_hash": "d1ef9c3bdcdcb9387f3cdf7bc21cf497",
     "semantic_hash": ""
   },
   "src/components/MainAppContent/MainAppLayout.test.tsx": {
-    "mtime": 1779308864.0,
-    "ast_hash": "2bfff70fee850a866bfff19573a50622",
+    "mtime": 1789943144.401938,
+    "ast_hash": "fbb087d5f63721be3282d10c9e7e9dd7",
     "semantic_hash": ""
   },
   "src/components/MainAppContent/MainAppLayout.tsx": {
-    "mtime": 1786558502.0,
-    "ast_hash": "3867e7b72455285db6e9a5f2bc0d8011",
-    "semantic_hash": ""
-  },
-  "src/components/MainAppContent/SharedBuildCallout.tsx": {
-    "mtime": 1779308864.0,
-    "ast_hash": "c49e85def269e89f35f8377d2d819150",
+    "mtime": 1789942976.855076,
+    "ast_hash": "6de647a78c3c4395d263a9b5d7581660",
     "semantic_hash": ""
   },
   "src/components/MainAppContent/ShipSelectionHeading.tsx": {
-    "mtime": 1779308864.0,
-    "ast_hash": "9e3d8b2078c6b29e03e77bc60f47d799",
+    "mtime": 1789942206.306708,
+    "ast_hash": "55383eb8f41dd31a410d3816e922ec3b",
     "semantic_hash": ""
   },
   "src/components/MainAppContent/useMainAppContext.ts": {
@@ -805,13 +800,8 @@
     "semantic_hash": ""
   },
   "src/components/MainAppContent/useMainAppLogic.test.ts": {
-    "mtime": 1788384701.9719882,
-    "ast_hash": "472904cda0bf572819bc0e385980056a",
-    "semantic_hash": ""
-  },
-  "src/components/MainAppContent/useMainAppLogic.ts": {
-    "mtime": 1788384701.9719882,
-    "ast_hash": "050310fc3b78cda1894174b0ab0e683d",
+    "mtime": 1789940099.9887037,
+    "ast_hash": "82cbaeeac42b6b6db0fa91e13e419e8e",
     "semantic_hash": ""
   },
   "src/components/MessageSpinner/MessageSpinner.tsx": {
@@ -955,8 +945,8 @@
     "semantic_hash": ""
   },
   "src/components/ShipSelection/ShipSelection.tsx": {
-    "mtime": 1779308864.0,
-    "ast_hash": "ea86d13834f8d2123ddb3e2ce6a4d81c",
+    "mtime": 1789938296.3662133,
+    "ast_hash": "fe1427b7343613bd68b334baef386a72",
     "semantic_hash": ""
   },
   "src/components/ShipSelection/ShipSelectionContent.tsx": {
@@ -965,8 +955,8 @@
     "semantic_hash": ""
   },
   "src/components/ShipSelection/ShipSelectionProvider.tsx": {
-    "mtime": 1779396147.0,
-    "ast_hash": "38dd2c7756745489f347369dc2645ee6",
+    "mtime": 1789941572.375653,
+    "ast_hash": "1bda082c92ab39249f1f962ad215f602",
     "semantic_hash": ""
   },
   "src/components/ShipSelection/ShipSelectionRoot.tsx": {
@@ -980,13 +970,13 @@
     "semantic_hash": ""
   },
   "src/components/ShipSelection/ShipSelectionTrigger.tsx": {
-    "mtime": 1779308864.0,
-    "ast_hash": "9c809e9c8a8bb1107d27783c72f8cfda",
+    "mtime": 1789941580.2131946,
+    "ast_hash": "a6e1550a03975e314ee38d17d642b608",
     "semantic_hash": ""
   },
   "src/components/ShipSelection/useShipSelectionContext.ts": {
-    "mtime": 1779145164.0,
-    "ast_hash": "3a8ead610dfe54e89022eea273536f23",
+    "mtime": 1789941548.2393208,
+    "ast_hash": "e6446b77190111e512318a7b95bfd7b5",
     "semantic_hash": ""
   },
   "src/components/TechTree/TechTree.stories.tsx": {
@@ -1220,8 +1210,8 @@
     "semantic_hash": ""
   },
   "src/hooks/useAppLayout/useAppLayout.tsx": {
-    "mtime": 1779308864.0,
-    "ast_hash": "d311790245853c9094d068e1770f5d9c",
+    "mtime": 1789940108.4232051,
+    "ast_hash": "d4726cffb56504c13fd80fe8a94b02d8",
     "semantic_hash": ""
   },
   "src/hooks/useBreakpoint/useBreakpoint.test.tsx": {
@@ -2187,6 +2177,21 @@
   "src/hooks/useUrlSync/useUrlSync.integration.test.tsx": {
     "mtime": 1789935902.0495217,
     "ast_hash": "8175a15d42a2b13be4df712d9502f83c",
+    "semantic_hash": ""
+  },
+  "src/components/MainAppContent/useMainAppLogic.tsx": {
+    "mtime": 1789940560.067973,
+    "ast_hash": "274faa552bf31944a81bfff5888170d0",
+    "semantic_hash": ""
+  },
+  "src/components/MainAppContent/useTechTreeEnterAnimation.test.ts": {
+    "mtime": 1789942015.4537868,
+    "ast_hash": "bb4b0b109e9c6bd46706a2992592de67",
+    "semantic_hash": ""
+  },
+  "src/components/MainAppContent/useTechTreeEnterAnimation.ts": {
+    "mtime": 1789942362.0009959,
+    "ast_hash": "54f726aabc12fe0eabaf688ae80696f1",
     "semantic_hash": ""
   }
 }

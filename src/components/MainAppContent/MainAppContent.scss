@@ -116,6 +116,15 @@ $panel-border: 1px solid var(--gray-6);
 		text-wrap: balance;
 	}
 
+	// Tech tree section
+	&__tech-tree-section {
+		&--entering {
+			@media (width >= 1024px) {
+				animation: techTreeFadeIn 0.2s ease-out forwards;
+			}
+		}
+	}
+
 	// Tech tree sidebar content (ScrollArea)
 	&__tech-tree-sidebar {
 		background-color: var(--accent-a3);
@@ -132,5 +141,15 @@ $panel-border: 1px solid var(--gray-6);
 		flex-direction: column;
 		flex-grow: 1;
 		justify-content: flex-end;
+	}
+}
+
+@keyframes techTreeFadeIn {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
 	}
 }

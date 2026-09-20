@@ -10,10 +10,11 @@ import { useShipSelectionContext } from "./useShipSelectionContext";
  */
 export const ShipSelectionTrigger: React.FC = () => {
 	const { t } = useTranslation();
-	const { isPending } = useShipSelectionContext();
+	const { disabled, isPending } = useShipSelectionContext();
+	const isDisabled = disabled || isPending;
 
 	return (
-		<DropdownMenu.Trigger disabled={isPending}>
+		<DropdownMenu.Trigger disabled={isDisabled}>
 			<Button
 				aria-label={t("ShipSelection.ariaLabel") ?? ""}
 				className="p-2!"
@@ -21,7 +22,7 @@ export const ShipSelectionTrigger: React.FC = () => {
 				variant="soft"
 			>
 				<GearIcon className="h-4 w-4 sm:h-5 sm:w-5" />
-				<Separator color={isPending ? "gray" : "cyan"} decorative orientation="vertical" />
+				<Separator color={isDisabled ? "gray" : "cyan"} decorative orientation="vertical" />
 				<DropdownMenu.TriggerIcon />
 			</Button>
 		</DropdownMenu.Trigger>

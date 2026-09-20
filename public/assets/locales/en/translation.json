@@ -14,6 +14,7 @@
 		"retry": "Retry",
 		"reload": "Reload",
 		"copyLink": "Copy Link",
+		"information": "Information",
 		"loading": "Loading..."
 	},
 	"shipSelection": {
@@ -27,7 +28,7 @@
 	},
 	"appName": "NMS Optimizer",
 	"mainApp": {
-		"viewingSharedBuild": "You are viewing a <strong>Shared Build</strong>. This layout is read-only."
+		"viewingSharedBuild": "You are viewing a <strong>Shared Build</strong>. This layout is read-only. Press the <strong>Reset Grid</strong> button to start a new layout."
 	},
 	"buttons": {
 		"instructions": "Instructions",

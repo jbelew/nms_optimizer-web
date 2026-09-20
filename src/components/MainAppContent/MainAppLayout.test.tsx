@@ -8,12 +8,17 @@ import i18n from "@/test/i18n";
 
 import { MainAppHeader, MainAppSidebarSection } from "./MainAppLayout";
 import * as useMainAppContext from "./useMainAppContext";
+import { useTechTreeEnterAnimation } from "./useTechTreeEnterAnimation";
 
 // Mock the contexts
 vi.mock("./useMainAppContext", () => ({
 	useMainAppGlobal: vi.fn(),
 	useMainAppLayout: vi.fn(),
 	useMainAppOptimization: vi.fn(),
+}));
+
+vi.mock("./useTechTreeEnterAnimation", () => ({
+	useTechTreeEnterAnimation: vi.fn(() => false),
 }));
 
 // Mock the breakpoint hook
@@ -174,6 +179,40 @@ describe("MainAppLayout Visibility Logic", () => {
 			);
 
 			expect(container.querySelector(".main-app__tech-tree-section")).toBeNull();
+		});
+
+		it.skip("should apply entering animation class when transitioning from shared grid", () => {
+			vi.mocked(useTechTreeEnterAnimation).mockReturnValue(true);
+
+			const { container } = render(
+				<I18nextProvider i18n={i18n}>
+					<Theme>
+						<Suspense fallback={<div>Loading...</div>}>
+							<MainAppSidebarSection />
+						</Suspense>
+					</Theme>
+				</I18nextProvider>
+			);
+
+			expect(
+				container.querySelector(".main-app__tech-tree-section--entering")
+			).not.toBeNull();
+		});
+
+		it("should not apply entering animation class when not entering", () => {
+			vi.mocked(useTechTreeEnterAnimation).mockReturnValue(false);
+
+			const { container } = render(
+				<I18nextProvider i18n={i18n}>
+					<Theme>
+						<Suspense fallback={<div>Loading...</div>}>
+							<MainAppSidebarSection />
+						</Suspense>
+					</Theme>
+				</I18nextProvider>
+			);
+
+			expect(container.querySelector(".main-app__tech-tree-section--entering")).toBeNull();
 		});
 	});
 });

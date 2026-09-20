@@ -26,6 +26,7 @@ import {
 	useMainAppLayout,
 	useMainAppOptimization,
 } from "./useMainAppContext";
+import { useTechTreeEnterAnimation } from "./useTechTreeEnterAnimation";
 
 const BuildNameDialog = lazy(() => import("@/components/AppDialog/BuildName/BuildNameDialog"));
 const OptimizationAlertDialog = lazy(
@@ -223,12 +224,13 @@ const MainAppSidebarContent: React.FC = () => {
 export const MainAppSidebarSection: React.FC = () => {
 	const { gridHeight, gridTableTotalWidth } = useMainAppLayout();
 	const { isLargeScreen, isSharedGrid } = useMainAppGlobal();
+	const isEntering = useTechTreeEnterAnimation(isSharedGrid, isLargeScreen);
 
 	if (isSharedGrid) return null;
 
 	return (
 		<Flex
-			className="main-app__tech-tree-section"
+			className={`main-app__tech-tree-section${isEntering ? "main-app__tech-tree-section--entering" : ""}`}
 			direction="column"
 			minHeight="0"
 			ml={{ md: "5" }}

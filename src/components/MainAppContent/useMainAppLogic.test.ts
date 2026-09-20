@@ -1,18 +1,19 @@
-// src/components/MainAppContent/useMainAppLogic.test.ts
 import type { Mock } from "vitest";
 import { renderHook } from "@testing-library/react";
-import { vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { registerToolbarForceShow } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { usePlatformStore } from "@/store/app/platformStore";
+import { useGridStore } from "@/store/grid/gridStore";
 import { useSessionStore } from "@/store/ui/uiStore";
 
 import { useMainAppLogic } from "./useMainAppLogic";
 
 // Mock external dependencies
 vi.mock("react-i18next", () => ({
+	Trans: (props: { components?: Record<string, unknown>; i18nKey?: string }) => props.i18nKey,
 	useTranslation: () => ({
-		t: (key: string) => key,
+		t: (key: string, defaultValue?: string) => defaultValue ?? key,
 	}),
 }));
 
@@ -80,16 +81,19 @@ vi.mock("@/hooks/useScrollHide/useScrollHide", () => ({
 	}),
 }));
 
+const mockShowInfo = vi.fn();
 vi.mock("@/hooks/useToast/useToast", () => ({
 	useToast: () => ({
 		showError: vi.fn(),
+		showInfo: mockShowInfo,
 		showSuccess: vi.fn(),
 	}),
 }));
 
 vi.mock("@/store/grid/gridStore", () => ({
-	useGridStore: (selector: (state: unknown) => unknown) =>
-		selector({ hasModulesInGrid: true, isSharedGrid: false }),
+	useGridStore: vi.fn((selector: (state: unknown) => unknown) =>
+		selector({ hasModulesInGrid: true, isSharedGrid: false })
+	),
 }));
 
 vi.mock("@/store/app/platformStore", () => ({
@@ -112,6 +116,10 @@ vi.mock("@/store/ui/uiStore", () => ({
 describe("useMainAppLogic", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
+		(useGridStore as unknown as Mock).mockImplementation(
+			(selector: (state: unknown) => unknown) =>
+				selector({ hasModulesInGrid: true, isSharedGrid: false })
+		);
 	});
 
 	it("should initialize with correct state values", () => {
@@ -145,5 +153,23 @@ describe("useMainAppLogic", () => {
 	it("should register toolbar force show on mount", () => {
 		renderHook(() => useMainAppLogic());
 		expect(registerToolbarForceShow).toHaveBeenCalled();
+	});
+
+	it("should show info toast when viewing a shared grid", () => {
+		(useGridStore as unknown as Mock).mockImplementation(
+			(selector: (state: unknown) => unknown) =>
+				selector({ hasModulesInGrid: true, isSharedGrid: true })
+		);
+
+		renderHook(() => useMainAppLogic());
+
+		expect(mockShowInfo).toHaveBeenCalledWith(
+			"Information",
+			expect.objectContaining({
+				props: expect.objectContaining({
+					i18nKey: "mainApp.viewingSharedBuild",
+				}),
+			})
+		);
 	});
 });

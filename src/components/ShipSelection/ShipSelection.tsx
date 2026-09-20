@@ -22,6 +22,8 @@ export { ShipSelectionTrigger } from "./ShipSelectionTrigger";
  * Props for the `ShipSelection` component.
  */
 interface ShipSelectionProps {
+	/** Whether the selector is disabled. */
+	disabled?: boolean;
 	/** Whether an optimization solve is currently active. */
 	solving: boolean;
 }
@@ -29,10 +31,10 @@ interface ShipSelectionProps {
 /**
  * The default composite ShipSelection component.
  */
-export const ShipSelection: React.FC<ShipSelectionProps> = ({ solving }) => {
+export const ShipSelection: React.FC<ShipSelectionProps> = ({ disabled = false, solving }) => {
 	return (
 		<Suspense fallback={<ShipSelectionSkeleton />}>
-			<ShipSelectionProvider solving={solving}>
+			<ShipSelectionProvider disabled={disabled} solving={solving}>
 				<ShipSelectionRoot>
 					<ShipSelectionTrigger />
 					<ShipSelectionContent />
