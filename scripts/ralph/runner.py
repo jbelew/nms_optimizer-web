@@ -65,7 +65,11 @@ class TaskRunner:
         self.lifecycle.claim(issue.number)
 
         # 3. Run initial agent implementation
-        self.agent.run_initial(issue, extra_args=extra_args)
+        initial_ok = self.agent.run_initial(issue, extra_args=extra_args)
+        if not initial_ok:
+            print(f"❌ Initial agent run failed for issue #{issue.number}.", file=sys.stderr)
+            return 1
+
         stage_all(self.cmd_runner)
 
         if not has_staged_changes(self.cmd_runner):
@@ -102,6 +106,10 @@ class TaskRunner:
             return 1
 
         # 5. Commit verified changes
+        if not has_staged_changes(self.cmd_runner):
+            print(f"❌ Error: No staged changes found to commit for issue #{issue.number}.", file=sys.stderr)
+            return 1
+
         commit_msg = format_commit_message(issue.title, issue.number)
         print(f"\nCommitting:\n{commit_msg}")
         if not commit(commit_msg, self.cmd_runner):

@@ -155,6 +155,14 @@ export const useUrlSync = () => {
 
 	/**
 	 * Removes grid-related parameters from the URL.
+	 *
+	 * @remarks
+	 * When resetting a Shared Grid (where the URL contains a `grid` parameter),
+	 * pushes a new history entry (`replace: false`) so the user can navigate
+	 * Back to recover the shared layout. If the URL does not contain a `grid`
+	 * parameter, replaces the current entry (`replace: true`) to avoid polluting
+	 * the history stack with duplicate empty states.
+	 *
 	 * @example URL state reset
 	 * ```ts
 	 * updateUrlForReset();
@@ -163,9 +171,10 @@ export const useUrlSync = () => {
 	const updateUrlForReset = () => {
 		try {
 			const url = new URL(window.location.href);
+			const hasGridParam = url.searchParams.has("grid");
 			url.searchParams.delete("grid");
 			// Use navigate to ensure React Router is aware of the URL change
-			navigate(url.pathname + url.search, { replace: true });
+			navigate(url.pathname + url.search, { replace: !hasGridParam });
 		} catch (error) {
 			Logger.warn("useUrlSync: Failed to update URL for reset", { error });
 		}

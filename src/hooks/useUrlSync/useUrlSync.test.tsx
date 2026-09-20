@@ -40,6 +40,15 @@ describe("useUrlSync", () => {
 	const mockSetSelectedPlatform = vi.fn();
 	const mockSerializeGrid = vi.fn();
 	const mockDeserializeGrid = vi.fn();
+	const mockResetGrid = vi.fn();
+	const mockClearInteractionState = vi.fn();
+
+	let gridStoreState = {
+		clearInteractionState: mockClearInteractionState,
+		isSharedGrid: false,
+		resetGrid: mockResetGrid,
+		setIsSharedGrid: mockSetIsSharedGrid,
+	};
 
 	/**
 	 * Sets up mocks and initializes test environment before each test.
@@ -48,14 +57,21 @@ describe("useUrlSync", () => {
 		vi.clearAllMocks();
 		window.history.pushState({}, "", "/");
 
-		(useGridStore as unknown as Mock).mockReturnValue({
+		gridStoreState = {
+			clearInteractionState: mockClearInteractionState,
 			isSharedGrid: false,
-			setIsSharedGrid: mockSetIsSharedGrid,
-		});
-		(useGridStore as unknown as { getState: Mock }).getState = vi.fn().mockReturnValue({
-			isSharedGrid: false,
-			setIsSharedGrid: mockSetIsSharedGrid,
-		});
+			resetGrid: mockResetGrid.mockImplementation(() => {
+				gridStoreState.isSharedGrid = false;
+			}),
+			setIsSharedGrid: mockSetIsSharedGrid.mockImplementation((val: boolean) => {
+				gridStoreState.isSharedGrid = val;
+			}),
+		};
+
+		(useGridStore as unknown as Mock).mockImplementation((selector) =>
+			typeof selector === "function" ? selector(gridStoreState) : gridStoreState
+		);
+		(useGridStore as unknown as { getState: Mock }).getState = vi.fn(() => gridStoreState);
 
 		(usePlatformStore as unknown as Mock).mockImplementation(
 			(selector: (state: PlatformState) => unknown) => {
@@ -75,7 +91,9 @@ describe("useUrlSync", () => {
 		});
 
 		(useGridDeserializer as unknown as Mock).mockReturnValue({
-			deserializeGrid: mockDeserializeGrid,
+			deserializeGrid: mockDeserializeGrid.mockImplementation(async () => {
+				gridStoreState.isSharedGrid = true;
+			}),
 			serializeGrid: mockSerializeGrid,
 		});
 		(useFetchShipTypesSuspense as unknown as Mock).mockReturnValue({
@@ -96,10 +114,20 @@ describe("useUrlSync", () => {
 	});
 
 	/**
-	 * Verifies that the URL is correctly updated for resetting the grid.
+	 * Verifies that the URL is updated with push (replace: false) when resetting a shared grid.
 	 */
-	it("should update URL for reset", () => {
+	it("should push history entry when resetting a shared grid (grid param in URL)", () => {
 		window.history.pushState({}, "", "/?grid=some-grid&platform=test-platform");
+		const { result } = renderHook(() => useUrlSync());
+		result.current.updateUrlForReset();
+		expect(mockNavigate).toHaveBeenCalledWith("/?platform=test-platform", { replace: false });
+	});
+
+	/**
+	 * Verifies that the URL is updated with replace: true when resetting without a grid param in URL.
+	 */
+	it("should replace history entry when resetting a layout without a grid param in URL", () => {
+		window.history.pushState({}, "", "/?platform=test-platform");
 		const { result } = renderHook(() => useUrlSync());
 		result.current.updateUrlForReset();
 		expect(mockNavigate).toHaveBeenCalledWith("/?platform=test-platform", { replace: true });
@@ -155,5 +183,47 @@ describe("useUrlSync", () => {
 			false,
 			true
 		);
+	});
+
+	/**
+	 * Tests full navigation restoration:
+	 * Resetting a shared grid pushes a new entry, pressing Back restores the shared grid,
+	 * and pressing Forward triggers session reset back to the empty workspace.
+	 */
+	it("should restore shared grid on Back navigation after reset, and reset on Forward navigation", async () => {
+		// 1. Initial load with a shared grid
+		window.history.pushState({}, "", "/?grid=shared-grid-1&platform=test-platform");
+		const { result } = renderHook(() => useUrlSync());
+
+		expect(mockDeserializeGrid).toHaveBeenCalledWith("shared-grid-1");
+		expect(gridStoreState.isSharedGrid).toBe(true);
+
+		// 2. User resets the grid
+		result.current.updateUrlForReset();
+		expect(mockNavigate).toHaveBeenCalledWith("/?platform=test-platform", { replace: false });
+
+		// Simulate URL and store change after reset
+		window.history.pushState({}, "", "/?platform=test-platform");
+		gridStoreState.isSharedGrid = false;
+
+		// 3. User navigates Back to the shared grid
+		act(() => {
+			window.history.pushState({}, "", "/?grid=shared-grid-1&platform=test-platform");
+			window.dispatchEvent(new PopStateEvent("popstate"));
+		});
+
+		expect(mockDeserializeGrid).toHaveBeenCalledWith("shared-grid-1");
+		expect(gridStoreState.isSharedGrid).toBe(true);
+
+		// 4. User navigates Forward to the reset grid (no grid param in URL)
+		act(() => {
+			window.history.pushState({}, "", "/?platform=test-platform");
+			window.dispatchEvent(new PopStateEvent("popstate"));
+		});
+
+		// sessionCoordinator.resetSession() should have been called, resetting the grid
+		expect(mockResetGrid).toHaveBeenCalled();
+		expect(mockClearInteractionState).toHaveBeenCalled();
+		expect(gridStoreState.isSharedGrid).toBe(false);
 	});
 });

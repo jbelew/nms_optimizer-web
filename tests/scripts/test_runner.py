@@ -181,11 +181,112 @@ class TestRunner(unittest.TestCase):
         self.assertEqual(exit_code, 1)
         self.assertNotIn(53, issue_adapter.closed_issues)
 
+    def test_run_initial_agent_failure(self):
+        issues = [
+            {
+                "number": 54,
+                "title": "fix: agent crash",
+                "body": "Some task",
+                "labels": ["ready-for-agent"],
+            }
+        ]
+        issue_adapter = FakeIssueTrackerAdapter(issues)
+        lifecycle = IssueLifecycle(issue_adapter)
+        cmd_runner = FakeCommandRunnerAdapter()
+        agent_adapter = FakeAgentRunnerAdapter(should_succeed=False)
+        agent = AgentClient(agent_adapter)
+        gate = MockGate([VerificationResult(passed=True, output="OK", exit_code=0)])
+
+        runner = TaskRunner(
+            lifecycle=lifecycle,
+            gate=gate,
+            agent=agent,
+            cmd_runner=cmd_runner,
+        )
+
+        exit_code = runner.run(issue_number=54)
+        self.assertEqual(exit_code, 1)
+        self.assertEqual(gate.call_count, 0)
+        self.assertNotIn(54, issue_adapter.closed_issues)
+
+    def test_run_no_staged_changes_to_commit(self):
+        issues = [
+            {
+                "number": 55,
+                "title": "fix: clean tree no changes",
+                "body": "Some task",
+                "labels": ["ready-for-agent"],
+            }
+        ]
+        issue_adapter = FakeIssueTrackerAdapter(issues)
+        lifecycle = IssueLifecycle(issue_adapter)
+        cmd_runner = FakeCommandRunnerAdapter()
+        # Default response has exit code 0 for git diff --cached --quiet (no staged changes)
+        agent_adapter = FakeAgentRunnerAdapter(should_succeed=True)
+        agent = AgentClient(agent_adapter)
+        gate = MockGate([VerificationResult(passed=True, output="OK", exit_code=0)])
+
+        runner = TaskRunner(
+            lifecycle=lifecycle,
+            gate=gate,
+            agent=agent,
+            cmd_runner=cmd_runner,
+        )
+
+        exit_code = runner.run(issue_number=55)
+        self.assertEqual(exit_code, 1)
+        self.assertEqual(gate.call_count, 1)
+        self.assertNotIn(55, issue_adapter.closed_issues)
+
     def test_parse_issue_number(self):
         from scripts.ralph_runner import parse_issue_number
 
         self.assertEqual(parse_issue_number("773"), 773)
         self.assertEqual(parse_issue_number("#773"), 773)
+
+    def test_cli_agent_adapter_build_cmd_defaults(self):
+        from scripts.ralph.adapters import CliAgentRunnerAdapter
+
+        adapter = CliAgentRunnerAdapter(project_dir="/tmp/test")
+        cmd_initial = adapter.build_cmd("implement issue", continue_session=False, effort="high")
+        self.assertIn("--model=gemini-3.8-flash", cmd_initial)
+        self.assertIn("--effort=high", cmd_initial)
+        self.assertNotIn("--continue", cmd_initial)
+
+        cmd_remediate = adapter.build_cmd("fix error", continue_session=True, effort="low")
+        self.assertIn("--model=gemini-3.8-flash", cmd_remediate)
+        self.assertIn("--effort=low", cmd_remediate)
+        self.assertIn("--continue", cmd_remediate)
+
+    def test_cli_agent_adapter_build_cmd_model_overrides(self):
+        from scripts.ralph.adapters import CliAgentRunnerAdapter
+
+        adapter = CliAgentRunnerAdapter(project_dir="/tmp/test")
+        # Model with baked-in effort should not get --effort added
+        cmd_baked = adapter.build_cmd(
+            "implement issue",
+            effort="high",
+            extra_args=['--model="Gemini 3.8 Flash (High)"'],
+        )
+        self.assertNotIn("--effort=high", cmd_baked)
+        self.assertNotIn("--model=gemini-3.8-flash", cmd_baked)
+
+        # Base model without baked-in effort should receive --effort
+        cmd_base = adapter.build_cmd(
+            "implement issue",
+            effort="high",
+            extra_args=["--model=gemini-3.7-flash"],
+        )
+        self.assertIn("--effort=high", cmd_base)
+
+        # Explicit effort override in extra_args should not get duplicate --effort
+        cmd_effort_override = adapter.build_cmd(
+            "implement issue",
+            effort="high",
+            extra_args=["--effort=medium"],
+        )
+        self.assertNotIn("--effort=high", cmd_effort_override)
+        self.assertIn("--effort=medium", cmd_effort_override)
 
 
 if __name__ == "__main__":

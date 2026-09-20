@@ -188,7 +188,11 @@ export const sessionCoordinator = {
 	/**
 	 * Synchronizes application state with values retrieved from the browser URL.
 	 *
+	 * @remarks
 	 * Handles conditional ship platform switches and grid layout deserialization.
+	 * When navigating via browser history (`popstate`) from a state that held a
+	 * Shared Grid to a URL without a `grid` parameter, triggers a full session
+	 * reset to return the workspace to an empty grid layout.
 	 *
 	 * @param {object} params - The search parameter values and deserializer.
 	 * @param {string | null} params.platformFromUrl - The platform query parameter.
@@ -232,11 +236,10 @@ export const sessionCoordinator = {
 		if (gridFromUrl) {
 			deserializeGrid(gridFromUrl);
 		} else {
-			const { isSharedGrid: currentIsSharedGrid, setIsSharedGrid: storeSetIsSharedGrid } =
-				useGridStore.getState();
+			const { isSharedGrid: currentIsSharedGrid } = useGridStore.getState();
 
 			if (currentIsSharedGrid) {
-				storeSetIsSharedGrid(false);
+				sessionCoordinator.resetSession();
 			}
 		}
 	},
