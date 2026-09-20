@@ -150,6 +150,26 @@ class TestRunner(unittest.TestCase):
         exit_code = runner.run(issue_number=None)
         self.assertEqual(exit_code, 0)
 
+    def _create_runner(
+        self,
+        issues,
+        agent_succeeds=True,
+        cmd_runner=None,
+    ):
+        issue_adapter = FakeIssueTrackerAdapter(issues)
+        lifecycle = IssueLifecycle(issue_adapter)
+        cmd_runner = cmd_runner or FakeCommandRunnerAdapter()
+        agent_adapter = FakeAgentRunnerAdapter(should_succeed=agent_succeeds)
+        agent = AgentClient(agent_adapter)
+        gate = MockGate([VerificationResult(passed=True, output="OK", exit_code=0)])
+        runner = TaskRunner(
+            lifecycle=lifecycle,
+            gate=gate,
+            agent=agent,
+            cmd_runner=cmd_runner,
+        )
+        return runner, issue_adapter, gate, cmd_runner
+
     def test_run_commit_failure(self):
         issues = [
             {
@@ -159,23 +179,11 @@ class TestRunner(unittest.TestCase):
                 "labels": ["ready-for-agent"],
             }
         ]
-        issue_adapter = FakeIssueTrackerAdapter(issues)
-        lifecycle = IssueLifecycle(issue_adapter)
-
         cmd_runner = FakeCommandRunnerAdapter()
         cmd_runner.set_response("git diff --cached --quiet", 1)
         cmd_runner.set_response("git commit", 1, stderr="error: failed to commit")
 
-        agent_adapter = FakeAgentRunnerAdapter(should_succeed=True)
-        agent = AgentClient(agent_adapter)
-        gate = MockGate([VerificationResult(passed=True, output="OK", exit_code=0)])
-
-        runner = TaskRunner(
-            lifecycle=lifecycle,
-            gate=gate,
-            agent=agent,
-            cmd_runner=cmd_runner,
-        )
+        runner, issue_adapter, _, _ = self._create_runner(issues, cmd_runner=cmd_runner)
 
         exit_code = runner.run(issue_number=53)
         self.assertEqual(exit_code, 1)
@@ -190,19 +198,7 @@ class TestRunner(unittest.TestCase):
                 "labels": ["ready-for-agent"],
             }
         ]
-        issue_adapter = FakeIssueTrackerAdapter(issues)
-        lifecycle = IssueLifecycle(issue_adapter)
-        cmd_runner = FakeCommandRunnerAdapter()
-        agent_adapter = FakeAgentRunnerAdapter(should_succeed=False)
-        agent = AgentClient(agent_adapter)
-        gate = MockGate([VerificationResult(passed=True, output="OK", exit_code=0)])
-
-        runner = TaskRunner(
-            lifecycle=lifecycle,
-            gate=gate,
-            agent=agent,
-            cmd_runner=cmd_runner,
-        )
+        runner, issue_adapter, gate, _ = self._create_runner(issues, agent_succeeds=False)
 
         exit_code = runner.run(issue_number=54)
         self.assertEqual(exit_code, 1)
@@ -218,20 +214,8 @@ class TestRunner(unittest.TestCase):
                 "labels": ["ready-for-agent"],
             }
         ]
-        issue_adapter = FakeIssueTrackerAdapter(issues)
-        lifecycle = IssueLifecycle(issue_adapter)
-        cmd_runner = FakeCommandRunnerAdapter()
         # Default response has exit code 0 for git diff --cached --quiet (no staged changes)
-        agent_adapter = FakeAgentRunnerAdapter(should_succeed=True)
-        agent = AgentClient(agent_adapter)
-        gate = MockGate([VerificationResult(passed=True, output="OK", exit_code=0)])
-
-        runner = TaskRunner(
-            lifecycle=lifecycle,
-            gate=gate,
-            agent=agent,
-            cmd_runner=cmd_runner,
-        )
+        runner, issue_adapter, gate, _ = self._create_runner(issues)
 
         exit_code = runner.run(issue_number=55)
         self.assertEqual(exit_code, 1)

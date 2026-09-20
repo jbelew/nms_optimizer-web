@@ -243,12 +243,16 @@ class AgentRunnerAdapter(Protocol):
         ...
 
 
+_BAKED_EFFORT_SUFFIXES: Tuple[str, ...] = ("(high)", "(medium)", "(low)", "-high", "-medium", "-low")
+_UNSUPPORTED_EFFORT_FAMILIES: Tuple[str, ...] = ("claude",)
+
+
 def model_supports_effort(model_name: str) -> bool:
     """Check if a model identifier accepts the --effort flag in agy."""
     lowered = model_name.lower()
-    if any(suffix in lowered for suffix in ["(high)", "(medium)", "(low)", "-high", "-medium", "-low"]):
+    if any(suffix in lowered for suffix in _BAKED_EFFORT_SUFFIXES):
         return False
-    if "claude" in lowered:
+    if any(family in lowered for family in _UNSUPPORTED_EFFORT_FAMILIES):
         return False
     return True
 

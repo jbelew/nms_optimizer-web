@@ -193,5 +193,24 @@ describe("sessionCoordinator", () => {
 			expect(resetSessionSpy).not.toHaveBeenCalled();
 			resetSessionSpy.mockRestore();
 		});
+
+		it("should trigger resetSession when transitioning from a shared grid to a different platform without grid param", () => {
+			mockGridStore.isSharedGrid = true;
+			mockPlatformStoreState.selectedPlatform = "old-platform";
+			const resetSessionSpy = vi
+				.spyOn(sessionCoordinator, "resetSession")
+				.mockImplementation(() => {});
+
+			sessionCoordinator.syncStateFromUrl({
+				deserializeGrid: vi.fn(),
+				gridFromUrl: null,
+				isKnownRoute: true,
+				platformFromUrl: "new-platform",
+				validShipTypes: ["old-platform", "new-platform"],
+			});
+
+			expect(resetSessionSpy).toHaveBeenCalled();
+			resetSessionSpy.mockRestore();
+		});
 	});
 });

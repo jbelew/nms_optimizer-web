@@ -200,6 +200,8 @@ export const sessionCoordinator = {
 	 * @param {string[]} params.validShipTypes - Array of supported ship type identifiers.
 	 * @param {boolean} params.isKnownRoute - True if route is standard/known.
 	 * @param {(serialized: string) => void} params.deserializeGrid - Callback to deserialize grid string.
+	 *
+	 * @returns {void}
 	 */
 	syncStateFromUrl(params: {
 		deserializeGrid: (serialized: string) => void;
@@ -212,6 +214,7 @@ export const sessionCoordinator = {
 			params;
 		const platformStore = usePlatformStore.getState();
 		const currentPlatform = platformStore.selectedPlatform;
+		const wasSharedGrid = useGridStore.getState().isSharedGrid;
 
 		// Sync platform first to avoid grid deserialization conflicts
 		if (platformFromUrl && platformFromUrl !== currentPlatform) {
@@ -238,7 +241,7 @@ export const sessionCoordinator = {
 		} else {
 			const { isSharedGrid: currentIsSharedGrid } = useGridStore.getState();
 
-			if (currentIsSharedGrid) {
+			if (currentIsSharedGrid || wasSharedGrid) {
 				sessionCoordinator.resetSession();
 			}
 		}

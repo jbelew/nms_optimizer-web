@@ -109,7 +109,7 @@ vi.mock("@/context/RouteContext", () => ({
  *
  * @returns {string} The serialized grid token.
  */
-function createSerializedBuild(tech: string, module: string, row: number, col: number): string {
+function createSerializedGrid(tech: string, module: string, row: number, col: number): string {
 	const testGrid = createGrid(10, 6);
 	testGrid.cells[row][col].active = true;
 	testGrid.cells[row][col].tech = tech;
@@ -122,8 +122,8 @@ function createSerializedBuild(tech: string, module: string, row: number, col: n
  * Integration test suite for `useUrlSync` verifying history navigation restoration and reset.
  */
 describe("useUrlSync Integration", () => {
-	let serializedShieldBuild: string;
-	let serializedPulseBuild: string;
+	let serializedShieldGrid: string;
+	let serializedPulseGrid: string;
 
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -150,8 +150,8 @@ describe("useUrlSync Integration", () => {
 		});
 		useUiStore.getState().resetSession();
 
-		serializedShieldBuild = createSerializedBuild("shield", "AA", 0, 0);
-		serializedPulseBuild = createSerializedBuild("pulse", "SL", 1, 1);
+		serializedShieldGrid = createSerializedGrid("shield", "AA", 0, 0);
+		serializedPulseGrid = createSerializedGrid("pulse", "SL", 1, 1);
 
 		window.history.pushState({}, "", "/?platform=standard");
 	});
@@ -165,7 +165,7 @@ describe("useUrlSync Integration", () => {
 		window.history.pushState(
 			{},
 			"",
-			`/?platform=standard&grid=${encodeURIComponent(serializedShieldBuild)}`
+			`/?platform=standard&grid=${encodeURIComponent(serializedShieldGrid)}`
 		);
 		let hookResult: { current: ReturnType<typeof useUrlSync> };
 		await act(async () => {
@@ -208,7 +208,7 @@ describe("useUrlSync Integration", () => {
 			window.history.pushState(
 				{},
 				"",
-				`/?platform=standard&grid=${encodeURIComponent(serializedShieldBuild)}`
+				`/?platform=standard&grid=${encodeURIComponent(serializedShieldGrid)}`
 			);
 			window.dispatchEvent(new PopStateEvent("popstate"));
 		});
@@ -248,15 +248,15 @@ describe("useUrlSync Integration", () => {
 	});
 
 	/**
-	 * Verifies that navigating forward and backward between multiple different shared build URLs
+	 * Verifies that navigating forward and backward between multiple different shared grid URLs
 	 * accurately restores each target layout.
 	 */
-	it("should deserialize and restore each target layout when navigating between multiple shared build URLs", async () => {
-		// 1. Mount on Build 1 (Shield)
+	it("should deserialize and restore each target layout when navigating between multiple shared grid URLs", async () => {
+		// 1. Mount on Grid 1 (Shield)
 		window.history.pushState(
 			{},
 			"",
-			`/?platform=standard&grid=${encodeURIComponent(serializedShieldBuild)}`
+			`/?platform=standard&grid=${encodeURIComponent(serializedShieldGrid)}`
 		);
 		await act(async () => {
 			renderHook(() => useUrlSync());
@@ -267,12 +267,12 @@ describe("useUrlSync Integration", () => {
 			expect(useGridStore.getState().grid.cells[0][0].tech).toBe("shield");
 		});
 
-		// 2. Navigate forward to Build 2 (Pulse)
+		// 2. Navigate forward to Grid 2 (Pulse)
 		await act(async () => {
 			window.history.pushState(
 				{},
 				"",
-				`/?platform=standard&grid=${encodeURIComponent(serializedPulseBuild)}`
+				`/?platform=standard&grid=${encodeURIComponent(serializedPulseGrid)}`
 			);
 			window.dispatchEvent(new PopStateEvent("popstate"));
 		});
@@ -284,12 +284,12 @@ describe("useUrlSync Integration", () => {
 			expect(grid.cells[0][0].tech).toBeNull();
 		});
 
-		// 3. Navigate back to Build 1 (Shield)
+		// 3. Navigate back to Grid 1 (Shield)
 		await act(async () => {
 			window.history.pushState(
 				{},
 				"",
-				`/?platform=standard&grid=${encodeURIComponent(serializedShieldBuild)}`
+				`/?platform=standard&grid=${encodeURIComponent(serializedShieldGrid)}`
 			);
 			window.dispatchEvent(new PopStateEvent("popstate"));
 		});
@@ -301,12 +301,12 @@ describe("useUrlSync Integration", () => {
 			expect(grid.cells[1][1].tech).toBeNull();
 		});
 
-		// 4. Navigate forward to Build 2 (Pulse) again
+		// 4. Navigate forward to Grid 2 (Pulse) again
 		await act(async () => {
 			window.history.pushState(
 				{},
 				"",
-				`/?platform=standard&grid=${encodeURIComponent(serializedPulseBuild)}`
+				`/?platform=standard&grid=${encodeURIComponent(serializedPulseGrid)}`
 			);
 			window.dispatchEvent(new PopStateEvent("popstate"));
 		});
@@ -337,11 +337,11 @@ describe("useUrlSync Integration", () => {
 	 * when forward navigating to a gridless URL without blocking modal dialogs.
 	 */
 	it("should wipe out post-restoration edits when forward navigating to a gridless URL", async () => {
-		// 1. Initial shared build
+		// 1. Initial shared grid
 		window.history.pushState(
 			{},
 			"",
-			`/?platform=standard&grid=${encodeURIComponent(serializedShieldBuild)}`
+			`/?platform=standard&grid=${encodeURIComponent(serializedShieldGrid)}`
 		);
 		await act(async () => {
 			renderHook(() => useUrlSync());
