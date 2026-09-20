@@ -1,3 +1,18 @@
+# [7.12.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.11.1...v7.12.0) (2026-09-20)
+
+
+### Bug Fixes
+
+* **layout:** ensure space between base and entering animation class names ([34d646b](https://github.com/jbelew/nms_optimizer-web/commit/34d646be12c00312e459cdb93f20d2c24ca8f0a1))
+* **tooling:** resolve python import path and entrypoint errors in ralph runner ([419edfb](https://github.com/jbelew/nms_optimizer-web/commit/419edfb7e5abf7f2f4c64f3e17be277ab261627a))
+
+
+### Features
+
+* **history:** push browser history entry when performing session reset on shared grid ([#773](https://github.com/jbelew/nms_optimizer-web/issues/773)) ([7bd2215](https://github.com/jbelew/nms_optimizer-web/commit/7bd2215cf00725ba3e0ceee20f636ca0907b8469))
+* **history:** restore reset state on forward navigation to gridless URL ([#774](https://github.com/jbelew/nms_optimizer-web/issues/774)) ([c7a9eac](https://github.com/jbelew/nms_optimizer-web/commit/c7a9eac1a4e7b92b0d2e849fc35f060cb88313d1))
+* **layout:** refine shared build presentation and tech tree enter animation ([a541960](https://github.com/jbelew/nms_optimizer-web/commit/a541960b93c321c74b0dd924a585215f14cc32c3))
+
 ## [7.11.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.11.0...v7.11.1) (2026-09-20)
 
 
