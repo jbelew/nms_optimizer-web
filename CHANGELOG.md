@@ -1,3 +1,10 @@
+## [7.11.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.11.0...v7.11.1) (2026-09-20)
+
+
+### Bug Fixes
+
+* **ui:** adjust header spacing and spinner positioning, update tests ([af2c64e](https://github.com/jbelew/nms_optimizer-web/commit/af2c64e7a8e840a680ead31978da48d8d0118428))
+
 # [7.11.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.10.2...v7.11.0) (2026-09-19)
 
 
