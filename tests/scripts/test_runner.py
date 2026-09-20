@@ -150,6 +150,43 @@ class TestRunner(unittest.TestCase):
         exit_code = runner.run(issue_number=None)
         self.assertEqual(exit_code, 0)
 
+    def test_run_commit_failure(self):
+        issues = [
+            {
+                "number": 53,
+                "title": "fix: commit error",
+                "body": "Some task",
+                "labels": ["ready-for-agent"],
+            }
+        ]
+        issue_adapter = FakeIssueTrackerAdapter(issues)
+        lifecycle = IssueLifecycle(issue_adapter)
+
+        cmd_runner = FakeCommandRunnerAdapter()
+        cmd_runner.set_response("git diff --cached --quiet", 1)
+        cmd_runner.set_response("git commit", 1, stderr="error: failed to commit")
+
+        agent_adapter = FakeAgentRunnerAdapter(should_succeed=True)
+        agent = AgentClient(agent_adapter)
+        gate = MockGate([VerificationResult(passed=True, output="OK", exit_code=0)])
+
+        runner = TaskRunner(
+            lifecycle=lifecycle,
+            gate=gate,
+            agent=agent,
+            cmd_runner=cmd_runner,
+        )
+
+        exit_code = runner.run(issue_number=53)
+        self.assertEqual(exit_code, 1)
+        self.assertNotIn(53, issue_adapter.closed_issues)
+
+    def test_parse_issue_number(self):
+        from scripts.ralph_runner import parse_issue_number
+
+        self.assertEqual(parse_issue_number("773"), 773)
+        self.assertEqual(parse_issue_number("#773"), 773)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -262,12 +262,15 @@ class CliAgentRunnerAdapter:
 
         cmd.extend([
             "--mode=accept-edits",
-            '--model=Gemini 3.8 Flash (High)',
             "--dangerously-skip-permissions",
             f"--project={self.project_dir}",
             "--print-timeout=20m",
             "--output-format=stream-json",
         ])
+
+        has_model_override = any(arg.startswith("--model") for arg in (extra_args or []))
+        if not has_model_override:
+            cmd.append('--model=Gemini 3.8 Flash (High)')
 
         has_effort_override = any(arg.startswith("--effort") for arg in (extra_args or []))
         if not has_effort_override:

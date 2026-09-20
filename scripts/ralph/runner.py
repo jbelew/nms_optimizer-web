@@ -104,7 +104,9 @@ class TaskRunner:
         # 5. Commit verified changes
         commit_msg = format_commit_message(issue.title, issue.number)
         print(f"\nCommitting:\n{commit_msg}")
-        commit(commit_msg, self.cmd_runner)
+        if not commit(commit_msg, self.cmd_runner):
+            print("❌ Error: Failed to commit changes.", file=sys.stderr)
+            return 1
 
         # 6. Complete issue and unblock downstream issues
         self.lifecycle.complete(issue.number, comment="Resolved.")
