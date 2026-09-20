@@ -132,7 +132,7 @@ export const MobileToolbar = ({
 
 	return (
 		<ToolbarRoot
-			className="fixed top-0 right-0 left-0 z-50 -mb-px flex items-center justify-between gap-2 py-2 transition-transform duration-300 ease-in-out"
+			className="fixed top-0 right-0 left-0 z-50 -mb-px flex items-center justify-between gap-2 border-b border-b-[var(--accent-3)] py-2 transition-transform duration-300 ease-in-out"
 			ref={ref}
 			style={{
 				backgroundColor: "var(--accent-4)",

@@ -17,7 +17,7 @@ export const TechTreeRoot: React.FC<{
 				className="main-app__tech-tree-sidebar shadow-sm"
 				scrollbars="vertical"
 				style={{
-					borderRadius: "var(--radius-5)",
+					borderRadius: "var(--radius-2)",
 					flexGrow: 1,
 					minHeight: 0,
 					padding: "var(--space-4)",

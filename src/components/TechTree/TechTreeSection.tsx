@@ -19,8 +19,6 @@ import { type TechTreeItem } from "@/hooks/useTechTree/useTechTree";
 import { TechTreeSectionHeader } from "./TechTreeSectionHeader";
 import { TechTreeSectionList } from "./TechTreeSectionList";
 
-import "./TechTreeSection.scss";
-
 /**
  * Props for the `TechTreeSection` component.
  */

@@ -213,7 +213,7 @@ const TechTreeRowLabel: React.FC = () => {
  */
 const TechTreeRowBadges: React.FC = () => {
 	const { t } = useTranslation();
-	const { a11yMode } = useA11yStore();
+	const { a11yMode: _a11yMode } = useA11yStore();
 	const { isGridFull, solving } = useTechTree();
 	const openDialog = useModuleSelectionDialogStore((state) => state.openDialog);
 
@@ -240,7 +240,7 @@ const TechTreeRowBadges: React.FC = () => {
 				className="ml-1! align-top font-mono! tabular-nums"
 				color={hasTechInGrid ? "gray" : techColor}
 				disabled={modules.length === 1 || (isGridFull && !hasTechInGrid) || solving}
-				highContrast={a11yMode}
+				// highContrast={a11yMode}
 				mt="1"
 				onClick={handleOpenDialog}
 				radius="medium"

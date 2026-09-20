@@ -16,7 +16,7 @@ export const TechTreeSkeleton: React.FC<{ height?: null | number }> = ({ height 
 				<ScrollArea
 					className="main-app__tech-tree-sidebar shadow-sm"
 					style={{
-						borderRadius: "var(--radius-5)",
+						borderRadius: "var(--radius-2)",
 						flexGrow: 1,
 						height: height ? `${height}px` : undefined,
 						minHeight: 0,

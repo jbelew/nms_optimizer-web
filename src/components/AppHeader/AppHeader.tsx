@@ -149,7 +149,7 @@ const AppHeaderLogo: React.FC = () => {
 		>
 			<Separator
 				className="flex-1"
-				color="cyan"
+				// color="cyan"
 				decorative
 				orientation="horizontal"
 				size="1"
@@ -189,7 +189,7 @@ const AppHeaderLogo: React.FC = () => {
 
 			<Separator
 				className="flex-1"
-				color="cyan"
+				// color="cyan"
 				decorative
 				orientation="horizontal"
 				size="1"
