@@ -2,6 +2,13 @@
 
 The full commit history for this project is available on [GitHub](https://github.com/jbelew/nms_optimizer-web/blob/main/CHANGELOG.md). A special thanks to [mateo-leal](https://github.com/mateo-leal) for the Spanish translation updates.
 
+## Version 7.14 – Recommended Builds & Mobile Polish (2026-09-21)
+
+This update brings recommended technology layouts to all devices and improves scrolling smoothness on mobile screens.
+
+- **Pinned Recommended Builds:** Community-sourced recommended builds are now conveniently pinned at the very top of the technology list across phones, tablets, and desktops. You can preview recommended layouts, check module counts, apply them with a single click, and easily jump to the relevant instructions.
+- **Smoother Mobile Scrolling:** Fixed an issue where buttons in the technology tree could flicker while scrolling on mobile devices and iPhones.
+
 ## Version 7.13 – Astronaut Figurine (2026-09-21)
 
 This update adds the Astronaut Figurine technology module for starships.
