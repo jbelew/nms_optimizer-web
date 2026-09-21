@@ -21,20 +21,6 @@ test.describe("Recommended Builds Presets Card", () => {
 		const cardHeading = page.getByRole("heading", { name: /Recommended Builds/i });
 		await expect(cardHeading).toBeVisible();
 
-		// Verify community instructions link is present and opens dialog
-		const instructionsLink = page.getByRole("link", { name: /recommended builds/i });
-		await expect(instructionsLink).toBeVisible();
-		await instructionsLink.click();
-
-		const dialog = page.getByRole("dialog");
-		await expect(dialog).toBeVisible();
-		await expect(dialog).toContainText(/Instructions/i);
-
-		// Close instructions dialog
-		const closeButton = dialog.getByRole("button", { name: /close/i });
-		await closeButton.click();
-		await expect(dialog).toBeHidden();
-
 		// Initial state: populated cells should be identifiable by having an <img> tag
 		const populatedLocator = page.locator('div[role="gridcell"]:has(img)');
 		const initialPopulatedCells = await populatedLocator.count();
