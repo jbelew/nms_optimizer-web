@@ -235,11 +235,14 @@
 			"Movement Systems": "Sistemas de movimiento"
 		},
 		"recommendedBuilds": {
-			"selectBuildButton": "Seleccionar un Diseño Recomendado",
+			"aboutRecommendedBuildsTooltip": "Acerca de las Configuraciones Recomendadas",
+			"applyBuild": "Aplicar diseño",
 			"applyBuildButton": "Aplicar Diseño Recomendado",
-			"summary": "Las tecnologías con <1>ranuras potenciadas fijas</1> admiten <5>diseños recomendados</5>.",
+			"cardDescription": "Las plataformas con ranuras potenciadas fijas incluyen <5>diseños recomendados</5> de la comunidad optimizados para obtener la máxima bonificación por adyacencia.",
+			"header": "Diseños recomendados",
+			"selectBuildButton": "Seleccionar un Diseño Recomendado",
 			"selectBuildLabel": "Seleccionar Configuración",
-			"aboutRecommendedBuildsTooltip": "Acerca de las Configuraciones Recomendadas"
+			"summary": "Las tecnologías con <1>ranuras potenciadas fijas</1> admiten <5>diseños recomendados</5>."
 		}
 	},
 	"technologies": {

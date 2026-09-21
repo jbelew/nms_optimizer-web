@@ -235,11 +235,14 @@
 			"Movement Systems": "Bewegungssysteme"
 		},
 		"recommendedBuilds": {
-			"selectBuildButton": "Empfohlenen Build Auswählen",
+			"aboutRecommendedBuildsTooltip": "Über empfohlene Konfigurationen",
+			"applyBuild": "Build anwenden",
 			"applyBuildButton": "Empfohlenen Build Anwenden",
-			"summary": "Technologien mit <1>festen überladenen Slots</1> unterstützen <5>empfohlene Builds</5>.",
+			"cardDescription": "Plattformen mit festen überladenen Slots enthalten von der Community erstellte <5>empfohlene Builds</5>, die für maximale Nachbarschaftsboni optimiert sind.",
+			"header": "Empfohlene Builds",
+			"selectBuildButton": "Empfohlenen Build Auswählen",
 			"selectBuildLabel": "Build auswählen",
-			"aboutRecommendedBuildsTooltip": "Über empfohlene Konfigurationen"
+			"summary": "Technologien mit <1>festen überladenen Slots</1> unterstützen <5>empfohlene Builds</5>."
 		}
 	},
 	"technologies": {

@@ -8,14 +8,11 @@ import { useGridStore } from "@/store/grid/gridStore";
 
 import { TechTreeList } from "./TechTreeList";
 import { TechTreeProvider } from "./TechTreeProvider";
-import { TechTreeRecommended } from "./TechTreeRecommended";
 import { TechTreeRoot } from "./TechTreeRoot";
 
 export { TechTreeList } from "./TechTreeList";
 
 export { TechTreeProvider } from "./TechTreeProvider";
-
-export { TechTreeRecommended } from "./TechTreeRecommended";
 
 export { TechTreeRoot } from "./TechTreeRoot";
 
@@ -85,7 +82,6 @@ export const TechTree: React.FC<TechTreeProps> = ({
 			<TechTreeRoot>
 				<TechTreeList techTree={techTree} />
 			</TechTreeRoot>
-			<TechTreeRecommended techTree={techTree} />
 			<Suspense fallback={null}>
 				<SharedModuleSelectionDialog />
 			</Suspense>

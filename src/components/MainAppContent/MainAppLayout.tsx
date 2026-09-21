@@ -9,7 +9,6 @@ import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 import {
 	TechTreeList,
 	TechTreeProvider,
-	TechTreeRecommended,
 	TechTreeRoot,
 	TechTreeSkeleton,
 } from "@/components/TechTree/TechTree";
@@ -186,7 +185,7 @@ const MainAppFooter: React.FC<{ position: "bottom-desktop" | "bottom-mobile" }> 
  * Inner component that renders the tech tree list/recommended builds.
  */
 const MainAppSidebarContent: React.FC = () => {
-	const { isLargeScreen, selectedShipType } = useMainAppGlobal();
+	const { selectedShipType } = useMainAppGlobal();
 	const { handleOptimize, solving } = useMainAppOptimization();
 	const techTree = useFetchTechTreeSuspense(selectedShipType);
 	const isGridFull = useGridStore((state) => state.isGridFull);
@@ -194,21 +193,9 @@ const MainAppSidebarContent: React.FC = () => {
 	return (
 		<TechTreeProvider handleOptimize={handleOptimize} isGridFull={isGridFull} solving={solving}>
 			<Flex direction="column" height="100%" minHeight="0">
-				{isLargeScreen ? (
-					<>
-						<TechTreeRoot>
-							<TechTreeList techTree={techTree} />
-						</TechTreeRoot>
-						<TechTreeRecommended techTree={techTree} />
-					</>
-				) : (
-					<>
-						<TechTreeRecommended techTree={techTree} />
-						<TechTreeRoot>
-							<TechTreeList techTree={techTree} />
-						</TechTreeRoot>
-					</>
-				)}
+				<TechTreeRoot>
+					<TechTreeList techTree={techTree} />
+				</TechTreeRoot>
 			</Flex>
 			<Suspense fallback={null}>
 				<SharedModuleSelectionDialog />
@@ -232,7 +219,7 @@ export const MainAppSidebarSection: React.FC = () => {
 			direction="column"
 			minHeight="0"
 			ml={{ md: "5" }}
-			mt={{ initial: "4", md: "0" }}
+			mt={{ initial: "0", md: "0" }}
 			style={{
 				height: isLargeScreen && gridHeight ? `${gridHeight}px` : undefined,
 			}}

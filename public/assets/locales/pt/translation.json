@@ -235,11 +235,14 @@
 			"Movement Systems": "Sistemas de Movimento"
 		},
 		"recommendedBuilds": {
-			"selectBuildButton": "Selecionar Build Recomendada",
+			"aboutRecommendedBuildsTooltip": "Sobre Construções Recomendadas",
+			"applyBuild": "Aplicar build",
 			"applyBuildButton": "Aplicar Build Recomendada",
-			"summary": "Tecnologias com <1>espaços sobrecarregados fixos</1> suportam <5>builds recomendadas</5>.",
+			"cardDescription": "Plataformas com espaços sobrecarregados fixos incluem <5>builds recomendadas</5> da comunidade otimizadas para bônus máximos de adjacência.",
+			"header": "Builds recomendadas",
+			"selectBuildButton": "Selecionar Build Recomendada",
 			"selectBuildLabel": "Selecionar Configuração",
-			"aboutRecommendedBuildsTooltip": "Sobre Construções Recomendadas"
+			"summary": "Tecnologias com <1>espaços sobrecarregados fixos</1> suportam <5>builds recomendadas</5>."
 		}
 	},
 	"technologies": {

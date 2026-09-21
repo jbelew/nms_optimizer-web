@@ -14,6 +14,11 @@ vi.mock("./TechTreeSection", () => ({
 	),
 }));
 
+// Mock TechTreePresetsCard
+vi.mock("./TechTreePresetsCard", () => ({
+	TechTreePresetsCard: () => <div data-testid="tech-tree-presets-card">Presets Card</div>,
+}));
+
 // Mock GridStore
 vi.mock("@/store/grid/gridStore", () => ({
 	useGridStore: vi.fn((selector) => {
@@ -73,6 +78,17 @@ describe("TechTreeContent", () => {
 
 		expect(screen.getByTestId("tech-tree-section-Weaponry")).toBeInTheDocument();
 		expect(screen.getByTestId("tech-tree-section-Utilities")).toBeInTheDocument();
+	});
+
+	test("should render TechTreePresetsCard", () => {
+		render(
+			<TechTreeContent
+				// @ts-expect-error - Test data doesn't match exact type
+				techTree={mockTechTree as TechTree}
+			/>
+		);
+
+		expect(screen.getByTestId("tech-tree-presets-card")).toBeInTheDocument();
 	});
 
 	test("should filter out recommended_builds category", () => {

@@ -118,7 +118,7 @@ describe("TechTree", () => {
 		expect(screen.getByTestId("tech-tree-content")).toBeInTheDocument();
 	});
 
-	test("should render RecommendedBuild when tech tree has recommended builds", () => {
+	test("should render TechTreeContent when tech tree has recommended builds", () => {
 		vi.mocked(useFetchTechTreeSuspense).mockReturnValue({
 			recommended_builds: [{ title: "Build 1" }],
 			Weaponry: [],
@@ -126,8 +126,7 @@ describe("TechTree", () => {
 
 		render(<TechTreeComponent handleOptimize={mockHandleOptimize} solving={false} />);
 
-		// RecommendedBuild components should render if tech tree has recommended_builds
-		expect(screen.getByTestId("recommended-build-root")).toBeInTheDocument();
+		expect(screen.getByTestId("tech-tree-content")).toBeInTheDocument();
 	});
 
 	test("should handle solving prop", () => {

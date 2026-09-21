@@ -253,9 +253,12 @@
 		},
 		"recommendedBuilds": {
 			"aboutRecommendedBuildsTooltip": "Informazioni sulle Configurazioni Consigliate",
-			"selectBuildLabel": "Seleziona Configurazione",
-			"selectBuildButton": "Seleziona una Configurazione Consigliata",
+			"applyBuild": "Applica configurazione",
 			"applyBuildButton": "Applica Configurazione Consigliata",
+			"cardDescription": "Le piattaforme con slot sovraccarichi fissi includono <5>configurazioni consigliate</5> dalla community ottimizzate per il massimo bonus di adiacenza.",
+			"header": "Configurazioni consigliate",
+			"selectBuildButton": "Seleziona una Configurazione Consigliata",
+			"selectBuildLabel": "Seleziona Configurazione",
 			"summary": "Le tecnologie con <1>slot Sovraccarichi fissi</1> supportano le <5>configurazioni consigliate</5>."
 		}
 	},

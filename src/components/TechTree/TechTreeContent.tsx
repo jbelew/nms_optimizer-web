@@ -17,6 +17,7 @@ import { EmptyState } from "@/components/EmptyState/EmptyState";
 import { type TechTree, type TechTreeItem } from "@/hooks/useTechTree/useTechTree";
 import { Logger } from "@/utils/system/monitoring";
 
+import { TechTreePresetsCard } from "./TechTreePresetsCard";
 import { TechTreeSection } from "./TechTreeSection";
 
 /**
@@ -93,6 +94,8 @@ export const TechTreeContent: React.FC<TechTreeContentProps> = ({ techTree }) =>
 
 	return (
 		<div className="tech-tree-content">
+			<TechTreePresetsCard techTree={techTree} />
+
 			{categories.map((category, index) => (
 				<TechTreeSection
 					index={index}
