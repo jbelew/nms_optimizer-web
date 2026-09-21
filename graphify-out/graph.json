@@ -9603,7 +9603,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_moduleselectiondialog_sharedmoduleselectiondialog_test",
-      "community": 46,
+      "community": 29,
       "community_name": "useTechStore",
       "norm_label": "sharedmoduleselectiondialog.test.tsx"
     },
@@ -9616,7 +9616,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_moduleselectiondialog_sharedmoduleselectiondialog_test_mockpresentationalprops",
-      "community": 46,
+      "community": 29,
       "community_name": "useTechStore",
       "norm_label": "mockpresentationalprops"
     },
@@ -9627,7 +9627,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_moduleselectiondialog_sharedmoduleselectiondialog",
-      "community": 46,
+      "community": 29,
       "community_name": "useTechStore",
       "norm_label": "sharedmoduleselectiondialog.tsx"
     },
@@ -9638,7 +9638,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_components_moduleselectiondialog_sharedmoduleselectiondialog_empty_modules_array",
-      "community": 46,
+      "community": 29,
       "community_name": "useTechStore",
       "norm_label": "empty_modules_array"
     },
@@ -9650,7 +9650,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_moduleselectiondialog_sharedmoduleselectiondialog_sharedmoduleselectiondialog",
-      "community": 46,
+      "community": 29,
       "community_name": "useTechStore",
       "norm_label": "sharedmoduleselectiondialog()"
     },
@@ -10898,7 +10898,7 @@
       "label": "TechTreeSectionProps",
       "file_type": "code",
       "source_file": "src/components/TechTree/TechTreeSection.tsx",
-      "source_location": "L25",
+      "source_location": "L27",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
@@ -10911,7 +10911,7 @@
       "label": "TechTreeSection()",
       "file_type": "code",
       "source_file": "src/components/TechTree/TechTreeSection.tsx",
-      "source_location": "L58",
+      "source_location": "L60",
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtree_techtreesection_techtreesection",
@@ -11009,7 +11009,7 @@
       "_origin": "ast",
       "id": "src_components_techtree_usetechtreecontext",
       "community": 29,
-      "community_name": "TechTreeRow.tsx",
+      "community_name": "useTechStore",
       "norm_label": "usetechtreecontext.ts"
     },
     {
@@ -11022,7 +11022,7 @@
       "_origin": "ast",
       "id": "src_components_techtree_usetechtreecontext_techtreecontextvalue",
       "community": 29,
-      "community_name": "TechTreeRow.tsx",
+      "community_name": "useTechStore",
       "norm_label": "techtreecontextvalue"
     },
     {
@@ -11045,7 +11045,7 @@
       "_origin": "ast",
       "id": "src_components_techtree_usetechtreecontext_usetechtree",
       "community": 29,
-      "community_name": "TechTreeRow.tsx",
+      "community_name": "useTechStore",
       "norm_label": "usetechtree()"
     },
     {
@@ -11055,7 +11055,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_techtreerow_bonusstatusicon_test",
-      "community": 29,
+      "community": 46,
       "community_name": "TechTreeRow.tsx",
       "norm_label": "bonusstatusicon.test.tsx"
     },
@@ -11200,7 +11200,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_techtreerow_techtreerow",
-      "community": 29,
+      "community": 46,
       "community_name": "TechTreeRow.tsx",
       "norm_label": "techtreerow.tsx"
     },
@@ -11213,7 +11213,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_techtreerow_techtreerow_bonusstatusiconprops",
-      "community": 29,
+      "community": 46,
       "community_name": "TechTreeRow.tsx",
       "norm_label": "bonusstatusiconprops"
     },
@@ -11225,7 +11225,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtreerow_techtreerow_rendericon",
-      "community": 29,
+      "community": 46,
       "community_name": "TechTreeRow.tsx",
       "norm_label": "rendericon()"
     },
@@ -11237,7 +11237,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtreerow_techtreerow_bonusstatusicon",
-      "community": 29,
+      "community": 46,
       "community_name": "TechTreeRow.tsx",
       "norm_label": "bonusstatusicon()"
     },
@@ -11249,7 +11249,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtreerow_techtreerow_techtreerowactions",
-      "community": 29,
+      "community": 46,
       "community_name": "TechTreeRow.tsx",
       "norm_label": "techtreerowactions()"
     },
@@ -11261,7 +11261,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtreerow_techtreerow_techtreerowlabel",
-      "community": 29,
+      "community": 46,
       "community_name": "TechTreeRow.tsx",
       "norm_label": "techtreerowlabel()"
     },
@@ -11273,7 +11273,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtreerow_techtreerow_techtreerowbadges",
-      "community": 29,
+      "community": 46,
       "community_name": "TechTreeRow.tsx",
       "norm_label": "techtreerowbadges()"
     },
@@ -11285,7 +11285,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtreerow_techtreerow_techtreerowavatar",
-      "community": 29,
+      "community": 46,
       "community_name": "TechTreeRow.tsx",
       "norm_label": "techtreerowavatar()"
     },
@@ -11308,7 +11308,7 @@
       "_origin": "ast",
       "id": "src_components_techtreerow_techtreerowcontext",
       "community": 29,
-      "community_name": "TechTreeRow.tsx",
+      "community_name": "useTechStore",
       "norm_label": "techtreerowcontext.tsx"
     },
     {
@@ -11320,7 +11320,7 @@
       "_origin": "ast",
       "id": "src_components_techtreerow_techtreerowcontext_techtreerowprovider",
       "community": 29,
-      "community_name": "TechTreeRow.tsx",
+      "community_name": "useTechStore",
       "norm_label": "techtreerowprovider()"
     },
     {
@@ -11331,7 +11331,7 @@
       "_origin": "ast",
       "id": "src_components_techtreerow_createtechtreerowcontext",
       "community": 29,
-      "community_name": "TechTreeRow.tsx",
+      "community_name": "useTechStore",
       "norm_label": "createtechtreerowcontext.ts"
     },
     {
@@ -11344,7 +11344,7 @@
       "_origin": "ast",
       "id": "src_components_techtreerow_createtechtreerowcontext_techtreerowcontextvalue",
       "community": 29,
-      "community_name": "TechTreeRow.tsx",
+      "community_name": "useTechStore",
       "norm_label": "techtreerowcontextvalue"
     },
     {
@@ -11355,7 +11355,7 @@
       "_origin": "ast",
       "id": "src_components_techtreerow_createtechtreerowcontext_techtreerowcontext",
       "community": 29,
-      "community_name": "TechTreeRow.tsx",
+      "community_name": "useTechStore",
       "norm_label": "techtreerowcontext"
     },
     {
@@ -11365,7 +11365,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_techtreerow_usetechmodulemanagement_test",
-      "community": 46,
+      "community": 29,
       "community_name": "useTechStore",
       "norm_label": "usetechmodulemanagement.test.ts"
     },
@@ -11376,7 +11376,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_components_techtreerow_usetechmodulemanagement_test_mockmodules",
-      "community": 46,
+      "community": 29,
       "community_name": "useTechStore",
       "norm_label": "mockmodules"
     },
@@ -11387,7 +11387,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_techtreerow_usetechmodulemanagement",
-      "community": 46,
+      "community": 29,
       "community_name": "useTechStore",
       "norm_label": "usetechmodulemanagement.ts"
     },
@@ -11399,7 +11399,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtreerow_usetechmodulemanagement_usetechmodulemanagement",
-      "community": 46,
+      "community": 29,
       "community_name": "useTechStore",
       "norm_label": "usetechmodulemanagement()"
     },
@@ -11445,7 +11445,7 @@
       "_origin": "ast",
       "id": "src_components_techtreerow_usetechtreerow_test",
       "community": 8,
-      "community_name": "useTechTreeRow.ts",
+      "community_name": "props.ts",
       "norm_label": "usetechtreerow.test.ts"
     },
     {
@@ -11456,7 +11456,7 @@
       "_origin": "ast",
       "id": "src_components_techtreerow_usetechtreerow_test_mockprops",
       "community": 8,
-      "community_name": "useTechTreeRow.ts",
+      "community_name": "props.ts",
       "norm_label": "mockprops"
     },
     {
@@ -11466,8 +11466,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_techtreerow_usetechtreerow",
-      "community": 8,
-      "community_name": "useTechTreeRow.ts",
+      "community": 29,
+      "community_name": "useTechStore",
       "norm_label": "usetechtreerow.ts"
     },
     {
@@ -11477,8 +11477,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_components_techtreerow_usetechtreerow_empty_modules_array",
-      "community": 8,
-      "community_name": "useTechTreeRow.ts",
+      "community": 29,
+      "community_name": "useTechStore",
       "norm_label": "empty_modules_array"
     },
     {
@@ -11490,7 +11490,7 @@
       "_origin": "ast",
       "id": "src_components_techtreerow_usetechtreerow_usetechtreerow",
       "community": 29,
-      "community_name": "TechTreeRow.tsx",
+      "community_name": "useTechStore",
       "norm_label": "usetechtreerow()"
     },
     {
@@ -11501,7 +11501,7 @@
       "_origin": "ast",
       "id": "src_components_techtreerow_usetechtreerowcontext",
       "community": 29,
-      "community_name": "TechTreeRow.tsx",
+      "community_name": "useTechStore",
       "norm_label": "usetechtreerowcontext.ts"
     },
     {
@@ -11512,7 +11512,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtreerow_usetechtreerowcontext_usetechtreerowcontext",
-      "community": 29,
+      "community": 46,
       "community_name": "TechTreeRow.tsx",
       "norm_label": "usetechtreerowcontext()"
     },
@@ -14795,7 +14795,7 @@
       "source_location": "L312",
       "_origin": "ast",
       "id": "src_store_tech_techstore_usetechstore",
-      "community": 46,
+      "community": 29,
       "community_name": "useTechStore",
       "norm_label": "usetechstore"
     },
@@ -14896,7 +14896,7 @@
       "_origin": "ast",
       "id": "src_store_ui_uistore_selectedtechdata",
       "community": 8,
-      "community_name": "useTechTreeRow.ts",
+      "community_name": "props.ts",
       "norm_label": "selectedtechdata"
     },
     {
@@ -15081,7 +15081,7 @@
       "_origin": "ast",
       "id": "src_store_ui_uistore_usemoduleselectiondialogstore",
       "community": 46,
-      "community_name": "useTechStore",
+      "community_name": "TechTreeRow.tsx",
       "norm_label": "usemoduleselectiondialogstore"
     },
     {
@@ -15256,7 +15256,7 @@
       "_origin": "ast",
       "id": "src_types_props",
       "community": 8,
-      "community_name": "useTechTreeRow.ts",
+      "community_name": "props.ts",
       "norm_label": "props.ts"
     },
     {
@@ -15308,7 +15308,7 @@
       "_origin": "ast",
       "id": "src_types_props_techtreerowprops",
       "community": 8,
-      "community_name": "useTechTreeRow.ts",
+      "community_name": "props.ts",
       "norm_label": "techtreerowprops"
     },
     {
@@ -15358,7 +15358,7 @@
       "_origin": "ast",
       "id": "src_types_tech_techcolor",
       "community": 8,
-      "community_name": "useTechTreeRow.ts",
+      "community_name": "props.ts",
       "norm_label": "techcolor"
     },
     {
@@ -47178,7 +47178,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTree/TechTreeSection.tsx",
-      "source_location": "L58",
+      "source_location": "L60",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtree_techtreesection",
@@ -47189,7 +47189,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTree/TechTreeSection.tsx",
-      "source_location": "L25",
+      "source_location": "L27",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtree_techtreesection",
@@ -47273,7 +47273,7 @@
       "context": "field",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTree/TechTreeSection.tsx",
-      "source_location": "L29",
+      "source_location": "L31",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtree_techtreesection_techtreesectionprops",
@@ -67465,5 +67465,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "5cf4fde093b042d7d6fa28d32a0e728ddaf790c7"
+  "built_at_commit": "8c81d89d2e8e8f3f30b485218b357c2ba4dbc2f9"
 }

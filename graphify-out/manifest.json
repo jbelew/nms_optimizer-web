@@ -70,8 +70,8 @@
     "semantic_hash": ""
   },
   "e2e-tests/recommended-build.test.ts": {
-    "mtime": 1790023404.3959994,
-    "ast_hash": "09915d76d66815159e208489930a7889",
+    "mtime": 1790024504.5200586,
+    "ast_hash": "2e3aaca1a3c954ada92b6ed5eada8c08",
     "semantic_hash": ""
   },
   "e2e-tests/resilience.spec.ts": {
@@ -1025,8 +1025,8 @@
     "semantic_hash": ""
   },
   "src/components/TechTree/TechTreeSection.tsx": {
-    "mtime": 1789933639.9539745,
-    "ast_hash": "bc4e46a854429c0218c53456960886d3",
+    "mtime": 1790025649.5920234,
+    "ast_hash": "b449b32ae9817dc721b4799f433d02ac",
     "semantic_hash": ""
   },
   "src/components/TechTree/TechTreeSectionHeader.tsx": {

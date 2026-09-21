@@ -1,7 +1,7 @@
 # Graph Report - nms_optimizer-web  (2026-09-21)
 
 ## Corpus Check
-- 439 files · ~200,732 words
+- 439 files · ~200,687 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5cf4fde0`
+- Built from commit: `8c81d89d`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -23,7 +23,7 @@
 - ModuleSelectionDialog.tsx
 - gridStore.ts
 - FakeCommandRunnerAdapter
-- useTechTreeRow.ts
+- props.ts
 - useMainAppLogic.tsx
 - WelcomeContent.tsx
 - uiStore.ts
@@ -44,7 +44,7 @@
 - monitoring.ts
 - useTechTree.tsx
 - Logger
-- TechTreeRow.tsx
+- useTechStore
 - MainAppLayout.tsx
 - dataValidation.ts
 - useOptimizeStore
@@ -61,7 +61,7 @@
 - iconRegistry.ts
 - vite-plugin-markdown-bundle.mjs
 - TechTree.tsx
-- useTechStore
+- TechTreeRow.tsx
 - TechTree
 - bootPipeline.tsx
 - generate-radix-colors.mjs
@@ -195,9 +195,9 @@ Nodes (9): createGrid(), createCellFromModuleData(), createEmptyCell(), createGr
 Cohesion: 0.18
 Nodes (13): FakeAgentRunnerAdapter, FakeCommandRunnerAdapter, Fake AgentRunnerAdapter for testing., In-memory fake CommandRunnerAdapter for testing., AgentClient, High-level client for running the autonomous agent., VerificationResult, main() (+5 more)
 
-### Community 8 - "useTechTreeRow.ts"
-Cohesion: 0.39
-Nodes (5): EMPTY_MODULES_ARRAY, mockProps, SelectedTechData, TechTreeRowProps, TechColor
+### Community 8 - "props.ts"
+Cohesion: 0.47
+Nodes (4): mockProps, SelectedTechData, TechTreeRowProps, TechColor
 
 ### Community 9 - "useMainAppLogic.tsx"
 Cohesion: 0.20
@@ -279,9 +279,9 @@ Nodes (19): API_URL, cache, fetchShipTypes(), ShipTypes, ShipTypesState, useShip
 Cohesion: 0.25
 Nodes (14): InstallPrompt(), UI_TIMING, debounceSetItem(), SetItemFunction, isTouchDevice(), safeClear(), safeGetItem(), safeRemoveItem() (+6 more)
 
-### Community 29 - "TechTreeRow.tsx"
-Cohesion: 0.20
-Nodes (14): TechTreeContextValue, useTechTree(), TechTreeRowContext, TechTreeRowContextValue, BonusStatusIcon(), BonusStatusIconProps, renderIcon(), TechTreeRowActions() (+6 more)
+### Community 29 - "useTechStore"
+Cohesion: 0.21
+Nodes (13): EMPTY_MODULES_ARRAY, SharedModuleSelectionDialog(), MockPresentationalProps, TechTreeContextValue, useTechTree(), TechTreeRowContext, TechTreeRowContextValue, TechTreeRowProvider() (+5 more)
 
 ### Community 30 - "MainAppLayout.tsx"
 Cohesion: 0.17
@@ -347,9 +347,9 @@ Nodes (5): __dirname, LOCALES_DIR, markdownBundlePlugin(), COMPONENT_CSS_MAP, pu
 Cohesion: 0.14
 Nodes (12): SharedModuleSelectionDialog, Desktop, Mobile, Story, Tablet, TechTree(), TechTreeProps, TechTreeProvider() (+4 more)
 
-### Community 46 - "useTechStore"
-Cohesion: 0.42
-Nodes (7): EMPTY_MODULES_ARRAY, SharedModuleSelectionDialog(), MockPresentationalProps, mockModules, useTechModuleManagement(), useTechStore, useModuleSelectionDialogStore
+### Community 46 - "TechTreeRow.tsx"
+Cohesion: 0.31
+Nodes (9): BonusStatusIcon(), BonusStatusIconProps, renderIcon(), TechTreeRowActions(), TechTreeRowAvatar(), TechTreeRowBadges(), TechTreeRowLabel(), useTechTreeRowContext() (+1 more)
 
 ### Community 47 - "TechTree"
 Cohesion: 0.15
@@ -569,7 +569,7 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Logger` connect `Logger` to `MarkdownContentRenderer.tsx`, `gridStore.ts`, `useMainAppLogic.tsx`, `useBreakpoint`, `WelcomeContent.tsx`, `usePlatformStore`, `LifecycleCoordinator`, `techStore.ts`, `gridSerializer.ts`, `App.tsx`, `tracking.ts`, `lifecycleCoordinator.ts`, `monitoring.ts`, `useTechTree.tsx`, `dataValidation.ts`, `useOptimizeStore`, `optimizationManager.ts`, `iconRegistry.ts`, `bootPipeline.tsx`, `ShareLinkDialog.tsx`, `TechTreeContent.tsx`, `useTechOptimization.ts`, `useAnalytics`?**
   _High betweenness centrality (0.069) - this node is a cross-community bridge._
-- **Why does `useGridStore` connect `useGridStore` to `GridTable.tsx`, `gridStore.ts`, `MobileToolbar.tsx`, `useMainAppLogic.tsx`, `useBreakpoint`, `useTechTreeRow.ts`, `usePlatformStore`, `techStore.ts`, `AppHeader.tsx`, `gridSerializer.ts`, `useTechTree.tsx`, `Logger`, `TechTreeRow.tsx`, `MainAppLayout.tsx`, `dataValidation.ts`, `GridCell.tsx`, `TechTreeRow.test.tsx`, `TechTree.tsx`, `useTechStore`, `MainAppGridSection.tsx`, `RecommendedBuild.stories.tsx`, `useTechOptimization.ts`, `useAnalytics`, `MainAppContent.stories.tsx`?**
+- **Why does `useGridStore` connect `useGridStore` to `GridTable.tsx`, `gridStore.ts`, `MobileToolbar.tsx`, `useMainAppLogic.tsx`, `useBreakpoint`, `props.ts`, `usePlatformStore`, `techStore.ts`, `AppHeader.tsx`, `gridSerializer.ts`, `useTechTree.tsx`, `Logger`, `useTechStore`, `MainAppLayout.tsx`, `dataValidation.ts`, `GridCell.tsx`, `TechTreeRow.test.tsx`, `TechTree.tsx`, `MainAppGridSection.tsx`, `RecommendedBuild.stories.tsx`, `useTechOptimization.ts`, `useAnalytics`, `MainAppContent.stories.tsx`?**
   _High betweenness centrality (0.028) - this node is a cross-community bridge._
 - **Why does `useDialog()` connect `App.tsx` to `dialogContext.tsx`, `AppFooter.tsx`, `ModuleSelectionDialog.tsx`, `MobileToolbar.tsx`, `useMainAppLogic.tsx`, `WelcomeContent.tsx`, `RoutedDialogs.integration.test.tsx`, `MainAppGridSection.tsx`, `useAnalytics`?**
   _High betweenness centrality (0.015) - this node is a cross-community bridge._
