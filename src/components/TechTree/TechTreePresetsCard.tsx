@@ -12,7 +12,7 @@
  */
 
 import React from "react";
-import { LayersIcon, MagicWandIcon, InfoCircledIcon } from "@radix-ui/react-icons";
+import { InfoCircledIcon, LayersIcon, MagicWandIcon } from "@radix-ui/react-icons";
 import { Button, Card, Flex, Link, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
