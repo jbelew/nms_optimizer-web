@@ -92,8 +92,10 @@ export const TechTreeContent: React.FC<TechTreeContentProps> = ({ techTree }) =>
 		);
 	}
 
+	const hasPresets = Boolean(techTree.recommended_builds?.length);
+
 	return (
-		<div className="tech-tree-content">
+		<div className={`tech-tree-content ${hasPresets ? "" : "mt-4 lg:mt-0"}`.trim()}>
 			<TechTreePresetsCard techTree={techTree} />
 
 			{categories.map((category, index) => (

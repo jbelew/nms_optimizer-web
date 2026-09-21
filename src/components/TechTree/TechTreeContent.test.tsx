@@ -250,4 +250,33 @@ describe("TechTreeContent", () => {
 		expect(screen.getByTestId("tech-tree-section-Weaponry")).toBeInTheDocument();
 		expect(screen.queryByTestId("tech-tree-section-grid_definition")).not.toBeInTheDocument();
 	});
+
+	test("should apply mt-4 lg:mt-0 when recommended_builds is absent or empty", () => {
+		const { container } = render(
+			<TechTreeContent techTree={mockTechTree as unknown as TechTree} />
+		);
+
+		const contentDiv = container.querySelector(".tech-tree-content");
+		expect(contentDiv).toHaveClass("mt-4", "lg:mt-0");
+	});
+
+	test("should not apply mt-4 lg:mt-0 when recommended_builds are present", () => {
+		const techTreeWithPresets = {
+			...mockTechTree,
+			recommended_builds: [
+				{
+					layout: [],
+					title: "Test Build",
+				},
+			],
+		};
+
+		const { container } = render(
+			<TechTreeContent techTree={techTreeWithPresets as unknown as TechTree} />
+		);
+
+		const contentDiv = container.querySelector(".tech-tree-content");
+		expect(contentDiv).not.toHaveClass("mt-4");
+		expect(contentDiv).not.toHaveClass("lg:mt-0");
+	});
 });
