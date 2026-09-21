@@ -89,7 +89,7 @@ $panel-border: 1px solid var(--gray-6);
 		}
 
 		@media (width > 1024px) {
-			margin-bottom: var(--space-4);
+			margin-bottom: var(--space-3);
 			min-height: 2rem;
 		}
 	}
@@ -112,6 +112,7 @@ $panel-border: 1px solid var(--gray-6);
 	&__ship-name {
 		align-self: flex-start;
 		flex: 1;
+		margin-left: -0.25rem;
 		min-width: 0;
 		text-wrap: balance;
 	}
