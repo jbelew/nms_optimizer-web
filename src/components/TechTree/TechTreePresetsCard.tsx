@@ -1,9 +1,9 @@
 /**
- * Pinned Recommended Presets Card component for desktop Tech Tree sidebar.
+ * Pinned Recommended Presets Card component for the Tech Tree.
  *
  * @remarks
  * Displays community-sourced recommended technology builds optimized for maximum
- * adjacency bonuses on platforms with fixed supercharged slots.
+ * adjacency bonuses on platforms with fixed supercharged slots across all viewports.
  *
  * @see {@link TechTreePresetsCard}
  * @see {@link ./TechTreePresetsCard.test.tsx Unit Tests}
@@ -62,30 +62,34 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build }) => {
 	const isSmallAndUp = useBreakpoint("640px");
 
 	return (
-		<div className="mb-1 flex items-center justify-between shadow-2xs">
-			<Flex align="center" gap="2">
-				<LayersIcon color="cyan" height="16" width="16" />
+		<div className="grid grid-cols-[1fr_auto_auto] items-center gap-2">
+			<Flex align="center" gap="1" minWidth="0">
+				<LayersIcon className="shrink-0" color="cyan" height="16" width="16" />
 				<Text size={isSmallAndUp ? "3" : "2"} weight="medium">
 					{build.title}
 				</Text>
-				{moduleCount > 0 && (
-					<Button
-						className="font-mono! tabular-nums"
-						color="gray"
-						disabled={true}
-						radius="medium"
-						size="1"
-						variant="surface"
-					>
-						x{moduleCount}
-					</Button>
-				)}
 			</Flex>
+
+			{moduleCount > 0 ? (
+				<Button
+					className="justify-self-end font-mono! tabular-nums"
+					color="gray"
+					disabled={true}
+					radius="medium"
+					size="1"
+					variant="surface"
+				>
+					x{moduleCount}
+				</Button>
+			) : (
+				<span />
+			)}
 
 			<Button
 				className="cursor-pointer! font-medium shadow-xs"
 				onClick={() => handleApply(build)}
-				size="2"
+				radius="medium"
+				size="1"
 				variant="soft"
 			>
 				<MagicWandIcon />
@@ -147,7 +151,7 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds }) => {
 					/>
 				</Text>
 
-				<div className="mt-1 flex flex-col gap-1 pt-1">
+				<div className="mt-1 mt-2 flex flex-col gap-3">
 					{builds.map((build, index) => (
 						<PresetCardItem build={build} key={build.title || index} />
 					))}
@@ -158,10 +162,10 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds }) => {
 };
 
 /**
- * Pinned card component for recommended technology builds on desktop.
+ * Pinned card component for recommended technology builds across viewports.
  *
  * @remarks
- * Renders a stylized card at the top of the desktop Tech Tree list showcasing
+ * Renders a stylized card at the top of the Tech Tree list showcasing
  * preconfigured layouts for ships with fixed supercharged slots.
  *
  * @param {TechTreePresetsCardProps} props - Component properties.
