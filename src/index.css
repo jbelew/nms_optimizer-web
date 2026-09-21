@@ -120,9 +120,11 @@ html.background-visible :is(#root, #storybook-root) .radix-themes {
 	}
 }
 
-.rt-BaseButton {
-	/* Use filter instead of box-shadow to avoid clobbering Radix variant outlines */
-	filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.1));
+@media (width >= 640px) {
+	.rt-BaseButton {
+		/* Use filter instead of box-shadow to avoid clobbering Radix variant outlines */
+		filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.1));
+	}
 }
 
 body.a11y-font .radix-themes {
