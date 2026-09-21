@@ -2,6 +2,19 @@
 
 The full commit history for this project is available on [GitHub](https://github.com/jbelew/nms_optimizer-web/blob/main/CHANGELOG.md). A special thanks to [mateo-leal](https://github.com/mateo-leal) for the Spanish translation updates.
 
+## Version 7.13 – Astronaut Figurine (2026-09-21)
+
+This update adds the Astronaut Figurine technology module for starships.
+
+- **Astronaut Figurine:** Added the Astronaut Figurine to the Starship Trails technology group for all applicable platforms.
+
+## Version 7.12 – Shared Build Navigation & Layout Polish (2026-09-20)
+
+This update refines how shared layouts are displayed and improves browser navigation when resetting shared builds.
+
+- **Shared Build Navigation:** Resetting a shared layout now works with your browser's back and forward buttons, making it easy to return to the shared build or jump forward to your fresh grid.
+- **Shared Build Presentation:** Polished the display when inspecting builds shared by other players and smoothed the transition when returning to the full technology tree.
+
 ## Version 7.11 – Navigation Fixes & Stability (2026-09-19)
 
 This update fixes dialog behavior during page navigation and includes stability improvements.
