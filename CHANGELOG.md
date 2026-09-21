@@ -1,3 +1,10 @@
+# [7.13.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.12.0...v7.13.0) (2026-09-21)
+
+
+### Features
+
+* **tech:** added astronaut figurine ([cccb0fb](https://github.com/jbelew/nms_optimizer-web/commit/cccb0fb744ea9daed6bfd5cfa7adeaaf838890b8))
+
 # [7.12.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.11.1...v7.12.0) (2026-09-20)
 
 
