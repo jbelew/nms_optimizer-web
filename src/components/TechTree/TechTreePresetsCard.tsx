@@ -12,7 +12,7 @@
  */
 
 import React from "react";
-import { InfoCircledIcon, LayersIcon, MagicWandIcon } from "@radix-ui/react-icons";
+import { LayersIcon, MagicWandIcon, TriangleRightIcon } from "@radix-ui/react-icons";
 import { Button, Card, Flex, Link, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -64,7 +64,7 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build }) => {
 	return (
 		<div className="grid grid-cols-[1fr_auto_auto] items-center gap-2">
 			<Flex align="center" gap="1" minWidth="0">
-				<LayersIcon className="shrink-0" color="cyan" height="16" width="16" />
+				<TriangleRightIcon className="shrink-0" color="cyan" height="16" width="16" />
 				<Text size={isSmallAndUp ? "3" : "2"} weight="medium">
 					{build.title}
 				</Text>
@@ -86,13 +86,13 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build }) => {
 			)}
 
 			<Button
-				className="cursor-pointer! font-medium shadow-xs"
+				className="cursor-pointer! font-medium"
 				onClick={() => handleApply(build)}
 				radius="medium"
 				size="1"
 				variant="soft"
 			>
-				<MagicWandIcon />
+				<MagicWandIcon height="16" width="16" />
 				{t("techTree.recommendedBuilds.applyBuild", "Apply Build")}
 			</Button>
 		</div>
@@ -120,7 +120,7 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds }) => {
 			<Flex direction="column" gap="1" width="100%">
 				<Flex align="center" justify="between" width="100%">
 					<Flex align="center" gap="2">
-						<InfoCircledIcon
+						<LayersIcon
 							className="shrink-0 text-(--accent-11)"
 							height="16"
 							width="16"
