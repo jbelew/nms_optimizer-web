@@ -120,11 +120,7 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds }) => {
 			<Flex direction="column" gap="1" width="100%">
 				<Flex align="center" justify="between" width="100%">
 					<Flex align="center" gap="2">
-						<LayersIcon
-							className="shrink-0 text-(--accent-11)"
-							height="16"
-							width="16"
-						/>
+						<LayersIcon className="shrink-0" color="cyan" height="16" width="16" />
 						<h2 className="heading-styled">
 							{t("techTree.recommendedBuilds.header", "Recommended Builds")}
 						</h2>
