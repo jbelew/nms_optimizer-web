@@ -1910,8 +1910,8 @@
     "semantic_hash": ""
   },
   "vite.config.ts": {
-    "mtime": 1790105525.4645333,
-    "ast_hash": "80ebab3a475953c1afff386edd4b7e7e",
+    "mtime": 1790107583.6703002,
+    "ast_hash": "a8d3c41da3d55270df0fedcd1905086b",
     "semantic_hash": ""
   },
   "vitest-mocks/virtual-markdown-bundle.ts": {
@@ -2192,6 +2192,11 @@
   "src/utils/tech/techTreeUtils.test.ts": {
     "mtime": 1790051857.2474465,
     "ast_hash": "5598513b3f94c6db0d40b923bab273b4",
+    "semantic_hash": ""
+  },
+  "scripts/pwa-config.test.mjs": {
+    "mtime": 1790107603.9074123,
+    "ast_hash": "f0ceeba0c41ef67d973660b20129b489",
     "semantic_hash": ""
   }
 }

@@ -20,6 +20,14 @@ import { purgeRadixCss } from "./scripts/vite-plugin-purge-radix-css.mjs";
 
 const dirname = import.meta.dirname;
 
+const DEFAULT_SHORTCUT_ICONS = [
+	{
+		sizes: "192x192",
+		src: "/assets/img/favicons/pwa-192x192.png",
+		type: "image/png",
+	},
+];
+
 /**
  * Vite 8 / Rolldown Configuration
  *
@@ -338,9 +346,16 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 							],
 							manifest: {
 								background_color: "#274860",
+								categories: ["utilities", "games", "entertainment"],
 								description:
 									"Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots for peak performance.",
+								dir: "ltr",
 								display: "standalone",
+								display_override: [
+									"window-controls-overlay",
+									"standalone",
+									"minimal-ui",
+								],
 								file_handlers: [
 									{
 										accept: {
@@ -368,8 +383,10 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 									},
 								],
 								id: "/",
+								lang: "en",
 								name: "No Man's Sky Technology Layout Optimizer",
 								orientation: "any",
+								prefer_related_applications: false,
 								scope: "/",
 								screenshots: [
 									{
@@ -395,6 +412,40 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 									},
 								],
 								short_name: "NMS Optimizer",
+								shortcuts: [
+									{
+										description:
+											"Learn how to use the grid, manage supercharged slots, and understand module ranking",
+										icons: DEFAULT_SHORTCUT_ICONS,
+										name: "How to Optimize Your Tech Layout",
+										short_name: "Instructions",
+										url: "/instructions/",
+									},
+									{
+										description:
+											"Stay updated with the latest NMS Optimizer features and updates",
+										icons: DEFAULT_SHORTCUT_ICONS,
+										name: "Latest Features and Updates",
+										short_name: "Changelog",
+										url: "/changelog/",
+									},
+									{
+										description:
+											"Explore the current No Man's Sky build meta and community stats",
+										icons: DEFAULT_SHORTCUT_ICONS,
+										name: "Community Meta & Tech Stats",
+										short_name: "Stats",
+										url: "/userstats/",
+									},
+									{
+										description:
+											"Discover how NMS Optimizer calculates the absolute best module placements",
+										icons: DEFAULT_SHORTCUT_ICONS,
+										name: "About the Optimization Algorithms",
+										short_name: "About",
+										url: "/about/",
+									},
+								],
 								start_url: "/",
 								theme_color: "#003848",
 							},
@@ -404,7 +455,7 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 								cleanupOutdatedCaches: true,
 								clientsClaim: false,
 								dontCacheBustURLsMatching: /\/build\/.*\.(js|css|woff2?)$/,
-								globIgnores: ["maintenance.html", "404.html", "500.html"],
+								globIgnores: ["maintenance.html", "404.html", "500.html", "index.html"],
 								maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
 								navigateFallback: undefined,
 								navigationPreload: true,
@@ -503,7 +554,7 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 												maxAgeSeconds: 60 * 60 * 24, // 1 day
 												maxEntries: 50,
 											},
-											networkTimeoutSeconds: 5,
+											networkTimeoutSeconds: 3,
 										},
 										urlPattern: /^https:\/\/api\.nms-optimizer\.app\/.*$/,
 									},
