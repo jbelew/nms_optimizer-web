@@ -1,3 +1,10 @@
+# [7.15.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.14.1...v7.15.0) (2026-09-22)
+
+
+### Features
+
+* **pwa:** add manifest shortcuts, native display options, and optimize precache ([53f8bca](https://github.com/jbelew/nms_optimizer-web/commit/53f8bca5853dfc7e5e97da288671565a3c9c510a))
+
 ## [7.14.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.14.0...v7.14.1) (2026-09-22)
 
 
