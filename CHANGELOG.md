@@ -1,3 +1,10 @@
+# [7.16.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.15.3...v7.16.0) (2026-09-22)
+
+
+### Features
+
+* **tooling:** add early remote sync check to pre-push hook ([06c223f](https://github.com/jbelew/nms_optimizer-web/commit/06c223f84c30e27bc36754c99d234ef03e26d902))
+
 ## [7.15.3](https://github.com/jbelew/nms_optimizer-web/compare/v7.15.2...v7.15.3) (2026-09-22)
 
 
