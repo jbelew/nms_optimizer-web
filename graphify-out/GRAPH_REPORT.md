@@ -1,7 +1,7 @@
 # Graph Report - nms_optimizer-web  (2026-09-22)
 
 ## Corpus Check
-- 443 files · ~202,926 words
+- 443 files · ~203,078 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `6e7e4a47`
+- Built from commit: `490f1349`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -439,7 +439,7 @@ Cohesion: 0.29
 Nodes (3): Language, NMS Optimizer Web Domain Model, Triage Labels
 
 ### Community 66 - "Issue tracker: GitHub"
-Cohesion: 0.29
+Cohesion: 0.33
 Nodes (6): Conventions, Issue tracker: GitHub, Pull requests as a triage surface, Wayfinding operations, When a skill says "fetch the relevant ticket", When a skill says "publish to the issue tracker"
 
 ### Community 67 - "git-hooks.test.mjs"
@@ -455,7 +455,7 @@ Cohesion: 0.33
 Nodes (5): Architecture Guidelines, Bundle Strategy, Directory Structure, Hybrid Rendering Flow, Tech Stack
 
 ### Community 70 - "Code Style Guidelines"
-Cohesion: 0.33
+Cohesion: 0.29
 Nodes (6): Code Style Guidelines, Error Handling, React Hook Usage, Tailwind v4, Tooling & Configuration, Zustand & Immer
 
 ### Community 71 - "Domain Docs"

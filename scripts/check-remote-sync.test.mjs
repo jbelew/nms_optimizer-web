@@ -2,7 +2,7 @@
  * @file Unit and integration tests for early remote synchronization pre-push hook.
  */
 
-import { execSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -76,18 +76,24 @@ describe("Remote Synchronization Check (check-remote-sync.mjs)", () => {
 		const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "git-sync-fixture-"));
 
 		try {
-			execSync("git init", { cwd: tempDir, stdio: "ignore" });
-			execSync("git config user.name 'CI Tester' && git config user.email 'tester@ci.local'", {
+			execFileSync("git", ["init"], { cwd: tempDir, stdio: "ignore" });
+			execFileSync("git", ["config", "user.name", "CI Tester"], {
+				cwd: tempDir,
+				stdio: "ignore",
+			});
+			execFileSync("git", ["config", "user.email", "tester@ci.local"], {
 				cwd: tempDir,
 				stdio: "ignore",
 			});
 			fs.writeFileSync(path.join(tempDir, "file1.txt"), "first");
-			execSync("git add . && git commit -m 'Initial commit'", { cwd: tempDir, stdio: "ignore" });
-			const c1 = execSync("git rev-parse HEAD", { cwd: tempDir, encoding: "utf-8" }).trim();
+			execFileSync("git", ["add", "."], { cwd: tempDir, stdio: "ignore" });
+			execFileSync("git", ["commit", "-m", "Initial commit"], { cwd: tempDir, stdio: "ignore" });
+			const c1 = execFileSync("git", ["rev-parse", "HEAD"], { cwd: tempDir, encoding: "utf-8" }).trim();
 
 			fs.writeFileSync(path.join(tempDir, "file2.txt"), "second");
-			execSync("git add . && git commit -m 'Second commit'", { cwd: tempDir, stdio: "ignore" });
-			const c2 = execSync("git rev-parse HEAD", { cwd: tempDir, encoding: "utf-8" }).trim();
+			execFileSync("git", ["add", "."], { cwd: tempDir, stdio: "ignore" });
+			execFileSync("git", ["commit", "-m", "Second commit"], { cwd: tempDir, stdio: "ignore" });
+			const c2 = execFileSync("git", ["rev-parse", "HEAD"], { cwd: tempDir, encoding: "utf-8" }).trim();
 
 			const result = checkRemoteSync({
 				baseRef: c1,
@@ -106,7 +112,7 @@ describe("Remote Synchronization Check (check-remote-sync.mjs)", () => {
 
 	it("runs cleanly via CLI when bypassed or synchronized", () => {
 		const scriptPath = path.join(ROOT, "scripts/check-remote-sync.mjs");
-		const output = execSync(`bun ${scriptPath}`, {
+		const output = execFileSync("bun", [scriptPath], {
 			cwd: ROOT,
 			encoding: "utf-8",
 			env: { ...process.env, SKIP_REMOTE_SYNC_CHECK: "1" },

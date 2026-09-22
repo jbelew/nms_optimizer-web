@@ -135,8 +135,8 @@
     "semantic_hash": ""
   },
   "scripts/generate-sitemap.mjs": {
-    "mtime": 1789846836.7250786,
-    "ast_hash": "965bf8ef0e007ef404242e1587051f9b",
+    "mtime": 1790115187.0438142,
+    "ast_hash": "978d8eb9103f5652a8b71ee5330b2cf9",
     "semantic_hash": ""
   },
   "scripts/generate-ssg.mjs": {
@@ -2200,18 +2200,18 @@
     "semantic_hash": ""
   },
   "scripts/git-hooks.test.mjs": {
-    "mtime": 1790113059.7238855,
-    "ast_hash": "e477ca54444c139ba93941b6dd0dc6b1",
+    "mtime": 1790113997.9766502,
+    "ast_hash": "86413ad2c4e85bd388983036c0dfd163",
     "semantic_hash": ""
   },
   "scripts/check-remote-sync.mjs": {
-    "mtime": 1790113167.5087872,
-    "ast_hash": "8dbdcf151a4e0516e3321273458361b5",
+    "mtime": 1790115175.217262,
+    "ast_hash": "eca8858fee13d11a10a475b19ea66b41",
     "semantic_hash": ""
   },
   "scripts/check-remote-sync.test.mjs": {
-    "mtime": 1790113461.880856,
-    "ast_hash": "8a13c5fdf578219b4b6ccf6146c59126",
+    "mtime": 1790115159.8821726,
+    "ast_hash": "2fae7c3069322b3a62d382881e373176",
     "semantic_hash": ""
   }
 }

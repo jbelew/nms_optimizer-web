@@ -11,7 +11,7 @@
  * hint to rebase or pull before wasting developer time.
  */
 
-import { execSync, spawnSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 
@@ -60,7 +60,7 @@ export function checkRemoteSync({
 		// Fetch remote ref to ensure we have the freshest commits
 		if (!skipFetch) {
 			try {
-				execSync(`git fetch ${remote} ${remoteBranch} --quiet`, {
+				execFileSync("git", ["fetch", remote, remoteBranch, "--quiet"], {
 					cwd,
 					encoding: "utf-8",
 					stdio: ["pipe", "pipe", "pipe"],
@@ -70,7 +70,7 @@ export function checkRemoteSync({
 				// If fetch fails (e.g. offline, remote branch not created yet, auth issue),
 				// check if remote tracking ref exists locally. If not, bypass softly.
 				try {
-					execSync(`git rev-parse --verify --quiet ${upstreamRef}`, {
+					execFileSync("git", ["rev-parse", "--verify", "--quiet", upstreamRef], {
 						cwd,
 						encoding: "utf-8",
 						stdio: ["pipe", "pipe", "ignore"],
@@ -89,20 +89,28 @@ export function checkRemoteSync({
 
 	// Count commits reachable from targetRef that are not reachable from baseRef
 	try {
-		const countOutput = execSync(`git rev-list ${baseRef}..${effectiveTargetRef} --count`, {
-			cwd,
-			encoding: "utf-8",
-			stdio: ["pipe", "pipe", "ignore"],
-		}).trim();
+		const countOutput = execFileSync(
+			"git",
+			["rev-list", `${baseRef}..${effectiveTargetRef}`, "--count"],
+			{
+				cwd,
+				encoding: "utf-8",
+				stdio: ["pipe", "pipe", "ignore"],
+			}
+		).trim();
 
 		const behindCount = parseInt(countOutput, 10) || 0;
 
 		if (behindCount > 0) {
-			const missingOutput = execSync(`git log --oneline -n 10 ${baseRef}..${effectiveTargetRef}`, {
-				cwd,
-				encoding: "utf-8",
-				stdio: ["pipe", "pipe", "ignore"],
-			}).trim();
+			const missingOutput = execFileSync(
+				"git",
+				["log", "--oneline", "-n", "10", `${baseRef}..${effectiveTargetRef}`],
+				{
+					cwd,
+					encoding: "utf-8",
+					stdio: ["pipe", "pipe", "ignore"],
+				}
+			).trim();
 
 			const missingCommits = missingOutput ? missingOutput.split("\n") : [];
 
@@ -128,7 +136,7 @@ export function checkRemoteSync({
  */
 export function getCurrentBranch(cwd = process.cwd()) {
 	try {
-		const branch = execSync("git symbolic-ref --quiet --short HEAD", {
+		const branch = execFileSync("git", ["symbolic-ref", "--quiet", "--short", "HEAD"], {
 			cwd,
 			encoding: "utf-8",
 			stdio: ["pipe", "pipe", "ignore"],
@@ -150,11 +158,15 @@ export function getCurrentBranch(cwd = process.cwd()) {
 export function getUpstreamInfo(branch, cwd = process.cwd()) {
 	// 1. Try to get configured upstream tracking branch (e.g. origin/main)
 	try {
-		const upstream = execSync("git rev-parse --abbrev-ref --symbolic-full-name @{u}", {
-			cwd,
-			encoding: "utf-8",
-			stdio: ["pipe", "pipe", "ignore"],
-		}).trim();
+		const upstream = execFileSync(
+			"git",
+			["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"],
+			{
+				cwd,
+				encoding: "utf-8",
+				stdio: ["pipe", "pipe", "ignore"],
+			}
+		).trim();
 
 		if (upstream) {
 			const slashIdx = upstream.indexOf("/");
@@ -173,7 +185,7 @@ export function getUpstreamInfo(branch, cwd = process.cwd()) {
 
 	// 2. Fall back to origin if configured
 	try {
-		const remotes = execSync("git remote", {
+		const remotes = execFileSync("git", ["remote"], {
 			cwd,
 			encoding: "utf-8",
 			stdio: ["pipe", "pipe", "ignore"],

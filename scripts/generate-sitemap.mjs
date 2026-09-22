@@ -1,4 +1,4 @@
-import { execSync } from "child_process";
+import { execFileSync } from "child_process";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -121,10 +121,14 @@ const getFileLastMod = (relPath) => {
 	const fullPath = path.join(__dirname, "..", relPath);
 
 	try {
-		const gitDate = execSync(`git log -1 --format="%cs" -- "${fullPath}"`, {
-			encoding: "utf8",
-			stdio: ["pipe", "pipe", "ignore"],
-		}).trim();
+		const gitDate = execFileSync(
+			"git",
+			["log", "-1", '--format=%cs', "--", fullPath],
+			{
+				encoding: "utf8",
+				stdio: ["pipe", "pipe", "ignore"],
+			}
+		).trim();
 
 		if (gitDate && /^\d{4}-\d{2}-\d{2}$/.test(gitDate)) {
 			return gitDate;
