@@ -1,4 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@100..1000&display=swap");
+@font-face {
+	font-family: "Roboto Flex";
+	src: url("/assets/fonts/roboto-flex.woff2") format("woff2");
+	font-weight: 100 1000;
+	font-style: normal;
+	font-display: swap;
+}
 
 @font-face {
 	font-family: Geosans;

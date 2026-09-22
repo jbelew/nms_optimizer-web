@@ -244,8 +244,6 @@
 		<!-- Resource Hints -->
 		<link rel="dns-prefetch" href="https://api.nms-optimizer.app" />
 		<link rel="dns-prefetch" href="https://static.cloudflareinsights.com" />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
 		<link rel="preconnect" href="https://api.nms-optimizer.app" crossorigin="" />
 		<link rel="preconnect" href="https://www.google-analytics.com" crossorigin="" />
 		<link rel="preconnect" href="https://static.cloudflareinsights.com" crossorigin="" />
@@ -285,6 +283,14 @@
 		<link
 			rel="preload"
 			href="/assets/fonts/geonms.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin="anonymous"
+			fetchpriority="high"
+		/>
+		<link
+			rel="preload"
+			href="/assets/fonts/roboto-flex.woff2"
 			as="font"
 			type="font/woff2"
 			crossorigin="anonymous"

@@ -21,7 +21,7 @@ import {
 
 import "./Toast.scss";
 
-import { Button, Separator } from "@radix-ui/themes";
+import { Button, Separator, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -99,7 +99,11 @@ export const NmsToast = ({
 				<ToastTitle className={`${titleClassName} heading-styled mb-1`}>{title}</ToastTitle>
 			</div>
 			<Separator mb="1" size="4" />
-			<ToastDescription className="Toast__description">{description}</ToastDescription>
+			<ToastDescription asChild>
+				<Text as="div" className="Toast__description text-sm font-normal sm:text-base">
+					{description}
+				</Text>
+			</ToastDescription>
 			<Button
 				aria-label={t("common.dismiss") ?? ""}
 				className="Toast__close"

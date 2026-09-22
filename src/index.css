@@ -20,8 +20,9 @@
 	--letter-spacing-wide: 0.175em;
 	--font-weight-light: 200;
 	--font-weight-normal: 300;
-	--font-weight-bold: 700;
+	--font-weight-regular: 300;
 	--font-weight-medium: 500;
+	--font-weight-bold: 700;
 
 	/* Theme-specific overrides */
 	&:is(.light, .light-theme),

@@ -46,7 +46,7 @@ export const RecommendedBuildProvider: React.FC<{
 	);
 
 	const handleOpenInstructions = useCallback(() => {
-		openDialog("instructions", { section: "section-7" });
+		openDialog("instructions", { section: "section-6" });
 	}, [openDialog]);
 
 	const value = useMemo(

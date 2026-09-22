@@ -215,7 +215,7 @@ const AppHeaderSubtitle: React.FC = () => {
 		>
 			<Trans
 				components={{
-					1: <span className="font-mono" style={{ color: "var(--accent-11)" }} />,
+					1: <span style={{ color: "var(--accent-11)" }} />,
 				}}
 				i18nKey="appHeader.subTitle"
 			/>
