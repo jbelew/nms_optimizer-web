@@ -1,3 +1,10 @@
+## [7.15.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.15.1...v7.15.2) (2026-09-22)
+
+
+### Performance Improvements
+
+* **tooling:** gate visualizer, de-duplicate oxlint, and optimize test targeting ([1cfe5b2](https://github.com/jbelew/nms_optimizer-web/commit/1cfe5b2b28a7eecffd7c1f54e99ce2fec365486e))
+
 ## [7.15.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.15.0...v7.15.1) (2026-09-22)
 
 
