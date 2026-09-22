@@ -1,3 +1,10 @@
+## [7.15.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.15.0...v7.15.1) (2026-09-22)
+
+
+### Performance Improvements
+
+* **git-hooks:** optimize pre-commit speed with related tests and tiered pre-push barrier ([5846459](https://github.com/jbelew/nms_optimizer-web/commit/5846459187f7e2e307d7f338268ccad1ffd7da57))
+
 # [7.15.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.14.1...v7.15.0) (2026-09-22)
 
 
