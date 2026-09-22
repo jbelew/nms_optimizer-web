@@ -85,8 +85,8 @@
     "semantic_hash": ""
   },
   "eslint.config.js": {
-    "mtime": 1779308864.0,
-    "ast_hash": "3199804c40a940a95c38b5a73a485ba6",
+    "mtime": 1790110636.6430972,
+    "ast_hash": "005673f6ad3c62d261dfa14b6585aaaf",
     "semantic_hash": ""
   },
   "functions/[[path]].js": {
@@ -850,8 +850,8 @@
     "semantic_hash": ""
   },
   "src/components/ModuleSelectionDialog/SharedModuleSelectionDialog.tsx": {
-    "mtime": 1789852805.8502734,
-    "ast_hash": "32103ef90ebfe478cf4847f9fcc0b360",
+    "mtime": 1790110636.6626222,
+    "ast_hash": "153323eefa4467dcced0a3207aa86a44",
     "semantic_hash": ""
   },
   "src/components/ModuleSelectionDialog/constants.ts": {
@@ -890,7 +890,7 @@
     "semantic_hash": ""
   },
   "src/components/RecommendedBuild/RecommendedBuild.stories.tsx": {
-    "mtime": 1779145165.0,
+    "mtime": 1790109381.8900502,
     "ast_hash": "4f5118124554c69f0e9dfaee8b64669c",
     "semantic_hash": ""
   },
@@ -1880,8 +1880,8 @@
     "semantic_hash": ""
   },
   "src/utils/validation/dataValidation.ts": {
-    "mtime": 1779308864.0,
-    "ast_hash": "817047e37eba65a6d6b86319a1864a49",
+    "mtime": 1790110636.6626222,
+    "ast_hash": "816f51ced2c157fb60ed7b232ea8b2d0",
     "semantic_hash": ""
   },
   "src/vite-env-markdown.d.ts": {
@@ -1910,8 +1910,8 @@
     "semantic_hash": ""
   },
   "vite.config.ts": {
-    "mtime": 1790107869.994888,
-    "ast_hash": "a8d3c41da3d55270df0fedcd1905086b",
+    "mtime": 1790110636.6626222,
+    "ast_hash": "fde390f313872d184056e3e55b5e8340",
     "semantic_hash": ""
   },
   "vitest-mocks/virtual-markdown-bundle.ts": {
@@ -2045,8 +2045,8 @@
     "semantic_hash": ""
   },
   "src/utils/system/lifecycleCoordinator.ts": {
-    "mtime": 1788384701.9873066,
-    "ast_hash": "85172cde82e06a5139faf01c7059cf82",
+    "mtime": 1790110866.535285,
+    "ast_hash": "a9263d9b97ce3905d9dda3a5dabe1002",
     "semantic_hash": ""
   },
   "CONTEXT.md": {
@@ -2200,8 +2200,8 @@
     "semantic_hash": ""
   },
   "scripts/git-hooks.test.mjs": {
-    "mtime": 1790108446.853868,
-    "ast_hash": "be89499e0dc8e085126c98ba09302348",
+    "mtime": 1790108887.660589,
+    "ast_hash": "6d59e0e95fa4ea19a65a267812a0806e",
     "semantic_hash": ""
   }
 }

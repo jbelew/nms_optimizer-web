@@ -5,7 +5,7 @@
 # A metadata-only commit will skip every file-scoped command automatically.
 
 pre-commit:
-  parallel: false
+  piped: true
   commands:
     # ----- Early commit message check (catches commitlint errors immediately) -----
     commitlint-early:
@@ -73,12 +73,16 @@ pre-commit:
       run: bun run test:scripts
 
 pre-push:
-  parallel: false
+  piped: true
   commands:
     # ----- Full repository safety barrier before pushing to remote -----
     typecheck:
       tags: types
       run: bun run typecheck
+
+    lint:
+      tags: lint
+      run: bun run lint
 
     circular:
       tags: lint

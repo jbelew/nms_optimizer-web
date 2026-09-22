@@ -108,10 +108,16 @@ export const SharedModuleSelectionDialog: React.FC = () => {
 		: activeTech;
 	const translatedTechName = activeTech ? t(`technologies.${translationKeyPart}`) : "";
 
+	const currentCheckedModulesRef = useRef(currentCheckedModules);
+	useEffect(() => {
+		currentCheckedModulesRef.current = currentCheckedModules;
+	}, [currentCheckedModules]);
+
 	// Snapshot initial modules and fire analytics when dialog opens
 	useEffect(() => {
 		if (isOpen && activeTech) {
-			setTimeout(() => setInitialModules(currentCheckedModules), 0);
+			const initialSnapshot = currentCheckedModulesRef.current;
+			setTimeout(() => setInitialModules(initialSnapshot), 0);
 			optimizeClickedRef.current = false;
 
 			const appName = t("appName", { defaultValue: "NMS Optimizer" });
@@ -126,10 +132,7 @@ export const SharedModuleSelectionDialog: React.FC = () => {
 				page_title: pageTitle,
 			});
 		}
-		// Only run when the dialog opens — intentionally excluding currentCheckedModules
-		// to capture the snapshot at open time, not on subsequent selection changes.
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isOpen, activeTech]);
+	}, [activeTech, isOpen, sendDeferredEvent, t, translatedTechName]);
 
 	/**
 	 * Handles the optimize action from the dialog footer.

@@ -317,7 +317,8 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 			// Purge unused Radix Themes component CSS to reduce TBT from style recalculation.
 			// Must run in production builds only (the plugin uses generateBundle hook).
 			purgeRadixCss(),
-			...(!process.env.STORYBOOK_BUILD
+			...(!process.env.STORYBOOK_BUILD &&
+			(process.env.ANALYZE === "true" || process.env.VITE_ANALYZE === "true")
 				? [
 						visualizer({
 							brotliSize: true,

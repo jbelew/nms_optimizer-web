@@ -8,6 +8,7 @@ import prettierConfig from "eslint-config-prettier";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import storybook from "eslint-plugin-storybook";
+import oxlint from "eslint-plugin-oxlint";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
@@ -288,5 +289,11 @@ export default tseslint.config(
 	//
 	// --- STORYBOOK'S OWN ESLINT RULESET ---
 	//
-	storybook.configs["flat/recommended"]
+	storybook.configs["flat/recommended"],
+
+	//
+	// --- OXLINT OVERLAP DE-DUPLICATION ---
+	// Automatically turns off ESLint rules that Oxlint already validates
+	//
+	...oxlint.buildFromOxlintConfigFile("./.oxlintrc.json")
 );

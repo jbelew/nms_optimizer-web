@@ -589,6 +589,10 @@ export class LifecycleCoordinator {
 			document.documentElement.classList.add("background-visible");
 
 			const removeVpssElements = () => {
+				if (typeof document === "undefined") {
+					return;
+				}
+
 				const vpss = document.getElementById("vpss");
 
 				if (vpss) {

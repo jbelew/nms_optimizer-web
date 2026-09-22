@@ -148,8 +148,17 @@ export const isValidFilename = (filename: string): boolean => {
  * ```
  */
 export const sanitizeFilename = (filename: string): string => {
-	// eslint-disable-next-line no-control-regex
-	let sanitized = filename.replace(/[<>:"/\\|?*\x00-\x1F`$&;(){}#!]/g, "");
+	let sanitized = "";
+
+	for (let i = 0; i < filename.length; i++) {
+		const code = filename.charCodeAt(i);
+
+		if (code >= 32) {
+			sanitized += filename[i];
+		}
+	}
+
+	sanitized = sanitized.replace(/[<>:"/\\|?*`$&;(){}#!]/g, "");
 	sanitized = sanitized.replace(/[\s.]+$/, "");
 
 	if (sanitized.length > 255) {
