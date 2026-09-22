@@ -1,16 +1,16 @@
 # Graph Report - nms_optimizer-web  (2026-09-22)
 
 ## Corpus Check
-- 441 files · ~201,542 words
+- 441 files · ~201,573 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1700 nodes · 4104 edges · 137 communities (115 shown, 22 thin omitted)
+- 1700 nodes · 4104 edges · 137 communities (116 shown, 21 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 113 edges (avg confidence: 0.57)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `87ec5737`
+- Built from commit: `1cfe5b2b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -165,7 +165,7 @@
 - 2-file cycle: `src/components/GridTable/GridTable.tsx -> src/components/GridTable/GridTableGrid.tsx -> src/components/GridTable/GridTable.tsx`
 - 3-file cycle: `src/components/ErrorBoundary/ErrorBoundary.tsx -> src/components/ErrorBoundary/ErrorContent.tsx -> src/components/ErrorBoundary/ErrorDisplay.tsx -> src/components/ErrorBoundary/ErrorBoundary.tsx`
 
-## Communities (137 total, 22 thin omitted)
+## Communities (137 total, 21 thin omitted)
 
 ### Community 0 - "performanceChart.tsx"
 Cohesion: 0.07
@@ -242,6 +242,10 @@ Nodes (16): AppContent(), OfflineBanner, PerformanceRoute, RoutedDialogs, ShareL
 ### Community 18 - "sessionCoordinator.ts"
 Cohesion: 0.18
 Nodes (11): createGrid(), mockNavigate, mockTechTreeData, Grid, computeBonusStatus(), sessionCoordinator, mockGridStore, mockPlatformStoreState (+3 more)
+
+### Community 19 - "CliIssueTrackerAdapter"
+Cohesion: 0.14
+Nodes (5): CliIssueTrackerAdapter, Any, List open issues with number, title, body, and labels., Fetch details for a single issue (number, title, body)., Adapter for GitHub using gh CLI.
 
 ### Community 20 - "agent.py"
 Cohesion: 0.16
@@ -324,8 +328,8 @@ Cohesion: 0.20
 Nodes (9): distill_gate_output(), Module for running the verification gatekeeper and reporting distilled results., Remove ANSI escape sequences from terminal text., Distill raw gate output to reduce token usage during remediation retries: 1.…, Encapsulates execution and evaluation of the pre-commit verification gate., Run the gate command and return structured result., strip_ansi(), VerificationGate (+1 more)
 
 ### Community 40 - "IssueLifecycle"
-Cohesion: 0.06
-Nodes (25): main(), FakeIssueTrackerAdapter, IssueTrackerAdapter, Any, Protocols and concrete adapters for external dependencies (CLI tools, agent,…, In-memory fake IssueTrackerAdapter for testing., Interface for querying and updating GitHub issues., List open issues with number, title, body, and labels. (+17 more)
+Cohesion: 0.08
+Nodes (22): main(), FakeIssueTrackerAdapter, IssueTrackerAdapter, Protocols and concrete adapters for external dependencies (CLI tools, agent,…, In-memory fake IssueTrackerAdapter for testing., Interface for querying and updating GitHub issues., Fetch comments for an issue., Edit an issue's assignee, labels, or body. (+14 more)
 
 ### Community 41 - "src/constants.ts"
 Cohesion: 0.22
@@ -578,7 +582,7 @@ Nodes (11): compressRLE(), decompressRLE(), deserialize(), GRID_SERIALIZATION_CO
 ## Knowledge Gaps
 - **425 isolated node(s):** `BackgroundWrapperProps`, `config`, `customViewports`, `globalTypes`, `preview` (+420 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **22 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **21 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_

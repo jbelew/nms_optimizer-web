@@ -39,6 +39,14 @@ if (typeof globalThis !== "undefined") {
 	(globalThis as Record<string, unknown>).__BUILD_DATE__ = "test-date";
 }
 
+// Ensure navigator.webdriver is false in test environments (happy-dom sets it to true by default)
+if (typeof navigator !== "undefined") {
+	Object.defineProperty(navigator, "webdriver", {
+		configurable: true,
+		value: false,
+	});
+}
+
 // Mock window.matchMedia
 if (typeof window !== "undefined") {
 	Object.defineProperty(window, "matchMedia", {

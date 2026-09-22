@@ -27,7 +27,7 @@ export default defineConfig({
 				plugins: [react()],
 				resolve: { alias: sharedAlias },
 				test: {
-					environment: "jsdom",
+					environment: "happy-dom",
 					exclude: ["node_modules", "dist", ".storybook"],
 					globals: true,
 					include: ["src/**/*.test.{ts,tsx}"],

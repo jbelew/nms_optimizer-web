@@ -2000,8 +2000,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "scripts_ralph_adapters_issuetrackeradapter_list_open_issues",
-      "community": 40,
-      "community_name": "IssueLifecycle",
+      "community": 19,
+      "community_name": "CliIssueTrackerAdapter",
       "norm_label": ".list_open_issues()"
     },
     {
@@ -2011,8 +2011,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "scripts_ralph_adapters_py_any",
-      "community": 40,
-      "community_name": "IssueLifecycle",
+      "community": 19,
+      "community_name": "CliIssueTrackerAdapter",
       "norm_label": "any"
     },
     {
@@ -2023,8 +2023,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "scripts_ralph_adapters_issuetrackeradapter_get_issue",
-      "community": 40,
-      "community_name": "IssueLifecycle",
+      "community": 19,
+      "community_name": "CliIssueTrackerAdapter",
       "norm_label": ".get_issue()"
     },
     {
@@ -2169,8 +2169,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "scripts_ralph_adapters_fakeissuetrackeradapter_init",
-      "community": 40,
-      "community_name": "IssueLifecycle",
+      "community": 19,
+      "community_name": "CliIssueTrackerAdapter",
       "norm_label": ".__init__()"
     },
     {
@@ -2181,8 +2181,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "scripts_ralph_adapters_fakeissuetrackeradapter_list_open_issues",
-      "community": 40,
-      "community_name": "IssueLifecycle",
+      "community": 19,
+      "community_name": "CliIssueTrackerAdapter",
       "norm_label": ".list_open_issues()"
     },
     {
@@ -2193,8 +2193,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "scripts_ralph_adapters_fakeissuetrackeradapter_get_issue",
-      "community": 40,
-      "community_name": "IssueLifecycle",
+      "community": 19,
+      "community_name": "CliIssueTrackerAdapter",
       "norm_label": ".get_issue()"
     },
     {
@@ -2429,8 +2429,8 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "scripts_ralph_adapters_rationale_61",
-      "community": 40,
-      "community_name": "IssueLifecycle",
+      "community": 19,
+      "community_name": "CliIssueTrackerAdapter",
       "norm_label": "list open issues with number, title, body, and labels."
     },
     {
@@ -2440,8 +2440,8 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "scripts_ralph_adapters_rationale_65",
-      "community": 40,
-      "community_name": "IssueLifecycle",
+      "community": 19,
+      "community_name": "CliIssueTrackerAdapter",
       "norm_label": "fetch details for a single issue (number, title, body)."
     },
     {
@@ -18776,7 +18776,7 @@
       "label": "localStorageMock",
       "file_type": "code",
       "source_file": "vitest.setup.ts",
-      "source_location": "L60",
+      "source_location": "L68",
       "_origin": "ast",
       "id": "vitest_setup_localstoragemock",
       "community": 119,
@@ -66819,7 +66819,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "vitest.setup.ts",
-      "source_location": "L60",
+      "source_location": "L68",
       "weight": 1.0,
       "_origin": "ast",
       "source": "vitest_setup",
@@ -67730,5 +67730,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "87ec5737b65bf151e57dd735d359d8a00ca8d14a"
+  "built_at_commit": "1cfe5b2b28a7eecffd7c1f54e99ce2fec365486e"
 }

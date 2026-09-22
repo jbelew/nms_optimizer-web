@@ -75,30 +75,30 @@ pre-commit:
 pre-push:
   piped: true
   commands:
-    # ----- Full repository safety barrier before pushing to remote -----
+    # ----- Full repository safety barrier before pushing to remote (fastest to slowest) -----
+    test-scripts:
+      tags: test
+      run: bun run test:scripts
+
     typecheck:
       tags: types
       run: bun run typecheck
-
-    lint:
-      tags: lint
-      run: bun run lint
-
-    circular:
-      tags: lint
-      run: bun run lint:circular
 
     knip:
       tags: lint
       run: bun run lint:knip
 
+    circular:
+      tags: lint
+      run: bun run lint:circular
+
+    lint:
+      tags: lint
+      run: bun run lint
+
     test:
       tags: test
       run: bun run test:unit
-
-    test-scripts:
-      tags: test
-      run: bun run test:scripts
 
 commit-msg:
   commands:
