@@ -89,6 +89,7 @@ describe("Git Hooks Architecture (Lefthook)", () => {
 		const prePush = getHookSection(lefthookRaw, "pre-push");
 		expect(prePush, "pre-push hook must be configured in lefthook.yml").toBeTruthy();
 
+		expect(prePush).toMatch(/^\s+check-remote-sync:/m);
 		expect(prePush).toMatch(/^\s+typecheck:/m);
 		expect(prePush).toMatch(/^\s+lint:/m);
 		expect(prePush).toMatch(/^\s+circular:/m);

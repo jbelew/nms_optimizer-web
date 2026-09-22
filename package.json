@@ -53,6 +53,7 @@
 		"verify:ssg": "bun scripts/verify-ssg.mjs",
 		"verify:routes": "bun scripts/verify-routes-consistency.mjs",
 		"verify:deployment": "bun scripts/verify-deployment.mjs",
+		"verify:sync": "bun scripts/check-remote-sync.mjs",
 		"format:check": "bunx prettier --check ./src README.md \"public/assets/**/*.md\"",
 		"format": "bunx prettier --write ./src README.md \"public/assets/**/*.md\"",
 		"format:locales": "bunx prettier --write \"public/assets/locales/**/*.json\"",

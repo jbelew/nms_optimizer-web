@@ -1925,12 +1925,12 @@
     "semantic_hash": ""
   },
   "vitest.config.ts": {
-    "mtime": 1790112132.7379382,
+    "mtime": 1790112767.9398332,
     "ast_hash": "14077636ad8033962586fdd34f5bca13",
     "semantic_hash": ""
   },
   "vitest.setup.ts": {
-    "mtime": 1790112176.4706845,
+    "mtime": 1790112767.9437182,
     "ast_hash": "bda446dbb3a083ae6548be5cc479cbce",
     "semantic_hash": ""
   },
@@ -2200,8 +2200,18 @@
     "semantic_hash": ""
   },
   "scripts/git-hooks.test.mjs": {
-    "mtime": 1790111705.5466986,
-    "ast_hash": "9bb8ee4cd30f39736a1d1518ee01fd47",
+    "mtime": 1790113059.7238855,
+    "ast_hash": "e477ca54444c139ba93941b6dd0dc6b1",
+    "semantic_hash": ""
+  },
+  "scripts/check-remote-sync.mjs": {
+    "mtime": 1790113167.5087872,
+    "ast_hash": "8dbdcf151a4e0516e3321273458361b5",
+    "semantic_hash": ""
+  },
+  "scripts/check-remote-sync.test.mjs": {
+    "mtime": 1790113461.880856,
+    "ast_hash": "8a13c5fdf578219b4b6ccf6146c59126",
     "semantic_hash": ""
   }
 }

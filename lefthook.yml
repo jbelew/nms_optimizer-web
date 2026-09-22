@@ -75,6 +75,11 @@ pre-commit:
 pre-push:
   piped: true
   commands:
+    # ----- Early remote sync check (catches out-of-sync remote before running expensive checks) -----
+    check-remote-sync:
+      tags: sync
+      run: bun scripts/check-remote-sync.mjs
+
     # ----- Full repository safety barrier before pushing to remote (fastest to slowest) -----
     test-scripts:
       tags: test
