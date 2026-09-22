@@ -38,6 +38,8 @@
 		"screenshot": "bun scripts/screenshot.mjs",
 		"screenshot:mobile-bg": "bun scripts/screenshot-blurred-background.js",
 		"test": "bunx vitest run --project unit --coverage && bun run test:scripts",
+		"test:unit": "bunx vitest run --project unit",
+		"test:related": "bunx vitest related --run --project unit --passWithNoTests",
 		"test:scripts": "bun test scripts/",
 		"test:storybook": "bunx vitest run --project storybook",
 		"test:storybook:watch": "bunx vitest --project storybook",

@@ -1910,7 +1910,7 @@
     "semantic_hash": ""
   },
   "vite.config.ts": {
-    "mtime": 1790107583.6703002,
+    "mtime": 1790107869.994888,
     "ast_hash": "a8d3c41da3d55270df0fedcd1905086b",
     "semantic_hash": ""
   },
@@ -2195,8 +2195,13 @@
     "semantic_hash": ""
   },
   "scripts/pwa-config.test.mjs": {
-    "mtime": 1790107603.9074123,
+    "mtime": 1790107869.994888,
     "ast_hash": "f0ceeba0c41ef67d973660b20129b489",
+    "semantic_hash": ""
+  },
+  "scripts/git-hooks.test.mjs": {
+    "mtime": 1790108446.853868,
+    "ast_hash": "be89499e0dc8e085126c98ba09302348",
     "semantic_hash": ""
   }
 }

@@ -55,34 +55,49 @@ pre-commit:
       run: bunx prettier --write {staged_files}
       stage_fixed: true
 
-    # ----- Whole-project checks (only when TS/TSX changes) -----
+    # ----- Fast validation checks (only when relevant source changes) -----
     typecheck:
       tags: types
       glob: "*.{ts,tsx}"
       # tsc -b uses project references and cannot be scoped to individual files
       run: bun run typecheck
 
-    circular:
-      tags: lint
-      glob: "*.{ts,tsx}"
-      run: bun run lint:circular
-
-    knip:
-      tags: lint
-      glob: "*.{ts,tsx}"
-      run: bun run lint:knip
-
     test:
       tags: test
-      glob: "*.{ts,tsx}"
-      run: bun run test:ci
+      glob: "{src,shared}/**/*.{ts,tsx,js,mjs,cjs}"
+      run: bun run test:related {staged_files}
 
     test-scripts:
       tags: test
       glob: "scripts/**/*.{ts,js,mjs,cjs}"
       run: bun run test:scripts
 
+pre-push:
+  parallel: false
+  commands:
+    # ----- Full repository safety barrier before pushing to remote -----
+    typecheck:
+      tags: types
+      run: bun run typecheck
+
+    circular:
+      tags: lint
+      run: bun run lint:circular
+
+    knip:
+      tags: lint
+      run: bun run lint:knip
+
+    test:
+      tags: test
+      run: bun run test:unit
+
+    test-scripts:
+      tags: test
+      run: bun run test:scripts
+
 commit-msg:
   commands:
     commitlint:
       run: bunx commitlint --edit {1}
+
