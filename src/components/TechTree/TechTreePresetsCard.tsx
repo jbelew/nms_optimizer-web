@@ -90,7 +90,7 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build }) => {
 				onClick={() => handleApply(build)}
 				radius="medium"
 				size="1"
-				variant="soft"
+				variant="solid"
 			>
 				<MagicWandIcon height="15" width="15" />
 				{t("techTree.recommendedBuilds.applyBuild", "Apply Build")}
