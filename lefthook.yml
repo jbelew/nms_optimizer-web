@@ -85,6 +85,10 @@ pre-push:
       tags: test
       run: bun run test:scripts
 
+    format:
+      tags: format
+      run: bun run format:check
+
     typecheck:
       tags: types
       run: bun run typecheck

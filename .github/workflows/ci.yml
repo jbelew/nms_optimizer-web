@@ -59,7 +59,6 @@ jobs:
 
       - name: Detect unused code (Knip)
         run: bun run lint:knip
-        continue-on-error: true
 
   security-scan:
     name: Security Analysis (CodeQL)
@@ -114,6 +113,9 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ github.event.pull_request.head.repo.full_name == github.repository && secrets.SENTRY_AUTH_TOKEN || '' }}
           SENTRY_ORG: ${{ github.event.pull_request.head.repo.full_name == github.repository && secrets.SENTRY_ORG || '' }}
           SENTRY_PROJECT: ${{ github.event.pull_request.head.repo.full_name == github.repository && secrets.SENTRY_PROJECT || '' }}
+
+      - name: Verify SSG and route integrity
+        run: bun run verify:routes && bun run verify:ssg
 
       - name: Upload dist artifact
         uses: actions/upload-artifact@v7

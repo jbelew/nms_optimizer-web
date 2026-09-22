@@ -3,6 +3,8 @@
  */
 
 import { execSync } from "node:child_process";
+import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -70,15 +72,36 @@ describe("Remote Synchronization Check (check-remote-sync.mjs)", () => {
 		expect(result.missingCommits).toEqual([]);
 	});
 
-	it("detects when baseRef is behind targetRef", () => {
-		const result = checkRemoteSync({
-			baseRef: "HEAD~1",
-			cwd: ROOT,
-			skipFetch: true,
-			targetRef: "HEAD",
-		});
-		expect(result.behindCount).toBe(1);
-		expect(result.missingCommits.length).toBe(1);
+	it("detects when baseRef is behind targetRef in an isolated repository", () => {
+		const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "git-sync-fixture-"));
+
+		try {
+			execSync("git init", { cwd: tempDir, stdio: "ignore" });
+			execSync("git config user.name 'CI Tester' && git config user.email 'tester@ci.local'", {
+				cwd: tempDir,
+				stdio: "ignore",
+			});
+			fs.writeFileSync(path.join(tempDir, "file1.txt"), "first");
+			execSync("git add . && git commit -m 'Initial commit'", { cwd: tempDir, stdio: "ignore" });
+			const c1 = execSync("git rev-parse HEAD", { cwd: tempDir, encoding: "utf-8" }).trim();
+
+			fs.writeFileSync(path.join(tempDir, "file2.txt"), "second");
+			execSync("git add . && git commit -m 'Second commit'", { cwd: tempDir, stdio: "ignore" });
+			const c2 = execSync("git rev-parse HEAD", { cwd: tempDir, encoding: "utf-8" }).trim();
+
+			const result = checkRemoteSync({
+				baseRef: c1,
+				cwd: tempDir,
+				skipFetch: true,
+				targetRef: c2,
+			});
+
+			expect(result.behindCount).toBe(1);
+			expect(result.missingCommits.length).toBe(1);
+			expect(result.missingCommits[0]).toContain("Second commit");
+		} finally {
+			fs.rmSync(tempDir, { force: true, recursive: true });
+		}
 	});
 
 	it("runs cleanly via CLI when bypassed or synchronized", () => {
