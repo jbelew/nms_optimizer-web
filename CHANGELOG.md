@@ -1,3 +1,10 @@
+## [7.15.3](https://github.com/jbelew/nms_optimizer-web/compare/v7.15.2...v7.15.3) (2026-09-22)
+
+
+### Performance Improvements
+
+* **testing:** migrate vitest to happy-dom and reorder pre-push hooks ([6e7e4a4](https://github.com/jbelew/nms_optimizer-web/commit/6e7e4a47c067953a28c653a8a5d783ec173454fb))
+
 ## [7.15.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.15.1...v7.15.2) (2026-09-22)
 
 
