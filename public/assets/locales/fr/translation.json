@@ -187,7 +187,7 @@
 	"translationRequest": {
 		"openDialogLabel": "Traducteurs Recherchés !"
 	},
-	"platformLabel": "PLATEFORME :",
+	"platformLabel": "Plateforme:",
 	"platforms": {
 		"standard": "Vaisseaux Standards / Exotiques",
 		"sentinel": "Intercepteurs Sentinelles",

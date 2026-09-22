@@ -205,7 +205,7 @@
 	"translationRequest": {
 		"openDialogLabel": "Translators needed!"
 	},
-	"platformLabel": "PLATFORM:",
+	"platformLabel": "Platform:",
 	"platforms": {
 		"standard": "Standard / Exotic Starships",
 		"sentinel": "Sentinel Interceptors",

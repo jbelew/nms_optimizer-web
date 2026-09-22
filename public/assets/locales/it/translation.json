@@ -204,7 +204,7 @@
 	"translationRequest": {
 		"openDialogLabel": "Cercasi traduttori!"
 	},
-	"platformLabel": "PIATTAFORMA:",
+	"platformLabel": "Piattaforma:",
 	"platforms": {
 		"standard": "Navi Stellari Standard / Esotiche",
 		"sentinel": "Intercettori Sentinel",
