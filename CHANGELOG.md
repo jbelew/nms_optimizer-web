@@ -1,3 +1,16 @@
+# [7.14.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.13.0...v7.14.0) (2026-09-22)
+
+
+### Bug Fixes
+
+* **tech-tree:** restore TechTreeSection styles to resolve iOS scrolling artifacts ([cda165b](https://github.com/jbelew/nms_optimizer-web/commit/cda165b52a38e6d3508f7f430e8dc34e3a3867f1))
+* **ui:** scope button drop-shadow to desktop viewports to prevent iOS scrolling flicker ([f2c8e66](https://github.com/jbelew/nms_optimizer-web/commit/f2c8e664d733ff80b9c71101e6a525d9e13a8987))
+
+
+### Features
+
+* **tech-tree:** add pinned recommended builds card across all viewports ([49406ea](https://github.com/jbelew/nms_optimizer-web/commit/49406eaf4eeca397c6bb9134803fe02fc89b8178))
+
 # [7.13.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.12.0...v7.13.0) (2026-09-21)
 
 
