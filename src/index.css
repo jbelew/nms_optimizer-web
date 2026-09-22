@@ -13,12 +13,15 @@
 
 /* Apply custom font styles using Tailwind's @layer directive */
 .radix-themes {
-	--default-font-family: "Raleway", Helvetica, Arial, sans-serif;
+	--default-font-family: "Roboto Flex", Helvetica, Arial, sans-serif;
+	--default-font-weight: 300;
 	--font-family-geosans: Geosans, Helvetica, Arial, sans-serif;
 	--font-family-nms: NMS, Helvetica, Arial, sans-serif;
 	--letter-spacing-wide: 0.175em;
+	--font-weight-light: 200;
+	--font-weight-normal: 300;
 	--font-weight-bold: 700;
-	--font-weight-medium: 550;
+	--font-weight-medium: 500;
 
 	/* Theme-specific overrides */
 	&:is(.light, .light-theme),
