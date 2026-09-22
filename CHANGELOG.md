@@ -1,3 +1,10 @@
+## [7.14.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.14.0...v7.14.1) (2026-09-22)
+
+
+### Performance Improvements
+
+* **pwa:** enable navigation preload to optimize TTFB ([7552765](https://github.com/jbelew/nms_optimizer-web/commit/755276545386913524b22fed24636b4e67bde83b))
+
 # [7.14.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.13.0...v7.14.0) (2026-09-22)
 
 
