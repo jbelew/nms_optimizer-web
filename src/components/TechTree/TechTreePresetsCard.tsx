@@ -127,7 +127,7 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds }) => {
 					</Flex>
 				</Flex>
 
-				<Text as="p" color="gray" size="2">
+				<Text as="p" size="2">
 					<Trans
 						components={{
 							5: (
