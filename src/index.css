@@ -13,12 +13,16 @@
 
 /* Apply custom font styles using Tailwind's @layer directive */
 .radix-themes {
-	--default-font-family: "Raleway", Helvetica, Arial, sans-serif;
+	--default-font-family: "Roboto Flex", Helvetica, Arial, sans-serif;
+	--default-font-weight: 300;
 	--font-family-geosans: Geosans, Helvetica, Arial, sans-serif;
 	--font-family-nms: NMS, Helvetica, Arial, sans-serif;
 	--letter-spacing-wide: 0.175em;
+	--font-weight-light: 200;
+	--font-weight-normal: 300;
+	--font-weight-regular: 300;
+	--font-weight-medium: 500;
 	--font-weight-bold: 700;
-	--font-weight-medium: 550;
 
 	/* Theme-specific overrides */
 	&:is(.light, .light-theme),
@@ -120,9 +124,11 @@ html.background-visible :is(#root, #storybook-root) .radix-themes {
 	}
 }
 
-.rt-BaseButton {
-	/* Use filter instead of box-shadow to avoid clobbering Radix variant outlines */
-	filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.1));
+@media (width >= 640px) {
+	.rt-BaseButton {
+		/* Use filter instead of box-shadow to avoid clobbering Radix variant outlines */
+		filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.1));
+	}
 }
 
 body.a11y-font .radix-themes {

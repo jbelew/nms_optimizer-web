@@ -1,4 +1,17 @@
-import type { Module, TechTree, TechTreeItem } from "@/types/tech";
+import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "@/types/tech";
+
+/**
+ * Calculates the total number of non-empty modules defined in a recommended build layout.
+ *
+ * @param {RecommendedBuild} build - The recommended build containing a 2D layout.
+ *
+ * @returns {number} The count of modules in the layout.
+ */
+export const countBuildModules = (build: RecommendedBuild): number => {
+	if (!build.layout) return 0;
+
+	return build.layout.flat().filter((slot) => slot && slot.module).length;
+};
 
 /**
  * Results of tech tree processing including flat maps and sets for lookup.

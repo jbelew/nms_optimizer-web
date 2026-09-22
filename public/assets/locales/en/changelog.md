@@ -2,6 +2,15 @@
 
 The full commit history for this project is available on [GitHub](https://github.com/jbelew/nms_optimizer-web/blob/main/CHANGELOG.md). A special thanks to [mateo-leal](https://github.com/mateo-leal) for the Spanish translation updates.
 
+## Version 7.14 – Recommended Builds & UI Polish (2026-09-21)
+
+This version updates and standardizes the presentation of the Recommended Builds component across all devices.
+
+- **Pinned Recommended Builds:** Community-sourced recommended builds are now conveniently pinned at the very top of the technology list across phones, tablets, and desktops. You can preview recommended layouts, check module counts, apply them with a single click, and easily jump to the relevant instructions.
+- **Smoother Mobile Scrolling:** Fixed an issue where buttons in the technology tree could flicker while scrolling on mobile devices and iPhones.
+- Updated and refined various UI components throughout the application.
+- Switched the main font from Raleway to Roboto Flex to better match the game's text rendering.
+
 ## Version 7.13 – Astronaut Figurine (2026-09-21)
 
 This update adds the Astronaut Figurine technology module for starships.

@@ -17,14 +17,19 @@
 
 	&__title {
 		color: var(--gray-12);
-		font-size: 14px;
+		font-size: 16px;
 		margin-top: var(--space-1);
 	}
 
 	&__description {
 		color: var(--gray-12);
-		font-size: 14px;
+		font-weight: var(--font-weight-normal);
 		margin-bottom: var(--space-1);
+
+		strong,
+		b {
+			font-weight: var(--font-weight-bold);
+		}
 	}
 
 	&__icon {

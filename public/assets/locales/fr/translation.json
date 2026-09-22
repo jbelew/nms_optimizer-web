@@ -187,7 +187,7 @@
 	"translationRequest": {
 		"openDialogLabel": "Traducteurs Recherchés !"
 	},
-	"platformLabel": "PLATEFORME :",
+	"platformLabel": "Plateforme:",
 	"platforms": {
 		"standard": "Vaisseaux Standards / Exotiques",
 		"sentinel": "Intercepteurs Sentinelles",
@@ -235,11 +235,14 @@
 			"Movement Systems": "Systèmes de Mouvement"
 		},
 		"recommendedBuilds": {
-			"selectBuildButton": "Choisir une Build Recommandée",
+			"aboutRecommendedBuildsTooltip": "À propos des configurations recommandées",
+			"applyBuild": "Appliquer la build",
 			"applyBuildButton": "Appliquer la Build Recommandée",
-			"summary": "Les technologies avec des <1>emplacements surchargés fixes</1> proposent des <5>builds recommandées</5>.",
+			"cardDescription": "Les plateformes avec des emplacements surchargés fixes incluent des <5>builds recommandées</5> communautaires optimisées pour un bonus d'adjacence maximal.",
+			"header": "Builds recommandées",
+			"selectBuildButton": "Choisir une Build Recommandée",
 			"selectBuildLabel": "Sélectionner une Configuration",
-			"aboutRecommendedBuildsTooltip": "À propos des configurations recommandées"
+			"summary": "Les technologies avec des <1>emplacements surchargés fixes</1> proposent des <5>builds recommandées</5>."
 		}
 	},
 	"technologies": {

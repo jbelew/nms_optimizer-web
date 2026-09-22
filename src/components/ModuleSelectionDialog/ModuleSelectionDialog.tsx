@@ -2,6 +2,7 @@
  * Interactive technology module configuration dialog module.
  */
 
+import type { GroupedModules, ModuleSelectionDialogProps, SelectionModule } from "@/types/props";
 import React, { memo, Suspense } from "react";
 import { CheckCircledIcon, InfoCircledIcon, MagicWandIcon } from "@radix-ui/react-icons";
 import {
@@ -18,18 +19,13 @@ import {
 import { Trans, useTranslation } from "react-i18next";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
+import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useDialog } from "@/utils/system/dialogUtils";
 
 import { MODULE_GROUP_ORDER, MODULE_RANK_ORDER } from "./constants";
 import { ModuleSelectionProvider } from "./ModuleSelectionContext";
 import { useModuleSelectionContext } from "./useModuleSelectionContext";
-
-import "./ModuleSelectionDialog.scss";
-
-import type { GroupedModules, ModuleSelectionDialogProps, SelectionModule } from "@/types/props";
-
-import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 
 /**
  * Shared types for module grouping and dialog properties.
@@ -293,29 +289,29 @@ const DialogBody: React.FC = () => {
 	return (
 		<>
 			{isCorvette && tech !== "trails" && (
-				<span className="mb-3 block text-sm sm:text-base">
+				<Text as="div" className="mb-3! block text-sm sm:text-base" mb="3">
 					<Trans
 						components={{
 							i: <i />,
 							p: <SafeParagraph />,
-							strong: <strong />,
+							strong: <strong className="font-bold" />,
 						}}
 						i18nKey="moduleSelection.warning"
 					/>
-				</span>
+				</Text>
 			)}
 			{tech === "trails" && (
-				<span className="mb-3 block text-sm sm:text-base">
+				<Text as="p" className="mb-3! block text-sm sm:text-base" mb="3">
 					<Trans
-						components={{ strong: <strong /> }}
+						components={{ strong: <strong className="font-bold" /> }}
 						i18nKey="moduleSelection.trailsInfo"
 					/>
-				</span>
+				</Text>
 			)}
 			{!isCorvette && tech !== "trails" && (
-				<span className="mb-3 block text-sm sm:text-base">
+				<Text as="p" className="mb-3! block text-sm sm:text-base" mb="3">
 					<Trans i18nKey="moduleSelection.description" />
-				</span>
+				</Text>
 			)}
 			<label className="flex cursor-pointer items-center text-sm font-medium transition-colors duration-200 hover:text-(--accent-a12) sm:text-base">
 				<Checkbox

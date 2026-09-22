@@ -117,7 +117,7 @@ export function useScreenshot(): UseScreenshotReturn {
 
 				if (ctx) {
 					const fontSize = 14;
-					ctx.font = `500 ${fontSize}px Raleway, Helvetica, Arial, sans-serif`;
+					ctx.font = `500 ${fontSize}px "Roboto Flex", Helvetica, Arial, sans-serif`;
 					ctx.textBaseline = "bottom";
 
 					// Keep the exact same distance from the grid as the original code

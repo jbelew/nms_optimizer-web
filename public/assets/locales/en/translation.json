@@ -205,7 +205,7 @@
 	"translationRequest": {
 		"openDialogLabel": "Translators needed!"
 	},
-	"platformLabel": "PLATFORM:",
+	"platformLabel": "Platform:",
 	"platforms": {
 		"standard": "Standard / Exotic Starships",
 		"sentinel": "Sentinel Interceptors",
@@ -254,9 +254,12 @@
 		},
 		"recommendedBuilds": {
 			"aboutRecommendedBuildsTooltip": "About Recommended Builds",
-			"selectBuildLabel": "Select Build",
-			"selectBuildButton": "Select a Recommended Build",
+			"applyBuild": "Apply Build",
 			"applyBuildButton": "Apply Recommended Build",
+			"cardDescription": "Platforms with fixed supercharged slots include community sourced <5>recommended builds</5> optimized for maximum adjacency bonuses.",
+			"header": "Recommended Builds",
+			"selectBuildButton": "Select a Recommended Build",
+			"selectBuildLabel": "Select Build",
 			"summary": "Technologies with <1>fixed Supercharged slots</1> support <5>recommended builds</5>."
 		}
 	},

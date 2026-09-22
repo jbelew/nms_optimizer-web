@@ -161,7 +161,7 @@ const TechTreeRowActions: React.FC = () => {
 			<ConditionalTooltip label={tooltipLabel}>
 				<IconButton
 					aria-label={`${tooltipLabel} ${translatedTechName}`}
-					className={`techRow__resetButton${!isOptimizeButtonDisabled ? "cursor-pointer!" : ""}`}
+					className={`techRow__resetButton ${!isOptimizeButtonDisabled ? "cursor-pointer!" : ""}`}
 					disabled={isOptimizeButtonDisabled}
 					id={tech}
 					onClick={handleOptimizeClick}
@@ -173,7 +173,7 @@ const TechTreeRowActions: React.FC = () => {
 			<ConditionalTooltip label={t("techTree.tooltips.reset")}>
 				<IconButton
 					aria-label={`${t("techTree.tooltips.reset")} ${translatedTechName}`}
-					className={`techRow__resetButton${hasTechInGrid && !solving ? "cursor-pointer!" : ""}`}
+					className={`techRow__resetButton ${hasTechInGrid && !solving ? "cursor-pointer!" : ""}`}
 					disabled={!hasTechInGrid || solving || isResetting || isOptimizing}
 					onClick={handleReset}
 				>

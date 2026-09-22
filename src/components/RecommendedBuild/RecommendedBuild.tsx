@@ -7,13 +7,7 @@ import { RecommendedBuildInfo } from "./RecommendedBuildInfo";
 import { RecommendedBuildProvider } from "./RecommendedBuildProvider";
 import { RecommendedBuildRoot } from "./RecommendedBuildRoot";
 
-export { RecommendedBuildButton } from "./RecommendedBuildButton";
-
-export { RecommendedBuildInfo } from "./RecommendedBuildInfo";
-
 export { RecommendedBuildProvider } from "./RecommendedBuildProvider";
-
-export { RecommendedBuildRoot } from "./RecommendedBuildRoot";
 
 /**
  * Props for the `RecommendedBuild` component.

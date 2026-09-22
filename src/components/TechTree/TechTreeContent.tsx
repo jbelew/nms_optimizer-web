@@ -17,6 +17,7 @@ import { EmptyState } from "@/components/EmptyState/EmptyState";
 import { type TechTree, type TechTreeItem } from "@/hooks/useTechTree/useTechTree";
 import { Logger } from "@/utils/system/monitoring";
 
+import { TechTreePresetsCard } from "./TechTreePresetsCard";
 import { TechTreeSection } from "./TechTreeSection";
 
 /**
@@ -91,8 +92,12 @@ export const TechTreeContent: React.FC<TechTreeContentProps> = ({ techTree }) =>
 		);
 	}
 
+	const hasPresets = Boolean(techTree.recommended_builds?.length);
+
 	return (
-		<div className="tech-tree-content">
+		<div className={`tech-tree-content ${hasPresets ? "" : "mt-4 lg:mt-0"}`.trim()}>
+			<TechTreePresetsCard techTree={techTree} />
+
 			{categories.map((category, index) => (
 				<TechTreeSection
 					index={index}
