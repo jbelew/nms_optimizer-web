@@ -2210,8 +2210,8 @@
     "semantic_hash": ""
   },
   "scripts/check-remote-sync.test.mjs": {
-    "mtime": 1790115159.8821726,
-    "ast_hash": "2fae7c3069322b3a62d382881e373176",
+    "mtime": 1790115723.826263,
+    "ast_hash": "5e0bc45c775bcffef75fc659248eb417",
     "semantic_hash": ""
   }
 }

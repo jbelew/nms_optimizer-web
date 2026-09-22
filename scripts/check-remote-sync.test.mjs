@@ -21,21 +21,68 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 
 describe("Remote Synchronization Check (check-remote-sync.mjs)", () => {
-	it("detects the current branch correctly", () => {
-		const branch = getCurrentBranch(ROOT);
-		expect(branch).toBeTypeOf("string");
-		expect(branch?.length).toBeGreaterThan(0);
+	it("detects the current branch correctly in an initialized repository", () => {
+		const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "git-branch-fixture-"));
+
+		try {
+			execFileSync("git", ["init", "-b", "feature-sync"], { cwd: tempDir, stdio: "ignore" });
+			const branch = getCurrentBranch(tempDir);
+			expect(branch).toBe("feature-sync");
+		} finally {
+			fs.rmSync(tempDir, { force: true, recursive: true });
+		}
 	});
 
-	it("resolves upstream info for the current branch", () => {
-		const branch = getCurrentBranch(ROOT);
-		expect(branch).not.toBeNull();
+	it("returns null for branch when in detached HEAD", () => {
+		const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "git-detached-fixture-"));
 
-		const upstream = getUpstreamInfo(branch, ROOT);
-		expect(upstream).toBeDefined();
-		expect(upstream?.remote).toBe("origin");
-		expect(upstream?.remoteBranch).toBe(branch);
-		expect(upstream?.upstreamRef).toBe(`origin/${branch}`);
+		try {
+			execFileSync("git", ["init", "-b", "main"], { cwd: tempDir, stdio: "ignore" });
+			execFileSync("git", ["config", "user.name", "CI Tester"], { cwd: tempDir, stdio: "ignore" });
+			execFileSync("git", ["config", "user.email", "tester@ci.local"], { cwd: tempDir, stdio: "ignore" });
+			fs.writeFileSync(path.join(tempDir, "file.txt"), "content");
+			execFileSync("git", ["add", "."], { cwd: tempDir, stdio: "ignore" });
+			execFileSync("git", ["commit", "-m", "Init"], { cwd: tempDir, stdio: "ignore" });
+			execFileSync("git", ["checkout", "--detach", "HEAD"], { cwd: tempDir, stdio: "ignore" });
+
+			const branch = getCurrentBranch(tempDir);
+			expect(branch).toBeNull();
+		} finally {
+			fs.rmSync(tempDir, { force: true, recursive: true });
+		}
+	});
+
+	it("resolves upstream info for a branch with configured remote", () => {
+		const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "git-upstream-fixture-"));
+
+		try {
+			execFileSync("git", ["init", "-b", "main"], { cwd: tempDir, stdio: "ignore" });
+			execFileSync("git", ["remote", "add", "origin", "https://github.com/example/repo.git"], {
+				cwd: tempDir,
+				stdio: "ignore",
+			});
+
+			const upstream = getUpstreamInfo("main", tempDir);
+			expect(upstream).toEqual({
+				remote: "origin",
+				remoteBranch: "main",
+				upstreamRef: "origin/main",
+			});
+		} finally {
+			fs.rmSync(tempDir, { force: true, recursive: true });
+		}
+	});
+
+	it("returns null when no upstream or origin remote is configured", () => {
+		const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "git-no-remote-fixture-"));
+
+		try {
+			execFileSync("git", ["init", "-b", "main"], { cwd: tempDir, stdio: "ignore" });
+			const upstream = getUpstreamInfo("main", tempDir);
+			expect(upstream).toBeNull();
+		} finally {
+			fs.rmSync(tempDir, { force: true, recursive: true });
+		}
 	});
 
 	it("returns false for isForceOrDeletePush during standard test execution", () => {
