@@ -92,7 +92,7 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build }) => {
 				size="1"
 				variant="soft"
 			>
-				<MagicWandIcon height="16" width="16" />
+				<MagicWandIcon height="15" width="15" />
 				{t("techTree.recommendedBuilds.applyBuild", "Apply Build")}
 			</Button>
 		</div>
