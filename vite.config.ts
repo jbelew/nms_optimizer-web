@@ -407,7 +407,7 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 								globIgnores: ["maintenance.html", "404.html", "500.html"],
 								maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
 								navigateFallback: undefined,
-								navigationPreload: false,
+								navigationPreload: true,
 								runtimeCaching: [
 									{
 										handler: "NetworkOnly",

@@ -1,16 +1,16 @@
-# Graph Report - nms_optimizer-web  (2026-09-21)
+# Graph Report - nms_optimizer-web  (2026-09-22)
 
 ## Corpus Check
-- 439 files · ~200,687 words
+- 439 files · ~200,714 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1687 nodes · 4093 edges · 133 communities (112 shown, 21 thin omitted)
+- 1687 nodes · 4093 edges · 132 communities (109 shown, 23 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 113 edges (avg confidence: 0.57)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `8c81d89d`
+- Built from commit: `d20195e9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -23,7 +23,6 @@
 - ModuleSelectionDialog.tsx
 - gridStore.ts
 - FakeCommandRunnerAdapter
-- props.ts
 - useMainAppLogic.tsx
 - WelcomeContent.tsx
 - uiStore.ts
@@ -76,7 +75,7 @@
 - TechTreeContent.tsx
 - RecommendedBuild.stories.tsx
 - CliAgentRunnerAdapter
-- useTechOptimization.ts
+- GridShake.tsx
 - useAnalytics
 - MainAppContent.stories.tsx
 - dialogContext.tsx
@@ -161,7 +160,7 @@
 - 2-file cycle: `src/components/GridTable/GridTable.tsx -> src/components/GridTable/GridTableGrid.tsx -> src/components/GridTable/GridTable.tsx`
 - 3-file cycle: `src/components/ErrorBoundary/ErrorBoundary.tsx -> src/components/ErrorBoundary/ErrorContent.tsx -> src/components/ErrorBoundary/ErrorDisplay.tsx -> src/components/ErrorBoundary/ErrorBoundary.tsx`
 
-## Communities (133 total, 21 thin omitted)
+## Communities (132 total, 23 thin omitted)
 
 ### Community 0 - "performanceChart.tsx"
 Cohesion: 0.06
@@ -194,10 +193,6 @@ Nodes (9): createGrid(), createCellFromModuleData(), createEmptyCell(), createGr
 ### Community 7 - "FakeCommandRunnerAdapter"
 Cohesion: 0.18
 Nodes (13): FakeAgentRunnerAdapter, FakeCommandRunnerAdapter, Fake AgentRunnerAdapter for testing., In-memory fake CommandRunnerAdapter for testing., AgentClient, High-level client for running the autonomous agent., VerificationResult, main() (+5 more)
-
-### Community 8 - "props.ts"
-Cohesion: 0.47
-Nodes (4): mockProps, SelectedTechData, TechTreeRowProps, TechColor
 
 ### Community 9 - "useMainAppLogic.tsx"
 Cohesion: 0.20
@@ -239,10 +234,6 @@ Nodes (15): AppContent(), OfflineBanner, PerformanceRoute, RoutedDialogs, ShareL
 Cohesion: 0.11
 Nodes (21): AppHeaderContext, AppHeaderContextValue, NotFound(), NotFound(), AnalyticsEventParams, GA4Event, reportTBT(), reportWebVitals() (+13 more)
 
-### Community 19 - "CliIssueTrackerAdapter"
-Cohesion: 0.14
-Nodes (5): CliIssueTrackerAdapter, Any, List open issues with number, title, body, and labels., Fetch details for a single issue (number, title, body)., Adapter for GitHub using gh CLI.
-
 ### Community 20 - "agent.py"
 Cohesion: 0.16
 Nodes (10): format_initial_prompt(), format_remediation_prompt(), Agent orchestration module: prompt formatting, session continuation, and…, Construct the initial autonomous implementation prompt for the agent., Construct the continuation prompt when verification gate fails., Run the initial autonomous session for an issue with high reasoning effort., Resume an existing session with low reasoning effort to fix verification…, Issue (+2 more)
@@ -280,8 +271,8 @@ Cohesion: 0.25
 Nodes (14): InstallPrompt(), UI_TIMING, debounceSetItem(), SetItemFunction, isTouchDevice(), safeClear(), safeGetItem(), safeRemoveItem() (+6 more)
 
 ### Community 29 - "useTechStore"
-Cohesion: 0.21
-Nodes (13): EMPTY_MODULES_ARRAY, SharedModuleSelectionDialog(), MockPresentationalProps, TechTreeContextValue, useTechTree(), TechTreeRowContext, TechTreeRowContextValue, TechTreeRowProvider() (+5 more)
+Cohesion: 0.24
+Nodes (12): EMPTY_MODULES_ARRAY, SharedModuleSelectionDialog(), MockPresentationalProps, mockModules, useTechModuleManagement(), useTechOptimization(), EMPTY_MODULES_ARRAY, mockProps (+4 more)
 
 ### Community 30 - "MainAppLayout.tsx"
 Cohesion: 0.17
@@ -324,16 +315,16 @@ Cohesion: 0.20
 Nodes (9): distill_gate_output(), Module for running the verification gatekeeper and reporting distilled results., Remove ANSI escape sequences from terminal text., Distill raw gate output to reduce token usage during remediation retries: 1.…, Encapsulates execution and evaluation of the pre-commit verification gate., Run the gate command and return structured result., strip_ansi(), VerificationGate (+1 more)
 
 ### Community 40 - "IssueLifecycle"
-Cohesion: 0.08
-Nodes (22): main(), FakeIssueTrackerAdapter, IssueTrackerAdapter, Protocols and concrete adapters for external dependencies (CLI tools, agent,…, In-memory fake IssueTrackerAdapter for testing., Interface for querying and updating GitHub issues., Fetch comments for an issue., Edit an issue's assignee, labels, or body. (+14 more)
+Cohesion: 0.06
+Nodes (25): main(), FakeIssueTrackerAdapter, IssueTrackerAdapter, Any, Protocols and concrete adapters for external dependencies (CLI tools, agent,…, In-memory fake IssueTrackerAdapter for testing., Interface for querying and updating GitHub issues., List open issues with number, title, body, and labels. (+17 more)
 
 ### Community 41 - "optimizationManager.ts"
 Cohesion: 0.30
 Nodes (7): ApiResponse, createSocket(), TRANSPORT_ERROR_MESSAGES, isApiResponse(), OptimizationManager, OptimizationOptions, mockCreateSocket
 
 ### Community 42 - "TechTreeRow.test.tsx"
-Cohesion: 0.14
-Nodes (11): defaultProps, mockClearTechMaxBonus, mockClearTechSolvedBonus, mockResetGridTech, mockUseGridStore, mockUseModuleSelectionDialogStore, mockUseShakeStore, mockUseTechStore (+3 more)
+Cohesion: 0.12
+Nodes (14): defaultProps, mockClearTechMaxBonus, mockClearTechSolvedBonus, mockResetGridTech, mockUseGridStore, mockUseModuleSelectionDialogStore, mockUseShakeStore, mockUseTechStore (+6 more)
 
 ### Community 43 - "iconRegistry.ts"
 Cohesion: 0.22
@@ -348,8 +339,8 @@ Cohesion: 0.14
 Nodes (12): SharedModuleSelectionDialog, Desktop, Mobile, Story, Tablet, TechTree(), TechTreeProps, TechTreeProvider() (+4 more)
 
 ### Community 46 - "TechTreeRow.tsx"
-Cohesion: 0.31
-Nodes (9): BonusStatusIcon(), BonusStatusIconProps, renderIcon(), TechTreeRowActions(), TechTreeRowAvatar(), TechTreeRowBadges(), TechTreeRowLabel(), useTechTreeRowContext() (+1 more)
+Cohesion: 0.20
+Nodes (13): TechTreeContextValue, useTechTree(), TechTreeRowContext, TechTreeRowContextValue, BonusStatusIcon(), BonusStatusIconProps, renderIcon(), TechTreeRowActions() (+5 more)
 
 ### Community 47 - "TechTree"
 Cohesion: 0.15
@@ -402,10 +393,6 @@ Nodes (6): RecommendedBuild(), Desktop, Mobile, mockTechTree, Story, Tablet
 ### Community 60 - "CliAgentRunnerAdapter"
 Cohesion: 0.14
 Nodes (8): Protocol, AgentRunnerAdapter, CliAgentRunnerAdapter, model_supports_effort(), Interface for invoking the autonomous agent., Run the agent with a prompt. Returns True if successful., Check if a model identifier accepts the --effort flag in agy., Real adapter running `agy` and formatting the NDJSON stream in-process.
-
-### Community 61 - "useTechOptimization.ts"
-Cohesion: 0.43
-Nodes (4): GridShake(), GridShakeProps, useTechOptimization(), useShakeStore
 
 ### Community 62 - "useAnalytics"
 Cohesion: 0.17
@@ -562,14 +549,14 @@ Nodes (9): compressRLE(), decompressRLE(), deserialize(), GRID_SERIALIZATION_CON
 ## Knowledge Gaps
 - **415 isolated node(s):** `BackgroundWrapperProps`, `config`, `customViewports`, `globalTypes`, `preview` (+410 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **21 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **23 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Logger` connect `Logger` to `MarkdownContentRenderer.tsx`, `gridStore.ts`, `useMainAppLogic.tsx`, `useBreakpoint`, `WelcomeContent.tsx`, `usePlatformStore`, `LifecycleCoordinator`, `techStore.ts`, `gridSerializer.ts`, `App.tsx`, `tracking.ts`, `lifecycleCoordinator.ts`, `monitoring.ts`, `useTechTree.tsx`, `dataValidation.ts`, `useOptimizeStore`, `optimizationManager.ts`, `iconRegistry.ts`, `bootPipeline.tsx`, `ShareLinkDialog.tsx`, `TechTreeContent.tsx`, `useTechOptimization.ts`, `useAnalytics`?**
+- **Why does `Logger` connect `Logger` to `MarkdownContentRenderer.tsx`, `gridStore.ts`, `useMainAppLogic.tsx`, `useBreakpoint`, `WelcomeContent.tsx`, `usePlatformStore`, `LifecycleCoordinator`, `techStore.ts`, `gridSerializer.ts`, `App.tsx`, `tracking.ts`, `lifecycleCoordinator.ts`, `monitoring.ts`, `useTechTree.tsx`, `useTechStore`, `dataValidation.ts`, `useOptimizeStore`, `optimizationManager.ts`, `iconRegistry.ts`, `bootPipeline.tsx`, `ShareLinkDialog.tsx`, `TechTreeContent.tsx`, `useAnalytics`?**
   _High betweenness centrality (0.069) - this node is a cross-community bridge._
-- **Why does `useGridStore` connect `useGridStore` to `GridTable.tsx`, `gridStore.ts`, `MobileToolbar.tsx`, `useMainAppLogic.tsx`, `useBreakpoint`, `props.ts`, `usePlatformStore`, `techStore.ts`, `AppHeader.tsx`, `gridSerializer.ts`, `useTechTree.tsx`, `Logger`, `useTechStore`, `MainAppLayout.tsx`, `dataValidation.ts`, `GridCell.tsx`, `TechTreeRow.test.tsx`, `TechTree.tsx`, `MainAppGridSection.tsx`, `RecommendedBuild.stories.tsx`, `useTechOptimization.ts`, `useAnalytics`, `MainAppContent.stories.tsx`?**
+- **Why does `useGridStore` connect `useGridStore` to `GridTable.tsx`, `gridStore.ts`, `MobileToolbar.tsx`, `useMainAppLogic.tsx`, `useBreakpoint`, `usePlatformStore`, `techStore.ts`, `AppHeader.tsx`, `gridSerializer.ts`, `useTechTree.tsx`, `Logger`, `useTechStore`, `MainAppLayout.tsx`, `dataValidation.ts`, `GridCell.tsx`, `TechTreeRow.test.tsx`, `TechTree.tsx`, `MainAppGridSection.tsx`, `RecommendedBuild.stories.tsx`, `useAnalytics`, `MainAppContent.stories.tsx`?**
   _High betweenness centrality (0.028) - this node is a cross-community bridge._
 - **Why does `useDialog()` connect `App.tsx` to `dialogContext.tsx`, `AppFooter.tsx`, `ModuleSelectionDialog.tsx`, `MobileToolbar.tsx`, `useMainAppLogic.tsx`, `WelcomeContent.tsx`, `RoutedDialogs.integration.test.tsx`, `MainAppGridSection.tsx`, `useAnalytics`?**
   _High betweenness centrality (0.015) - this node is a cross-community bridge._
