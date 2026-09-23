@@ -835,13 +835,13 @@
     "semantic_hash": ""
   },
   "src/components/ModuleSelectionDialog/ModuleSelectionDialog.test.tsx": {
-    "mtime": 1789852805.0,
-    "ast_hash": "12d10ea79a65a981b234ce21e73815d6",
+    "mtime": 1790186985.6965377,
+    "ast_hash": "bb3bb3a32ac395ad23608859115d6d19",
     "semantic_hash": ""
   },
   "src/components/ModuleSelectionDialog/ModuleSelectionDialog.tsx": {
-    "mtime": 1790051857.0,
-    "ast_hash": "4df5b496b0453ec3bcfc3829a5c347ef",
+    "mtime": 1790187009.287431,
+    "ast_hash": "888550485e1d335c88d5f8fb22d0bf8f",
     "semantic_hash": ""
   },
   "src/components/ModuleSelectionDialog/SharedModuleSelectionDialog.test.tsx": {
@@ -990,8 +990,8 @@
     "semantic_hash": ""
   },
   "src/components/TechTree/TechTree.tsx": {
-    "mtime": 1790178519.1179948,
-    "ast_hash": "db66cdd94223e0411f1a2af5902f20c3",
+    "mtime": 1790179924.2947214,
+    "ast_hash": "ba1c328043ded5c10bfec4b73b545226",
     "semantic_hash": ""
   },
   "src/components/TechTree/TechTreeContent.test.tsx": {
@@ -1015,7 +1015,7 @@
     "semantic_hash": ""
   },
   "src/components/TechTree/TechTreeRoot.tsx": {
-    "mtime": 1790178547.902933,
+    "mtime": 1790179819.1880243,
     "ast_hash": "bb380bd0d30b2e536bbe1be15e1c372b",
     "semantic_hash": ""
   },
@@ -1260,8 +1260,8 @@
     "semantic_hash": ""
   },
   "src/hooks/useGridDeserializer/gridSerializer.ts": {
-    "mtime": 1787940776.0,
-    "ast_hash": "19762fdb509a69b39da7c82fc70e35ea",
+    "mtime": 1790186803.0553174,
+    "ast_hash": "2856f95599187f5002884bdb16600172",
     "semantic_hash": ""
   },
   "src/hooks/useGridDeserializer/useGridDeserializer.test.tsx": {
@@ -1430,8 +1430,8 @@
     "semantic_hash": ""
   },
   "src/hooks/useUrlSync/useUrlSync.tsx": {
-    "mtime": 1789956729.0,
-    "ast_hash": "7aa46f7aea5fe1097b81cc84d98acb5c",
+    "mtime": 1790186810.9713013,
+    "ast_hash": "e6d7135b095f081791b6a1271890add2",
     "semantic_hash": ""
   },
   "src/hooks/useUserStats/useUserStats.test.ts": {
@@ -2170,8 +2170,8 @@
     "semantic_hash": ""
   },
   "src/hooks/useUrlSync/useUrlSync.integration.test.tsx": {
-    "mtime": 1789956729.0,
-    "ast_hash": "8175a15d42a2b13be4df712d9502f83c",
+    "mtime": 1790186783.9212875,
+    "ast_hash": "4bfffd773dc7a4d06e4a08ffab45d551",
     "semantic_hash": ""
   },
   "src/components/MainAppContent/useMainAppLogic.tsx": {
@@ -2185,8 +2185,8 @@
     "semantic_hash": ""
   },
   "src/components/TechTree/TechTreePresetsCard.tsx": {
-    "mtime": 1790178554.2199614,
-    "ast_hash": "885525acf14e8d5b3c0e77409eee4d7f",
+    "mtime": 1790187124.3371136,
+    "ast_hash": "346137a3b64eb92388cd5c9d335d9a50",
     "semantic_hash": ""
   },
   "src/utils/tech/techTreeUtils.test.ts": {
@@ -2225,8 +2225,8 @@
     "semantic_hash": ""
   },
   "src/components/TechTree/TechTreeRoot.test.tsx": {
-    "mtime": 1790178226.340258,
-    "ast_hash": "46f05435894fd691ea8b9b56f275ee95",
+    "mtime": 1790179819.2802973,
+    "ast_hash": "35e303686dc9c617fce9daecfc02802b",
     "semantic_hash": ""
   }
 }

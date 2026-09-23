@@ -149,7 +149,7 @@ export const useUrlSync = () => {
 		} catch (error) {
 			Logger.warn("useUrlSync: Failed to create share URL", { error });
 
-			return `/?platform=${selectedShipTypeFromStore}&grid=${serializedGrid}`;
+			return `/?platform=${selectedShipTypeFromStore}&grid=${encodeURIComponent(serializedGrid)}`;
 		}
 	};
 

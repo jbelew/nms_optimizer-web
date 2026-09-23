@@ -17,6 +17,9 @@ vi.mock("react-i18next", () => ({
 			if (key === "moduleSelection.figurines") return "Figurines";
 			if (key === "moduleSelection.bonus") return "Bonus Modules";
 			if (key === "moduleSelection.cosmetic") return "Cosmetic Modules";
+			if (key === "moduleSelection.selectAll") return "Select All";
+			if (key === "moduleSelection.optimizeButton") return "Optimize";
+			if (key === "moduleSelection.cancelButton") return "Cancel";
 			if (key.startsWith("moduleSelection.")) return key.split(".").pop();
 
 			return key;
@@ -174,7 +177,7 @@ describe("ModuleSelectionDialog", () => {
 
 	it("calls handleSelectAllChange when 'Select All' is clicked", async () => {
 		renderDialog();
-		fireEvent.click(await screen.findByRole("checkbox", { name: "selectAll" }));
+		fireEvent.click(await screen.findByRole("checkbox", { name: "Select All" }));
 		await vi.waitFor(() => {
 			expect(defaultProps.handleSelectAllChange).toHaveBeenCalled();
 		});
@@ -182,13 +185,13 @@ describe("ModuleSelectionDialog", () => {
 
 	it("disables the optimize button when no modules are checked", async () => {
 		renderDialog({ currentCheckedModules: [] });
-		const optimizeButton = await screen.findByRole("button", { name: "optimizeButton" });
+		const optimizeButton = await screen.findByRole("button", { name: "Optimize" });
 		expect(optimizeButton).toBeDisabled();
 	});
 
 	it("calls handleOptimizeClick when the optimize button is clicked", async () => {
 		renderDialog();
-		const optimizeButton = await screen.findByRole("button", { name: "optimizeButton" });
+		const optimizeButton = await screen.findByRole("button", { name: "Optimize" });
 		fireEvent.click(optimizeButton);
 		await vi.waitFor(() => {
 			expect(defaultProps.handleOptimizeClick).toHaveBeenCalled();

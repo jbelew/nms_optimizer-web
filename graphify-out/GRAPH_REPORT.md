@@ -1,16 +1,16 @@
 # Graph Report - nms_optimizer-web  (2026-09-23)
 
 ## Corpus Check
-- 446 files · ~204,787 words
+- 446 files · ~204,902 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1722 nodes · 4156 edges · 144 communities (123 shown, 21 thin omitted)
+- 1722 nodes · 4155 edges · 144 communities (123 shown, 21 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 113 edges (avg confidence: 0.57)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b1b55bf5`
+- Built from commit: `c3a55cc6`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -37,7 +37,7 @@
 - CliIssueTrackerAdapter
 - agent.py
 - No Man's Sky Technology Layout Optimizer (Web UI)
-- dialogUtils.ts
+- UpdatePrompt.tsx
 - userStatsData.tsx
 - generate-sitemap.mjs
 - OptimizationAlertDialog.tsx
@@ -130,8 +130,8 @@
 - vitest.setup.ts
 - BuildNameContent.tsx
 - useBreakpoint
-- Seo.tsx
-- routes.tsx
+- dialogContext.tsx
+- dialogUtils.ts
 - gridStore.ts
 - RecommendedBuild.stories.tsx
 - useOptimize.test.tsx
@@ -263,9 +263,9 @@ Nodes (10): format_initial_prompt(), format_remediation_prompt(), Agent orchestr
 Cohesion: 0.08
 Nodes (24): Agentic JSDoc, Auto-Translation Workflow, Bundle Strategy & Resilience, CI/CD Status, Commit Convention, Component Architecture (Colocated Hooks), 🚀 Development Workflow, 🐳 Docker (+16 more)
 
-### Community 22 - "dialogUtils.ts"
-Cohesion: 0.20
-Nodes (8): mockDialogContext, mockSendEvent, TransProps, DialogProvider(), getActiveDialogFromPathname(), VALID_DIALOGS, DialogContext, DialogContextType
+### Community 22 - "UpdatePrompt.tsx"
+Cohesion: 0.38
+Nodes (4): Default, Story, UpdatePrompt(), UpdatePromptProps
 
 ### Community 23 - "userStatsData.tsx"
 Cohesion: 0.18
@@ -284,8 +284,8 @@ Cohesion: 0.50
 Nodes (3): TechTreeProvider(), TechTreeContext, TechTreeContextValue
 
 ### Community 27 - "TechTree.tsx"
-Cohesion: 0.16
-Nodes (11): SharedModuleSelectionDialog, Desktop, Mobile, Story, Tablet, TechTree(), TechTreeProps, TechTreeList() (+3 more)
+Cohesion: 0.19
+Nodes (9): SharedModuleSelectionDialog, Desktop, Mobile, Story, Tablet, TechTree(), TechTreeProps, TechTreeList() (+1 more)
 
 ### Community 28 - "lifecycleCoordinator.ts"
 Cohesion: 0.13
@@ -304,7 +304,7 @@ Cohesion: 0.33
 Nodes (7): SHIP_NAME_PREFIXES_COMPOUND, SHIP_NAME_PREFIXES_SIMPLE, SHIP_NAME_SUFFIXES, generateBuildNameWithType(), getShipTypeName(), SHIP_TYPE_NAMES, sanitizeFilename()
 
 ### Community 32 - "AppFooter.tsx"
-Cohesion: 0.16
+Cohesion: 0.15
 Nodes (12): AppFooter, AppFooterContent(), AppFooterRating(), AppFooterRoot(), Desktop, Mobile, Story, Tablet (+4 more)
 
 ### Community 33 - "check-remote-sync.test.mjs"
@@ -548,16 +548,16 @@ Cohesion: 0.20
 Nodes (12): AppContent(), BuildNameContent(), BuildNameContentProps, BuildNameContentRef, PlatformStoreSelector, PlatformStoreState, useDebouncedValidation(), UseDebouncedValidationOptions (+4 more)
 
 ### Community 130 - "useBreakpoint"
-Cohesion: 0.09
-Nodes (18): BuyMeACoffee(), Props, State, ErrorContent(), ErrorContentProps, PageVariant, Story, WithComponentStack (+10 more)
+Cohesion: 0.10
+Nodes (16): BuyMeACoffee(), Props, State, ErrorContent(), ErrorContentProps, PageVariant, Story, WithComponentStack (+8 more)
 
-### Community 131 - "Seo.tsx"
-Cohesion: 0.30
-Nodes (5): normalizePath(), Seo(), useLanguage(), getSupportedLanguages(), useSupportedLanguages()
+### Community 131 - "dialogContext.tsx"
+Cohesion: 0.18
+Nodes (8): normalizePath(), Seo(), DialogProvider(), getActiveDialogFromPathname(), VALID_DIALOGS, useLanguage(), getSupportedLanguages(), useSupportedLanguages()
 
-### Community 132 - "routes.tsx"
-Cohesion: 0.22
-Nodes (8): LanguageCode, languages, PageName, DIALOG_ROUTE_PATHS, languageRoutes, NotFound(), pageRoutes, routes
+### Community 132 - "dialogUtils.ts"
+Cohesion: 0.14
+Nodes (13): mockDialogContext, mockSendEvent, TransProps, LanguageCode, languages, PageName, DIALOG_ROUTE_PATHS, languageRoutes (+5 more)
 
 ### Community 133 - "gridStore.ts"
 Cohesion: 0.32
@@ -612,7 +612,7 @@ Cohesion: 0.20
 Nodes (14): compressRLE(), decompressRLE(), deserialize(), GRID_SERIALIZATION_CONSTANTS, serialize(), fixturePath, nmsFixture, useGridDeserializer() (+6 more)
 
 ## Knowledge Gaps
-- **431 isolated node(s):** `BackgroundWrapperProps`, `config`, `customViewports`, `globalTypes`, `preview` (+426 more)
+- **432 isolated node(s):** `BackgroundWrapperProps`, `config`, `customViewports`, `globalTypes`, `preview` (+427 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **21 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -623,10 +623,10 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.057) - this node is a cross-community bridge._
 - **Why does `useGridStore` connect `useGridStore` to `gridStore.ts`, `RecommendedBuild.stories.tsx`, `useOptimize.test.tsx`, `sessionCoordinator.ts`, `useTechTree.tsx`, `MobileToolbar.tsx`, `uiStore.ts`, `Logger`, `useRecommendedBuild.tsx`, `bootstrap.ts`, `gridSerializer.ts`, `TechTree.tsx`, `techStore.ts`, `MainAppLayout.tsx`, `GridCell.tsx`, `TechTreeRow.tsx`, `useAnalytics`, `GridTableButtons.tsx`, `usePlatformStore`, `TechTreeRow.test.tsx`, `AppHeader.stories.tsx`, `MainAppContent.stories.tsx`, `preview.tsx`, `BuildNameContent.tsx`?**
   _High betweenness centrality (0.033) - this node is a cross-community bridge._
-- **Why does `LifecycleCoordinator` connect `LifecycleCoordinator` to `tracking.ts`, `useBreakpoint`, `App.tsx`, `routes.tsx`, `monitoring.ts`, `lifecycleCoordinator.ts`?**
+- **Why does `LifecycleCoordinator` connect `LifecycleCoordinator` to `tracking.ts`, `useBreakpoint`, `App.tsx`, `dialogUtils.ts`, `monitoring.ts`, `lifecycleCoordinator.ts`?**
   _High betweenness centrality (0.029) - this node is a cross-community bridge._
 - **What connects `BackgroundWrapperProps`, `config`, `customViewports` to the rest of the system?**
-  _431 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _432 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `performanceChart.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.06180733162830349 - nodes in this community are weakly interconnected._
 - **Should `tracking.ts` be split into smaller, more focused modules?**

@@ -12,7 +12,7 @@
  */
 
 import React from "react";
-import { ComponentInstanceIcon, LayersIcon, MagicWandIcon } from "@radix-ui/react-icons";
+import { LayersIcon, MagicWandIcon, StackIcon } from "@radix-ui/react-icons";
 import { Button, Card, Flex, Link, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -64,7 +64,7 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build }) => {
 	return (
 		<div className="grid grid-cols-[1fr_auto_auto] items-center gap-2">
 			<Flex align="center" gap="1" minWidth="0">
-				<ComponentInstanceIcon className="shrink-0" color="cyan" height="15" width="15" />
+				<StackIcon className="shrink-0" color="cyan" height="15" width="15" />
 				<Text size={isSmallAndUp ? "3" : "2"} weight="medium">
 					{build.title}
 				</Text>
@@ -113,7 +113,7 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds }) => {
 
 	return (
 		<Card
-			className="mb-4 shadow-sm! [--base-card-border-radius:var(--radius-2)]! before:bg-(--accent-a3)! sm:before:bg-(--accent-surface)!"
+			className="mb-4 shadow-sm! [--base-card-border-radius:var(--radius-2)]! before:bg-(--accent-a3)! md:before:bg-(--accent-surface)!"
 			size="1"
 			variant="surface"
 		>

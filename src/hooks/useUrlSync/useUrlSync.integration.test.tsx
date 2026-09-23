@@ -371,4 +371,34 @@ describe("useUrlSync Integration", () => {
 			expect(currentGridState.grid.cells[0][0].tech).toBeNull();
 		});
 	});
+
+	/**
+	 * Verifies that updateUrlForShare produces a URL without double-encoding the grid parameter.
+	 */
+	it("should generate a share URL without double-encoding the grid parameter", async () => {
+		let hookResult!: { current: ReturnType<typeof useUrlSync> };
+		await act(async () => {
+			const rendered = renderHook(() => useUrlSync());
+			hookResult = rendered.result;
+		});
+
+		// Put a module in the grid
+		act(() => {
+			const testGrid = createGrid(10, 6);
+			testGrid.cells[0][0].active = true;
+			testGrid.cells[0][0].tech = "shield";
+			testGrid.cells[0][0].module = "AA";
+			useGridStore.getState().setGrid(testGrid);
+		});
+
+		const shareUrl = hookResult.current.updateUrlForShare();
+		expect(shareUrl).not.toContain("%253A");
+		expect(shareUrl).not.toContain("%257C");
+		expect(shareUrl).toContain("grid=v1");
+
+		const parsedUrl = new URL(shareUrl, "http://localhost:4173");
+		const gridParam = parsedUrl.searchParams.get("grid");
+		expect(gridParam).toBeDefined();
+		expect(gridParam).toMatch(/^v1:[0-9]+\|/);
+	});
 });

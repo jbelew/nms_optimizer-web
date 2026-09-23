@@ -195,7 +195,7 @@ export const serialize = (grid: Grid): string => {
 	// Format: version:gridString|compressedTech|compressedModule|compressedAdjBonus|techMap|moduleMap
 	const payload = `${gridString}|${compressedTech}|${compressedModule}|${compressedAdjBonus}|${techMapString}|${moduleMapString}`;
 
-	return encodeURIComponent(`${SERIALIZATION_VERSION}:${payload}`);
+	return `${SERIALIZATION_VERSION}:${payload}`;
 };
 
 /**

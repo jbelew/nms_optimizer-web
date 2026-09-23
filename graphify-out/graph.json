@@ -4829,7 +4829,7 @@
       "_origin": "ast",
       "id": "src_app_test",
       "community": 132,
-      "community_name": "routes.tsx",
+      "community_name": "dialogUtils.ts",
       "norm_label": "app.test.tsx"
     },
     {
@@ -6903,7 +6903,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_appdialog_welcome_welcomecontent_test",
-      "community": 22,
+      "community": 132,
       "community_name": "dialogUtils.ts",
       "norm_label": "welcomecontent.test.tsx"
     },
@@ -6914,7 +6914,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_components_appdialog_welcome_welcomecontent_test_mocksendevent",
-      "community": 22,
+      "community": 132,
       "community_name": "dialogUtils.ts",
       "norm_label": "mocksendevent"
     },
@@ -6927,7 +6927,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_appdialog_welcome_welcomecontent_test_transprops",
-      "community": 22,
+      "community": 132,
       "community_name": "dialogUtils.ts",
       "norm_label": "transprops"
     },
@@ -6938,7 +6938,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_components_appdialog_welcome_welcomecontent_test_mockdialogcontext",
-      "community": 22,
+      "community": 132,
       "community_name": "dialogUtils.ts",
       "norm_label": "mockdialogcontext"
     },
@@ -9685,7 +9685,7 @@
       "label": "MockAppDialogProps",
       "file_type": "code",
       "source_file": "src/components/ModuleSelectionDialog/ModuleSelectionDialog.test.tsx",
-      "source_location": "L41",
+      "source_location": "L44",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
@@ -9698,7 +9698,7 @@
       "label": "mockGroupedModules",
       "file_type": "code",
       "source_file": "src/components/ModuleSelectionDialog/ModuleSelectionDialog.test.tsx",
-      "source_location": "L64",
+      "source_location": "L67",
       "_origin": "ast",
       "id": "src_components_moduleselectiondialog_moduleselectiondialog_test_mockgroupedmodules",
       "community": 5,
@@ -9709,7 +9709,7 @@
       "label": "defaultProps",
       "file_type": "code",
       "source_file": "src/components/ModuleSelectionDialog/ModuleSelectionDialog.test.tsx",
-      "source_location": "L79",
+      "source_location": "L82",
       "_origin": "ast",
       "id": "src_components_moduleselectiondialog_moduleselectiondialog_test_defaultprops",
       "community": 5,
@@ -9720,7 +9720,7 @@
       "label": "renderDialog()",
       "file_type": "code",
       "source_file": "src/components/ModuleSelectionDialog/ModuleSelectionDialog.test.tsx",
-      "source_location": "L97",
+      "source_location": "L100",
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_moduleselectiondialog_moduleselectiondialog_test_renderdialog",
@@ -10427,7 +10427,7 @@
       "_origin": "ast",
       "id": "src_components_seo_seo_test",
       "community": 131,
-      "community_name": "Seo.tsx",
+      "community_name": "dialogContext.tsx",
       "norm_label": "seo.test.tsx"
     },
     {
@@ -10438,7 +10438,7 @@
       "_origin": "ast",
       "id": "src_components_seo_seo",
       "community": 131,
-      "community_name": "Seo.tsx",
+      "community_name": "dialogContext.tsx",
       "norm_label": "seo.tsx"
     },
     {
@@ -10450,7 +10450,7 @@
       "_origin": "ast",
       "id": "src_components_seo_seo_normalizepath",
       "community": 131,
-      "community_name": "Seo.tsx",
+      "community_name": "dialogContext.tsx",
       "norm_label": "normalizepath()"
     },
     {
@@ -10462,7 +10462,7 @@
       "_origin": "ast",
       "id": "src_components_seo_seo_seo",
       "community": 131,
-      "community_name": "Seo.tsx",
+      "community_name": "dialogContext.tsx",
       "norm_label": "seo()"
     },
     {
@@ -10968,7 +10968,7 @@
       "label": "SharedModuleSelectionDialog",
       "file_type": "code",
       "source_file": "src/components/TechTree/TechTree.tsx",
-      "source_location": "L31",
+      "source_location": "L29",
       "_origin": "ast",
       "id": "src_components_techtree_techtree_sharedmoduleselectiondialog",
       "community": 27,
@@ -10979,7 +10979,7 @@
       "label": "TechTreeProps",
       "file_type": "code",
       "source_file": "src/components/TechTree/TechTree.tsx",
-      "source_location": "L40",
+      "source_location": "L38",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
@@ -10992,7 +10992,7 @@
       "label": "TechTree()",
       "file_type": "code",
       "source_file": "src/components/TechTree/TechTree.tsx",
-      "source_location": "L72",
+      "source_location": "L70",
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtree_techtree_techtree",
@@ -11219,8 +11219,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_techtree_techtreeroot_test",
-      "community": 27,
-      "community_name": "TechTree.tsx",
+      "community": 130,
+      "community_name": "useBreakpoint",
       "norm_label": "techtreeroot.test.tsx"
     },
     {
@@ -11230,8 +11230,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_techtree_techtreeroot",
-      "community": 27,
-      "community_name": "TechTree.tsx",
+      "community": 130,
+      "community_name": "useBreakpoint",
       "norm_label": "techtreeroot.tsx"
     },
     {
@@ -11243,8 +11243,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_techtree_techtreeroot_techtreerootprops",
-      "community": 27,
-      "community_name": "TechTree.tsx",
+      "community": 130,
+      "community_name": "useBreakpoint",
       "norm_label": "techtreerootprops"
     },
     {
@@ -11255,8 +11255,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtree_techtreeroot_techtreeroot",
-      "community": 27,
-      "community_name": "TechTree.tsx",
+      "community": 130,
+      "community_name": "useBreakpoint",
       "norm_label": "techtreeroot()"
     },
     {
@@ -12049,8 +12049,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_updateprompt_updateprompt_stories",
-      "community": 130,
-      "community_name": "useBreakpoint",
+      "community": 22,
+      "community_name": "UpdatePrompt.tsx",
       "norm_label": "updateprompt.stories.tsx"
     },
     {
@@ -12062,8 +12062,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_updateprompt_updateprompt_stories_story",
-      "community": 130,
-      "community_name": "useBreakpoint",
+      "community": 22,
+      "community_name": "UpdatePrompt.tsx",
       "norm_label": "story"
     },
     {
@@ -12073,8 +12073,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_components_updateprompt_updateprompt_stories_default",
-      "community": 130,
-      "community_name": "useBreakpoint",
+      "community": 22,
+      "community_name": "UpdatePrompt.tsx",
       "norm_label": "default"
     },
     {
@@ -12084,8 +12084,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_updateprompt_updateprompt_test",
-      "community": 130,
-      "community_name": "useBreakpoint",
+      "community": 22,
+      "community_name": "UpdatePrompt.tsx",
       "norm_label": "updateprompt.test.tsx"
     },
     {
@@ -12095,8 +12095,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_updateprompt_updateprompt",
-      "community": 130,
-      "community_name": "useBreakpoint",
+      "community": 22,
+      "community_name": "UpdatePrompt.tsx",
       "norm_label": "updateprompt.tsx"
     },
     {
@@ -12108,8 +12108,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_updateprompt_updateprompt_updatepromptprops",
-      "community": 130,
-      "community_name": "useBreakpoint",
+      "community": 22,
+      "community_name": "UpdatePrompt.tsx",
       "norm_label": "updatepromptprops"
     },
     {
@@ -12120,8 +12120,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_updateprompt_updateprompt_updateprompt",
-      "community": 130,
-      "community_name": "useBreakpoint",
+      "community": 22,
+      "community_name": "UpdatePrompt.tsx",
       "norm_label": "updateprompt()"
     },
     {
@@ -12323,8 +12323,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_context_dialogcontext_test",
-      "community": 22,
-      "community_name": "dialogUtils.ts",
+      "community": 131,
+      "community_name": "dialogContext.tsx",
       "norm_label": "dialogcontext.test.tsx"
     },
     {
@@ -12335,8 +12335,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_context_dialogcontext_test_testdialognavigation",
-      "community": 22,
-      "community_name": "dialogUtils.ts",
+      "community": 131,
+      "community_name": "dialogContext.tsx",
       "norm_label": "testdialognavigation()"
     },
     {
@@ -12347,8 +12347,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_context_dialogcontext_test_testdialogclosing",
-      "community": 22,
-      "community_name": "dialogUtils.ts",
+      "community": 131,
+      "community_name": "dialogContext.tsx",
       "norm_label": "testdialogclosing()"
     },
     {
@@ -12359,8 +12359,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_context_dialogcontext_test_mockwindowlocationsearch",
-      "community": 22,
-      "community_name": "dialogUtils.ts",
+      "community": 131,
+      "community_name": "dialogContext.tsx",
       "norm_label": "mockwindowlocationsearch()"
     },
     {
@@ -12463,8 +12463,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_context_dialogcontext",
-      "community": 22,
-      "community_name": "dialogUtils.ts",
+      "community": 131,
+      "community_name": "dialogContext.tsx",
       "norm_label": "dialogcontext.tsx"
     },
     {
@@ -12474,8 +12474,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_context_dialogcontext_valid_dialogs",
-      "community": 22,
-      "community_name": "dialogUtils.ts",
+      "community": 131,
+      "community_name": "dialogContext.tsx",
       "norm_label": "valid_dialogs"
     },
     {
@@ -12486,8 +12486,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_context_dialogcontext_getactivedialogfrompathname",
-      "community": 22,
-      "community_name": "dialogUtils.ts",
+      "community": 131,
+      "community_name": "dialogContext.tsx",
       "norm_label": "getactivedialogfrompathname()"
     },
     {
@@ -12498,8 +12498,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_context_dialogcontext_dialogprovider",
-      "community": 22,
-      "community_name": "dialogUtils.ts",
+      "community": 131,
+      "community_name": "dialogContext.tsx",
       "norm_label": "dialogprovider()"
     },
     {
@@ -12933,7 +12933,7 @@
       "_origin": "ast",
       "id": "src_hooks_uselanguage_uselanguage_test",
       "community": 131,
-      "community_name": "Seo.tsx",
+      "community_name": "dialogContext.tsx",
       "norm_label": "uselanguage.test.tsx"
     },
     {
@@ -12945,7 +12945,7 @@
       "_origin": "ast",
       "id": "src_hooks_uselanguage_uselanguage_test_createmocklocation",
       "community": 131,
-      "community_name": "Seo.tsx",
+      "community_name": "dialogContext.tsx",
       "norm_label": "createmocklocation()"
     },
     {
@@ -12956,7 +12956,7 @@
       "_origin": "ast",
       "id": "src_hooks_uselanguage_uselanguage",
       "community": 131,
-      "community_name": "Seo.tsx",
+      "community_name": "dialogContext.tsx",
       "norm_label": "uselanguage.ts"
     },
     {
@@ -12968,7 +12968,7 @@
       "_origin": "ast",
       "id": "src_hooks_uselanguage_uselanguage_uselanguage",
       "community": 131,
-      "community_name": "Seo.tsx",
+      "community_name": "dialogContext.tsx",
       "norm_label": "uselanguage()"
     },
     {
@@ -13676,7 +13676,7 @@
       "_origin": "ast",
       "id": "src_hooks_usesupportedlanguages",
       "community": 131,
-      "community_name": "Seo.tsx",
+      "community_name": "dialogContext.tsx",
       "norm_label": "usesupportedlanguages.ts"
     },
     {
@@ -13688,7 +13688,7 @@
       "_origin": "ast",
       "id": "src_hooks_usesupportedlanguages_getsupportedlanguages",
       "community": 131,
-      "community_name": "Seo.tsx",
+      "community_name": "dialogContext.tsx",
       "norm_label": "getsupportedlanguages()"
     },
     {
@@ -13700,7 +13700,7 @@
       "_origin": "ast",
       "id": "src_hooks_usesupportedlanguages_usesupportedlanguages",
       "community": 131,
-      "community_name": "Seo.tsx",
+      "community_name": "dialogContext.tsx",
       "norm_label": "usesupportedlanguages()"
     },
     {
@@ -14199,7 +14199,7 @@
       "_origin": "ast",
       "id": "src_routeconfig",
       "community": 132,
-      "community_name": "routes.tsx",
+      "community_name": "dialogUtils.ts",
       "norm_label": "routeconfig.ts"
     },
     {
@@ -14221,7 +14221,7 @@
       "_origin": "ast",
       "id": "src_routeconfig_languages",
       "community": 132,
-      "community_name": "routes.tsx",
+      "community_name": "dialogUtils.ts",
       "norm_label": "languages"
     },
     {
@@ -14234,7 +14234,7 @@
       "_origin": "ast",
       "id": "src_routeconfig_pagename",
       "community": 132,
-      "community_name": "routes.tsx",
+      "community_name": "dialogUtils.ts",
       "norm_label": "pagename"
     },
     {
@@ -14247,7 +14247,7 @@
       "_origin": "ast",
       "id": "src_routeconfig_languagecode",
       "community": 132,
-      "community_name": "routes.tsx",
+      "community_name": "dialogUtils.ts",
       "norm_label": "languagecode"
     },
     {
@@ -14270,7 +14270,7 @@
       "_origin": "ast",
       "id": "src_routes",
       "community": 132,
-      "community_name": "routes.tsx",
+      "community_name": "dialogUtils.ts",
       "norm_label": "routes.tsx"
     },
     {
@@ -14282,7 +14282,7 @@
       "_origin": "ast",
       "id": "src_routes_notfound",
       "community": 132,
-      "community_name": "routes.tsx",
+      "community_name": "dialogUtils.ts",
       "norm_label": "notfound()"
     },
     {
@@ -14293,7 +14293,7 @@
       "_origin": "ast",
       "id": "src_routes_dialog_route_paths",
       "community": 132,
-      "community_name": "routes.tsx",
+      "community_name": "dialogUtils.ts",
       "norm_label": "dialog_route_paths"
     },
     {
@@ -14304,7 +14304,7 @@
       "_origin": "ast",
       "id": "src_routes_pageroutes",
       "community": 132,
-      "community_name": "routes.tsx",
+      "community_name": "dialogUtils.ts",
       "norm_label": "pageroutes"
     },
     {
@@ -14315,7 +14315,7 @@
       "_origin": "ast",
       "id": "src_routes_languageroutes",
       "community": 132,
-      "community_name": "routes.tsx",
+      "community_name": "dialogUtils.ts",
       "norm_label": "languageroutes"
     },
     {
@@ -14326,7 +14326,7 @@
       "_origin": "ast",
       "id": "src_routes_routes",
       "community": 132,
-      "community_name": "routes.tsx",
+      "community_name": "dialogUtils.ts",
       "norm_label": "routes"
     },
     {
@@ -15522,8 +15522,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_test_i18n",
-      "community": 131,
-      "community_name": "Seo.tsx",
+      "community": 32,
+      "community_name": "AppFooter.tsx",
       "norm_label": "test/i18n.ts"
     },
     {
@@ -17017,7 +17017,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_system_dialogutils",
-      "community": 22,
+      "community": 132,
       "community_name": "dialogUtils.ts",
       "norm_label": "dialogutils.ts"
     },
@@ -17030,7 +17030,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_utils_system_dialogutils_dialogcontexttype",
-      "community": 22,
+      "community": 132,
       "community_name": "dialogUtils.ts",
       "norm_label": "dialogcontexttype"
     },
@@ -17054,7 +17054,7 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "src_utils_system_dialogutils_dialogcontext",
-      "community": 22,
+      "community": 132,
       "community_name": "dialogUtils.ts",
       "norm_label": "dialogcontext"
     },
@@ -43680,7 +43680,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/ModuleSelectionDialog/ModuleSelectionDialog.test.tsx",
-      "source_location": "L79",
+      "source_location": "L82",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_moduleselectiondialog_moduleselectiondialog_test",
@@ -43691,7 +43691,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/ModuleSelectionDialog/ModuleSelectionDialog.test.tsx",
-      "source_location": "L41",
+      "source_location": "L44",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_moduleselectiondialog_moduleselectiondialog_test",
@@ -43702,7 +43702,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/ModuleSelectionDialog/ModuleSelectionDialog.test.tsx",
-      "source_location": "L64",
+      "source_location": "L67",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_moduleselectiondialog_moduleselectiondialog_test",
@@ -43713,7 +43713,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/ModuleSelectionDialog/ModuleSelectionDialog.test.tsx",
-      "source_location": "L97",
+      "source_location": "L100",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_moduleselectiondialog_moduleselectiondialog_test",
@@ -47254,7 +47254,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTree/TechTree.tsx",
-      "source_location": "L31",
+      "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtree_techtree",
@@ -47265,7 +47265,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTree/TechTree.tsx",
-      "source_location": "L72",
+      "source_location": "L70",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtree_techtree",
@@ -47276,7 +47276,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTree/TechTree.tsx",
-      "source_location": "L40",
+      "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtree_techtree",
@@ -47357,22 +47357,10 @@
     },
     {
       "relation": "re_exports",
-      "context": "re-export",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/TechTree/TechTree.tsx",
-      "source_location": "L19",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_techtree_techtree",
-      "target": "src_components_techtree_techtreeroot_techtreerootprops",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "re_exports",
       "context": "export",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTree/TechTree.tsx",
-      "source_location": "L21",
+      "source_location": "L19",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtree_techtree",
@@ -47384,7 +47372,7 @@
       "context": "re-export",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTree/TechTree.tsx",
-      "source_location": "L21",
+      "source_location": "L19",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtree_techtree",
@@ -47480,7 +47468,7 @@
       "context": "field",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTree/TechTree.tsx",
-      "source_location": "L48",
+      "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtree_techtree_techtreeprops",
@@ -47493,7 +47481,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/TechTree/TechTree.tsx",
-      "source_location": "L78",
+      "source_location": "L76",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtree_techtree_techtree",
@@ -47505,7 +47493,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/TechTree/TechTree.tsx",
-      "source_location": "L77",
+      "source_location": "L75",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtree_techtree_techtree",
@@ -47517,7 +47505,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/TechTree/TechTree.tsx",
-      "source_location": "L80",
+      "source_location": "L78",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtree_techtree_techtree",
@@ -68591,5 +68579,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "b1b55bf502955b210b7be440d766cd6a8931beef"
+  "built_at_commit": "c3a55cc6baa5e7f74eab21de9e8d0a0598b45231"
 }

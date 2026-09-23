@@ -315,7 +315,7 @@ const DialogBody: React.FC = () => {
 			)}
 			<label className="flex cursor-pointer items-center text-sm font-medium transition-colors duration-200 hover:text-(--accent-a12) sm:text-base">
 				<Checkbox
-					aria-label="selectAll"
+					aria-label={t("moduleSelection.selectAll")}
 					checked={allModulesSelected}
 					onCheckedChange={handleSelectAllChange}
 				/>
@@ -404,7 +404,7 @@ const DialogFooter: React.FC = () => {
 				{t("moduleSelection.cancelButton")}
 			</Button>
 			<Button
-				aria-label="optimizeButton"
+				aria-label={t("moduleSelection.optimizeButton")}
 				disabled={isOptimizeDisabled}
 				onClick={handleOptimizeClick}
 			>
