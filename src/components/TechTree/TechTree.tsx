@@ -16,6 +16,8 @@ export { TechTreeProvider } from "./TechTreeProvider";
 
 export { TechTreeRoot } from "./TechTreeRoot";
 
+export type { TechTreeRootProps } from "./TechTreeRoot";
+
 export { TechTreeSkeleton } from "./TechTreeSkeleton";
 
 /**
