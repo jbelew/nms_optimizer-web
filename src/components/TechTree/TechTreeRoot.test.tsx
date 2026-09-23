@@ -57,6 +57,7 @@ describe("TechTreeRoot", () => {
 
 	afterEach(() => {
 		vi.resetAllMocks();
+		vi.restoreAllMocks();
 	});
 
 	test("should render ScrollArea on large screens", () => {
@@ -85,8 +86,9 @@ describe("TechTreeRoot", () => {
 	});
 
 	test("should scroll ScrollArea to top when selectedPlatform changes on desktop", () => {
-		const scrollToSpy = vi.fn();
-		HTMLElement.prototype.scrollTo = scrollToSpy;
+		const scrollToSpy = vi
+			.spyOn(HTMLElement.prototype, "scrollTo")
+			.mockImplementation(() => {});
 
 		let currentPlatform = "standard";
 		vi.mocked(usePlatformStore).mockImplementation((selector) =>
@@ -119,8 +121,9 @@ describe("TechTreeRoot", () => {
 
 	test("should not attempt to scroll when selectedPlatform changes on mobile", () => {
 		vi.mocked(useBreakpointModule.useBreakpoint).mockReturnValue(false);
-		const scrollToSpy = vi.fn();
-		HTMLElement.prototype.scrollTo = scrollToSpy;
+		const scrollToSpy = vi
+			.spyOn(HTMLElement.prototype, "scrollTo")
+			.mockImplementation(() => {});
 
 		let currentPlatform = "standard";
 		vi.mocked(usePlatformStore).mockImplementation((selector) =>
