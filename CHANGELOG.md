@@ -1,3 +1,10 @@
+# [7.17.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.16.2...v7.17.0) (2026-09-23)
+
+
+### Features
+
+* **tech-tree:** scroll tech tree to top on platform selection change ([6479afe](https://github.com/jbelew/nms_optimizer-web/commit/6479afe3fa76b18b05302fd87d2c75ffd5f7b8b9))
+
 ## [7.16.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.16.1...v7.16.2) (2026-09-23)
 
 
