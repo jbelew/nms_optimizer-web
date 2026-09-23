@@ -1,3 +1,11 @@
+## [7.16.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.16.0...v7.16.1) (2026-09-22)
+
+
+### Bug Fixes
+
+* **ci:** bypass pre-push hooks on screenshots and hermetize sync tests ([d252ade](https://github.com/jbelew/nms_optimizer-web/commit/d252adeb00e9c5d40890ecf20ced46a041301049))
+* **security:** resolve CodeQL shell command injection alert ([90aa177](https://github.com/jbelew/nms_optimizer-web/commit/90aa177d45e935ed9ece853e1e744cc9abcb0393)), closes [#40](https://github.com/jbelew/nms_optimizer-web/issues/40)
+
 # [7.16.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.15.3...v7.16.0) (2026-09-22)
 
 
