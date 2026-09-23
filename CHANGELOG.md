@@ -1,3 +1,11 @@
+## [7.17.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.17.0...v7.17.1) (2026-09-23)
+
+
+### Bug Fixes
+
+* **grid:** prevent double-encoding of share url and localize module selection aria-labels ([2794ab1](https://github.com/jbelew/nms_optimizer-web/commit/2794ab1e1a037913c177eae3f2dbfe06580e752d))
+* **test:** update optimization e2e selector to match localized dialog button ([629e96d](https://github.com/jbelew/nms_optimizer-web/commit/629e96d15359929b2ce2c9c861cc8d90515bb0f1))
+
 # [7.17.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.16.2...v7.17.0) (2026-09-23)
 
 
