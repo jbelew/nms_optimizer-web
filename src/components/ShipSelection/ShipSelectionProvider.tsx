@@ -1,6 +1,7 @@
 import type { GroupedShipType } from "./useShipSelectionContext";
 import React, { useCallback, useMemo, useTransition } from "react";
 import { Trans, useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 import { useRouteContext } from "@/context/RouteContext";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
@@ -48,6 +49,7 @@ export const ShipSelectionProvider: React.FC<ShipSelectionProviderProps> = ({
 	const { showInfo } = useToast();
 	const [isPending, startTransition] = useTransition();
 	const { isKnownRoute } = useRouteContext();
+	const navigate = useNavigate();
 
 	const shipTypeKeys = Object.keys(shipTypes);
 
@@ -81,6 +83,15 @@ export const ShipSelectionProvider: React.FC<ShipSelectionProviderProps> = ({
 					sessionCoordinator.switchPlatform(initialGrid);
 				});
 
+				if (isKnownRoute) {
+					const searchParams = new URLSearchParams(window.location.search);
+					searchParams.set("platform", option);
+					searchParams.delete("grid");
+					const search = searchParams.toString();
+					const hash = window.location.hash;
+					navigate(`${window.location.pathname}${search ? `?${search}` : ""}${hash}`);
+				}
+
 				sendDeferredEvent({
 					action: "select_content",
 					category: "ui",
@@ -98,6 +109,7 @@ export const ShipSelectionProvider: React.FC<ShipSelectionProviderProps> = ({
 			setSelectedShipType,
 			shipTypeKeys,
 			isKnownRoute,
+			navigate,
 			sendDeferredEvent,
 		]
 	);
