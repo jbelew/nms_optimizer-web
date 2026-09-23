@@ -39,7 +39,7 @@
 		"showEasterEgg": "Easter Egg-Koordinaten anzeigen"
 	},
 	"gridTable": {
-		"optimizing": "OPTIMIERUNG LÄUFT!",
+		"optimizing": "Optimierung Läuft!",
 		"tapInstructions": "Einmal tippen, um einen Slot zu deaktivieren, oder zweimal tippen, um ihn als überladen zu markieren.",
 		"ariaLabel": "Technologie-Raster"
 	},

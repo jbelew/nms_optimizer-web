@@ -52,7 +52,7 @@
 		"showEasterEgg": "Show easter egg coordinates"
 	},
 	"gridTable": {
-		"optimizing": "OPTIMIZING!",
+		"optimizing": "Optimizing!",
 		"tapInstructions": "Tap once to disable a slot, or double-tap to mark it as supercharged.",
 		"ariaLabel": "Technology Grid"
 	},

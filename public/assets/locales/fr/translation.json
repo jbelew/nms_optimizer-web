@@ -39,7 +39,7 @@
 		"showEasterEgg": "Afficher les coordonnées de l'œuf de Pâques"
 	},
 	"gridTable": {
-		"optimizing": "OPTIMISATION EN COURS !",
+		"optimizing": "Optimisation en Cours!",
 		"tapInstructions": "Appuyez une fois pour désactiver un emplacement, ou deux fois pour le marquer comme surchargé.",
 		"ariaLabel": "Grille Technologique"
 	},
