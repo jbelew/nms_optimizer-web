@@ -12,7 +12,7 @@
  */
 
 import React from "react";
-import { LayersIcon, MagicWandIcon, TriangleRightIcon } from "@radix-ui/react-icons";
+import { ComponentInstanceIcon, LayersIcon, MagicWandIcon } from "@radix-ui/react-icons";
 import { Button, Card, Flex, Link, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -64,7 +64,7 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build }) => {
 	return (
 		<div className="grid grid-cols-[1fr_auto_auto] items-center gap-2">
 			<Flex align="center" gap="1" minWidth="0">
-				<TriangleRightIcon className="shrink-0" color="cyan" height="16" width="16" />
+				<ComponentInstanceIcon className="shrink-0" color="cyan" height="15" width="15" />
 				<Text size={isSmallAndUp ? "3" : "2"} weight="medium">
 					{build.title}
 				</Text>
