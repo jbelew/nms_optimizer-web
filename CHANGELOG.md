@@ -1,3 +1,10 @@
+## [7.17.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.17.1...v7.17.2) (2026-09-23)
+
+
+### Bug Fixes
+
+* **moduleSelection:** update help text links ([a4d6cc7](https://github.com/jbelew/nms_optimizer-web/commit/a4d6cc7dc155a3a31dd55e7fdc1f063701be3843))
+
 ## [7.17.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.17.0...v7.17.1) (2026-09-23)
 
 
