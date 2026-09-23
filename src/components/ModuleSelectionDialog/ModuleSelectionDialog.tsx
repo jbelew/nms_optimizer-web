@@ -219,7 +219,7 @@ const ModuleGroup: React.FC<{
 							className="shrink-0 cursor-pointer opacity-70 transition-opacity hover:opacity-100"
 							onClick={() => {
 								onClose?.();
-								openDialog("instructions", { section: "section-5" });
+								openDialog("instructions", { section: "section-4" });
 							}}
 						/>
 					</ConditionalTooltip>

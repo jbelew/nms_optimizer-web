@@ -13,7 +13,7 @@
 
 import React from "react";
 import { LayersIcon, MagicWandIcon, StackIcon } from "@radix-ui/react-icons";
-import { Button, Card, Flex, Link, Text } from "@radix-ui/themes";
+import { Button, Flex, Link, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 import { RecommendedBuildProvider } from "@/components/RecommendedBuild/RecommendedBuild";
@@ -112,11 +112,7 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds }) => {
 	const { handleOpenInstructions } = useRecommendedBuildContext();
 
 	return (
-		<Card
-			className="mb-4 shadow-sm! [--base-card-border-radius:var(--radius-2)]! before:bg-(--accent-a3)! md:before:bg-(--accent-surface)!"
-			size="1"
-			variant="surface"
-		>
+		<div className="mb-4 rounded-(--radius-2) border border-(--gray-a6) bg-(--accent-a3) p-3 shadow-sm md:bg-(--accent-surface)">
 			<Flex direction="column" gap="1" width="100%">
 				<Flex align="center" justify="between" width="100%">
 					<Flex align="center" gap="2">
@@ -147,13 +143,13 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds }) => {
 					/>
 				</Text>
 
-				<div className="mt-1 mt-2 flex flex-col gap-3">
+				<div className="mt-2 flex flex-col gap-3">
 					{builds.map((build, index) => (
 						<PresetCardItem build={build} key={build.title || index} />
 					))}
 				</div>
 			</Flex>
-		</Card>
+		</div>
 	);
 };
 
