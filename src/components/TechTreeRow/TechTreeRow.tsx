@@ -233,10 +233,10 @@ const TechTreeRowBadges: React.FC = () => {
 	const badgeContent = (
 		<div>
 			<Button
-				aria-label={t("moduleSelection.tooltip", {
+				aria-label={`x${currentCheckedModules.length} - ${t("moduleSelection.tooltip", {
 					count: currentCheckedModules.length,
 					techName: translatedTechName,
-				})}
+				})}`}
 				className="ml-1! align-top font-mono! tabular-nums"
 				color={hasTechInGrid ? "gray" : techColor}
 				disabled={modules.length === 1 || (isGridFull && !hasTechInGrid) || solving}

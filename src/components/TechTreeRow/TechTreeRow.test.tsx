@@ -30,11 +30,13 @@ vi.mock("@/components/ConditionalTooltip/ConditionalTooltip", () => ({
 
 vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
-		t: (key: string) => {
+		t: (key: string, options?: { count?: number; techName?: string }) => {
 			if (key === "technologies.test") return "Test Tech Name";
 			if (key === "techTree.tooltips.solve") return "Solve";
 			if (key === "techTree.tooltips.reset") return "Reset";
 			if (key === "techTree.tooltips.update") return "Update";
+			if (key === "moduleSelection.tooltip")
+				return `${options?.techName ?? "Technology"} Module Selection`;
 
 			return key;
 		},
@@ -279,5 +281,16 @@ describe("TechTreeRow", () => {
 		// Assert
 		expect(handleOptimizeMock).toHaveBeenCalledWith("testTech");
 		expect(scrollToMock).not.toHaveBeenCalled();
+	});
+
+	it("should render module count button with accessible name including visible text for WCAG 2.5.3", () => {
+		setupMocks(false);
+		renderWithProviders(<TechTreeRow {...defaultProps} />);
+
+		const moduleButton = screen.getByRole("button", {
+			name: "x1 - Test Tech Name Module Selection",
+		});
+		expect(moduleButton).toBeInTheDocument();
+		expect(moduleButton).toHaveTextContent("x1");
 	});
 });

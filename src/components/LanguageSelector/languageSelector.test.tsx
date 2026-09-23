@@ -1,4 +1,32 @@
+import type * as ReactI18next from "react-i18next";
+import { Theme } from "@radix-ui/themes";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { LanguageSelector } from "./LanguageSelector";
+
+vi.mock("react-i18next", async (importOriginal) => {
+	const actual = await importOriginal<typeof ReactI18next>();
+
+	return {
+		...actual,
+		useTranslation: () => ({
+			i18n: {
+				changeLanguage: vi.fn(),
+				language: "en",
+				options: {
+					supportedLngs: ["en", "de", "es", "fr", "it", "pt"],
+				},
+			},
+			t: (key: string) => {
+				if (key === "languageInfo.changeLanguage") return "Change language";
+
+				return key;
+			},
+		}),
+	};
+});
 
 // Mock window.location.search
 /**
@@ -139,5 +167,30 @@ describe("LanguageSelector - Query Parameter Preservation", () => {
 		const result = path + window.location.search;
 
 		expect(result).toBe("/es/translation?platform=standard");
+	});
+});
+
+describe("LanguageSelector Accessibility", () => {
+	it("renders decorative flag icons with empty alt and aria-hidden in dropdown radio items", () => {
+		render(
+			<Theme>
+				<MemoryRouter>
+					<LanguageSelector />
+				</MemoryRouter>
+			</Theme>
+		);
+
+		const triggerButton = screen.getByRole("button", { name: "Change language" });
+		fireEvent.pointerDown(triggerButton);
+
+		const radioItems = screen.getAllByRole("menuitemradio");
+		expect(radioItems.length).toBeGreaterThan(0);
+
+		radioItems.forEach((item) => {
+			const flagImg = item.querySelector("img");
+			expect(flagImg).toBeInTheDocument();
+			expect(flagImg).toHaveAttribute("alt", "");
+			expect(flagImg).toHaveAttribute("aria-hidden", "true");
+		});
 	});
 });

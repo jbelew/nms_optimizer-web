@@ -16,7 +16,7 @@ export const ShipSelectionContent: React.FC = () => {
 	return (
 		<DropdownMenu.Content className="ShipSelection__dropdownMenu">
 			<DropdownMenu.Label className="ShipSelection__header heading-styled">
-				{t("ShipSelection.selectPlatform", "Select Platform")}
+				{t("shipSelection.selectPlatform", "Select Platform")}
 			</DropdownMenu.Label>
 			<DropdownMenu.RadioGroup onValueChange={handleOptionSelect} value={selectedShipType}>
 				{Object.entries(groupedShipTypes).map(([type, items], groupIndex) => (

@@ -16,6 +16,10 @@ i18n.addResourceBundle(
 		platforms: {
 			corvette: "Corvettes",
 		},
+		shipSelection: {
+			ariaLabel: "Select ship type",
+			selectPlatform: "Select Platform",
+		},
 		ShipSelection: {
 			selectPlatform: "Select Platform",
 		},

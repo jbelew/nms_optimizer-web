@@ -135,7 +135,7 @@
     "semantic_hash": ""
   },
   "scripts/generate-sitemap.mjs": {
-    "mtime": 1790115187.0438142,
+    "mtime": 1790115917.391197,
     "ast_hash": "978d8eb9103f5652a8b71ee5330b2cf9",
     "semantic_hash": ""
   },
@@ -750,13 +750,13 @@
     "semantic_hash": ""
   },
   "src/components/LanguageSelector/LanguageSelector.tsx": {
-    "mtime": 1789846836.8057876,
-    "ast_hash": "6730d3e824ade2608218a68b1317d036",
+    "mtime": 1790121665.4894714,
+    "ast_hash": "69817bcccef5e9abdd495c4f76e0cedc",
     "semantic_hash": ""
   },
   "src/components/LanguageSelector/languageSelector.test.tsx": {
-    "mtime": 1779145165.0,
-    "ast_hash": "327db22fe38d01f6f992cc9c4904ba23",
+    "mtime": 1790121802.2195764,
+    "ast_hash": "35d7c1b975890cd94d4b2b07eebbe6c5",
     "semantic_hash": ""
   },
   "src/components/MainAppContent/MainAppContent.stories.tsx": {
@@ -950,8 +950,8 @@
     "semantic_hash": ""
   },
   "src/components/ShipSelection/ShipSelectionContent.tsx": {
-    "mtime": 1779308864.0,
-    "ast_hash": "1772ddeb490f04468ca79906d30520e6",
+    "mtime": 1790121383.890895,
+    "ast_hash": "16e904962f3cf3aaf8ef4692257eebc9",
     "semantic_hash": ""
   },
   "src/components/ShipSelection/ShipSelectionProvider.tsx": {
@@ -965,13 +965,13 @@
     "semantic_hash": ""
   },
   "src/components/ShipSelection/ShipSelectionSkeleton.tsx": {
-    "mtime": 1779308864.0,
-    "ast_hash": "7a52d4e6d40097699659c4c45ccb3e31",
+    "mtime": 1790121377.537952,
+    "ast_hash": "90263826a0c644245cb83276c433d108",
     "semantic_hash": ""
   },
   "src/components/ShipSelection/ShipSelectionTrigger.tsx": {
-    "mtime": 1789956729.9012227,
-    "ast_hash": "a6e1550a03975e314ee38d17d642b608",
+    "mtime": 1790121368.1079485,
+    "ast_hash": "bc2f518d9dff73a155fef6c0a4571fb6",
     "semantic_hash": ""
   },
   "src/components/ShipSelection/useShipSelectionContext.ts": {
@@ -1055,13 +1055,13 @@
     "semantic_hash": ""
   },
   "src/components/TechTreeRow/TechTreeRow.test.tsx": {
-    "mtime": 1789862941.806286,
-    "ast_hash": "434833b57b24d7af0131ad62dad2122d",
+    "mtime": 1790121410.152194,
+    "ast_hash": "0243bbd7b52f944a94faddd0c9f08bc6",
     "semantic_hash": ""
   },
   "src/components/TechTreeRow/TechTreeRow.tsx": {
-    "mtime": 1790051857.2474465,
-    "ast_hash": "4578a07c2744383575571cc89e69a0f8",
+    "mtime": 1790121427.0304937,
+    "ast_hash": "d387c20cf04e088dd876dbbc1742ba39",
     "semantic_hash": ""
   },
   "src/components/TechTreeRow/TechTreeRowContext.tsx": {
@@ -2205,13 +2205,18 @@
     "semantic_hash": ""
   },
   "scripts/check-remote-sync.mjs": {
-    "mtime": 1790115175.217262,
+    "mtime": 1790115917.391197,
     "ast_hash": "eca8858fee13d11a10a475b19ea66b41",
     "semantic_hash": ""
   },
   "scripts/check-remote-sync.test.mjs": {
-    "mtime": 1790115723.826263,
+    "mtime": 1790115917.4029021,
     "ast_hash": "5e0bc45c775bcffef75fc659248eb417",
+    "semantic_hash": ""
+  },
+  "src/components/ShipSelection/ShipSelectionTrigger.test.tsx": {
+    "mtime": 1790121834.3754737,
+    "ast_hash": "9706c1b12b204bd348a7c5897c1bb4c8",
     "semantic_hash": ""
   }
 }

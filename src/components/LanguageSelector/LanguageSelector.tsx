@@ -215,7 +215,8 @@ export const LanguageSelector: React.FC = () => {
 					{supportedLanguages.map(({ code, flagPath, label }) => (
 						<DropdownMenu.RadioItem key={code} value={code}>
 							<img
-								alt={label}
+								alt=""
+								aria-hidden="true"
 								className="mr-2 h-auto w-5"
 								height="14"
 								src={flagPath}
