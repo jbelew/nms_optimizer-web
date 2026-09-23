@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "e2e-tests/optimization.spec.ts": {
-    "mtime": 1779308864.0,
-    "ast_hash": "c9e547a5e0c8d98e8b4f8d23ca1938a0",
+    "mtime": 1790189916.187809,
+    "ast_hash": "4d4459e15665d04dc616c57ba4221bc9",
     "semantic_hash": ""
   },
   "e2e-tests/recommended-build.test.ts": {
@@ -2170,8 +2170,8 @@
     "semantic_hash": ""
   },
   "src/hooks/useUrlSync/useUrlSync.integration.test.tsx": {
-    "mtime": 1790186783.9212875,
-    "ast_hash": "4bfffd773dc7a4d06e4a08ffab45d551",
+    "mtime": 1790187208.0432153,
+    "ast_hash": "ee4dc6f61b0a92efa4511796df8a9011",
     "semantic_hash": ""
   },
   "src/components/MainAppContent/useMainAppLogic.tsx": {

@@ -47,7 +47,7 @@ test.describe('End-to-End Optimization Flow', () => {
     }
 
     // 4. Click Optimize inside the dialog
-    const optimizeDialogButton = page.getByLabel('optimizeButton');
+    const optimizeDialogButton = dialog.getByRole('button', { name: /Optimize/i });
     await expect(optimizeDialogButton).toBeEnabled();
     await optimizeDialogButton.click();
 
