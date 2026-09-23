@@ -113,7 +113,7 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds }) => {
 
 	return (
 		<Card
-			className="mb-4 shadow-sm! [--base-card-border-radius:var(--radius-2)]! before:bg-(--accent-a3)!"
+			className="mb-4 shadow-sm! [--base-card-border-radius:var(--radius-2)]! before:bg-(--accent-a3)! sm:before:bg-(--accent-surface)!"
 			size="1"
 			variant="surface"
 		>
