@@ -1,3 +1,15 @@
+## [7.16.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.16.1...v7.16.2) (2026-09-23)
+
+
+### Bug Fixes
+
+* **a11y:** resolve ship selection i18n keys, label-in-name, and flag alt text ([96e4e03](https://github.com/jbelew/nms_optimizer-web/commit/96e4e03892191a1b6989e1186b99c0bb787eccb9))
+
+
+### Performance Improvements
+
+* **navigation:** enable client-side platform switching via react-router ([bf8902e](https://github.com/jbelew/nms_optimizer-web/commit/bf8902ee2437c47ca5afaf5c14ab5b66c17f3201))
+
 ## [7.16.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.16.0...v7.16.1) (2026-09-22)
 
 
