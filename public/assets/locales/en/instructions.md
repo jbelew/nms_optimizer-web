@@ -5,6 +5,7 @@
 - Select a **Platform** (Starship, Multi-Tool, Corvette, etc.) using the <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> icon.
 - **Click** or **double-tap** (mobile) a slot to mark it **Supercharged**.
 - **Ctrl-click (Windows) / ⌘-click (Mac) / single-tap (mobile)** to toggle a slot **active** or **inactive**.
+- **Keyboard controls:** Navigate with **Arrow keys** (↑, ↓, ←, →) and **Home** / **End**, press **S** / **Shift+Enter** to supercharge, and **Space** / **Enter** to toggle active/inactive.
 - Use **row toggles** to enable or disable entire rows. _(Row toggles are disabled once modules are placed.)_
 - Use the **module selection** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> button to add or remove individual modules within a technology group.
 

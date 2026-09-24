@@ -5,6 +5,7 @@
 - Seleziona una **Piattaforma** (Starship, Multi-Tool, Corvette, ecc.) usando l'icona <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
 - **Clicca** o **doppio tocco** (mobile) su uno slot per marcarlo come **Sovraccarico**.
 - **Ctrl-clic (Windows) / ⌘-clic (Mac) / singolo tocco (mobile)** per attivare o disattivare uno slot.
+- **Controlli da tastiera:** Naviga con i **tasti freccia** (↑, ↓, ←, →) e **Inizio** / **Fine**, premi **S** / **Shift+Invio** per sovraccaricare e **Spazio** / **Invio** per attivare/disattivare.
 - Usa gli **interruttori di riga** per abilitare o disabilitare intere righe. _(Gli interruttori di riga sono disabilitati una volta posizionati i moduli.)_
 - Usa il pulsante di **selezione moduli** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> per aggiungere o rimuovere singoli moduli all'interno di un gruppo tecnologico.
 

@@ -5,6 +5,7 @@
 - Sélectionnez une **Plateforme** (Vaisseau, Multi-outil, Corvette, etc.) via l'icône <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
 - **Cliquez** ou **appuyez deux fois** (mobile) sur un emplacement pour le marquer comme **Surchargé**.
 - **Ctrl-clic (Windows) / ⌘-clic (Mac) / appui simple (mobile)** pour basculer un emplacement entre **actif** et **inactif**.
+- **Commandes clavier :** Naviguez avec les **touches fléchées** (↑, ↓, ←, →) et **Début** / **Fin**, appuyez sur **S** / **Maj+Entrée** pour surcharger, et sur **Espace** / **Entrée** pour activer/désactiver.
 - Utilisez les **interrupteurs de rangée** pour activer ou désactiver des lignes entières. _(Ils sont désactivés une fois que des modules sont placés)._
 - Utilisez le bouton de **sélection de modules** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> pour ajouter ou retirer des modules individuels.
 
