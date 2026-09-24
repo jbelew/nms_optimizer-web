@@ -500,8 +500,8 @@
     "semantic_hash": ""
   },
   "src/components/AppFooter/AppFooter.tsx": {
-    "mtime": 1787940776.0,
-    "ast_hash": "3d8c383180ee9f57ddeceaea73513f44",
+    "mtime": 1790202604.2679248,
+    "ast_hash": "a09353a2252fe50faeffd32ab05167d2",
     "semantic_hash": ""
   },
   "src/components/AppFooter/AppFooterProvider.tsx": {
@@ -625,23 +625,23 @@
     "semantic_hash": ""
   },
   "src/components/GridCell/GridCell.test.tsx": {
-    "mtime": 1788384701.0,
-    "ast_hash": "a4a76ae6a78e24ace21150e68208b837",
+    "mtime": 1790280752.1221294,
+    "ast_hash": "ba03376525bba30f5a996e4a72de5356",
     "semantic_hash": ""
   },
   "src/components/GridCell/GridCell.tsx": {
-    "mtime": 1779308864.0,
-    "ast_hash": "c8e26e14bd0db0514f9655fa4183de70",
+    "mtime": 1790280743.5454142,
+    "ast_hash": "f3423e795b00fe8ad8b3338da9f5ac0f",
     "semantic_hash": ""
   },
   "src/components/GridCell/useGridCellInteraction.test.ts": {
-    "mtime": 1788384701.0,
-    "ast_hash": "68b90fddaad4b1a777e87c1e9fcaf720",
+    "mtime": 1790280785.6984935,
+    "ast_hash": "43eea8baf86a94b4ac1892be8b8f1048",
     "semantic_hash": ""
   },
   "src/components/GridCell/useGridCellInteraction.ts": {
-    "mtime": 1789846836.0,
-    "ast_hash": "84f2f83bfba19e95c22d209f5f582307",
+    "mtime": 1790280728.2349138,
+    "ast_hash": "40cb4b976ee02fac7562a5b4d419cf3a",
     "semantic_hash": ""
   },
   "src/components/GridCell/useGridCellStyle.ts": {
@@ -730,8 +730,8 @@
     "semantic_hash": ""
   },
   "src/components/GridTableButtons/GridTableButtons.tsx": {
-    "mtime": 1790010838.0,
-    "ast_hash": "090b87e9d8bf6e407145ae0853685aa4",
+    "mtime": 1790268100.1395967,
+    "ast_hash": "233c8302c1a53525e6fee68fc7a1cce6",
     "semantic_hash": ""
   },
   "src/components/Icons/EmptyCellIcon.tsx": {
@@ -840,8 +840,8 @@
     "semantic_hash": ""
   },
   "src/components/ModuleSelectionDialog/ModuleSelectionDialog.tsx": {
-    "mtime": 1790187009.287431,
-    "ast_hash": "888550485e1d335c88d5f8fb22d0bf8f",
+    "mtime": 1790199366.483156,
+    "ast_hash": "312a1ee6d34c17c53d99b50337db71e0",
     "semantic_hash": ""
   },
   "src/components/ModuleSelectionDialog/SharedModuleSelectionDialog.test.tsx": {
@@ -970,7 +970,7 @@
     "semantic_hash": ""
   },
   "src/components/ShipSelection/ShipSelectionTrigger.tsx": {
-    "mtime": 1790121368.0,
+    "mtime": 1790267882.4470072,
     "ast_hash": "bc2f518d9dff73a155fef6c0a4571fb6",
     "semantic_hash": ""
   },
@@ -1060,7 +1060,7 @@
     "semantic_hash": ""
   },
   "src/components/TechTreeRow/TechTreeRow.tsx": {
-    "mtime": 1790121427.0,
+    "mtime": 1790268026.734327,
     "ast_hash": "d387c20cf04e088dd876dbbc1742ba39",
     "semantic_hash": ""
   },
@@ -1910,7 +1910,7 @@
     "semantic_hash": ""
   },
   "vite.config.ts": {
-    "mtime": 1790125353.0,
+    "mtime": 1790208940.7253795,
     "ast_hash": "fde390f313872d184056e3e55b5e8340",
     "semantic_hash": ""
   },
@@ -2185,8 +2185,8 @@
     "semantic_hash": ""
   },
   "src/components/TechTree/TechTreePresetsCard.tsx": {
-    "mtime": 1790187124.3371136,
-    "ast_hash": "346137a3b64eb92388cd5c9d335d9a50",
+    "mtime": 1790274171.037558,
+    "ast_hash": "c888f92e8da5342494697e2b3b710bd4",
     "semantic_hash": ""
   },
   "src/utils/tech/techTreeUtils.test.ts": {
@@ -2227,6 +2227,26 @@
   "src/components/TechTree/TechTreeRoot.test.tsx": {
     "mtime": 1790179819.2802973,
     "ast_hash": "35e303686dc9c617fce9daecfc02802b",
+    "semantic_hash": ""
+  },
+  "src/components/GridCell/gridCellAria.test.ts": {
+    "mtime": 1790279764.8215647,
+    "ast_hash": "c855893b3bfaeb64c309eecca98d5964",
+    "semantic_hash": ""
+  },
+  "src/components/GridCell/gridCellAria.ts": {
+    "mtime": 1790280679.0258346,
+    "ast_hash": "a6520b1b728f3de6603c3e3996680d7c",
+    "semantic_hash": ""
+  },
+  "src/store/grid/useGridFocusStore.test.ts": {
+    "mtime": 1790280794.7132778,
+    "ast_hash": "e328c971373604dfdc8969dbd87f01f7",
+    "semantic_hash": ""
+  },
+  "src/store/grid/useGridFocusStore.ts": {
+    "mtime": 1790280695.6163332,
+    "ast_hash": "06136f3bcb728ea1028404214a9b33a3",
     "semantic_hash": ""
   }
 }

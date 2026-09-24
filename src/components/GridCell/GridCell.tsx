@@ -2,33 +2,21 @@ import "./GridCell.scss";
 
 import type { Cell } from "@/store/grid/gridStore";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import EmptyCellIcon from "@/components/Icons/EmptyCellIcon";
 import { useCell } from "@/hooks/useCell/useCell";
 import { useGridStore } from "@/store/grid/gridStore";
+import { getGridCellElementId, useGridFocusStore } from "@/store/grid/useGridFocusStore";
 import { getUpgradePriority } from "@/utils/grid/upgradePriority";
 
+import { getGridCellAriaLabel, stripLabel } from "./gridCellAria";
 import { useGridCellInteraction } from "./useGridCellInteraction";
 import { useGridCellStyle } from "./useGridCellStyle";
 
 /** Regular expression to match `.webp` file extensions at the end of a string. */
 const WEBP_REGEX = /\.webp$/;
-
-/**
- * Removes bracketed and parenthetical metadata from a technology label.
- *
- * @param {string | undefined} label - The raw technology label.
- *
- * @returns {string} The cleaned label.
- *
- * @category Utilities
- */
-const stripLabel = (label: string | undefined): string => {
-	if (!label) return "";
-
-	return label.replace(/\[[^\]]+\]|\([^)]+\)/g, "").trim();
-};
 
 /**
  * Static elements for the cell's corner highlights.
@@ -133,12 +121,17 @@ const EmptyContent: React.FC<{
  * ```
  */
 const GridCell: React.FC<GridCellProps> = ({ columnIndex, rowIndex }) => {
+	const { t } = useTranslation();
 	const cell = useCell(rowIndex, columnIndex);
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
+	const isRovingFocused = useGridFocusStore(
+		(state) => state.focusedRow === rowIndex && state.focusedCol === columnIndex
+	);
 
 	const {
 		handleClick,
 		handleContextMenu,
+		handleFocus,
 		handleKeyDown,
 		handleTouchCancel,
 		handleTouchEnd,
@@ -150,14 +143,20 @@ const GridCell: React.FC<GridCellProps> = ({ columnIndex, rowIndex }) => {
 	const { cellClassName, cellElementStyle, emptyIconFillColor, showEmptyIcon, techColor } =
 		useGridCellStyle(cell, isTouching);
 
+	const ariaLabel = getGridCellAriaLabel(cell, rowIndex, columnIndex, t);
+
 	const cellElement = (
 		<div
 			aria-colindex={columnIndex + 1}
+			aria-disabled={!cell.active ? true : undefined}
+			aria-label={ariaLabel}
 			className={cellClassName}
 			data-accent-color={techColor}
 			data-testid="grid-cell"
+			id={getGridCellElementId(rowIndex, columnIndex)}
 			onClick={handleClick}
 			onContextMenu={handleContextMenu}
+			onFocus={handleFocus}
 			onKeyDown={handleKeyDown}
 			onTouchCancel={handleTouchCancel}
 			onTouchEnd={handleTouchEnd}
@@ -165,7 +164,7 @@ const GridCell: React.FC<GridCellProps> = ({ columnIndex, rowIndex }) => {
 			onTouchStart={handleTouchStart}
 			role="gridcell"
 			style={cellElementStyle as React.CSSProperties}
-			tabIndex={isSharedGrid ? -1 : 0}
+			tabIndex={isRovingFocused ? 0 : -1}
 		>
 			{cell.module && cell.active ? (
 				<ModuleContent cell={cell} rowIndex={rowIndex} />

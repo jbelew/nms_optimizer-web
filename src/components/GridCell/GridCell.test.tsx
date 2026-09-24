@@ -34,13 +34,16 @@ vi.mock("@/store/grid/gridStore", () => {
 		gridFixed: false,
 		handleCellDoubleTap: vi.fn(),
 		handleCellTap: vi.fn(),
+		isSharedGrid: false,
 		revertCellTap: vi.fn(),
 		selectTotalSuperchargedCells: vi.fn(() => 0),
 		superchargedFixed: false,
 		toggleCellActive: vi.fn(),
 		toggleCellSupercharged: vi.fn(),
 	};
-	const useGridStore = vi.fn(() => mockState);
+	const useGridStore = vi.fn((selector?: (state: typeof mockState) => unknown) =>
+		typeof selector === "function" ? selector(mockState) : mockState
+	);
 	// @ts-expect-error - Mocking getState
 	useGridStore.getState = () => mockState;
 
@@ -171,5 +174,31 @@ describe("GridCell", () => {
 		// React.memo wraps the component, setting $$typeof to Symbol.for("react.memo")
 		// and placing the original component in the `type` property.
 		expect(GridCell).toHaveProperty("$$typeof", Symbol.for("react.memo"));
+	});
+
+	it("renders descriptive aria-label and id based on coordinates", () => {
+		renderComponent({ active: true, label: "Deflector Shield", module: "shield-1" });
+		const cellElement = screen.getByRole("gridcell");
+		expect(cellElement).toHaveAttribute("id", "grid-cell-0-0");
+		expect(cellElement).not.toHaveAttribute("aria-selected");
+		expect(cellElement).toHaveAttribute("aria-label", "Row 1, Column 1: Deflector Shield");
+	});
+
+	it("sets aria-disabled when cell is inactive", () => {
+		renderComponent({ active: false, label: "" });
+		const cellElement = screen.getByRole("gridcell");
+		expect(cellElement).toHaveAttribute("aria-disabled", "true");
+		expect(cellElement).toHaveAttribute("aria-label", "Row 1, Column 1: Disabled Slot");
+	});
+
+	it("sets tabIndex=0 when focused and tabIndex=-1 when not focused in roving tabindex", () => {
+		const { rerender } = renderComponent({}, { columnIndex: 0, rowIndex: 0 });
+		const cellElement = screen.getByRole("gridcell");
+		// Cell (0, 0) is default focused in useGridFocusStore
+		expect(cellElement).toHaveAttribute("tabindex", "0");
+
+		// Cell (1, 2) is not focused
+		rerender(<GridCell columnIndex={2} rowIndex={1} />);
+		expect(cellElement).toHaveAttribute("tabindex", "-1");
 	});
 });

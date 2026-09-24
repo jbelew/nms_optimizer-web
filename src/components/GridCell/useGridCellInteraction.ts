@@ -2,6 +2,14 @@ import type { Cell } from "@/store/grid/gridStore";
 import { useRef, useState, useTransition } from "react";
 
 import { useGridStore } from "@/store/grid/gridStore";
+import { useGridFocusStore } from "@/store/grid/useGridFocusStore";
+import { Logger } from "@/utils/system/monitoring";
+
+/** Default fallback grid width for navigation. */
+const DEFAULT_GRID_WIDTH = 10;
+
+/** Default fallback grid height for navigation. */
+const DEFAULT_GRID_HEIGHT = 6;
 
 /**
  * Custom hook for managing browser/DOM interactions with an individual grid cell.
@@ -19,6 +27,7 @@ import { useGridStore } from "@/store/grid/gridStore";
  * @returns {boolean} returns.isTouching - Active touch state for visual feedback.
  * @returns {function} returns.handleClick - Desktop mouse click handler.
  * @returns {function} returns.handleContextMenu - Prevents default context menu.
+ * @returns {function} returns.handleFocus - Roving tabindex focus sync handler.
  * @returns {function} returns.handleKeyDown - Keyboard accessibility handler.
  * @returns {function} returns.handleTouchCancel - Touch cancellation handler.
  * @returns {function} returns.handleTouchEnd - Touch end gesture translator.
@@ -143,22 +152,72 @@ export const useGridCellInteraction = (
 	};
 
 	/**
-	 * Manages keyboard-driven interactions for accessibility.
+	 * Synchronizes active roving tabindex cell when focused via click, tap, or tab.
+	 */
+	const handleFocus = () => {
+		useGridFocusStore.getState().setFocusedCell(rowIndex, columnIndex);
+	};
+
+	/**
+	 * Manages keyboard-driven interactions for accessibility and WAI-ARIA grid navigation.
 	 */
 	const handleKeyDown = (event: React.KeyboardEvent) => {
-		if (event.key === " " || event.key === "Enter") {
-			event.preventDefault();
-			if (isSharedGrid) return;
+		try {
+			const key = event.key;
+			const isModifier = event.ctrlKey || event.metaKey;
 
-			startTransition(() => {
-				useGridStore.getState().toggleCellActive(rowIndex, columnIndex);
-			});
+			// 1. Activation & Supercharged controls (ignore when Ctrl, Meta, or Alt is pressed)
+			if (
+				(key === " " || key === "Enter") &&
+				!event.shiftKey &&
+				!isModifier &&
+				!event.altKey
+			) {
+				event.preventDefault();
+				if (isSharedGrid) return;
+
+				startTransition(() => {
+					useGridStore.getState().toggleCellActive(rowIndex, columnIndex);
+				});
+
+				return;
+			}
+
+			if (
+				((key === "s" || key === "S") && !isModifier && !event.altKey) ||
+				(key === "Enter" && event.shiftKey && !isModifier && !event.altKey)
+			) {
+				event.preventDefault();
+				if (isSharedGrid) return;
+
+				startTransition(() => {
+					useGridStore.getState().toggleCellSupercharged(rowIndex, columnIndex);
+				});
+
+				return;
+			}
+
+			// 2. WAI-ARIA Grid Keyboard Navigation
+			const grid = useGridStore.getState().grid;
+			const width = grid?.width ?? DEFAULT_GRID_WIDTH;
+			const height = grid?.height ?? DEFAULT_GRID_HEIGHT;
+
+			const didNavigate = useGridFocusStore
+				.getState()
+				.navigateGrid(key, rowIndex, columnIndex, width, height, isModifier);
+
+			if (didNavigate) {
+				event.preventDefault();
+			}
+		} catch (error) {
+			Logger.error("Failed to handle key down on grid cell", error);
 		}
 	};
 
 	return {
 		handleClick,
 		handleContextMenu,
+		handleFocus,
 		handleKeyDown,
 		handleTouchCancel,
 		handleTouchEnd,

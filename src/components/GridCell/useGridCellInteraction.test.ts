@@ -1,7 +1,7 @@
 import type { Cell } from "@/store/grid/gridStore";
 import type { Mock } from "vitest";
 import { act, renderHook } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useGridStore } from "@/store/grid/gridStore";
 
@@ -24,8 +24,13 @@ describe("useGridCellInteraction (Thin DOM Adapter)", () => {
 		(useGridStore as unknown as { getState: Mock }).getState = mockGetGridState;
 	});
 
+	afterEach(() => {
+		vi.restoreAllMocks();
+	});
+
 	// Helper to get fresh mock state for each test run to avoid reference mutation issues
 	const createMockGridStoreState = () => ({
+		grid: { height: 6, width: 10 },
 		registerCellTap: mockRegisterCellTap,
 		toggleCellActive: mockToggleCellActive,
 		toggleCellSupercharged: mockToggleCellSupercharged,
@@ -172,6 +177,187 @@ describe("useGridCellInteraction (Thin DOM Adapter)", () => {
 		expect(mockToggleCellActive).toHaveBeenCalledTimes(2);
 		expect(mockToggleCellActive).toHaveBeenNthCalledWith(1, 0, 0);
 		expect(mockToggleCellActive).toHaveBeenNthCalledWith(2, 0, 0);
+	});
+
+	it("should toggle cell supercharged on 's', 'S', or Shift+Enter key down", () => {
+		const { result } = renderGridCellHook();
+		const mockEventLowerS = {
+			key: "s",
+			preventDefault: vi.fn(),
+			shiftKey: false,
+		} as unknown as React.KeyboardEvent;
+		const mockEventUpperS = {
+			key: "S",
+			preventDefault: vi.fn(),
+			shiftKey: true,
+		} as unknown as React.KeyboardEvent;
+		const mockEventShiftEnter = {
+			key: "Enter",
+			preventDefault: vi.fn(),
+			shiftKey: true,
+		} as unknown as React.KeyboardEvent;
+
+		act(() => {
+			result.current.handleKeyDown(mockEventLowerS);
+			result.current.handleKeyDown(mockEventUpperS);
+			result.current.handleKeyDown(mockEventShiftEnter);
+		});
+
+		expect(mockEventLowerS.preventDefault).toHaveBeenCalled();
+		expect(mockEventUpperS.preventDefault).toHaveBeenCalled();
+		expect(mockEventShiftEnter.preventDefault).toHaveBeenCalled();
+		expect(mockToggleCellSupercharged).toHaveBeenCalledTimes(3);
+		expect(mockToggleCellSupercharged).toHaveBeenNthCalledWith(1, 0, 0);
+		expect(mockToggleCellSupercharged).toHaveBeenNthCalledWith(2, 0, 0);
+		expect(mockToggleCellSupercharged).toHaveBeenNthCalledWith(3, 0, 0);
+	});
+
+	it("should not toggle supercharged on keyboard shortcuts if isSharedGrid is true", () => {
+		const { result } = renderGridCellHook({}, true);
+		const mockEventS = {
+			key: "s",
+			preventDefault: vi.fn(),
+			shiftKey: false,
+		} as unknown as React.KeyboardEvent;
+
+		act(() => {
+			result.current.handleKeyDown(mockEventS);
+		});
+
+		expect(mockEventS.preventDefault).toHaveBeenCalled();
+		expect(mockToggleCellSupercharged).not.toHaveBeenCalled();
+	});
+
+	it("should navigate across grid with ArrowRight, ArrowLeft, ArrowDown, and ArrowUp", () => {
+		const targetElement = document.createElement("div");
+		targetElement.id = "grid-cell-1-1";
+		vi.spyOn(document, "getElementById").mockReturnValue(targetElement);
+		const spyFocus = vi.spyOn(targetElement, "focus");
+
+		// Start at (1, 1)
+		const cell = { active: true, module: null, supercharged: false } as Cell;
+		const { result } = renderHook(() => useGridCellInteraction(cell, 1, 1, false));
+
+		const rightEvent = {
+			key: "ArrowRight",
+			preventDefault: vi.fn(),
+		} as unknown as React.KeyboardEvent;
+		act(() => {
+			result.current.handleKeyDown(rightEvent);
+		});
+		expect(rightEvent.preventDefault).toHaveBeenCalled();
+		expect(document.getElementById).toHaveBeenCalledWith("grid-cell-1-2");
+
+		const downEvent = {
+			key: "ArrowDown",
+			preventDefault: vi.fn(),
+		} as unknown as React.KeyboardEvent;
+		act(() => {
+			result.current.handleKeyDown(downEvent);
+		});
+		expect(downEvent.preventDefault).toHaveBeenCalled();
+		expect(document.getElementById).toHaveBeenCalledWith("grid-cell-2-1");
+
+		const leftEvent = {
+			key: "ArrowLeft",
+			preventDefault: vi.fn(),
+		} as unknown as React.KeyboardEvent;
+		act(() => {
+			result.current.handleKeyDown(leftEvent);
+		});
+		expect(leftEvent.preventDefault).toHaveBeenCalled();
+		expect(document.getElementById).toHaveBeenCalledWith("grid-cell-1-0");
+
+		const upEvent = {
+			key: "ArrowUp",
+			preventDefault: vi.fn(),
+		} as unknown as React.KeyboardEvent;
+		act(() => {
+			result.current.handleKeyDown(upEvent);
+		});
+		expect(upEvent.preventDefault).toHaveBeenCalled();
+		expect(document.getElementById).toHaveBeenCalledWith("grid-cell-0-1");
+
+		expect(spyFocus).toHaveBeenCalled();
+	});
+
+	it("should not hijack browser shortcuts like Ctrl+S or Cmd+S", () => {
+		const { result } = renderGridCellHook();
+		const mockEventCtrlS = {
+			altKey: false,
+			ctrlKey: true,
+			key: "s",
+			metaKey: false,
+			preventDefault: vi.fn(),
+			shiftKey: false,
+		} as unknown as React.KeyboardEvent;
+
+		act(() => {
+			result.current.handleKeyDown(mockEventCtrlS);
+		});
+
+		expect(mockEventCtrlS.preventDefault).not.toHaveBeenCalled();
+		expect(mockToggleCellSupercharged).not.toHaveBeenCalled();
+	});
+
+	it("should navigate to bounds on Home and End", () => {
+		const targetElement = document.createElement("div");
+		targetElement.id = "grid-cell-0-0";
+		vi.spyOn(document, "getElementById").mockReturnValue(targetElement);
+
+		// Start at (2, 5)
+		const cell = { active: true, module: null, supercharged: false } as Cell;
+		const { result } = renderHook(() => useGridCellInteraction(cell, 2, 5, false));
+
+		const homeEvent = {
+			key: "Home",
+			preventDefault: vi.fn(),
+		} as unknown as React.KeyboardEvent;
+		act(() => {
+			result.current.handleKeyDown(homeEvent);
+		});
+		expect(homeEvent.preventDefault).toHaveBeenCalled();
+		expect(document.getElementById).toHaveBeenCalledWith("grid-cell-2-0");
+
+		const endEvent = { key: "End", preventDefault: vi.fn() } as unknown as React.KeyboardEvent;
+		act(() => {
+			result.current.handleKeyDown(endEvent);
+		});
+		expect(endEvent.preventDefault).toHaveBeenCalled();
+		expect(document.getElementById).toHaveBeenCalledWith("grid-cell-2-9");
+
+		const ctrlHomeEvent = {
+			ctrlKey: true,
+			key: "Home",
+			preventDefault: vi.fn(),
+		} as unknown as React.KeyboardEvent;
+		act(() => {
+			result.current.handleKeyDown(ctrlHomeEvent);
+		});
+		expect(ctrlHomeEvent.preventDefault).toHaveBeenCalled();
+		expect(document.getElementById).toHaveBeenCalledWith("grid-cell-0-0");
+
+		const ctrlEndEvent = {
+			ctrlKey: true,
+			key: "End",
+			preventDefault: vi.fn(),
+		} as unknown as React.KeyboardEvent;
+		act(() => {
+			result.current.handleKeyDown(ctrlEndEvent);
+		});
+		expect(ctrlEndEvent.preventDefault).toHaveBeenCalled();
+		expect(document.getElementById).toHaveBeenCalledWith("grid-cell-5-9");
+	});
+
+	it("should update focus store on handleFocus", () => {
+		const cell = { active: true, module: null, supercharged: false } as Cell;
+		const { result } = renderHook(() => useGridCellInteraction(cell, 3, 4, false));
+
+		act(() => {
+			result.current.handleFocus();
+		});
+
+		// Focus store should now be set to (3, 4)
 	});
 
 	it("should prevent context menu default behavior", () => {

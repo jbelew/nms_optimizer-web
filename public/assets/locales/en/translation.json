@@ -54,7 +54,13 @@
 	"gridTable": {
 		"optimizing": "Optimizing!",
 		"tapInstructions": "Tap once to disable a slot, or double-tap to mark it as supercharged.",
-		"ariaLabel": "Technology Grid"
+		"ariaLabel": "Technology Grid",
+		"cellAriaLabel": "Row {{row}}, Column {{col}}: {{content}}",
+		"emptySlot": "Empty Slot",
+		"disabledSlot": "Disabled Slot",
+		"disabledSuperchargedSlot": "Disabled Slot (Supercharged)",
+		"superchargedSlot": "Empty Slot (Supercharged)",
+		"superchargedWithContent": "{{content}} (Supercharged)"
 	},
 	"gridControls": {
 		"activateRow": "Activate Row",
