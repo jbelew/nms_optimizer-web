@@ -286,7 +286,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 						disabled={solving || isResetPending}
 						onClick={handleResetGrid}
 						size="2"
-						variant="solid"
+						variant="soft"
 					>
 						<ResetIcon />
 						{t("buttons.resetGrid")}

@@ -112,7 +112,7 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds }) => {
 	const { handleOpenInstructions } = useRecommendedBuildContext();
 
 	return (
-		<div className="mb-4 rounded-(--radius-2) bg-(--accent-a3) p-3 shadow-sm md:bg-(--accent-surface)">
+		<div className="mb-4 rounded-(--radius-2) bg-(--accent-a3) p-3 shadow-sm lg:bg-(--accent-surface)">
 			<Flex direction="column" gap="1" width="100%">
 				<Flex align="center" justify="between" width="100%">
 					<Flex align="center" gap="2">
