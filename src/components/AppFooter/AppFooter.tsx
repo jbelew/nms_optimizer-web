@@ -135,7 +135,7 @@ const AppFooterRating: React.FC = () => {
 const AppFooterSupport: React.FC = () => {
 	return (
 		<>
-			<Separator color="cyan" decorative mb="1" mt="1" size="3" />
+			<Separator decorative mb="1" mt="1" size="3" />
 			<Flex
 				align="center"
 				className="app-footer__support"
