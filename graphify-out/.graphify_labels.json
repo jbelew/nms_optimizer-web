@@ -131,7 +131,7 @@
   "129": ".stylelintrc.cjs",
   "130": "useBreakpoint",
   "131": "dialogContext.tsx",
-  "132": "dialogUtils.ts",
+  "132": "iconRegistry.ts",
   "133": "gridStore.ts",
   "134": "props.ts",
   "135": "Logger",
@@ -142,5 +142,6 @@
   "140": "useTechTreeContext.ts",
   "141": "splashScreen.ts",
   "142": "lazyNamed.ts",
-  "143": "AppDialog.tsx"
+  "143": "AppDialog.tsx",
+  "144": "spa-routes.test.mjs"
 }

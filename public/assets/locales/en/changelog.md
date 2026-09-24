@@ -2,40 +2,17 @@
 
 The full commit history for this project is available on [GitHub](https://github.com/jbelew/nms_optimizer-web/blob/main/CHANGELOG.md). A special thanks to [mateo-leal](https://github.com/mateo-leal) for the Spanish translation updates.
 
-## Version 7.14 – Recommended Builds & UI Polish (2026-09-21)
+## Version 8.0 – NMS Cosmos Support (2026-09-24)
 
-This version updates and standardizes the presentation of the Recommended Builds component across all devices.
+Version 8.0 is here with full support for the **No Man's Sky Cosmos** update! We've added new technologies and in-game art, made the grid completely controllable from your keyboard, and packed in dozens of quality-of-life improvements to make planning your layouts smoother and faster.
 
-- **Pinned Recommended Builds:** Community-sourced recommended builds are now conveniently pinned at the very top of the technology list across phones, tablets, and desktops. You can preview recommended layouts, check module counts, apply them with a single click, and easily jump to the relevant instructions.
-- **Smoother Mobile Scrolling:** Fixed an issue where buttons in the technology tree could flicker while scrolling on mobile devices and iPhones.
-- Updated and refined various UI components throughout the application.
-- Switched the main font from Raleway to Roboto Flex to better match the game's text rendering.
-
-## Version 7.13 – Astronaut Figurine (2026-09-21)
-
-This update adds the Astronaut Figurine technology module for starships.
-
-- **Astronaut Figurine:** Added the Astronaut Figurine to the Starship Trails technology group for all applicable platforms.
-
-## Version 7.12 – Shared Build Navigation & Layout Polish (2026-09-20)
-
-This update refines how shared layouts are displayed and improves browser navigation when resetting shared builds.
-
-- **Shared Build Navigation:** Resetting a shared layout now works with your browser's back and forward buttons, making it easy to return to the shared build or jump forward to your fresh grid.
-- **Shared Build Presentation:** Polished the display when inspecting builds shared by other players and smoothed the transition when returning to the full technology tree.
-
-## Version 7.11 – Navigation Fixes & Stability (2026-09-19)
-
-This update fixes dialog behavior during page navigation and includes stability improvements.
-
-- **Dialog Navigation:** Fixed an issue where switching views or navigating sub-routes could unexpectedly close active dialogs.
-
-## Version 7.8 – Corvette Tractor Beam & Grid Polish (2026-09-15)
-
-This update adds Corvette Tractor Beam imagery and improves responsiveness when interacting with grid cells.
-
-- **Corvette Tractor Beam Graphics:** Added in-game images and icons for the Corvette Tractor Beam technology.
-- **Smoother Grid Selection:** Improved responsiveness when clicking and selecting cells on the grid.
+- **NMS Cosmos Additions:** Added the new **Astronaut Figurine** to starship bobbleheads and full in-game graphics and icons for the **Corvette Tractor Beam**.
+- **Fly Through the Grid with Your Keyboard:** You can now navigate the entire 10×6 grid using your **Arrow keys** (↑, ↓, ←, →), plus **Home** and **End** to jump to the start or end of the grid. You can also configure slots directly from your keyboard — press **S** or **Shift+Enter** to mark a slot as **Supercharged**, and press **Space** or **Enter** to toggle a slot between **active** and **inactive**.
+- **Instant Platform Switching:** Jumping between your Starship, Multi-Tool, Exosuit, and Freighter is now instant with zero page reloads. Picking a new platform also rolls the technology list right back to the top so you're ready to build.
+- **Pinned Recommended Builds:** Recommended builds are now pinned right at the very top of the technology list on phones, tablets, and desktops. You can see module counts and apply a layout in one click.
+- **Browser History for Shared Builds:** When you reset a shared build from a friend, your browser's Back and Forward buttons now remember both the shared build and your clean grid so you can flip back and forth without losing anything.
+- **Smoother Mobile Scrolling & Fresh Font:** Squashed a frustrating bug where buttons flickered while scrolling on iPhones, made tapping cells feel much snappier, and switched to the clean **Roboto Flex** font to match the game's actual text styling.
+- **Overall Polish & Feel:** Fine-tuned theme colors, sharpened icon clarity across menus, and smoothed out transitions so everything feels right at home.
 
 ## Version 7.7 – Mobile Screenshots & Snappier Controls (2026-09-08)
 
@@ -183,7 +160,7 @@ A deep-dive optimization update that makes the app feel faster and more responsi
 
 This update introduces a new feature for sharing your builds, along with several smaller improvements to translations and app stability.
 
-- **Grid Screenshots:** A new screenshot tool lets you easily capture high-quality, attributed images of your optimized grid layouts. _(Note: This tool is temporarily disabled on the mobile web-app toolbar while we fix a compatibility issue)._
+- **Grid Screenshots:** A new screenshot tool lets you easily capture high-quality, attributed images of your optimized grid layouts. *(Note: This tool is temporarily disabled on the mobile web-app toolbar while we fix a compatibility issue).*
 - **Clearer Instructions:** Improved the optimization and module selection descriptions across all supported languages.
 - **Global Discovery:** Added international SEO improvements so players around the world can more easily find the app in their native language.
 - **Rendering & Stability:** Fixed a timing bug related to loading text content, updated privacy dialog icons for better clarity, and upgraded various internal systems.
@@ -510,7 +487,7 @@ Version 5 introduces a complete solver overhaul focused on speed, accuracy, and 
 ## Version 3.11 (2025-09-06)
 
 - Corvettes now support both **cosmetic** and **min/max** solves.
-  _Note: space is limited, so you'll only be able to fit two or three min/max solves — choose carefully!_
+  *Note: space is limited, so you'll only be able to fit two or three min/max solves — choose carefully!*
 
 ## Version 3.10 (2025-09-02)
 
