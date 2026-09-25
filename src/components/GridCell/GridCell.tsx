@@ -148,6 +148,7 @@ const GridCell: React.FC<GridCellProps> = ({ columnIndex, rowIndex }) => {
 	const cellElement = (
 		<div
 			aria-colindex={columnIndex + 1}
+			// Note: aria-disabled is intentionally omitted so inactive cells remain interactive
 			aria-label={ariaLabel}
 			className={cellClassName}
 			data-accent-color={techColor}

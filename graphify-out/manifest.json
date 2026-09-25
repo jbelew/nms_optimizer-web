@@ -630,8 +630,8 @@
     "semantic_hash": ""
   },
   "src/components/GridCell/GridCell.tsx": {
-    "mtime": 1790287581.3646472,
-    "ast_hash": "cb41bfc813b4842eea1a7b80f3ebb7eb",
+    "mtime": 1790297999.7785966,
+    "ast_hash": "26d3c6cd565b44ad1b9adf2d4b0e1a0b",
     "semantic_hash": ""
   },
   "src/components/GridCell/useGridCellInteraction.test.ts": {
