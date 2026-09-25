@@ -23,3 +23,11 @@ _Avoid_: shared build, imported layout, URL grid
 **Session Reset**:
 The action of restoring the workspace to an empty, unconfigured layout and clearing all active module selections and URL parameters.
 _Avoid_: rest grid, wipe grid, clear board
+
+**Platform Type**:
+A specific equipment or vessel classification (e.g., Solar, Freighter, Multi-Tool, Exocraft, Exosuit) defining available technologies and grid dimensions.
+_Avoid_: ship type, vehicle category, gear kind
+
+**Class**:
+The grade rating (C, B, A, S) of an equipment platform derived from the number of active supercharged slots (1 &rarr; C, 2 &rarr; B, 3 &rarr; A, 4 &rarr; S). Not applicable to Exocraft or Exosuits.
+_Avoid_: platform class, ship tier, gear rank, upgrade class
