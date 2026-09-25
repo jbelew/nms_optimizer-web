@@ -184,10 +184,10 @@ describe("GridCell", () => {
 		expect(cellElement).toHaveAttribute("aria-label", "Row 1, Column 1: Deflector Shield");
 	});
 
-	it("sets aria-disabled when cell is inactive", () => {
+	it("announces disabled slot in aria-label when cell is inactive", () => {
 		renderComponent({ active: false, label: "" });
 		const cellElement = screen.getByRole("gridcell");
-		expect(cellElement).toHaveAttribute("aria-disabled", "true");
+		expect(cellElement).not.toHaveAttribute("aria-disabled");
 		expect(cellElement).toHaveAttribute("aria-label", "Row 1, Column 1: Disabled Slot");
 	});
 

@@ -104,7 +104,7 @@ test.describe('Mobile Touch Interactions', () => {
       localStorage.setItem("user-visited", "true");
     });
 
-    test.skip(testInfo.project.name !== 'mobile-chrome', 'Only run on mobile-chrome');
+    test.skip(testInfo.project.name.toLowerCase() !== 'mobile chrome', 'Only run on mobile-chrome');
     await page.goto('/?platform=standard');
     await waitForStore(page);
     await resetGrid(page);

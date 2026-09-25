@@ -148,7 +148,6 @@ const GridCell: React.FC<GridCellProps> = ({ columnIndex, rowIndex }) => {
 	const cellElement = (
 		<div
 			aria-colindex={columnIndex + 1}
-			aria-disabled={!cell.active ? true : undefined}
 			aria-label={ariaLabel}
 			className={cellClassName}
 			data-accent-color={techColor}
