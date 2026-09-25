@@ -101,16 +101,23 @@ describe("ShipSelectionHeading", () => {
 	};
 
 	describe("Dynamic Class Icon Rendering", () => {
-		it("renders no class icon when totalSuperchargedCells is 0", () => {
+		it("renders empty container with reserved space when totalSuperchargedCells is 0", () => {
 			useGridStore.setState({ totalSuperchargedCells: 0 });
 			renderComponent();
 
+			const container = screen.getByTestId("class-badge-container");
+			expect(container).toBeInTheDocument();
+			expect(container).toHaveAttribute("aria-hidden", "true");
 			expect(screen.queryByRole("img")).toBeNull();
 		});
 
-		it("renders Class C icon when totalSuperchargedCells is 1", () => {
+		it("renders Class C icon inside container when totalSuperchargedCells is 1", () => {
 			useGridStore.setState({ totalSuperchargedCells: 1 });
 			renderComponent();
+
+			const container = screen.getByTestId("class-badge-container");
+			expect(container).toBeInTheDocument();
+			expect(container).toHaveAttribute("aria-hidden", "false");
 
 			const img = screen.getByRole("img", { name: "Class C" });
 			expect(img).toBeInTheDocument();
@@ -191,6 +198,9 @@ describe("ShipSelectionHeading", () => {
 
 				renderComponent();
 
+				const container = screen.getByTestId("class-badge-container");
+				expect(container).toBeInTheDocument();
+				expect(container).toHaveAttribute("aria-hidden", "true");
 				expect(screen.queryByRole("img")).toBeNull();
 			});
 		});
