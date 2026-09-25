@@ -1,3 +1,15 @@
+# [7.18.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.17.2...v7.18.0) (2026-09-25)
+
+
+### Bug Fixes
+
+* **grid:** remove aria-disabled from cells to fix e2e actionability ([0919433](https://github.com/jbelew/nms_optimizer-web/commit/0919433ff39052ae25cf0f16022d6fa8ab26ea4a))
+
+
+### Features
+
+* **grid:** implement roving tabindex and accessible cell labeling ([dc19dd4](https://github.com/jbelew/nms_optimizer-web/commit/dc19dd4619a621ba772d9aeafb4ea76426e1286d))
+
 ## [7.17.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.17.1...v7.17.2) (2026-09-23)
 
 
