@@ -1,3 +1,15 @@
+# [8.0.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.18.0...v8.0.0) (2026-09-25)
+
+
+* feat!: major version bump for NMS Cosmos update ([33829dc](https://github.com/jbelew/nms_optimizer-web/commit/33829dc9e462527e418495d9e3a86f532c2f6fb1))
+* feat!: support NMS Cosmos update and layout changes ([e99f716](https://github.com/jbelew/nms_optimizer-web/commit/e99f7169bb7a62db2a3804c9d21af26e4b2a5d57))
+
+
+### BREAKING CHANGES
+
+* support NMS Cosmos update and layout changes
+* support NMS Cosmos update and layout changes
+
 # [7.18.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.17.2...v7.18.0) (2026-09-25)
 
 
