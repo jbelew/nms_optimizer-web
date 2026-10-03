@@ -12,7 +12,7 @@ $panel-border: 1px solid var(--gray-6);
 		min-height: 100dvh;
 		padding-top: 3rem; // Mobile
 
-		@media (width >= 640px) {
+		@media (width >=640px) {
 			justify-content: center;
 			padding-top: 0;
 		}
@@ -24,7 +24,7 @@ $panel-border: 1px solid var(--gray-6);
 
 	&__card {
 		// Desktop: use backdrop-filter for dynamic blur
-		@media (width >= 640px) {
+		@media (width >=640px) {
 			backdrop-filter: blur(64px);
 			background-color: var(--accent-a3);
 
@@ -33,11 +33,11 @@ $panel-border: 1px solid var(--gray-6);
 			}
 		}
 
-		@media (width <= 639px) {
+		@media (width <=639px) {
 			max-width: fit-content;
 		}
 
-		@media (width >= 1024px) {
+		@media (width >=1024px) {
 			border-radius: var(--radius-4);
 
 			/* Theme-aware inset shadow + allow Tailwind shadow */
@@ -52,7 +52,7 @@ $panel-border: 1px solid var(--gray-6);
 		}
 
 		// Tablet: Fill full height (no container padding)
-		@media (width >= 640px) and (width < 1024px) {
+		@media (width >=640px) and (width < 1024px) {
 			display: flex;
 			flex-direction: column;
 			min-height: 100dvh;
@@ -73,7 +73,7 @@ $panel-border: 1px solid var(--gray-6);
 	}
 
 	&__background-wrapper {
-		@media (width <= 639px) {
+		@media (width <=639px) {
 			position: relative;
 		}
 	}
@@ -83,7 +83,7 @@ $panel-border: 1px solid var(--gray-6);
 		font-size: 1.25rem;
 		min-height: 1.25rem;
 
-		@media (width >= 640px) {
+		@media (width >=640px) {
 			font-size: 1.5rem;
 			min-height: 1.5rem;
 		}
@@ -104,7 +104,7 @@ $panel-border: 1px solid var(--gray-6);
 		color: var(--accent-11);
 		display: none;
 
-		@media (width >= 640px) {
+		@media (width >=640px) {
 			display: inline;
 		}
 	}
@@ -115,11 +115,15 @@ $panel-border: 1px solid var(--gray-6);
 		margin-left: -0.25rem;
 		min-width: 0;
 		text-wrap: balance;
+
+		@media (width <=640px) {
+			margin-top: 2px;
+		}
 	}
 
 	// Tech tree section
 	&__tech-tree-section {
-		@media (width >= 1024px) {
+		@media (width >=1024px) {
 			animation: techTreeFadeIn 0.2s ease-out;
 		}
 	}
