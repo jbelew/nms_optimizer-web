@@ -106,22 +106,24 @@ export const ShipSelectionHeading: React.FC = () => {
 			>
 				{t(`platforms.${selectedShipType}`)}
 			</Text>
-			<span
-				aria-hidden={!classKey}
-				className="main-app__class-badge flex h-8 w-9 shrink-0 items-center justify-center sm:h-9 sm:w-10"
-				data-testid="class-badge-container"
-				style={{ alignSelf: "flex-end" }}
-			>
-				{classKey && (
-					<img
-						alt={t(`classes.${classKey}`, `Class ${classKey.toUpperCase()}`)}
-						className="h-full w-auto object-contain"
-						src={`/assets/img/class_icons/class-${classKey}.webp?v=${__APP_VERSION__}`}
-						srcSet={`/assets/img/class_icons/class-${classKey}@2x.webp?v=${__APP_VERSION__} 2x`}
-						style={{ opacity: solving ? 0.365 : 1 }}
-					/>
-				)}
-			</span>
+			{isClassEligible && (
+				<span
+					aria-hidden={!classKey}
+					className="main-app__class-badge flex h-8 w-9 shrink-0 items-center justify-center sm:h-9 sm:w-10"
+					data-testid="class-badge-container"
+					style={{ alignSelf: "flex-end" }}
+				>
+					{classKey && (
+						<img
+							alt={t(`classes.${classKey}`, `Class ${classKey.toUpperCase()}`)}
+							className="h-full w-auto object-contain"
+							src={`/assets/img/class_icons/class-${classKey}.webp?v=${__APP_VERSION__}`}
+							srcSet={`/assets/img/class_icons/class-${classKey}@2x.webp?v=${__APP_VERSION__} 2x`}
+							style={{ opacity: solving ? 0.365 : 1 }}
+						/>
+					)}
+				</span>
+			)}
 		</Flex>
 	);
 };

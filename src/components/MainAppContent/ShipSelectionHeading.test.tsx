@@ -192,15 +192,13 @@ describe("ShipSelectionHeading", () => {
 		];
 
 		excludedPlatformTypes.forEach((platform) => {
-			it(`does not render class icon for excluded platform: ${platform} even with 4 supercharged slots`, () => {
+			it(`does not render class icon or container for excluded platform: ${platform} even with 4 supercharged slots`, () => {
 				mockGlobalContext.selectedShipType = platform;
 				useGridStore.setState({ totalSuperchargedCells: 4 });
 
 				renderComponent();
 
-				const container = screen.getByTestId("class-badge-container");
-				expect(container).toBeInTheDocument();
-				expect(container).toHaveAttribute("aria-hidden", "true");
+				expect(screen.queryByTestId("class-badge-container")).toBeNull();
 				expect(screen.queryByRole("img")).toBeNull();
 			});
 		});
