@@ -1,3 +1,10 @@
+## [8.0.2](https://github.com/jbelew/nms_optimizer-web/compare/v8.0.1...v8.0.2) (2026-10-06)
+
+
+### Bug Fixes
+
+* **images:** update Barrel Ionizer images in various formats ([f9d5eba](https://github.com/jbelew/nms_optimizer-web/commit/f9d5ebab7f8da70e53537d5a35e13e6b5d99fe5d))
+
 ## [8.0.1](https://github.com/jbelew/nms_optimizer-web/compare/v8.0.0...v8.0.1) (2026-10-06)
 
 
