@@ -1,3 +1,10 @@
+## [8.0.1](https://github.com/jbelew/nms_optimizer-web/compare/v8.0.0...v8.0.1) (2026-10-06)
+
+
+### Bug Fixes
+
+* **tech-tree:** hide bonus status icon when solved bonus is zero ([62ce135](https://github.com/jbelew/nms_optimizer-web/commit/62ce135044e17fc7dba901aff560be0acb7ea7ea))
+
 # [8.0.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.18.0...v8.0.0) (2026-09-25)
 
 
