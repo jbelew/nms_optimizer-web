@@ -56,13 +56,19 @@ function renderIcon(
 
 /**
  * A component that displays a status icon representing the optimization quality of a technology.
+ *
+ * @param {BonusStatusIconProps} props - The component props.
+ * @param {string} props.tech - Unique identifier for the technology.
+ * @param {number} props.techSolvedBonus - The actual bonus achieved in the most recent solve.
+ *
+ * @returns {React.ReactNode} The rendered status icon, or null if bonus score is non-positive or status is unavailable.
  */
 export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ tech, techSolvedBonus }) => {
 	const { t } = useTranslation();
 	const getBonusStatus = useTechStore((s) => s.getBonusStatus);
 	const status = getBonusStatus(tech);
 
-	if ((techSolvedBonus <= 0 && !status) || !status) {
+	if (techSolvedBonus <= 0 || !status) {
 		return null;
 	}
 

@@ -107,6 +107,18 @@ describe("BonusStatusIcon Component", () => {
 			expect(container.querySelector(".radix-themes")?.childNodes.length).toBe(0);
 		});
 
+		it("should return null when techSolvedBonus is 0 even if status exists", () => {
+			const status: BonusStatusData = { icon: "warning", percent: 100 };
+			const { container } = renderComponent(0, status);
+			expect(container.querySelector(".radix-themes")?.childNodes.length).toBe(0);
+		});
+
+		it("should return null when techSolvedBonus is negative even if status exists", () => {
+			const status: BonusStatusData = { icon: "warning", percent: 100 };
+			const { container } = renderComponent(-5, status);
+			expect(container.querySelector(".radix-themes")?.childNodes.length).toBe(0);
+		});
+
 		it("should render an icon when techSolvedBonus is positive and status exists", () => {
 			const status: BonusStatusData = { icon: "check", percent: 0 };
 			const { container } = renderComponent(10, status);

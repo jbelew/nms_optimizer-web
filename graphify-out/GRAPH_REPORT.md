@@ -1,16 +1,16 @@
-# Graph Report - nms_optimizer-web  (2026-09-24)
+# Graph Report - nms_optimizer-web  (2026-10-06)
 
 ## Corpus Check
-- 450 files · ~207,120 words
+- 450 files · ~207,236 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1731 nodes · 4184 edges · 145 communities (122 shown, 23 thin omitted)
+- 1731 nodes · 4184 edges · 145 communities (121 shown, 24 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 113 edges (avg confidence: 0.57)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `33829dc9`
+- Built from commit: `726aec3f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -174,7 +174,7 @@
 - 2-file cycle: `src/components/GridTable/GridTable.tsx -> src/components/GridTable/GridTableGrid.tsx -> src/components/GridTable/GridTable.tsx`
 - 3-file cycle: `src/components/ErrorBoundary/ErrorBoundary.tsx -> src/components/ErrorBoundary/ErrorContent.tsx -> src/components/ErrorBoundary/ErrorDisplay.tsx -> src/components/ErrorBoundary/ErrorBoundary.tsx`
 
-## Communities (145 total, 23 thin omitted)
+## Communities (145 total, 24 thin omitted)
 
 ### Community 0 - "performanceChart.tsx"
 Cohesion: 0.06
@@ -221,8 +221,8 @@ Cohesion: 0.11
 Nodes (18): createGrid(), createSerializedGrid(), mockNavigate, mockTechTreeData, ApiResponse, Grid, computeBonusStatus(), sessionCoordinator (+10 more)
 
 ### Community 9 - "GridControlButtons.tsx"
-Cohesion: 0.26
-Nodes (8): GridControlButtons(), RowControlButtonProps, selectHasAnyActiveCells(), mockActivateRow, mockDeActivateRow, useGridRowState(), GridStore, useTechTreeLoadingStore
+Cohesion: 0.29
+Nodes (7): GridControlButtons(), RowControlButtonProps, selectHasAnyActiveCells(), mockActivateRow, mockDeActivateRow, useGridRowState(), useTechTreeLoadingStore
 
 ### Community 10 - "page-metadata.js"
 Cohesion: 0.19
@@ -259,10 +259,6 @@ Nodes (12): ShipSelectionProviderProps, mockNavigate, mockSendDeferredEvent, moc
 ### Community 18 - "monitoring.ts"
 Cohesion: 0.20
 Nodes (10): Root(), useThemeStore, createAppRouter(), LogEntry, LogLevel, logs, SentryIntegration, SentrySDK (+2 more)
-
-### Community 19 - "CliIssueTrackerAdapter"
-Cohesion: 0.14
-Nodes (5): CliIssueTrackerAdapter, Any, List open issues with number, title, body, and labels., Fetch details for a single issue (number, title, body)., Adapter for GitHub using gh CLI.
 
 ### Community 20 - "agent.py"
 Cohesion: 0.16
@@ -338,15 +334,15 @@ Nodes (17): GenerateContentConfig, flatten_json(), get_config(), get_system_inst
 
 ### Community 38 - "GridCell.tsx"
 Cohesion: 0.12
-Nodes (19): GridCell(), GridCellProps, ModuleContent(), getGridCellAriaLabel(), stripLabel(), TranslateFn, mockRegisterCellTap, mockToggleCellActive (+11 more)
+Nodes (20): GridCell(), GridCellProps, ModuleContent(), getGridCellAriaLabel(), stripLabel(), TranslateFn, mockRegisterCellTap, mockToggleCellActive (+12 more)
 
 ### Community 39 - "VerificationGate"
 Cohesion: 0.20
 Nodes (9): distill_gate_output(), Module for running the verification gatekeeper and reporting distilled results., Remove ANSI escape sequences from terminal text., Distill raw gate output to reduce token usage during remediation retries: 1.…, Encapsulates execution and evaluation of the pre-commit verification gate., Run the gate command and return structured result., strip_ansi(), VerificationGate (+1 more)
 
 ### Community 40 - "IssueLifecycle"
-Cohesion: 0.08
-Nodes (22): main(), FakeIssueTrackerAdapter, IssueTrackerAdapter, Protocols and concrete adapters for external dependencies (CLI tools, agent,…, In-memory fake IssueTrackerAdapter for testing., Interface for querying and updating GitHub issues., Fetch comments for an issue., Edit an issue's assignee, labels, or body. (+14 more)
+Cohesion: 0.06
+Nodes (25): main(), FakeIssueTrackerAdapter, IssueTrackerAdapter, Any, Protocols and concrete adapters for external dependencies (CLI tools, agent,…, In-memory fake IssueTrackerAdapter for testing., Interface for querying and updating GitHub issues., List open issues with number, title, body, and labels. (+17 more)
 
 ### Community 41 - "applyValidationFeedback.ts"
 Cohesion: 0.31
@@ -619,7 +615,7 @@ Nodes (5): __dirname, DIST, FN_PATH, HYBRID_ROUTES, ROOT
 ## Knowledge Gaps
 - **434 isolated node(s):** `BackgroundWrapperProps`, `config`, `customViewports`, `globalTypes`, `preview` (+429 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **23 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **24 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
