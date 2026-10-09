@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React, { useEffect } from "react";
 import * as Toast from "@radix-ui/react-toast";
 
 import { ToastRenderer } from "@/components/Toast/ToastRenderer";
 import { ToastProvider } from "@/hooks/useToast/useToast";
+import { resetPwaInstallForTesting } from "@/utils/browser/pwaInstall";
 
 import { InstallPrompt } from "./InstallPrompt";
 
@@ -61,6 +63,66 @@ export const Default: Story = {
 		docs: {
 			description: {
 				story: "Install prompt component. Displays a toast notification prompting users to install the app, shown only on touch devices after the first visit (if not already installed).",
+			},
+		},
+		layout: "fullscreen",
+	},
+};
+
+/**
+ * Wrapper to safely configure Android user agent and dispatch beforeinstallprompt inside an effect.
+ */
+const AndroidStoryWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+	useEffect(() => {
+		const originalUserAgent = navigator.userAgent;
+		Object.defineProperty(navigator, "userAgent", {
+			configurable: true,
+			value: "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.113 Mobile Safari/537.36",
+			writable: true,
+		});
+
+		const event = new Event("beforeinstallprompt");
+		Object.defineProperty(event, "platforms", { value: ["android"] });
+		Object.defineProperty(event, "prompt", {
+			value: async () => {
+				window.alert("Simulated Native Android Install Dialog");
+			},
+		});
+		Object.defineProperty(event, "userChoice", {
+			value: Promise.resolve({ outcome: "accepted", platform: "android" }),
+		});
+		window.dispatchEvent(event);
+
+		return () => {
+			Object.defineProperty(navigator, "userAgent", {
+				configurable: true,
+				value: originalUserAgent,
+				writable: true,
+			});
+			resetPwaInstallForTesting();
+		};
+	}, []);
+
+	return <>{children}</>;
+};
+
+export const AndroidChromium: Story = {
+	decorators: [
+		(Story) => {
+			localStorage.setItem("userVisited", "true");
+			localStorage.removeItem("installPromptDismissed");
+
+			return (
+				<AndroidStoryWrapper>
+					<Story />
+				</AndroidStoryWrapper>
+			);
+		},
+	],
+	parameters: {
+		docs: {
+			description: {
+				story: "Android / Chromium install prompt with direct interactive 'Install' button triggering native prompt.",
 			},
 		},
 		layout: "fullscreen",

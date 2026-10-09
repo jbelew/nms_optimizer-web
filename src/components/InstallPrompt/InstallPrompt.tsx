@@ -14,11 +14,13 @@
  * @category Components
  */
 
+import type { BeforeInstallPromptEvent } from "@/utils/browser/pwaInstall";
 import React, { useEffect, useRef } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
 import { useToast } from "@/hooks/useToast/useToast";
 import { isIosSafari, isStandalone, safeGetItem, safeSetItem } from "@/utils/browser/environment";
+import { clearDeferredInstallPrompt, onBeforeInstallPrompt } from "@/utils/browser/pwaInstall";
 
 /**
  * LocalStorage key for tracking if the user has already dismissed the prompt.
@@ -33,13 +35,6 @@ export const INSTALL_PROMPT_DISMISSED_KEY = "installPromptDismissed";
  * @category Utilities
  */
 export const USER_VISIT_KEY = "userVisited";
-
-/** Event interface for the Chromium beforeinstallprompt event. */
-interface BeforeInstallPromptEvent extends Event {
-	readonly platforms: string[];
-	prompt(): Promise<void>;
-	readonly userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
-}
 
 /**
  * A non-rendering component that manages PWA installation prompts.
@@ -87,16 +82,11 @@ export const InstallPrompt: React.FC = () => {
 		}
 
 		// Handler for Chromium / Android / Edge native install prompt
-		const handleBeforeInstallPrompt = (e: Event) => {
-			e.preventDefault();
-			const deferredPrompt = e as BeforeInstallPromptEvent;
+		const handleBeforeInstallPrompt = (deferredPrompt: BeforeInstallPromptEvent) => {
+			clearDeferredInstallPrompt();
 
 			const handleInstall = async () => {
-				try {
-					await deferredPrompt.prompt();
-				} finally {
-					safeSetItem(INSTALL_PROMPT_DISMISSED_KEY, "true");
-				}
+				await deferredPrompt.prompt();
 			};
 
 			showToast({
@@ -125,7 +115,7 @@ export const InstallPrompt: React.FC = () => {
 			safeSetItem(INSTALL_PROMPT_DISMISSED_KEY, "true");
 		};
 
-		window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+		const unsubscribePrompt = onBeforeInstallPrompt(handleBeforeInstallPrompt);
 
 		// iOS Safari does not support beforeinstallprompt; show platform-specific instructions
 		if (isIosSafari()) {
@@ -145,7 +135,7 @@ export const InstallPrompt: React.FC = () => {
 		}
 
 		return () => {
-			window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+			unsubscribePrompt();
 		};
 	}, [showToast, t]);
 
