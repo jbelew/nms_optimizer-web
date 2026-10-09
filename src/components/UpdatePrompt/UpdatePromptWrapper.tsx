@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useUpdateCheck } from "@/hooks/useUpdateCheck/useUpdateCheck";
+import { activateLatestServiceWorker } from "@/utils/system/setupServiceWorker";
 
 const UpdatePrompt = lazy(() => import("./UpdatePrompt"));
 
@@ -66,11 +67,12 @@ export const UpdatePromptWrapper: FC = () => {
 	);
 
 	/**
-	 * Triggers a hard reload to activate the newly installed service worker.
+	 * Triggers a hard reload to activate the latest service worker.
 	 *
 	 * @remarks
-	 * Calls the stored `updateServiceWorker` function provided by the
-	 * `new-version-available` event.
+	 * Calls {@link activateLatestServiceWorker} to ensure that if newer releases
+	 * have landed on the server since this dialog was opened, the app skips
+	 * directly to the latest version.
 	 *
 	 * A 2.5s fallback timeout is implemented to ensure a page reload occurs
 	 * even if the service worker activation fails to trigger the browser's
@@ -84,21 +86,16 @@ export const UpdatePromptWrapper: FC = () => {
 	 * ```
 	 */
 	const handleRefresh = () => {
-		if (updateSWRef.current) {
-			updateSWRef
-				.current(true)
-				.then(() => {
-					// Fallback reload if it doesn't happen automatically in 2.5 seconds
-					setTimeout(() => {
-						window.location.reload();
-					}, 2500);
-				})
-				.catch(() => {
+		void activateLatestServiceWorker(updateSWRef.current)
+			.then(() => {
+				// Fallback reload if activation does not trigger controlling reload within 2.5s
+				setTimeout(() => {
 					window.location.reload();
-				});
-		} else {
-			window.location.reload();
-		}
+				}, 2500);
+			})
+			.catch(() => {
+				window.location.reload();
+			});
 	};
 
 	/**

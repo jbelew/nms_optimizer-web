@@ -1150,8 +1150,8 @@
     "semantic_hash": ""
   },
   "src/components/UpdatePrompt/UpdatePromptWrapper.tsx": {
-    "mtime": 1789846836.0,
-    "ast_hash": "d50d713b0339c7085c0601ffaaff72e6",
+    "mtime": 1791583241.352848,
+    "ast_hash": "e5db586376f079a2abf09a801309e1e5",
     "semantic_hash": ""
   },
   "src/constants.ts": {
@@ -1845,13 +1845,13 @@
     "semantic_hash": ""
   },
   "src/utils/system/setupServiceWorker.test.ts": {
-    "mtime": 1791566684.728898,
-    "ast_hash": "cc8e84475de28b6205b6f920952587a0",
+    "mtime": 1791583267.1208782,
+    "ast_hash": "18ff509ee2bcacf60aa3d76019362751",
     "semantic_hash": ""
   },
   "src/utils/system/setupServiceWorker.ts": {
-    "mtime": 1791566964.2688904,
-    "ast_hash": "f25f124790570a6a4dd1ffb33cf55904",
+    "mtime": 1791583329.284899,
+    "ast_hash": "6c8ad53bfc0c37488160fd830512eae2",
     "semantic_hash": ""
   },
   "src/utils/system/splashScreen.test.ts": {

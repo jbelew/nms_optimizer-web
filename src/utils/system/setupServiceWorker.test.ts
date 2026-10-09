@@ -3,7 +3,12 @@ import type { RegisterSWOptions } from "virtual:pwa-register"; // Import the typ
 import * as pwaMockModule from "virtual:pwa-register";
 import { vi } from "vitest";
 
-import { setupServiceWorkerRegistration } from "./setupServiceWorker";
+import {
+	activateLatestServiceWorker,
+	isAppHiddenOrIdle,
+	setLastUserActivityForTesting,
+	setupServiceWorkerRegistration,
+} from "./setupServiceWorker";
 
 // Set up spies on the mock module
 const mockRegisterSW = vi.spyOn(pwaMockModule, "registerSW");
@@ -154,6 +159,134 @@ describe("setupServiceWorkerRegistration", () => {
 		expect(mockUpdateSW).toHaveBeenCalledWith(true);
 	});
 
+	it("should silently apply update without dispatching event when onNeedRefresh is called while document is hidden", async () => {
+		let onNeedRefreshCallback: () => void;
+
+		mockRegisterSW.mockImplementationOnce((options?: RegisterSWOptions) => {
+			if (options?.onNeedRefresh) {
+				onNeedRefreshCallback = options.onNeedRefresh;
+			}
+
+			return mockUpdateSW;
+		});
+
+		setupServiceWorkerRegistration();
+		await Promise.resolve();
+
+		window.dispatchEvent(new Event("load"));
+		vi.advanceTimersByTime(2000);
+		await vi.runAllTimersAsync();
+
+		expect(onNeedRefreshCallback!).toBeDefined();
+
+		// Set document to hidden before onNeedRefresh is called
+		Object.defineProperty(document, "visibilityState", {
+			configurable: true,
+			value: "hidden",
+			writable: true,
+		});
+
+		onNeedRefreshCallback!();
+
+		vi.advanceTimersByTime(1);
+		await vi.runAllTimersAsync();
+
+		// Should NOT dispatch new-version-available event
+		expect(window.dispatchEvent).not.toHaveBeenCalledWith(
+			expect.objectContaining({
+				type: "new-version-available",
+			})
+		);
+
+		// Should have silently called mockUpdateSW(true)
+		expect(mockUpdateSW).toHaveBeenCalledWith(true);
+	});
+
+	it("should silently apply update when onNeedRefresh is called while document is visible but idle", async () => {
+		let onNeedRefreshCallback: () => void;
+
+		mockRegisterSW.mockImplementationOnce((options?: RegisterSWOptions) => {
+			if (options?.onNeedRefresh) {
+				onNeedRefreshCallback = options.onNeedRefresh;
+			}
+
+			return mockUpdateSW;
+		});
+
+		setupServiceWorkerRegistration();
+		await Promise.resolve();
+
+		window.dispatchEvent(new Event("load"));
+		vi.advanceTimersByTime(2000);
+		await vi.runAllTimersAsync();
+
+		expect(onNeedRefreshCallback!).toBeDefined();
+
+		// Document is visible, but user has been idle for 40 minutes (> 30 min threshold)
+		Object.defineProperty(document, "visibilityState", {
+			configurable: true,
+			value: "visible",
+			writable: true,
+		});
+		setLastUserActivityForTesting(Date.now() - 40 * 60 * 1000);
+
+		expect(isAppHiddenOrIdle()).toBe(true);
+
+		onNeedRefreshCallback!();
+
+		vi.advanceTimersByTime(1);
+		await vi.runAllTimersAsync();
+
+		// Should NOT dispatch new-version-available event
+		expect(window.dispatchEvent).not.toHaveBeenCalledWith(
+			expect.objectContaining({
+				type: "new-version-available",
+			})
+		);
+
+		// Should have silently called mockUpdateSW(true)
+		expect(mockUpdateSW).toHaveBeenCalledWith(true);
+	});
+
+	it("should silently apply waiting update when visibilityState transitions to hidden", async () => {
+		let onRegisteredCallback:
+			((registration: ServiceWorkerRegistration | undefined) => void) | undefined;
+
+		mockRegisterSW.mockImplementationOnce((options?: RegisterSWOptions) => {
+			if (options?.onRegistered) {
+				onRegisteredCallback = options.onRegistered;
+			}
+
+			return mockUpdateSW;
+		});
+
+		setupServiceWorkerRegistration();
+		await Promise.resolve();
+
+		window.dispatchEvent(new Event("load"));
+		vi.advanceTimersByTime(2000);
+		await vi.runAllTimersAsync();
+
+		const mockWaitingWorker = {} as ServiceWorker;
+		const mockRegistration = {
+			installing: null,
+			update: vi.fn().mockResolvedValue(undefined),
+			waiting: mockWaitingWorker,
+		} as unknown as ServiceWorkerRegistration;
+
+		onRegisteredCallback!(mockRegistration);
+
+		// Document transitions to hidden with a waiting worker
+		Object.defineProperty(document, "visibilityState", {
+			configurable: true,
+			value: "hidden",
+			writable: true,
+		});
+		document.dispatchEvent(new Event("visibilitychange"));
+
+		expect(mockUpdateSW).toHaveBeenCalledWith(true);
+	});
+
 	it("should have an onOfflineReady callback", async () => {
 		let onOfflineReadyCallback: () => void;
 
@@ -259,5 +392,163 @@ describe("setupServiceWorkerRegistration", () => {
 		// Advance by another 30 minutes (1 hour total): should trigger update
 		vi.advanceTimersByTime(30 * 60 * 1000);
 		expect(mockRegistration.update).toHaveBeenCalledTimes(1);
+	});
+});
+
+describe("activateLatestServiceWorker", () => {
+	beforeEach(() => {
+		vi.useFakeTimers();
+	});
+
+	afterEach(() => {
+		vi.useRealTimers();
+		vi.restoreAllMocks();
+	});
+
+	it("should immediately invoke updateSW when no newer worker is installing on server", async () => {
+		const mockUpdate = vi.fn().mockResolvedValue(undefined);
+		const mockReg = {
+			installing: null,
+			update: mockUpdate,
+		} as unknown as ServiceWorkerRegistration;
+		const mockUpdateSW = vi.fn().mockResolvedValue(undefined);
+
+		const promise = activateLatestServiceWorker(mockUpdateSW, mockReg);
+		await vi.runAllTimersAsync();
+		await promise;
+
+		expect(mockUpdate).toHaveBeenCalledTimes(1);
+		expect(mockUpdateSW).toHaveBeenCalledWith(true);
+	});
+
+	it("should wait for installing worker to reach installed state before calling updateSW", async () => {
+		let stateChangeCallback: (() => void) | undefined;
+		const mockWorker = {
+			addEventListener: vi.fn((event: string, cb: () => void) => {
+				if (event === "statechange") {
+					stateChangeCallback = cb;
+				}
+			}),
+			state: "installing",
+		} as unknown as ServiceWorker;
+
+		const mockReg = {
+			installing: mockWorker,
+			update: vi.fn().mockImplementation(async () => {
+				// Simulates network update finding a newer worker
+			}),
+		} as unknown as ServiceWorkerRegistration;
+
+		const mockUpdateSW = vi.fn().mockResolvedValue(undefined);
+
+		let resolved = false;
+		const promise = activateLatestServiceWorker(mockUpdateSW, mockReg).then(() => {
+			resolved = true;
+		});
+
+		await Promise.resolve(); // Let initial microtasks run
+		expect(mockUpdateSW).not.toHaveBeenCalled();
+		expect(resolved).toBe(false);
+
+		// Now simulate state transition to "installed"
+		Object.defineProperty(mockWorker, "state", { value: "installed", writable: true });
+		stateChangeCallback?.();
+
+		await promise;
+		expect(resolved).toBe(true);
+		expect(mockUpdateSW).toHaveBeenCalledWith(true);
+	});
+
+	it("should fall back to calling updateSW if installing worker takes longer than timeout", async () => {
+		const mockWorker = {
+			addEventListener: vi.fn(),
+			state: "installing",
+		} as unknown as ServiceWorker;
+
+		const mockReg = {
+			installing: mockWorker,
+			update: vi.fn().mockResolvedValue(undefined),
+		} as unknown as ServiceWorkerRegistration;
+
+		const mockUpdateSW = vi.fn().mockResolvedValue(undefined);
+
+		const promise = activateLatestServiceWorker(mockUpdateSW, mockReg, 2000);
+
+		// Advance past timeout
+		vi.advanceTimersByTime(2001);
+		await vi.runAllTimersAsync();
+		await promise;
+
+		expect(mockUpdateSW).toHaveBeenCalledWith(true);
+	});
+
+	it("should resolve immediately if installing worker is already in installed state upon inspection", async () => {
+		const mockWorker = {
+			addEventListener: vi.fn(),
+			state: "installed",
+		} as unknown as ServiceWorker;
+
+		const mockReg = {
+			installing: mockWorker,
+			update: vi.fn().mockResolvedValue(undefined),
+		} as unknown as ServiceWorkerRegistration;
+
+		const mockUpdateSW = vi.fn().mockResolvedValue(undefined);
+
+		await activateLatestServiceWorker(mockUpdateSW, mockReg);
+
+		expect(mockUpdateSW).toHaveBeenCalledWith(true);
+	});
+
+	it("should fall back to calling updateSW if registration.update hangs past timeout", async () => {
+		const mockReg = {
+			installing: null,
+			update: vi.fn().mockImplementation(() => new Promise(() => {})), // never resolves
+		} as unknown as ServiceWorkerRegistration;
+
+		const mockUpdateSW = vi.fn().mockResolvedValue(undefined);
+
+		const promise = activateLatestServiceWorker(mockUpdateSW, mockReg, 2000);
+
+		vi.advanceTimersByTime(2001);
+		await vi.runAllTimersAsync();
+		await promise;
+
+		expect(mockUpdateSW).toHaveBeenCalledWith(true);
+	});
+
+	it("should safely fall back to updateSW if registration.update throws an error", async () => {
+		const mockReg = {
+			installing: null,
+			update: vi.fn().mockRejectedValue(new Error("Network failed")),
+		} as unknown as ServiceWorkerRegistration;
+
+		const mockUpdateSW = vi.fn().mockResolvedValue(undefined);
+
+		await activateLatestServiceWorker(mockUpdateSW, mockReg);
+
+		expect(mockUpdateSW).toHaveBeenCalledWith(true);
+	});
+
+	it("should fall back to location.reload if updateSW is not provided", async () => {
+		const originalLocation = window.location;
+		const mockReload = vi.fn();
+
+		Object.defineProperty(window, "location", {
+			configurable: true,
+			value: { ...originalLocation, reload: mockReload },
+			writable: true,
+		});
+
+		try {
+			await activateLatestServiceWorker();
+			expect(mockReload).toHaveBeenCalled();
+		} finally {
+			Object.defineProperty(window, "location", {
+				configurable: true,
+				value: originalLocation,
+				writable: true,
+			});
+		}
 	});
 });
