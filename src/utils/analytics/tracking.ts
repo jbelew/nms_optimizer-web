@@ -31,7 +31,7 @@
 import type { AnalyticsEventParams, GA4Event } from "@/types/analytics";
 import type ReactGA from "react-ga4";
 
-import { API_URL, TRACKING_ID } from "@/constants";
+import { API_URL, CLOUDFLARE_BEACON_CONFIG, CLOUDFLARE_BEACON_SRC, TRACKING_ID } from "@/constants";
 import { isBot, safeGetItem, safeSetItem } from "@/utils/browser/environment";
 import { Logger } from "@/utils/system/monitoring";
 
@@ -412,14 +412,7 @@ export const sendServerEvent = (
 	}
 };
 
-/** Cloudflare Web Analytics beacon script URL. */
-export const CLOUDFLARE_BEACON_SRC = "https://static.cloudflareinsights.com/beacon.min.js";
-
-/** Cloudflare Web Analytics beacon payload configuration. */
-export const CLOUDFLARE_BEACON_CONFIG = JSON.stringify({
-	spa: true,
-	token: "614f4aacf3d1446bae6719e156ecc36e",
-});
+export { CLOUDFLARE_BEACON_CONFIG, CLOUDFLARE_BEACON_SRC };
 
 /**
  * Injects the Cloudflare Web Analytics beacon script dynamically.

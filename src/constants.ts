@@ -35,6 +35,30 @@ export const WS_URL = import.meta.env.VITE_WS_URL;
 export const TRACKING_ID = "G-P5VBZQ69Q9";
 
 /**
+ * Cloudflare Web Analytics beacon script URL.
+ *
+ * @category Utilities
+ */
+export const CLOUDFLARE_BEACON_SRC = "https://static.cloudflareinsights.com/beacon.min.js";
+
+/**
+ * Cloudflare Web Analytics site token.
+ *
+ * @category Utilities
+ */
+export const CLOUDFLARE_BEACON_TOKEN = "614f4aacf3d1446bae6719e156ecc36e";
+
+/**
+ * Cloudflare Web Analytics beacon payload configuration.
+ *
+ * @category Utilities
+ */
+export const CLOUDFLARE_BEACON_CONFIG = JSON.stringify({
+	spa: true,
+	token: CLOUDFLARE_BEACON_TOKEN,
+});
+
+/**
  * Common timing and duration constants used across the application.
  *
  * @category Utilities
