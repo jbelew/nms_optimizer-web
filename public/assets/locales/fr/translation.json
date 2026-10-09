@@ -733,9 +733,6 @@
 	},
 	"installPrompt": {
 		"title": "Ajouter à l'Écran d'Accueil",
-		"installTitle": "Installer l'Application",
-		"installDescription": "Installez NMS Optimizer pour un accès rapide et une expérience plein écran.",
-		"installButton": "Installer",
 		"iosInstructions": "Pour une meilleure expérience, ajoutez cette app à votre écran d'accueil. Ouvrez le menu <strong>Partager</strong> de votre navigateur et sélectionnez <strong>Sur l'écran d'accueil</strong>."
 	},
 	"notFound": {

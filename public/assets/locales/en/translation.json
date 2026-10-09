@@ -757,9 +757,6 @@
 	},
 	"installPrompt": {
 		"title": "Add to Home Screen",
-		"installTitle": "Install App",
-		"installDescription": "Install NMS Optimizer for quick access and full-screen experience.",
-		"installButton": "Install",
 		"iosInstructions": "For the best experience, add this app to your Home Screen. Open the <strong>Share</strong> menu in your browser and select <strong>Add to Home Screen</strong>."
 	},
 	"notFound": {

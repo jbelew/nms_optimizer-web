@@ -740,13 +740,13 @@
     "semantic_hash": ""
   },
   "src/components/InstallPrompt/InstallPrompt.stories.tsx": {
-    "mtime": 1791575440.7929082,
-    "ast_hash": "020fd7b1dd3c0a94033ea120b2d47647",
+    "mtime": 1791578014.4329412,
+    "ast_hash": "5d0681b39c70156ed459505891fb0271",
     "semantic_hash": ""
   },
   "src/components/InstallPrompt/InstallPrompt.tsx": {
-    "mtime": 1791575406.1689122,
-    "ast_hash": "45b9c1160810824479647c000820b869",
+    "mtime": 1791578073.1809392,
+    "ast_hash": "9125132cb98ea79785aac637ac73c32e",
     "semantic_hash": ""
   },
   "src/components/LanguageSelector/LanguageSelector.tsx": {
@@ -2035,8 +2035,8 @@
     "semantic_hash": ""
   },
   "src/utils/system/bootPipeline.tsx": {
-    "mtime": 1791575388.4929054,
-    "ast_hash": "55b2b93b8d9822508645aa2d38f0e145",
+    "mtime": 1791577482.6329129,
+    "ast_hash": "7827870ef682eb8bfd26b53334f764ea",
     "semantic_hash": ""
   },
   "src/utils/system/lifecycleCoordinator.test.ts": {
@@ -2250,18 +2250,8 @@
     "semantic_hash": ""
   },
   "src/components/InstallPrompt/InstallPrompt.test.tsx": {
-    "mtime": 1791575424.620905,
-    "ast_hash": "8781d556ccac9fdf7abedb01477898e6",
-    "semantic_hash": ""
-  },
-  "src/utils/browser/pwaInstall.test.ts": {
-    "mtime": 1791575143.7928858,
-    "ast_hash": "81940c1f0c97bc654fff71f1abb3b2bb",
-    "semantic_hash": ""
-  },
-  "src/utils/browser/pwaInstall.ts": {
-    "mtime": 1791575460.1969192,
-    "ast_hash": "c36232e90b28fb1fda5b868eee1408a2",
+    "mtime": 1791578022.5729368,
+    "ast_hash": "61dff739f4ac09170d7f5e21b53e368b",
     "semantic_hash": ""
   }
 }

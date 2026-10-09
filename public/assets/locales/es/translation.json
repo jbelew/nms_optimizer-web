@@ -733,9 +733,6 @@
 	},
 	"installPrompt": {
 		"title": "Añadir a la Pantalla de Inicio",
-		"installTitle": "Instalar Aplicación",
-		"installDescription": "Instala NMS Optimizer para un acceso rápido y una experiencia a pantalla completa.",
-		"installButton": "Instalar",
 		"iosInstructions": "Para la mejor experiencia, añade esta aplicación a tu pantalla de inicio. Abre el menú <strong>Compartir</strong> de tu navegador y selecciona <strong>Añadir a la Pantalla de Inicio</strong>."
 	},
 	"notFound": {

@@ -19,9 +19,6 @@ import { createRoot } from "react-dom/client";
 import { Root } from "@/Root";
 import { initializeAnalytics, initializeAnalyticsClient } from "@/utils/analytics/tracking";
 import { preloadInitialState } from "@/utils/api/apiPreload";
-
-import "@/utils/browser/pwaInstall";
-
 import { performBootstrapMigrations } from "@/utils/system/bootstrap";
 import {
 	handleFatalBootstrapError,

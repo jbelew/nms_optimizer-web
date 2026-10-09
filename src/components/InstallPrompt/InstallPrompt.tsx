@@ -2,25 +2,26 @@
  * PWA Installation management module.
  *
  * @remarks
- * This module manages PWA installation prompting based on platform capabilities:
- * - On Chromium browsers (Android, Chrome, Edge), it listens for the standard
- *   `beforeinstallprompt` event and prompts the user on return visits.
- * - On iOS Safari, it displays manual 'Add to Home Screen' instructions.
- * - On already installed (standalone) PWAs or unsupported platforms, it remains silent.
+ * This module manages PWA installation prompting tailored to platform capabilities:
+ * - On iOS Safari, which lacks native install events and omnibox install buttons,
+ *   it displays subtle instructions to use the 'Add to Home Screen' action via Safari's Share menu.
+ * - On Chromium platforms (Android, Chrome, Edge), installation is delegated entirely
+ *   to native browser mechanisms (Omnibox install icon on desktop, native infobar and
+ *   overflow menu on Android) without disruptive custom prompts.
+ * - On already installed (standalone) PWAs or previously dismissed sessions, it remains silent.
  *
  * @see {@link InstallPrompt}
  * @see {@link ./InstallPrompt.stories.tsx Storybook}
+ * @see {@link ./InstallPrompt.test.tsx Unit Tests}
  *
  * @category Components
  */
 
-import type { BeforeInstallPromptEvent } from "@/utils/browser/pwaInstall";
 import React, { useEffect, useRef } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
 import { useToast } from "@/hooks/useToast/useToast";
 import { isIosSafari, isStandalone, safeGetItem, safeSetItem } from "@/utils/browser/environment";
-import { clearDeferredInstallPrompt, onBeforeInstallPrompt } from "@/utils/browser/pwaInstall";
 
 /**
  * LocalStorage key for tracking if the user has already dismissed the prompt.
@@ -41,10 +42,9 @@ export const USER_VISIT_KEY = "userVisited";
  *
  * @remarks
  * Avoids nagging first-time visitors by showing installation nudges starting
- * on the second visit. Tailors prompts to the user's platform:
- * - Direct install prompt for browsers firing `beforeinstallprompt`.
- * - Safari-specific Share menu instructions for iOS Safari.
- * - No-op for already installed apps or browsers without PWA support.
+ * on the second visit. For iOS Safari users, it presents instructions for manual
+ * addition to the Home Screen. For all other platforms, it allows native browser
+ * install mechanisms to handle installation without obstruction.
  *
  * @returns {null} Non-rendering component (side-effects only).
  *
@@ -81,42 +81,6 @@ export const InstallPrompt: React.FC = () => {
 			return;
 		}
 
-		// Handler for Chromium / Android / Edge native install prompt
-		const handleBeforeInstallPrompt = (deferredPrompt: BeforeInstallPromptEvent) => {
-			clearDeferredInstallPrompt();
-
-			const handleInstall = async () => {
-				await deferredPrompt.prompt();
-			};
-
-			showToast({
-				description: (
-					<div className="flex flex-col gap-2 pt-1">
-						<span>
-							{t("installPrompt.installDescription", {
-								defaultValue:
-									"Install NMS Optimizer for quick access and full-screen experience.",
-							})}
-						</span>
-						<button
-							className="self-start rounded bg-cyan-600 px-3 py-1 text-xs font-semibold text-white hover:bg-cyan-500 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
-							onClick={() => void handleInstall()}
-							type="button"
-						>
-							{t("installPrompt.installButton", { defaultValue: "Install" })}
-						</button>
-					</div>
-				),
-				duration: 12000,
-				title: t("installPrompt.installTitle", { defaultValue: "Install App" }),
-				variant: "success",
-			});
-
-			safeSetItem(INSTALL_PROMPT_DISMISSED_KEY, "true");
-		};
-
-		const unsubscribePrompt = onBeforeInstallPrompt(handleBeforeInstallPrompt);
-
 		// iOS Safari does not support beforeinstallprompt; show platform-specific instructions
 		if (isIosSafari()) {
 			showToast({
@@ -128,15 +92,10 @@ export const InstallPrompt: React.FC = () => {
 				),
 				duration: 10000,
 				title: t("installPrompt.title"),
-				variant: "success",
 			});
 
 			safeSetItem(INSTALL_PROMPT_DISMISSED_KEY, "true");
 		}
-
-		return () => {
-			unsubscribePrompt();
-		};
 	}, [showToast, t]);
 
 	return null;
