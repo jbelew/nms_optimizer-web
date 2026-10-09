@@ -1,3 +1,12 @@
+## [8.0.3](https://github.com/jbelew/nms_optimizer-web/compare/v8.0.2...v8.0.3) (2026-10-09)
+
+
+### Bug Fixes
+
+* **analytics:** isolate telemetry loading from critical path and mock in e2e ([eca3bd4](https://github.com/jbelew/nms_optimizer-web/commit/eca3bd497a54f4a6f78034ad7f23d94693c4e65b))
+* **analytics:** remove unused exports flagged by knip ([da13cfe](https://github.com/jbelew/nms_optimizer-web/commit/da13cfe3287668ec0658907cc64239dc2ed28493))
+* **pwa:** address code review findings across PWA modules ([f53d838](https://github.com/jbelew/nms_optimizer-web/commit/f53d8384550d9de6765f4ca2e70875aab8e977ec))
+
 ## [8.0.2](https://github.com/jbelew/nms_optimizer-web/compare/v8.0.1...v8.0.2) (2026-10-06)
 
 
