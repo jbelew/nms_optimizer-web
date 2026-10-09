@@ -136,6 +136,52 @@ describe("Analytics Tracking", () => {
 			await tracking.initializeAnalytics();
 			expect(ReactGA.initialize).toHaveBeenCalled();
 		});
+
+		it("should inject Cloudflare Web Analytics beacon if not blocked", async () => {
+			(fetch as Mock).mockResolvedValue({ status: 200 });
+			await tracking.initializeAnalytics();
+			expect(document.body.appendChild).toHaveBeenCalledWith(
+				expect.objectContaining({
+					defer: true,
+					src: tracking.CLOUDFLARE_BEACON_SRC,
+				})
+			);
+		});
+
+		it("should not re-inject Cloudflare beacon if already present in DOM", () => {
+			const existingScript = document.createElement("script");
+			vi.mocked(document.querySelector).mockReturnValueOnce(existingScript);
+			tracking.loadCloudflareBeacon();
+			expect(document.body.appendChild).not.toHaveBeenCalled();
+		});
+
+		it("should not inject Cloudflare beacon if analytics are disabled via env", () => {
+			const originalEnv = import.meta.env.VITE_ANALYTICS_ENABLED;
+			vi.stubEnv("VITE_ANALYTICS_ENABLED", "false");
+
+			try {
+				tracking.loadCloudflareBeacon();
+				expect(document.body.appendChild).not.toHaveBeenCalled();
+			} finally {
+				if (originalEnv === undefined) {
+					vi.unstubAllEnvs();
+				} else {
+					vi.stubEnv("VITE_ANALYTICS_ENABLED", originalEnv);
+				}
+			}
+		});
+
+		it("should not inject Cloudflare beacon if user is a bot", () => {
+			vi.stubGlobal("navigator", { userAgent: "Googlebot/2.1" });
+			tracking.loadCloudflareBeacon();
+			expect(document.body.appendChild).not.toHaveBeenCalled();
+		});
+
+		it("should not inject Cloudflare beacon when ad blocker is detected", async () => {
+			(fetch as Mock).mockRejectedValue(new Error("Blocked"));
+			await tracking.initializeAnalytics();
+			expect(document.body.appendChild).not.toHaveBeenCalled();
+		});
 	});
 
 	describe("Event Dispatching", () => {

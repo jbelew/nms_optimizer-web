@@ -11,6 +11,13 @@ test.describe("Application Resilience & Recovery", () => {
 	const MARKER = "__preload_recovery__";
 
 	test.beforeEach(async ({ page }) => {
+		await page.route(
+			/(googletagmanager|google-analytics|cloudflareinsights)/,
+			async (route) => {
+				await route.abort("blockedbyclient");
+			}
+		);
+
 		// Suppress welcome dialog via localStorage and clear Service Workers to ensure fresh tests
 		await page.addInitScript(() => {
 			localStorage.setItem("user-visited", "true");
