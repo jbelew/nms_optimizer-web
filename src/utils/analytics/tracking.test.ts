@@ -2,6 +2,8 @@ import type { Mock } from "vitest";
 import ReactGA from "react-ga4";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { CLOUDFLARE_BEACON_SRC } from "@/constants";
+
 import * as tracking from "./tracking";
 
 // Mock external dependencies
@@ -143,7 +145,7 @@ describe("Analytics Tracking", () => {
 			expect(document.body.appendChild).toHaveBeenCalledWith(
 				expect.objectContaining({
 					defer: true,
-					src: tracking.CLOUDFLARE_BEACON_SRC,
+					src: CLOUDFLARE_BEACON_SRC,
 				})
 			);
 		});

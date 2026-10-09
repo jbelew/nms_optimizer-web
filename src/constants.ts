@@ -43,10 +43,8 @@ export const CLOUDFLARE_BEACON_SRC = "https://static.cloudflareinsights.com/beac
 
 /**
  * Cloudflare Web Analytics site token.
- *
- * @category Utilities
  */
-export const CLOUDFLARE_BEACON_TOKEN = "614f4aacf3d1446bae6719e156ecc36e";
+const CLOUDFLARE_BEACON_TOKEN = "614f4aacf3d1446bae6719e156ecc36e";
 
 /**
  * Cloudflare Web Analytics beacon payload configuration.

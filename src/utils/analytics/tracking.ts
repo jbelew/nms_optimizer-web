@@ -412,8 +412,6 @@ export const sendServerEvent = (
 	}
 };
 
-export { CLOUDFLARE_BEACON_CONFIG, CLOUDFLARE_BEACON_SRC };
-
 /**
  * Injects the Cloudflare Web Analytics beacon script dynamically.
  *
