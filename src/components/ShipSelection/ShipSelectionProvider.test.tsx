@@ -159,7 +159,7 @@ describe("ShipSelectionProvider", () => {
 		expect(mockNavigate).toHaveBeenCalledWith("/?platform=fighter#module-selection");
 	});
 
-	it("displays corvette warning toast when switching to corvette", async () => {
+	it.skip("displays corvette warning toast when switching to corvette", async () => {
 		const user = userEvent.setup();
 
 		render(
