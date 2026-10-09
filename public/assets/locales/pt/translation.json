@@ -733,6 +733,9 @@
 	},
 	"installPrompt": {
 		"title": "Adicionar à Tela de Início",
+		"installTitle": "Instalar Aplicativo",
+		"installDescription": "Instale o NMS Optimizer para acesso rápido e uma experiência em tela cheia.",
+		"installButton": "Instalar",
 		"iosInstructions": "Para a melhor experiência, adicione este app à sua Tela de Início. Abra o menu <strong>Compartilhar</strong> no navegador e selecione <strong>Adicionar à Tela de Início</strong>."
 	},
 	"notFound": {

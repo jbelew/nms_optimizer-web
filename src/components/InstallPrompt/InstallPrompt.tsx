@@ -20,10 +20,18 @@ import { Trans, useTranslation } from "react-i18next";
 import { useToast } from "@/hooks/useToast/useToast";
 import { isIosSafari, isStandalone, safeGetItem, safeSetItem } from "@/utils/browser/environment";
 
-/** LocalStorage key for tracking if the user has already dismissed the prompt. */
+/**
+ * LocalStorage key for tracking if the user has already dismissed the prompt.
+ *
+ * @category Utilities
+ */
 export const INSTALL_PROMPT_DISMISSED_KEY = "installPromptDismissed";
 
-/** LocalStorage key for tracking if the user has visited the app before. */
+/**
+ * LocalStorage key for tracking if the user has visited the app before.
+ *
+ * @category Utilities
+ */
 export const USER_VISIT_KEY = "userVisited";
 
 /** Event interface for the Chromium beforeinstallprompt event. */
@@ -45,9 +53,19 @@ interface BeforeInstallPromptEvent extends Event {
  *
  * @returns {null} Non-rendering component (side-effects only).
  *
+ * @see {@link useToast}
+ * @see {@link ./InstallPrompt.test.tsx Unit Tests}
+ * @see {@link ./InstallPrompt.stories.tsx Storybook}
+ *
  * @component
  *
  * @category Components
+ *
+ * @example
+ * ```tsx
+ * <InstallPrompt />
+ * // returns null (side-effects only)
+ * ```
  */
 export const InstallPrompt: React.FC = () => {
 	const { t } = useTranslation();

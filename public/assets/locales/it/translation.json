@@ -750,6 +750,9 @@
 	},
 	"installPrompt": {
 		"title": "Aggiungi alla schermata Home",
+		"installTitle": "Installa Applicazione",
+		"installDescription": "Installa NMS Optimizer per un accesso rapido e un'esperienza a schermo intero.",
+		"installButton": "Installa",
 		"iosInstructions": "Per la migliore esperienza, aggiungi questa app alla tua schermata Home. Apri il menu <strong>Condividi</strong> nel tuo browser e seleziona <strong>Aggiungi alla schermata Home</strong>."
 	},
 	"notFound": {

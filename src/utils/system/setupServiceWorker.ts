@@ -74,7 +74,7 @@ export function setupServiceWorkerRegistration() {
 								document.visibilityState === "visible" &&
 								!registration.installing
 							) {
-								void registration.update();
+								void registration.update().catch(() => {});
 							}
 						});
 
@@ -82,7 +82,7 @@ export function setupServiceWorkerRegistration() {
 						setInterval(
 							() => {
 								if (!registration.installing) {
-									void registration.update();
+									void registration.update().catch(() => {});
 								}
 							},
 							60 * 60 * 1000 // every 1 hour

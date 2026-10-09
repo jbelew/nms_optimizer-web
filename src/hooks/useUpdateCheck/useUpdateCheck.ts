@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 
+import { Logger } from "@/utils/system/monitoring";
+
 /**
  * Custom hook for detecting application updates via Service Worker.
  *
@@ -43,7 +45,12 @@ export const useUpdateCheck = (
 	useEffect(() => {
 		const handleNewVersion = (event: Event) => {
 			if (!(event instanceof CustomEvent)) return;
-			onUpdateAvailable(event.detail);
+
+			try {
+				onUpdateAvailable(event.detail);
+			} catch (error) {
+				Logger.error("Failed to process update notification", { error });
+			}
 		};
 
 		window.addEventListener("new-version-available", handleNewVersion);

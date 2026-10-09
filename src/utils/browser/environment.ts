@@ -99,13 +99,14 @@ export const isTouchDevice = (): boolean => {
  *
  * @returns {boolean} `true` if running as an installed PWA in standalone mode, otherwise `false`.
  *
+ * @see {@link ./environment.test.ts Unit Tests}
+ *
  * @category Utilities
  *
  * @example
  * ```ts
- * if (isStandalone()) {
- *   // App is running in standalone mode
- * }
+ * const standalone = isStandalone();
+ * // returns boolean
  * ```
  */
 export const isStandalone = (): boolean => {
@@ -132,13 +133,14 @@ export const isStandalone = (): boolean => {
  *
  * @returns {boolean} `true` if current browser is Safari on iOS/iPadOS, otherwise `false`.
  *
+ * @see {@link ./environment.test.ts Unit Tests}
+ *
  * @category Utilities
  *
  * @example
  * ```ts
- * if (isIosSafari()) {
- *   // Show manual 'Add to Home Screen' instructions
- * }
+ * const isSafari = isIosSafari();
+ * // returns boolean
  * ```
  */
 export const isIosSafari = (): boolean => {

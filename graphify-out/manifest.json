@@ -740,13 +740,13 @@
     "semantic_hash": ""
   },
   "src/components/InstallPrompt/InstallPrompt.stories.tsx": {
-    "mtime": 1791565966.8849208,
-    "ast_hash": "63d688fb0058edd1b74686eeeafa82ed",
+    "mtime": 1791566684.3568954,
+    "ast_hash": "795336d57bd4df04d822b97aee4158f3",
     "semantic_hash": ""
   },
   "src/components/InstallPrompt/InstallPrompt.tsx": {
-    "mtime": 1791566170.6649337,
-    "ast_hash": "043d55235f968107ffa9aff42efdbc78",
+    "mtime": 1791566990.6769207,
+    "ast_hash": "68888cc34ba06dc4f4961b9374d600fc",
     "semantic_hash": ""
   },
   "src/components/LanguageSelector/LanguageSelector.tsx": {
@@ -1415,13 +1415,13 @@
     "semantic_hash": ""
   },
   "src/hooks/useUpdateCheck/useUpdateCheck.test.ts": {
-    "mtime": 1791565888.9289315,
-    "ast_hash": "a5b82d164442cf1a0223d2d7b8d97678",
+    "mtime": 1791566684.5128965,
+    "ast_hash": "8cc4e234a4fba4342a6856853681ce42",
     "semantic_hash": ""
   },
   "src/hooks/useUpdateCheck/useUpdateCheck.ts": {
-    "mtime": 1791565884.4409323,
-    "ast_hash": "4bf02374ebaefd529063e8c868912bd1",
+    "mtime": 1791566972.584864,
+    "ast_hash": "64c6081a19718ef7c2520cda8ac98587",
     "semantic_hash": ""
   },
   "src/hooks/useUrlSync/useUrlSync.test.tsx": {
@@ -1730,8 +1730,8 @@
     "semantic_hash": ""
   },
   "src/utils/browser/environment.ts": {
-    "mtime": 1791566120.5409434,
-    "ast_hash": "b1da09324dcc1a7f1488ba908a8d7a53",
+    "mtime": 1791566980.340854,
+    "ast_hash": "3ffd7ba4aae7ce100e7bf609a4472bfb",
     "semantic_hash": ""
   },
   "src/utils/browser/platformResolver.ts": {
@@ -1845,13 +1845,13 @@
     "semantic_hash": ""
   },
   "src/utils/system/setupServiceWorker.test.ts": {
-    "mtime": 1791566131.0249438,
-    "ast_hash": "1999515fb2fe9f042b20c2ac1d3b5451",
+    "mtime": 1791566684.728898,
+    "ast_hash": "cc8e84475de28b6205b6f920952587a0",
     "semantic_hash": ""
   },
   "src/utils/system/setupServiceWorker.ts": {
-    "mtime": 1791565837.7809355,
-    "ast_hash": "f8f83f662904b6cea7927d169ac0c37e",
+    "mtime": 1791566964.2688904,
+    "ast_hash": "f25f124790570a6a4dd1ffb33cf55904",
     "semantic_hash": ""
   },
   "src/utils/system/splashScreen.test.ts": {
@@ -2250,8 +2250,8 @@
     "semantic_hash": ""
   },
   "src/components/InstallPrompt/InstallPrompt.test.tsx": {
-    "mtime": 1791565985.3209298,
-    "ast_hash": "ff1dade43474f05ddac98a4105da6a66",
+    "mtime": 1791566684.424896,
+    "ast_hash": "d701fc4a29ad85a8c6163dc64f1e80ac",
     "semantic_hash": ""
   }
 }
