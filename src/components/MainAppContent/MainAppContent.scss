@@ -115,6 +115,10 @@ $panel-border: 1px solid var(--gray-6);
 		margin-left: -0.25rem;
 		min-width: 0;
 		text-wrap: balance;
+
+		@media (width <=640px) {
+			margin-top: 2px;
+		}
 	}
 
 	// Tech tree section
