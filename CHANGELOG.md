@@ -1,3 +1,10 @@
+## [8.0.4](https://github.com/jbelew/nms_optimizer-web/compare/v8.0.3...v8.0.4) (2026-10-09)
+
+
+### Bug Fixes
+
+* **pwa:** capture beforeinstallprompt early to prevent missed install prompt ([2830376](https://github.com/jbelew/nms_optimizer-web/commit/283037657de3fe03431b16acd8bd370a8151bfd2))
+
 ## [8.0.3](https://github.com/jbelew/nms_optimizer-web/compare/v8.0.2...v8.0.3) (2026-10-09)
 
 
