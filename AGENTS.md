@@ -25,6 +25,7 @@ Before marking any code task complete, execute this sequence:
 - **Build**: `bun run build` (production build, includes static site pre-rendering via SSG).
 - **Single Test**: `bun run test -- src/path/to/file.test.tsx`.
 - **Storybook**: `bun run test:storybook` (unit test stories) and `bun run test:storybook:a11y` (CLI a11y audit).
+- **E2E Tests**: Do not run locally due to duration; CI runs them automatically. Only run locally (`bun run test:e2e:ci` or targeted spec) when actively debugging CI failures.
 - **Format**: `bun run format` (formats `src/`, `README.md`, and markdown assets).
 
 ## Reference Guides (Progressive Disclosure)

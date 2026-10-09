@@ -23,3 +23,15 @@ _Avoid_: shared build, imported layout, URL grid
 **Session Reset**:
 The action of restoring the workspace to an empty, unconfigured layout and clearing all active module selections and URL parameters.
 _Avoid_: rest grid, wipe grid, clear board
+
+**Recommended Builds**:
+Curated, preconfigured technology layouts bundled within the application that provide optimal module placements for common setups.
+_Avoid_: Community Builds, default builds, preset setups
+
+**Platform Type**:
+The vehicle or gear category being configured (e.g. Starship, Multi-Tool, Exosuit, Freighter).
+_Avoid_: ship type, vehicle type, gear type
+
+**Ship Class**:
+The tier rating of a starship (`C`, `B`, `A`, `S`) determining available inventory dimensions and supercharged slot allocations.
+_Avoid_: ship rank, ship tier, platform class

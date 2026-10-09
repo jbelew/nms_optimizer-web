@@ -48,6 +48,7 @@
 		"test:storybook:watch": "bunx vitest --project storybook",
 		"test:storybook:a11y": "bunx vitest run --project storybook --reporter=verbose",
 		"test:e2e": "bun run build:e2e && bunx playwright test",
+		"test:e2e:ci": "CI=true bun run build:e2e && CI=true bunx playwright test",
 		"test:ci": "bunx vitest run --project unit --coverage",
 		"typecheck": "bunx tsgo --noEmit",
 		"verify:ssg": "bun scripts/verify-ssg.mjs",

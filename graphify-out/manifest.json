@@ -1935,8 +1935,8 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1789933639.0,
-    "ast_hash": "a47ef7912cb121807258d39e9eaa44e6",
+    "mtime": 1791312554.296957,
+    "ast_hash": "5c5713c5cee826b0e11f86e0d79ba5bb",
     "semantic_hash": ""
   },
   "GEMINI.md": {
@@ -1955,8 +1955,8 @@
     "semantic_hash": ""
   },
   "docs/agents/architecture.md": {
-    "mtime": 1788477393.0,
-    "ast_hash": "9d0c9035edef06e0f6037e74f52b498c",
+    "mtime": 1791312261.3902962,
+    "ast_hash": "42c991755ec31186f968a37eaaf896ac",
     "semantic_hash": ""
   },
   "docs/agents/code-style.md": {
@@ -1980,13 +1980,13 @@
     "semantic_hash": ""
   },
   "docs/agents/project-rules.md": {
-    "mtime": 1788477216.0,
-    "ast_hash": "02449170f0cae8a6eda32cbf9b34a1ea",
+    "mtime": 1791312256.1486146,
+    "ast_hash": "ea7c7ccf54d54de74ca9a89f2ec76857",
     "semantic_hash": ""
   },
   "docs/agents/testing.md": {
-    "mtime": 1788384701.0,
-    "ast_hash": "edb1568f735ddad3f9ec93d6f50e2eda",
+    "mtime": 1791312540.6739168,
+    "ast_hash": "2d0794a995a3c6728147e2e0c23d6b45",
     "semantic_hash": ""
   },
   "docs/agents/triage-labels.md": {
@@ -2050,8 +2050,8 @@
     "semantic_hash": ""
   },
   "CONTEXT.md": {
-    "mtime": 1791052580.0371323,
-    "ast_hash": "17781b17bb341fe01b5d085b288f5c6a",
+    "mtime": 1791312272.2463512,
+    "ast_hash": "78b50bc1ea30e2ce38813bd522ccf952",
     "semantic_hash": ""
   },
   "shared/page-metadata.js": {

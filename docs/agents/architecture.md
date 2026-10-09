@@ -26,4 +26,4 @@ Guidelines and technical decisions regarding the system architecture of the NMS 
 - [`src/hooks/`](file:///home/jbelew/projects/nms_optimizer-web/src/hooks/): Custom React hooks
 - [`src/utils/`](file:///home/jbelew/projects/nms_optimizer-web/src/utils/): Shared utilities
 - [`server/`](file:///home/jbelew/projects/nms_optimizer-web/server/): Express app for production serving
-- [`e2e-tests/`](file:///home/jbelew/projects/nms_optimizer-web/e2e-tests/): Playwright tests (Note: Legacy/Unstable)
+- [`e2e-tests/`](file:///home/jbelew/projects/nms_optimizer-web/e2e-tests/): Playwright tests (Required CI release gate; see [`docs/agents/testing.md`](file:///home/jbelew/projects/nms_optimizer-web/docs/agents/testing.md))
