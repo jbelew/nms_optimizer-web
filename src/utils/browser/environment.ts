@@ -91,6 +91,70 @@ export const isTouchDevice = (): boolean => {
 };
 
 /**
+ * Checks if the application is currently running in standalone (PWA) mode.
+ *
+ * @remarks
+ * Detects standalone mode via the standard CSS media query `(display-mode: standalone)`
+ * and the iOS-specific `navigator.standalone` property.
+ *
+ * @returns {boolean} `true` if running as an installed PWA in standalone mode, otherwise `false`.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * if (isStandalone()) {
+ *   // App is running in standalone mode
+ * }
+ * ```
+ */
+export const isStandalone = (): boolean => {
+	if (typeof window === "undefined") return false;
+
+	const isDisplayStandalone =
+		typeof window.matchMedia === "function" &&
+		window.matchMedia("(display-mode: standalone)").matches;
+
+	const isIosStandalone =
+		typeof navigator !== "undefined" &&
+		"standalone" in navigator &&
+		Boolean((navigator as unknown as { standalone?: boolean }).standalone);
+
+	return Boolean(isDisplayStandalone || isIosStandalone);
+};
+
+/**
+ * Checks if the current browser environment is Safari on iOS/iPadOS.
+ *
+ * @remarks
+ * Uses user agent sniffing and touch point detection (for iPads running desktop UA)
+ * while excluding non-Safari browsers (Chrome, Edge, CriOS, etc.).
+ *
+ * @returns {boolean} `true` if current browser is Safari on iOS/iPadOS, otherwise `false`.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * if (isIosSafari()) {
+ *   // Show manual 'Add to Home Screen' instructions
+ * }
+ * ```
+ */
+export const isIosSafari = (): boolean => {
+	if (typeof navigator === "undefined") return false;
+
+	const ua = navigator.userAgent || "";
+	const isIos =
+		/iphone|ipad|ipod/i.test(ua) ||
+		(navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+	const isSafari = /safari/i.test(ua) && !/chrome|crios|android|edg|edgios|fxios|opr\//i.test(ua);
+
+	return Boolean(isIos && isSafari);
+};
+
+/**
  * Safely retrieves an item from `localStorage`.
  *
  * @param {string} key - The key to retrieve. **Must not be empty.**

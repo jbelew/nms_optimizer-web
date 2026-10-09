@@ -14,10 +14,15 @@ const meta = {
 			localStorage.setItem("userVisited", "true");
 			localStorage.removeItem("installPromptDismissed");
 
-			// Mock touch device so isTouchDevice() returns true
+			// Mock touch device and iOS Safari so isIosSafari() returns true
 			Object.defineProperty(navigator, "maxTouchPoints", {
 				configurable: true,
 				value: 1,
+				writable: true,
+			});
+			Object.defineProperty(navigator, "userAgent", {
+				configurable: true,
+				value: "Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1",
 				writable: true,
 			});
 

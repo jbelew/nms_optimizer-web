@@ -1,72 +1,46 @@
-import { act, renderHook } from "@testing-library/react";
+import { renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useUpdateCheck } from "./useUpdateCheck";
 
 describe("useUpdateCheck", () => {
 	const onUpdateAvailable = vi.fn();
-	const mockBuildDate = "2023-10-27T10:00:00.000Z";
 
 	beforeEach(() => {
-		vi.stubGlobal("__BUILD_DATE__", mockBuildDate);
 		onUpdateAvailable.mockClear();
-		global.fetch = vi.fn();
 	});
 
 	afterEach(() => {
-		vi.unstubAllGlobals();
 		vi.restoreAllMocks();
 	});
 
-	it("should call onUpdateAvailable when server returns different build date", async () => {
-		// Mock fetch to return a different build date
-		vi.mocked(global.fetch).mockResolvedValue({
-			json: async () => ({ buildDate: "2023-10-28T10:00:00.000Z" }),
-			ok: true,
-		} as Response);
-
+	it("should call onUpdateAvailable when new-version-available event is dispatched", () => {
+		const mockUpdateSW = vi.fn();
 		renderHook(() => useUpdateCheck(onUpdateAvailable));
 
-		await act(async () => {
-			window.dispatchEvent(new CustomEvent("new-version-available", { detail: vi.fn() }));
-			// Wait for async fetch to complete
-			await new Promise((resolve) => setTimeout(resolve, 0));
-		});
+		window.dispatchEvent(new CustomEvent("new-version-available", { detail: mockUpdateSW }));
 
 		expect(onUpdateAvailable).toHaveBeenCalledTimes(1);
+		expect(onUpdateAvailable).toHaveBeenCalledWith(mockUpdateSW);
 	});
 
-	it("should NOT call onUpdateAvailable when server returns same build date", async () => {
-		// Mock fetch to return the same build date
-		vi.mocked(global.fetch).mockResolvedValue({
-			json: async () => ({ buildDate: mockBuildDate }),
-			ok: true,
-		} as Response);
-
+	it("should ignore non-CustomEvent events", () => {
 		renderHook(() => useUpdateCheck(onUpdateAvailable));
 
-		await act(async () => {
-			window.dispatchEvent(new CustomEvent("new-version-available", { detail: vi.fn() }));
-			// Wait for async fetch to complete
-			await new Promise((resolve) => setTimeout(resolve, 0));
-		});
+		window.dispatchEvent(new Event("new-version-available"));
 
 		expect(onUpdateAvailable).not.toHaveBeenCalled();
 	});
 
-	it("should call onUpdateAvailable on fetch error (fail-safe)", async () => {
-		// Mock fetch to throw an error
-		vi.mocked(global.fetch).mockRejectedValue(new Error("Network error"));
+	it("should clean up event listener on unmount", () => {
+		const removeEventListenerSpy = vi.spyOn(window, "removeEventListener");
+		const { unmount } = renderHook(() => useUpdateCheck(onUpdateAvailable));
 
-		renderHook(() => useUpdateCheck(onUpdateAvailable));
+		unmount();
 
-		await act(async () => {
-			window.dispatchEvent(new CustomEvent("new-version-available", { detail: vi.fn() }));
-			// Wait for async fetch to complete
-			await new Promise((resolve) => setTimeout(resolve, 0));
-		});
-
-		// Should show prompt as a fail-safe
-		expect(onUpdateAvailable).toHaveBeenCalledTimes(1);
+		expect(removeEventListenerSpy).toHaveBeenCalledWith(
+			"new-version-available",
+			expect.any(Function)
+		);
 	});
 });

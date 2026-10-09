@@ -2,8 +2,11 @@
  * PWA Installation management module.
  *
  * @remarks
- * This module contains the `InstallPrompt` logic, which intelligently nudges
- * mobile users to install the application as a PWA after their initial visit.
+ * This module manages PWA installation prompting based on platform capabilities:
+ * - On Chromium browsers (Android, Chrome, Edge), it listens for the standard
+ *   `beforeinstallprompt` event and prompts the user on return visits.
+ * - On iOS Safari, it displays manual 'Add to Home Screen' instructions.
+ * - On already installed (standalone) PWAs or unsupported platforms, it remains silent.
  *
  * @see {@link InstallPrompt}
  * @see {@link ./InstallPrompt.stories.tsx Storybook}
@@ -15,52 +18,99 @@ import React, { useEffect, useRef } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
 import { useToast } from "@/hooks/useToast/useToast";
-import { isTouchDevice, safeGetItem, safeSetItem } from "@/utils/browser/environment";
+import { isIosSafari, isStandalone, safeGetItem, safeSetItem } from "@/utils/browser/environment";
 
 /** LocalStorage key for tracking if the user has already dismissed the prompt. */
-const INSTALL_PROMPT_DISMISSED_KEY = "installPromptDismissed";
+export const INSTALL_PROMPT_DISMISSED_KEY = "installPromptDismissed";
+
 /** LocalStorage key for tracking if the user has visited the app before. */
-const USER_VISIT_KEY = "userVisited";
+export const USER_VISIT_KEY = "userVisited";
+
+/** Event interface for the Chromium beforeinstallprompt event. */
+interface BeforeInstallPromptEvent extends Event {
+	readonly platforms: string[];
+	prompt(): Promise<void>;
+	readonly userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
+}
 
 /**
- * A non-rendering component that manages the PWA installation prompt logic.
+ * A non-rendering component that manages PWA installation prompts.
  *
  * @remarks
- * It uses a heuristic to determine if the user is on a mobile device and hasn't
- * installed the app yet. To avoid annoying new users, it only shows the
- * prompt starting from the second visit. It uses the `Toast` system to
- * display installation instructions (specifically tailored for iOS).
+ * Avoids nagging first-time visitors by showing installation nudges starting
+ * on the second visit. Tailors prompts to the user's platform:
+ * - Direct install prompt for browsers firing `beforeinstallprompt`.
+ * - Safari-specific Share menu instructions for iOS Safari.
+ * - No-op for already installed apps or browsers without PWA support.
  *
- * @returns {null} This component does not render any visual elements.
- *
- * @see {@link useToast}
- * @see {@link isTouchDevice}
+ * @returns {null} Non-rendering component (side-effects only).
  *
  * @component
  *
  * @category Components
- *
- * @example
- * ```tsx
- * <InstallPrompt />
- * // returns null (side-effects only)
- * ```
  */
 export const InstallPrompt: React.FC = () => {
 	const { t } = useTranslation();
 	const { showToast } = useToast();
 
-	// Capture the visit state once on component mount.
-	// This ensures that even if the effect re-runs in the same session,
-	// we still treat it as the "first visit" based on the state when the page loaded.
-	const wasVisitedRef = useRef(!!safeGetItem(USER_VISIT_KEY));
+	const wasVisitedRef = useRef(Boolean(safeGetItem(USER_VISIT_KEY)));
 
 	useEffect(() => {
-		const isInstalled = window.matchMedia("(display-mode: standalone)").matches;
-		const isDismissed = safeGetItem(INSTALL_PROMPT_DISMISSED_KEY);
-		const hadVisitedBeforeLoad = wasVisitedRef.current;
+		// Mark user as visited for subsequent sessions
+		if (!wasVisitedRef.current) {
+			safeSetItem(USER_VISIT_KEY, "true");
 
-		if (!isInstalled && !isDismissed && hadVisitedBeforeLoad && isTouchDevice()) {
+			return;
+		}
+
+		// Don't prompt if already running in standalone PWA mode or previously dismissed
+		if (isStandalone() || safeGetItem(INSTALL_PROMPT_DISMISSED_KEY)) {
+			return;
+		}
+
+		// Handler for Chromium / Android / Edge native install prompt
+		const handleBeforeInstallPrompt = (e: Event) => {
+			e.preventDefault();
+			const deferredPrompt = e as BeforeInstallPromptEvent;
+
+			const handleInstall = async () => {
+				try {
+					await deferredPrompt.prompt();
+				} finally {
+					safeSetItem(INSTALL_PROMPT_DISMISSED_KEY, "true");
+				}
+			};
+
+			showToast({
+				description: (
+					<div className="flex flex-col gap-2 pt-1">
+						<span>
+							{t("installPrompt.installDescription", {
+								defaultValue:
+									"Install NMS Optimizer for quick access and full-screen experience.",
+							})}
+						</span>
+						<button
+							className="self-start rounded bg-cyan-600 px-3 py-1 text-xs font-semibold text-white hover:bg-cyan-500 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
+							onClick={() => void handleInstall()}
+							type="button"
+						>
+							{t("installPrompt.installButton", { defaultValue: "Install" })}
+						</button>
+					</div>
+				),
+				duration: 12000,
+				title: t("installPrompt.installTitle", { defaultValue: "Install App" }),
+				variant: "success",
+			});
+
+			safeSetItem(INSTALL_PROMPT_DISMISSED_KEY, "true");
+		};
+
+		window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+
+		// iOS Safari does not support beforeinstallprompt; show platform-specific instructions
+		if (isIosSafari()) {
 			showToast({
 				description: (
 					<Trans
@@ -76,11 +126,9 @@ export const InstallPrompt: React.FC = () => {
 			safeSetItem(INSTALL_PROMPT_DISMISSED_KEY, "true");
 		}
 
-		// Mark user as having visited. This setting in localStorage will be picked up
-		// by wasVisitedRef.current in the NEXT session (page refresh/revisit).
-		if (!hadVisitedBeforeLoad) {
-			safeSetItem(USER_VISIT_KEY, "true");
-		}
+		return () => {
+			window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+		};
 	}, [showToast, t]);
 
 	return null;

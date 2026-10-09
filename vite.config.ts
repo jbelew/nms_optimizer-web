@@ -67,36 +67,6 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 		console.warn("⚠️  SENTRY_AUTH_TOKEN is missing. Source maps will not be uploaded.");
 	}
 
-	const deferManifestPlugin = () => ({
-		enforce: "post" as const,
-		name: "defer-manifest",
-		transformIndexHtml: {
-			handler(html: string) {
-				// Remove the automatically injected manifest link (handles various formats)
-				const manifestRegex = /<link rel="manifest"[^>]*href="[^"]*manifest\.json"[^>]*>/;
-				const hasManifest = manifestRegex.test(html);
-				let newHtml = html.replace(manifestRegex, "");
-
-				if (hasManifest) {
-					// Inject it via script after load
-					const script = `
-		<script>
-			window.addEventListener('load', function() {
-				var link = document.createElement('link');
-				link.rel = 'manifest';
-				link.href = '/manifest.json';
-				document.head.appendChild(link);
-			});
-		</script>`;
-					newHtml = newHtml.replace("</head>", `${script}\n	</head>`);
-				}
-
-				return newHtml;
-			},
-			order: "post" as const,
-		},
-	});
-
 	return {
 		build: {
 			chunkSizeWarningLimit: 600,
@@ -618,7 +588,6 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 						}),
 					]
 				: []),
-			deferManifestPlugin(),
 		],
 		preview: { host: "0.0.0.0", port: 4173 },
 		resolve: {

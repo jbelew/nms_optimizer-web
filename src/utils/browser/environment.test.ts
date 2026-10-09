@@ -2,6 +2,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
 	isBot,
+	isIosSafari,
+	isStandalone,
 	isTouchDevice,
 	safeClear,
 	safeGetItem,
@@ -65,6 +67,69 @@ describe("environment utilities", () => {
 			vi.stubGlobal("window", {});
 			vi.stubGlobal("navigator", { maxTouchPoints: 0 });
 			expect(isTouchDevice()).toBe(false);
+		});
+	});
+
+	describe("isStandalone", () => {
+		it("should return true if matchMedia matches standalone display mode", () => {
+			vi.stubGlobal("window", {
+				matchMedia: (query: string) => ({
+					matches: query === "(display-mode: standalone)",
+				}),
+			});
+			expect(isStandalone()).toBe(true);
+		});
+
+		it("should return true if navigator.standalone is true on iOS", () => {
+			vi.stubGlobal("window", {
+				matchMedia: () => ({ matches: false }),
+			});
+			vi.stubGlobal("navigator", { standalone: true });
+			expect(isStandalone()).toBe(true);
+		});
+
+		it("should return false when not in standalone mode", () => {
+			vi.stubGlobal("window", {
+				matchMedia: () => ({ matches: false }),
+			});
+			vi.stubGlobal("navigator", { standalone: false });
+			expect(isStandalone()).toBe(false);
+		});
+	});
+
+	describe("isIosSafari", () => {
+		it("should return true for iPhone Safari", () => {
+			vi.stubGlobal("navigator", {
+				userAgent:
+					"Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1",
+			});
+			expect(isIosSafari()).toBe(true);
+		});
+
+		it("should return true for iPad on desktop UA with multi-touch", () => {
+			vi.stubGlobal("navigator", {
+				maxTouchPoints: 5,
+				platform: "MacIntel",
+				userAgent:
+					"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15",
+			});
+			expect(isIosSafari()).toBe(true);
+		});
+
+		it("should return false for Chrome on iOS (CriOS)", () => {
+			vi.stubGlobal("navigator", {
+				userAgent:
+					"Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/123.0.6312.52 Mobile/15E148 Safari/604.1",
+			});
+			expect(isIosSafari()).toBe(false);
+		});
+
+		it("should return false for Chrome on Android", () => {
+			vi.stubGlobal("navigator", {
+				userAgent:
+					"Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.6312.80 Mobile Safari/537.36",
+			});
+			expect(isIosSafari()).toBe(false);
 		});
 	});
 

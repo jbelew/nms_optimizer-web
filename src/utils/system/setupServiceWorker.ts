@@ -68,31 +68,24 @@ export function setupServiceWorkerRegistration() {
 					onRegistered(registration) {
 						if (!registration) return;
 
-						// Periodically check for SW updates (every 60s).
-						// This catches the case where a new SW enters the
-						// `waiting` state but the `statechange` event was
-						// missed because registration was deferred.
+						// Check for SW updates when the user returns to the tab
+						document.addEventListener("visibilitychange", () => {
+							if (
+								document.visibilityState === "visible" &&
+								!registration.installing
+							) {
+								void registration.update();
+							}
+						});
+
+						// Also periodically check for updates once per hour during long-running sessions
 						setInterval(
-							async () => {
-								// Skip if another install is already in progress
-								if (registration.installing) return;
-
-								// Use fetch to check if the SW script changed,
-								// bypassing the HTTP cache to get a fresh copy.
-								try {
-									const resp = await fetch("/sw.js", {
-										cache: "no-cache",
-										headers: { "cache-control": "no-cache" },
-									});
-
-									if (resp?.status === 200) {
-										await registration.update();
-									}
-								} catch {
-									// Network error — skip this cycle
+							() => {
+								if (!registration.installing) {
+									void registration.update();
 								}
 							},
-							60 * 1000 // every 60 seconds
+							60 * 60 * 1000 // every 1 hour
 						);
 					},
 					onRegisterError(error) {

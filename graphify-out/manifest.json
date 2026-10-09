@@ -185,7 +185,7 @@
     "semantic_hash": ""
   },
   "scripts/process-images.mjs": {
-    "mtime": 1791052580.048649,
+    "mtime": 1791565296.9129155,
     "ast_hash": "0d6c49215ed5c19da8730a0a3bf382fe",
     "semantic_hash": ""
   },
@@ -740,13 +740,13 @@
     "semantic_hash": ""
   },
   "src/components/InstallPrompt/InstallPrompt.stories.tsx": {
-    "mtime": 1779145165.0,
-    "ast_hash": "1a44f70f296436d8127351cfe1e24a6e",
+    "mtime": 1791565966.8849208,
+    "ast_hash": "63d688fb0058edd1b74686eeeafa82ed",
     "semantic_hash": ""
   },
   "src/components/InstallPrompt/InstallPrompt.tsx": {
-    "mtime": 1779308864.0,
-    "ast_hash": "bb7dde8127fdbf79bb70d9c55dc7e7a3",
+    "mtime": 1791566170.6649337,
+    "ast_hash": "043d55235f968107ffa9aff42efdbc78",
     "semantic_hash": ""
   },
   "src/components/LanguageSelector/LanguageSelector.tsx": {
@@ -790,7 +790,7 @@
     "semantic_hash": ""
   },
   "src/components/MainAppContent/ShipSelectionHeading.tsx": {
-    "mtime": 1791052580.0601661,
+    "mtime": 1791565296.9169154,
     "ast_hash": "55383eb8f41dd31a410d3816e922ec3b",
     "semantic_hash": ""
   },
@@ -1050,7 +1050,7 @@
     "semantic_hash": ""
   },
   "src/components/TechTreeRow/BonusStatusIcon.test.tsx": {
-    "mtime": 1791305009.941355,
+    "mtime": 1791565296.9169154,
     "ast_hash": "2319700bb0b253527f07939bc6c426f8",
     "semantic_hash": ""
   },
@@ -1060,7 +1060,7 @@
     "semantic_hash": ""
   },
   "src/components/TechTreeRow/TechTreeRow.tsx": {
-    "mtime": 1791305103.1385374,
+    "mtime": 1791565296.9169154,
     "ast_hash": "19f94e2d40bbdd272a30fa5129b3c8af",
     "semantic_hash": ""
   },
@@ -1415,13 +1415,13 @@
     "semantic_hash": ""
   },
   "src/hooks/useUpdateCheck/useUpdateCheck.test.ts": {
-    "mtime": 1779145164.0,
-    "ast_hash": "24e04f6666c8a14efb6b37b71cba0cd8",
+    "mtime": 1791565888.9289315,
+    "ast_hash": "a5b82d164442cf1a0223d2d7b8d97678",
     "semantic_hash": ""
   },
   "src/hooks/useUpdateCheck/useUpdateCheck.ts": {
-    "mtime": 1779308864.0,
-    "ast_hash": "4a796a0d920027f9dff16db9e8fc7176",
+    "mtime": 1791565884.4409323,
+    "ast_hash": "4bf02374ebaefd529063e8c868912bd1",
     "semantic_hash": ""
   },
   "src/hooks/useUrlSync/useUrlSync.test.tsx": {
@@ -1725,13 +1725,13 @@
     "semantic_hash": ""
   },
   "src/utils/browser/environment.test.ts": {
-    "mtime": 1779145165.0,
-    "ast_hash": "75530863e7e1eb0a0415ffc51a2a10ad",
+    "mtime": 1791565940.3329341,
+    "ast_hash": "b39fad232cd30b5aeb89a43f29901ccf",
     "semantic_hash": ""
   },
   "src/utils/browser/environment.ts": {
-    "mtime": 1787940776.0,
-    "ast_hash": "c57ce39bdd2e2bcd7f4f0237dd878593",
+    "mtime": 1791566120.5409434,
+    "ast_hash": "b1da09324dcc1a7f1488ba908a8d7a53",
     "semantic_hash": ""
   },
   "src/utils/browser/platformResolver.ts": {
@@ -1845,13 +1845,13 @@
     "semantic_hash": ""
   },
   "src/utils/system/setupServiceWorker.test.ts": {
-    "mtime": 1779145165.0,
-    "ast_hash": "ed98ec21e74b7d4f56233eee6ddcd920",
+    "mtime": 1791566131.0249438,
+    "ast_hash": "1999515fb2fe9f042b20c2ac1d3b5451",
     "semantic_hash": ""
   },
   "src/utils/system/setupServiceWorker.ts": {
-    "mtime": 1779308864.0,
-    "ast_hash": "d3de13c8720dbf442fd53ef5ddca1e76",
+    "mtime": 1791565837.7809355,
+    "ast_hash": "f8f83f662904b6cea7927d169ac0c37e",
     "semantic_hash": ""
   },
   "src/utils/system/splashScreen.test.ts": {
@@ -1910,8 +1910,8 @@
     "semantic_hash": ""
   },
   "vite.config.ts": {
-    "mtime": 1790355478.4696715,
-    "ast_hash": "fde390f313872d184056e3e55b5e8340",
+    "mtime": 1791566019.2809334,
+    "ast_hash": "979c2db97e76a89966ffce7247cf42fd",
     "semantic_hash": ""
   },
   "vitest-mocks/virtual-markdown-bundle.ts": {
@@ -1935,7 +1935,7 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1791312554.296957,
+    "mtime": 1791565296.8529155,
     "ast_hash": "5c5713c5cee826b0e11f86e0d79ba5bb",
     "semantic_hash": ""
   },
@@ -1955,7 +1955,7 @@
     "semantic_hash": ""
   },
   "docs/agents/architecture.md": {
-    "mtime": 1791312261.3902962,
+    "mtime": 1791565296.8649154,
     "ast_hash": "42c991755ec31186f968a37eaaf896ac",
     "semantic_hash": ""
   },
@@ -1980,12 +1980,12 @@
     "semantic_hash": ""
   },
   "docs/agents/project-rules.md": {
-    "mtime": 1791312256.1486146,
+    "mtime": 1791565296.8649154,
     "ast_hash": "ea7c7ccf54d54de74ca9a89f2ec76857",
     "semantic_hash": ""
   },
   "docs/agents/testing.md": {
-    "mtime": 1791312540.6739168,
+    "mtime": 1791565296.8649154,
     "ast_hash": "2d0794a995a3c6728147e2e0c23d6b45",
     "semantic_hash": ""
   },
@@ -2050,7 +2050,7 @@
     "semantic_hash": ""
   },
   "CONTEXT.md": {
-    "mtime": 1791312272.2463512,
+    "mtime": 1791565296.8569155,
     "ast_hash": "78b50bc1ea30e2ce38813bd522ccf952",
     "semantic_hash": ""
   },
@@ -2247,6 +2247,11 @@
   "src/store/grid/useGridFocusStore.ts": {
     "mtime": 1790355478.465765,
     "ast_hash": "a75bde4152512b4645b8a76c1fec3950",
+    "semantic_hash": ""
+  },
+  "src/components/InstallPrompt/InstallPrompt.test.tsx": {
+    "mtime": 1791565985.3209298,
+    "ast_hash": "ff1dade43474f05ddac98a4105da6a66",
     "semantic_hash": ""
   }
 }

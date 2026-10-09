@@ -178,4 +178,86 @@ describe("setupServiceWorkerRegistration", () => {
 		// Just verify it doesn't throw
 		expect(() => onOfflineReadyCallback!()).not.toThrow();
 	});
+
+	it("should trigger registration.update on visibilitychange when visible", async () => {
+		let onRegisteredCallback:
+			((registration: ServiceWorkerRegistration | undefined) => void) | undefined;
+
+		mockRegisterSW.mockImplementationOnce((options?: RegisterSWOptions) => {
+			if (options?.onRegistered) {
+				onRegisteredCallback = options.onRegistered;
+			}
+
+			return mockUpdateSW;
+		});
+
+		setupServiceWorkerRegistration();
+		await Promise.resolve();
+
+		window.dispatchEvent(new Event("load"));
+		vi.advanceTimersByTime(2000);
+		await vi.runAllTimersAsync();
+
+		expect(onRegisteredCallback).toBeDefined();
+
+		const mockRegistration = {
+			installing: null,
+			update: vi.fn().mockResolvedValue(undefined),
+		} as unknown as ServiceWorkerRegistration;
+
+		onRegisteredCallback!(mockRegistration);
+
+		// When document is hidden, visibilitychange should NOT call update
+		Object.defineProperty(document, "visibilityState", {
+			configurable: true,
+			value: "hidden",
+			writable: true,
+		});
+		document.dispatchEvent(new Event("visibilitychange"));
+		expect(mockRegistration.update).not.toHaveBeenCalled();
+
+		// When document is visible, visibilitychange should call update
+		Object.defineProperty(document, "visibilityState", {
+			configurable: true,
+			value: "visible",
+			writable: true,
+		});
+		document.dispatchEvent(new Event("visibilitychange"));
+		expect(mockRegistration.update).toHaveBeenCalledTimes(1);
+	});
+
+	it("should periodically check for updates once per hour", async () => {
+		let onRegisteredCallback:
+			((registration: ServiceWorkerRegistration | undefined) => void) | undefined;
+
+		mockRegisterSW.mockImplementationOnce((options?: RegisterSWOptions) => {
+			if (options?.onRegistered) {
+				onRegisteredCallback = options.onRegistered;
+			}
+
+			return mockUpdateSW;
+		});
+
+		setupServiceWorkerRegistration();
+		await Promise.resolve();
+
+		window.dispatchEvent(new Event("load"));
+		vi.advanceTimersByTime(2000);
+		await vi.runAllTimersAsync();
+
+		const mockRegistration = {
+			installing: null,
+			update: vi.fn().mockResolvedValue(undefined),
+		} as unknown as ServiceWorkerRegistration;
+
+		onRegisteredCallback!(mockRegistration);
+
+		// Advance by 30 minutes: should not trigger update
+		vi.advanceTimersByTime(30 * 60 * 1000);
+		expect(mockRegistration.update).not.toHaveBeenCalled();
+
+		// Advance by another 30 minutes (1 hour total): should trigger update
+		vi.advanceTimersByTime(30 * 60 * 1000);
+		expect(mockRegistration.update).toHaveBeenCalledTimes(1);
+	});
 });
