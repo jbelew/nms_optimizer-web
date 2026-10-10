@@ -551,4 +551,167 @@ describe("activateLatestServiceWorker", () => {
 			});
 		}
 	});
+
+	it("should wait for waiting worker to reach activated state when waiting worker exists", async () => {
+		let stateChangeCallback: (() => void) | undefined;
+		const mockWaitingWorker = {
+			addEventListener: vi.fn((event: string, cb: () => void) => {
+				if (event === "statechange") {
+					stateChangeCallback = cb;
+				}
+			}),
+			removeEventListener: vi.fn(),
+			state: "installed",
+		} as unknown as ServiceWorker;
+
+		const mockReg = {
+			installing: null,
+			update: vi.fn().mockResolvedValue(undefined),
+			waiting: mockWaitingWorker,
+		} as unknown as ServiceWorkerRegistration;
+
+		const mockUpdateSW = vi.fn().mockResolvedValue(undefined);
+
+		let resolved = false;
+		const promise = activateLatestServiceWorker(mockUpdateSW, mockReg).then(() => {
+			resolved = true;
+		});
+
+		await vi.waitFor(() => {
+			expect(mockUpdateSW).toHaveBeenCalledWith(true);
+		});
+		expect(resolved).toBe(false);
+
+		// Simulate transition to activated
+		Object.defineProperty(mockWaitingWorker, "state", { value: "activated", writable: true });
+		stateChangeCallback?.();
+
+		await promise;
+		expect(resolved).toBe(true);
+	});
+
+	it("should resolve immediately if waiting worker is already in activated state", async () => {
+		const mockWaitingWorker = {
+			addEventListener: vi.fn(),
+			removeEventListener: vi.fn(),
+			state: "activated",
+		} as unknown as ServiceWorker;
+
+		const mockReg = {
+			installing: null,
+			update: vi.fn().mockResolvedValue(undefined),
+			waiting: mockWaitingWorker,
+		} as unknown as ServiceWorkerRegistration;
+
+		const mockUpdateSW = vi.fn().mockResolvedValue(undefined);
+
+		await activateLatestServiceWorker(mockUpdateSW, mockReg);
+
+		expect(mockUpdateSW).toHaveBeenCalledWith(true);
+		expect(mockWaitingWorker.addEventListener).not.toHaveBeenCalled();
+	});
+
+	it("should resolve when waiting worker transitions to redundant state", async () => {
+		let stateChangeCallback: (() => void) | undefined;
+		const mockWaitingWorker = {
+			addEventListener: vi.fn((event: string, cb: () => void) => {
+				if (event === "statechange") {
+					stateChangeCallback = cb;
+				}
+			}),
+			removeEventListener: vi.fn(),
+			state: "installed",
+		} as unknown as ServiceWorker;
+
+		const mockReg = {
+			installing: null,
+			update: vi.fn().mockResolvedValue(undefined),
+			waiting: mockWaitingWorker,
+		} as unknown as ServiceWorkerRegistration;
+
+		const mockUpdateSW = vi.fn().mockResolvedValue(undefined);
+
+		let resolved = false;
+		const promise = activateLatestServiceWorker(mockUpdateSW, mockReg).then(() => {
+			resolved = true;
+		});
+
+		await vi.waitFor(() => {
+			expect(mockUpdateSW).toHaveBeenCalledWith(true);
+		});
+		expect(resolved).toBe(false);
+
+		// Simulate transition to redundant
+		Object.defineProperty(mockWaitingWorker, "state", { value: "redundant", writable: true });
+		stateChangeCallback?.();
+
+		await promise;
+		expect(resolved).toBe(true);
+		expect(mockWaitingWorker.removeEventListener).toHaveBeenCalledWith(
+			"statechange",
+			expect.any(Function)
+		);
+	});
+
+	it("should resolve after timeout and clean up event listener if waiting worker does not activate", async () => {
+		const mockWaitingWorker = {
+			addEventListener: vi.fn(),
+			removeEventListener: vi.fn(),
+			state: "installed",
+		} as unknown as ServiceWorker;
+
+		const mockReg = {
+			installing: null,
+			update: vi.fn().mockResolvedValue(undefined),
+			waiting: mockWaitingWorker,
+		} as unknown as ServiceWorkerRegistration;
+
+		const mockUpdateSW = vi.fn().mockResolvedValue(undefined);
+
+		const promise = activateLatestServiceWorker(mockUpdateSW, mockReg);
+
+		vi.advanceTimersByTime(1501);
+		await vi.runAllTimersAsync();
+		await promise;
+
+		expect(mockWaitingWorker.removeEventListener).toHaveBeenCalledWith(
+			"statechange",
+			expect.any(Function)
+		);
+	});
+
+	it("should post SKIP_WAITING and reload window when waiting worker exists but updateSW is not provided", async () => {
+		const originalLocation = window.location;
+		const mockReload = vi.fn();
+
+		Object.defineProperty(window, "location", {
+			configurable: true,
+			value: { ...originalLocation, reload: mockReload },
+			writable: true,
+		});
+
+		const mockWaitingWorker = {
+			addEventListener: vi.fn(),
+			postMessage: vi.fn(),
+			removeEventListener: vi.fn(),
+			state: "activated",
+		} as unknown as ServiceWorker;
+
+		const mockReg = {
+			installing: null,
+			update: vi.fn().mockResolvedValue(undefined),
+			waiting: mockWaitingWorker,
+		} as unknown as ServiceWorkerRegistration;
+
+		try {
+			await activateLatestServiceWorker(undefined, mockReg);
+			expect(mockReload).toHaveBeenCalled();
+		} finally {
+			Object.defineProperty(window, "location", {
+				configurable: true,
+				value: originalLocation,
+				writable: true,
+			});
+		}
+	});
 });

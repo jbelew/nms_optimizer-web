@@ -19,6 +19,9 @@ import { Logger } from "@/utils/system/monitoring";
 /** Inactivity threshold in milliseconds to consider the application idle (30 minutes). */
 const IDLE_INACTIVITY_THRESHOLD_MS = 30 * 60 * 1000;
 
+/** Timeout in milliseconds to wait for a waiting service worker to transition to activated state. */
+const WAITING_WORKER_ACTIVATION_TIMEOUT_MS = 1500;
+
 let lastUserActivityTimestamp = Date.now();
 
 if (typeof window !== "undefined") {
@@ -68,14 +71,15 @@ export async function activateLatestServiceWorker(
 	customRegistration?: ServiceWorkerRegistration,
 	maxTimeoutMs = 3000
 ): Promise<void> {
-	try {
-		let registration = customRegistration;
+	let registration = customRegistration;
 
+	try {
 		if (!registration && typeof navigator !== "undefined" && "serviceWorker" in navigator) {
 			registration = await navigator.serviceWorker?.getRegistration();
 		}
 
 		if (registration) {
+			const activeReg = registration;
 			// Bounded update check: race network update check and install against maxTimeoutMs
 			await new Promise<void>((resolve) => {
 				let settled = false;
@@ -109,11 +113,11 @@ export async function activateLatestServiceWorker(
 					});
 				};
 
-				registration
+				activeReg
 					.update()
 					.then(() => {
-						if (registration.installing) {
-							handleInstallingWorker(registration.installing);
+						if (activeReg.installing) {
+							handleInstallingWorker(activeReg.installing);
 						} else if (!settled) {
 							settled = true;
 							clearTimeout(timer);
@@ -133,7 +137,55 @@ export async function activateLatestServiceWorker(
 		Logger.warn("Failed to check for newer service worker update before activation", { error });
 	}
 
-	if (updateSW) {
+	if (registration?.waiting) {
+		const waitingWorker = registration.waiting;
+
+		await new Promise<void>((resolve) => {
+			if (waitingWorker.state === "activated" || waitingWorker.state === "redundant") {
+				if (updateSW) {
+					void updateSW(true);
+				}
+
+				resolve();
+
+				return;
+			}
+
+			let finished = false;
+
+			const onStateChange = () => {
+				if (
+					!finished &&
+					(waitingWorker.state === "activated" || waitingWorker.state === "redundant")
+				) {
+					finished = true;
+					clearTimeout(timer);
+					waitingWorker.removeEventListener("statechange", onStateChange);
+					resolve();
+				}
+			};
+
+			const timer = setTimeout(() => {
+				if (!finished) {
+					finished = true;
+					waitingWorker.removeEventListener("statechange", onStateChange);
+					resolve();
+				}
+			}, WAITING_WORKER_ACTIVATION_TIMEOUT_MS);
+
+			waitingWorker.addEventListener("statechange", onStateChange);
+
+			if (updateSW) {
+				void updateSW(true);
+			} else {
+				waitingWorker.postMessage({ type: "SKIP_WAITING" });
+			}
+		});
+
+		if (!updateSW && typeof window !== "undefined") {
+			window.location.reload();
+		}
+	} else if (updateSW) {
 		await updateSW(true);
 	} else if (typeof window !== "undefined") {
 		window.location.reload();

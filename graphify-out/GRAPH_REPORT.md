@@ -1,85 +1,82 @@
-# Graph Report - nms_optimizer-web  (2026-10-09)
+# Graph Report - nms_optimizer-web  (2026-10-10)
 
 ## Corpus Check
-- 451 files · ~209,890 words
+- 451 files · ~210,931 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1746 nodes · 4220 edges · 137 communities (117 shown, 20 thin omitted)
+- 1746 nodes · 4220 edges · 128 communities (108 shown, 20 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 113 edges (avg confidence: 0.57)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c98785a6`
+- Built from commit: `d98a6089`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - performanceChart.tsx
-- useSeoAndTitle.ts
+- RoutedDialogs.integration.test.tsx
 - tracking.ts
-- MobileToolbar.tsx
+- InstallPrompt.stories.tsx
 - MarkdownContentRenderer.tsx
 - ModuleSelectionDialog.tsx
 - useBreakpoint
 - FakeCommandRunnerAdapter
 - sessionCoordinator.ts
-- AppHeader.tsx
+- preview.tsx
 - routes.tsx
 - bootPipeline.tsx
-- RecommendedBuild.stories.tsx
+- lifecycleCoordinator.ts
 - LifecycleCoordinator
 - page-metadata.js
 - UpdatePrompt.tsx
 - __init__.py
-- ShareLinkDialog.tsx
-- Logger
+- OptimizationAlertDialog.tsx
+- gridSerializer.ts
 - CliIssueTrackerAdapter
 - agent.py
 - No Man's Sky Technology Layout Optimizer (Web UI)
-- reportWebVitals.ts
-- userStatsData.tsx
+- GridTableButtons.tsx
+- network.ts
 - generate-ssg.mjs
-- ShipSelection.tsx
+- MainAppLayout.tsx
 - TechTreeRow.test.tsx
-- optimizationManager.ts
-- lifecycleCoordinator.ts
+- src/constants.ts
+- ErrorBoundary.tsx
 - uiStore.ts
-- MainAppContent.tsx
-- dataValidation.ts
-- AppFooter.tsx
+- ShareLinkDialog.tsx
+- buildNameGenerator.ts
+- AppHeader.tsx
 - check-remote-sync.test.mjs
-- GridTable.tsx
+- useGridStore
 - dialogUtils.ts
 - report-inp.py
 - translate.py
 - GridCell.tsx
 - VerificationGate
 - IssueLifecycle
-- useAnalytics
+- Logger
 - useTechTreeRow.ts
 - pwa-config.test.mjs
 - vite-plugin-markdown-bundle.mjs
 - useTechTree.tsx
-- useRecommendedBuild.tsx
+- GridTableButtons.stories.tsx
 - App.tsx
-- monitoring.ts
 - generate-radix-colors.mjs
 - environment.ts
 - sentryMock.ts
 - store-helpers.ts
 - process_stream
-- MainAppLayout.tsx
 - create_screenshot_video.py
 - update-lighthouse-history.mjs
-- platformStore.ts
-- useTechStore
+- fetchTechTreeAsync
+- techStore.ts
 - TechTreeRow.tsx
 - CliAgentRunnerAdapter
 - gridStore.ts
 - spa-routes.test.mjs
 - useTechOptimization.ts
-- GridControlButtons.tsx
 - AGENTS.md
 - Issue tracker: GitHub
 - git-hooks.test.mjs
@@ -91,10 +88,8 @@
 - performance-check.mjs
 - run-bench.mjs
 - verify-routes-consistency.mjs
-- TechTree.stories.tsx
 - OfflineBanner.stories.tsx
-- useOptimize.test.tsx
-- useTechTreeContext.ts
+- useAnalytics
 - Project Safeguards & Preferences
 - Testing Guidelines
 - Gemini Agent: Core Directives & Protocols
@@ -110,11 +105,9 @@
 - apiAdapter.ts
 - radix-themes.d.ts
 - virtual.d.ts
-- TechTreeSection.tsx
 - check-commit-msg-early.mjs
 - cloudflare-function.test.mjs
 - PrerenderedMarkdownRenderer.tsx
-- RoutedDialogs.integration.test.tsx
 - hashUtils.ts
 - critical.d.ts
 - virtual-pwa-register.ts
@@ -129,10 +122,8 @@
 - vitest.config.ts
 - vitest.setup.ts
 - MainAppContent.stories.tsx
-- ErrorContent.stories.tsx
-- techStore.ts
-- applyValidationFeedback.ts
-- TechTreeSkeleton.tsx
+- techRules.ts
+- gridTypes.ts
 - UpdatePromptWrapper.tsx
 - usePlatformStore
 - AppDialog.tsx
@@ -166,27 +157,27 @@
 - 2-file cycle: `src/components/GridTable/GridTable.tsx -> src/components/GridTable/GridTableGrid.tsx -> src/components/GridTable/GridTable.tsx`
 - 3-file cycle: `src/components/ErrorBoundary/ErrorBoundary.tsx -> src/components/ErrorBoundary/ErrorContent.tsx -> src/components/ErrorBoundary/ErrorDisplay.tsx -> src/components/ErrorBoundary/ErrorBoundary.tsx`
 
-## Communities (137 total, 20 thin omitted)
+## Communities (128 total, 20 thin omitted)
 
 ### Community 0 - "performanceChart.tsx"
 Cohesion: 0.07
 Nodes (43): ACTIVE_DOT_STYLE, CHART_MARGIN, CHART_TICK_STYLE, ChartTooltipContent, ChartTooltipContentProps, MetricSummaryCardProps, OVERALL_DOT_STYLE, OVERALL_Y_DOMAIN (+35 more)
 
-### Community 1 - "useSeoAndTitle.ts"
-Cohesion: 0.15
-Nodes (11): AppDialog, PerformanceDialog(), PerformanceDialogProps, UserStatsDialog(), UserStatsDialogProps, useLanguage(), useSeoAndTitle(), getSupportedLanguages() (+3 more)
+### Community 1 - "RoutedDialogs.integration.test.tsx"
+Cohesion: 0.12
+Nodes (15): AppDialog, PerformanceDialog(), PerformanceDialogProps, UserStatsDialog(), UserStatsDialogProps, supportedLanguages, MARKDOWN_DIALOGS, MarkdownContentRenderer (+7 more)
 
 ### Community 2 - "tracking.ts"
-Cohesion: 0.15
-Nodes (15): CLOUDFLARE_BEACON_CONFIG, CLOUDFLARE_BEACON_SRC, TRACKING_ID, WS_URL, AnalyticsEventParams, AnalyticsEventPayload, detectAdBlocker(), dispatchEvent() (+7 more)
+Cohesion: 0.14
+Nodes (20): API_URL, AnalyticsEventParams, reportTBT(), reportWebVitals(), SendEventFunction, sendVitalsMetric(), AnalyticsEventPayload, detectAdBlocker() (+12 more)
 
-### Community 3 - "MobileToolbar.tsx"
-Cohesion: 0.17
-Nodes (8): LanguageFlagPaths, LanguageSelector(), MobileToolbar(), MobileToolbarProps, Default, Story, languages, nativeLanguageNames
+### Community 3 - "InstallPrompt.stories.tsx"
+Cohesion: 0.13
+Nodes (13): Default, Story, NmsToast(), Default, Error, Story, Success, ToastProps (+5 more)
 
 ### Community 4 - "MarkdownContentRenderer.tsx"
 Cohesion: 0.07
-Nodes (12): LoremIpsumSkeleton(), H2Context, LazyReactMarkdown, MARKDOWN_COMPONENTS, MarkdownContentRenderer(), MarkdownContentRendererProps, PrerenderedMarkdownRenderer, YouTubeEmbed() (+4 more)
+Nodes (14): DynamicRadixIcon(), DynamicRadixIconProps, LoremIpsumSkeleton(), H2Context, LazyReactMarkdown, MARKDOWN_COMPONENTS, MarkdownContentRenderer(), MarkdownContentRendererProps (+6 more)
 
 ### Community 5 - "ModuleSelectionDialog.tsx"
 Cohesion: 0.09
@@ -194,15 +185,7 @@ Nodes (23): MODULE_GROUP_ORDER, MODULE_RANK_ORDER, ModuleSelectionContext, Modul
 
 ### Community 6 - "useBreakpoint"
 Cohesion: 0.11
-Nodes (23): ErrorContent(), ErrorContentProps, useGridContext(), BuildNameDialog, GridTableButtons(), GridTableButtonsProps, SCROLL_OPTIONS, {
-	markTutorialFinishedMock,
-	mockResetGrid,
-	mockSendEvent,
-	mockSetIsSharedGrid,
-	mockUpdateUrlForReset,
-	mockUpdateUrlForShare,
-	openDialogMock,
-} (+15 more)
+Nodes (25): ErrorContent(), ErrorContentProps, PageVariant, Story, WithComponentStack, WithErrorMessage, WithStackTrace, mockShowInfo (+17 more)
 
 ### Community 7 - "FakeCommandRunnerAdapter"
 Cohesion: 0.18
@@ -212,29 +195,29 @@ Nodes (13): FakeAgentRunnerAdapter, FakeCommandRunnerAdapter, Fake AgentRunnerAd
 Cohesion: 0.22
 Nodes (8): createGrid(), computeBonusStatus(), sessionCoordinator, mockGridStore, mockPlatformStoreState, mockTechStore, mockUiStore, BonusStatusData
 
-### Community 9 - "AppHeader.tsx"
-Cohesion: 0.05
-Nodes (32): AppHeader, AppHeaderAccessibilityToggle(), AppHeaderChangelogButton(), AppHeaderContainer(), AppHeaderLogo(), AppHeaderPerformanceButton(), AppHeaderSubtitle(), AppHeaderUserStatsButton() (+24 more)
+### Community 9 - "preview.tsx"
+Cohesion: 0.10
+Nodes (19): ConditionalTooltip, ConditionalTooltipProps, TooltipManager(), TooltipProvider(), Root(), useThemeStore, createAppRouter(), TooltipActions (+11 more)
 
 ### Community 10 - "routes.tsx"
-Cohesion: 0.23
-Nodes (9): formatErrorDocumentTitle(), NotFound(), DIALOG_ROUTE_PATHS, languageRoutes, NotFound(), pageRoutes, routes, sendEvent() (+1 more)
+Cohesion: 0.22
+Nodes (8): LanguageCode, languages, PageName, DIALOG_ROUTE_PATHS, languageRoutes, NotFound(), pageRoutes, routes
 
 ### Community 11 - "bootPipeline.tsx"
 Cohesion: 0.23
-Nodes (14): initializeAnalytics(), initializeAnalyticsClient(), loadCloudflareBeacon(), isBot(), registerDefaultDeferredServices(), handleFatalBootstrapError(), activateLatestServiceWorker(), IDLE_INACTIVITY_THRESHOLD_MS (+6 more)
+Nodes (11): BootOptions, BootResult, registerDefaultDeferredServices(), handleFatalBootstrapError(), initializeSentry(), isAppHiddenOrIdle(), lastUserActivityTimestamp, setLastUserActivityForTesting() (+3 more)
 
-### Community 12 - "RecommendedBuild.stories.tsx"
-Cohesion: 0.14
-Nodes (14): RecommendedBuild(), RecommendedBuildProps, Desktop, Mobile, mockTechTree, Story, Tablet, RecommendedBuildButton() (+6 more)
+### Community 12 - "lifecycleCoordinator.ts"
+Cohesion: 0.20
+Nodes (8): formatErrorDocumentTitle(), NotFound(), runWhenIdle(), AppLifecyclePhase, DeferredTaskHandler, LifecycleListener, hideSplashScreenAndShowBackground(), SplashHider()
 
 ### Community 13 - "LifecycleCoordinator"
-Cohesion: 0.11
-Nodes (6): bootApp(), BootOptions, BootResult, DeferredTask, LifecycleCoordinator, LifecycleCoordinatorOptions
+Cohesion: 0.12
+Nodes (4): bootApp(), DeferredTask, LifecycleCoordinator, LifecycleCoordinatorOptions
 
 ### Community 14 - "page-metadata.js"
-Cohesion: 0.21
-Nodes (16): DEFAULT_BASE_URL, DEFAULT_OG_IMAGE_PATH, extractContentHeading(), getPageMetadata(), getAllPages(), getPageByPath(), getRoutedDialogs(), PAGE_IDS (+8 more)
+Cohesion: 0.20
+Nodes (17): DEFAULT_BASE_URL, DEFAULT_OG_IMAGE_PATH, extractContentHeading(), getPageMetadata(), getAllPages(), getPageByPath(), getRoutedDialogs(), PAGE_IDS (+9 more)
 
 ### Community 15 - "UpdatePrompt.tsx"
 Cohesion: 0.38
@@ -244,12 +227,12 @@ Nodes (4): Default, Story, UpdatePrompt(), UpdatePromptProps
 Cohesion: 0.12
 Nodes (18): CommandRunnerAdapter, Interface for running OS commands., Execute a command. Returns (exit_code, stdout, stderr)., Real implementation of CommandRunnerAdapter using subprocess., SubprocessCommandRunnerAdapter, commit(), format_commit_message(), has_staged_changes() (+10 more)
 
-### Community 17 - "ShareLinkDialog.tsx"
-Cohesion: 0.12
-Nodes (11): OptimizationAlertContent(), OptimizationAlertContentProps, OptimizationAlertDialog(), OptimizationAlertDialogProps, Default, Story, ShareLinkContent(), ShareLinkContentProps (+3 more)
+### Community 17 - "OptimizationAlertDialog.tsx"
+Cohesion: 0.23
+Nodes (6): OptimizationAlertContent(), OptimizationAlertContentProps, OptimizationAlertDialog(), OptimizationAlertDialogProps, Default, Story
 
-### Community 18 - "Logger"
-Cohesion: 0.19
+### Community 18 - "gridSerializer.ts"
+Cohesion: 0.16
 Nodes (16): compressRLE(), decompressRLE(), deserialize(), GRID_SERIALIZATION_CONSTANTS, serialize(), fixturePath, nmsFixture, useGridDeserializer() (+8 more)
 
 ### Community 19 - "CliIssueTrackerAdapter"
@@ -264,61 +247,69 @@ Nodes (10): format_initial_prompt(), format_remediation_prompt(), Agent orchestr
 Cohesion: 0.08
 Nodes (24): Agentic JSDoc, Auto-Translation Workflow, Bundle Strategy & Resilience, CI/CD Status, Commit Convention, Component Architecture (Colocated Hooks), 🚀 Development Workflow, 🐳 Docker (+16 more)
 
-### Community 22 - "reportWebVitals.ts"
-Cohesion: 0.29
-Nodes (8): AppHeaderContext, AppHeaderContextValue, GA4Event, reportTBT(), reportWebVitals(), SendEventFunction, sendVitalsMetric(), DialogType
+### Community 22 - "GridTableButtons.tsx"
+Cohesion: 0.22
+Nodes (8): useGridContext(), BuildNameDialog, GridTableButtons(), GridTableButtonsProps, SCROLL_OPTIONS, {
+	markTutorialFinishedMock,
+	mockResetGrid,
+	mockSendEvent,
+	mockSetIsSharedGrid,
+	mockUpdateUrlForReset,
+	mockUpdateUrlForShare,
+	openDialogMock,
+}, mockGridRef, { setGridStoreState, useGridStore }
 
-### Community 23 - "userStatsData.tsx"
-Cohesion: 0.18
-Nodes (12): UserStatsContent(), UserStatsContentProps, COLORS, LazyRechartsChart, PieLabelRenderProps, UserStatsData(), useTechTreeColors(), useUserStats() (+4 more)
+### Community 23 - "network.ts"
+Cohesion: 0.13
+Nodes (17): UserStatsContent(), UserStatsContentProps, COLORS, LazyRechartsChart, PieLabelRenderProps, UserStatsData(), useTechTreeColors(), useUserStats() (+9 more)
 
 ### Community 24 - "generate-ssg.mjs"
 Cohesion: 0.10
 Nodes (30): CHANGE_FREQUENCIES, __dirname, escapeXml(), EXCLUDED_FROM_SITEMAP, __filename, generateSitemap(), getFileLastMod(), getPageImages() (+22 more)
 
-### Community 25 - "ShipSelection.tsx"
-Cohesion: 0.10
-Nodes (20): ShipSelection(), ShipSelectionProps, Default, Story, ShipSelectionContent(), mockNavigate, mockSendDeferredEvent, mockShowInfo (+12 more)
+### Community 25 - "MainAppLayout.tsx"
+Cohesion: 0.05
+Nodes (48): MainAppContent(), MainAppProvider(), MainAppGridSection(), BuildNameDialog, ErrorMessageRenderer, InstallPrompt, MainAppBackgroundServices(), MainAppFooter() (+40 more)
 
 ### Community 26 - "TechTreeRow.test.tsx"
-Cohesion: 0.14
-Nodes (11): defaultProps, mockClearTechMaxBonus, mockClearTechSolvedBonus, mockResetGridTech, mockUseGridStore, mockUseModuleSelectionDialogStore, mockUseShakeStore, mockUseTechStore (+3 more)
+Cohesion: 0.11
+Nodes (14): TechTreeProvider(), TechTreeContext, TechTreeContextValue, defaultProps, mockClearTechMaxBonus, mockClearTechSolvedBonus, mockResetGridTech, mockUseGridStore (+6 more)
 
-### Community 27 - "optimizationManager.ts"
+### Community 27 - "src/constants.ts"
 Cohesion: 0.18
-Nodes (13): createCellFromModuleData(), ApiResponse, Grid, GridActions, GridComputed, GridState, Module, createSocket() (+5 more)
+Nodes (12): CLOUDFLARE_BEACON_CONFIG, CLOUDFLARE_BEACON_SRC, TRACKING_ID, WS_URL, ApiResponse, createSocket(), SOCKET_OPTIONS, TRANSPORT_ERROR_MESSAGES (+4 more)
 
-### Community 28 - "lifecycleCoordinator.ts"
-Cohesion: 0.15
-Nodes (9): ErrorBoundary, Props, State, handleError(), RouteError(), AppLifecyclePhase, DeferredTaskHandler, LifecycleListener (+1 more)
+### Community 28 - "ErrorBoundary.tsx"
+Cohesion: 0.18
+Nodes (6): ErrorBoundary, Props, State, handleError(), RouteError(), captureException()
 
 ### Community 29 - "uiStore.ts"
-Cohesion: 0.09
-Nodes (26): ErrorContent(), ErrorDialog(), ErrorDialogProps, Default, Story, ErrorDisplay(), ErrorDisplayProps, ErrorMessageRenderer() (+18 more)
+Cohesion: 0.07
+Nodes (32): ErrorContent(), ErrorDialog(), ErrorDialogProps, Default, Story, ErrorDisplay(), ErrorDisplayProps, ErrorMessageRenderer() (+24 more)
 
-### Community 30 - "MainAppContent.tsx"
-Cohesion: 0.50
-Nodes (3): MainAppContent(), MainAppProvider(), ShipTypesLoader()
+### Community 30 - "ShareLinkDialog.tsx"
+Cohesion: 0.27
+Nodes (5): ShareLinkContent(), ShareLinkContentProps, mockClipboard, ShareLinkDialog(), ShareLinkDialogProps
 
-### Community 31 - "dataValidation.ts"
-Cohesion: 0.18
-Nodes (14): BuildNameContent(), BuildNameContentProps, BuildNameContentRef, SHIP_NAME_PREFIXES_COMPOUND, SHIP_NAME_PREFIXES_SIMPLE, SHIP_NAME_SUFFIXES, generateBuildNameWithType(), getShipTypeName() (+6 more)
+### Community 31 - "buildNameGenerator.ts"
+Cohesion: 0.33
+Nodes (7): SHIP_NAME_PREFIXES_COMPOUND, SHIP_NAME_PREFIXES_SIMPLE, SHIP_NAME_SUFFIXES, generateBuildNameWithType(), getShipTypeName(), SHIP_TYPE_NAMES, sanitizeFilename()
 
-### Community 32 - "AppFooter.tsx"
-Cohesion: 0.16
-Nodes (12): AppFooter, AppFooterContent(), AppFooterRating(), AppFooterRoot(), Desktop, Mobile, Story, Tablet (+4 more)
+### Community 32 - "AppHeader.tsx"
+Cohesion: 0.07
+Nodes (23): AppFooter, AppFooterContent(), AppFooterRating(), AppFooterRoot(), Desktop, Mobile, Story, Tablet (+15 more)
 
 ### Community 33 - "check-remote-sync.test.mjs"
 Cohesion: 0.44
 Nodes (7): checkRemoteSync(), getCurrentBranch(), getUpstreamInfo(), isForceOrDeletePush(), main(), __dirname, ROOT
 
-### Community 34 - "GridTable.tsx"
-Cohesion: 0.13
-Nodes (13): GridContext, GridContextValue, GridProvider(), GridTable, GridTableProps, Default, Solving, Story (+5 more)
+### Community 34 - "useGridStore"
+Cohesion: 0.17
+Nodes (14): GridControlButtons(), RowControlButtonProps, selectHasAnyActiveCells(), mockActivateRow, mockDeActivateRow, useGridRowState(), GridTable, GridTableProps (+6 more)
 
 ### Community 35 - "dialogUtils.ts"
-Cohesion: 0.14
-Nodes (12): mockDialogContext, mockSendEvent, TransProps, DialogProvider(), getActiveDialogFromPathname(), VALID_DIALOGS, build, LanguageCode (+4 more)
+Cohesion: 0.12
+Nodes (17): formatDocumentTitle(), mockDialogContext, mockSendEvent, TransProps, WelcomeContent(), WelcomeContentProps, AppFooterProvider(), AppFooterContext (+9 more)
 
 ### Community 36 - "report-inp.py"
 Cohesion: 0.16
@@ -330,7 +321,7 @@ Nodes (17): GenerateContentConfig, flatten_json(), get_config(), get_system_inst
 
 ### Community 38 - "GridCell.tsx"
 Cohesion: 0.12
-Nodes (20): GridCell(), GridCellProps, ModuleContent(), mockCellState, getGridCellAriaLabel(), stripLabel(), TranslateFn, mockRegisterCellTap (+12 more)
+Nodes (19): GridCell(), GridCellProps, ModuleContent(), mockCellState, getGridCellAriaLabel(), stripLabel(), TranslateFn, mockRegisterCellTap (+11 more)
 
 ### Community 39 - "VerificationGate"
 Cohesion: 0.20
@@ -340,9 +331,9 @@ Nodes (9): distill_gate_output(), Module for running the verification gatekeeper
 Cohesion: 0.08
 Nodes (22): main(), FakeIssueTrackerAdapter, IssueTrackerAdapter, Protocols and concrete adapters for external dependencies (CLI tools, agent,…, In-memory fake IssueTrackerAdapter for testing., Interface for querying and updating GitHub issues., Fetch comments for an issue., Edit an issue's assignee, labels, or body. (+14 more)
 
-### Community 41 - "useAnalytics"
-Cohesion: 0.18
-Nodes (14): AppHeaderProvider(), BuyMeACoffee(), useAnalytics(), {
+### Community 41 - "Logger"
+Cohesion: 0.14
+Nodes (20): App(), useMainAppBuildManagement(), {
 	mockGetGridState,
 	mockGetPlatformState,
 	mockGetTechState,
@@ -350,11 +341,11 @@ Nodes (14): AppHeaderProvider(), BuyMeACoffee(), useAnalytics(), {
 	mockRestoreTechState,
 	mockSetSelectedPlatform,
 	mockSetTechState,
-}, useBuildFileManager(), useFileHandling(), useLoadBuild(), UseLoadBuildReturn (+6 more)
+}, useBuildFileManager(), useFileHandling(), useLoadBuild(), UseLoadBuildReturn, useSaveBuild() (+12 more)
 
 ### Community 42 - "useTechTreeRow.ts"
-Cohesion: 0.26
-Nodes (9): TechTreeRowContext, TechTreeRowContextValue, TechTreeRowProvider(), EMPTY_MODULES_ARRAY, mockProps, useTechTreeRow(), SelectedTechData, TechTreeRowProps (+1 more)
+Cohesion: 0.36
+Nodes (6): TechTreeRowContext, TechTreeRowContextValue, EMPTY_MODULES_ARRAY, mockProps, useTechTreeRow(), TechTreeRowProps
 
 ### Community 43 - "pwa-config.test.mjs"
 Cohesion: 0.33
@@ -365,28 +356,24 @@ Cohesion: 0.15
 Nodes (6): __dirname, LOCALES_DIR, markdownBundlePlugin(), COMPONENT_CSS_MAP, purgeRadixCss(), DEFAULT_SHORTCUT_ICONS
 
 ### Community 45 - "useTechTree.tsx"
-Cohesion: 0.13
-Nodes (20): App(), EmptyState(), EmptyStateProps, SharedModuleSelectionDialog, TechTree(), TechTreeProps, TechTreeContent(), TechTreeContentProps (+12 more)
+Cohesion: 0.05
+Nodes (56): EmptyState(), EmptyStateProps, RecommendedBuild(), RecommendedBuildProps, Desktop, Mobile, mockTechTree, Story (+48 more)
 
-### Community 46 - "useRecommendedBuild.tsx"
-Cohesion: 0.25
-Nodes (11): RecommendedBuildProvider(), PresetCardItem(), PresetCardItemProps, PresetsCardContentProps, TechTreePresetsCardProps, useRecommendedBuild(), RecommendedBuild, TechTreeItem (+3 more)
+### Community 46 - "GridTableButtons.stories.tsx"
+Cohesion: 0.27
+Nodes (6): GridContext, GridContextValue, GridProvider(), Default, meta, Story
 
 ### Community 47 - "App.tsx"
-Cohesion: 0.16
-Nodes (16): AppContent(), OfflineBanner, PerformanceRoute, RoutedDialogs, ShareLinkDialog, UserStatsRoute, WelcomeContent, PlatformStoreSelector (+8 more)
-
-### Community 48 - "monitoring.ts"
-Cohesion: 0.20
-Nodes (12): Root(), useA11yStore, useThemeStore, createAppRouter(), initializeSentry(), LogEntry, LogLevel, logs (+4 more)
+Cohesion: 0.12
+Nodes (20): AppContent(), OfflineBanner, PerformanceRoute, RoutedDialogs, ShareLinkDialog, UserStatsRoute, WelcomeContent, AppHeaderProvider() (+12 more)
 
 ### Community 49 - "generate-radix-colors.mjs"
 Cohesion: 0.17
 Nodes (10): ALL_RADIX_COLORS, baseInputPath, colors, concatenatedContent, concatenatedPath, __dirname, optimizedColorContents, outputDir (+2 more)
 
 ### Community 50 - "environment.ts"
-Cohesion: 0.09
-Nodes (30): INSTALL_PROMPT_DISMISSED_KEY, InstallPrompt(), Default, Story, USER_VISIT_KEY, NmsToast(), Default, Error (+22 more)
+Cohesion: 0.21
+Nodes (16): INSTALL_PROMPT_DISMISSED_KEY, InstallPrompt(), USER_VISIT_KEY, UI_TIMING, debouncedStorage, debounceSetItem(), SetItemFunction, isIosSafari() (+8 more)
 
 ### Community 52 - "store-helpers.ts"
 Cohesion: 0.30
@@ -396,10 +383,6 @@ Nodes (5): getShakeCount(), resetGrid(), waitForOptimization(), waitForStore(), 
 Cohesion: 0.38
 Nodes (6): format_tool_detail(), main(), process_stream(), Any, Extract a concise, human-readable summary of tool arguments., Process an NDJSON stream from agy and format it to out (default: sys.stdout).
 
-### Community 54 - "MainAppLayout.tsx"
-Cohesion: 0.16
-Nodes (23): MainAppGridSection(), BuildNameDialog, ErrorMessageRenderer, InstallPrompt, MainAppBackgroundServices(), MainAppFooter(), MainAppHeader(), MainAppLayoutContent() (+15 more)
-
 ### Community 55 - "create_screenshot_video.py"
 Cohesion: 0.29
 Nodes (9): calculate_durations(), create_video(), extract_versions(), get_screenshot_history(), main(), Create video with crossfades by pre-rendering each transition., Get all commits that modified the screenshot in reverse chronological order., Extract each version of the screenshot from git history. (+1 more)
@@ -408,17 +391,17 @@ Nodes (9): calculate_durations(), create_video(), extract_versions(), get_screen
 Cohesion: 0.20
 Nodes (9): dataPath, existingIndex, fontsDestDir, history, manifest, manifestPath, newData, reportPath (+1 more)
 
-### Community 57 - "platformStore.ts"
-Cohesion: 0.23
-Nodes (11): API_URL, cache, fetchShipTypes(), ShipTypes, ShipTypesState, useShipTypesStore, preloadInitialState(), getPlatformFromStorage() (+3 more)
+### Community 57 - "fetchTechTreeAsync"
+Cohesion: 0.40
+Nodes (7): fetchShipTypes(), fetchTechTreeAsync(), preloadInitialState(), getPlatformFromStorage(), getPlatformFromUrl(), PLATFORM_STORAGE_KEY, resolveInitialPlatform()
 
-### Community 58 - "useTechStore"
-Cohesion: 0.36
-Nodes (9): EMPTY_MODULES_ARRAY, SharedModuleSelectionDialog(), MockPresentationalProps, useTechTree(), TechTreeRowBadges(), mockModules, useTechModuleManagement(), useTechStore (+1 more)
+### Community 58 - "techStore.ts"
+Cohesion: 0.22
+Nodes (11): useGridCellStyle(), EMPTY_MODULES_ARRAY, SharedModuleSelectionDialog(), MockPresentationalProps, mockModules, useTechModuleManagement(), debouncedStorage, debounceSetItem() (+3 more)
 
 ### Community 59 - "TechTreeRow.tsx"
-Cohesion: 0.36
-Nodes (8): BonusStatusIcon(), BonusStatusIconProps, renderIcon(), TechTreeRowActions(), TechTreeRowAvatar(), TechTreeRowLabel(), useTechTreeRowContext(), isTouchDevice()
+Cohesion: 0.27
+Nodes (11): useTechTree(), BonusStatusIcon(), BonusStatusIconProps, renderIcon(), TechTreeRowActions(), TechTreeRowAvatar(), TechTreeRowBadges(), TechTreeRowLabel() (+3 more)
 
 ### Community 60 - "CliAgentRunnerAdapter"
 Cohesion: 0.14
@@ -426,7 +409,7 @@ Nodes (8): Protocol, AgentRunnerAdapter, CliAgentRunnerAdapter, model_supports_e
 
 ### Community 61 - "gridStore.ts"
 Cohesion: 0.24
-Nodes (9): createSerializedGrid(), mockNavigate, mockTechTreeData, createEmptyCell(), createGrid(), resetCellContent(), useGridStore, useUiStore (+1 more)
+Nodes (7): createCellFromModuleData(), createEmptyCell(), createGrid(), resetCellContent(), Grid, useUiStore, StoreResetWrapper()
 
 ### Community 62 - "spa-routes.test.mjs"
 Cohesion: 0.25
@@ -436,16 +419,12 @@ Nodes (5): __dirname, DIST, FN_PATH, HYBRID_ROUTES, ROOT
 Cohesion: 0.36
 Nodes (5): GridShake(), GridShakeProps, GridTableRoot(), useTechOptimization(), useShakeStore
 
-### Community 64 - "GridControlButtons.tsx"
-Cohesion: 0.26
-Nodes (8): GridControlButtons(), RowControlButtonProps, selectHasAnyActiveCells(), mockActivateRow, mockDeActivateRow, useGridRowState(), GridStore, useTechTreeLoadingStore
-
 ### Community 65 - "AGENTS.md"
 Cohesion: 0.20
 Nodes (5): Language, NMS Optimizer Web Domain Model, Component Architecture, Prop Drilling Prevention, Triage Labels
 
 ### Community 66 - "Issue tracker: GitHub"
-Cohesion: 0.33
+Cohesion: 0.29
 Nodes (6): Conventions, Issue tracker: GitHub, Pull requests as a triage surface, Wayfinding operations, When a skill says "fetch the relevant ticket", When a skill says "publish to the issue tracker"
 
 ### Community 67 - "git-hooks.test.mjs"
@@ -461,7 +440,7 @@ Cohesion: 0.33
 Nodes (5): Architecture Guidelines, Bundle Strategy, Directory Structure, Hybrid Rendering Flow, Tech Stack
 
 ### Community 70 - "Code Style Guidelines"
-Cohesion: 0.29
+Cohesion: 0.33
 Nodes (6): Code Style Guidelines, Error Handling, React Hook Usage, Tailwind v4, Tooling & Configuration, Zustand & Immer
 
 ### Community 71 - "Domain Docs"
@@ -484,21 +463,13 @@ Nodes (3): configPath, __dirname, repoRoot
 Cohesion: 0.40
 Nodes (5): __dirname, DIST, getAllHtmlFiles(), ROUTES_JSON, verify()
 
-### Community 76 - "TechTree.stories.tsx"
-Cohesion: 0.29
-Nodes (4): Desktop, Mobile, Story, Tablet
-
 ### Community 77 - "OfflineBanner.stories.tsx"
 Cohesion: 0.47
 Nodes (3): OfflineBanner(), Offline, Story
 
-### Community 78 - "useOptimize.test.tsx"
+### Community 78 - "useAnalytics"
 Cohesion: 0.22
-Nodes (8): mockCreateSocket, mockUseAnalytics, mockUseBreakpoint, mockUseGridStore, mockUsePlatformStore, mockUseTechStore, PlatformState, TechStore
-
-### Community 79 - "useTechTreeContext.ts"
-Cohesion: 0.50
-Nodes (3): TechTreeProvider(), TechTreeContext, TechTreeContextValue
+Nodes (11): BuyMeACoffee(), useAnalytics(), mockCreateSocket, mockUseAnalytics, mockUseBreakpoint, mockUseGridStore, mockUsePlatformStore, mockUseTechStore (+3 more)
 
 ### Community 80 - "Project Safeguards & Preferences"
 Cohesion: 0.40
@@ -548,45 +519,29 @@ Nodes (3): @radix-ui/themes/*.css, @radix-ui/themes/tokens/colors/*.css, @radix-
 Cohesion: 0.50
 Nodes (3): RegisterSWOptions, virtual:markdown-bundle, virtual:pwa-register
 
-### Community 95 - "TechTreeSection.tsx"
-Cohesion: 0.27
-Nodes (6): TechTreeSection(), TechTreeSectionProps, TechTreeSectionHeader(), TypeImageMap, TechTreeSectionList(), TechTreeRow
-
-### Community 99 - "RoutedDialogs.integration.test.tsx"
-Cohesion: 0.16
-Nodes (13): PAGE_REGISTRY, DynamicRadixIconProps, supportedLanguages, MARKDOWN_DIALOGS, MarkdownContentRenderer, RoutedDialogs(), DialogIconAndStyle, getDialogIconAndStyle() (+5 more)
-
 ### Community 121 - "MainAppContent.stories.tsx"
 Cohesion: 0.29
 Nodes (5): Desktop, Mobile, Story, StorybookWrapper(), Tablet
 
-### Community 131 - "ErrorContent.stories.tsx"
-Cohesion: 0.33
-Nodes (5): PageVariant, Story, WithComponentStack, WithErrorMessage, WithStackTrace
+### Community 132 - "techRules.ts"
+Cohesion: 0.60
+Nodes (4): MODULE_RANK_ORDER, mockModules, validateModuleSelections(), VALIDATION_GROUPS
 
-### Community 132 - "techStore.ts"
-Cohesion: 0.24
-Nodes (7): MODULE_RANK_ORDER, mockModules, validateModuleSelections(), VALIDATION_GROUPS, debouncedStorage, debounceSetItem(), SetItemFunction
-
-### Community 133 - "applyValidationFeedback.ts"
-Cohesion: 0.31
-Nodes (7): applyValidationFeedback(), feedbackMap, ValidationReason, validateToggleActive(), validateToggleSupercharged(), ValidationResult, UiActions
-
-### Community 135 - "TechTreeSkeleton.tsx"
-Cohesion: 0.50
-Nodes (3): MessageSpinner(), MessageSpinnerProps, TechTreeSkeleton()
+### Community 133 - "gridTypes.ts"
+Cohesion: 0.23
+Nodes (9): applyValidationFeedback(), feedbackMap, ValidationReason, validateToggleActive(), validateToggleSupercharged(), ValidationResult, GridComputed, GridStore (+1 more)
 
 ### Community 137 - "UpdatePromptWrapper.tsx"
-Cohesion: 0.29
-Nodes (7): formatDocumentTitle(), DynamicRadixIcon(), WelcomeContent(), WelcomeContentProps, UpdatePrompt, UpdatePromptWrapper(), useUpdateCheck()
+Cohesion: 0.42
+Nodes (5): UpdatePrompt, UpdatePromptWrapper(), useUpdateCheck(), VersionPayload, activateLatestServiceWorker()
 
 ### Community 138 - "usePlatformStore"
-Cohesion: 0.24
-Nodes (11): ShipSelectionProvider(), ShipSelectionProviderProps, TechTreeRoot(), TechTreeRootProps, RouteContext, RouteContextType, useRouteContext(), useFetchShipTypesSuspense() (+3 more)
+Cohesion: 0.17
+Nodes (16): ShipSelectionProvider(), ShipSelectionProviderProps, TechTreeRoot(), TechTreeRootProps, RouteContext, RouteContextType, useRouteContext(), cache (+8 more)
 
 ### Community 143 - "AppDialog.tsx"
-Cohesion: 0.14
-Nodes (18): getPageByDialogTitleKey(), getPageById(), AppDialogBody(), AppDialogBodyProps, AppDialogContext, AppDialogContextValue, AppDialogFooter(), AppDialogFooterProps (+10 more)
+Cohesion: 0.08
+Nodes (29): getPageByDialogTitleKey(), getPageById(), AppDialogBody(), AppDialogBodyProps, AppDialogContext, AppDialogContextValue, AppDialogFooter(), AppDialogFooterProps (+21 more)
 
 ## Knowledge Gaps
 - **437 isolated node(s):** `BackgroundWrapperProps`, `config`, `customViewports`, `globalTypes`, `preview` (+432 more)
@@ -596,17 +551,17 @@ Nodes (18): getPageByDialogTitleKey(), getPageById(), AppDialogBody(), AppDialog
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Logger` connect `Logger` to `tracking.ts`, `MarkdownContentRenderer.tsx`, `techStore.ts`, `useBreakpoint`, `sessionCoordinator.ts`, `UpdatePromptWrapper.tsx`, `usePlatformStore`, `routes.tsx`, `bootPipeline.tsx`, `LifecycleCoordinator`, `ShareLinkDialog.tsx`, `reportWebVitals.ts`, `optimizationManager.ts`, `lifecycleCoordinator.ts`, `dataValidation.ts`, `GridCell.tsx`, `useAnalytics`, `useTechTree.tsx`, `useRecommendedBuild.tsx`, `App.tsx`, `monitoring.ts`, `environment.ts`, `platformStore.ts`, `gridStore.ts`, `useTechOptimization.ts`, `RoutedDialogs.integration.test.tsx`?**
-  _High betweenness centrality (0.079) - this node is a cross-community bridge._
-- **Why does `useGridStore` connect `gridStore.ts` to `MobileToolbar.tsx`, `useBreakpoint`, `sessionCoordinator.ts`, `AppHeader.tsx`, `usePlatformStore`, `RecommendedBuild.stories.tsx`, `Logger`, `TechTreeRow.test.tsx`, `dataValidation.ts`, `GridTable.tsx`, `GridCell.tsx`, `useAnalytics`, `useTechTreeRow.ts`, `useTechTree.tsx`, `useRecommendedBuild.tsx`, `environment.ts`, `MainAppLayout.tsx`, `useTechStore`, `useTechOptimization.ts`, `GridControlButtons.tsx`, `useOptimize.test.tsx`, `MainAppContent.stories.tsx`?**
-  _High betweenness centrality (0.027) - this node is a cross-community bridge._
-- **Why does `LifecycleCoordinator` connect `LifecycleCoordinator` to `AppHeader.tsx`, `routes.tsx`, `bootPipeline.tsx`, `App.tsx`, `lifecycleCoordinator.ts`?**
-  _High betweenness centrality (0.019) - this node is a cross-community bridge._
+- **Why does `Logger` connect `Logger` to `tracking.ts`, `MarkdownContentRenderer.tsx`, `useBreakpoint`, `sessionCoordinator.ts`, `UpdatePromptWrapper.tsx`, `usePlatformStore`, `bootPipeline.tsx`, `lifecycleCoordinator.ts`, `LifecycleCoordinator`, `gridSerializer.ts`, `network.ts`, `src/constants.ts`, `ErrorBoundary.tsx`, `ShareLinkDialog.tsx`, `GridCell.tsx`, `useTechTree.tsx`, `App.tsx`, `environment.ts`, `fetchTechTreeAsync`, `techStore.ts`, `gridStore.ts`, `useTechOptimization.ts`, `useAnalytics`?**
+  _High betweenness centrality (0.080) - this node is a cross-community bridge._
+- **Why does `useGridStore` connect `useGridStore` to `useBreakpoint`, `sessionCoordinator.ts`, `usePlatformStore`, `AppDialog.tsx`, `gridSerializer.ts`, `GridTableButtons.tsx`, `MainAppLayout.tsx`, `TechTreeRow.test.tsx`, `AppHeader.tsx`, `GridCell.tsx`, `Logger`, `useTechTreeRow.ts`, `useTechTree.tsx`, `GridTableButtons.stories.tsx`, `App.tsx`, `environment.ts`, `techStore.ts`, `gridStore.ts`, `useTechOptimization.ts`, `useAnalytics`, `MainAppContent.stories.tsx`?**
+  _High betweenness centrality (0.026) - this node is a cross-community bridge._
+- **Why does `LifecycleCoordinator` connect `LifecycleCoordinator` to `Logger`, `usePlatformStore`, `bootPipeline.tsx`, `lifecycleCoordinator.ts`, `App.tsx`, `ErrorBoundary.tsx`?**
+  _High betweenness centrality (0.022) - this node is a cross-community bridge._
 - **What connects `BackgroundWrapperProps`, `config`, `customViewports` to the rest of the system?**
   _437 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `performanceChart.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.06845238095238096 - nodes in this community are weakly interconnected._
-- **Should `useSeoAndTitle.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.14624505928853754 - nodes in this community are weakly interconnected._
-- **Should `MarkdownContentRenderer.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.07058823529411765 - nodes in this community are weakly interconnected._
+- **Should `RoutedDialogs.integration.test.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.12169312169312169 - nodes in this community are weakly interconnected._
+- **Should `tracking.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.14 - nodes in this community are weakly interconnected._

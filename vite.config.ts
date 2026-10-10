@@ -424,7 +424,7 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 							registerType: "prompt",
 							workbox: {
 								cleanupOutdatedCaches: true,
-								clientsClaim: false,
+								clientsClaim: true,
 								dontCacheBustURLsMatching: /\/build\/.*\.(js|css|woff2?)$/,
 								globIgnores: ["maintenance.html", "404.html", "500.html", "index.html"],
 								maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,

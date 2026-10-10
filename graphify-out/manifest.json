@@ -1415,13 +1415,13 @@
     "semantic_hash": ""
   },
   "src/hooks/useUpdateCheck/useUpdateCheck.test.ts": {
-    "mtime": 1791566684.5128965,
-    "ast_hash": "8cc4e234a4fba4342a6856853681ce42",
+    "mtime": 1791655970.8768046,
+    "ast_hash": "cf694c12e1d03b23b09bca4a28a5ccd8",
     "semantic_hash": ""
   },
   "src/hooks/useUpdateCheck/useUpdateCheck.ts": {
-    "mtime": 1791566972.584864,
-    "ast_hash": "64c6081a19718ef7c2520cda8ac98587",
+    "mtime": 1791655970.8768046,
+    "ast_hash": "6221c8cfc9016b21ada7ea1bd51723c3",
     "semantic_hash": ""
   },
   "src/hooks/useUrlSync/useUrlSync.test.tsx": {
@@ -1845,13 +1845,13 @@
     "semantic_hash": ""
   },
   "src/utils/system/setupServiceWorker.test.ts": {
-    "mtime": 1791583267.1208782,
-    "ast_hash": "18ff509ee2bcacf60aa3d76019362751",
+    "mtime": 1791656160.1738164,
+    "ast_hash": "33d7a05bdb2312935b95f0eb874b4744",
     "semantic_hash": ""
   },
   "src/utils/system/setupServiceWorker.ts": {
-    "mtime": 1791583329.284899,
-    "ast_hash": "6c8ad53bfc0c37488160fd830512eae2",
+    "mtime": 1791656206.837338,
+    "ast_hash": "8c8e524abbe11674b44e9b5b18862692",
     "semantic_hash": ""
   },
   "src/utils/system/splashScreen.test.ts": {
@@ -1910,8 +1910,8 @@
     "semantic_hash": ""
   },
   "vite.config.ts": {
-    "mtime": 1791566019.2809334,
-    "ast_hash": "979c2db97e76a89966ffce7247cf42fd",
+    "mtime": 1791655607.9868393,
+    "ast_hash": "1432c9d95bccc11bdb5586beb78084de",
     "semantic_hash": ""
   },
   "vitest-mocks/virtual-markdown-bundle.ts": {
