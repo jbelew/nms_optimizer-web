@@ -16,6 +16,16 @@ test.describe("PWA Upgrade & Self-Healing Lifecycle", () => {
 				await route.abort("blockedbyclient");
 			}
 		);
+		await page.route("**/version.json", async (route) => {
+			await route.fulfill({
+				body: JSON.stringify({
+					buildDate: "2099-01-01T00:00:00.000Z",
+					version: "99.0.0",
+				}),
+				contentType: "application/json",
+				status: 200,
+			});
+		});
 	});
 
 	test("should mark __pwa_healed_v804__ milestone and boot application cleanly", async ({
@@ -75,7 +85,7 @@ test.describe("PWA Upgrade & Self-Healing Lifecycle", () => {
 		await expect(refreshButton).toBeVisible();
 		await refreshButton.click();
 
-		await page.waitForFunction(() => Boolean(updateTriggered), { timeout: 10000 });
+		await expect.poll(() => updateTriggered, { timeout: 10000 }).toBe(true);
 		expect(updateTriggered).toBe(true);
 	});
 });

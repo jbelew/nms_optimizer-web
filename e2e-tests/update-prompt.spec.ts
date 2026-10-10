@@ -20,6 +20,25 @@ async function triggerUpdatePrompt(page: Page): Promise<void> {
 }
 
 test.describe("UpdatePrompt Lifecycle", () => {
+	test.beforeEach(async ({ page }) => {
+		await page.route(
+			/(googletagmanager|google-analytics|cloudflareinsights)/,
+			async (route) => {
+				await route.abort("blockedbyclient");
+			}
+		);
+		await page.route("**/version.json", async (route) => {
+			await route.fulfill({
+				body: JSON.stringify({
+					buildDate: "2099-01-01T00:00:00.000Z",
+					version: "99.0.0",
+				}),
+				contentType: "application/json",
+				status: 200,
+			});
+		});
+	});
+
 	test("should show update prompt when new-version-available event is dispatched", async ({
 		page,
 	}) => {

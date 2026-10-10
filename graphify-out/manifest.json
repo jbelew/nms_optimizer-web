@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "e2e-tests/update-prompt.spec.ts": {
-    "mtime": 1791569500.5849335,
-    "ast_hash": "407427a640628088befeb75fea5fb591",
+    "mtime": 1791663273.122955,
+    "ast_hash": "9b1909252a39457ac48c7656adb96d6b",
     "semantic_hash": ""
   },
   "eslint.config.js": {
@@ -2255,8 +2255,8 @@
     "semantic_hash": ""
   },
   "e2e-tests/pwa-upgrade.spec.ts": {
-    "mtime": 1791657954.4074044,
-    "ast_hash": "224e7a3f50eac9b218bbe261f9338390",
+    "mtime": 1791663269.8421555,
+    "ast_hash": "0541a782c65d41af8e476e0d6fe78ee4",
     "semantic_hash": ""
   },
   "docs/adr/0001-pwa-runtime-caching-and-update-resilience.md": {
