@@ -1,11 +1,12 @@
 import type { GroupedShipType } from "./useShipSelectionContext";
 import React, { useCallback, useMemo, useTransition } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import { useRouteContext } from "@/context/RouteContext";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
+import { useToast } from "@/hooks/useToast/useToast";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { createGrid } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
@@ -41,6 +42,7 @@ export const ShipSelectionProvider: React.FC<ShipSelectionProviderProps> = ({
 	solving,
 }) => {
 	const { t } = useTranslation();
+	const { showInfo } = useToast();
 	const shipTypes = useFetchShipTypesSuspense();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const setSelectedShipType = usePlatformStore((state) => state.setSelectedPlatform);
@@ -69,12 +71,12 @@ export const ShipSelectionProvider: React.FC<ShipSelectionProviderProps> = ({
 			if (option !== selectedShipType) {
 				Logger.info(`Platform selected: ${option}`, { platform: option });
 				startTransition(() => {
-					// if (option === "corvette") {
-					// 	showInfo(
-					// 		t("shipSelection.corvetteWarning.title"),
-					// 		<Trans i18nKey="shipSelection.corvetteWarning.description" />
-					// 	);
-					// }
+					if (option === "corvette") {
+						showInfo(
+							t("shipSelection.corvetteWarning.title"),
+							<Trans i18nKey="shipSelection.corvetteWarning.description" />
+						);
+					}
 
 					setSelectedShipType(option, shipTypeKeys, true, isKnownRoute);
 					const initialGrid = createGrid(DEFAULT_GRID_HEIGHT, DEFAULT_GRID_WIDTH);
@@ -102,6 +104,8 @@ export const ShipSelectionProvider: React.FC<ShipSelectionProviderProps> = ({
 		},
 		[
 			selectedShipType,
+			showInfo,
+			t,
 			setSelectedShipType,
 			shipTypeKeys,
 			isKnownRoute,
