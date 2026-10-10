@@ -1,3 +1,10 @@
+# [8.1.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.0.4...v8.1.0) (2026-10-09)
+
+
+### Features
+
+* **pwa:** silently apply updates when idle and verify freshness on refresh ([2b242c3](https://github.com/jbelew/nms_optimizer-web/commit/2b242c3629270861d820c2953e0be8769d8cc6cf))
+
 ## [8.0.4](https://github.com/jbelew/nms_optimizer-web/compare/v8.0.3...v8.0.4) (2026-10-09)
 
 
