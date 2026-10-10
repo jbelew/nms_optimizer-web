@@ -70,6 +70,12 @@ describe("PWA Configuration & Manifest", () => {
 		expect(swContent).not.toMatch(/\{url:"index\.html"/);
 	});
 
+	itWhenBuilt("sw.js excludes build JavaScript and CSS bundles from precache manifest", () => {
+		expect(swContent).toBeTruthy();
+		// Should NOT precache hashed build JS/CSS bundles (delegated to immutable HTTP caching)
+		expect(swContent).not.toMatch(/\{url:"build\/[^"]+\.(?:js|css)"/);
+	});
+
 	itWhenBuilt("sw.js enables navigation preload", () => {
 		expect(swContent).toBeTruthy();
 		expect(swContent).toMatch(/navigationPreload|enable\(\)/);

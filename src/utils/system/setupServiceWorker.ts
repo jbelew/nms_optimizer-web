@@ -193,6 +193,56 @@ export async function activateLatestServiceWorker(
 }
 
 /**
+ * Evicts active service worker registrations and purges all CacheStorage entries.
+ *
+ * @remarks
+ * Used for self-healing recovery when a client is stranded on stale or corrupt
+ * service worker state, or during emergency reset actions.
+ *
+ * @returns {Promise<boolean>} Resolves to true if any service workers were unregistered, false otherwise.
+ *
+ * @see {@link ./setupServiceWorker.test.ts Unit Tests}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * const evicted = await evictStaleServiceWorkers();
+ * // returns boolean
+ * if (evicted) {
+ *   window.location.reload();
+ * }
+ * ```
+ */
+export async function evictStaleServiceWorkers(): Promise<boolean> {
+	let unregisteredAny = false;
+
+	if (typeof navigator !== "undefined" && "serviceWorker" in navigator) {
+		try {
+			const registrations = await navigator.serviceWorker.getRegistrations();
+
+			if (registrations && registrations.length > 0) {
+				await Promise.all(registrations.map((reg) => reg.unregister()));
+				unregisteredAny = true;
+			}
+		} catch (error) {
+			Logger.error("Failed to unregister service workers during eviction", { error });
+		}
+	}
+
+	if (typeof window !== "undefined" && "caches" in window) {
+		try {
+			const cacheNames = await caches.keys();
+			await Promise.all(cacheNames.map((name) => caches.delete(name)));
+		} catch (error) {
+			Logger.error("Failed to delete cache storage during eviction", { error });
+		}
+	}
+
+	return unregisteredAny;
+}
+
+/**
  * Determines whether the application tab is currently hidden or idle.
  *
  * @returns {boolean} True if the tab is hidden or inactive for longer than the idle threshold.

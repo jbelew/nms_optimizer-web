@@ -5,6 +5,7 @@ import { vi } from "vitest";
 
 import {
 	activateLatestServiceWorker,
+	evictStaleServiceWorkers,
 	isAppHiddenOrIdle,
 	setLastUserActivityForTesting,
 	setupServiceWorkerRegistration,
@@ -30,6 +31,7 @@ describe("setupServiceWorkerRegistration", () => {
 
 		// Mock navigator.serviceWorker to be present by default for most tests
 		Object.defineProperty(window.navigator, "serviceWorker", {
+			configurable: true,
 			value: {
 				getRegistration: vi.fn(), // Mock enough of the ServiceWorkerContainer
 				// We don't need a full ServiceWorkerContainer mock for these tests, just its presence
@@ -39,6 +41,7 @@ describe("setupServiceWorkerRegistration", () => {
 
 		// Mock user agent to not be a bot
 		Object.defineProperty(window.navigator, "userAgent", {
+			configurable: true,
 			value: "Test User Agent",
 			writable: true,
 		});
@@ -51,10 +54,12 @@ describe("setupServiceWorkerRegistration", () => {
 
 		// Restore original globals
 		Object.defineProperty(window.navigator, "serviceWorker", {
+			configurable: true,
 			value: originalServiceWorker,
 			writable: true,
 		});
 		Object.defineProperty(window.navigator, "userAgent", {
+			configurable: true,
 			value: originalUserAgent,
 			writable: true,
 		});
@@ -713,5 +718,80 @@ describe("activateLatestServiceWorker", () => {
 				writable: true,
 			});
 		}
+	});
+});
+
+describe("evictStaleServiceWorkers", () => {
+	it("should unregister all active service worker registrations and purge CacheStorage", async () => {
+		const mockUnregister1 = vi.fn().mockResolvedValue(true);
+		const mockUnregister2 = vi.fn().mockResolvedValue(true);
+		const mockReg1 = { unregister: mockUnregister1 } as unknown as ServiceWorkerRegistration;
+		const mockReg2 = { unregister: mockUnregister2 } as unknown as ServiceWorkerRegistration;
+
+		const mockGetRegistrations = vi.fn().mockResolvedValue([mockReg1, mockReg2]);
+		Object.defineProperty(window.navigator, "serviceWorker", {
+			configurable: true,
+			value: { getRegistrations: mockGetRegistrations },
+			writable: true,
+		});
+
+		const mockCacheDelete = vi.fn().mockResolvedValue(true);
+		const mockCacheKeys = vi.fn().mockResolvedValue(["cache-v1", "cache-v2"]);
+		Object.defineProperty(window, "caches", {
+			configurable: true,
+			value: { delete: mockCacheDelete, keys: mockCacheKeys },
+			writable: true,
+		});
+
+		const result = await evictStaleServiceWorkers();
+
+		expect(result).toBe(true);
+		expect(mockGetRegistrations).toHaveBeenCalled();
+		expect(mockUnregister1).toHaveBeenCalled();
+		expect(mockUnregister2).toHaveBeenCalled();
+		expect(mockCacheKeys).toHaveBeenCalled();
+		expect(mockCacheDelete).toHaveBeenCalledWith("cache-v1");
+		expect(mockCacheDelete).toHaveBeenCalledWith("cache-v2");
+	});
+
+	it("should return false when no service worker registrations exist", async () => {
+		const mockGetRegistrations = vi.fn().mockResolvedValue([]);
+		Object.defineProperty(window.navigator, "serviceWorker", {
+			configurable: true,
+			value: { getRegistrations: mockGetRegistrations },
+			writable: true,
+		});
+
+		const mockCacheDelete = vi.fn().mockResolvedValue(true);
+		const mockCacheKeys = vi.fn().mockResolvedValue([]);
+		Object.defineProperty(window, "caches", {
+			configurable: true,
+			value: { delete: mockCacheDelete, keys: mockCacheKeys },
+			writable: true,
+		});
+
+		const result = await evictStaleServiceWorkers();
+
+		expect(result).toBe(false);
+	});
+
+	it("should handle unregister and cache errors gracefully without throwing", async () => {
+		const mockGetRegistrations = vi.fn().mockRejectedValue(new Error("SecurityError"));
+		Object.defineProperty(window.navigator, "serviceWorker", {
+			configurable: true,
+			value: { getRegistrations: mockGetRegistrations },
+			writable: true,
+		});
+
+		const mockCacheKeys = vi.fn().mockRejectedValue(new Error("Cache access denied"));
+		Object.defineProperty(window, "caches", {
+			configurable: true,
+			value: { keys: mockCacheKeys },
+			writable: true,
+		});
+
+		const result = await evictStaleServiceWorkers();
+
+		expect(result).toBe(false);
 	});
 });

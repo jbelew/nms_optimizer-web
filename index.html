@@ -18,6 +18,40 @@
 
 		<script>
 			(function () {
+				function purgeWorkersAndCaches() {
+					const unregisterWorkers = ("serviceWorker" in navigator)
+						? navigator.serviceWorker.getRegistrations().then(function (regs) {
+								if (regs && regs.length > 0) {
+									return Promise.all(regs.map(function (r) { return r.unregister(); }));
+								}
+								return Promise.resolve();
+						  }).catch(function () {})
+						: Promise.resolve();
+					const clearCaches = ("caches" in window)
+						? caches.keys().then(function (names) {
+								return Promise.all(names.map(function (n) { return caches.delete(n); }));
+						  }).catch(function () {})
+						: Promise.resolve();
+					return Promise.all([unregisterWorkers, clearCaches]);
+				}
+
+				// Emergency Self-Healing: Evict any stale Service Workers and corrupted CacheStorage
+				// from versions prior to v8.0.4 to unstick stranded users immediately.
+				try {
+					if (!localStorage.getItem("__pwa_healed_v804__")) {
+						localStorage.setItem("__pwa_healed_v804__", "1");
+						if ("serviceWorker" in navigator) {
+							navigator.serviceWorker.getRegistrations().then(function (registrations) {
+								if (registrations && registrations.length > 0) {
+									purgeWorkersAndCaches().then(function () {
+										window.location.reload();
+									});
+								}
+							}).catch(function () {});
+						}
+					}
+				} catch (e) {}
+
 				const MARKER = "__preload_recovery__";
 				let recoveryInProgress = false;
 
@@ -63,13 +97,7 @@
 							}
 						};
 						setTimeout(doReload, 500);
-						if ("caches" in window) {
-							caches.keys().then((names) =>
-								Promise.all(names.map((n) => caches.delete(n)))
-									.catch(() => {})
-									.then(doReload)
-							);
-						} else doReload();
+						purgeWorkersAndCaches().then(doReload);
 						return;
 					}
 

@@ -5,7 +5,10 @@ import { useTranslation } from "react-i18next";
 
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useUpdateCheck } from "@/hooks/useUpdateCheck/useUpdateCheck";
-import { activateLatestServiceWorker } from "@/utils/system/setupServiceWorker";
+import {
+	activateLatestServiceWorker,
+	evictStaleServiceWorkers,
+} from "@/utils/system/setupServiceWorker";
 
 const UpdatePrompt = lazy(() => import("./UpdatePrompt"));
 
@@ -94,7 +97,9 @@ export const UpdatePromptWrapper: FC = () => {
 				}, 2500);
 			})
 			.catch(() => {
-				window.location.reload();
+				void evictStaleServiceWorkers().finally(() => {
+					window.location.reload();
+				});
 			});
 	};
 

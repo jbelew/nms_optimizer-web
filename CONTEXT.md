@@ -35,3 +35,16 @@ _Avoid_: ship type, vehicle type, gear type
 **Ship Class**:
 The tier rating of a starship (`C`, `B`, `A`, `S`) determining available inventory dimensions and supercharged slot allocations.
 _Avoid_: ship rank, ship tier, platform class
+
+**PWA Self-Healing**:
+The automatic client-side eviction of outdated service worker registrations and corrupted CacheStorage upon detected version mismatch or dynamic import failure.
+_Avoid_: SW nuke, hard reset, cache bust
+
+**Silent Background Activation**:
+The process of activating a staged waiting service worker when the application tab becomes hidden or idle without displaying an intrusive prompt.
+_Avoid_: silent reload, stealth update, background push
+
+**Staged Worker**:
+A newly installed service worker sitting in the `waiting` state ready to activate once the active client session permits cutover.
+_Avoid_: pending worker, queued worker, background worker
+
