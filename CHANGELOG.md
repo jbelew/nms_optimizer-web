@@ -1,3 +1,11 @@
+## [8.2.2](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.1...v8.2.2) (2026-10-12)
+
+
+### Bug Fixes
+
+* **analytics:** add 3s failsafe timeout to DOM ad-blocker probe ([e046e70](https://github.com/jbelew/nms_optimizer-web/commit/e046e708a23bbe71d3defe43d24315a5a30787ce))
+* **analytics:** restore static Cloudflare beacon in index.html and remove runtime loader ([62c8854](https://github.com/jbelew/nms_optimizer-web/commit/62c8854eb569ff538633086abb7e5bc9d58afffe))
+
 ## [8.2.1](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.0...v8.2.1) (2026-10-12)
 
 
