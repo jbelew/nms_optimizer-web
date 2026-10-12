@@ -391,6 +391,9 @@ export const useGridStore = create<GridStore>()(
 						state.result = null;
 						state.isSharedGrid = false;
 						state.buildName = null;
+						state._initialCellStateForTap = null;
+						state._lastTapCell = [-1, -1];
+						state._lastTapTime = 0;
 						recomputeDerivedState(state);
 					});
 				},

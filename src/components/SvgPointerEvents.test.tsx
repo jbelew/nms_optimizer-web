@@ -26,8 +26,16 @@ describe("Global SVG Icon Pointer-Event Delegation (#767)", () => {
 			'[role="button"] svg *',
 			'[role="menuitem"] svg',
 			'[role="menuitem"] svg *',
+			'[role="menuitemradio"] svg',
+			'[role="menuitemradio"] svg *',
 			".rt-BaseButton svg",
 			".rt-BaseButton svg *",
+			"button .rt-Separator",
+			"button .rt-Separator *",
+			'[role="button"] .rt-Separator',
+			'[role="button"] .rt-Separator *',
+			".rt-BaseButton .rt-Separator",
+			".rt-BaseButton .rt-Separator *",
 		];
 
 		for (const selector of requiredSelectors) {
@@ -171,8 +179,12 @@ describe("Global SVG Icon Pointer-Event Delegation (#767)", () => {
 				<div role="menuitem" id="role-menuitem">
 					<svg id="menu-svg"><path id="menu-path" d="M0 0" /></svg>
 				</div>
+				<div role="menuitemradio" id="role-menuitemradio">
+					<svg id="radio-svg"><path id="radio-path" d="M0 0" /></svg>
+				</div>
 				<a class="rt-BaseButton" id="rt-btn">
 					<svg id="rt-svg"><path id="rt-path" d="M0 0" /></svg>
+					<span class="rt-Separator" id="btn-separator"></span>
 				</a>
 			`;
 			document.body.appendChild(container);
@@ -183,8 +195,11 @@ describe("Global SVG Icon Pointer-Event Delegation (#767)", () => {
 			const rolePath = document.getElementById("role-path");
 			const menuSvg = document.getElementById("menu-svg");
 			const menuPath = document.getElementById("menu-path");
+			const radioSvg = document.getElementById("radio-svg");
+			const radioPath = document.getElementById("radio-path");
 			const rtSvg = document.getElementById("rt-svg");
 			const rtPath = document.getElementById("rt-path");
+			const btnSeparator = document.getElementById("btn-separator");
 
 			expect(window.getComputedStyle(btnSvg!).pointerEvents).toBe("none");
 			expect(window.getComputedStyle(btnPath!).pointerEvents).toBe("none");
@@ -192,8 +207,11 @@ describe("Global SVG Icon Pointer-Event Delegation (#767)", () => {
 			expect(window.getComputedStyle(rolePath!).pointerEvents).toBe("none");
 			expect(window.getComputedStyle(menuSvg!).pointerEvents).toBe("none");
 			expect(window.getComputedStyle(menuPath!).pointerEvents).toBe("none");
+			expect(window.getComputedStyle(radioSvg!).pointerEvents).toBe("none");
+			expect(window.getComputedStyle(radioPath!).pointerEvents).toBe("none");
 			expect(window.getComputedStyle(rtSvg!).pointerEvents).toBe("none");
 			expect(window.getComputedStyle(rtPath!).pointerEvents).toBe("none");
+			expect(window.getComputedStyle(btnSeparator!).pointerEvents).toBe("none");
 
 			document.body.removeChild(container);
 		} finally {

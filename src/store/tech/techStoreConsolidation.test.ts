@@ -229,4 +229,66 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 		expect(selections.tech2).toBeUndefined();
 		expect(selections.tech3).toEqual(["mod3"]); // Should use API defaults
 	});
+
+	it("should atomically reset bonus status, solved results, and restore default checked modules via resetSession", () => {
+		const mockModule1: TechTreeItem["modules"][0] = {
+			active: false,
+			adjacency: "",
+			adjacency_bonus: 0,
+			bonus: 0,
+			checked: true,
+			id: "mod1",
+			image: "",
+			label: "Module 1",
+			sc_eligible: false,
+			supercharged: false,
+			tech: "tech1",
+			type: "",
+			value: 0,
+		};
+		const mockModule2: TechTreeItem["modules"][0] = {
+			active: false,
+			adjacency: "",
+			adjacency_bonus: 0,
+			bonus: 0,
+			checked: false,
+			id: "mod2",
+			image: "",
+			label: "Module 2",
+			sc_eligible: false,
+			supercharged: false,
+			tech: "tech1",
+			type: "",
+			value: 0,
+		};
+		const mockTechGroup: TechTreeItem = {
+			color: "red",
+			image: null,
+			key: "tech1",
+			label: "Tech 1",
+			module_count: 2,
+			modules: [mockModule1, mockModule2],
+			type: "normal",
+		};
+
+		useTechStore.setState({
+			activeGroups: { tech1: "normal" },
+			bonusStatus: { tech1: { icon: "lightning", percent: 10 } },
+			checkedModules: { tech1: ["mod1", "mod2"] },
+			maxBonus: { tech1: 100 },
+			solvedBonus: { tech1: 95 },
+			solveMethod: { tech1: "test-method" },
+			techGroups: { tech1: [mockTechGroup] },
+		});
+
+		useTechStore.getState().resetSession();
+
+		const state = useTechStore.getState();
+		expect(state.bonusStatus).toEqual({});
+		expect(state.maxBonus).toEqual({});
+		expect(state.solvedBonus).toEqual({});
+		expect(state.solveMethod).toEqual({});
+		// checkedModules should be restored to default checked modules (mod1 only)
+		expect(state.checkedModules).toEqual({ tech1: ["mod1"] });
+	});
 });

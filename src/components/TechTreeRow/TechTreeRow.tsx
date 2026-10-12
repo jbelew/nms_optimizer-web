@@ -222,6 +222,7 @@ const TechTreeRowBadges: React.FC = () => {
 	const { a11yMode: _a11yMode } = useA11yStore();
 	const { isGridFull, solving } = useTechTree();
 	const openDialog = useModuleSelectionDialogStore((state) => state.openDialog);
+	const [, startTransition] = React.useTransition();
 
 	const {
 		currentCheckedModules,
@@ -234,7 +235,11 @@ const TechTreeRowBadges: React.FC = () => {
 		translatedTechName,
 	} = useTechTreeRowContext();
 
-	const handleOpenDialog = () => openDialog({ tech, techColor, techImage });
+	const handleOpenDialog = () => {
+		startTransition(() => {
+			openDialog({ tech, techColor, techImage });
+		});
+	};
 
 	const badgeContent = (
 		<div>

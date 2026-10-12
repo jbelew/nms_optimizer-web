@@ -135,14 +135,11 @@ export const sessionCoordinator = {
 		const gridStore = useGridStore.getState();
 		const techStore = useTechStore.getState();
 
-		// 1. Reset Grid and its Interaction State
+		// 1. Reset Grid and its Interaction State atomically in a single batch
 		gridStore.resetGrid();
-		gridStore.clearInteractionState();
 
-		// 2. Reset Tech, Selections, and computed statuses
-		techStore.clearResult();
-		techStore.clearAllCheckedModules();
-		techStore.clearAllBonusStatus();
+		// 2. Reset Tech, Selections, and computed statuses atomically in a single batch
+		techStore.resetSession();
 
 		// 3. Reset UI session violation counters
 		useUiStore.getState().resetSession();

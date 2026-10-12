@@ -271,8 +271,16 @@ button svg *,
 [role="button"] svg *,
 [role="menuitem"] svg,
 [role="menuitem"] svg *,
+[role="menuitemradio"] svg,
+[role="menuitemradio"] svg *,
 .rt-BaseButton svg,
-.rt-BaseButton svg * {
+.rt-BaseButton svg *,
+button .rt-Separator,
+button .rt-Separator *,
+[role="button"] .rt-Separator,
+[role="button"] .rt-Separator *,
+.rt-BaseButton .rt-Separator,
+.rt-BaseButton .rt-Separator * {
 	pointer-events: none;
 }
 

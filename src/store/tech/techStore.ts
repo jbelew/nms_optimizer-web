@@ -171,6 +171,16 @@ export interface TechStore {
 	/** A mapping where keys are technology identifiers and values are arrays of selected module IDs. */
 	moduleSelections: Record<string, string[]>;
 	/**
+	 * Atomically resets all solved results, bonus statuses, and checked modules in a single batch.
+	 *
+	 * @remarks
+	 * Consolidates what previously required multiple separate store mutations into a single `set()` invocation,
+	 * preventing redundant subscriber notifications and associated INP rendering latency.
+	 *
+	 * @returns {void} Updates the store state in place.
+	 */
+	resetSession: () => void;
+	/**
 	 * Restores the technology state from saved build parameters.
 	 *
 	 * @remarks
@@ -307,6 +317,33 @@ const syncAliases = (state: TechStore) => {
 };
 
 /**
+ * Computes default checked modules across all registered technology groups.
+ *
+ * @param {TechStore} state - The technology store state draft.
+ *
+ * @returns {Record<string, string[]>} Mapping of tech keys to arrays of default checked module IDs.
+ */
+const computeDefaultCheckedModules = (state: TechStore): Record<string, string[]> => {
+	return Object.keys(state.techGroups).reduce(
+		(acc, tech) => {
+			const activeGroupType = state.activeGroups[tech] || "normal";
+			const groups = state.techGroups[tech] || [];
+			const activeGroup =
+				groups.length > 1
+					? groups.find((g) => g.type === activeGroupType) || groups[0]
+					: groups[0];
+
+			if (activeGroup) {
+				acc[tech] = activeGroup.modules.filter((m) => m.checked).map((m) => m.id);
+			}
+
+			return acc;
+		},
+		{} as Record<string, string[]>
+	);
+};
+
+/**
  * Global technology store managing metadata and results.
  */
 export const useTechStore = create<TechStore>()(
@@ -321,33 +358,13 @@ export const useTechStore = create<TechStore>()(
 					syncAliases(state);
 				});
 			},
-
 			clearAllCheckedModules: () => {
 				set((state: TechStore) => {
-					const resetCheckedModules = Object.keys(state.techGroups).reduce(
-						(acc, tech) => {
-							const activeGroupType = state.activeGroups[tech] || "normal";
-							const groups = state.techGroups[tech] || [];
-							const activeGroup =
-								groups.length > 1
-									? groups.find((g) => g.type === activeGroupType) || groups[0]
-									: groups[0];
-
-							if (activeGroup) {
-								acc[tech] = activeGroup.modules
-									.filter((m) => m.checked)
-									.map((m) => m.id);
-							}
-
-							return acc;
-						},
-						{} as { [key: string]: string[] }
-					);
-
-					state.checkedModules = resetCheckedModules;
+					state.checkedModules = computeDefaultCheckedModules(state);
 					syncAliases(state);
 				});
 			},
+
 			clearAllModuleSelections: () => {
 				set((state) => {
 					state.checkedModules = {};
@@ -390,12 +407,12 @@ export const useTechStore = create<TechStore>()(
 					state.maxBonus[tech] = 0;
 					syncAliases(state);
 				}),
-
 			clearTechSolvedBonus: (tech) =>
 				set((state: TechStore) => {
 					state.solvedBonus[tech] = 0;
 					syncAliases(state);
 				}),
+
 			getBonusStatus: (tech) => get().bonusStatus[tech] ?? null,
 			getModuleSelection: (tech) => get().checkedModules[tech] ?? null,
 			getTechColor: (tech) => get().techColors[tech],
@@ -416,6 +433,16 @@ export const useTechStore = create<TechStore>()(
 			max_bonus: {},
 			maxBonus: {},
 			moduleSelections: {},
+			resetSession: () => {
+				set((state: TechStore) => {
+					state.bonusStatus = {};
+					state.maxBonus = {};
+					state.solvedBonus = {};
+					state.solveMethod = {};
+					state.checkedModules = computeDefaultCheckedModules(state);
+					syncAliases(state);
+				});
+			},
 			restoreTechState: (params) =>
 				set((state: TechStore) => {
 					const techState = params.techState || {};

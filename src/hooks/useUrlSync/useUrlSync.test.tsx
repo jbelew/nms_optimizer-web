@@ -223,7 +223,7 @@ describe("useUrlSync", () => {
 
 		// sessionCoordinator.resetSession() should have been called, resetting the grid
 		expect(mockResetGrid).toHaveBeenCalled();
-		expect(mockClearInteractionState).toHaveBeenCalled();
+		expect(mockClearInteractionState).not.toHaveBeenCalled();
 		expect(gridStoreState.isSharedGrid).toBe(false);
 	});
 });

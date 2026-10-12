@@ -67,6 +67,7 @@ const renderWithProviders = (ui: React.ReactElement) => {
 const mockResetGridTech = vi.fn();
 const mockClearTechMaxBonus = vi.fn();
 const mockClearTechSolvedBonus = vi.fn();
+const mockOpenDialog = vi.fn();
 
 // Helper to set up the default store mocks
 /**
@@ -162,7 +163,7 @@ const setupMocks = (hasTechInGrid: boolean, solving = false) => {
 			const state: ModuleSelectionDialogState = {
 				closeDialog: vi.fn(),
 				isOpen: false,
-				openDialog: vi.fn(),
+				openDialog: mockOpenDialog,
 				selectedTechData: null,
 			};
 
@@ -292,5 +293,77 @@ describe("TechTreeRow", () => {
 		});
 		expect(moduleButton).toBeInTheDocument();
 		expect(moduleButton).toHaveTextContent("x1");
+	});
+
+	it("should open module selection dialog within transition when module count button is clicked", () => {
+		setupMocks(false);
+		mockUseTechStore.mockImplementation((selector?: (state: TechStore) => unknown) => {
+			const state: Partial<TechStore> = {
+				checkedModules: { testTech: ["module1", "module2"] },
+				clearTechMaxBonus: mockClearTechMaxBonus,
+				clearTechSolvedBonus: mockClearTechSolvedBonus,
+				getBonusStatus: vi.fn(() => null),
+				maxBonus: {},
+				solvedBonus: {},
+				techGroups: {
+					testTech: [
+						{
+							color: "blue",
+							image: null,
+							key: "testTech",
+							label: "Test Tech Group",
+							module_count: 2,
+							modules: [
+								{
+									active: false,
+									adjacency: "",
+									adjacency_bonus: 0,
+									bonus: 0,
+									id: "module1",
+									image: "",
+									label: "Module 1",
+									sc_eligible: false,
+									supercharged: false,
+									tech: "testTech",
+									type: "",
+									value: 0,
+								},
+								{
+									active: false,
+									adjacency: "",
+									adjacency_bonus: 0,
+									bonus: 0,
+									id: "module2",
+									image: "",
+									label: "Module 2",
+									sc_eligible: false,
+									supercharged: false,
+									tech: "testTech",
+									type: "",
+									value: 0,
+								},
+							],
+							type: "normal",
+						},
+					],
+				},
+			};
+
+			return selector ? selector(state as TechStore) : (state as TechStore);
+		});
+
+		renderWithProviders(<TechTreeRow {...defaultProps} />);
+
+		const moduleButton = screen.getByRole("button", {
+			name: "x2 - Test Tech Name Module Selection",
+		});
+		expect(moduleButton).not.toBeDisabled();
+		fireEvent.click(moduleButton);
+
+		expect(mockOpenDialog).toHaveBeenCalledWith({
+			tech: "testTech",
+			techColor: "blue",
+			techImage: "test.webp",
+		});
 	});
 });

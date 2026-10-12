@@ -1055,13 +1055,13 @@
     "semantic_hash": ""
   },
   "src/components/TechTreeRow/TechTreeRow.test.tsx": {
-    "mtime": 1790355478.4618585,
-    "ast_hash": "ab85d4cea3649e473abd0e836ae88748",
+    "mtime": 1791838292.0418968,
+    "ast_hash": "39734de43659c1b7b56be32148e9f595",
     "semantic_hash": ""
   },
   "src/components/TechTreeRow/TechTreeRow.tsx": {
-    "mtime": 1791565296.9169154,
-    "ast_hash": "19f94e2d40bbdd272a30fa5129b3c8af",
+    "mtime": 1791838132.1499166,
+    "ast_hash": "3436a4ece05b5ef4bf918eea8dd557b4",
     "semantic_hash": ""
   },
   "src/components/TechTreeRow/TechTreeRowContext.tsx": {
@@ -1425,8 +1425,8 @@
     "semantic_hash": ""
   },
   "src/hooks/useUrlSync/useUrlSync.test.tsx": {
-    "mtime": 1789956729.0,
-    "ast_hash": "a014d9b2ce7e4ed95422dda9921b46d6",
+    "mtime": 1791838702.8098967,
+    "ast_hash": "2c54092dc927b983d33a94d7e5a9ec4a",
     "semantic_hash": ""
   },
   "src/hooks/useUrlSync/useUrlSync.tsx": {
@@ -1530,8 +1530,8 @@
     "semantic_hash": ""
   },
   "src/store/grid/gridStore.ts": {
-    "mtime": 1788384701.0,
-    "ast_hash": "501e1acf921f2bdf0ffa8edc2e955ad5",
+    "mtime": 1791838242.309896,
+    "ast_hash": "10ef28d3895f4847100a58d1032ca28c",
     "semantic_hash": ""
   },
   "src/store/grid/gridTypes.ts": {
@@ -1590,13 +1590,13 @@
     "semantic_hash": ""
   },
   "src/store/sessionCoordinator.test.ts": {
-    "mtime": 1789956729.0,
-    "ast_hash": "768e16b711c814cb5a32598c06363ffb",
+    "mtime": 1791838687.6019037,
+    "ast_hash": "43bc625a2b90a051aea8e637922360c1",
     "semantic_hash": ""
   },
   "src/store/sessionCoordinator.ts": {
-    "mtime": 1789956729.0,
-    "ast_hash": "4e7186533aa758ec947702998013b14c",
+    "mtime": 1791838681.2179065,
+    "ast_hash": "929c7a20feb991c5a17627d86dd6507a",
     "semantic_hash": ""
   },
   "src/store/tech/techStore.test.ts": {
@@ -1605,13 +1605,13 @@
     "semantic_hash": ""
   },
   "src/store/tech/techStore.ts": {
-    "mtime": 1788384701.0,
-    "ast_hash": "e7e90f2c5ace726427fbf75b8ee788eb",
+    "mtime": 1791838856.3378937,
+    "ast_hash": "3b04e901030d9662070310c63e00932f",
     "semantic_hash": ""
   },
   "src/store/tech/techStoreConsolidation.test.ts": {
-    "mtime": 1788384701.0,
-    "ast_hash": "800f5b1b5d5eff4a544e0f5af6dce132",
+    "mtime": 1791838852.4578972,
+    "ast_hash": "ad4b1b6226e0bacf249421e11b197ea5",
     "semantic_hash": ""
   },
   "src/store/ui/uiStore.ts": {
@@ -2095,8 +2095,8 @@
     "semantic_hash": ""
   },
   "src/components/SvgPointerEvents.test.tsx": {
-    "mtime": 1789862941.0,
-    "ast_hash": "b5d72d1b7f3bcc3c2da838a432ee8c13",
+    "mtime": 1791838228.3098953,
+    "ast_hash": "37e1f7830b0cad12ebb730808c54e91b",
     "semantic_hash": ""
   },
   "src/hooks/useScrollGridIntoView/useScrollGridIntoView.test.ts": {
@@ -2262,6 +2262,11 @@
   "docs/adr/0001-pwa-runtime-caching-and-update-resilience.md": {
     "mtime": 1791657547.8462691,
     "ast_hash": "0d0b37c9763e9f1c0bd6566adfd4ec3a",
+    "semantic_hash": ""
+  },
+  "src/store/grid/resetGrid.test.ts": {
+    "mtime": 1791838850.5138972,
+    "ast_hash": "2f529d8ed57cdc25b0e9bf1ee0f72289",
     "semantic_hash": ""
   }
 }

@@ -19,6 +19,7 @@ const mockTechStore = {
 	clearAllModuleSelections: vi.fn(),
 	clearResult: vi.fn(),
 	clearTechGroups: vi.fn(),
+	resetSession: vi.fn(),
 };
 
 const mockPlatformStoreState = {
@@ -101,10 +102,8 @@ describe("sessionCoordinator", () => {
 		sessionCoordinator.resetSession();
 
 		expect(mockGridStore.resetGrid).toHaveBeenCalled();
-		expect(mockGridStore.clearInteractionState).toHaveBeenCalled();
-		expect(mockTechStore.clearResult).toHaveBeenCalled();
-		expect(mockTechStore.clearAllCheckedModules).toHaveBeenCalled();
-		expect(mockTechStore.clearAllBonusStatus).toHaveBeenCalled();
+		expect(mockGridStore.clearInteractionState).not.toHaveBeenCalled();
+		expect(mockTechStore.resetSession).toHaveBeenCalled();
 		expect(mockTechStore.clearAllModuleSelections).not.toHaveBeenCalled();
 		expect(mockUiStore.resetSession).toHaveBeenCalled();
 	});
