@@ -154,22 +154,12 @@ describe("Analytics Tracking", () => {
 			}
 		});
 
-		it("should fall back to blocked when google-analytics collect probe fails (e.g. Pi-hole)", async () => {
+		it.each([
+			{ probe: "google-analytics.com", reason: "e.g. Pi-hole DNS sinkhole" },
+			{ probe: "googletagmanager.com", reason: "e.g. script blocker" },
+		])("should fall back to blocked when $probe fails ($reason)", async ({ probe }) => {
 			(fetch as Mock).mockImplementation((url: string) => {
-				if (typeof url === "string" && url.includes("google-analytics.com")) {
-					return Promise.reject(new Error("net::ERR_NAME_NOT_RESOLVED"));
-				}
-
-				return Promise.resolve({ status: 200 });
-			});
-
-			await tracking.initializeAnalytics();
-			expect(ReactGA.initialize).not.toHaveBeenCalled();
-		});
-
-		it("should fall back to blocked when googletagmanager script probe fails", async () => {
-			(fetch as Mock).mockImplementation((url: string) => {
-				if (typeof url === "string" && url.includes("googletagmanager.com")) {
+				if (typeof url === "string" && url.includes(probe)) {
 					return Promise.reject(new Error("net::ERR_NAME_NOT_RESOLVED"));
 				}
 
@@ -197,19 +187,15 @@ describe("Analytics Tracking", () => {
 			});
 		});
 
-		it("should call server-side analytics when tracking is blocked", async () => {
-			(fetch as Mock).mockRejectedValue(new Error("Blocked"));
-			await tracking.initializeAnalytics();
-			tracking.sendEvent(testEvent);
-
-			await vi.waitFor(() => {
-				expect(navigator.sendBeacon).toHaveBeenCalled();
-			});
-		});
-
-		it("should route events to server-side when google-analytics collect endpoint is blocked", async () => {
+		it.each([
+			{ description: "all probes fail", filter: () => true },
+			{
+				description: "google-analytics collect endpoint is blocked (e.g. Pi-hole)",
+				filter: (url: string) => url.includes("google-analytics.com/g/collect"),
+			},
+		])("should route events to server-side when $description", async ({ filter }) => {
 			(fetch as Mock).mockImplementation((url: string) => {
-				if (typeof url === "string" && url.includes("google-analytics.com/g/collect")) {
+				if (typeof url === "string" && filter(url)) {
 					return Promise.reject(new Error("net::ERR_NAME_NOT_RESOLVED"));
 				}
 
