@@ -153,6 +153,32 @@ describe("Analytics Tracking", () => {
 				vi.useRealTimers();
 			}
 		});
+
+		it("should fall back to blocked when google-analytics collect probe fails (e.g. Pi-hole)", async () => {
+			(fetch as Mock).mockImplementation((url: string) => {
+				if (typeof url === "string" && url.includes("google-analytics.com")) {
+					return Promise.reject(new Error("net::ERR_NAME_NOT_RESOLVED"));
+				}
+
+				return Promise.resolve({ status: 200 });
+			});
+
+			await tracking.initializeAnalytics();
+			expect(ReactGA.initialize).not.toHaveBeenCalled();
+		});
+
+		it("should fall back to blocked when googletagmanager script probe fails", async () => {
+			(fetch as Mock).mockImplementation((url: string) => {
+				if (typeof url === "string" && url.includes("googletagmanager.com")) {
+					return Promise.reject(new Error("net::ERR_NAME_NOT_RESOLVED"));
+				}
+
+				return Promise.resolve({ status: 200 });
+			});
+
+			await tracking.initializeAnalytics();
+			expect(ReactGA.initialize).not.toHaveBeenCalled();
+		});
 	});
 
 	describe("Event Dispatching", () => {
@@ -178,6 +204,24 @@ describe("Analytics Tracking", () => {
 
 			await vi.waitFor(() => {
 				expect(navigator.sendBeacon).toHaveBeenCalled();
+			});
+		});
+
+		it("should route events to server-side when google-analytics collect endpoint is blocked", async () => {
+			(fetch as Mock).mockImplementation((url: string) => {
+				if (typeof url === "string" && url.includes("google-analytics.com/g/collect")) {
+					return Promise.reject(new Error("net::ERR_NAME_NOT_RESOLVED"));
+				}
+
+				return Promise.resolve({ status: 200 });
+			});
+
+			await tracking.initializeAnalytics();
+			tracking.sendEvent(testEvent);
+
+			await vi.waitFor(() => {
+				expect(navigator.sendBeacon).toHaveBeenCalled();
+				expect(ReactGA.event).not.toHaveBeenCalled();
 			});
 		});
 	});

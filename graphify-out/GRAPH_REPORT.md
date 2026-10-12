@@ -1,7 +1,7 @@
 # Graph Report - nms_optimizer-web  (2026-10-12)
 
 ## Corpus Check
-- 453 files · ~211,943 words
+- 453 files · ~212,134 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `62c8854e`
+- Built from commit: `a56da4d9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

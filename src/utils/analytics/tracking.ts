@@ -118,7 +118,7 @@ const globalIsInstalled =
  *     This specifically catches DNS sinkholes that might allow scripts but block data.
  * 3.  **Fail-Fast Settlement**: The promise resolves to `true` as soon as any probe fails,
  *     triggering the server-side fallback immediately.
- * 4.  **Timeout Safeguard**: Resolves to `true` after 3.5s if the network silently drops
+ * 4.  **Timeout Safeguard**: Resolves to `true` after 3s if the network silently drops
  *     the requests without an immediate error.
  *
  * @returns {Promise<boolean>} A promise resolving to `true` if blocking is detected.
@@ -135,7 +135,10 @@ const globalIsInstalled =
  * ```
  */
 const detectAdBlocker = (): Promise<boolean> => {
-	const probes = [`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`];
+	const probes = [
+		`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`,
+		"https://www.google-analytics.com/g/collect",
+	];
 
 	// Fallback for SSR / non-DOM environments
 	if (typeof document === "undefined" || !document.head) {
@@ -177,6 +180,7 @@ const detectAdBlocker = (): Promise<boolean> => {
 		script.async = true;
 
 		let timeoutId: null | ReturnType<typeof setTimeout> = null;
+		const controller = new AbortController();
 
 		const finish = (blocked: boolean) => {
 			if (settled) return;
@@ -186,6 +190,8 @@ const detectAdBlocker = (): Promise<boolean> => {
 				clearTimeout(timeoutId);
 				timeoutId = null;
 			}
+
+			controller.abort();
 
 			try {
 				script.remove();
@@ -223,8 +229,28 @@ const detectAdBlocker = (): Promise<boolean> => {
 			finish(true);
 		};
 
+		// 2. Fetch probe (GA Collect)
+		const fetchProbe = async () => {
+			try {
+				await fetch(probes[1], {
+					cache: "no-store",
+					method: "HEAD",
+					mode: "no-cors",
+					signal: controller.signal,
+				});
+
+				successes++;
+
+				if (successes + failures === probes.length) finish(failures > 0);
+			} catch {
+				failures++;
+				finish(true);
+			}
+		};
+
 		try {
 			document.head.appendChild(script);
+			void fetchProbe();
 		} catch {
 			finish(true);
 		}
