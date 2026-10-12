@@ -1,3 +1,10 @@
+## [8.2.3](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.2...v8.2.3) (2026-10-12)
+
+
+### Bug Fixes
+
+* **analytics:** add Google Analytics collect endpoint to ad-blocker probes ([2e8b579](https://github.com/jbelew/nms_optimizer-web/commit/2e8b5795a54b2a196aa6c33bea9015ebb02f1e27))
+
 ## [8.2.2](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.1...v8.2.2) (2026-10-12)
 
 
