@@ -1,3 +1,10 @@
+## [8.2.1](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.0...v8.2.1) (2026-10-12)
+
+
+### Bug Fixes
+
+* **images:** removed class upgrade icons from suppressor upgrade images ([b6a3c32](https://github.com/jbelew/nms_optimizer-web/commit/b6a3c328df1c6477bcce47f577847e81b3da88df))
+
 # [8.2.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.1.0...v8.2.0) (2026-10-10)
 
 
