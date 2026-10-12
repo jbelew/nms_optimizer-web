@@ -136,6 +136,23 @@ describe("Analytics Tracking", () => {
 			await tracking.initializeAnalytics();
 			expect(ReactGA.initialize).toHaveBeenCalled();
 		});
+
+		it("should fall back to blocked when ad-blocker script probe times out", async () => {
+			vi.useFakeTimers();
+
+			try {
+				(fetch as Mock).mockReturnValue(new Promise(() => {}));
+
+				const initPromise = tracking.initializeAnalytics();
+
+				await vi.advanceTimersByTimeAsync(3000);
+				await initPromise;
+
+				expect(ReactGA.initialize).not.toHaveBeenCalled();
+			} finally {
+				vi.useRealTimers();
+			}
+		});
 	});
 
 	describe("Event Dispatching", () => {

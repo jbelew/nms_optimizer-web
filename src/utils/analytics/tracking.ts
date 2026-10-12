@@ -171,17 +171,35 @@ const detectAdBlocker = (): Promise<boolean> => {
 		let failures = 0;
 		let successes = 0;
 
-		const finish = (blocked: boolean) => {
-			if (settled) return;
-			settled = true;
-
-			resolve(blocked);
-		};
-
 		// 1. Script injection probe (GTM)
 		const script = document.createElement("script");
 		script.src = probes[0];
 		script.async = true;
+
+		let timeoutId: null | ReturnType<typeof setTimeout> = null;
+
+		const finish = (blocked: boolean) => {
+			if (settled) return;
+			settled = true;
+
+			if (timeoutId !== null) {
+				clearTimeout(timeoutId);
+				timeoutId = null;
+			}
+
+			try {
+				script.remove();
+			} catch {
+				/* noop */
+			}
+
+			resolve(blocked);
+		};
+
+		// Failsafe timeout for DNS sinkholes (e.g. Pi-hole) or stalled networks
+		timeoutId = setTimeout(() => {
+			finish(true);
+		}, 3000);
 
 		script.onload = () => {
 			// Verify it's not a dummy script injected by uBlock/Brave
@@ -197,24 +215,11 @@ const detectAdBlocker = (): Promise<boolean> => {
 
 			successes++;
 
-			try {
-				script.remove();
-			} catch {
-				/* noop */
-			}
-
 			if (successes + failures === probes.length) finish(failures > 0);
 		};
 
 		script.onerror = () => {
 			failures++;
-
-			try {
-				script.remove();
-			} catch {
-				/* noop */
-			}
-
 			finish(true);
 		};
 
