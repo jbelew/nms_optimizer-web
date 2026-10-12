@@ -1,3 +1,10 @@
+## [8.2.4](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.3...v8.2.4) (2026-10-12)
+
+
+### Performance Improvements
+
+* **ui:** optimize mobile INP via deferred dialog mounts and atomic resets ([1cb4372](https://github.com/jbelew/nms_optimizer-web/commit/1cb4372e81ff955fbbc05028b6a0020edc8b211d))
+
 ## [8.2.3](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.2...v8.2.3) (2026-10-12)
 
 
