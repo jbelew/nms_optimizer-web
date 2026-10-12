@@ -1,3 +1,16 @@
+# [8.2.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.1.0...v8.2.0) (2026-10-10)
+
+
+### Bug Fixes
+
+* **pwa:** prevent false-positive update loops and await service worker activation ([09098f5](https://github.com/jbelew/nms_optimizer-web/commit/09098f5f6d5eb2144bb47255ff14b79cc95f516f))
+* **pwa:** transition to runtime caching and implement self-healing ([6f21e15](https://github.com/jbelew/nms_optimizer-web/commit/6f21e15cd300a079c2f92debd26bcf293a436318))
+
+
+### Features
+
+* **ui:** re-enable Corvette layout recommendation warning toast ([43b27dc](https://github.com/jbelew/nms_optimizer-web/commit/43b27dc068d8dfcefea982f567f06add50d7731f))
+
 # [8.1.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.0.4...v8.1.0) (2026-10-09)
 
 
