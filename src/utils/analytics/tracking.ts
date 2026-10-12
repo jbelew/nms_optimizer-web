@@ -31,7 +31,7 @@
 import type { AnalyticsEventParams, GA4Event } from "@/types/analytics";
 import type ReactGA from "react-ga4";
 
-import { API_URL, CLOUDFLARE_BEACON_CONFIG, CLOUDFLARE_BEACON_SRC, TRACKING_ID } from "@/constants";
+import { API_URL, TRACKING_ID } from "@/constants";
 import { isBot, safeGetItem, safeSetItem } from "@/utils/browser/environment";
 import { Logger } from "@/utils/system/monitoring";
 
@@ -413,51 +413,6 @@ export const sendServerEvent = (
 };
 
 /**
- * Injects the Cloudflare Web Analytics beacon script dynamically.
- *
- * @remarks
- * Injects the beacon script tag into `document.body` if not already present.
- * Uses dynamic script insertion during idle initialization so that network latency
- * or packet loss (e.g. from local DNS sinkholes or ad-blockers) cannot stall the
- * critical rendering path, `DOMContentLoaded`, or the window `load` event.
- *
- * Checks `VITE_ANALYTICS_ENABLED` and bot status internally before proceeding.
- *
- * @returns {void} Side-effects only.
- *
- * @see {@link initializeAnalytics}
- * @see {@link ./tracking.test.ts Unit Tests}
- *
- * @category Utilities
- *
- * @example
- * ```ts
- * loadCloudflareBeacon();
- * // Injects script tag into document.body
- * ```
- */
-export const loadCloudflareBeacon = (): void => {
-	if (
-		typeof document === "undefined" ||
-		!document.body ||
-		import.meta.env.VITE_ANALYTICS_ENABLED === "false" ||
-		isBot()
-	) {
-		return;
-	}
-
-	if (document.querySelector('script[src*="cloudflareinsights.com"]')) {
-		return;
-	}
-
-	const script = document.createElement("script");
-	script.defer = true;
-	script.src = CLOUDFLARE_BEACON_SRC;
-	script.setAttribute("data-cf-beacon", CLOUDFLARE_BEACON_CONFIG);
-	document.body.appendChild(script);
-};
-
-/**
  * Initializes Google Analytics tracking.
  *
  * @returns {Promise<void>} Resolves when initialization is complete or skipped.
@@ -478,8 +433,6 @@ export const initializeAnalytics = async () => {
 	const isBlocked = await getAdBlockerDetectionResult();
 
 	if (!isBlocked) {
-		loadCloudflareBeacon();
-
 		const ReactGAModule = (await import("react-ga4")) as unknown as {
 			default: typeof ReactGA & {
 				default?: typeof ReactGA;
