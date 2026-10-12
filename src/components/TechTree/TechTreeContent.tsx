@@ -86,7 +86,7 @@ export const TechTreeContent: React.FC<TechTreeContentProps> = ({ techTree }) =>
 
 		return (
 			<EmptyState
-				description="No technologies were found for the selected platform."
+				description="Unable to connect to the Solver API endpoint."
 				title="No Technologies Found"
 			/>
 		);
