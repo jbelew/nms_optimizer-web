@@ -1,3 +1,17 @@
+## [8.2.5](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.4...v8.2.5) (2026-10-14)
+
+
+### Bug Fixes
+
+* **pwa:** deduplicate precache, honor silent activation, and stamp sw release ([beb1e71](https://github.com/jbelew/nms_optimizer-web/commit/beb1e71e55f1a873fc47121f866ab8954f9d485d))
+
+
+### Performance Improvements
+
+* **build:** purge unused Radix responsive CSS, consolidate app CSS, and split dialog components ([eca28b4](https://github.com/jbelew/nms_optimizer-web/commit/eca28b437bb4ebd87f80fbd5c444af0d933a7d2a))
+* **cache:** add immutable Cache-Control header for hashed workbox runtime ([96a7597](https://github.com/jbelew/nms_optimizer-web/commit/96a75970b5911d61ed21f491fbcc5df6fa07bacb))
+* eliminate boot preload waterfall and reduce grid/dialog INP churn ([c491c66](https://github.com/jbelew/nms_optimizer-web/commit/c491c666279f37f01049fce82f5585d9452110e0))
+
 ## [8.2.4](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.3...v8.2.4) (2026-10-12)
 
 
