@@ -1,3 +1,10 @@
+## [8.2.7](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.6...v8.2.7) (2026-10-14)
+
+
+### Performance Improvements
+
+* **boot:** restore bot FCP/LCP paint visibility and defer JS API preload ([0240585](https://github.com/jbelew/nms_optimizer-web/commit/024058598e0888865b985cc886e4874d66597bf3))
+
 ## [8.2.6](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.5...v8.2.6) (2026-10-14)
 
 
