@@ -35,6 +35,8 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
+        with:
+          setup-node: 'false'
 
       - name: Check formatting
         run: bun run format:check
@@ -95,9 +97,12 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          filter: blob:none
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
+        with:
+          setup-node: 'false'
 
       - name: Set Build Version
         id: build_version
@@ -195,7 +200,6 @@ jobs:
 
   storybook-test:
     name: Storybook Interaction, A11y & Chromatic
-    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -204,6 +208,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          filter: blob:none
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
@@ -222,11 +227,8 @@ jobs:
       - name: Build Storybook
         run: bun run build-storybook -- --webpack-stats-json
 
-      - name: Run Storybook Interaction Tests
+      - name: Run Storybook Interaction & A11y Tests
         run: bun run test:storybook
-
-      - name: Run Storybook A11y Tests
-        run: bun run test:storybook:a11y
 
       - name: Run Chromatic visual tests
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
@@ -239,17 +241,23 @@ jobs:
           exitZeroOnChanges: true
 
   e2e-test:
-    name: E2E Verification (Playwright)
+    name: E2E Verification (${{ matrix.browser }})
     needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
+        with:
+          setup-node: 'false'
 
       - name: Download E2E dist artifact
         uses: actions/download-artifact@v8
@@ -265,24 +273,24 @@ jobs:
           restore-keys: |
             playwright-${{ runner.os }}-
 
-      - name: Install Playwright Browsers
-        run: bunx playwright install --with-deps chromium firefox webkit
+      - name: Install Playwright Browser (${{ matrix.browser }})
+        run: bunx playwright install --with-deps ${{ matrix.browser }}
 
-      - name: Run E2E Tests
-        run: bunx playwright test --project=chromium --project=firefox --project=webkit
+      - name: Run E2E Tests (${{ matrix.browser }})
+        run: bunx playwright test --project=${{ matrix.browser }}
         env:
           CI: true
 
-      - name: Upload Playwright Report
+      - name: Upload Playwright Report (${{ matrix.browser }})
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.browser }}
           path: playwright-report/
           retention-days: 30
 
   release:
-    name: Release
+    name: Release & Build Production
     needs: [lint-test, security-scan, build, storybook-test, e2e-test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -293,11 +301,14 @@ jobs:
     outputs:
       released: ${{ steps.check_release.outputs.released }}
       tag: ${{ steps.check_release.outputs.tag }}
+      build-version: ${{ steps.build_version.outputs.version }}
+      effective-tag: ${{ steps.version_logic.outputs.version }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          filter: blob:none
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
@@ -328,30 +339,11 @@ jobs:
             echo "released=false" >> $GITHUB_OUTPUT
           fi
 
-  build-production:
-    name: Build Application (Production)
-    needs: [release]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    outputs:
-      build-version: ${{ steps.build_version.outputs.version }}
-      effective-tag: ${{ steps.version_logic.outputs.version }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-        with:
-          ref: ${{ needs.release.outputs.tag || github.sha }}
-          fetch-depth: 0
-
-      - name: Setup environment
-        uses: ./.github/actions/setup-node-env
-
       - name: Determine Effective Version
         id: version_logic
         shell: bash
         env:
-          RELEASE_TAG: ${{ needs.release.outputs.tag }}
+          RELEASE_TAG: ${{ steps.check_release.outputs.tag }}
         run: |
           if [ -n "$RELEASE_TAG" ]; then
             echo "version=$RELEASE_TAG" >> $GITHUB_OUTPUT
@@ -385,7 +377,7 @@ jobs:
 
   deploy-production-cloudflare:
     name: Deploy to Cloudflare (Production)
-    needs: [build-production, release]
+    needs: [release]
     runs-on: ubuntu-latest
     environment:
       name: production
@@ -397,9 +389,6 @@ jobs:
         uses: actions/checkout@v7
         with:
           ref: ${{ needs.release.outputs.tag || github.sha }}
-
-      - name: Setup environment
-        uses: ./.github/actions/setup-node-env
 
       - name: Download production artifact
         uses: actions/download-artifact@v8
@@ -460,12 +449,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Setup environment
-        uses: ./.github/actions/setup-node-env
-
       - name: Download dist artifact
         uses: actions/download-artifact@v8
-
         with:
           name: dist-bundle
           path: dist/
@@ -476,3 +461,4 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_PAGES_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=nms-optimizer-web --branch=dev
+

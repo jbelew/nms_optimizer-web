@@ -71,6 +71,6 @@ export default defineConfig({
 		url: "http://127.0.0.1:4173",
 	},
 
-	/* Opt out of parallel tests on CI. */
-	workers: process.env.CI ? 1 : 1,
+	/* Use 2 workers on CI (4-vCPU runner) and 1 worker locally. */
+	workers: process.env.CI ? 2 : 1,
 });

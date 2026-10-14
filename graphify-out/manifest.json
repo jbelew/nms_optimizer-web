@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "playwright.config.ts": {
-    "mtime": 1790291607.7801335,
-    "ast_hash": "b377c41bc0f4ce5a51990b469d2063d6",
+    "mtime": 1792006526.4008,
+    "ast_hash": "3d55808b42412088c3f0a5b19c886a01",
     "semantic_hash": ""
   },
   "ralph.sh": {
@@ -235,7 +235,7 @@
     "semantic_hash": ""
   },
   "scripts/verify-deployment.mjs": {
-    "mtime": 1792005371.452579,
+    "mtime": 1792005568.9017484,
     "ast_hash": "fdef7ca02d4d55c9f1db82a8cea8672c",
     "semantic_hash": ""
   },
@@ -255,7 +255,7 @@
     "semantic_hash": ""
   },
   "scripts/vite-plugin-purge-radix-css.mjs": {
-    "mtime": 1792004437.869371,
+    "mtime": 1792005568.8729484,
     "ast_hash": "ffb6c3f54dbfbcf919c2cc576a3631a4",
     "semantic_hash": ""
   },
@@ -500,7 +500,7 @@
     "semantic_hash": ""
   },
   "src/components/AppFooter/AppFooter.tsx": {
-    "mtime": 1792003993.5857234,
+    "mtime": 1792005568.8729484,
     "ast_hash": "1dc5e9465c274e6fa970b95338a1021c",
     "semantic_hash": ""
   },
@@ -725,12 +725,12 @@
     "semantic_hash": ""
   },
   "src/components/GridTableButtons/GridTableButtons.test.tsx": {
-    "mtime": 1792000763.2421172,
+    "mtime": 1792005568.7845714,
     "ast_hash": "9975c6969d49c5130fe86c9e872ae66e",
     "semantic_hash": ""
   },
   "src/components/GridTableButtons/GridTableButtons.tsx": {
-    "mtime": 1792000882.8292463,
+    "mtime": 1792005568.7845714,
     "ast_hash": "6f34dc6d26f6a3853cce3d7cb5bbd1ce",
     "semantic_hash": ""
   },
@@ -785,7 +785,7 @@
     "semantic_hash": ""
   },
   "src/components/MainAppContent/MainAppLayout.tsx": {
-    "mtime": 1792003994.936717,
+    "mtime": 1792005568.8729484,
     "ast_hash": "7953894bde8cff72a799e5a470142a5c",
     "semantic_hash": ""
   },
@@ -845,12 +845,12 @@
     "semantic_hash": ""
   },
   "src/components/ModuleSelectionDialog/SharedModuleSelectionDialog.test.tsx": {
-    "mtime": 1792001121.237771,
+    "mtime": 1792005568.7845714,
     "ast_hash": "e33fd0f517e2b3efe5678c73fdbcd7bc",
     "semantic_hash": ""
   },
   "src/components/ModuleSelectionDialog/SharedModuleSelectionDialog.tsx": {
-    "mtime": 1792001505.3212395,
+    "mtime": 1792005568.7845714,
     "ast_hash": "837eef4d79310e7cd1b3517d293bca42",
     "semantic_hash": ""
   },
@@ -1060,7 +1060,7 @@
     "semantic_hash": ""
   },
   "src/components/TechTreeRow/TechTreeRow.tsx": {
-    "mtime": 1792001077.9036765,
+    "mtime": 1792005568.7845714,
     "ast_hash": "d45c49d59e948e81881e0829e982f9ff",
     "semantic_hash": ""
   },
@@ -1095,12 +1095,12 @@
     "semantic_hash": ""
   },
   "src/components/TechTreeRow/useTechTreeRow.test.ts": {
-    "mtime": 1792001000.319503,
+    "mtime": 1792005568.7884479,
     "ast_hash": "ddc2035cc87cdfddc7d97359d01ace44",
     "semantic_hash": ""
   },
   "src/components/TechTreeRow/useTechTreeRow.ts": {
-    "mtime": 1792001076.3676214,
+    "mtime": 1792005568.7884479,
     "ast_hash": "c8056ebfab52bf63cf1d200376e6f365",
     "semantic_hash": ""
   },
@@ -1425,12 +1425,12 @@
     "semantic_hash": ""
   },
   "src/hooks/useUrlSync/useUrlSync.test.tsx": {
-    "mtime": 1792000761.7269664,
+    "mtime": 1792005568.7884479,
     "ast_hash": "be4bda10471378ce9866cec4ff240370",
     "semantic_hash": ""
   },
   "src/hooks/useUrlSync/useUrlSync.tsx": {
-    "mtime": 1792000881.8505044,
+    "mtime": 1792005568.7884479,
     "ast_hash": "a914079d754f755c10b0aeacc8bc3ea7",
     "semantic_hash": ""
   },
@@ -1525,12 +1525,12 @@
     "semantic_hash": ""
   },
   "src/store/grid/gridSelectors.test.ts": {
-    "mtime": 1792000758.176221,
+    "mtime": 1792005568.7884479,
     "ast_hash": "47c6134dfa6cef85b46004d9a8f7a807",
     "semantic_hash": ""
   },
   "src/store/grid/gridStore.ts": {
-    "mtime": 1792001500.0068364,
+    "mtime": 1792005568.7884479,
     "ast_hash": "08da4b571915b8e7d251e9462ac7abcc",
     "semantic_hash": ""
   },
@@ -1600,12 +1600,12 @@
     "semantic_hash": ""
   },
   "src/store/tech/techStore.test.ts": {
-    "mtime": 1792000759.1776872,
+    "mtime": 1792005568.7884479,
     "ast_hash": "74aae14459e184c913d14d89834e632f",
     "semantic_hash": ""
   },
   "src/store/tech/techStore.ts": {
-    "mtime": 1792001502.9255526,
+    "mtime": 1792005568.7884479,
     "ast_hash": "1f54ee93511bfc0a137618509e796540",
     "semantic_hash": ""
   },
@@ -1845,12 +1845,12 @@
     "semantic_hash": ""
   },
   "src/utils/system/setupServiceWorker.test.ts": {
-    "mtime": 1791999985.388207,
+    "mtime": 1792005568.7109184,
     "ast_hash": "f41658c2b4366fe41d68b4f2cf0b230b",
     "semantic_hash": ""
   },
   "src/utils/system/setupServiceWorker.ts": {
-    "mtime": 1792000055.1311383,
+    "mtime": 1792005568.7109184,
     "ast_hash": "a897fab3ca65693fee59a34ca55a2073",
     "semantic_hash": ""
   },
@@ -1905,12 +1905,12 @@
     "semantic_hash": ""
   },
   "types/virtual.d.ts": {
-    "mtime": 1791999365.4307613,
+    "mtime": 1792005568.7109184,
     "ast_hash": "b7a4e92c60a57ed22062bc4cae8f50d3",
     "semantic_hash": ""
   },
   "vite.config.ts": {
-    "mtime": 1792004216.2661903,
+    "mtime": 1792005568.8729484,
     "ast_hash": "90c7243de6eadb30a5b918ba304c79fe",
     "semantic_hash": ""
   },
@@ -1920,7 +1920,7 @@
     "semantic_hash": ""
   },
   "vitest-mocks/virtual-pwa-register.ts": {
-    "mtime": 1791999364.487485,
+    "mtime": 1792005568.7109184,
     "ast_hash": "dac17dc21e6d7c3743dca235135ac452",
     "semantic_hash": ""
   },
@@ -2030,12 +2030,12 @@
     "semantic_hash": ""
   },
   "src/utils/system/bootPipeline.test.tsx": {
-    "mtime": 1792000611.0095022,
+    "mtime": 1792005568.7884479,
     "ast_hash": "9520fb5ab86d67bab84cfe75397f7ee2",
     "semantic_hash": ""
   },
   "src/utils/system/bootPipeline.tsx": {
-    "mtime": 1792001506.3533435,
+    "mtime": 1792005568.7884479,
     "ast_hash": "f0973267ad2b3b24b0eeff2da130fb5e",
     "semantic_hash": ""
   },
@@ -2195,7 +2195,7 @@
     "semantic_hash": ""
   },
   "scripts/pwa-config.test.mjs": {
-    "mtime": 1792005417.6136765,
+    "mtime": 1792005568.9017484,
     "ast_hash": "c09f4845767010b611022e34f1d140df",
     "semantic_hash": ""
   },
@@ -2255,12 +2255,12 @@
     "semantic_hash": ""
   },
   "e2e-tests/pwa-upgrade.spec.ts": {
-    "mtime": 1791999629.1155174,
+    "mtime": 1792005568.6876595,
     "ast_hash": "5138bcbaff909a19c19b123373b198bd",
     "semantic_hash": ""
   },
   "docs/adr/0001-pwa-runtime-caching-and-update-resilience.md": {
-    "mtime": 1791999630.7471368,
+    "mtime": 1792005568.6876595,
     "ast_hash": "491a2d3f557257c2396178eaf91d7a09",
     "semantic_hash": ""
   },
@@ -2270,8 +2270,13 @@
     "semantic_hash": ""
   },
   "scripts/vite-plugin-purge-radix-css.test.mjs": {
-    "mtime": 1792004057.4491107,
+    "mtime": 1792005568.8729484,
     "ast_hash": "730a81ea2a4dcae6f620d2e7cf75edff",
+    "semantic_hash": ""
+  },
+  "scripts/ci-workflow.test.mjs": {
+    "mtime": 1792006665.5778432,
+    "ast_hash": "e3240e3403d41f84db06cdf4e2e8083b",
     "semantic_hash": ""
   }
 }
