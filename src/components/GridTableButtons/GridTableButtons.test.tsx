@@ -229,7 +229,7 @@ describe("GridTableButtons", () => {
 		// Check that the functions inside handleResetGrid are called
 		expect(mockResetGrid).toHaveBeenCalled();
 		expect(mockUpdateUrlForReset).toHaveBeenCalled();
-		expect(mockSetIsSharedGrid).toHaveBeenCalledWith(false);
+		expect(mockSetIsSharedGrid).not.toHaveBeenCalled();
 	});
 
 	it("triggers instructions action handler when clicking its child SVG icon", () => {
@@ -258,7 +258,7 @@ describe("GridTableButtons", () => {
 		});
 		expect(mockResetGrid).toHaveBeenCalled();
 		expect(mockUpdateUrlForReset).toHaveBeenCalled();
-		expect(mockSetIsSharedGrid).toHaveBeenCalledWith(false);
+		expect(mockSetIsSharedGrid).not.toHaveBeenCalled();
 	});
 
 	it("initiates reset transition immediately and delegates scrolling asynchronously on mobile", () => {
@@ -303,7 +303,7 @@ describe("GridTableButtons", () => {
 		// 1. Reset state transitions must be initiated immediately
 		expect(mockResetGrid).toHaveBeenCalled();
 		expect(mockUpdateUrlForReset).toHaveBeenCalled();
-		expect(mockSetIsSharedGrid).toHaveBeenCalledWith(false);
+		expect(mockSetIsSharedGrid).not.toHaveBeenCalled();
 
 		// 2. Synchronous layout measurement and scrolling must NOT occur in the click tick
 		expect(getBoundingClientRectMock).not.toHaveBeenCalled();

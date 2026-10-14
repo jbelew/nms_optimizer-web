@@ -137,7 +137,7 @@ const TechTreeRowActions: React.FC = () => {
 	const { t } = useTranslation();
 	const { isGridFull, solving } = useTechTree();
 	const {
-		currentCheckedModules,
+		checkedModulesCount,
 		handleOptimizeClick,
 		handleReset,
 		hasTechInGrid,
@@ -157,10 +157,7 @@ const TechTreeRowActions: React.FC = () => {
 
 	const OptimizeIconComponent = hasTechInGrid ? UpdateIcon : MagicWandIcon;
 	const isOptimizeButtonDisabled =
-		(isGridFull && !hasTechInGrid) ||
-		solving ||
-		isOptimizing ||
-		currentCheckedModules.length === 0;
+		(isGridFull && !hasTechInGrid) || solving || isOptimizing || checkedModulesCount === 0;
 
 	return (
 		<>
@@ -225,7 +222,7 @@ const TechTreeRowBadges: React.FC = () => {
 	const [, startTransition] = React.useTransition();
 
 	const {
-		currentCheckedModules,
+		checkedModulesCount,
 		hasTechInGrid,
 		modules,
 		tech,
@@ -244,8 +241,8 @@ const TechTreeRowBadges: React.FC = () => {
 	const badgeContent = (
 		<div>
 			<Button
-				aria-label={`x${currentCheckedModules.length} - ${t("moduleSelection.tooltip", {
-					count: currentCheckedModules.length,
+				aria-label={`x${checkedModulesCount} - ${t("moduleSelection.tooltip", {
+					count: checkedModulesCount,
 					techName: translatedTechName,
 				})}`}
 				className="ml-1! align-top font-mono! tabular-nums"
@@ -258,7 +255,7 @@ const TechTreeRowBadges: React.FC = () => {
 				size="1"
 				variant={modules.length === 1 ? "surface" : "solid"}
 			>
-				x{currentCheckedModules.length}
+				x{checkedModulesCount}
 				<OpenInNewWindowIcon />
 			</Button>
 		</div>

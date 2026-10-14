@@ -6,25 +6,19 @@ import { describe, expect, it, vi } from "vitest";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
 
+import { useTechModuleManagement } from "./useTechModuleManagement";
 import { useTechTreeRow } from "./useTechTreeRow";
 
-// Mock child hooks and stores
+// Spy on useTechModuleManagement to ensure TechTreeRow does not invoke it per-row
 vi.mock("./useTechModuleManagement", () => ({
-	useTechModuleManagement: vi.fn(() => ({
-		allModulesSelected: false,
-		currentCheckedModules: ["module1"],
-		groupedModules: {},
-		handleAllCheckboxesChange: vi.fn(),
-		handleSelectAllChange: vi.fn(),
-		handleValueChange: vi.fn(),
-		isIndeterminate: true,
-	})),
+	useTechModuleManagement: vi.fn(),
 }));
 
 vi.mock("./useTechOptimization", () => ({
 	useTechOptimization: vi.fn(() => ({
 		handleOptimizeClick: vi.fn(),
 		handleReset: vi.fn(),
+		isOptimizing: false,
 		isResetting: false,
 	})),
 }));
@@ -54,6 +48,7 @@ const mockProps: TechTreeRowProps & {
 
 describe("useTechTreeRow", () => {
 	beforeEach(() => {
+		vi.clearAllMocks();
 		(useGridStore as unknown as Mock).mockImplementation(
 			(selector: (state: Record<string, unknown>) => unknown) =>
 				selector({
@@ -64,12 +59,14 @@ describe("useTechTreeRow", () => {
 		(useTechStore as unknown as Mock).mockImplementation(
 			(
 				selector: (state: {
+					checkedModules: { [key: string]: string[] };
 					maxBonus: { [key: string]: number };
 					solvedBonus: { [key: string]: number };
 					techGroups: { [key: string]: [{ modules: unknown[] }] };
 				}) => unknown
 			) =>
 				selector({
+					checkedModules: { testTech: ["module1"] },
 					maxBonus: {},
 					solvedBonus: {},
 					techGroups: { testTech: [{ modules: [] }] },
@@ -77,15 +74,16 @@ describe("useTechTreeRow", () => {
 		);
 	});
 
-	it("should return the correct data shape", () => {
+	it("should return the correct data shape without calling useTechModuleManagement", () => {
 		const { result } = renderHook(() => useTechTreeRow(mockProps));
 
-		// Check for some key properties to ensure the hook is returning what's expected
+		// Check for key properties to ensure the hook returns what TechTreeRow needs
 		expect(result.current).toHaveProperty("hasTechInGrid");
 		expect(result.current).toHaveProperty("translatedTechName");
 		expect(result.current).toHaveProperty("handleOptimizeClick");
-		expect(result.current).toHaveProperty("currentCheckedModules");
+		expect(result.current.checkedModulesCount).toBe(1);
 		expect(result.current.techColor).toBe("blue");
+		expect(useTechModuleManagement).not.toHaveBeenCalled();
 	});
 
 	it("should calculate translatedTechName correctly", () => {
@@ -160,11 +158,9 @@ describe("useTechTreeRow", () => {
 	});
 
 	it("should handle empty modules array", () => {
-		// The mock returns ["module1"] by default, so we're testing that the data flows through
 		const { result } = renderHook(() => useTechTreeRow(mockProps));
 
-		// Should pass through the mocked module data
-		expect(result.current.currentCheckedModules).toEqual(["module1"]);
+		expect(result.current.checkedModulesCount).toBe(1);
 		expect(result.current.moduleCount).toBe(0); // No modules in the mocked tech group
 	});
 
@@ -172,12 +168,14 @@ describe("useTechTreeRow", () => {
 		(useTechStore as unknown as Mock).mockImplementation(
 			(
 				selector: (state: {
+					checkedModules: { [key: string]: string[] };
 					maxBonus: { [key: string]: number };
 					solvedBonus: { [key: string]: number };
 					techGroups: { [key: string]: [{ modules: unknown[] }] };
 				}) => unknown
 			) =>
 				selector({
+					checkedModules: {},
 					maxBonus: {},
 					solvedBonus: {},
 					techGroups: {}, // No testTech key
@@ -187,6 +185,7 @@ describe("useTechTreeRow", () => {
 		const { result } = renderHook(() => useTechTreeRow(mockProps));
 
 		// Should gracefully handle missing tech
+		expect(result.current.checkedModulesCount).toBe(0);
 		expect(result.current.moduleCount).toBe(0);
 		expect(result.current.modules).toEqual([]);
 	});
@@ -197,8 +196,5 @@ describe("useTechTreeRow", () => {
 		// Callbacks should exist
 		expect(typeof result.current.handleOptimizeClick).toBe("function");
 		expect(typeof result.current.handleReset).toBe("function");
-		expect(typeof result.current.handleValueChange).toBe("function");
-		expect(typeof result.current.handleSelectAllChange).toBe("function");
-		expect(typeof result.current.handleAllCheckboxesChange).toBe("function");
 	});
 });

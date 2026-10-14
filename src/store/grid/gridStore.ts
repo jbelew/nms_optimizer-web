@@ -3,6 +3,7 @@ import type { Module } from "@/types/tech";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
+import { shallow } from "zustand/shallow";
 
 import { UI_TIMING } from "@/constants";
 import { useUiStore } from "@/store/ui/uiStore";
@@ -56,7 +57,52 @@ export * from "./gridTypes";
  */
 export const useGridStore = create<GridStore>()(
 	persist(
-		immer((set, _get) => {
+		immer((set, get) => {
+			/**
+			 * Synchronizes `state.grid.cells` with `targetCells` while preserving object
+			 * references for unmodified cells and rows in the Immer draft.
+			 *
+			 * @param {GridStore} state - The current mutable Immer draft state.
+			 * @param {Cell[][]} targetCells - The target 2D cell matrix to apply.
+			 *
+			 * @returns {void} Updates `state.grid` in place.
+			 */
+			const syncGridCellsInPlace = (state: GridStore, targetCells: Cell[][]): void => {
+				const targetHeight = targetCells.length;
+				const targetWidth = targetCells[0]?.length ?? 0;
+				const currentCells = state.grid?.cells;
+
+				const hasMatchingDimensions =
+					Array.isArray(currentCells) &&
+					currentCells.length === targetHeight &&
+					currentCells.every((row, r) => row?.length === targetCells[r]?.length);
+
+				if (!hasMatchingDimensions) {
+					state.grid.cells = targetCells;
+					state.grid.width = targetWidth;
+					state.grid.height = targetHeight;
+
+					return;
+				}
+
+				for (let r = 0; r < targetHeight; r++) {
+					const currentRow = currentCells[r];
+					const targetRow = targetCells[r];
+
+					for (let c = 0; c < targetRow.length; c++) {
+						const currentCell = currentRow[c];
+						const targetCell = targetRow[c];
+
+						if (!shallow(currentCell, targetCell)) {
+							Object.assign(currentCell, targetCell);
+						}
+					}
+				}
+
+				state.grid.width = targetWidth;
+				state.grid.height = targetHeight;
+			};
+
 			/**
 			 * Applies a grid definition to the state.
 			 *
@@ -75,9 +121,7 @@ export const useGridStore = create<GridStore>()(
 				const newCells: Cell[][] = definition.grid.map((row) =>
 					row.map(createCellFromModuleData)
 				);
-				state.grid.cells = newCells;
-				state.grid.width = newCells[0]?.length ?? 0;
-				state.grid.height = newCells.length;
+				syncGridCellsInPlace(state, newCells);
 				state.gridFixed = definition.gridFixed;
 				state.superchargedFixed = definition.superchargedFixed;
 			};
@@ -97,10 +141,14 @@ export const useGridStore = create<GridStore>()(
 			 */
 			const recomputeDerivedState = (state: GridStore) => {
 				const cells = state.grid?.cells;
+				const currentActiveTechs = get().activeTechs;
 
 				// Basic guard for empty grid (though should not happen with current init)
 				if (!cells || cells.length === 0) {
-					state.activeTechs = new Set();
+					if (currentActiveTechs.size > 0) {
+						state.activeTechs = new Set();
+					}
+
 					state.totalSuperchargedCells = 0;
 					state.hasModulesInGrid = false;
 					state.isGridFull = false;
@@ -144,7 +192,10 @@ export const useGridStore = create<GridStore>()(
 					if (rowAllInactive && firstInactiveRow === -1) firstInactiveRow = r;
 				}
 
-				state.activeTechs = techs;
+				if (!shallow(currentActiveTechs, techs)) {
+					state.activeTechs = techs;
+				}
+
 				state.totalSuperchargedCells = superchargedCount;
 				state.hasModulesInGrid = hasModules;
 				state.isGridFull = activeCount > 0 && activeCount === activeWithModuleCount;
@@ -383,7 +434,7 @@ export const useGridStore = create<GridStore>()(
 							applyGridDefinition(state, definition);
 						} else {
 							const newGrid = createGrid(state.grid.width, state.grid.height);
-							state.grid.cells = newGrid.cells;
+							syncGridCellsInPlace(state, newGrid.cells);
 							state.gridFixed = false;
 							state.superchargedFixed = false;
 						}

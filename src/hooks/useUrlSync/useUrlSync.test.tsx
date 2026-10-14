@@ -124,13 +124,13 @@ describe("useUrlSync", () => {
 	});
 
 	/**
-	 * Verifies that the URL is updated with replace: true when resetting without a grid param in URL.
+	 * Verifies that updateUrlForReset is a no-op when the URL does not contain a grid param.
 	 */
-	it("should replace history entry when resetting a layout without a grid param in URL", () => {
+	it("should skip navigation when resetting a layout without a grid param in URL", () => {
 		window.history.pushState({}, "", "/?platform=test-platform");
 		const { result } = renderHook(() => useUrlSync());
 		result.current.updateUrlForReset();
-		expect(mockNavigate).toHaveBeenCalledWith("/?platform=test-platform", { replace: true });
+		expect(mockNavigate).not.toHaveBeenCalled();
 	});
 
 	/**

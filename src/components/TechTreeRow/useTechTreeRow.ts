@@ -1,30 +1,31 @@
 import type { TechTreeRowProps } from "@/types/props";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
 
-import { useTechModuleManagement } from "./useTechModuleManagement";
 import { useTechOptimization } from "./useTechOptimization";
 
 /** Default empty array for modules to ensure stable reference for hooks. */
 const EMPTY_MODULES_ARRAY: { id: string; image: string; label: string; type?: string }[] = [];
 
 /**
- * Orchestrates the complex logic for a single technology sidebar row.
+ * Orchestrates the state and callbacks for a single technology sidebar row.
  *
  * @remarks
  * This coordinator hook acts as a facade, aggregating data from multiple stores
- * and delegating specialized tasks to sub-hooks. It handles:
- * 1. Data aggregation from {@link useGridStore} and {@link useTechStore}.
- * 2. Module selection state via {@link useTechModuleManagement}.
- * 3. Optimization and reset lifecycle via {@link useTechOptimization}.
- * 4. Derived logic for localization and resolution-aware image path generation.
+ * and delegating solver interactions to {@link useTechOptimization}. It handles:
+ * 1. Data aggregation from {@link useGridStore} and {@link useTechStore}, selecting
+ *    only the primitive `checkedModulesCount` to avoid per-row module grouping overhead.
+ * 2. Optimization and reset lifecycle via {@link useTechOptimization}.
+ * 3. Derived logic for localization and resolution-aware image path generation.
  *
  * @param {TechTreeRowProps} props - The properties passed to the parent component.
  *
  * @returns {object} A unified interface containing state flags, localized strings, and event handlers.
+ * @returns {number} returns.checkedModulesCount - Count of currently checked modules for this technology.
  * @returns {boolean} returns.hasTechInGrid - Whether the technology is currently placed in the grid.
  * @returns {string} returns.translatedTechName - The localized name of the technology.
  * @returns {string} returns.imagePath - Path to the 1x resolution technology icon.
@@ -35,7 +36,6 @@ const EMPTY_MODULES_ARRAY: { id: string; image: string; label: string; type?: st
  * @returns {boolean} returns.isResetting - Whether a reset operation is in progress.
  *
  * @see {@link import('./TechTreeRow').TechTreeRow} for the consuming component.
- * @see {@link useTechModuleManagement} for module selection logic.
  * @see {@link useTechOptimization} for solver orchestration.
  * @see {@link useGridStore} for grid state.
  * @see {@link useTechStore} for technology metadata.
@@ -73,14 +73,16 @@ export const useTechTreeRow = ({
 	// State from stores
 	const hasTechInGrid = useGridStore((state) => state.activeTechs.has(tech));
 
-	const { activeGroupType, techGroup, techMaxBonus, techSolvedBonus } = useTechStore(
-		useShallow((state) => ({
-			activeGroupType: state.activeGroups?.[tech] || "normal",
-			techGroup: state.techGroups?.[tech],
-			techMaxBonus: state.maxBonus?.[tech] ?? 0,
-			techSolvedBonus: state.solvedBonus?.[tech] ?? 0,
-		}))
-	);
+	const { activeGroupType, checkedModulesCount, techGroup, techMaxBonus, techSolvedBonus } =
+		useTechStore(
+			useShallow((state) => ({
+				activeGroupType: state.activeGroups?.[tech] || "normal",
+				checkedModulesCount: state.checkedModules?.[tech]?.length ?? 0,
+				techGroup: state.techGroups?.[tech],
+				techMaxBonus: state.maxBonus?.[tech] ?? 0,
+				techSolvedBonus: state.solvedBonus?.[tech] ?? 0,
+			}))
+		);
 
 	// Derived state
 	const activeGroup = techGroup?.length
@@ -97,18 +99,7 @@ export const useTechTreeRow = ({
 		hasTechInGrid
 	);
 
-	const {
-		allModulesSelected,
-		currentCheckedModules,
-		groupedModules,
-		handleAllCheckboxesChange,
-		handleSelectAllChange,
-		handleValueChange,
-		isIndeterminate,
-	} = useTechModuleManagement(tech, modules);
-
 	// Other logic specific to TechTreeRow
-
 	const translationKeyPart = techImage
 		? techImage.replace(/\.\w+$/, "").replace(/\//g, ".")
 		: tech;
@@ -124,33 +115,44 @@ export const useTechTreeRow = ({
 		? `${baseImagePath}${techImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1")}${versionParam}`
 		: fallbackImage2x;
 
-	return {
-		allModulesSelected,
-		// Module management
-		currentCheckedModules,
-		groupedModules,
-		handleAllCheckboxesChange,
-		// Callbacks
-		handleOptimizeClick,
-		handleReset,
-		handleSelectAllChange,
-		handleValueChange,
-		// State and derived data
-		hasTechInGrid,
-		imagePath,
-		imagePath2x,
-		isIndeterminate,
-		isOptimizing,
-		isResetting,
-		moduleCount,
-		modules,
-		solving,
-
-		tech,
-		techColor,
-		techImage,
-		techMaxBonus,
-		techSolvedBonus,
-		translatedTechName,
-	};
+	return useMemo(
+		() => ({
+			checkedModulesCount,
+			handleOptimizeClick,
+			handleReset,
+			hasTechInGrid,
+			imagePath,
+			imagePath2x,
+			isOptimizing,
+			isResetting,
+			moduleCount,
+			modules,
+			solving,
+			tech,
+			techColor,
+			techImage,
+			techMaxBonus,
+			techSolvedBonus,
+			translatedTechName,
+		}),
+		[
+			checkedModulesCount,
+			handleOptimizeClick,
+			handleReset,
+			hasTechInGrid,
+			imagePath,
+			imagePath2x,
+			isOptimizing,
+			isResetting,
+			moduleCount,
+			modules,
+			solving,
+			tech,
+			techColor,
+			techImage,
+			techMaxBonus,
+			techSolvedBonus,
+			translatedTechName,
+		]
+	);
 };

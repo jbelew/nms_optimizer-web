@@ -4,6 +4,7 @@ import type { StorageValue } from "zustand/middleware";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
+import { shallow } from "zustand/shallow";
 
 import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
 import { Logger } from "@/utils/system/monitoring";
@@ -334,7 +335,10 @@ const computeDefaultCheckedModules = (state: TechStore): Record<string, string[]
 					: groups[0];
 
 			if (activeGroup) {
-				acc[tech] = activeGroup.modules.filter((m) => m.checked).map((m) => m.id);
+				const defaultIds = activeGroup.modules.filter((m) => m.checked).map((m) => m.id);
+				const existingIds = state.checkedModules[tech];
+				acc[tech] =
+					existingIds && shallow(existingIds, defaultIds) ? existingIds : defaultIds;
 			}
 
 			return acc;

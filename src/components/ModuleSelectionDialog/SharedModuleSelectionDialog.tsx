@@ -14,10 +14,11 @@
  * @category Components
  */
 
-import React, { useCallback, useEffect, useRef, useState, useTransition } from "react";
+import React, { useCallback, useEffect, useRef, useTransition } from "react";
 import { formatDocumentTitle } from "@shared/page-metadata.js";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
+import { shallow } from "zustand/shallow";
 
 import { ModuleSelectionDialog } from "@/components/ModuleSelectionDialog/ModuleSelectionDialog";
 import { useTechTree } from "@/components/TechTree/useTechTreeContext";
@@ -98,8 +99,9 @@ export const SharedModuleSelectionDialog: React.FC = () => {
 		isIndeterminate,
 	} = useTechModuleManagement(activeTech, modules);
 
-	// Snapshot of initial module selections when dialog opens (for cancel/revert)
-	const [initialModules, setInitialModules] = useState<string[]>([]);
+	// Snapshot of initial module selections when dialog opens (for cancel/revert without extra re-render)
+	const initialModulesRef = useRef<string[]>([]);
+	const lastOpenedTechRef = useRef<null | string>(null);
 	const optimizeClickedRef = useRef(false);
 
 	// Compute translated tech name
@@ -113,25 +115,33 @@ export const SharedModuleSelectionDialog: React.FC = () => {
 		currentCheckedModulesRef.current = currentCheckedModules;
 	}, [currentCheckedModules]);
 
-	// Snapshot initial modules and fire analytics when dialog opens
+	// Snapshot initial modules and fire analytics once when dialog opens for a technology
 	useEffect(() => {
-		if (isOpen && activeTech) {
-			const initialSnapshot = currentCheckedModulesRef.current;
-			setTimeout(() => setInitialModules(initialSnapshot), 0);
-			optimizeClickedRef.current = false;
+		if (!isOpen || !activeTech) {
+			lastOpenedTechRef.current = null;
 
-			const appName = t("appName", { defaultValue: "NMS Optimizer" });
-			const pageTitle = formatDocumentTitle(`${translatedTechName} Selection`, appName);
-
-			sendDeferredEvent({
-				action: "page_view",
-				category: "engagement",
-				nonInteraction: true,
-				page: `${window.location.pathname}${window.location.search}#module-selection-${activeTech}`,
-				page_location: window.location.href,
-				page_title: pageTitle,
-			});
+			return;
 		}
+
+		if (lastOpenedTechRef.current === activeTech) {
+			return;
+		}
+
+		lastOpenedTechRef.current = activeTech;
+		initialModulesRef.current = currentCheckedModulesRef.current;
+		optimizeClickedRef.current = false;
+
+		const appName = t("appName", { defaultValue: "NMS Optimizer" });
+		const pageTitle = formatDocumentTitle(`${translatedTechName} Selection`, appName);
+
+		sendDeferredEvent({
+			action: "page_view",
+			category: "engagement",
+			nonInteraction: true,
+			page: `${window.location.pathname}${window.location.search}#module-selection-${activeTech}`,
+			page_location: window.location.href,
+			page_title: pageTitle,
+		});
 	}, [activeTech, isOpen, sendDeferredEvent, t, translatedTechName]);
 
 	/**
@@ -154,17 +164,20 @@ export const SharedModuleSelectionDialog: React.FC = () => {
 
 	/**
 	 * Handles dialog close (cancel or backdrop click).
-	 * If optimize wasn't clicked, reverts module selections to the snapshot.
+	 * If optimize wasn't clicked and selections diverged, reverts module selections to the snapshot.
 	 */
 	const handleClose = useCallback(() => {
 		startTransition(() => {
-			if (!optimizeClickedRef.current) {
-				handleAllCheckboxesChange(initialModules);
+			if (
+				!optimizeClickedRef.current &&
+				!shallow(currentCheckedModulesRef.current, initialModulesRef.current)
+			) {
+				handleAllCheckboxesChange(initialModulesRef.current);
 			}
 
 			closeDialog();
 		});
-	}, [closeDialog, handleAllCheckboxesChange, initialModules]);
+	}, [closeDialog, handleAllCheckboxesChange]);
 
 	// Don't render anything when no tech is selected
 	if (!selectedTechData) {

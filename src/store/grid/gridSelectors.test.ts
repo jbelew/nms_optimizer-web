@@ -147,4 +147,30 @@ describe("Grid Store Selectors", () => {
 			expect(useGridStore.getState().hasModulesInGrid).toBe(false);
 		});
 	});
+
+	describe("Reference Stability (INP Optimization)", () => {
+		it("should preserve activeTechs Set reference when active technologies do not change", () => {
+			const initialActiveTechs = useGridStore.getState().activeTechs;
+			useGridStore.getState().handleCellTap(0, 0);
+			expect(useGridStore.getState().activeTechs).toBe(initialActiveTechs);
+		});
+
+		it("should preserve unmodified cell and row references during resetGrid", () => {
+			// Place a module only in [0, 0]
+			useGridStore.setState((state) => {
+				state.grid.cells[0][0].module = "PC";
+				state.grid.cells[0][0].tech = "pulse";
+			});
+			useGridStore.getState().triggerRecompute();
+
+			const untouchedCellBefore = useGridStore.getState().grid.cells[1][1];
+			const untouchedRowBefore = useGridStore.getState().grid.cells[1];
+
+			useGridStore.getState().resetGrid();
+
+			expect(useGridStore.getState().grid.cells[0][0].module).toBeNull();
+			expect(useGridStore.getState().grid.cells[1][1]).toBe(untouchedCellBefore);
+			expect(useGridStore.getState().grid.cells[1]).toBe(untouchedRowBefore);
+		});
+	});
 });

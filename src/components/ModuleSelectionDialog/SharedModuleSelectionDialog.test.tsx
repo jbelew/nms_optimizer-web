@@ -166,7 +166,41 @@ describe("SharedModuleSelectionDialog", () => {
 		});
 	});
 
-	test("reverts checkboxes to initial modules and closes on cancel", () => {
+	test("reverts checkboxes to initial modules and closes on cancel when selection was modified", () => {
+		vi.mocked(useModuleSelectionDialogStore).mockReturnValue({
+			closeDialog: mockCloseDialog,
+			isOpen: true,
+			selectedTechData: {
+				tech: "hyperdrive",
+				techColor: "blue",
+				techImage: "hyperdrive.webp",
+			},
+		} as unknown as ReturnType<typeof useModuleSelectionDialogStore>);
+
+		const { rerender } = render(<SharedModuleSelectionDialog />);
+
+		// Simulate user modifying checkbox selection while dialog is open
+		vi.mocked(useTechModuleManagement).mockReturnValue({
+			allModulesSelected: true,
+			currentCheckedModules: ["module-1", "module-2"],
+			groupedModules: {} as unknown as ReturnType<
+				typeof useTechModuleManagement
+			>["groupedModules"],
+			handleAllCheckboxesChange: mockHandleAllCheckboxesChange,
+			handleSelectAllChange: mockHandleSelectAllChange,
+			handleValueChange: mockHandleValueChange,
+			isIndeterminate: false,
+		});
+		rerender(<SharedModuleSelectionDialog />);
+
+		fireEvent.click(screen.getByText("Cancel Button"));
+
+		// Reverts modules to the initial snapshot ["module-1"] and closes the dialog
+		expect(mockHandleAllCheckboxesChange).toHaveBeenCalledWith(["module-1"]);
+		expect(mockCloseDialog).toHaveBeenCalled();
+	});
+
+	test("skips reverting checkboxes on cancel when selection was not modified", () => {
 		vi.mocked(useModuleSelectionDialogStore).mockReturnValue({
 			closeDialog: mockCloseDialog,
 			isOpen: true,
@@ -181,8 +215,7 @@ describe("SharedModuleSelectionDialog", () => {
 
 		fireEvent.click(screen.getByText("Cancel Button"));
 
-		// Reverts modules and closes the dialog
-		expect(mockHandleAllCheckboxesChange).toHaveBeenCalled();
+		expect(mockHandleAllCheckboxesChange).not.toHaveBeenCalled();
 		expect(mockCloseDialog).toHaveBeenCalled();
 	});
 });

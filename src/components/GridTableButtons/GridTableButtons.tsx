@@ -54,7 +54,6 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	const [isSharePending, startShareTransition] = useTransition();
 
 	const { markTutorialFinished, openDialog, tutorialFinished } = useDialog();
-	const setIsSharedGrid = useGridStore((state) => state.setIsSharedGrid);
 	const hasModulesInGrid = useGridStore((state) => state.hasModulesInGrid);
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const {
@@ -133,7 +132,6 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 		startResetTransition(() => {
 			sessionCoordinator.resetSession();
 			updateUrlForReset();
-			setIsSharedGrid(false);
 		});
 	};
 

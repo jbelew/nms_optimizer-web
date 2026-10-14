@@ -896,5 +896,96 @@ describe("TechStore", () => {
 				"mod_photonix_checked",
 			]);
 		});
+
+		it("should preserve checkedModules array reference in resetSession when selection already matches defaults", () => {
+			const { initializeTechTree, resetSession } = useTechStore.getState();
+			const mockTechGroups = {
+				hyperdrive: [
+					{
+						color: "blue" as const,
+						image: null,
+						key: "hyperdrive",
+						label: "Hyperdrive",
+						module_count: 1,
+						modules: [
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 5,
+								checked: true,
+								id: "HD1",
+								image: "",
+								label: "Hyperdrive",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "hyperdrive",
+								type: "core",
+								value: 10,
+							},
+						],
+						type: "normal",
+					},
+				],
+				pulse: [
+					{
+						color: "red" as const,
+						image: null,
+						key: "pulse",
+						label: "Pulse",
+						module_count: 2,
+						modules: [
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 5,
+								checked: true,
+								id: "P1",
+								image: "",
+								label: "Pulse 1",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "pulse",
+								type: "core",
+								value: 10,
+							},
+							{
+								active: true,
+								adjacency: "",
+								adjacency_bonus: 0,
+								bonus: 5,
+								checked: false,
+								id: "P2",
+								image: "",
+								label: "Pulse 2",
+								sc_eligible: false,
+								supercharged: false,
+								tech: "pulse",
+								type: "upgrade",
+								value: 10,
+							},
+						],
+						type: "normal",
+					},
+				],
+			};
+
+			initializeTechTree(
+				{},
+				mockTechGroups,
+				{ hyperdrive: "normal", pulse: "normal" },
+				{ hyperdrive: ["HD1"], pulse: ["P1", "P2"] }
+			);
+
+			const hyperdriveRefBefore = useTechStore.getState().checkedModules["hyperdrive"];
+
+			resetSession();
+
+			// hyperdrive was already at its default ["HD1"], so its array reference must be preserved
+			expect(useTechStore.getState().checkedModules["hyperdrive"]).toBe(hyperdriveRefBefore);
+			// pulse had "P2" checked, so it resets to ["P1"]
+			expect(useTechStore.getState().checkedModules["pulse"]).toEqual(["P1"]);
+		});
 	});
 });

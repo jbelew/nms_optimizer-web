@@ -79,6 +79,7 @@ describe("bootPipeline", () => {
 			});
 
 			expect(performBootstrapMigrations).toHaveBeenCalledTimes(1);
+			expect(preloadInitialState).toHaveBeenCalledTimes(1);
 			expect(initializeSentry).toHaveBeenCalledTimes(1);
 			expect(coordinator.getPhase()).toBe("HYDRATED");
 			expect(coordinator.isHydrated()).toBe(true);
@@ -285,30 +286,24 @@ describe("bootPipeline", () => {
 			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
 			registerDefaultDeferredServices(coordinator);
 
-			expect(coordinator.hasDeferredTask("api-preload")).toBe(true);
+			expect(coordinator.hasDeferredTask("api-preload")).toBe(false);
 			expect(coordinator.hasDeferredTask("ga4-analytics")).toBe(true);
 			expect(coordinator.hasDeferredTask("service-worker")).toBe(true);
 
 			const tasks = coordinator.getDeferredTasks();
-			expect(tasks.map((t) => t.name)).toEqual([
-				"api-preload",
-				"ga4-analytics",
-				"service-worker",
-			]);
+			expect(tasks.map((t) => t.name)).toEqual(["ga4-analytics", "service-worker"]);
 		});
 
 		it("should execute registered deferred services when IDLE is reached or flushed", async () => {
 			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
 			registerDefaultDeferredServices(coordinator);
 
-			expect(preloadInitialState).not.toHaveBeenCalled();
 			expect(initializeAnalyticsClient).not.toHaveBeenCalled();
 			expect(initializeAnalytics).not.toHaveBeenCalled();
 			expect(setupServiceWorkerRegistration).not.toHaveBeenCalled();
 
 			await coordinator.flushDeferredTasks();
 
-			expect(preloadInitialState).toHaveBeenCalledTimes(1);
 			expect(initializeAnalyticsClient).toHaveBeenCalledTimes(1);
 			expect(initializeAnalytics).toHaveBeenCalledTimes(1);
 			expect(setupServiceWorkerRegistration).toHaveBeenCalledTimes(1);
@@ -327,7 +322,6 @@ describe("bootPipeline", () => {
 				});
 			});
 
-			expect(coordinator1.hasDeferredTask("api-preload")).toBe(true);
 			expect(coordinator1.hasDeferredTask("ga4-analytics")).toBe(true);
 			expect(coordinator1.hasDeferredTask("service-worker")).toBe(true);
 
@@ -347,7 +341,6 @@ describe("bootPipeline", () => {
 				});
 			});
 
-			expect(coordinator2.hasDeferredTask("api-preload")).toBe(false);
 			expect(coordinator2.hasDeferredTask("ga4-analytics")).toBe(false);
 			expect(coordinator2.hasDeferredTask("service-worker")).toBe(false);
 
