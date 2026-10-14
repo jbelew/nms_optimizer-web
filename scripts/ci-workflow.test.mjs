@@ -2,7 +2,7 @@
  * @file Architectural and performance verification tests for the GitHub Actions CI pipeline.
  *
  * Ensures `.github/workflows/ci.yml` and `playwright.config.ts` maintain optimal DAG
- * parallelism and avoid redundant setup/checkout/test steps.
+ * parallelism, standardized `Category (Target)` labels, matrix grouping, and `ubuntu-26.04` runners.
  */
 
 import fs from "node:fs";
@@ -48,6 +48,35 @@ describe("CI Pipeline Architecture (.github/workflows/ci.yml)", () => {
 		expect(ciYml).toMatch(/^name:\s*CI Pipeline\b/m);
 	});
 
+	it("pins runs-on to ubuntu-26.04 across all jobs without unpinned ubuntu-latest", () => {
+		expect(ciYml).not.toContain("runs-on: ubuntu-latest");
+		expect(ciYml).toContain("runs-on: ubuntu-26.04");
+	});
+
+	it("uses standardized Category (Target) job names and 2-shard Quality matrix for lint-test", () => {
+		const lintTestJob = extractJobBlock(ciYml, "lint-test");
+		expect(lintTestJob).toContain("name: Quality (${{ matrix.label }})");
+		expect(lintTestJob).toContain("label: Lint & Typecheck");
+		expect(lintTestJob).toContain("label: Unit Tests");
+
+		expect(extractJobBlock(ciYml, "security-scan")).toContain("name: Security (CodeQL)");
+		expect(extractJobBlock(ciYml, "build")).toContain("name: Build (Verification & E2E)");
+		expect(extractJobBlock(ciYml, "storybook-test")).toContain(
+			"name: Storybook (Tests & Chromatic)"
+		);
+		expect(extractJobBlock(ciYml, "lighthouse")).toContain("name: Lighthouse (Audit & History)");
+		expect(extractJobBlock(ciYml, "release")).toContain(
+			"name: Release (Version & Production Build)"
+		);
+		expect(extractJobBlock(ciYml, "deploy-production-cloudflare")).toContain(
+			"name: Deploy (Production)"
+		);
+		expect(extractJobBlock(ciYml, "deploy-staging")).toContain("name: Deploy (Staging)");
+		expect(extractJobBlock(ciYml, "post-deploy-production")).toContain(
+			"name: Post-Deploy (Downstream Triggers)"
+		);
+	});
+
 	it("starts storybook-test at t=0 without waiting on build and runs vitest storybook suite only once", () => {
 		const storybookJob = extractJobBlock(ciYml, "storybook-test");
 		expect(storybookJob).toBeTruthy();
@@ -56,10 +85,13 @@ describe("CI Pipeline Architecture (.github/workflows/ci.yml)", () => {
 		expect(storybookJob).not.toContain("bun run test:storybook:a11y");
 	});
 
-	it("parallelizes e2e-test via browser matrix and multi-worker Playwright config", () => {
+	it("parallelizes e2e-test via capitalized browser matrix and multi-worker Playwright config", () => {
 		const e2eJob = extractJobBlock(ciYml, "e2e-test");
 		expect(e2eJob).toBeTruthy();
-		expect(e2eJob).toMatch(/matrix:\s*\n\s*browser:\s*\[chromium,\s*firefox,\s*webkit\]/);
+		expect(e2eJob).toContain("name: E2E (${{ matrix.label }})");
+		expect(e2eJob).toContain("label: Chromium");
+		expect(e2eJob).toContain("label: Firefox");
+		expect(e2eJob).toContain("label: WebKit");
 		expect(e2eJob).toContain("bunx playwright install --with-deps ${{ matrix.browser }}");
 		expect(e2eJob).toContain("bunx playwright test --project=${{ matrix.browser }}");
 		expect(playwrightConfig).toMatch(/workers:\s*process\.env\.CI\s*\?\s*2\s*:\s*1/);
@@ -85,7 +117,9 @@ describe("CI Pipeline Architecture (.github/workflows/ci.yml)", () => {
 	});
 
 	it("uses filter: blob:none on all fetch-depth: 0 checkouts to avoid downloading historical binary blobs", () => {
-		const checkoutBlocks = [...ciYml.matchAll(/uses:\s*actions\/checkout@v\d+([\s\S]*?)(?=\n\s*-\s|\n\n)/g)];
+		const checkoutBlocks = [
+			...ciYml.matchAll(/uses:\s*actions\/checkout@v\d+([\s\S]*?)(?=\n\s*-\s|\n\n)/g),
+		];
 		const fullDepthBlocks = checkoutBlocks.filter((m) => m[1].includes("fetch-depth: 0"));
 
 		expect(fullDepthBlocks.length).toBeGreaterThan(0);

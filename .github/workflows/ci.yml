@@ -25,10 +25,18 @@ permissions: {}
 
 jobs:
   lint-test:
-    name: Lint, Typecheck & Unit Test
-    runs-on: ubuntu-latest
+    name: Quality (${{ matrix.label }})
+    runs-on: ubuntu-26.04
     permissions:
       contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - suite: lint
+            label: Lint & Typecheck
+          - suite: unit
+            label: Unit Tests
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -39,32 +47,40 @@ jobs:
           setup-node: 'false'
 
       - name: Check formatting
+        if: matrix.suite == 'lint'
         run: bun run format:check
 
       - name: Run JS linter
+        if: matrix.suite == 'lint'
         run: bun run lint
 
       - name: Run CSS linter
+        if: matrix.suite == 'lint'
         run: bun run lint:css
 
       - name: Check for circular dependencies
+        if: matrix.suite == 'lint'
         run: bun run lint:circular
 
       - name: Type check
+        if: matrix.suite == 'lint'
         run: bun run typecheck
 
+      - name: Detect unused code (Knip)
+        if: matrix.suite == 'lint'
+        run: bun run lint:knip
+
       - name: Run unit tests
+        if: matrix.suite == 'unit'
         run: bun run test:ci
 
       - name: Run script tests
+        if: matrix.suite == 'unit'
         run: bun run test:scripts
 
-      - name: Detect unused code (Knip)
-        run: bun run lint:knip
-
   security-scan:
-    name: Security Analysis (CodeQL)
-    runs-on: ubuntu-latest
+    name: Security (CodeQL)
+    runs-on: ubuntu-26.04
     permissions:
       actions: read
       contents: read
@@ -86,8 +102,8 @@ jobs:
           category: "/language:javascript-typescript"
 
   build:
-    name: Build Application (Verification)
-    runs-on: ubuntu-latest
+    name: Build (Verification & E2E)
+    runs-on: ubuntu-26.04
     permissions:
       contents: read
     outputs:
@@ -143,10 +159,10 @@ jobs:
           retention-days: 1
 
   lighthouse:
-    name: Lighthouse Audit & History
+    name: Lighthouse (Audit & History)
     needs: build
     if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       contents: write
       pull-requests: write
@@ -199,8 +215,8 @@ jobs:
           clean: false # Keep previous reports
 
   storybook-test:
-    name: Storybook Interaction, A11y & Chromatic
-    runs-on: ubuntu-latest
+    name: Storybook (Tests & Chromatic)
+    runs-on: ubuntu-26.04
     permissions:
       contents: read
     steps:
@@ -241,15 +257,21 @@ jobs:
           exitZeroOnChanges: true
 
   e2e-test:
-    name: E2E Verification (${{ matrix.browser }})
+    name: E2E (${{ matrix.label }})
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       contents: read
     strategy:
       fail-fast: false
       matrix:
-        browser: [chromium, firefox, webkit]
+        include:
+          - browser: chromium
+            label: Chromium
+          - browser: firefox
+            label: Firefox
+          - browser: webkit
+            label: WebKit
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -273,15 +295,15 @@ jobs:
           restore-keys: |
             playwright-${{ runner.os }}-
 
-      - name: Install Playwright Browser (${{ matrix.browser }})
+      - name: Install Playwright Browser (${{ matrix.label }})
         run: bunx playwright install --with-deps ${{ matrix.browser }}
 
-      - name: Run E2E Tests (${{ matrix.browser }})
+      - name: Run E2E Tests (${{ matrix.label }})
         run: bunx playwright test --project=${{ matrix.browser }}
         env:
           CI: true
 
-      - name: Upload Playwright Report (${{ matrix.browser }})
+      - name: Upload Playwright Report (${{ matrix.label }})
         if: always()
         uses: actions/upload-artifact@v7
         with:
@@ -290,10 +312,10 @@ jobs:
           retention-days: 30
 
   release:
-    name: Release & Build Production
+    name: Release (Version & Production Build)
     needs: [lint-test, security-scan, build, storybook-test, e2e-test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       contents: write
       issues: write
@@ -376,9 +398,9 @@ jobs:
           retention-days: 1
 
   deploy-production-cloudflare:
-    name: Deploy to Cloudflare (Production)
+    name: Deploy (Production)
     needs: [release]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     environment:
       name: production
       url: https://nms-optimizer.app
@@ -414,11 +436,11 @@ jobs:
           --data '{"purge_everything":true}'
 
   post-deploy-production:
-    name: Finalize Production
+    name: Post-Deploy (Downstream Triggers)
     needs: [deploy-production-cloudflare, release]
     # Only fire downstream triggers (Docker/Screenshots) on literal version bumps
     if: needs.release.outputs.released == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       actions: write
     steps:
@@ -439,10 +461,10 @@ jobs:
             });
 
   deploy-staging:
-    name: Deploy to Staging (Cloudflare)
+    name: Deploy (Staging)
     needs: [lint-test, security-scan, build, storybook-test, e2e-test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     environment:
       name: staging
       url: https://dev.nms-optimizer-web.pages.dev
@@ -467,4 +489,5 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_PAGES_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=nms-optimizer-web --branch=dev
+
 

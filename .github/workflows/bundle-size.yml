@@ -19,7 +19,7 @@ permissions:
 jobs:
   measure:
     name: Measure (${{ matrix.label }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     strategy:
       fail-fast: false
       matrix:
@@ -96,7 +96,7 @@ jobs:
   report:
     name: Comment bundle size diff
     needs: measure
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       contents: write
     steps:
