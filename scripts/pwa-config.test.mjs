@@ -104,5 +104,12 @@ describe("PWA Configuration & Manifest", () => {
 		expect(swContent).toBeTruthy();
 		expect(swContent).toMatch(/\/\/ Release: v/);
 	});
+
+	it("public/_headers configures immutable caching for /workbox-*.js and no-cache for /sw.js and /version.json", () => {
+		const headersContent = fs.readFileSync(path.join(ROOT, "public/_headers"), "utf-8");
+		expect(headersContent).toMatch(/\/workbox-\*\.js\s+Cache-Control:\s*public,\s*max-age=31536000,\s*immutable/);
+		expect(headersContent).toMatch(/\/sw\.js\s+Cache-Control:\s*no-cache,\s*must-revalidate,\s*max-age=0/);
+		expect(headersContent).toMatch(/\/version\.json\s+Cache-Control:\s*no-cache,\s*must-revalidate,\s*max-age=0/);
+	});
 });
 

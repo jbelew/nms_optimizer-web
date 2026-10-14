@@ -235,8 +235,8 @@
     "semantic_hash": ""
   },
   "scripts/verify-deployment.mjs": {
-    "mtime": 1777504800.0,
-    "ast_hash": "49bfa079630e8d78367423545a6fc926",
+    "mtime": 1792005371.452579,
+    "ast_hash": "fdef7ca02d4d55c9f1db82a8cea8672c",
     "semantic_hash": ""
   },
   "scripts/verify-routes-consistency.mjs": {
@@ -2195,8 +2195,8 @@
     "semantic_hash": ""
   },
   "scripts/pwa-config.test.mjs": {
-    "mtime": 1791999500.4228127,
-    "ast_hash": "548f232439752a8d4cea2e4d6fae9671",
+    "mtime": 1792005417.6136765,
+    "ast_hash": "c09f4845767010b611022e34f1d140df",
     "semantic_hash": ""
   },
   "scripts/git-hooks.test.mjs": {

@@ -10,7 +10,7 @@
 import { execSync } from 'child_process';
 
 const TARGET = process.argv[2] || 'https://nms-optimizer.app';
-const LOCALES = ['en', 'es', 'fr', 'de', 'pt'];
+const LOCALES = ['en', 'es', 'fr', 'de', 'pt', 'it'];
 
 function getHeaders(path) {
     const url = `${TARGET}${path}`;
