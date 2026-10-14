@@ -143,6 +143,7 @@
   "141": "GridShake.tsx",
   "142": "lazyNamed.ts",
   "143": "AppDialog.tsx",
+  "144": "bootPipeline.tsx",
   "146": "PWA Runtime Caching and Update Resilience",
   "149": "pwa-upgrade.spec.ts"
 }

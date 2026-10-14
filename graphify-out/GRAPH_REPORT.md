@@ -1,16 +1,16 @@
 # Graph Report - nms_optimizer-web  (2026-10-14)
 
 ## Corpus Check
-- 456 files · ~215,103 words
+- 456 files · ~215,270 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1766 nodes · 4240 edges · 146 communities (125 shown, 21 thin omitted)
+- 1766 nodes · 4240 edges · 147 communities (126 shown, 21 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 113 edges (avg confidence: 0.57)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `96a75970`
+- Built from commit: `d011b808`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -143,6 +143,7 @@
 - GridShake.tsx
 - lazyNamed.ts
 - AppDialog.tsx
+- bootPipeline.tsx
 - PWA Runtime Caching and Update Resilience
 
 ## God Nodes (most connected - your core abstractions)
@@ -174,7 +175,7 @@
 - 2-file cycle: `src/components/GridTable/GridTable.tsx -> src/components/GridTable/GridTableGrid.tsx -> src/components/GridTable/GridTable.tsx`
 - 3-file cycle: `src/components/ErrorBoundary/ErrorBoundary.tsx -> src/components/ErrorBoundary/ErrorContent.tsx -> src/components/ErrorBoundary/ErrorDisplay.tsx -> src/components/ErrorBoundary/ErrorBoundary.tsx`
 
-## Communities (146 total, 21 thin omitted)
+## Communities (147 total, 21 thin omitted)
 
 ### Community 0 - "performanceChart.tsx"
 Cohesion: 0.07
@@ -237,8 +238,8 @@ Cohesion: 0.15
 Nodes (8): hideSplashScreenAndShowBackground(), BackgroundWrapper(), BackgroundWrapperProps, ThemeWrapper(), customViewports, globalTypes, preview, SplashHider()
 
 ### Community 13 - "LifecycleCoordinator"
-Cohesion: 0.11
-Nodes (12): initializeAnalytics(), initializeAnalyticsClient(), isBot(), bootApp(), BootOptions, BootResult, registerDefaultDeferredServices(), handleFatalBootstrapError() (+4 more)
+Cohesion: 0.10
+Nodes (5): BootOptions, BootResult, DeferredTask, LifecycleCoordinator, LifecycleCoordinatorOptions
 
 ### Community 14 - "iconRegistry.ts"
 Cohesion: 0.29
@@ -297,8 +298,8 @@ Cohesion: 0.33
 Nodes (10): DEFAULT_OG_IMAGE_PATH, extractContentHeading(), formatErrorDocumentTitle(), getPageMetadata(), getAllPages(), getPageByPath(), PAGE_IDS, PAGE_REGISTRY (+2 more)
 
 ### Community 28 - "lifecycleCoordinator.ts"
-Cohesion: 0.14
-Nodes (10): ErrorBoundary, Props, State, handleError(), RouteError(), AppLifecyclePhase, DeferredTask, DeferredTaskHandler (+2 more)
+Cohesion: 0.15
+Nodes (9): ErrorBoundary, Props, State, handleError(), RouteError(), AppLifecyclePhase, DeferredTaskHandler, LifecycleListener (+1 more)
 
 ### Community 29 - "platformStore.ts"
 Cohesion: 0.20
@@ -620,6 +621,10 @@ Nodes (3): GridShake(), GridShakeProps, GridTableRoot()
 Cohesion: 0.13
 Nodes (20): getPageByDialogTitleKey(), getPageById(), AppDialogBody(), AppDialogBodyProps, AppDialogContext, AppDialogContextValue, AppDialogFooter(), AppDialogFooterProps (+12 more)
 
+### Community 144 - "bootPipeline.tsx"
+Cohesion: 0.41
+Nodes (8): initializeAnalytics(), initializeAnalyticsClient(), isBot(), bootApp(), registerDefaultDeferredServices(), handleFatalBootstrapError(), initializeSentry(), setupServiceWorkerRegistration()
+
 ### Community 146 - "PWA Runtime Caching and Update Resilience"
 Cohesion: 0.33
 Nodes (5): Consequences, Considered Options, Context, Decision, PWA Runtime Caching and Update Resilience
@@ -632,7 +637,7 @@ Nodes (5): Consequences, Considered Options, Context, Decision, PWA Runtime Cach
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Logger` connect `Logger` to `useMainAppLogic.tsx`, `tracking.ts`, `MarkdownContentRenderer.tsx`, `useOptimize.tsx`, `dialogUtils.ts`, `setupServiceWorker.ts`, `App.tsx`, `LifecycleCoordinator`, `usePlatformStore`, `useOptimize.test.tsx`, `sendEvent`, `sessionCoordinator.ts`, `lifecycleCoordinator.ts`, `platformStore.ts`, `useRecommendedBuild.tsx`, `useAnalytics`, `GridCell.tsx`, `TechTree`, `techStore.ts`, `useTechTree.tsx`, `ShareLinkDialog.tsx`, `environment.ts`, `gridStore.ts`, `dataValidation.ts`, `gridSerializer.ts`?**
+- **Why does `Logger` connect `Logger` to `useMainAppLogic.tsx`, `tracking.ts`, `MarkdownContentRenderer.tsx`, `useOptimize.tsx`, `dialogUtils.ts`, `setupServiceWorker.ts`, `App.tsx`, `LifecycleCoordinator`, `usePlatformStore`, `bootPipeline.tsx`, `useOptimize.test.tsx`, `sendEvent`, `sessionCoordinator.ts`, `lifecycleCoordinator.ts`, `platformStore.ts`, `useRecommendedBuild.tsx`, `useAnalytics`, `GridCell.tsx`, `TechTree`, `techStore.ts`, `useTechTree.tsx`, `ShareLinkDialog.tsx`, `environment.ts`, `gridStore.ts`, `dataValidation.ts`, `gridSerializer.ts`?**
   _High betweenness centrality (0.069) - this node is a cross-community bridge._
 - **Why does `useGridStore` connect `useGridStore` to `useMainAppLogic.tsx`, `Logger`, `useOptimize.tsx`, `MainAppLayout.tsx`, `App.tsx`, `AppHeader.stories.tsx`, `usePlatformStore`, `useOptimize.test.tsx`, `sessionCoordinator.ts`, `TechTreeRow.test.tsx`, `useRecommendedBuild.tsx`, `MainAppContent.stories.tsx`, `useAnalytics`, `GridCell.tsx`, `TechTree`, `techStore.ts`, `useTechTree.tsx`, `MobileToolbar.tsx`, `environment.ts`, `SharedModuleSelectionDialog.tsx`, `gridStore.ts`, `RecommendedBuild.stories.tsx`, `GridTableButtons.stories.tsx`?**
   _High betweenness centrality (0.035) - this node is a cross-community bridge._

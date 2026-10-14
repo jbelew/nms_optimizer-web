@@ -14449,8 +14449,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_main",
-      "community": 13,
-      "community_name": "LifecycleCoordinator",
+      "community": 144,
+      "community_name": "bootPipeline.tsx",
       "norm_label": "main.tsx"
     },
     {
@@ -16313,8 +16313,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_utils_analytics_tracking_initializeanalyticsclient",
-      "community": 13,
-      "community_name": "LifecycleCoordinator",
+      "community": 144,
+      "community_name": "bootPipeline.tsx",
       "norm_label": "initializeanalyticsclient()"
     },
     {
@@ -16349,8 +16349,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_utils_analytics_tracking_initializeanalytics",
-      "community": 13,
-      "community_name": "LifecycleCoordinator",
+      "community": 144,
+      "community_name": "bootPipeline.tsx",
       "norm_label": "initializeanalytics()"
     },
     {
@@ -16779,8 +16779,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_utils_browser_environment_isbot",
-      "community": 13,
-      "community_name": "LifecycleCoordinator",
+      "community": 144,
+      "community_name": "bootPipeline.tsx",
       "norm_label": "isbot()"
     },
     {
@@ -17254,8 +17254,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_system_bootpipeline_test",
-      "community": 13,
-      "community_name": "LifecycleCoordinator",
+      "community": 144,
+      "community_name": "bootPipeline.tsx",
       "norm_label": "bootpipeline.test.tsx"
     },
     {
@@ -17265,8 +17265,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_system_bootpipeline",
-      "community": 13,
-      "community_name": "LifecycleCoordinator",
+      "community": 144,
+      "community_name": "bootPipeline.tsx",
       "norm_label": "bootpipeline.tsx"
     },
     {
@@ -17303,8 +17303,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_utils_system_bootpipeline_registerdefaultdeferredservices",
-      "community": 13,
-      "community_name": "LifecycleCoordinator",
+      "community": 144,
+      "community_name": "bootPipeline.tsx",
       "norm_label": "registerdefaultdeferredservices()"
     },
     {
@@ -17315,8 +17315,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_utils_system_bootpipeline_bootapp",
-      "community": 13,
-      "community_name": "LifecycleCoordinator",
+      "community": 144,
+      "community_name": "bootPipeline.tsx",
       "norm_label": "bootapp()"
     },
     {
@@ -17596,8 +17596,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_utils_system_lifecyclecoordinator_deferredtask",
-      "community": 28,
-      "community_name": "lifecycleCoordinator.ts",
+      "community": 13,
+      "community_name": "LifecycleCoordinator",
       "norm_label": "deferredtask"
     },
     {
@@ -17912,8 +17912,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_utils_system_lifecyclecoordinator_lifecyclecoordinator_executedeferredtask",
-      "community": 28,
-      "community_name": "lifecycleCoordinator.ts",
+      "community": 13,
+      "community_name": "LifecycleCoordinator",
       "norm_label": ".executedeferredtask()"
     },
     {
@@ -17924,8 +17924,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_utils_system_lifecyclecoordinator_lifecyclecoordinator_handlefatal",
-      "community": 13,
-      "community_name": "LifecycleCoordinator",
+      "community": 144,
+      "community_name": "bootPipeline.tsx",
       "norm_label": ".handlefatal()"
     },
     {
@@ -17948,8 +17948,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_utils_system_lifecyclecoordinator_handlefatalbootstraperror",
-      "community": 13,
-      "community_name": "LifecycleCoordinator",
+      "community": 144,
+      "community_name": "bootPipeline.tsx",
       "norm_label": "handlefatalbootstraperror()"
     },
     {
@@ -18067,8 +18067,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_utils_system_monitoring_initializesentry",
-      "community": 13,
-      "community_name": "LifecycleCoordinator",
+      "community": 144,
+      "community_name": "bootPipeline.tsx",
       "norm_label": "initializesentry()"
     },
     {
@@ -18362,8 +18362,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_utils_system_setupserviceworker_setupserviceworkerregistration",
-      "community": 13,
-      "community_name": "LifecycleCoordinator",
+      "community": 144,
+      "community_name": "bootPipeline.tsx",
       "norm_label": "setupserviceworkerregistration()"
     },
     {
@@ -66949,7 +66949,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/utils/system/splashScreen.test.ts",
-      "source_location": "L3",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_utils_system_splashscreen_test",
@@ -67273,7 +67273,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/utils/system/splashScreen.test.ts",
-      "source_location": "L3",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_utils_system_splashscreen_test",
@@ -68095,7 +68095,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/utils/system/splashScreen.test.ts",
-      "source_location": "L4",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_utils_system_splashscreen_test",
@@ -68107,7 +68107,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/utils/system/splashScreen.test.ts",
-      "source_location": "L4",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_utils_system_splashscreen_test",
@@ -70068,5 +70068,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "96a75970b5911d61ed21f491fbcc5df6fa07bacb"
+  "built_at_commit": "d011b808da6a47660298e32dc461bcb0acbd9e77"
 }

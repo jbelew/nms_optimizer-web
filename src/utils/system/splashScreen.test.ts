@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { lifecycleCoordinator } from "./lifecycleCoordinator";
@@ -26,6 +28,17 @@ describe("splashScreen", () => {
 
 	afterEach(() => {
 		vi.restoreAllMocks();
+	});
+
+	it("should not pre-populate background-visible on html or body in index.html to prevent background flash before splash screen", () => {
+		const indexHtml = fs.readFileSync(path.resolve(process.cwd(), "index.html"), "utf-8");
+		const htmlTagMatch = indexHtml.match(/<html[^>]*>/i);
+		const bodyTagMatch = indexHtml.match(/<body[^>]*>/i);
+
+		expect(htmlTagMatch?.[0]).toBeDefined();
+		expect(htmlTagMatch?.[0]).not.toContain("background-visible");
+		expect(bodyTagMatch?.[0]).toBeDefined();
+		expect(bodyTagMatch?.[0]).not.toContain("background-visible");
 	});
 
 	it("should delegate to lifecycleCoordinator.markReady, hide splash screen, and add background-visible class without app-ready event", async () => {
