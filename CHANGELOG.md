@@ -1,3 +1,10 @@
+## [8.2.6](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.5...v8.2.6) (2026-10-14)
+
+
+### Bug Fixes
+
+* **splash:** remove initial background-visible class from index.html to prevent background flash ([8ff99c7](https://github.com/jbelew/nms_optimizer-web/commit/8ff99c7b10f89277f656ee4b30c47fdd714db32b))
+
 ## [8.2.5](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.4...v8.2.5) (2026-10-14)
 
 
