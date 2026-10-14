@@ -92,15 +92,17 @@ export interface BootResult {
  * Registers default background capabilities into the {@link LifecycleCoordinator} deferred task registry.
  *
  * @remarks
- * Registers two non-critical background services to run during browser idle cycles once the application
+ * Registers three non-critical background services to run during browser idle cycles once the application
  * enters the `IDLE` phase:
- * 1. `ga4-analytics`: GA4 analytics client and event tracker initialization (priority 5).
- * 2. `service-worker`: PWA service worker registration and update listeners (priority 0).
+ * 1. `api-preload`: Initial state preloading for platforms and tech tree (priority 10).
+ * 2. `ga4-analytics`: GA4 analytics client and event tracker initialization (priority 5).
+ * 3. `service-worker`: PWA service worker registration and update listeners (priority 0).
  *
  * @param {LifecycleCoordinator} coordinator - The lifecycle coordinator instance to register tasks on.
  *
  * @returns {void} Side-effects only.
  *
+ * @see {@link preloadInitialState}
  * @see {@link initializeAnalyticsClient}
  * @see {@link initializeAnalytics}
  * @see {@link setupServiceWorkerRegistration}
@@ -113,7 +115,16 @@ export interface BootResult {
  * ```
  */
 export const registerDefaultDeferredServices = (coordinator: LifecycleCoordinator): void => {
-	// 1. GA4 analytics client and tracker initialization (priority 5)
+	// 1. Initial API state preloading (priority 10)
+	coordinator.registerDeferredTask({
+		name: "api-preload",
+		priority: 10,
+		run: () => {
+			preloadInitialState();
+		},
+	});
+
+	// 2. GA4 analytics client and tracker initialization (priority 5)
 	coordinator.registerDeferredTask({
 		name: "ga4-analytics",
 		priority: 5,
@@ -123,7 +134,7 @@ export const registerDefaultDeferredServices = (coordinator: LifecycleCoordinato
 		},
 	});
 
-	// 2. PWA Service Worker setup (priority 0)
+	// 3. PWA Service Worker setup (priority 0)
 	coordinator.registerDeferredTask({
 		name: "service-worker",
 		priority: 0,
@@ -141,11 +152,10 @@ export const registerDefaultDeferredServices = (coordinator: LifecycleCoordinato
  * @remarks
  * Encapsulates the complete startup sequence:
  * 1. Executes pre-mount data and storage migrations via {@link performBootstrapMigrations}.
- * 2. Preloads initial platform and technology tree API promises into Suspense caches via {@link preloadInitialState}.
- * 3. Initializes Sentry error tracking if enabled.
- * 4. Attaches global error and unhandled rejection interceptors for early error trapping.
- * 5. Resolves the target DOM container and mounts the React root tree.
- * 6. Transitions the application lifecycle to `HYDRATED`.
+ * 2. Initializes Sentry error tracking if enabled.
+ * 3. Attaches global error and unhandled rejection interceptors for early error trapping.
+ * 4. Resolves the target DOM container and mounts the React root tree.
+ * 5. Transitions the application lifecycle to `HYDRATED`.
  *
  * @param {BootOptions} [options={}] - Configuration options for the boot pipeline.
  *
@@ -191,10 +201,7 @@ export const bootApp = async (options: BootOptions = {}): Promise<BootResult> =>
 		// 1. Perform pre-mount data migrations and cleanups
 		performBootstrapMigrations();
 
-		// 2. Preload initial API promises and lazy route chunks before React mounts
-		preloadInitialState();
-
-		// 3. Initialize Sentry synchronously as early as possible if enabled
+		// 2. Initialize Sentry synchronously as early as possible if enabled
 		const isSentryEnabled =
 			options.enableSentry ?? import.meta.env.VITE_SENTRY_ENABLED === "true";
 

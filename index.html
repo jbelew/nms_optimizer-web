@@ -167,7 +167,7 @@
 					) ||
 					navigator.webdriver === true
 				) {
-					document.documentElement.classList.add("is-bot");
+					document.documentElement.classList.add("is-bot", "background-visible");
 				}
 				document.documentElement.classList.add("js-enabled");
 			})();
@@ -358,7 +358,8 @@
 			}
 
 			/* Fallback Management */
-			html.js-enabled .ssg-fallback {
+			html.js-enabled:not(.is-bot) .ssg-fallback,
+			html.is-bot .ssg-fallback main {
 				display: none !important;
 			}
 			.vpss-logo img,

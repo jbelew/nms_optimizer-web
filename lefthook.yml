@@ -1,116 +1,131 @@
 # Lefthook configuration for nms_optimizer-web
 # Faster, Bun-friendly git hooks
 #
-# Per-file-type commands run only against staged files matching their glob.
-# A metadata-only commit will skip every file-scoped command automatically.
+# Per-file-type jobs run only against staged/pushed files matching their glob.
+# A metadata-only commit or push will skip file-scoped jobs automatically.
 
 pre-commit:
   piped: true
-  commands:
-    # ----- Early commit message check (catches commitlint errors immediately) -----
-    commitlint-early:
-      tags: lint
-      run: bun scripts/check-commit-msg-early.mjs
+  jobs:
+    # Stage 1: Policy checks and auto-fixers (run sequentially so stage_fixed mutations don't race)
+    - name: policy-and-autofix
+      group:
+        piped: true
+        jobs:
+          - name: commitlint-early
+            tags: [lint]
+            run: bun scripts/check-commit-msg-early.mjs
 
-    # ----- Policy gate (always runs) -----
-    beads-enforcement:
-      tags: policy
-      run: |
-        STAGED_FILES=$(git diff --cached --name-only)
-        BEADS_MATCHES=$(printf '%s\n' "$STAGED_FILES" | grep -E "^\.beads/" | grep -vE "(\.pid|\.beads-credential-key)$" | wc -l || true)
-        CONDUCTOR_MATCHES=$(printf '%s\n' "$STAGED_FILES" | grep -cE "^conductor/|^plan\.md|^task\.md" || true)
-        if [ "$BEADS_MATCHES" -gt 0 ] && [ "$CONDUCTOR_MATCHES" -eq 0 ]; then
-          ACTIVE_TRACKS=$(grep -r "\"status\": \"in-progress\"" conductor/tracks/ 2>/dev/null | wc -l)
-          if [ "$ACTIVE_TRACKS" -eq 0 ]; then
-            echo "❌ ERROR: Beads data modified without corresponding Conductor context."
-            echo "This project requires Beads to be used only in conjunction with Conductor."
-            exit 1
-          fi
-        fi
+          - name: beads-enforcement
+            tags: [policy]
+            run: |
+              STAGED_FILES=$(git diff --cached --name-only)
+              BEADS_MATCHES=$(printf '%s\n' "$STAGED_FILES" | grep -E "^\.beads/" | grep -vE "(\.pid|\.beads-credential-key)$" | wc -l || true)
+              CONDUCTOR_MATCHES=$(printf '%s\n' "$STAGED_FILES" | grep -cE "^conductor/|^plan\.md|^task\.md" || true)
+              if [ "$BEADS_MATCHES" -gt 0 ] && [ "$CONDUCTOR_MATCHES" -eq 0 ]; then
+                ACTIVE_TRACKS=$(grep -r "\"status\": \"in-progress\"" conductor/tracks/ 2>/dev/null | wc -l)
+                if [ "$ACTIVE_TRACKS" -eq 0 ]; then
+                  echo "❌ ERROR: Beads data modified without corresponding Conductor context."
+                  echo "This project requires Beads to be used only in conjunction with Conductor."
+                  exit 1
+                fi
+              fi
 
-    # ----- Lint & format (per-file-type, scoped to staged files) -----
-    # oxlint + eslint run sequentially in one command to avoid races on --fix
-    lint-js:
-      tags: lint
-      glob: "*.{js,jsx,ts,tsx,cjs,mjs}"
-      exclude: "*.d.ts"
-      run: bunx oxlint --fix {staged_files} && bunx eslint --fix {staged_files}
-      stage_fixed: true
+          - name: lint-js
+            tags: [lint]
+            glob: "*.{js,jsx,ts,tsx,cjs,mjs}"
+            exclude: "*.d.ts"
+            run: bunx oxlint --fix {staged_files} && bunx eslint --cache --cache-location node_modules/.cache/eslint/.eslintcache --fix {staged_files}
+            stage_fixed: true
 
-    stylelint:
-      tags: lint
-      glob: "*.scss"
-      run: bunx stylelint --fix {staged_files}
-      stage_fixed: true
+          - name: stylelint
+            tags: [lint]
+            glob: "*.scss"
+            run: bunx stylelint --fix {staged_files}
+            stage_fixed: true
 
-    lint-md:
-      tags: lint
-      glob: "{README.md,public/assets/**/*.md}"
-      run: bunx markdownlint-cli2 --no-globs --fix {staged_files}
-      stage_fixed: true
+          - name: lint-md
+            tags: [lint]
+            glob: "{README.md,public/assets/**/*.md}"
+            run: bunx markdownlint-cli2 --no-globs --fix {staged_files}
+            stage_fixed: true
 
-    prettier:
-      tags: format
-      glob: "{src/**/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},README.md,public/assets/**/*.md}"
-      run: bunx prettier --write {staged_files}
-      stage_fixed: true
+          - name: prettier
+            tags: [format]
+            glob: "{src/**/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},README.md,public/assets/**/*.md}"
+            run: bunx prettier --cache --cache-location node_modules/.cache/prettier/.prettier-cache --write {staged_files}
+            stage_fixed: true
 
-    # ----- Fast validation checks (only when relevant source changes) -----
-    typecheck:
-      tags: types
-      glob: "*.{ts,tsx}"
-      # tsc -b uses project references and cannot be scoped to individual files
-      run: bun run typecheck
+    # Stage 2: Read-only verification checks (run in parallel after auto-fixers finish)
+    - name: verify
+      group:
+        parallel: true
+        jobs:
+          - name: typecheck
+            tags: [types]
+            glob: "*.{ts,tsx}"
+            run: bun run typecheck
 
-    test:
-      tags: test
-      glob: "{src,shared}/**/*.{ts,tsx,js,mjs,cjs}"
-      run: bun run test:related {staged_files}
+          - name: test
+            tags: [test]
+            glob: "{src,shared}/**/*.{ts,tsx,js,mjs,cjs}"
+            run: bun run test:related {staged_files}
 
-    test-scripts:
-      tags: test
-      glob: "scripts/**/*.{ts,js,mjs,cjs}"
-      run: bun run test:scripts
+          - name: test-scripts
+            tags: [test]
+            glob: "scripts/**/*.{ts,js,mjs,cjs}"
+            run: bun run test:scripts
 
 pre-push:
   piped: true
-  commands:
-    # ----- Early remote sync check (catches out-of-sync remote before running expensive checks) -----
-    check-remote-sync:
-      tags: sync
+  jobs:
+    # Stage 1: Fail-fast remote synchronization check (~1s) before running any local checks
+    - name: check-remote-sync
+      tags: [sync]
       run: bun scripts/check-remote-sync.mjs
 
-    # ----- Full repository safety barrier before pushing to remote (fastest to slowest) -----
-    test-scripts:
-      tags: test
-      run: bun run test:scripts
+    # Stage 2: Parallel, file-scoped verification barrier
+    - name: verify
+      group:
+        parallel: true
+        jobs:
+          - name: test-scripts
+            tags: [test]
+            glob: "{scripts/**,functions/**,shared/**,public/_*,vite.config.ts,package.json}"
+            run: bun run test:scripts
 
-    format:
-      tags: format
-      run: bun run format:check
+          - name: format
+            tags: [format]
+            glob: "{src/**/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},README.md,public/assets/**/*.md}"
+            run: bunx prettier --cache --cache-location node_modules/.cache/prettier/.prettier-cache --check {push_files}
 
-    typecheck:
-      tags: types
-      run: bun run typecheck
+          - name: typecheck
+            tags: [types]
+            glob: "{src,shared}/**/*.{ts,tsx}|tsconfig*.json|package.json|vite.config.ts"
+            run: bun run typecheck
 
-    knip:
-      tags: lint
-      run: bun run lint:knip
+          - name: knip
+            tags: [lint]
+            glob: "{src,shared,scripts}/**/*.{ts,tsx,js,mjs,cjs}|package.json|knip*"
+            run: bun run lint:knip
 
-    circular:
-      tags: lint
-      run: bun run lint:circular
+          - name: circular
+            tags: [lint]
+            glob: "src/**/*.{ts,tsx}|tsconfig*.json"
+            run: bun run lint:circular
 
-    lint:
-      tags: lint
-      run: bun run lint
+          - name: lint
+            tags: [lint]
+            glob: "*.{js,jsx,ts,tsx,cjs,mjs}"
+            exclude: "*.d.ts"
+            run: bunx oxlint {push_files} && bunx eslint --cache --cache-location node_modules/.cache/eslint/.eslintcache {push_files}
 
-    test:
-      tags: test
-      run: bun run test:unit
+          - name: test
+            tags: [test]
+            glob: "{src,shared}/**/*.{ts,tsx,js,mjs,cjs}"
+            run: bun run test:related {push_files}
 
 commit-msg:
   commands:
     commitlint:
       run: bunx commitlint --edit {1}
-
