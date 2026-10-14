@@ -41,6 +41,16 @@ describe("splashScreen", () => {
 		expect(bodyTagMatch?.[0]).not.toContain("background-visible");
 	});
 
+	it("should include responsive background image styles on standalone static error pages", () => {
+		for (const file of ["public/404.html", "public/500.html", "public/maintenance.html"]) {
+			const html = fs.readFileSync(path.resolve(process.cwd(), file), "utf-8");
+
+			expect(html).toContain("/assets/img/background.webp");
+			expect(html).toContain("/assets/img/background@2x.webp");
+			expect(html).toContain("/assets/img/background@mobile-blurred.webp");
+		}
+	});
+
 	it("should delegate to lifecycleCoordinator.markReady, hide splash screen, and add background-visible class without app-ready event", async () => {
 		const dispatchSpy = vi.spyOn(window, "dispatchEvent");
 		const addSpy = vi.spyOn(document.documentElement.classList, "add");
