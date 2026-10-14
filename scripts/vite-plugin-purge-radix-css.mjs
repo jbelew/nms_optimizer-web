@@ -1,15 +1,16 @@
 /**
- * @file Vite plugin to purge unused Radix Themes component CSS at build time.
+ * @file Vite plugin to purge unused Radix Themes component and responsive CSS at build time.
  *
  * @remarks
- * Radix Themes ships a monolithic `components.css` (~432 KB) containing styles
- * for every component in the library. This plugin strips CSS rule blocks for
- * components that are not imported anywhere in the application source code.
+ * Radix Themes ships monolithic `components.css` (~422 KB) and `utilities.css` (~247 KB)
+ * containing styles for every component and 5 responsive breakpoint tiers (`xs`, `sm`,
+ * `md`, `lg`, `xl`). This plugin strips CSS rule blocks for:
+ * 1. Components that are not imported anywhere in the application source code.
+ * 2. Responsive breakpoint selectors (`.xs\:rt-r-*`, `.sm\:rt-r-*`, `.md\:rt-r-*`,
+ *    `.lg\:rt-r-*`, `.xl\:rt-r-*`) whose corresponding responsive props are not used in `src/`.
  *
  * The plugin operates on the final CSS bundle output (post-minification), so it
- * works regardless of how the CSS is imported or bundled. It identifies Radix
- * Themes CSS by the `.rt-` class prefix convention and removes entire rule blocks
- * that only reference unused component class prefixes.
+ * works regardless of how the CSS is imported or bundled.
  *
  * @example
  * ```ts
@@ -37,6 +38,7 @@ import path from "path";
  */
 const COMPONENT_CSS_MAP = {
 	// --- Components NOT typically used (candidates for removal) ---
+	Avatar: ["AvatarRoot", "AvatarImage", "AvatarFallback"],
 	Badge: ["Badge"],
 	Card: ["Card", "BaseCard"],
 	Checkbox: ["CheckboxRoot", "BaseCheckboxRoot", "BaseCheckboxIndicator"],
@@ -110,19 +112,93 @@ const COMPONENT_CSS_MAP = {
 };
 
 /**
- * Vite plugin that removes unused Radix Themes component CSS from the production build.
+ * Maps Radix Themes responsive JSX prop names to their generated `.rt-r-*` class prefixes.
+ *
+ * @type {Record<string, string[]>}
+ */
+const RESPONSIVE_PROP_CLASS_MAP = {
+	align: ["rt-r-ta", "rt-r-ai", "rt-r-align", "rt-r-va"],
+	alignContent: ["rt-r-ac"],
+	alignSelf: ["rt-r-as"],
+	areas: ["rt-r-gta"],
+	bottom: ["rt-r-bottom"],
+	clip: ["rt-r-clip"],
+	columns: ["rt-r-gtc"],
+	direction: ["rt-r-fd"],
+	display: ["rt-r-display"],
+	flexBasis: ["rt-r-fb"],
+	flexGrow: ["rt-r-fg"],
+	flexShrink: ["rt-r-fs"],
+	flow: ["rt-r-gaf"],
+	gap: ["rt-r-gap"],
+	gapX: ["rt-r-cg"],
+	gapY: ["rt-r-rg"],
+	gridArea: ["rt-r-ga"],
+	gridColumn: ["rt-r-gc"],
+	gridColumnEnd: ["rt-r-gce"],
+	gridColumnStart: ["rt-r-gcs"],
+	gridRow: ["rt-r-gr"],
+	gridRowEnd: ["rt-r-gre"],
+	gridRowStart: ["rt-r-grs"],
+	height: ["rt-r-h"],
+	inset: ["rt-r-inset"],
+	justify: ["rt-r-jc", "rt-r-ta"],
+	justifyItems: ["rt-r-ji"],
+	justifySelf: ["rt-r-js"],
+	layout: ["rt-r-tl"],
+	left: ["rt-r-left"],
+	m: ["rt-r-m"],
+	maxHeight: ["rt-r-max-h"],
+	maxWidth: ["rt-r-max-w"],
+	mb: ["rt-r-mb"],
+	minHeight: ["rt-r-min-h"],
+	minWidth: ["rt-r-min-w"],
+	ml: ["rt-r-ml"],
+	mr: ["rt-r-mr"],
+	mt: ["rt-r-mt"],
+	mx: ["rt-r-mx"],
+	my: ["rt-r-my"],
+	orientation: ["rt-r-orientation"],
+	overflow: ["rt-r-overflow"],
+	overflowX: ["rt-r-ox"],
+	overflowY: ["rt-r-oy"],
+	p: ["rt-r-p"],
+	pb: ["rt-r-pb"],
+	pl: ["rt-r-pl"],
+	position: ["rt-r-position"],
+	pr: ["rt-r-pr"],
+	pt: ["rt-r-pt"],
+	px: ["rt-r-px"],
+	py: ["rt-r-py"],
+	resize: ["rt-r-resize"],
+	right: ["rt-r-right"],
+	rows: ["rt-r-gtr"],
+	side: ["rt-r-side"],
+	size: ["rt-r-size"],
+	top: ["rt-r-top"],
+	trim: ["rt-r-lt", "rt-r-trim"],
+	weight: ["rt-r-weight"],
+	width: ["rt-r-w"],
+	wrap: ["rt-r-tw", "rt-r-fw"],
+};
+
+/**
+ * Vite plugin that removes unused Radix Themes component and responsive CSS from the production build.
  *
  * @remarks
  * The plugin runs in the `generateBundle` hook (production builds only) and processes
- * all CSS assets in the output bundle. It scans `src/` for Radix Themes imports to
- * determine which components are used, then strips CSS rules for unused components.
- *
- * This is safe because:
- * 1. It only removes rules where ALL `.rt-*` selectors reference unused components.
- * 2. Shared base classes (like `.rt-reset`) are never removed.
- * 3. Responsive/utility classes (`.rt-r-*`) are never removed.
+ * all CSS assets in the output bundle. It scans `src/` for Radix Themes imports and
+ * responsive prop objects to determine which components and breakpoint rules are used,
+ * then strips CSS rules for unused components and breakpoints.
  *
  * @returns {import("vite").Plugin} The Vite plugin object.
+ *
+ * @see {@link ./vite-plugin-purge-radix-css.test.mjs Unit Tests}
+ *
+ * @example
+ * ```ts
+ * plugins: [purgeRadixCss()]
+ * ```
  */
 export function purgeRadixCss() {
 	let srcDir;
@@ -134,15 +210,8 @@ export function purgeRadixCss() {
 		enforce: "post",
 
 		generateBundle(_options, bundle) {
-			// Scan source for used Radix components
-			const usedComponents = scanUsedRadixComponents(srcDir);
+			const { usedComponents, usedResponsivePrefixes } = scanRadixUsage(srcDir);
 			const unusedPrefixes = buildUnusedPrefixes(usedComponents);
-
-			if (unusedPrefixes.size === 0) {
-				console.log("[purge-radix-css] All Radix components are in use, nothing to purge.");
-
-				return;
-			}
 
 			let totalRemoved = 0;
 			let totalOriginal = 0;
@@ -154,6 +223,7 @@ export function purgeRadixCss() {
 					const { css, removedBytes } = purgeUnusedRadixRules(
 						chunk.source.toString(),
 						unusedPrefixes,
+						usedResponsivePrefixes,
 					);
 
 					if (removedBytes > 0) {
@@ -202,23 +272,44 @@ function buildUnusedPrefixes(usedComponents) {
 }
 
 /**
- * Removes CSS rule blocks that only reference unused Radix component classes.
+ * Checks whether a single responsive breakpoint class reference (`<bp>:<rt-r-class>`)
+ * matches any used responsive class prefix discovered in `src/`.
+ *
+ * @param {string} ref - Responsive class reference such as `"md:rt-r-fd-row"`.
+ * @param {Set<string>} usedResponsivePrefixes - Allowed `<bp>:<rt-r-prefix>` prefixes.
+ *
+ * @returns {boolean} True if the responsive reference is used in the application.
+ */
+function isResponsiveRefUsed(ref, usedResponsivePrefixes) {
+	for (const allowedPrefix of usedResponsivePrefixes) {
+		if (
+			ref === allowedPrefix ||
+			ref.startsWith(`${allowedPrefix}-`)
+		) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * Removes CSS rule blocks that only reference unused Radix component classes or unused
+ * responsive breakpoint prefixes.
  *
  * @remarks
- * This function parses minified CSS and removes complete rule blocks (selector + body)
- * where ALL `.rt-*` class references in the selector belong to unused components.
- * Rules that mix used and unused component classes are preserved to avoid breakage.
+ * Parses minified CSS and removes complete rule blocks (selector + body) where ALL
+ * `.rt-*` component references belong to unused components or where responsive
+ * breakpoint selectors (`.xs\:rt-r-*`, etc.) are not used in `src/`. Rules that mix
+ * used and unused selectors are preserved to avoid breakage.
  *
  * @param {string} css - The CSS string to process.
- * @param {Set<string>} unusedPrefixes - Set of `.rt-` prefixes to strip.
+ * @param {Set<string>} unusedPrefixes - Set of `.rt-` component prefixes to strip.
+ * @param {Set<string>} usedResponsivePrefixes - Set of `<bp>:rt-r-*` prefixes to preserve.
  *
  * @returns {{ css: string, removedBytes: number }} The purged CSS and bytes removed.
  */
-function purgeUnusedRadixRules(css, unusedPrefixes) {
-	if (unusedPrefixes.size === 0) {
-		return { css, removedBytes: 0 };
-	}
-
+function purgeUnusedRadixRules(css, unusedPrefixes, usedResponsivePrefixes) {
 	const originalLength = css.length;
 
 	// Split CSS into rule blocks by finding balanced braces.
@@ -251,7 +342,11 @@ function purgeUnusedRadixRules(css, unusedPrefixes) {
 
 			// Process the inner content recursively
 			const innerContent = css.slice(openBrace + 1, j - 1);
-			const purgedInner = purgeUnusedRadixRules(innerContent, unusedPrefixes);
+			const purgedInner = purgeUnusedRadixRules(
+				innerContent,
+				unusedPrefixes,
+				usedResponsivePrefixes,
+			);
 
 			if (purgedInner.css.trim()) {
 				result.push(atRule + purgedInner.css + "}");
@@ -281,12 +376,20 @@ function purgeUnusedRadixRules(css, unusedPrefixes) {
 
 		const fullRule = css.slice(i, closeBrace + 1);
 
-		// Check if this rule's selector references Radix component classes
+		// 1. Check if this rule's selector references unused Radix component classes
 		const rtRefs = [...selector.matchAll(/\.rt-([A-Z][a-zA-Z]+)/g)].map((m) => m[1]);
+		const isUnusedComponentRule =
+			rtRefs.length > 0 && rtRefs.every((ref) => unusedPrefixes.has(ref));
 
-		if (rtRefs.length > 0 && rtRefs.every((ref) => unusedPrefixes.has(ref))) {
-			// All .rt- references in this selector are for unused components — skip it
-		} else {
+		// 2. Check if this rule's selector references Radix responsive breakpoint classes (.xs\:rt-r-*, etc.)
+		const bpRefs = [...selector.matchAll(/\.([a-z]{2})\\:(rt-r-[a-z0-9-]+)/g)].map(
+			(m) => `${m[1]}:${m[2]}`,
+		);
+		const isUnusedResponsiveRule =
+			bpRefs.length > 0 &&
+			!bpRefs.some((ref) => isResponsiveRefUsed(ref, usedResponsivePrefixes));
+
+		if (!isUnusedComponentRule && !isUnusedResponsiveRule) {
 			result.push(fullRule);
 		}
 
@@ -302,20 +405,23 @@ function purgeUnusedRadixRules(css, unusedPrefixes) {
 }
 
 /**
- * Scans the source directory for Radix Themes component imports and returns
- * the set of component names that are actually used.
+ * Scans the source directory for Radix Themes component imports and responsive prop
+ * usages, returning both the used component names and used `<bp>:rt-r-*` prefixes.
  *
  * @param {string} srcDir - Absolute path to the source directory to scan.
  *
- * @returns {Set<string>} Set of Radix Themes component names found in imports.
+ * @returns {{ usedComponents: Set<string>, usedResponsivePrefixes: Set<string> }} Discovered Radix usage.
  */
-function scanUsedRadixComponents(srcDir) {
-	const used = new Set();
+function scanRadixUsage(srcDir) {
+	const usedComponents = new Set();
+	const usedResponsivePrefixes = new Set();
 
 	/**
-	 * Recursively walks a directory and processes .ts/.tsx files.
+	 * Recursively walks a directory and processes source files.
 	 *
 	 * @param {string} dir - Directory to walk.
+	 *
+	 * @returns {void}
 	 */
 	function walk(dir) {
 		for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -323,9 +429,13 @@ function scanUsedRadixComponents(srcDir) {
 
 			if (entry.isDirectory() && entry.name !== "node_modules") {
 				walk(fullPath);
-			} else if (/\.(tsx?|jsx?)$/.test(entry.name)) {
+			} else if (
+				/\.(tsx?|jsx?)$/.test(entry.name) &&
+				!/\.(test|stories)\.[jt]sx?$/.test(entry.name)
+			) {
 				const content = fs.readFileSync(fullPath, "utf-8");
-				// Use a global regex to match single and multi-line imports
+
+				// 1. Scan Radix Themes component imports
 				const importPattern = /import\s*\{([^}]+)\}\s*from\s+["']@radix-ui\/themes["']/g;
 				let match;
 
@@ -334,9 +444,40 @@ function scanUsedRadixComponents(srcDir) {
 						const trimmed = name.replace(/\s+as\s+\w+/, "").trim();
 
 						if (trimmed && !trimmed.startsWith("type ")) {
-							used.add(trimmed);
+							usedComponents.add(trimmed);
 						}
 					});
+				}
+
+				// 2. Scan responsive JSX prop objects: prop={{ initial: "...", sm: "...", md: "..." }}
+				const responsivePropPattern = /([a-zA-Z]+)\s*=\s*\{\s*\{([^{}]+)\}\s*\}/g;
+				let propMatch;
+
+				while ((propMatch = responsivePropPattern.exec(content)) !== null) {
+					const propName = propMatch[1];
+					const objectBody = propMatch[2];
+					const classPrefixes = RESPONSIVE_PROP_CLASS_MAP[propName];
+
+					if (classPrefixes) {
+						const bpPattern = /\b(xs|sm|md|lg|xl)\s*:/g;
+						let bpMatch;
+
+						while ((bpMatch = bpPattern.exec(objectBody)) !== null) {
+							const bp = bpMatch[1];
+
+							for (const classPrefix of classPrefixes) {
+								usedResponsivePrefixes.add(`${bp}:${classPrefix}`);
+							}
+						}
+					}
+				}
+
+				// 3. Scan any explicit responsive Radix class strings (e.g. "md:rt-r-ai-start" or "sm:rt-r-size-3")
+				const explicitRtPattern = /\b(xs|sm|md|lg|xl):(rt-r-[a-z0-9-]+)/g;
+				let explicitMatch;
+
+				while ((explicitMatch = explicitRtPattern.exec(content)) !== null) {
+					usedResponsivePrefixes.add(`${explicitMatch[1]}:${explicitMatch[2]}`);
 				}
 			}
 		}
@@ -344,5 +485,5 @@ function scanUsedRadixComponents(srcDir) {
 
 	walk(srcDir);
 
-	return used;
+	return { usedComponents, usedResponsivePrefixes };
 }

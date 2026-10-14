@@ -171,14 +171,26 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 								test: /[\\/]node_modules[\\/](zustand|immer|clsx|tailwind-merge|tiny-invariant)[\\/]/,
 							},
 							{
+								// Consolidate all application and component stylesheets (index.css + component .scss)
+								// into a single `index` CSS bundle alongside `vendor-ui-themes-[hash].css`.
+								// `minSize: 0` is required because Vite's css-post transform replaces CSS modules
+								// with empty JS stubs (`code: ""`) during Rolldown chunking.
+								minSize: 0,
+								name: "index",
+								priority: 85,
+								test: /[\\/]src[\\/](?!assets[\\/]css[\\/]radix-colors[\\/]).*\.(?:css|scss)(?:\?.*)?$/,
+							},
+							{
+								// Eager Radix Themes core & critical-path components + Radix color CSS.
+								// Dialog-only Radix components are excluded so they split into lazy dialog chunks.
 								name: "vendor-ui-themes",
 								priority: 80,
-								test: /[\\/]node_modules[\\/]@radix-ui\/themes[\\/]|[\\/]assets[\\/]css[\\/]radix-colors[\\/]/,
+								test: /[\\/]node_modules[\\/]@radix-ui\/themes[\\/](?!dist[\\/]esm[\\/]components[\\/](?:_internal[\\/]base-checkbox|badge|blockquote|card|checkbox|checkbox-group|data-list|kbd|segmented-control|text-area|text-field)(?:\.props)?\.js$)|[\\/]assets[\\/]css[\\/]radix-colors[\\/]/,
 							},
 							{
 								name: "vendor-ui-utils",
 								priority: 70,
-								test: /[\\/]node_modules[\\/](@radix-ui\/|@floating-ui\/|aria-hidden|react-remove-scroll|focus-lock)/,
+								test: /[\\/]node_modules[\\/](@radix-ui\/(?!react-checkbox|react-toggle-group|react-roving-focus)|@floating-ui\/|aria-hidden|react-remove-scroll|focus-lock)/,
 							},
 							{
 								name: "vendor-i18n",

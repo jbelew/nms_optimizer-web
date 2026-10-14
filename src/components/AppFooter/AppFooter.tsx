@@ -139,7 +139,7 @@ const AppFooterSupport: React.FC = () => {
 			<Flex
 				align="center"
 				className="app-footer__support"
-				gap={{ initial: "2", lg: "2" }}
+				gap="2"
 				justify="center"
 				wrap="wrap"
 			>

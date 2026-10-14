@@ -255,8 +255,8 @@
     "semantic_hash": ""
   },
   "scripts/vite-plugin-purge-radix-css.mjs": {
-    "mtime": 1778893059.0,
-    "ast_hash": "a94c6f920b0e1bf501b52b6f50be037c",
+    "mtime": 1792004437.869371,
+    "ast_hash": "ffb6c3f54dbfbcf919c2cc576a3631a4",
     "semantic_hash": ""
   },
   "shared/config.js": {
@@ -500,8 +500,8 @@
     "semantic_hash": ""
   },
   "src/components/AppFooter/AppFooter.tsx": {
-    "mtime": 1790355478.4462328,
-    "ast_hash": "a09353a2252fe50faeffd32ab05167d2",
+    "mtime": 1792003993.5857234,
+    "ast_hash": "1dc5e9465c274e6fa970b95338a1021c",
     "semantic_hash": ""
   },
   "src/components/AppFooter/AppFooterProvider.tsx": {
@@ -785,8 +785,8 @@
     "semantic_hash": ""
   },
   "src/components/MainAppContent/MainAppLayout.tsx": {
-    "mtime": 1790285184.5955172,
-    "ast_hash": "20a780359e88425016e204f5fd25c1f9",
+    "mtime": 1792003994.936717,
+    "ast_hash": "7953894bde8cff72a799e5a470142a5c",
     "semantic_hash": ""
   },
   "src/components/MainAppContent/ShipSelectionHeading.tsx": {
@@ -1910,8 +1910,8 @@
     "semantic_hash": ""
   },
   "vite.config.ts": {
-    "mtime": 1791999723.863223,
-    "ast_hash": "227ef50643717401ad2cebfe365ab4f3",
+    "mtime": 1792004216.2661903,
+    "ast_hash": "90c7243de6eadb30a5b918ba304c79fe",
     "semantic_hash": ""
   },
   "vitest-mocks/virtual-markdown-bundle.ts": {
@@ -2267,6 +2267,11 @@
   "src/store/grid/resetGrid.test.ts": {
     "mtime": 1791838850.5138972,
     "ast_hash": "2f529d8ed57cdc25b0e9bf1ee0f72289",
+    "semantic_hash": ""
+  },
+  "scripts/vite-plugin-purge-radix-css.test.mjs": {
+    "mtime": 1792004057.4491107,
+    "ast_hash": "730a81ea2a4dcae6f620d2e7cf75edff",
     "semantic_hash": ""
   }
 }

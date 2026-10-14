@@ -219,7 +219,7 @@ export const MainAppSidebarSection: React.FC = () => {
 			direction="column"
 			minHeight="0"
 			ml={{ md: "5" }}
-			mt={{ initial: "0", md: "0" }}
+			mt="0"
 			style={{
 				height: isLargeScreen && gridHeight ? `${gridHeight}px` : undefined,
 			}}
