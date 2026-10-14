@@ -390,6 +390,9 @@ jobs:
         with:
           ref: ${{ needs.release.outputs.tag || github.sha }}
 
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+
       - name: Download production artifact
         uses: actions/download-artifact@v8
         with:
@@ -448,6 +451,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
 
       - name: Download dist artifact
         uses: actions/download-artifact@v8

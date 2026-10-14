@@ -75,10 +75,11 @@ describe("CI Pipeline Architecture (.github/workflows/ci.yml)", () => {
 		expect(releaseJob).toContain("VITE_SENTRY_ENV: production");
 	});
 
-	it("preserves actions/checkout for Cloudflare Pages Functions while skipping setup-node-env in deploy-production-cloudflare", () => {
+	it("preserves actions/checkout and oven-sh/setup-bun for wrangler-action while skipping full setup-node-env in deploy-production-cloudflare", () => {
 		const deployProdJob = extractJobBlock(ciYml, "deploy-production-cloudflare");
 		expect(deployProdJob).toBeTruthy();
 		expect(deployProdJob).toContain("actions/checkout");
+		expect(deployProdJob).toContain("oven-sh/setup-bun@v2");
 		expect(deployProdJob).not.toContain("setup-node-env");
 		expect(deployProdJob).toContain("name: dist-production");
 	});
