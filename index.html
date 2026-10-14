@@ -35,23 +35,6 @@
 					return Promise.all([unregisterWorkers, clearCaches]);
 				}
 
-				// Emergency Self-Healing: Evict any stale Service Workers and corrupted CacheStorage
-				// from versions prior to v8.0.4 to unstick stranded users immediately.
-				try {
-					if (!localStorage.getItem("__pwa_healed_v804__")) {
-						localStorage.setItem("__pwa_healed_v804__", "1");
-						if ("serviceWorker" in navigator) {
-							navigator.serviceWorker.getRegistrations().then(function (registrations) {
-								if (registrations && registrations.length > 0) {
-									purgeWorkersAndCaches().then(function () {
-										window.location.reload();
-									});
-								}
-							}).catch(function () {});
-						}
-					}
-				} catch (e) {}
-
 				const MARKER = "__preload_recovery__";
 				let recoveryInProgress = false;
 

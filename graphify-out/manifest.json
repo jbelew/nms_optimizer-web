@@ -1605,8 +1605,8 @@
     "semantic_hash": ""
   },
   "src/store/tech/techStore.ts": {
-    "mtime": 1791838856.3378937,
-    "ast_hash": "3b04e901030d9662070310c63e00932f",
+    "mtime": 1791838928.465907,
+    "ast_hash": "6c345cd0480842bf91e6e269945d3178",
     "semantic_hash": ""
   },
   "src/store/tech/techStoreConsolidation.test.ts": {
@@ -1845,13 +1845,13 @@
     "semantic_hash": ""
   },
   "src/utils/system/setupServiceWorker.test.ts": {
-    "mtime": 1791657519.4713323,
-    "ast_hash": "a956acb2181874b545aa76eee85a7a57",
+    "mtime": 1791999985.388207,
+    "ast_hash": "f41658c2b4366fe41d68b4f2cf0b230b",
     "semantic_hash": ""
   },
   "src/utils/system/setupServiceWorker.ts": {
-    "mtime": 1791657938.8242326,
-    "ast_hash": "8e3f34525a731badf8ef59c53184b78f",
+    "mtime": 1791999984.6448395,
+    "ast_hash": "baeaaeab3f2b9697c9d0e2ae0182d38a",
     "semantic_hash": ""
   },
   "src/utils/system/splashScreen.test.ts": {
@@ -1905,13 +1905,13 @@
     "semantic_hash": ""
   },
   "types/virtual.d.ts": {
-    "mtime": 1778893059.0,
-    "ast_hash": "2ea1bf77ac0118b086e3c524ae13603d",
+    "mtime": 1791999365.4307613,
+    "ast_hash": "b7a4e92c60a57ed22062bc4cae8f50d3",
     "semantic_hash": ""
   },
   "vite.config.ts": {
-    "mtime": 1791657567.527151,
-    "ast_hash": "abb26401b2115888f20d664c33fdf562",
+    "mtime": 1791999723.863223,
+    "ast_hash": "227ef50643717401ad2cebfe365ab4f3",
     "semantic_hash": ""
   },
   "vitest-mocks/virtual-markdown-bundle.ts": {
@@ -1920,8 +1920,8 @@
     "semantic_hash": ""
   },
   "vitest-mocks/virtual-pwa-register.ts": {
-    "mtime": 1778893059.0,
-    "ast_hash": "367324e5767bc95707aadc967646e820",
+    "mtime": 1791999364.487485,
+    "ast_hash": "dac17dc21e6d7c3743dca235135ac452",
     "semantic_hash": ""
   },
   "vitest.config.ts": {
@@ -2195,8 +2195,8 @@
     "semantic_hash": ""
   },
   "scripts/pwa-config.test.mjs": {
-    "mtime": 1791657422.8394523,
-    "ast_hash": "66771ef11d77ff594ff2eaa5ddd5b157",
+    "mtime": 1791999500.4228127,
+    "ast_hash": "548f232439752a8d4cea2e4d6fae9671",
     "semantic_hash": ""
   },
   "scripts/git-hooks.test.mjs": {
@@ -2255,13 +2255,13 @@
     "semantic_hash": ""
   },
   "e2e-tests/pwa-upgrade.spec.ts": {
-    "mtime": 1791663269.8421555,
-    "ast_hash": "0541a782c65d41af8e476e0d6fe78ee4",
+    "mtime": 1791999629.1155174,
+    "ast_hash": "5138bcbaff909a19c19b123373b198bd",
     "semantic_hash": ""
   },
   "docs/adr/0001-pwa-runtime-caching-and-update-resilience.md": {
-    "mtime": 1791657547.8462691,
-    "ast_hash": "0d0b37c9763e9f1c0bd6566adfd4ec3a",
+    "mtime": 1791999630.7471368,
+    "ast_hash": "491a2d3f557257c2396178eaf91d7a09",
     "semantic_hash": ""
   },
   "src/store/grid/resetGrid.test.ts": {

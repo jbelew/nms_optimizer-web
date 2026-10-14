@@ -104,7 +104,7 @@ describe("setupServiceWorkerRegistration", () => {
 		expect(mockRegisterSW).not.toHaveBeenCalled();
 	});
 
-	it("should attempt to register the service worker after the window loads", async () => {
+	it("should attempt to register the service worker with immediate: true after the window loads", async () => {
 		setupServiceWorkerRegistration();
 		await Promise.resolve(); // Ensure queueMicrotask (if any) executes
 
@@ -115,6 +115,11 @@ describe("setupServiceWorkerRegistration", () => {
 
 		// Assert
 		expect(mockRegisterSW).toHaveBeenCalledTimes(1);
+		expect(mockRegisterSW).toHaveBeenCalledWith(
+			expect.objectContaining({
+				immediate: true,
+			})
+		);
 	});
 
 	it("should dispatch a 'new-version-available' event when onNeedRefresh is called", async () => {
@@ -397,6 +402,110 @@ describe("setupServiceWorkerRegistration", () => {
 		// Advance by another 30 minutes (1 hour total): should trigger update
 		vi.advanceTimersByTime(30 * 60 * 1000);
 		expect(mockRegistration.update).toHaveBeenCalledTimes(1);
+	});
+
+	const runWithForegroundNeedReload = async (
+		assertion: (ctx: {
+			mockReload: ReturnType<typeof vi.fn>;
+			onNeedRefresh: () => void;
+			onNeedReload: () => void;
+		}) => Promise<void> | void
+	) => {
+		const originalLocation = window.location;
+		const mockReload = vi.fn();
+		Object.defineProperty(window, "location", {
+			configurable: true,
+			value: { ...originalLocation, reload: mockReload },
+			writable: true,
+		});
+
+		try {
+			let onNeedRefreshCallback: (() => void) | undefined;
+			let onNeedReloadCallback: (() => void) | undefined;
+
+			mockRegisterSW.mockImplementationOnce((options?: RegisterSWOptions) => {
+				onNeedRefreshCallback = options?.onNeedRefresh as (() => void) | undefined;
+				onNeedReloadCallback = options?.onNeedReload;
+
+				return mockUpdateSW;
+			});
+
+			Object.defineProperty(document, "visibilityState", {
+				configurable: true,
+				value: "visible",
+				writable: true,
+			});
+			setLastUserActivityForTesting(Date.now());
+
+			setupServiceWorkerRegistration();
+			window.dispatchEvent(new Event("load"));
+			vi.advanceTimersByTime(2000);
+			await vi.runAllTimersAsync();
+
+			expect(onNeedRefreshCallback).toBeDefined();
+			expect(onNeedReloadCallback).toBeDefined();
+
+			await assertion({
+				mockReload,
+				onNeedRefresh: onNeedRefreshCallback!,
+				onNeedReload: onNeedReloadCallback!,
+			});
+		} finally {
+			Object.defineProperty(window, "location", {
+				configurable: true,
+				value: originalLocation,
+				writable: true,
+			});
+		}
+	};
+
+	it("should NOT reload the page when onNeedReload fires after updateSW(false) is called", async () => {
+		await runWithForegroundNeedReload(async ({ mockReload, onNeedRefresh, onNeedReload }) => {
+			onNeedRefresh();
+			vi.advanceTimersByTime(1);
+			await vi.runAllTimersAsync();
+
+			const call = vi
+				.mocked(window.dispatchEvent)
+				.mock.calls.find((c) => (c[0] as CustomEvent).type === "new-version-available");
+			const event = call![0] as CustomEvent<(reload?: boolean) => Promise<void>>;
+
+			await event.detail(false);
+			expect(mockUpdateSW).toHaveBeenCalledWith(false);
+
+			onNeedReload();
+			expect(mockReload).not.toHaveBeenCalled();
+		});
+	});
+
+	it("should reload the page when onNeedReload fires after updateSW(true) is called", async () => {
+		await runWithForegroundNeedReload(async ({ mockReload, onNeedRefresh, onNeedReload }) => {
+			onNeedRefresh();
+			vi.advanceTimersByTime(1);
+			await vi.runAllTimersAsync();
+
+			const call = vi
+				.mocked(window.dispatchEvent)
+				.mock.calls.find((c) => (c[0] as CustomEvent).type === "new-version-available");
+			const event = call![0] as CustomEvent<(reload?: boolean) => Promise<void>>;
+
+			await event.detail(true);
+			expect(mockUpdateSW).toHaveBeenCalledWith(true);
+
+			onNeedReload();
+			expect(mockReload).toHaveBeenCalledTimes(1);
+		});
+	});
+
+	it("should NOT reload an active foreground tab when another tab triggers Silent Background Activation", async () => {
+		await runWithForegroundNeedReload(async ({ mockReload, onNeedRefresh, onNeedReload }) => {
+			onNeedRefresh();
+			vi.advanceTimersByTime(1);
+			await vi.runAllTimersAsync();
+
+			onNeedReload();
+			expect(mockReload).not.toHaveBeenCalled();
+		});
 	});
 });
 

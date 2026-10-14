@@ -308,13 +308,11 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 			...(!process.env.STORYBOOK_BUILD
 				? [
 						VitePWA({
-							includeAssets: [
-								"assets/svg/favicon.svg",
-								"robots.txt",
-								"assets/img/favicons/apple-touch-icon.png",
-								"assets/fonts/*.woff2",
-								"assets/locales/*/translation.json",
-							],
+							includeAssets: ["robots.txt"],
+							includeManifestIcons: false,
+							integration: {
+								closeBundleOrder: "pre",
+							},
 							manifest: {
 								background_color: "#274860",
 								categories: ["utilities", "games", "entertainment"],
@@ -434,8 +432,10 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 									"404.html",
 									"500.html",
 									"index.html",
+									"assets/img/screenshots/**",
+									"assets/img/manifest/**",
 								],
-								globPatterns: ["**/*.{ico,png,svg,woff2}", "manifest.json"],
+								globPatterns: ["**/*.{ico,png,svg,woff2}"],
 								maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
 								navigateFallback: undefined,
 								navigationPreload: true,
@@ -595,6 +595,23 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 								skipWaiting: false,
 							},
 						}),
+						{
+							closeBundle: {
+								handler() {
+									const swPath = path.resolve(dirname, "dist/sw.js");
+
+									if (fs.existsSync(swPath)) {
+										fs.appendFileSync(
+											swPath,
+											`\n// Release: ${appVersion} (${buildDate})\n`
+										);
+									}
+								},
+								order: "post",
+								sequential: true,
+							},
+							name: "stamp-sw-release",
+						},
 					]
 				: []),
 		],

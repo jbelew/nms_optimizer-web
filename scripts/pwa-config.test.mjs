@@ -85,5 +85,24 @@ describe("PWA Configuration & Manifest", () => {
 		expect(swContent).toBeTruthy();
 		expect(swContent).toMatch(/networkTimeoutSeconds:\s*3/);
 	});
+
+	itWhenBuilt("sw.js contains no duplicate precache URLs", () => {
+		expect(swContent).toBeTruthy();
+		const urls = [...swContent.matchAll(/\{url:"([^"]+)"/g)].map((m) => m[1]);
+		expect(urls.length).toBeGreaterThan(0);
+		expect(new Set(urls).size).toBe(urls.length);
+	});
+
+	itWhenBuilt("sw.js excludes screenshots, legacy manifest icons, and locale JSONs from precache", () => {
+		expect(swContent).toBeTruthy();
+		expect(swContent).not.toMatch(/\{url:"assets\/img\/screenshots\//);
+		expect(swContent).not.toMatch(/\{url:"assets\/img\/manifest\//);
+		expect(swContent).not.toMatch(/\{url:"assets\/locales\//);
+	});
+
+	itWhenBuilt("sw.js includes a build release stamp so code-only deployments trigger Staged Worker detection", () => {
+		expect(swContent).toBeTruthy();
+		expect(swContent).toMatch(/\/\/ Release: v/);
+	});
 });
 

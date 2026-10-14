@@ -4,8 +4,8 @@ import { expect, test } from "@playwright/test";
  * PWA Upgrade and Self-Healing E2E Test Suite
  *
  * Verifies that:
- * 1. The two-tier self-healing head script marks the migration milestone (__pwa_healed_v804__).
- * 2. Unregistered or stale service worker states heal on page navigation.
+ * 1. The application boots cleanly without legacy milestone reload loops.
+ * 2. Runtime preload errors (vite:preloadError) trigger PWA Self-Healing and cache-busted reload.
  * 3. In-app update notifications present non-disruptive actions to users.
  */
 test.describe("PWA Upgrade & Self-Healing Lifecycle", () => {
@@ -28,7 +28,7 @@ test.describe("PWA Upgrade & Self-Healing Lifecycle", () => {
 		});
 	});
 
-	test("should mark __pwa_healed_v804__ milestone and boot application cleanly", async ({
+	test("should boot application cleanly without setting legacy __pwa_healed_v804__ marker", async ({
 		page,
 	}) => {
 		await page.goto("/");
@@ -37,24 +37,29 @@ test.describe("PWA Upgrade & Self-Healing Lifecycle", () => {
 		const healedMarker = await page.evaluate(() =>
 			localStorage.getItem("__pwa_healed_v804__")
 		);
-		expect(healedMarker).toBe("1");
+		expect(healedMarker).toBeNull();
 	});
 
-	test("should evict stale service workers and clear caches on boot when unhealed", async ({
+	test("should trigger PWA Self-Healing and cache-busted reload on vite:preloadError", async ({
 		page,
 	}) => {
-		// Simulate a client with an unhealed state before visiting
-		await page.addInitScript(() => {
-			localStorage.removeItem("__pwa_healed_v804__");
-		});
-
 		await page.goto("/");
 		await page.waitForFunction(() => window.lifecycleCoordinator?.isReady(), { timeout: 30000 });
 
-		const healedMarker = await page.evaluate(() =>
-			localStorage.getItem("__pwa_healed_v804__")
+		await page.evaluate(() => {
+			window.dispatchEvent(
+				new CustomEvent("vite:preloadError", {
+					cancelable: true,
+					detail: { message: "Failed to fetch dynamically imported module" },
+				})
+			);
+		});
+
+		await page.waitForURL(/\?_cb=\d+/, { timeout: 10000 });
+		const attempts = await page.evaluate(() =>
+			sessionStorage.getItem("__recovery_attempts__")
 		);
-		expect(healedMarker).toBe("1");
+		expect(attempts).toBe("1");
 	});
 
 	test("should trigger update handler when user clicks Refresh Now", async ({ page }) => {

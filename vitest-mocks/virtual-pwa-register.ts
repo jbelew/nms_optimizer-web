@@ -1,6 +1,7 @@
 export interface RegisterSWOptions {
 	immediate?: boolean;
 	onNeedRefresh?: (updateServiceWorker: () => Promise<void>) => void;
+	onNeedReload?: () => void;
 	onOfflineReady?: () => void;
 }
 

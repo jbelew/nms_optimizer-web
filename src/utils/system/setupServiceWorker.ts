@@ -310,11 +310,15 @@ export function setupServiceWorkerRegistration() {
 				// 1000ms is usually enough to let the main thread settle
 				await new Promise((resolve) => setTimeout(resolve, 1000));
 
+				let reloadIntent: "idle" | "requested" | "suppressed" = "idle";
+
 				const updateServiceWorker = registerSW({
+					immediate: true,
 					onNeedRefresh() {
 						// If the tab is currently hidden or idle, apply the update silently
 						// so the user returns to an already-updated application.
 						if (isAppHiddenOrIdle()) {
+							reloadIntent = "requested";
 							void updateServiceWorker(true);
 
 							return;
@@ -326,11 +330,26 @@ export function setupServiceWorkerRegistration() {
 							window.dispatchEvent(
 								new CustomEvent("new-version-available", {
 									detail: (reload?: boolean) => {
+										reloadIntent =
+											reload === false ? "suppressed" : "requested";
+
 										return updateServiceWorker(reload);
 									},
 								})
 							);
 						}, 0);
+					},
+					onNeedReload() {
+						if (reloadIntent === "suppressed") {
+							reloadIntent = "idle";
+
+							return;
+						}
+
+						if (reloadIntent === "requested" || isAppHiddenOrIdle()) {
+							reloadIntent = "idle";
+							window.location.reload();
+						}
 					},
 					onOfflineReady() {},
 					onRegistered(registration) {
@@ -341,6 +360,7 @@ export function setupServiceWorkerRegistration() {
 						document.addEventListener("visibilitychange", () => {
 							if (document.visibilityState === "hidden") {
 								if (registration.waiting) {
+									reloadIntent = "requested";
 									void updateServiceWorker(true);
 								}
 
