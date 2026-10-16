@@ -1,3 +1,16 @@
+# [8.3.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.9...v8.3.0) (2026-10-16)
+
+
+### Bug Fixes
+
+* **grid:** keep Reset Grid enabled when module selections differ from defaults ([3a899ba](https://github.com/jbelew/nms_optimizer-web/commit/3a899ba82f7fb9cbf231af8f915ac0dabd107198))
+
+
+### Features
+
+* **grid:** disable Reset Grid button in default layout and remove dead RecommendedBuild components ([448d835](https://github.com/jbelew/nms_optimizer-web/commit/448d835a13862be3840cdb731052171e7966199d))
+* **i18n:** rename Reset Grid button label to Reset Build across all locales ([9485ef3](https://github.com/jbelew/nms_optimizer-web/commit/9485ef33aee6938558a7ca55c24c8afe16dd02ee))
+
 ## [8.2.9](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.8...v8.2.9) (2026-10-16)
 
 
