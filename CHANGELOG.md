@@ -1,3 +1,11 @@
+## [8.2.8](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.7...v8.2.8) (2026-10-16)
+
+
+### Bug Fixes
+
+* **lighthouse:** upgrade to v13.5.0, defer welcome dialog to idle, and fix label-in-name ([ffac45f](https://github.com/jbelew/nms_optimizer-web/commit/ffac45f71f33f26b108bbb451ae0f50479319cb5))
+* **welcome:** avoid false-positive bot detection on Google Chrome brands ([59fd67c](https://github.com/jbelew/nms_optimizer-web/commit/59fd67c5a0d424d686b025070b8957b601e4d8b3))
+
 ## [8.2.7](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.6...v8.2.7) (2026-10-14)
 
 
