@@ -988,4 +988,101 @@ describe("TechStore", () => {
 			expect(useTechStore.getState().checkedModules["pulse"]).toEqual(["P1"]);
 		});
 	});
+
+	describe("isDefaultModuleSelection", () => {
+		const mockTechGroups = {
+			pulse: [
+				{
+					color: "red" as const,
+					image: null,
+					key: "pulse",
+					label: "Pulse",
+					module_count: 2,
+					modules: [
+						{
+							active: true,
+							adjacency: "",
+							adjacency_bonus: 0,
+							bonus: 5,
+							checked: true,
+							id: "P1",
+							image: "",
+							label: "Pulse 1",
+							sc_eligible: false,
+							supercharged: false,
+							tech: "pulse",
+							type: "core",
+							value: 10,
+						},
+						{
+							active: true,
+							adjacency: "",
+							adjacency_bonus: 0,
+							bonus: 5,
+							checked: true,
+							id: "P2",
+							image: "",
+							label: "Pulse 2",
+							sc_eligible: false,
+							supercharged: false,
+							tech: "pulse",
+							type: "upgrade",
+							value: 10,
+						},
+						{
+							active: true,
+							adjacency: "",
+							adjacency_bonus: 0,
+							bonus: 5,
+							checked: false,
+							id: "P3",
+							image: "",
+							label: "Pulse 3",
+							sc_eligible: false,
+							supercharged: false,
+							tech: "pulse",
+							type: "upgrade",
+							value: 10,
+						},
+					],
+					type: "normal",
+				},
+			],
+		};
+
+		it("should be true when initialized with default checked modules", () => {
+			const { initializeTechTree } = useTechStore.getState();
+			initializeTechTree({}, mockTechGroups, { pulse: "normal" }, { pulse: ["P1", "P2"] });
+
+			expect(useTechStore.getState().isDefaultModuleSelection).toBe(true);
+		});
+
+		it("should become false when a module selection differs from defaults", () => {
+			const { initializeTechTree, setCheckedModules } = useTechStore.getState();
+			initializeTechTree({}, mockTechGroups, { pulse: "normal" }, { pulse: ["P1", "P2"] });
+
+			setCheckedModules("pulse", () => ["P1", "P2", "P3"]);
+			expect(useTechStore.getState().isDefaultModuleSelection).toBe(false);
+		});
+
+		it("should be true even when checkedModules order differs from default definition order", () => {
+			const { initializeTechTree, setCheckedModules } = useTechStore.getState();
+			initializeTechTree({}, mockTechGroups, { pulse: "normal" }, { pulse: ["P1", "P2"] });
+
+			// Uncheck P1 then re-check P1 (appended at end: ["P2", "P1"])
+			setCheckedModules("pulse", () => ["P2", "P1"]);
+			expect(useTechStore.getState().isDefaultModuleSelection).toBe(true);
+		});
+
+		it("should return to true after resetSession restores default selections", () => {
+			const { initializeTechTree, resetSession, setCheckedModules } = useTechStore.getState();
+			initializeTechTree({}, mockTechGroups, { pulse: "normal" }, { pulse: ["P1", "P2"] });
+
+			setCheckedModules("pulse", () => ["P1"]);
+			expect(useTechStore.getState().isDefaultModuleSelection).toBe(false);
+
+			resetSession();
+			expect(useTechStore.getState().isDefaultModuleSelection).toBe(true);
+		});
+	});
 });

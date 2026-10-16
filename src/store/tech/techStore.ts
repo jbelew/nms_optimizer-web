@@ -158,6 +158,8 @@ export interface TechStore {
 		activeGroups: { [key: string]: string },
 		initialCheckedModules: { [key: string]: string[] }
 	) => void;
+	/** Whether all currently checked modules match the default checked modules for each technology's active group variant. */
+	isDefaultModuleSelection: boolean;
 	/**
 	 * @deprecated Use maxBonus.
 	 *
@@ -305,7 +307,53 @@ export interface TechStore {
 }
 
 /**
- * Helper to synchronize snake_case aliases with camelCase fields.
+ * Resolves the active group definition for a specific technology.
+ *
+ * @param {TechStore} state - The technology store state draft.
+ * @param {string} tech - The technology key.
+ *
+ * @returns {TechTreeItem | undefined} The active group item, or `undefined` if none exist.
+ */
+const getActiveGroupForTech = (state: TechStore, tech: string): TechTreeItem | undefined => {
+	const activeGroupType = state.activeGroups[tech] || "normal";
+	const groups = state.techGroups[tech] || [];
+
+	return groups.length > 1
+		? groups.find((g) => g.type === activeGroupType) || groups[0]
+		: groups[0];
+};
+
+/**
+ * Determines whether all currently checked modules match the default checked modules
+ * for each technology's active group variant.
+ *
+ * @param {TechStore} state - The technology store state draft.
+ *
+ * @returns {boolean} `true` if all module selections match their active variant defaults.
+ */
+const computeIsDefaultModuleSelection = (state: TechStore): boolean => {
+	const techKeys = Object.keys(state.techGroups);
+
+	if (techKeys.length === 0) {
+		return Object.keys(state.checkedModules).length === 0;
+	}
+
+	return techKeys.every((tech) => {
+		const activeGroup = getActiveGroupForTech(state, tech);
+		const defaultIds = activeGroup
+			? activeGroup.modules.filter((m) => m.checked).map((m) => m.id)
+			: [];
+		const currentIds = state.checkedModules[tech] || [];
+
+		return (
+			currentIds.length === defaultIds.length &&
+			defaultIds.every((id) => currentIds.includes(id))
+		);
+	});
+};
+
+/**
+ * Helper to synchronize snake_case aliases and derived flags with camelCase fields.
  *
  * @param {TechStore} state - The mutable state draft.
  */
@@ -315,6 +363,10 @@ const syncAliases = (state: TechStore) => {
 	if (state.solveMethod !== undefined) state.solve_method = state.solveMethod;
 	if (state.solvedBonus !== undefined) state.solved_bonus = state.solvedBonus;
 	if (state.checkedModules !== undefined) state.moduleSelections = state.checkedModules;
+
+	if (state.techGroups !== undefined && state.checkedModules !== undefined) {
+		state.isDefaultModuleSelection = computeIsDefaultModuleSelection(state);
+	}
 };
 
 /**
@@ -327,12 +379,7 @@ const syncAliases = (state: TechStore) => {
 const computeDefaultCheckedModules = (state: TechStore): Record<string, string[]> => {
 	return Object.keys(state.techGroups).reduce(
 		(acc, tech) => {
-			const activeGroupType = state.activeGroups[tech] || "normal";
-			const groups = state.techGroups[tech] || [];
-			const activeGroup =
-				groups.length > 1
-					? groups.find((g) => g.type === activeGroupType) || groups[0]
-					: groups[0];
+			const activeGroup = getActiveGroupForTech(state, tech);
 
 			if (activeGroup) {
 				const defaultIds = activeGroup.modules.filter((m) => m.checked).map((m) => m.id);
@@ -434,6 +481,7 @@ export const useTechStore = create<TechStore>()(
 					syncAliases(state);
 				});
 			},
+			isDefaultModuleSelection: true,
 			max_bonus: {},
 			maxBonus: {},
 			moduleSelections: {},
@@ -487,12 +535,7 @@ export const useTechStore = create<TechStore>()(
 					const prev = state.checkedModules[tech] || [];
 					const updated = updater(prev);
 
-					const activeGroupType = state.activeGroups[tech] || "normal";
-					const groups = state.techGroups[tech] || [];
-					const activeGroup =
-						groups.length > 1
-							? groups.find((g) => g.type === activeGroupType) || groups[0]
-							: groups[0];
+					const activeGroup = getActiveGroupForTech(state, tech);
 					const modules = activeGroup ? activeGroup.modules : [];
 
 					state.checkedModules[tech] = validateModuleSelections(prev, updated, modules);

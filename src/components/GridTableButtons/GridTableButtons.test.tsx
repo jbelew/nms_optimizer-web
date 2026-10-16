@@ -10,6 +10,7 @@ import {
 	__resetScrollGridIntoViewRef,
 	useScrollGridIntoView,
 } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
+import { useTechStore } from "@/store/tech/techStore";
 
 import GridTableButtons from "./GridTableButtons";
 
@@ -150,6 +151,7 @@ describe("GridTableButtons", () => {
 		__resetScrollGridIntoViewRef();
 		(useBreakpoint as Mock).mockReturnValue(true); // Default to smallAndUp
 		setGridStoreState(false, true); // Default to not shared, has modules
+		useTechStore.setState({ isDefaultModuleSelection: true });
 	});
 
 	it("renders all buttons when not shared grid and has modules", () => {
@@ -182,14 +184,22 @@ describe("GridTableButtons", () => {
 		expect(screen.getByLabelText("Reset Grid Button")).toBeDisabled();
 	});
 
-	it("disables reset button when isDefaultGrid is true", () => {
+	it("disables reset button when both isDefaultGrid and isDefaultModuleSelection are true", () => {
 		setGridStoreState(false, false, true);
+		useTechStore.setState({ isDefaultModuleSelection: true });
 		renderComponent(false);
 		expect(screen.getByLabelText("Reset Grid Button")).toBeDisabled();
 	});
 
 	it("enables reset button when isDefaultGrid is false even without modules in grid", () => {
 		setGridStoreState(false, false, false);
+		renderComponent(false);
+		expect(screen.getByLabelText("Reset Grid Button")).not.toBeDisabled();
+	});
+
+	it("enables reset button when isDefaultGrid is true but isDefaultModuleSelection is false", () => {
+		setGridStoreState(false, false, true);
+		useTechStore.setState({ isDefaultModuleSelection: false });
 		renderComponent(false);
 		expect(screen.getByLabelText("Reset Grid Button")).not.toBeDisabled();
 	});

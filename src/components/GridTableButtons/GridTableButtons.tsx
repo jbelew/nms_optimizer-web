@@ -24,6 +24,7 @@ import { useScrollGridIntoView } from "@/hooks/useScrollGridIntoView/useScrollGr
 import { useUrlSync } from "@/hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
+import { useTechStore } from "@/store/tech/techStore";
 import { useDialog } from "@/utils/system/dialogUtils";
 
 const BuildNameDialog = React.lazy(
@@ -57,6 +58,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	const hasModulesInGrid = useGridStore((state) => state.hasModulesInGrid);
 	const isDefaultGrid = useGridStore((state) => state.isDefaultGrid);
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
+	const isDefaultModuleSelection = useTechStore((state) => state.isDefaultModuleSelection);
 	const {
 		handleBuildNameCancel,
 		handleBuildNameConfirm,
@@ -282,7 +284,9 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 					<Button
 						aria-label={t("buttons.resetGrid")}
 						className="gridTable__button gridTable__button--reset"
-						disabled={solving || isResetPending || isDefaultGrid}
+						disabled={
+							solving || isResetPending || (isDefaultGrid && isDefaultModuleSelection)
+						}
 						onClick={handleResetGrid}
 						size="2"
 						variant="soft"
