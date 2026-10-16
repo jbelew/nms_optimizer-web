@@ -48,8 +48,8 @@ test.describe("Recommended Builds Presets Card", () => {
 		const countAfterReload = await populatedLocator.count();
 		expect(countAfterReload).toBe(countAfterApply);
 
-		// Reset Grid
-		const resetGridButton = page.getByRole("button", { name: /Reset Grid/i });
+		// Reset Build
+		const resetGridButton = page.getByRole("button", { name: /Reset Build/i });
 		await resetGridButton.click();
 
 		// Verify grid is cleared back to initial state

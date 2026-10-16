@@ -28,13 +28,13 @@
 	},
 	"appName": "NMS Optimizer",
 	"mainApp": {
-		"viewingSharedBuild": "You are viewing a <strong>Shared Build</strong>. This layout is read-only. Press the <strong>Reset Grid</strong> button to start a new layout."
+		"viewingSharedBuild": "You are viewing a <strong>Shared Build</strong>. This layout is read-only. Press the <strong>Reset Build</strong> button to start a new layout."
 	},
 	"buttons": {
 		"instructions": "Instructions",
 		"about": "About",
 		"share": "Share Build",
-		"resetGrid": "Reset Grid",
+		"resetGrid": "Reset Build",
 		"changelog": "Changelog",
 		"userStats": "User Statistics",
 		"privacy": "Privacy Policy",
