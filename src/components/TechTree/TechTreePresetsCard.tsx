@@ -11,16 +11,18 @@
  * @category Components
  */
 
-import React from "react";
+import React, { useCallback } from "react";
 import { LayersIcon, MagicWandIcon, StackIcon } from "@radix-ui/react-icons";
 import { Button, Flex, Link, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
-import { RecommendedBuildProvider } from "@/components/RecommendedBuild/RecommendedBuild";
-import { useRecommendedBuildContext } from "@/components/RecommendedBuild/useRecommendedBuildContext";
+import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
+import { useRecommendedBuild } from "@/hooks/useRecommendedBuild/useRecommendedBuild";
 import { type TechTree } from "@/hooks/useTechTree/useTechTree";
+import { usePlatformStore } from "@/store/app/platformStore";
 import { type RecommendedBuild } from "@/types/tech";
+import { useDialog } from "@/utils/system/dialogUtils";
 import { countBuildModules } from "@/utils/tech/techTreeUtils";
 
 /**
@@ -29,6 +31,8 @@ import { countBuildModules } from "@/utils/tech/techTreeUtils";
 interface PresetCardItemProps {
 	/** The recommended build data item. */
 	build: RecommendedBuild;
+	/** Callback invoked when the user applies the recommended build. */
+	onApply: (build: RecommendedBuild) => void;
 }
 
 /**
@@ -37,6 +41,8 @@ interface PresetCardItemProps {
 interface PresetsCardContentProps {
 	/** List of recommended builds to display. */
 	builds: RecommendedBuild[];
+	/** The technology tree data containing recommended builds. */
+	techTree: TechTree;
 }
 
 /**
@@ -51,13 +57,11 @@ interface TechTreePresetsCardProps {
  * Single item row inside the {@link TechTreePresetsCard}.
  *
  * @param {PresetCardItemProps} props - Component properties.
- * @param {RecommendedBuild} props.build - Build configuration.
  *
  * @returns {JSX.Element} The rendered preset item row.
  */
-const PresetCardItem: React.FC<PresetCardItemProps> = ({ build }) => {
+const PresetCardItem: React.FC<PresetCardItemProps> = ({ build, onApply }) => {
 	const { t } = useTranslation();
-	const { handleApply } = useRecommendedBuildContext();
 	const moduleCount = countBuildModules(build);
 	const isSmallAndUp = useBreakpoint("640px");
 
@@ -87,7 +91,7 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build }) => {
 
 			<Button
 				className="cursor-pointer! font-medium"
-				onClick={() => handleApply(build)}
+				onClick={() => onApply(build)}
 				radius="medium"
 				size="1"
 				variant="solid"
@@ -100,16 +104,39 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build }) => {
 };
 
 /**
- * Inner content layout for {@link TechTreePresetsCard}, consuming RecommendedBuildContext.
+ * Inner content layout for {@link TechTreePresetsCard}.
  *
  * @param {PresetsCardContentProps} props - Component properties.
- * @param {RecommendedBuild[]} props.builds - Array of builds.
  *
  * @returns {JSX.Element} The rendered presets card UI.
  */
-const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds }) => {
+const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds, techTree }) => {
 	const { t } = useTranslation();
-	const { handleOpenInstructions } = useRecommendedBuildContext();
+	const { openDialog } = useDialog();
+	const { applyRecommendedBuild } = useRecommendedBuild(techTree);
+	const { sendEvent } = useAnalytics();
+	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
+
+	const handleApply = useCallback(
+		(build: RecommendedBuild) => {
+			setTimeout(async () => {
+				await applyRecommendedBuild(build);
+				sendEvent({
+					action: "apply_build",
+					build: build.title,
+					category: "build",
+					nonInteraction: false,
+					platform: selectedPlatform,
+					value: 1,
+				});
+			}, 0);
+		},
+		[applyRecommendedBuild, sendEvent, selectedPlatform]
+	);
+
+	const handleOpenInstructions = useCallback(() => {
+		openDialog("instructions", { section: "section-6" });
+	}, [openDialog]);
 
 	return (
 		<div className="mb-4 rounded-(--radius-2) bg-(--accent-a3) p-3 shadow-sm lg:bg-(--accent-surface)">
@@ -145,7 +172,11 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds }) => {
 
 				<div className="mt-2 flex flex-col gap-3">
 					{builds.map((build, index) => (
-						<PresetCardItem build={build} key={build.title || index} />
+						<PresetCardItem
+							build={build}
+							key={build.title || index}
+							onApply={handleApply}
+						/>
 					))}
 				</div>
 			</Flex>
@@ -161,20 +192,28 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds }) => {
  * preconfigured layouts for ships with fixed supercharged slots.
  *
  * @param {TechTreePresetsCardProps} props - Component properties.
- * @param {TechTree} props.techTree - Full technology tree data structure.
  *
  * @returns {JSX.Element | null} The rendered presets card, or null if no recommended builds exist.
+ *
+ * @see {@link useRecommendedBuild}
+ * @see {@link ./TechTreePresetsCard.test.tsx Unit Tests}
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <TechTreePresetsCard techTree={techTree} />
+ * // renders presets card when recommended_builds exist, or null
+ * ```
  */
 export const TechTreePresetsCard: React.FC<TechTreePresetsCardProps> = ({ techTree }) => {
 	const builds = (techTree.recommended_builds as RecommendedBuild[]) || [];
 
 	if (builds.length === 0) return null;
 
-	return (
-		<RecommendedBuildProvider isLarge techTree={techTree}>
-			<PresetsCardContent builds={builds} />
-		</RecommendedBuildProvider>
-	);
+	return <PresetsCardContent builds={builds} techTree={techTree} />;
 };
 
 TechTreePresetsCard.displayName = "TechTreePresetsCard";

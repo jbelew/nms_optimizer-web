@@ -55,6 +55,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 
 	const { markTutorialFinished, openDialog, tutorialFinished } = useDialog();
 	const hasModulesInGrid = useGridStore((state) => state.hasModulesInGrid);
+	const isDefaultGrid = useGridStore((state) => state.isDefaultGrid);
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const {
 		handleBuildNameCancel,
@@ -281,7 +282,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 					<Button
 						aria-label={t("buttons.resetGrid")}
 						className="gridTable__button gridTable__button--reset"
-						disabled={solving || isResetPending}
+						disabled={solving || isResetPending || isDefaultGrid}
 						onClick={handleResetGrid}
 						size="2"
 						variant="soft"

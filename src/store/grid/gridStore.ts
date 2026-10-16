@@ -151,6 +151,7 @@ export const useGridStore = create<GridStore>()(
 
 					state.totalSuperchargedCells = 0;
 					state.hasModulesInGrid = false;
+					state.isDefaultGrid = !state.isSharedGrid;
 					state.isGridFull = false;
 					state.firstInactiveRowIndex = -1;
 					state.lastActiveRowIndex = -1;
@@ -165,11 +166,20 @@ export const useGridStore = create<GridStore>()(
 				let activeWithModuleCount = 0;
 				let firstInactiveRow = -1;
 				let lastActiveRow = -1;
+				const initialCells = state.initialGridDefinition?.grid;
+				const hasInitialCells = Array.isArray(initialCells) && initialCells.length > 0;
+				let isDefault =
+					!state.isSharedGrid &&
+					(!hasInitialCells || initialCells.length === cells.length);
 
 				for (let r = 0; r < cells.length; r++) {
 					const row = cells[r];
 					let rowHasActive = false;
 					let rowAllInactive = true;
+
+					if (isDefault && hasInitialCells && initialCells[r]?.length !== row.length) {
+						isDefault = false;
+					}
 
 					for (let c = 0; c < row.length; c++) {
 						const cell = row[c];
@@ -186,6 +196,25 @@ export const useGridStore = create<GridStore>()(
 
 							if (cell.module !== null) activeWithModuleCount++;
 						}
+
+						if (isDefault) {
+							const initialCell = hasInitialCells ? initialCells[r]?.[c] : undefined;
+							const expectedActive = initialCell
+								? (initialCell.active ?? true)
+								: false;
+							const expectedSupercharged = initialCell
+								? (initialCell.supercharged ?? false)
+								: false;
+							const expectedModule = initialCell?.id || null;
+
+							if (
+								cell.active !== expectedActive ||
+								cell.supercharged !== expectedSupercharged ||
+								cell.module !== expectedModule
+							) {
+								isDefault = false;
+							}
+						}
 					}
 
 					if (rowHasActive) lastActiveRow = r;
@@ -198,6 +227,7 @@ export const useGridStore = create<GridStore>()(
 
 				state.totalSuperchargedCells = superchargedCount;
 				state.hasModulesInGrid = hasModules;
+				state.isDefaultGrid = isDefault;
 				state.isGridFull = activeCount > 0 && activeCount === activeWithModuleCount;
 				state.firstInactiveRowIndex = firstInactiveRow;
 				state.lastActiveRowIndex = lastActiveRow;
@@ -316,6 +346,7 @@ export const useGridStore = create<GridStore>()(
 
 				hasModulesInGrid: false,
 				initialGridDefinition: undefined,
+				isDefaultGrid: true,
 				isGridFull: false,
 
 				isSharedGrid: false,
@@ -587,11 +618,13 @@ export const useGridStore = create<GridStore>()(
 				setInitialGridDefinition: (definition) =>
 					set((state) => {
 						state.initialGridDefinition = definition;
+						recomputeDerivedState(state);
 					}),
 
 				setIsSharedGrid: (isShared) =>
 					set((state) => {
 						state.isSharedGrid = isShared;
+						recomputeDerivedState(state);
 					}),
 
 				setLastTap: (cell, time) =>

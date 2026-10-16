@@ -20,8 +20,12 @@ _Avoid_: selected modules, checked upgrades
 A technology layout imported into the workspace from an encoded URL query parameter rather than configured manually or loaded from a saved file.
 _Avoid_: shared build, imported layout, URL grid
 
+**Default Grid Layout**:
+The baseline slot configuration for the active Platform Type (or Ship Class), consisting of its initial active and supercharged slot states with no placed modules.
+_Avoid_: empty grid, blank board, default state
+
 **Session Reset**:
-The action of restoring the workspace to an empty, unconfigured layout and clearing all active module selections and URL parameters.
+The action of restoring the workspace to the platform's Default Grid Layout, restoring all technology Module Selections to their defaults, and clearing URL grid parameters.
 _Avoid_: rest grid, wipe grid, clear board
 
 **Recommended Builds**:

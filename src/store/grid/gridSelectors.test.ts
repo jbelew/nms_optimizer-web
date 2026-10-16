@@ -7,7 +7,12 @@ describe("Grid Store Selectors", () => {
 		// Directly reset to a known initial state for the grid part,
 		// avoiding issues with resetGrid if state.grid is null from a previous test.
 		// Default dimensions (10,6) are from the main store's initialization.
-		useGridStore.setState({ grid: createGrid(10, 6), isSharedGrid: false, result: null });
+		useGridStore.setState({
+			grid: createGrid(10, 6),
+			initialGridDefinition: undefined,
+			isSharedGrid: false,
+			result: null,
+		});
 		useGridStore.getState().triggerRecompute();
 	});
 	describe("selectTotalSuperchargedCells", () => {
@@ -171,6 +176,63 @@ describe("Grid Store Selectors", () => {
 			expect(useGridStore.getState().grid.cells[0][0].module).toBeNull();
 			expect(useGridStore.getState().grid.cells[1][1]).toBe(untouchedCellBefore);
 			expect(useGridStore.getState().grid.cells[1]).toBe(untouchedRowBefore);
+		});
+	});
+
+	describe("selectIsDefaultGrid", () => {
+		it("should be true for a newly created default grid and false when modified", () => {
+			expect(useGridStore.getState().isDefaultGrid).toBe(true);
+
+			// Toggling a cell active state marks the grid as non-default
+			useGridStore.getState().handleCellTap(0, 0);
+			expect(useGridStore.getState().isDefaultGrid).toBe(false);
+
+			// Reverting the cell back to inactive restores default state
+			useGridStore.getState().handleCellTap(0, 0);
+			expect(useGridStore.getState().isDefaultGrid).toBe(true);
+		});
+
+		it("should compare against initialGridDefinition when present", () => {
+			const definition = {
+				grid: [
+					[
+						{
+							active: true,
+							adjacency: "none",
+							adjacency_bonus: 0,
+							bonus: 0,
+							id: "",
+							image: "",
+							label: "",
+							sc_eligible: false,
+							supercharged: true,
+							tech: "",
+							type: "",
+							value: 0,
+						},
+					],
+				],
+				gridFixed: false,
+				superchargedFixed: false,
+			};
+
+			useGridStore.getState().setInitialGridDefinition(definition);
+			useGridStore.getState().setGridFromInitialDefinition(definition);
+			expect(useGridStore.getState().isDefaultGrid).toBe(true);
+
+			// Toggling supercharged off deviates from initialGridDefinition
+			useGridStore.getState().handleCellDoubleTap(0, 0);
+			expect(useGridStore.getState().isDefaultGrid).toBe(false);
+
+			// Resetting grid restores initialGridDefinition and isDefaultGrid = true
+			useGridStore.getState().resetGrid();
+			expect(useGridStore.getState().isDefaultGrid).toBe(true);
+		});
+
+		it("should be false when isSharedGrid is true even if cells match default", () => {
+			expect(useGridStore.getState().isDefaultGrid).toBe(true);
+			useGridStore.getState().setIsSharedGrid(true);
+			expect(useGridStore.getState().isDefaultGrid).toBe(false);
 		});
 	});
 });

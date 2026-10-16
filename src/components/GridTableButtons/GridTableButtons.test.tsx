@@ -34,17 +34,19 @@ const {
 const { setGridStoreState, useGridStore } = vi.hoisted(() => {
 	let isSharedGrid = false;
 	let hasModulesInGrid = true;
+	let isDefaultGrid = false;
 
 	const store = {
 		clearInteractionState: vi.fn(),
 		hasModulesInGrid,
+		isDefaultGrid,
 		isSharedGrid,
 		resetGrid: mockResetGrid,
 		setIsSharedGrid: mockSetIsSharedGrid,
 	};
 
 	const useGridStoreMock = vi.fn((selector?: (state: unknown) => unknown) => {
-		const currentState = { ...store, hasModulesInGrid, isSharedGrid };
+		const currentState = { ...store, hasModulesInGrid, isDefaultGrid, isSharedGrid };
 
 		if (typeof selector === "function") {
 			return selector(currentState);
@@ -62,9 +64,14 @@ const { setGridStoreState, useGridStore } = vi.hoisted(() => {
 	});
 
 	return {
-		setGridStoreState: (isShared: boolean, hasModules: boolean) => {
+		setGridStoreState: (
+			isShared: boolean,
+			hasModules: boolean,
+			isDefault: boolean = !hasModules && !isShared
+		) => {
 			isSharedGrid = isShared;
 			hasModulesInGrid = hasModules;
+			isDefaultGrid = isDefault;
 		},
 		useGridStore: useGridStoreMock,
 	};
@@ -173,6 +180,18 @@ describe("GridTableButtons", () => {
 	it("disables reset button when solving is true", () => {
 		renderComponent(true);
 		expect(screen.getByLabelText("Reset Grid Button")).toBeDisabled();
+	});
+
+	it("disables reset button when isDefaultGrid is true", () => {
+		setGridStoreState(false, false, true);
+		renderComponent(false);
+		expect(screen.getByLabelText("Reset Grid Button")).toBeDisabled();
+	});
+
+	it("enables reset button when isDefaultGrid is false even without modules in grid", () => {
+		setGridStoreState(false, false, false);
+		renderComponent(false);
+		expect(screen.getByLabelText("Reset Grid Button")).not.toBeDisabled();
 	});
 
 	it("disables instructions button when solving is true", () => {

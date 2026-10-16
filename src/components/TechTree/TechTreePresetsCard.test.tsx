@@ -1,6 +1,6 @@
 import type { TechTree } from "@/hooks/useTechTree/useTechTree";
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { TechTreePresetsCard } from "./TechTreePresetsCard";
@@ -34,22 +34,30 @@ vi.mock("react-i18next", () => ({
 	}),
 }));
 
-// Mock RecommendedBuildProvider
-vi.mock("@/components/RecommendedBuild/RecommendedBuild", () => ({
-	RecommendedBuildProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+const mockApplyRecommendedBuild = vi.fn();
+vi.mock("@/hooks/useRecommendedBuild/useRecommendedBuild", () => ({
+	useRecommendedBuild: () => ({
+		applyRecommendedBuild: mockApplyRecommendedBuild,
+	}),
 }));
 
-// Mock useRecommendedBuildContext
-const mockHandleApply = vi.fn();
-const mockHandleOpenInstructions = vi.fn();
-vi.mock("@/components/RecommendedBuild/useRecommendedBuildContext", () => ({
-	RecommendedBuildContext: React.createContext(null),
-	useRecommendedBuildContext: () => ({
-		handleApply: mockHandleApply,
-		handleOpenInstructions: mockHandleOpenInstructions,
-		isLarge: true,
-		techTree: {} as TechTree,
+const mockSendEvent = vi.fn();
+vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
+	useAnalytics: () => ({
+		sendEvent: mockSendEvent,
 	}),
+}));
+
+const mockOpenDialog = vi.fn();
+vi.mock("@/utils/system/dialogUtils", () => ({
+	useDialog: () => ({
+		openDialog: mockOpenDialog,
+	}),
+}));
+
+vi.mock("@/store/app/platformStore", () => ({
+	usePlatformStore: (selector: (state: { selectedPlatform: string }) => unknown) =>
+		selector({ selectedPlatform: "exosuit" }),
 }));
 
 describe("TechTreePresetsCard", () => {
@@ -101,21 +109,31 @@ describe("TechTreePresetsCard", () => {
 		expect(screen.getByRole("button", { name: /Apply Build/i })).toBeInTheDocument();
 	});
 
-	test("should call handleApply when Apply Build button is clicked", () => {
+	test("should apply recommended build and send analytics event when Apply Build button is clicked", async () => {
 		render(<TechTreePresetsCard techTree={mockTechTree} />);
 
 		const applyButton = screen.getByRole("button", { name: /Apply Build/i });
 		fireEvent.click(applyButton);
 
-		expect(mockHandleApply).toHaveBeenCalledWith(mockBuilds[0]);
+		await waitFor(() => {
+			expect(mockApplyRecommendedBuild).toHaveBeenCalledWith(mockBuilds[0]);
+			expect(mockSendEvent).toHaveBeenCalledWith({
+				action: "apply_build",
+				build: "Alpha Preset",
+				category: "build",
+				nonInteraction: false,
+				platform: "exosuit",
+				value: 1,
+			});
+		});
 	});
 
-	test("should call handleOpenInstructions when recommended builds link is clicked", () => {
+	test("should open instructions dialog when recommended builds link is clicked", () => {
 		render(<TechTreePresetsCard techTree={mockTechTree} />);
 
 		const link = screen.getByText("recommended builds");
 		fireEvent.click(link);
 
-		expect(mockHandleOpenInstructions).toHaveBeenCalled();
+		expect(mockOpenDialog).toHaveBeenCalledWith("instructions", { section: "section-6" });
 	});
 });

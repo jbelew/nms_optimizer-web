@@ -725,13 +725,13 @@
     "semantic_hash": ""
   },
   "src/components/GridTableButtons/GridTableButtons.test.tsx": {
-    "mtime": 1792005568.7845714,
-    "ast_hash": "9975c6969d49c5130fe86c9e872ae66e",
+    "mtime": 1792174105.0948474,
+    "ast_hash": "8ddb9ed39e758332f0e5948619f80bee",
     "semantic_hash": ""
   },
   "src/components/GridTableButtons/GridTableButtons.tsx": {
-    "mtime": 1792005568.7845714,
-    "ast_hash": "6f34dc6d26f6a3853cce3d7cb5bbd1ce",
+    "mtime": 1792174170.6946526,
+    "ast_hash": "6dcfd6be03b6e6b27c9863edf3d94ea8",
     "semantic_hash": ""
   },
   "src/components/Icons/EmptyCellIcon.tsx": {
@@ -887,41 +887,6 @@
   "src/components/OfflineBanner/OfflineBanner.tsx": {
     "mtime": 1779145165.0,
     "ast_hash": "ccd9df7351569c21ecfe5a959583bab9",
-    "semantic_hash": ""
-  },
-  "src/components/RecommendedBuild/RecommendedBuild.stories.tsx": {
-    "mtime": 1790109381.0,
-    "ast_hash": "4f5118124554c69f0e9dfaee8b64669c",
-    "semantic_hash": ""
-  },
-  "src/components/RecommendedBuild/RecommendedBuild.tsx": {
-    "mtime": 1790051857.0,
-    "ast_hash": "d2f96ea426c48e356620ea4c43cc6418",
-    "semantic_hash": ""
-  },
-  "src/components/RecommendedBuild/RecommendedBuildButton.tsx": {
-    "mtime": 1789846836.0,
-    "ast_hash": "40a237680884d7c6333b4a286c7e42f4",
-    "semantic_hash": ""
-  },
-  "src/components/RecommendedBuild/RecommendedBuildInfo.tsx": {
-    "mtime": 1779145165.0,
-    "ast_hash": "6daf70ba68a38cff1d0b042e69a5d79e",
-    "semantic_hash": ""
-  },
-  "src/components/RecommendedBuild/RecommendedBuildProvider.tsx": {
-    "mtime": 1790051857.0,
-    "ast_hash": "9f52db565f278a3404dbffb1b80fde0e",
-    "semantic_hash": ""
-  },
-  "src/components/RecommendedBuild/RecommendedBuildRoot.tsx": {
-    "mtime": 1779145165.0,
-    "ast_hash": "08899d721c0b4c2e5e4cf7a2df3cbc87",
-    "semantic_hash": ""
-  },
-  "src/components/RecommendedBuild/useRecommendedBuildContext.ts": {
-    "mtime": 1779145165.0,
-    "ast_hash": "908a8814d76ebf679b6afc9919321c1a",
     "semantic_hash": ""
   },
   "src/components/RoutedDialogs/RoutedDialogs.tsx": {
@@ -1505,8 +1470,8 @@
     "semantic_hash": ""
   },
   "src/store/grid/gridFactories.ts": {
-    "mtime": 1779308864.0,
-    "ast_hash": "34aa64c0c76fcf93818ec99eaea33d7f",
+    "mtime": 1792174830.8023396,
+    "ast_hash": "d0ea202d25d1180c5128784d5d397308",
     "semantic_hash": ""
   },
   "src/store/grid/gridPersistence.ts": {
@@ -1525,18 +1490,18 @@
     "semantic_hash": ""
   },
   "src/store/grid/gridSelectors.test.ts": {
-    "mtime": 1792005568.7884479,
-    "ast_hash": "47c6134dfa6cef85b46004d9a8f7a807",
+    "mtime": 1792174432.2141469,
+    "ast_hash": "6c856d8c57e410c0f358b3dbb7542b74",
     "semantic_hash": ""
   },
   "src/store/grid/gridStore.ts": {
-    "mtime": 1792005568.7884479,
-    "ast_hash": "08da4b571915b8e7d251e9462ac7abcc",
+    "mtime": 1792174832.1497054,
+    "ast_hash": "0b4d8c8a09926d56e7f2de882c341308",
     "semantic_hash": ""
   },
   "src/store/grid/gridTypes.ts": {
-    "mtime": 1788384701.0,
-    "ast_hash": "a8d7ccd18bc3cc1c2a05ddf3e01abbc5",
+    "mtime": 1792174020.66265,
+    "ast_hash": "dcb180e65c83efc65aa4f51fd48fd452",
     "semantic_hash": ""
   },
   "src/store/grid/handleCellDoubleTap.test.ts": {
@@ -1910,8 +1875,8 @@
     "semantic_hash": ""
   },
   "vite.config.ts": {
-    "mtime": 1792171423.3149486,
-    "ast_hash": "5df63442259eea7fdc10ebb62f0cca41",
+    "mtime": 1792171974.251655,
+    "ast_hash": "76068319de9ff15dcb78277dd17b6431",
     "semantic_hash": ""
   },
   "vitest-mocks/virtual-markdown-bundle.ts": {
@@ -2050,8 +2015,8 @@
     "semantic_hash": ""
   },
   "CONTEXT.md": {
-    "mtime": 1791657553.0568144,
-    "ast_hash": "e9e05004c20cd4f7d205d8caf73e0fb6",
+    "mtime": 1792173913.397235,
+    "ast_hash": "07b3c0a396209c1097303e0ab9083324",
     "semantic_hash": ""
   },
   "shared/page-metadata.js": {
@@ -2180,13 +2145,13 @@
     "semantic_hash": ""
   },
   "src/components/TechTree/TechTreePresetsCard.test.tsx": {
-    "mtime": 1790051857.0,
-    "ast_hash": "7df41f19f99facb108c9cf0c1752d4a7",
+    "mtime": 1792173369.5309331,
+    "ast_hash": "6ea1c4c22953a9dfb635e6c567f96771",
     "semantic_hash": ""
   },
   "src/components/TechTree/TechTreePresetsCard.tsx": {
-    "mtime": 1790355478.4618585,
-    "ast_hash": "c888f92e8da5342494697e2b3b710bd4",
+    "mtime": 1792174829.7460942,
+    "ast_hash": "a36ae14908af910262746a62fd400e0a",
     "semantic_hash": ""
   },
   "src/utils/tech/techTreeUtils.test.ts": {

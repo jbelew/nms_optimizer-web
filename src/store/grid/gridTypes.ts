@@ -255,6 +255,8 @@ export interface GridComputed {
 	firstInactiveRowIndex: number;
 	/** Whether any cell in the grid has a non-null module. */
 	hasModulesInGrid: boolean;
+	/** Whether the grid matches its Default Grid Layout (no placed modules, not a Shared Grid, and all cell active/supercharged states match initialGridDefinition). */
+	isDefaultGrid: boolean;
 	/** Whether every active cell has a module assigned. */
 	isGridFull: boolean;
 	/** Index of the last row containing at least one active cell, or -1. */
