@@ -101,17 +101,17 @@ pre-push:
 
           - name: typecheck
             tags: [types]
-            glob: "{src,shared}/**/*.{ts,tsx}|tsconfig*.json|package.json|vite.config.ts"
+            glob: "{src/*.{ts,tsx},src/**/*.{ts,tsx},shared/**/*.{ts,tsx},tsconfig*.json,package.json,vite.config.ts}"
             run: bun run typecheck
 
           - name: knip
             tags: [lint]
-            glob: "{src,shared,scripts}/**/*.{ts,tsx,js,mjs,cjs}|package.json|knip*"
+            glob: "{src/*.{ts,tsx,js,mjs,cjs},src/**/*.{ts,tsx,js,mjs,cjs},shared/**/*.{ts,tsx,js,mjs,cjs},scripts/**/*.{ts,tsx,js,mjs,cjs},package.json,knip*}"
             run: bun run lint:knip
 
           - name: circular
             tags: [lint]
-            glob: "src/**/*.{ts,tsx}|tsconfig*.json"
+            glob: "{src/*.{ts,tsx},src/**/*.{ts,tsx},tsconfig*.json}"
             run: bun run lint:circular
 
           - name: lint
