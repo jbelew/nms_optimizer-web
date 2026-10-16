@@ -152,11 +152,12 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onClose }) => {
 						components={{
 							1: (
 								<button
-									aria-label="View instructions"
 									className="welcomeContent__link"
 									onClick={handleViewInstructions}
 									type="button"
-								/>
+								>
+									{t("dialogs.titles.instructions")}
+								</button>
 							),
 						}}
 						i18nKey="dialogs.welcome.viewInstructions"

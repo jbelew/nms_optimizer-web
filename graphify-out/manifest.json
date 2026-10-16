@@ -155,8 +155,8 @@
     "semantic_hash": ""
   },
   "scripts/lighthouserc.cjs": {
-    "mtime": 1778893059.0,
-    "ast_hash": "968e2d4602d38950fea377b5ae4e0742",
+    "mtime": 1792169158.4073184,
+    "ast_hash": "339613d991dbbe39c82a0a2545ad0112",
     "semantic_hash": ""
   },
   "scripts/list-chunk-modules.py": {
@@ -270,13 +270,13 @@
     "semantic_hash": ""
   },
   "src/App.test.tsx": {
-    "mtime": 1789846836.0,
-    "ast_hash": "be13f2b63a7331829b75c8b008e55404",
+    "mtime": 1792169349.9358447,
+    "ast_hash": "7e761b0f793104cb6c199ebd11dda480",
     "semantic_hash": ""
   },
   "src/App.tsx": {
-    "mtime": 1789846836.0,
-    "ast_hash": "b19f61f88996f724c44c5f96910db39c",
+    "mtime": 1792169371.2254763,
+    "ast_hash": "2ef7afe3b5f1e700efe0c506d676d5d1",
     "semantic_hash": ""
   },
   "src/components/AppDialog/Base/AppDialog.test.tsx": {
@@ -480,13 +480,13 @@
     "semantic_hash": ""
   },
   "src/components/AppDialog/Welcome/WelcomeContent.test.tsx": {
-    "mtime": 1789846836.0,
-    "ast_hash": "1a47270d507ca72c95e84df55de4eda9",
+    "mtime": 1792168142.9146032,
+    "ast_hash": "0313cdc351e34b9c2bba65379c4efdbf",
     "semantic_hash": ""
   },
   "src/components/AppDialog/Welcome/WelcomeContent.tsx": {
-    "mtime": 1789846836.0,
-    "ast_hash": "475e8cd3528674a53877a49375d255b2",
+    "mtime": 1792168223.630872,
+    "ast_hash": "1b1b30c4fa49ef35f8194d114e5bbaa8",
     "semantic_hash": ""
   },
   "src/components/AppFooter/AppFooter.stories.tsx": {
@@ -1725,13 +1725,13 @@
     "semantic_hash": ""
   },
   "src/utils/browser/environment.test.ts": {
-    "mtime": 1791565940.3329341,
-    "ast_hash": "b39fad232cd30b5aeb89a43f29901ccf",
+    "mtime": 1792169101.9347954,
+    "ast_hash": "448a6c4b1b85de840e532ce078534d94",
     "semantic_hash": ""
   },
   "src/utils/browser/environment.ts": {
-    "mtime": 1791566980.340854,
-    "ast_hash": "3ffd7ba4aae7ce100e7bf609a4472bfb",
+    "mtime": 1792169567.1024823,
+    "ast_hash": "cf65fe548834d76d94790140241da98a",
     "semantic_hash": ""
   },
   "src/utils/browser/platformResolver.ts": {

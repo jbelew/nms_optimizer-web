@@ -181,13 +181,20 @@ jobs:
           path: dist/
 
       - name: Run Lighthouse CI
-        uses: treosh/lighthouse-ci-action@v12
-        with:
-          uploadArtifacts: true
-          temporaryPublicStorage: true
-          configPath: "./scripts/lighthouserc.cjs"
+        run: |
+          bunx lhci collect --config=./scripts/lighthouserc.cjs
+          bunx lhci upload --config=./scripts/lighthouserc.cjs --target=temporary-public-storage
+          bunx lhci upload --config=./scripts/lighthouserc.cjs --target=filesystem --outputDir=.lighthouseci
         env:
           LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Lighthouse Results Artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: lighthouse-results
+          path: .lighthouseci/
+          retention-days: 7
 
       - name: Checkout Lighthouse History Branch
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'

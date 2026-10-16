@@ -27,13 +27,16 @@ const BOT_USER_AGENT_PATTERN =
  *
  * @remarks
  * Uses heuristics including `navigator.webdriver`, the `.is-bot` CSS class on
- * the document root, and User-Agent string matching against known bot signatures.
+ * the document root, `navigator.userAgentData.brands` client hints, and
+ * User-Agent string matching against known bot signatures.
  *
  * This check is used to suppress non-essential UI (like Welcome dialogs) for
  * automated visitors to improve SEO and prevent unwanted interactions.
  * **Note: This is not a security-critical check.**
  *
  * @returns {boolean} `true` if the visitor is likely a bot, false otherwise.
+ *
+ * @see {@link ./environment.test.ts Unit Tests}
  *
  * @category Utilities
  *
@@ -56,8 +59,25 @@ export function isBot(): boolean {
 		return true;
 	}
 
-	// 3. User-Agent pattern matching
-	if (typeof navigator !== "undefined") {
+	// 3. User-Agent Client Hints (survives UA string overrides in Chromium/Lighthouse)
+	if (typeof navigator !== "undefined" && "userAgentData" in navigator) {
+		const uaData = (
+			navigator as Navigator & {
+				userAgentData?: { brands?: Array<{ brand?: string }> };
+			}
+		).userAgentData;
+
+		if (
+			uaData?.brands?.some(
+				(b) => typeof b.brand === "string" && BOT_USER_AGENT_PATTERN.test(b.brand)
+			)
+		) {
+			return true;
+		}
+	}
+
+	// 4. User-Agent pattern matching
+	if (typeof navigator !== "undefined" && typeof navigator.userAgent === "string") {
 		return BOT_USER_AGENT_PATTERN.test(navigator.userAgent);
 	}
 

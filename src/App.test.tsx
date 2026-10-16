@@ -7,7 +7,7 @@
 import { Suspense } from "react";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Theme } from "@radix-ui/themes";
-import { fireEvent, render } from "@testing-library/react";
+import { act, fireEvent, render } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { vi } from "vitest";
 
@@ -344,11 +344,25 @@ describe("App", () => {
 	});
 
 	describe("WelcomeDialog", () => {
-		test("should show WelcomeDialog on first visit", async () => {
-			// Ensure localStorage is empty
+		beforeEach(() => {
+			lifecycleCoordinator.reset();
+		});
+
+		test("should defer mounting WelcomeDialog until LifecycleCoordinator reaches IDLE", async () => {
 			localStorage.removeItem("userVisited");
 
 			const rendered = renderApp(["/"]);
+
+			// Wait for App to mount and signal READY; WelcomeDialog must NOT be mounted during READY
+			await vi.waitFor(() => {
+				expect(lifecycleCoordinator.getPhase()).toBe("READY");
+			});
+			expect(rendered.queryAllByText("dialogs.titles.welcome")).toHaveLength(0);
+
+			// Once the application transitions to IDLE, WelcomeDialog mounts
+			act(() => {
+				lifecycleCoordinator.transitionTo("IDLE");
+			});
 
 			await vi.waitFor(() => {
 				expect(rendered.getAllByText("dialogs.titles.welcome")[0]).toBeInTheDocument();
@@ -360,6 +374,9 @@ describe("App", () => {
 			localStorage.setItem("userVisited", "true");
 
 			const rendered = renderApp(["/"]);
+			act(() => {
+				lifecycleCoordinator.transitionTo("IDLE");
+			});
 
 			// Should not show welcome dialog
 			const welcomeTitle = rendered.queryAllByText("dialogs.titles.welcome");
@@ -370,6 +387,9 @@ describe("App", () => {
 			localStorage.removeItem("userVisited");
 
 			const rendered = renderApp(["/"]);
+			act(() => {
+				lifecycleCoordinator.transitionTo("IDLE");
+			});
 
 			// Find the "Get Started" button in the footer
 			const footers = await rendered.findAllByTestId("app-dialog-footer");
@@ -394,6 +414,9 @@ describe("App", () => {
 
 			// Route /instructions has its own dialog
 			const rendered = renderApp(["/instructions"]);
+			act(() => {
+				lifecycleCoordinator.transitionTo("IDLE");
+			});
 
 			// Welcome dialog title should NOT be in the document
 			await vi.waitFor(() => {

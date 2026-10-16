@@ -39,6 +39,18 @@ describe("environment utilities", () => {
 			expect(isBot()).toBe(true);
 		});
 
+		it("should return true if navigator.userAgentData brands match headless or lighthouse", () => {
+			vi.stubGlobal("navigator", {
+				userAgent:
+					"Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1",
+				userAgentData: {
+					brands: [{ brand: "HeadlessChrome", version: "155" }],
+				},
+				webdriver: false,
+			});
+			expect(isBot()).toBe(true);
+		});
+
 		it("should return false if no bot indicators are present", () => {
 			vi.stubGlobal("navigator", { userAgent: "Mozilla/5.0", webdriver: false });
 			vi.stubGlobal("document", {

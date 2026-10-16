@@ -1,5 +1,6 @@
 import type { DialogContextType } from "@/utils/system/dialogUtils";
 import type { ReactNode } from "react";
+import { cloneElement, isValidElement } from "react";
 import { Theme } from "@radix-ui/themes";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -31,10 +32,10 @@ vi.mock("react-i18next", () => ({
 				: (components as Record<string, ReactNode>)[1] ||
 					(components as Record<string, ReactNode>).link;
 
-			if (comp) {
+			if (comp && isValidElement(comp)) {
 				return (
 					<span data-testid={i18nKey}>
-						{i18nKey} {comp}
+						{i18nKey} {cloneElement(comp, undefined, "see the complete instructions")}
 					</span>
 				);
 			}
@@ -109,7 +110,8 @@ describe("WelcomeContent", () => {
 			</DialogContext.Provider>
 		);
 
-		const link = screen.getByRole("button", { name: "View instructions" });
+		const link = screen.getByRole("button", { name: "see the complete instructions" });
+		expect(link).not.toHaveAttribute("aria-label");
 		await userEvent.click(link);
 
 		expect(onClose).toHaveBeenCalled();

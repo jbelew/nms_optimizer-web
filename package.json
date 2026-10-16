@@ -172,5 +172,8 @@
 		"vite-plugin-pwa": "^2.0.0",
 		"vite-plugin-splash-screen": "^0.2.0",
 		"vitest": "^5.0.4"
+	},
+	"overrides": {
+		"lighthouse": "^13.5.0"
 	}
 }

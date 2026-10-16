@@ -161,11 +161,16 @@
 				preload(apiUrl + "/tech_tree/" + encodeURIComponent(platform), "fetch");
 
 				// Environment Detection
+				const botPattern =
+					/bot|crawler|spider|headless|phantom|webdriver|googlebot|google-inspectiontool|lighthouse|chrome-lighthouse/i;
+				const hasBotBrand =
+					navigator.userAgentData &&
+					Array.isArray(navigator.userAgentData.brands) &&
+					navigator.userAgentData.brands.some((b) => b && botPattern.test(b.brand || ""));
 				if (
-					/bot|crawler|spider|headless|phantom|webdriver|googlebot|google-inspectiontool|lighthouse|chrome-lighthouse/i.test(
-						navigator.userAgent
-					) ||
-					navigator.webdriver === true
+					botPattern.test(navigator.userAgent) ||
+					navigator.webdriver === true ||
+					hasBotBrand
 				) {
 					document.documentElement.classList.add("is-bot", "background-visible");
 				}

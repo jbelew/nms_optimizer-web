@@ -102,13 +102,30 @@ const AppContent: FC = () => {
 	useSeoAndTitle();
 	useUrlValidation();
 
-	const [showWelcome, setShowWelcome] = useState(() => !userVisited && !activeDialog && !isBot());
+	const [isIdle, setIsIdle] = useState(() => lifecycleCoordinator.getPhase() === "IDLE");
+	const [welcomeDismissed, setWelcomeDismissed] = useState(false);
 
 	useEffect(() => {
 		if (!userVisited && activeDialog) {
 			markUserVisited();
+
+			return;
 		}
+
+		if (userVisited || activeDialog || isBot()) {
+			return;
+		}
+
+		if (lifecycleCoordinator.getPhase() === "IDLE") {
+			return;
+		}
+
+		return lifecycleCoordinator.onPhase("IDLE", () => {
+			setIsIdle(true);
+		});
 	}, [activeDialog, userVisited, markUserVisited]);
+
+	const showWelcome = !welcomeDismissed && !userVisited && !activeDialog && !isBot() && isIdle;
 
 	/**
 	 * Dismisses the welcome dialog and records the visit.
@@ -117,7 +134,7 @@ const AppContent: FC = () => {
 	 * handleCloseWelcome();
 	 */
 	const handleCloseWelcome = () => {
-		setShowWelcome(false);
+		setWelcomeDismissed(true);
 		markUserVisited();
 	};
 
