@@ -1,3 +1,10 @@
+## [8.2.9](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.8...v8.2.9) (2026-10-16)
+
+
+### Bug Fixes
+
+* **lighthouse:** return 404 for missing static assets and remove unused preconnect ([3c2acb6](https://github.com/jbelew/nms_optimizer-web/commit/3c2acb636d2e251b7ae397efd2a40d41f4453f62))
+
 ## [8.2.8](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.7...v8.2.8) (2026-10-16)
 
 
