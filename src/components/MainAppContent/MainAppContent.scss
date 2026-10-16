@@ -35,6 +35,7 @@ $panel-border: 1px solid var(--gray-6);
 		}
 
 		@media (width < 640px) {
+			background-color: var(--accent-3);
 			display: flex;
 			flex-direction: column;
 			max-width: fit-content;
@@ -115,6 +116,10 @@ $panel-border: 1px solid var(--gray-6);
 
 		@media (width < 640px) {
 			margin-top: 2px;
+
+			body.a11y-font & {
+				margin-top: 0;
+			}
 		}
 	}
 
