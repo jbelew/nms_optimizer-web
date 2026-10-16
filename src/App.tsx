@@ -116,10 +116,6 @@ const AppContent: FC = () => {
 			return;
 		}
 
-		if (lifecycleCoordinator.getPhase() === "IDLE") {
-			return;
-		}
-
 		return lifecycleCoordinator.onPhase("IDLE", () => {
 			setIsIdle(true);
 		});

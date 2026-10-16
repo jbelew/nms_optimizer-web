@@ -275,8 +275,8 @@
     "semantic_hash": ""
   },
   "src/App.tsx": {
-    "mtime": 1792169371.2254763,
-    "ast_hash": "2ef7afe3b5f1e700efe0c506d676d5d1",
+    "mtime": 1792169897.007252,
+    "ast_hash": "5a580a0e466bd3f91cff6fde9507eaeb",
     "semantic_hash": ""
   },
   "src/components/AppDialog/Base/AppDialog.test.tsx": {
@@ -1725,13 +1725,13 @@
     "semantic_hash": ""
   },
   "src/utils/browser/environment.test.ts": {
-    "mtime": 1792169101.9347954,
-    "ast_hash": "448a6c4b1b85de840e532ce078534d94",
+    "mtime": 1792169839.5061352,
+    "ast_hash": "93ac50507896ebecda4255d32f0f49a9",
     "semantic_hash": ""
   },
   "src/utils/browser/environment.ts": {
-    "mtime": 1792169567.1024823,
-    "ast_hash": "cf65fe548834d76d94790140241da98a",
+    "mtime": 1792169893.5461936,
+    "ast_hash": "313d168532940a8a7675ddf1d6c04316",
     "semantic_hash": ""
   },
   "src/utils/browser/platformResolver.ts": {

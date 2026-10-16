@@ -51,6 +51,29 @@ describe("environment utilities", () => {
 			expect(isBot()).toBe(true);
 		});
 
+		it("should return false for standard Google Chrome with userAgentData brands", () => {
+			vi.stubGlobal("navigator", {
+				userAgent:
+					"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
+				userAgentData: {
+					brands: [
+						{ brand: "Chromium", version: "135" },
+						{ brand: "Google Chrome", version: "135" },
+						{ brand: "Not-A.Brand", version: "8" },
+					],
+				},
+				webdriver: false,
+			});
+			vi.stubGlobal("document", {
+				documentElement: {
+					classList: {
+						contains: () => false,
+					},
+				},
+			});
+			expect(isBot()).toBe(false);
+		});
+
 		it("should return false if no bot indicators are present", () => {
 			vi.stubGlobal("navigator", { userAgent: "Mozilla/5.0", webdriver: false });
 			vi.stubGlobal("document", {

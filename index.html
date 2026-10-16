@@ -163,10 +163,13 @@
 				// Environment Detection
 				const botPattern =
 					/bot|crawler|spider|headless|phantom|webdriver|googlebot|google-inspectiontool|lighthouse|chrome-lighthouse/i;
+				const botBrandPattern = /headless|lighthouse|phantom|webdriver/i;
 				const hasBotBrand =
 					navigator.userAgentData &&
 					Array.isArray(navigator.userAgentData.brands) &&
-					navigator.userAgentData.brands.some((b) => b && botPattern.test(b.brand || ""));
+					navigator.userAgentData.brands.some(
+						(b) => b && botBrandPattern.test(b.brand || "")
+					);
 				if (
 					botPattern.test(navigator.userAgent) ||
 					navigator.webdriver === true ||

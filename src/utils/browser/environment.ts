@@ -20,7 +20,14 @@ import { Logger } from "@/utils/system/monitoring";
  * @category Utilities
  */
 const BOT_USER_AGENT_PATTERN =
-	/bot|crawl|spider|slurp|mediapartners|facebookexternalhit|ia_archiver|google|lighthouse|chrome-lighthouse|pingdom|uptime|speedcurve|headless|phantom|webdriver|pinterest|whatsapp|twitterbot|linkedinbot|embedly|quora|outbrain|rogerbot|bufferbot|duckduckbot|semrushbot|ahrefsbot|mj12bot|dotbot|archive\.org|baidu/i;
+	/bot|crawl|spider|slurp|mediapartners|facebookexternalhit|ia_archiver|googlebot|google-inspectiontool|adsbot-google|apis-google|lighthouse|chrome-lighthouse|pingdom|uptime|speedcurve|headless|phantom|webdriver|pinterest|whatsapp|twitterbot|linkedinbot|embedly|quora|outbrain|rogerbot|bufferbot|duckduckbot|semrushbot|ahrefsbot|mj12bot|dotbot|archive\.org|baidu/i;
+
+/**
+ * A regex pattern matching automated or headless browser brand tokens in `navigator.userAgentData.brands`.
+ *
+ * @category Utilities
+ */
+const BOT_BRAND_PATTERN = /headless|lighthouse|phantom|webdriver/i;
 
 /**
  * Detects whether the current visitor is likely a bot or web crawler.
@@ -69,7 +76,7 @@ export function isBot(): boolean {
 
 		if (
 			uaData?.brands?.some(
-				(b) => typeof b.brand === "string" && BOT_USER_AGENT_PATTERN.test(b.brand)
+				(b) => typeof b.brand === "string" && BOT_BRAND_PATTERN.test(b.brand)
 			)
 		) {
 			return true;
