@@ -1,7 +1,8 @@
 {
 	"$schema": "https://unpkg.com/knip@6/schema.json",
 	"entry": [
-		"scripts/**/*.{js,mjs,cjs}",
+		"index.html!",
+		"scripts/**/*.{js,mjs,cjs}!",
 		".storybook/**/*.{ts,tsx,js}",
 		"src/**/*.stories.{ts,tsx}",
 		"src/**/*.test.{ts,tsx}",
@@ -9,7 +10,14 @@
 		"functions/**/*.{ts,js}",
 		"src/utils/system/sentryMock.ts"
 	],
-	"project": ["src/**/*.{ts,tsx,js,jsx}", "scripts/**/*.{js,mjs,cjs}", "shared/**/*.{ts,js}"],
+	"project": [
+		"src/**/*.{ts,tsx,js,jsx}!",
+		"!src/test/**",
+		"!src/**/*.test.{ts,tsx}",
+		"!src/**/*.stories.{ts,tsx}",
+		"scripts/**/*.{js,mjs,cjs}!",
+		"shared/**/*.{ts,js}"
+	],
 	"ignore": ["typedoc.json"],
 	"ignoreDependencies": ["@semantic-release/github"]
 }

@@ -30,6 +30,7 @@
 		"lint:md:fix": "markdownlint-cli2 --fix",
 		"lint:circular": "bunx madge --circular --extensions ts,tsx --ts-config tsconfig.json src/",
 		"lint:knip": "bunx knip",
+		"lint:knip:prod": "bunx knip --production",
 		"size": "bunx size-limit",
 		"bench": "bun scripts/run-bench.mjs",
 		"bench:build": "bun run build && bun scripts/run-bench.mjs",

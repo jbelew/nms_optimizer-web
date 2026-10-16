@@ -68,7 +68,12 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build, onApply }) => {
 	return (
 		<div className="grid grid-cols-[1fr_auto_auto] items-center gap-2">
 			<Flex align="center" gap="1" minWidth="0">
-				<StackIcon className="shrink-0" color="cyan" height="15" width="15" />
+				<StackIcon
+					className="shrink-0"
+					height="15"
+					style={{ color: "var(--accent-a11)" }}
+					width="15"
+				/>
 				<Text size={isSmallAndUp ? "3" : "2"} weight="medium">
 					{build.title}
 				</Text>
@@ -94,9 +99,9 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build, onApply }) => {
 				onClick={() => onApply(build)}
 				radius="medium"
 				size="1"
-				variant="solid"
+				variant="soft"
 			>
-				<MagicWandIcon height="15" width="15" />
+				<MagicWandIcon height="15" style={{ color: "var(--accent-a11)" }} width="15" />
 				{t("techTree.recommendedBuilds.applyBuild", "Apply Build")}
 			</Button>
 		</div>
@@ -143,7 +148,12 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds, techTre
 			<Flex direction="column" gap="1" width="100%">
 				<Flex align="center" justify="between" width="100%">
 					<Flex align="center" gap="2">
-						<LayersIcon className="shrink-0" color="cyan" height="16" width="16" />
+						<LayersIcon
+							className="shrink-0"
+							height="18"
+							style={{ color: "var(--accent-a11)" }}
+							width="18"
+						/>
 						<h2 className="heading-styled">
 							{t("techTree.recommendedBuilds.header", "Recommended Builds")}
 						</h2>
