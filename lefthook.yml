@@ -52,7 +52,7 @@ pre-commit:
 
           - name: prettier
             tags: [format]
-            glob: "{src/**/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},README.md,public/assets/**/*.md}"
+            glob: "{src/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},src/**/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},README.md,public/assets/**/*.md}"
             run: bunx prettier --cache --cache-location node_modules/.cache/prettier/.prettier-cache --write {staged_files}
             stage_fixed: true
 
@@ -96,7 +96,7 @@ pre-push:
 
           - name: format
             tags: [format]
-            glob: "{src/**/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},README.md,public/assets/**/*.md}"
+            glob: "{src/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},src/**/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},README.md,public/assets/**/*.md}"
             run: bunx prettier --cache --cache-location node_modules/.cache/prettier/.prettier-cache --check {push_files}
 
           - name: typecheck

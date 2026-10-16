@@ -55,14 +55,20 @@
 		background-color: #fff;
 		background-image:
 			linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
-			image-set(url("/assets/img/background.webp") 1x, url("/assets/img/background@2x.webp") 2x);
+			image-set(
+				url("/assets/img/background.webp") 1x,
+				url("/assets/img/background@2x.webp") 2x
+			);
 	}
 
 	/* 3. Accessibility Mode Background */
 	html.background-visible body.a11y-font {
 		background-image:
 			linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)),
-			image-set(url("/assets/img/background.webp") 1x, url("/assets/img/background@2x.webp") 2x);
+			image-set(
+				url("/assets/img/background.webp") 1x,
+				url("/assets/img/background@2x.webp") 2x
+			);
 	}
 }
 
