@@ -12,7 +12,7 @@ import { VitePWA } from "vite-plugin-pwa";
 import { splashScreen } from "vite-plugin-splash-screen";
 
 import type { PreRenderedAsset, PreRenderedChunk } from "rolldown";
-import type { UserConfig } from "vite";
+import type { PreviewServer, UserConfig, ViteDevServer } from "vite";
 
 import packageJson from "./package.json" with { type: "json" };
 import { markdownBundlePlugin } from "./scripts/vite-plugin-markdown-bundle.mjs";
@@ -27,6 +27,44 @@ const DEFAULT_SHORTCUT_ICONS = [
 		type: "image/png",
 	},
 ];
+
+/**
+ * Registers a post-hook middleware that prevents Vite's `htmlFallbackMiddleware`
+ * from serving `/index.html` (`200 OK`) for missing `/.well-known/*` or static
+ * file requests with extensions (such as `/.well-known/ai-catalog.json` probed
+ * by Lighthouse 13.5+).
+ *
+ * @remarks
+ * Because the returned function runs as a Vite post-hook, it executes after
+ * static/public asset serving (`sirv` / `serveStaticMiddleware`) and
+ * `htmlFallbackMiddleware`, but immediately before `indexHtmlMiddleware`.
+ * Restoring `req.url` to `req.originalUrl` causes `indexHtmlMiddleware` to skip
+ * the request and delegate to Vite's `notFoundMiddleware` (`404 Not Found`),
+ * matching production Cloudflare Pages routing in `functions/[[path]].js`.
+ *
+ * @param {PreviewServer | ViteDevServer} server - The Vite dev or preview server instance.
+ * @returns {() => void} A post-hook callback that attaches the 404 guard middleware.
+ */
+function attachStaticAsset404Guard(server: PreviewServer | ViteDevServer): () => void {
+	return () => {
+		server.middlewares.use((req, _res, next) => {
+			const originalUrl = req.originalUrl ?? req.url ?? "";
+			const pathname = originalUrl.split("?")[0];
+			const lastSegment = pathname.split("/").filter(Boolean).pop() ?? "";
+			const isNonHtmlFileRequest =
+				lastSegment.includes(".") && !lastSegment.endsWith(".html");
+
+			if (
+				req.url === "/index.html" &&
+				(pathname.startsWith("/.well-known/") || isNonHtmlFileRequest)
+			) {
+				req.url = originalUrl;
+			}
+
+			next();
+		});
+	};
+}
 
 /**
  * Vite 8 / Rolldown Configuration
@@ -247,6 +285,11 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 			},
 		},
 		plugins: [
+			{
+				configurePreviewServer: attachStaticAsset404Guard,
+				configureServer: attachStaticAsset404Guard,
+				name: "static-asset-404-guard",
+			},
 			markdownBundlePlugin(),
 			...(!process.env.STORYBOOK_BUILD
 				? [

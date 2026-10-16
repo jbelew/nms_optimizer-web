@@ -1910,8 +1910,8 @@
     "semantic_hash": ""
   },
   "vite.config.ts": {
-    "mtime": 1792005568.8729484,
-    "ast_hash": "90c7243de6eadb30a5b918ba304c79fe",
+    "mtime": 1792171423.3149486,
+    "ast_hash": "5df63442259eea7fdc10ebb62f0cca41",
     "semantic_hash": ""
   },
   "vitest-mocks/virtual-markdown-bundle.ts": {
