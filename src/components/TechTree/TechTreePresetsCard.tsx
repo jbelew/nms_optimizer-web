@@ -67,12 +67,12 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build, onApply }) => {
 
 	return (
 		<div className="grid grid-cols-[1fr_auto_auto] items-center gap-2">
-			<Flex align="center" gap="1" minWidth="0">
+			<Flex align="center" gap="2" minWidth="0">
 				<StackIcon
 					className="shrink-0"
-					height="15"
+					height="18"
 					style={{ color: "var(--accent-a11)" }}
-					width="15"
+					width="18"
 				/>
 				<Text size={isSmallAndUp ? "3" : "2"} weight="medium">
 					{build.title}
