@@ -23,18 +23,22 @@ $panel-border: 1px solid var(--gray-6);
 	}
 
 	&__card {
-		// Desktop: use backdrop-filter for dynamic blur
-		@media (width >= 640px) {
-			backdrop-filter: blur(64px);
-			background-color: var(--accent-a3);
+		background-color: var(--accent-a3);
 
-			:is(.light, .light-theme) & {
-				background-color: var(--accent-1);
-			}
+		:is(.light, .light-theme) & {
+			background-color: var(--accent-1);
 		}
 
-		@media (width <= 639px) {
+		// Desktop: use backdrop-filter for dynamic blur over background image
+		@media (width >= 640px) {
+			backdrop-filter: blur(64px);
+		}
+
+		@media (width < 640px) {
+			display: flex;
+			flex-direction: column;
 			max-width: fit-content;
+			min-height: calc(100dvh - 3rem);
 		}
 
 		@media (width >= 1024px) {
@@ -58,13 +62,6 @@ $panel-border: 1px solid var(--gray-6);
 			min-height: 100dvh;
 		}
 
-		// Mobile: Fill remaining height (minus container padding)
-		@media (width < 640px) {
-			display: flex;
-			flex-direction: column;
-			min-height: calc(100dvh - 3rem);
-		}
-
 		// Accessibility override
 		body.a11y-font & {
 			backdrop-filter: none;
@@ -73,7 +70,7 @@ $panel-border: 1px solid var(--gray-6);
 	}
 
 	&__background-wrapper {
-		@media (width <= 639px) {
+		@media (width < 640px) {
 			position: relative;
 		}
 	}
@@ -116,7 +113,7 @@ $panel-border: 1px solid var(--gray-6);
 		min-width: 0;
 		text-wrap: balance;
 
-		@media (width <=640px) {
+		@media (width < 640px) {
 			margin-top: 2px;
 		}
 	}

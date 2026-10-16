@@ -82,13 +82,14 @@
 			background-color: var(--color-panel-translucent);
 		}
 
-		// Mobile: use pre-blurred background image for better performance
-		@media (width <= 639px) {
-			background-image: url("/assets/img/background@mobile-blurred.webp");
-			background-position: center top;
-			background-repeat: no-repeat;
-			background-size: cover;
+		// Mobile: use solid theme color without background image
+		@media (width < 640px) {
+			background-color: var(--accent-a3);
 			max-width: fit-content;
+
+			:is(.light, .light-theme) & {
+				background-color: var(--accent-1);
+			}
 		}
 
 		@media (width >= 1024px) {
@@ -96,11 +97,10 @@
 			border-radius: var(--radius-4);
 		}
 
-		// Accessibility override: disable background image
+		// Accessibility override
 		body.a11y-font & {
-			@media (width <= 639px) {
+			@media (width < 640px) {
 				background-color: var(--color-panel-solid);
-				background-image: none !important;
 			}
 		}
 	}

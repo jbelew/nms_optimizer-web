@@ -775,8 +775,8 @@
     "semantic_hash": ""
   },
   "src/components/MainAppContent/MainAppGridSection.tsx": {
-    "mtime": 1790284792.9988897,
-    "ast_hash": "d1ef9c3bdcdcb9387f3cdf7bc21cf497",
+    "mtime": 1792179385.369748,
+    "ast_hash": "74244bef161186d0f003a867a958ff8e",
     "semantic_hash": ""
   },
   "src/components/MainAppContent/MainAppLayout.test.tsx": {
@@ -805,8 +805,8 @@
     "semantic_hash": ""
   },
   "src/components/MessageSpinner/MessageSpinner.tsx": {
-    "mtime": 1792175407.5376651,
-    "ast_hash": "5208229d86ba8a73ce0be31abe1ec5b6",
+    "mtime": 1792180193.8661199,
+    "ast_hash": "55704218f3d912335a11416be27408c7",
     "semantic_hash": ""
   },
   "src/components/MobileToolbar/MobileToolbar.stories.tsx": {
@@ -1005,8 +1005,8 @@
     "semantic_hash": ""
   },
   "src/components/TechTree/TechTreeSkeleton.tsx": {
-    "mtime": 1789933639.0,
-    "ast_hash": "b8a2857264119ed774e322a56c9718a2",
+    "mtime": 1792179386.4709592,
+    "ast_hash": "5c83cbc6817fa5cfac50a635bd0f7cbd",
     "semantic_hash": ""
   },
   "src/components/TechTree/useTechTreeContext.ts": {
@@ -1820,8 +1820,8 @@
     "semantic_hash": ""
   },
   "src/utils/system/splashScreen.test.ts": {
-    "mtime": 1792009420.005903,
-    "ast_hash": "3062a27fc01131ceb7bfe9e94033c1ad",
+    "mtime": 1792178555.4084425,
+    "ast_hash": "490330e5163970c19096427812fe3c19",
     "semantic_hash": ""
   },
   "src/utils/system/splashScreen.ts": {
@@ -1875,8 +1875,8 @@
     "semantic_hash": ""
   },
   "vite.config.ts": {
-    "mtime": 1792171974.251655,
-    "ast_hash": "76068319de9ff15dcb78277dd17b6431",
+    "mtime": 1792176242.2928066,
+    "ast_hash": "5df63442259eea7fdc10ebb62f0cca41",
     "semantic_hash": ""
   },
   "vitest-mocks/virtual-markdown-bundle.ts": {
@@ -2237,6 +2237,11 @@
   "scripts/vite-plugin-purge-radix-css.test.mjs": {
     "mtime": 1792005568.8729484,
     "ast_hash": "730a81ea2a4dcae6f620d2e7cf75edff",
+    "semantic_hash": ""
+  },
+  "src/components/MessageSpinner/MessageSpinner.test.tsx": {
+    "mtime": 1792180195.21252,
+    "ast_hash": "f77e14f8fa894a7768257d3ae312fdfb",
     "semantic_hash": ""
   }
 }

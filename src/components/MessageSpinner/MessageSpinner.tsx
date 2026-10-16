@@ -13,37 +13,87 @@
 
 import "./MessageSpinner.scss";
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Progress, Spinner, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+/** Delay in milliseconds before fading in the flavor message during a solve. */
+export const FLAVOR_MESSAGE_DELAY_MS = 750;
+
 /**
  * Props for the `MessageSpinner` component.
+ *
+ * @category Components
  */
-interface MessageSpinnerProps {
-	/** The primary message to display below the spinner. */
+export interface MessageSpinnerProps {
+	/** The primary message to display. */
 	initialMessage?: string;
-	/** If `true`, the spinner is absolutely positioned to cover its parent container. Defaults to `true`. */
+	/** If `true`, the overlay is absolutely positioned to cover its parent container. Defaults to `true`. */
 	isInlay?: boolean;
-	/** Whether the spinner and overlay are visible. */
+	/** Whether the loading or progress overlay is visible. */
 	isVisible: boolean;
 	/** The current progress value (0-100). */
 	progressPercent?: number;
-	/** Whether to display the progress bar alongside the spinner. */
+	/** Whether to display the progress bar instead of the indeterminate spinner. */
 	showProgress?: boolean;
 }
 
 /**
- * A comprehensive loading overlay component.
+ * Subcomponent that selects and fades in a single randomized flavor message
+ * after a short delay so quick solves complete without visual clutter.
+ *
+ * @returns {JSX.Element} The rendered flavor text element.
+ */
+const DelayedFlavorMessage: React.FC = () => {
+	const { t } = useTranslation();
+	const [message, setMessage] = useState<string>("");
+
+	useEffect(() => {
+		const timeoutId = setTimeout(() => {
+			const randomMessages = t("messageSpinner.randomMessages", {
+				returnObjects: true,
+			});
+
+			if (Array.isArray(randomMessages) && randomMessages.length > 0) {
+				const randomIndex = Math.floor(Math.random() * randomMessages.length);
+				const selected = randomMessages[randomIndex];
+
+				if (typeof selected === "string") {
+					setMessage(selected);
+				}
+			}
+		}, FLAVOR_MESSAGE_DELAY_MS);
+
+		return () => {
+			clearTimeout(timeoutId);
+		};
+	}, [t]);
+
+	return (
+		<div className="flex h-12 justify-center pt-3 font-medium">
+			<Text
+				className={`MessageSpinner__random w-full text-center text-xs sm:text-sm ${
+					message ? "MessageSpinner__random--visible" : ""
+				}`}
+			>
+				{message || "\u00A0"}
+			</Text>
+		</div>
+	);
+};
+
+/**
+ * A loading and optimization progress overlay component.
  *
  * @remarks
- * It features a spinning icon, a localized primary message, and an optional
- * progress bar. While visible, it cycles through a set of "random flavored"
- * status messages (e.g., "Adjusting warp coils...") to improve perceived performance.
+ * Renders an indeterminate `<Spinner />` with an optional localized heading when
+ * `showProgress` is omitted or `false` (e.g., Suspense skeletons). When `showProgress`
+ * is `true` (e.g., during layout optimization), hides the `<Spinner />` and instead
+ * displays a determinate `<Progress />` bar accompanied by a delayed flavor message.
  *
  * @param {MessageSpinnerProps} props - Component properties.
  *
- * @returns {JSX.Element | null} The rendered loading UI, or `null` if not visible.
+ * @returns {JSX.Element | null} The rendered loading or progress UI, or `null` if not visible.
  *
  * @component
  *
@@ -51,8 +101,13 @@ interface MessageSpinnerProps {
  *
  * @example
  * ```tsx
- * <MessageSpinner isVisible={solving} progressPercent={45} showProgress={true} initialMessage="Optimizing..." />
- * // renders loading overlay with progress bar
+ * <MessageSpinner
+ *   isVisible={solving}
+ *   progressPercent={45}
+ *   showProgress={true}
+ *   initialMessage="Optimizing!"
+ * />
+ * // renders progress overlay without spinner
  * ```
  */
 export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
@@ -60,64 +115,9 @@ export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 	isInlay = true,
 	isVisible,
 	progressPercent,
-	showProgress,
+	showProgress = false,
 }) => {
-	const [currentRandomMessage, setCurrentRandomMessage] = useState<string>("");
-	const [showRandomMessage, setShowRandomMessage] = useState<boolean>(false);
 	const { t } = useTranslation();
-
-	const i18nRandomMessages = t("messageSpinner.randomMessages", {
-		returnObjects: true,
-	}) as string[];
-
-	const randomMessageTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-	/**
-	 * Selects and fades in a new random flavor message.
-	 */
-	const setRandomMessage = useCallback(() => {
-		setShowRandomMessage(false); // Fade out
-		randomMessageTimeoutRef.current = setTimeout(() => {
-			const randomIndex = Math.floor(Math.random() * i18nRandomMessages.length);
-			setCurrentRandomMessage(i18nRandomMessages[randomIndex]);
-			setShowRandomMessage(true); // Fade in
-		}, 500); // Corresponds to the transition duration
-	}, [i18nRandomMessages]);
-
-	useEffect(() => {
-		let messageTimeout: NodeJS.Timeout | null = null;
-
-		if (isVisible) {
-			// Set the first message after a delay
-			messageTimeout = setTimeout(setRandomMessage, 500); // Fade in after 500ms
-		}
-
-		// Cleanup function
-		return () => {
-			if (messageTimeout) {
-				clearTimeout(messageTimeout);
-			}
-		};
-	}, [isVisible, setRandomMessage]);
-
-	useEffect(() => {
-		if (!isVisible) {
-			if (randomMessageTimeoutRef.current) {
-				clearTimeout(randomMessageTimeoutRef.current);
-				randomMessageTimeoutRef.current = null;
-			}
-
-			// Track this timeout to avoid memory leaks on unmount
-			const resetTimeout = setTimeout(() => {
-				setCurrentRandomMessage("");
-				setShowRandomMessage(false);
-			}, 0);
-
-			return () => {
-				clearTimeout(resetTimeout);
-			};
-		}
-	}, [isVisible]);
 
 	if (!isVisible) {
 		return null;
@@ -128,10 +128,11 @@ export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 	}`;
 
 	const hasMessage = initialMessage != null;
+	const hasProgress = showProgress && progressPercent !== undefined;
 
 	return (
 		<div aria-live="polite" className={containerClasses.trim()} role="status">
-			<Spinner className="MessageSpinner__spinner" />
+			{!showProgress && <Spinner className="MessageSpinner__spinner" />}
 
 			{hasMessage && (
 				<>
@@ -139,35 +140,16 @@ export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 						{initialMessage}
 					</Text>
 
-					<div className="w-3/4 sm:w-1/2">
-						{progressPercent !== undefined && showProgress ? (
-							<div>
-								<Progress
-									aria-label={
-										initialMessage || t("messageSpinner.loadingProgress")
-									}
-									value={Math.min(
-										isNaN(progressPercent) ? 0 : progressPercent,
-										100
-									)}
-									variant="soft"
-								/>
-								<div className="flex h-12 justify-center pt-3 font-medium">
-									<Text
-										className={`MessageSpinner__random w-full text-center text-xs sm:text-sm ${
-											showRandomMessage
-												? "MessageSpinner__random--visible"
-												: ""
-										}`}
-									>
-										{currentRandomMessage || "\u00A0"}
-									</Text>
-								</div>
-							</div>
-						) : (
-							<div className="h-1.5" />
-						)}
-					</div>
+					{hasProgress && (
+						<div className="w-3/4 sm:w-1/2">
+							<Progress
+								aria-label={initialMessage || t("messageSpinner.loadingProgress")}
+								value={Math.min(isNaN(progressPercent) ? 0 : progressPercent, 100)}
+								variant="soft"
+							/>
+							<DelayedFlavorMessage />
+						</div>
+					)}
 				</>
 			)}
 		</div>

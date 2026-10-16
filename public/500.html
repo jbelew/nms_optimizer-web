@@ -48,14 +48,9 @@
 	<style>
 		body {
 			background-color: #000;
-			background-image: image-set(
-				url("/assets/img/background.webp") 1x,
-				url("/assets/img/background@2x.webp") 2x
-			);
 			background-position: center;
 			background-repeat: no-repeat;
 			background-size: cover;
-			background-attachment: fixed;
 			color: #e2e8f0;
 			font-family:
 				-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
@@ -68,11 +63,20 @@
 			text-align: center;
 		}
 
+		@media (width >= 640px) {
+			body {
+				background-image: image-set(
+					url("/assets/img/background.webp") 1x,
+					url("/assets/img/background@2x.webp") 2x
+				);
+				background-attachment: fixed;
+			}
+		}
+
 		@media (width < 640px) {
 			body {
-				background-image: url("/assets/img/background@mobile-blurred.webp");
-				background-position: center top;
-				background-attachment: scroll;
+				background-color: #082c36;
+				background-image: none;
 			}
 		}
 

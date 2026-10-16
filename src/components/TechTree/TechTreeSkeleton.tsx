@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, ScrollArea, Skeleton } from "@radix-ui/themes";
+import { useTranslation } from "react-i18next";
 
 import { MessageSpinner } from "@/components/MessageSpinner/MessageSpinner";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
@@ -8,6 +9,7 @@ import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
  * A responsive skeleton component for the tech tree.
  */
 export const TechTreeSkeleton: React.FC<{ height?: null | number }> = ({ height }) => {
+	const { t } = useTranslation();
 	const isLarge = useBreakpoint("1024px");
 
 	return (
@@ -23,7 +25,11 @@ export const TechTreeSkeleton: React.FC<{ height?: null | number }> = ({ height 
 						padding: "var(--space-5)",
 					}}
 				>
-					<MessageSpinner initialMessage="Loading Tech" isInlay={true} isVisible={true} />
+					<MessageSpinner
+						initialMessage={t("techTree.loading")}
+						isInlay={true}
+						isVisible={true}
+					/>
 				</ScrollArea>
 			) : (
 				<aside className="w-full grow pt-4" style={{ minHeight: "50vh" }}>

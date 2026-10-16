@@ -11,7 +11,6 @@ import {
 } from "@/components/GridTable/GridTable";
 import { MessageSpinner } from "@/components/MessageSpinner/MessageSpinner";
 import { useGridStore } from "@/store/grid/gridStore";
-import { useTechTreeLoadingStore } from "@/store/ui/uiStore";
 
 import { ShipSelectionHeading } from "./ShipSelectionHeading";
 import { useMainAppGlobal, useMainAppLayout, useMainAppOptimization } from "./useMainAppContext";
@@ -24,7 +23,6 @@ export const MainAppGridSection: React.FC = () => {
 	const { containerRef, gridTableRef } = useMainAppLayout();
 	const { isSharedGrid } = useMainAppGlobal();
 	const { progressPercent, solving } = useMainAppOptimization();
-	const isTechTreeLoading = useTechTreeLoadingStore((state) => state.isLoading);
 	const gridHeight = useGridStore((state) => state.grid.height);
 
 	return (
@@ -40,14 +38,10 @@ export const MainAppGridSection: React.FC = () => {
 					<div className="relative">
 						{!isSharedGrid && (
 							<MessageSpinner
-								initialMessage={
-									isTechTreeLoading
-										? t("techTree.loading")
-										: t("gridTable.optimizing")
-								}
+								initialMessage={t("gridTable.optimizing")}
 								isVisible={solving}
 								progressPercent={progressPercent}
-								showProgress={!isTechTreeLoading}
+								showProgress={true}
 							/>
 						)}
 						<GridTableGrid

@@ -190,20 +190,19 @@
 					left: 0;
 					width: 100%;
 					height: 100%;
-					background-color: #000;
+					background-color: #082c36;
 					background-position: center;
 					background-repeat: no-repeat;
 					background-size: cover;
-					background-image: image-set(
-						url("/assets/img/background.webp") 1x,
-						url("/assets/img/background@2x.webp") 2x
-					);
 					z-index: -1;
 				}
-				@media (max-width: 640px) {
+				@media (min-width: 640px) {
 					body::before {
-						background-image: url("/assets/img/background@mobile-blurred.webp");
-						background-position: center top;
+						background-color: #000;
+						background-image: image-set(
+							url("/assets/img/background.webp") 1x,
+							url("/assets/img/background@2x.webp") 2x
+						);
 					}
 				}
 			</style>
@@ -326,15 +325,8 @@
 		<link
 			rel="preload"
 			as="image"
-			href="/assets/img/background@mobile-blurred.webp"
-			media="(max-width: 640px)"
-			fetchpriority="high"
-		/>
-		<link
-			rel="preload"
-			as="image"
 			imagesrcset="/assets/img/background.webp 1x, /assets/img/background@2x.webp 2x"
-			media="(min-width: 641px)"
+			media="(min-width: 640px)"
 			fetchpriority="low"
 		/>
 

@@ -47,7 +47,7 @@ describe("splashScreen", () => {
 
 			expect(html).toContain("/assets/img/background.webp");
 			expect(html).toContain("/assets/img/background@2x.webp");
-			expect(html).toContain("/assets/img/background@mobile-blurred.webp");
+			expect(html).not.toContain("/assets/img/background@mobile-blurred.webp");
 		}
 	});
 

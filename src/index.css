@@ -36,61 +36,41 @@
 /* THEME & BACKGROUND SYSTEM                   */
 /* ============================================ */
 
-/* 1. Global Background Canvas */
-html.background-visible body {
-	background-color: #000;
-	background-image: image-set(
-		url("/assets/img/background.webp") 1x,
-		url("/assets/img/background@2x.webp") 2x
-	);
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-attachment: fixed;
-}
+/* 1. Desktop & Tablet Background Canvas */
+@media (width >= 640px) {
+	html.background-visible body {
+		background-color: #000;
+		background-image: image-set(
+			url("/assets/img/background.webp") 1x,
+			url("/assets/img/background@2x.webp") 2x
+		);
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-attachment: fixed;
+	}
 
-/* 2. Light Theme Background */
-html.background-visible:is(.light, .light-theme) body {
-	background-color: #fff;
-	background-image:
-		linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
-		image-set(url("/assets/img/background.webp") 1x, url("/assets/img/background@2x.webp") 2x);
-}
+	/* 2. Light Theme Background */
+	html.background-visible:is(.light, .light-theme) body {
+		background-color: #fff;
+		background-image:
+			linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+			image-set(url("/assets/img/background.webp") 1x, url("/assets/img/background@2x.webp") 2x);
+	}
 
-/* 3. Accessibility Mode Background */
-html.background-visible body.a11y-font {
-	background-image:
-		linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)),
-		image-set(url("/assets/img/background.webp") 1x, url("/assets/img/background@2x.webp") 2x);
+	/* 3. Accessibility Mode Background */
+	html.background-visible body.a11y-font {
+		background-image:
+			linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)),
+			image-set(url("/assets/img/background.webp") 1x, url("/assets/img/background@2x.webp") 2x);
+	}
 }
 
 /* 4. Mobile Responsive Backgrounds */
 @media (width < 640px) {
-	/* Remove body background on mobile; the wrapper owns it instead */
+	/* Solid body canvas on mobile; no background image or blur filter */
 	html.background-visible body {
 		background-color: light-dark(white, #18191b);
-		background-image: none;
-	}
-
-	html.background-visible .main-app__background-wrapper {
-		background-image: url("/assets/img/background@mobile-blurred.webp");
-		background-position: center top;
-		background-repeat: no-repeat;
-		background-size: cover;
-	}
-
-	html.background-visible:is(.light, .light-theme) .main-app__background-wrapper {
-		background-image:
-			linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
-			url("/assets/img/background@mobile-blurred.webp");
-	}
-
-	/* A11y mode: no background images at all */
-	html.background-visible body.a11y-font {
-		background-image: none;
-	}
-
-	html.background-visible body.a11y-font .main-app__background-wrapper {
 		background-image: none;
 	}
 }
