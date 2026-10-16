@@ -2,6 +2,33 @@
 
 The full commit history for this project is available on [GitHub](https://github.com/jbelew/nms_optimizer-web/blob/main/CHANGELOG.md). A special thanks to [mateo-leal](https://github.com/mateo-leal) for the Spanish translation updates.
 
+## Version 8.3 – Smart Build Reset & Mobile Performance (2026-10-16)
+
+This update introduces a smarter "Reset Build" control that tracks layout and module changes, updates button labeling across all languages, and boosts mobile animation performance.
+
+- **Smart "Reset Build" Button:** Renamed the reset button from **Reset Grid** to **Reset Build** across all supported languages to better communicate that it restores both grid slots and default module selections.
+- **Context-Aware Reset:** The **Reset Build** button is now automatically disabled when your layout and module selections already match the default configuration, enabling instantly whenever you make changes to slots or module choices.
+- **Smoother Mobile Animations:** Streamlined the message spinner and removed heavy mobile background blur filters for smoother transitions and improved rendering performance on phones and tablets.
+
+## Version 8.2 – Corvette Guidance & Snappier Interactions (2026-10-10)
+
+This update brings back Corvette build guidance, resolves update prompt loops, speeds up dialog interactions on mobile, and refines module icons.
+
+- **Corvette Build Guidance:** Restored the helpful warning notification when switching to Corvettes, reminding you that limited space requires strategic technology choices.
+- **Reliable Update Prompts:** Fixed an issue where update notices could repeatedly appear in loops, ensuring the app updates smoothly and caches reliably.
+- **Snappier Dialogs & Touch Response:** Optimized interface responsiveness so opening module selection menus and interacting with grid cells responds noticeably faster on mobile devices.
+- **Accurate Exosuit Upgrade Icons:** Cleaned up hazard protection and suppressor upgrade icons (Aeration, Coolant, Radiation, Thermic, and Toxin) by removing incorrect class badges to match the in-game art.
+- **Visual & Onboarding Stability:** Eliminated the brief background flash during startup, added responsive artwork to error screens, and ensured the welcome guide reliably displays for Chrome users.
+
+## Version 8.1 – Seamless Updates & Installation (2026-10-09)
+
+This update streamlines application updates, integrates native app installation on mobile devices, and polishes technology tree indicators.
+
+- **Silent Background Updates:** The app now updates automatically in the background when your tab is idle or hidden, avoiding intrusive update pop-ups while you are planning your layouts. If you choose to refresh manually, the app verifies freshness directly with the server to load the latest version immediately.
+- **Native App Installation:** Android and Chromium browsers now use the clean, built-in browser install experience instead of a custom overlay, while iOS Safari retains tailored "Add to Home Screen" guidance.
+- **Bonus Indicator Fix:** Removed confusing warning indicators on single-module technologies that have no adjacency bonuses.
+- **Visual Polish:** Updated artwork for the **Barrel Ionizer** module and adjusted mobile header spacing for ship titles.
+
 ## Version 8.0 – NMS Cosmos Support (2026-09-24)
 
 Version 8.0 is here with full support for the **No Man's Sky Cosmos** update! We've added new technologies and in-game art, made the grid completely controllable from your keyboard, and packed in dozens of quality-of-life improvements to make planning your layouts smoother and faster.

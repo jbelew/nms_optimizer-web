@@ -9612,7 +9612,7 @@
       "label": "renderWithTheme()",
       "file_type": "code",
       "source_file": "src/components/MessageSpinner/MessageSpinner.test.tsx",
-      "source_location": "L28",
+      "source_location": "L29",
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_messagespinner_messagespinner_test_renderwiththeme",
@@ -19822,8 +19822,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_agents_code_style",
-      "community": 65,
-      "community_name": "AGENTS.md",
+      "community": 70,
+      "community_name": "Code Style Guidelines",
       "norm_label": "code-style.md"
     },
     {
@@ -19998,8 +19998,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_agents_issue_tracker",
-      "community": 66,
-      "community_name": "Issue tracker: GitHub",
+      "community": 65,
+      "community_name": "AGENTS.md",
       "norm_label": "issue-tracker.md"
     },
     {
@@ -43865,7 +43865,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/MessageSpinner/MessageSpinner.test.tsx",
-      "source_location": "L28",
+      "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_messagespinner_messagespinner_test",
@@ -69186,5 +69186,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "75cd032447e284c3dd1cc860bbe10f9c14323d07"
+  "built_at_commit": "db910a04c438b10abde246de23cccca24293413d"
 }
