@@ -9,7 +9,7 @@ import { shallow } from "zustand/shallow";
 import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
 import { Logger } from "@/utils/system/monitoring";
 
-import { validateModuleSelections } from "./techRules";
+import { resolveActiveTechVariant, validateModuleSelections } from "./techRules";
 
 /**
  * Metadata representing the calculated bonus status for a specific technology.
@@ -307,25 +307,8 @@ export interface TechStore {
 }
 
 /**
- * Resolves the active group definition for a specific technology.
- *
- * @param {TechStore} state - The technology store state draft.
- * @param {string} tech - The technology key.
- *
- * @returns {TechTreeItem | undefined} The active group item, or `undefined` if none exist.
- */
-const getActiveGroupForTech = (state: TechStore, tech: string): TechTreeItem | undefined => {
-	const activeGroupType = state.activeGroups[tech] || "normal";
-	const groups = state.techGroups[tech] || [];
-
-	return groups.length > 1
-		? groups.find((g) => g.type === activeGroupType) || groups[0]
-		: groups[0];
-};
-
-/**
  * Determines whether all currently checked modules match the default checked modules
- * for each technology's active group variant.
+ * for each technology's active Technology Variant.
  *
  * @param {TechStore} state - The technology store state draft.
  *
@@ -339,9 +322,12 @@ const computeIsDefaultModuleSelection = (state: TechStore): boolean => {
 	}
 
 	return techKeys.every((tech) => {
-		const activeGroup = getActiveGroupForTech(state, tech);
-		const defaultIds = activeGroup
-			? activeGroup.modules.filter((m) => m.checked).map((m) => m.id)
+		const activeVariant = resolveActiveTechVariant(
+			state.techGroups[tech],
+			state.activeGroups[tech]
+		);
+		const defaultIds = activeVariant
+			? activeVariant.modules.filter((m) => m.checked).map((m) => m.id)
 			: [];
 		const currentIds = state.checkedModules[tech] || [];
 
@@ -379,10 +365,13 @@ const syncAliases = (state: TechStore) => {
 const computeDefaultCheckedModules = (state: TechStore): Record<string, string[]> => {
 	return Object.keys(state.techGroups).reduce(
 		(acc, tech) => {
-			const activeGroup = getActiveGroupForTech(state, tech);
+			const activeVariant = resolveActiveTechVariant(
+				state.techGroups[tech],
+				state.activeGroups[tech]
+			);
 
-			if (activeGroup) {
-				const defaultIds = activeGroup.modules.filter((m) => m.checked).map((m) => m.id);
+			if (activeVariant) {
+				const defaultIds = activeVariant.modules.filter((m) => m.checked).map((m) => m.id);
 				const existingIds = state.checkedModules[tech];
 				acc[tech] =
 					existingIds && shallow(existingIds, defaultIds) ? existingIds : defaultIds;
@@ -535,8 +524,11 @@ export const useTechStore = create<TechStore>()(
 					const prev = state.checkedModules[tech] || [];
 					const updated = updater(prev);
 
-					const activeGroup = getActiveGroupForTech(state, tech);
-					const modules = activeGroup ? activeGroup.modules : [];
+					const activeVariant = resolveActiveTechVariant(
+						state.techGroups[tech],
+						state.activeGroups[tech]
+					);
+					const modules = activeVariant ? activeVariant.modules : [];
 
 					state.checkedModules[tech] = validateModuleSelections(prev, updated, modules);
 					syncAliases(state);

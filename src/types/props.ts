@@ -7,44 +7,10 @@
 import type { TechColor } from "./tech";
 
 /**
- * A dictionary of module lists, keyed by their grouping category (e.g., 'Procedural Upgrades').
+ * A dictionary of module lists, keyed by their Module Group category (e.g., `'upgrade'`, `'bonus'`).
  */
 export interface GroupedModules {
 	[key: string]: SelectionModule[];
-}
-
-/**
- * Properties for the `ModuleSelectionDialog` component.
- */
-export interface ModuleSelectionDialogProps {
-	/** Whether all modules in the dialog are selected. */
-	allModulesSelected: boolean;
-	/** Array of IDs for currently selected modules. */
-	currentCheckedModules: string[];
-	/** Modules organized into categories for display. **Must be provided.** */
-	groupedModules: GroupedModules;
-	/** Asynchronous callback to trigger an optimization using the current selection. */
-	handleOptimizeClick: () => Promise<void>;
-	/** Callback for the "Select All" toggle. */
-	handleSelectAllChange: (checked: "indeterminate" | boolean) => void;
-	/** Callback for individual module selection changes. */
-	handleValueChange: (newValues: string[]) => void;
-	/** Whether the "Select All" checkbox is in an indeterminate state. */
-	isIndeterminate: boolean;
-	/** Whether the dialog is currently visible. */
-	isOpen: boolean;
-	/** Optional callback triggered when the dialog closes. */
-	onClose: () => void;
-	/** The unique technology key. */
-	tech?: string;
-	/** Theme color for the technology icon/avatar. */
-	techColor: TechColor;
-	/** Icon filename for the main technology. */
-	techImage: null | string;
-	/** Localized name of the technology being configured. */
-	translatedTechName: string;
-	/** Optional mapping of module count thresholds to `[width, height]` Solver Window dimensions. */
-	windowRules?: Record<string, [number, number]>;
 }
 
 /**
@@ -59,7 +25,7 @@ export interface SelectionModule {
 	image: string;
 	/** Display name of the module. */
 	label: string;
-	/** Optional classification (e.g., 'upgrade'). */
+	/** Optional Module Group classification (e.g., `'upgrade'`). */
 	type?: string;
 }
 

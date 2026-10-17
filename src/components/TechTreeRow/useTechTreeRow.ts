@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
 import { useGridStore } from "@/store/grid/gridStore";
+import { getTechnologyTranslationKey, resolveActiveTechVariant } from "@/store/tech/techRules";
 import { useTechStore } from "@/store/tech/techStore";
 
 import { useTechOptimization } from "./useTechOptimization";
@@ -85,9 +86,7 @@ export const useTechTreeRow = ({
 		);
 
 	// Derived state
-	const activeGroup = techGroup?.length
-		? techGroup.find((g) => g.type === activeGroupType) || techGroup[0]
-		: null;
+	const activeGroup = resolveActiveTechVariant(techGroup, activeGroupType);
 	const modules = activeGroup?.modules || EMPTY_MODULES_ARRAY;
 	const moduleCount = activeGroup?.module_count || 0;
 
@@ -100,9 +99,7 @@ export const useTechTreeRow = ({
 	);
 
 	// Other logic specific to TechTreeRow
-	const translationKeyPart = techImage
-		? techImage.replace(/\.\w+$/, "").replace(/\//g, ".")
-		: tech;
+	const translationKeyPart = getTechnologyTranslationKey(tech, techImage);
 	const translatedTechName = t(`technologies.${translationKeyPart}`);
 
 	const baseImagePath = "/assets/img/tech/";

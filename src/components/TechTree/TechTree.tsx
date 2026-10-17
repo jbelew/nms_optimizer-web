@@ -20,9 +20,9 @@ export { TechTreeSkeleton } from "./TechTreeSkeleton";
  * selection interface and its Radix UI components (Avatar, Checkbox, Tooltip, etc.)
  * from the critical startup chunk, reducing initial JS load size and TBT.
  */
-const SharedModuleSelectionDialog = lazy(() =>
-	import("@/components/ModuleSelectionDialog/SharedModuleSelectionDialog").then((m) => ({
-		default: m.SharedModuleSelectionDialog,
+const ModuleSelectionDialog = lazy(() =>
+	import("@/components/ModuleSelectionDialog/ModuleSelectionDialog").then((m) => ({
+		default: m.ModuleSelectionDialog,
 	}))
 );
 
@@ -46,14 +46,14 @@ interface TechTreeProps {
  * @remarks
  * The `TechTree` component acts as the high-level manager for display and interaction
  * within the technology panel. It leverages {@link TechTreeProvider} to pass core optimization states,
- * renders child rows, and dynamically inserts {@link SharedModuleSelectionDialog} wrapped in `Suspense`.
+ * renders child rows, and dynamically inserts {@link ModuleSelectionDialog} wrapped in `Suspense`.
  *
  * @param {TechTreeProps} props - Component properties.
  *
  * @returns {JSX.Element} The rendered technology tree layout.
  *
  * @see {@link TechTreeProvider}
- * @see {@link SharedModuleSelectionDialog}
+ * @see {@link ModuleSelectionDialog}
  * @see {@link ./TechTree.test.tsx Unit Tests}
  * @see {@link ./TechTree.stories.tsx Storybook}
  *
@@ -83,7 +83,7 @@ export const TechTree: React.FC<TechTreeProps> = ({
 				<TechTreeContent techTree={techTree} />
 			</TechTreeRoot>
 			<Suspense fallback={null}>
-				<SharedModuleSelectionDialog />
+				<ModuleSelectionDialog />
 			</Suspense>
 		</TechTreeProvider>
 	);

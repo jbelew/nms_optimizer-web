@@ -1,13 +1,17 @@
-import type { Mock } from "vitest";
+import type { TechTreeItem } from "@/types/tech";
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { useTechTree } from "@/components/TechTree/useTechTreeContext";
+import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { usePlatformStore } from "@/store/app/platformStore";
+import { useGridStore } from "@/store/grid/gridStore";
+import { useTechStore } from "@/store/tech/techStore";
+import { useModuleSelectionDialogStore } from "@/store/ui/uiStore";
 
 import { ModuleSelectionDialog } from "./ModuleSelectionDialog";
 
-// Mocking external dependencies
 vi.mock("react-i18next", () => ({
 	Trans: ({ i18nKey }: { i18nKey: string }) => <span>{i18nKey}</span>,
 	useTranslation: () => ({
@@ -23,6 +27,7 @@ vi.mock("react-i18next", () => ({
 			if (key === "moduleSelection.solverWindow")
 				return `Window: ${options?.width}×${options?.height}`;
 			if (key === "moduleSelection.solverWindowEmpty") return "Window: —";
+			if (key === "technologies.starship.hyperdrive") return "Hyperdrive";
 			if (key.startsWith("moduleSelection.")) return key.split(".").pop();
 
 			return key;
@@ -30,204 +35,326 @@ vi.mock("react-i18next", () => ({
 	}),
 }));
 
-vi.mock("@/store/app/platformStore");
+vi.mock("@/components/TechTree/useTechTreeContext");
+vi.mock("@/hooks/useAnalytics/useAnalytics");
 vi.mock("@/utils/system/dialogUtils", () => ({
 	useDialog: () => ({
 		openDialog: vi.fn(),
 	}),
 }));
 
-// Mock AppDialog to support compound component pattern
 vi.mock("@/components/AppDialog/Base/AppDialog", () => {
-	const MockRoot = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
-	const MockTitle = ({ children }: { children: React.ReactNode }) => <h1>{children}</h1>;
-	const MockBody = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
-	const MockFooter = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
-
 	interface MockAppDialogProps {
 		content?: React.ReactNode;
 		footer?: React.ReactNode;
+		isOpen?: boolean;
 		title?: React.ReactNode;
 	}
-	const MockAppDialog = ({ content, footer, title }: MockAppDialogProps) => (
-		<div>
-			<h1>{title}</h1>
-			<div>{content}</div>
-			<div>{footer}</div>
-		</div>
-	);
+	const MockAppDialog = ({ content, footer, isOpen, title }: MockAppDialogProps) =>
+		isOpen ? (
+			<div data-testid="app-dialog">
+				<h1>{title}</h1>
+				<div>{content}</div>
+				<div>{footer}</div>
+			</div>
+		) : null;
 
 	return {
-		default: Object.assign(MockAppDialog, {
-			Body: MockBody,
-			Footer: MockFooter,
-			Root: MockRoot,
-			Title: MockTitle,
-		}),
+		default: MockAppDialog,
 	};
 });
 
-const mockGroupedModules = {
-	atlantid: [],
-	bonus: [
-		{ id: "bonus2", image: "bonus.png", label: "Beta Bonus" },
-		{ id: "bonus1", image: "bonus.png", label: "Alpha Bonus" },
-	],
-	core: [{ id: "core1", image: "core.png", label: "Core Module" }],
-	cosmetic: [{ id: "cosmetic1", image: "cosmetic.png", label: "Cosmetic Module" }],
-	reactor: [],
-	upgrade: [
-		{ id: "upgrade_sigma", image: "upgrade.png", label: "Upgrade Sigma" },
-		{ id: "upgrade_tau", image: "upgrade.png", label: "Upgrade Tau" },
-	],
-};
+const baseModules: TechTreeItem["modules"] = [
+	{
+		active: true,
+		adjacency: "",
+		adjacency_bonus: 0,
+		bonus: 0,
+		checked: true,
+		id: "core1",
+		image: "core.png",
+		label: "Core Module",
+		sc_eligible: false,
+		supercharged: false,
+		tech: "hyperdrive",
+		type: "core",
+		value: 0,
+	},
+	{
+		active: true,
+		adjacency: "",
+		adjacency_bonus: 0,
+		bonus: 0,
+		checked: true,
+		id: "bonus2",
+		image: "bonus.png",
+		label: "Beta Bonus",
+		sc_eligible: false,
+		supercharged: false,
+		tech: "hyperdrive",
+		type: "bonus",
+		value: 0,
+	},
+	{
+		active: true,
+		adjacency: "",
+		adjacency_bonus: 0,
+		bonus: 0,
+		checked: true,
+		id: "bonus1",
+		image: "bonus.png",
+		label: "Alpha Bonus",
+		sc_eligible: false,
+		supercharged: false,
+		tech: "hyperdrive",
+		type: "bonus",
+		value: 0,
+	},
+	{
+		active: true,
+		adjacency: "",
+		adjacency_bonus: 0,
+		bonus: 0,
+		checked: false,
+		id: "cosmetic1",
+		image: "cosmetic.png",
+		label: "Cosmetic Module",
+		sc_eligible: false,
+		supercharged: false,
+		tech: "hyperdrive",
+		type: "cosmetic",
+		value: 0,
+	},
+	{
+		active: true,
+		adjacency: "",
+		adjacency_bonus: 0,
+		bonus: 0,
+		checked: true,
+		id: "upgrade_theta",
+		image: "upgrade.png",
+		label: "Upgrade Theta",
+		sc_eligible: false,
+		supercharged: false,
+		tech: "hyperdrive",
+		type: "upgrade",
+		value: 0,
+	},
+	{
+		active: true,
+		adjacency: "",
+		adjacency_bonus: 0,
+		bonus: 0,
+		checked: true,
+		id: "upgrade_tau",
+		image: "upgrade.png",
+		label: "Upgrade Tau",
+		sc_eligible: false,
+		supercharged: false,
+		tech: "hyperdrive",
+		type: "upgrade",
+		value: 0,
+	},
+	{
+		active: true,
+		adjacency: "",
+		adjacency_bonus: 0,
+		bonus: 0,
+		checked: false,
+		id: "upgrade_sigma",
+		image: "upgrade.png",
+		label: "Upgrade Sigma",
+		sc_eligible: false,
+		supercharged: false,
+		tech: "hyperdrive",
+		type: "upgrade",
+		value: 0,
+	},
+];
 
-const defaultProps = {
-	allModulesSelected: false,
-	currentCheckedModules: ["bonus1", "upgrade_tau"],
-	groupedModules: mockGroupedModules,
-	handleOptimizeClick: vi.fn(),
-	handleSelectAllChange: vi.fn(),
-	handleValueChange: vi.fn(),
-	isIndeterminate: true,
-	isOpen: true,
-	onClose: vi.fn(),
-	techColor: "blue" as const,
-	techImage: "hyperdrive.png",
-	translatedTechName: "Hyperdrive",
-};
-
-/**
- * Helper to render the dialog for testing.
- */
-const renderDialog = (props = {}) => {
-	(usePlatformStore as unknown as Mock).mockReturnValue({
-		selectedPlatform: "explorer",
-	});
-
-	return render(<ModuleSelectionDialog {...defaultProps} {...props} />);
-};
+interface SeedOptions {
+	checkedModules?: string[];
+	isGridFull?: boolean;
+	isOpen?: boolean;
+	modules?: TechTreeItem["modules"];
+	platform?: string;
+	selectedTechData?: null | {
+		tech: string;
+		techColor: "blue";
+		techImage: null | string;
+	};
+	windowRules?: Record<string, [number, number]>;
+}
 
 describe("ModuleSelectionDialog", () => {
+	const mockHandleOptimize = vi.fn();
+	const mockSendDeferredEvent = vi.fn();
+
+	const seedAndRender = ({
+		checkedModules = ["core1", "bonus1", "upgrade_theta", "upgrade_tau"],
+		isGridFull = false,
+		isOpen = true,
+		modules = baseModules,
+		platform = "explorer",
+		selectedTechData = {
+			tech: "hyperdrive",
+			techColor: "blue",
+			techImage: "starship/hyperdrive.webp",
+		},
+		windowRules,
+	}: SeedOptions = {}) => {
+		usePlatformStore.setState({ selectedPlatform: platform });
+		useGridStore.setState({ activeTechs: new Set(["hyperdrive"]), isGridFull });
+		useTechStore.setState({
+			activeGroups: { hyperdrive: "normal" },
+			checkedModules: { hyperdrive: checkedModules },
+			techGroups: {
+				hyperdrive: [
+					{
+						color: "blue",
+						image: "starship/hyperdrive.webp",
+						key: "hyperdrive",
+						label: "Hyperdrive",
+						module_count: modules.length,
+						modules,
+						type: "normal",
+						window_rules: windowRules,
+					},
+				],
+			},
+		});
+		useModuleSelectionDialogStore.setState({
+			isOpen,
+			selectedTechData,
+		});
+
+		vi.mocked(useTechTree).mockReturnValue({
+			handleOptimize: mockHandleOptimize,
+			isGridFull,
+			solving: false,
+		});
+
+		vi.mocked(useAnalytics).mockReturnValue({
+			sendDeferredEvent: mockSendDeferredEvent,
+			sendEvent: vi.fn(),
+		});
+
+		return render(<ModuleSelectionDialog />);
+	};
+
 	beforeEach(() => {
 		vi.clearAllMocks();
 	});
 
-	it("renders the dialog with the correct title", async () => {
-		renderDialog();
+	it("renders null when selectedTechData is null", () => {
+		const { container } = seedAndRender({ isOpen: false, selectedTechData: null });
+		expect(container.firstChild).toBeNull();
+	});
+
+	it("renders the dialog with localized title and fires page_view analytics on open", async () => {
+		seedAndRender();
 		expect(await screen.findByText("Modules for Hyperdrive")).toBeInTheDocument();
+		expect(mockSendDeferredEvent).toHaveBeenCalledWith(
+			expect.objectContaining({
+				action: "page_view",
+				category: "engagement",
+				page_title: "Hyperdrive Selection | appName",
+			})
+		);
 	});
 
-	it("renders module groups correctly", async () => {
-		renderDialog();
-		expect(await screen.findByText("Bonus Modules")).toBeInTheDocument();
-		expect(screen.getByText("Alpha Bonus")).toBeInTheDocument();
-		expect(screen.getByText("upgrade")).toBeInTheDocument();
-		expect(screen.getByText("Cosmetic Modules")).toBeInTheDocument();
-	});
-
-	it("sorts 'bonus' modules alphabetically", async () => {
-		renderDialog();
-		const header = await screen.findByText("Bonus Modules");
-		const group = header.parentElement;
-		const bonusModules = group?.querySelectorAll("label");
-		expect(bonusModules).not.toBeNull();
-		expect(bonusModules![0]).toHaveTextContent("Alpha Bonus");
-		expect(bonusModules![1]).toHaveTextContent("Beta Bonus");
-	});
-
-	it("sorts 'trails' and 'figurines' modules alphabetically", async () => {
-		const props = {
-			...defaultProps,
-			groupedModules: {
-				...mockGroupedModules,
-				figurines: [
-					{ id: "fig2", image: "fig.png", label: "Beta Figurine" },
-					{ id: "fig1", image: "fig.png", label: "Alpha Figurine" },
-				],
-				trails: [
-					{ id: "trail2", image: "trail.png", label: "Beta Trail" },
-					{ id: "trail1", image: "trail.png", label: "Alpha Trail" },
-				],
-			},
-		};
-		renderDialog(props);
-
-		const trailsHeader = await screen.findByText("Starship Trails");
-		const trailsGroup = trailsHeader.parentElement;
-		const trailModules = trailsGroup?.querySelectorAll("label");
-		expect(trailModules![0]).toHaveTextContent("Alpha Trail");
-		expect(trailModules![1]).toHaveTextContent("Beta Trail");
-
-		const figurinesHeader = await screen.findByText("Figurines");
-		const figurinesGroup = figurinesHeader.parentElement;
-		const figModules = figurinesGroup?.querySelectorAll("label");
-		expect(figModules![0]).toHaveTextContent("Alpha Figurine");
-		expect(figModules![1]).toHaveTextContent("Beta Figurine");
-	});
-
-	it("calls handleValueChange when a checkbox is clicked", async () => {
-		renderDialog();
-		// Find the checkbox by its value (id)
-		const checkbox = await screen.findByRole("checkbox", { name: "Alpha Bonus" });
-		fireEvent.click(checkbox);
-
-		// The CheckboxGroup.Root onValueChange should be called with the new array
-		await vi.waitFor(() => {
-			expect(defaultProps.handleValueChange).toHaveBeenCalled();
-		});
-	});
-
-	it("calls handleSelectAllChange when 'Select All' is clicked", async () => {
-		renderDialog();
-		fireEvent.click(await screen.findByRole("checkbox", { name: "Select All" }));
-		await vi.waitFor(() => {
-			expect(defaultProps.handleSelectAllChange).toHaveBeenCalled();
-		});
-	});
-
-	it("disables the optimize button when no modules are checked", async () => {
-		renderDialog({ currentCheckedModules: [] });
-		const optimizeButton = await screen.findByRole("button", { name: "Optimize" });
-		expect(optimizeButton).toBeDisabled();
-	});
-
-	it("calls handleOptimizeClick when the optimize button is clicked", async () => {
-		renderDialog();
-		const optimizeButton = await screen.findByRole("button", { name: "Optimize" });
-		fireEvent.click(optimizeButton);
-		await vi.waitFor(() => {
-			expect(defaultProps.handleOptimizeClick).toHaveBeenCalled();
-		});
-	});
-
-	it("renders Solver Window dimensions in the footer when modules are selected", async () => {
-		renderDialog({
-			currentCheckedModules: [
-				"bonus1",
-				"bonus2",
-				"upgrade_sigma",
-				"upgrade_tau",
-				"cosmetic1",
+	it("renders Module Groups and sorts alphabetical groups ('bonus', 'figurines', 'trails')", async () => {
+		seedAndRender({
+			modules: [
+				...baseModules,
+				{
+					...baseModules[0],
+					id: "fig2",
+					label: "Beta Figurine",
+					type: "bonus",
+				},
+				{
+					...baseModules[0],
+					id: "fig1",
+					label: "Alpha Figurine",
+					type: "bonus",
+				},
+				{
+					...baseModules[0],
+					id: "trail2",
+					label: "Beta Trail",
+					type: "trails",
+				},
+				{
+					...baseModules[0],
+					id: "trail1",
+					label: "Alpha Trail",
+					type: "trails",
+				},
 			],
 		});
-		expect(await screen.findByText("Window: 3×2 (x5)")).toBeInTheDocument();
+
+		const bonusHeader = await screen.findByText("Bonus Modules");
+		const bonusLabels = bonusHeader.parentElement?.querySelectorAll("label");
+		expect(bonusLabels![0]).toHaveTextContent("Alpha Bonus");
+		expect(bonusLabels![1]).toHaveTextContent("Beta Bonus");
+
+		const figurinesHeader = await screen.findByText("Figurines");
+		const figLabels = figurinesHeader.parentElement?.querySelectorAll("label");
+		expect(figLabels![0]).toHaveTextContent("Alpha Figurine");
+		expect(figLabels![1]).toHaveTextContent("Beta Figurine");
+
+		const trailsHeader = await screen.findByText("Starship Trails");
+		const trailLabels = trailsHeader.parentElement?.querySelectorAll("label");
+		expect(trailLabels![0]).toHaveTextContent("Alpha Trail");
+		expect(trailLabels![1]).toHaveTextContent("Beta Trail");
 	});
 
-	it("renders 'Window: — (x0)' in the footer when zero modules are selected", async () => {
-		renderDialog({ currentCheckedModules: [] });
-		expect(await screen.findByText("Window: — (x0)")).toBeInTheDocument();
+	it("enforces Module Rank Order prerequisite disabling and cascading deselection", async () => {
+		seedAndRender({
+			checkedModules: ["core1", "upgrade_theta", "upgrade_tau", "upgrade_sigma"],
+		});
+
+		const thetaCheckbox = await screen.findByRole("checkbox", { name: /Upgrade Theta/i });
+		const tauCheckbox = screen.getByRole("checkbox", { name: /Upgrade Tau/i });
+		const sigmaCheckbox = screen.getByRole("checkbox", { name: /Upgrade Sigma/i });
+
+		expect(tauCheckbox).not.toBeDisabled();
+		expect(sigmaCheckbox).not.toBeDisabled();
+
+		// Uncheck Theta -> cascades to deselect Tau and Sigma and disables both
+		fireEvent.click(thetaCheckbox);
+
+		await waitFor(() => {
+			expect(useTechStore.getState().checkedModules["hyperdrive"]).toEqual(["core1"]);
+		});
+		expect(tauCheckbox).toBeDisabled();
+		expect(sigmaCheckbox).toBeDisabled();
+	});
+
+	it("updates Solver Window dimensions and store selection when checkboxes or Select All are toggled", async () => {
+		seedAndRender({
+			checkedModules: ["core1", "bonus1"],
+		});
+
+		expect(await screen.findByText("Window: 2×1 (x2)")).toBeInTheDocument();
+
+		// Check Beta Bonus -> 3 modules checked -> 2×2 (x3)
+		fireEvent.click(screen.getByRole("checkbox", { name: /Beta Bonus/i }));
+		expect(screen.getByText("Window: 2×2 (x3)")).toBeInTheDocument();
+
+		// Select All -> all 7 modules checked -> 3×3 (x7)
+		fireEvent.click(screen.getByRole("checkbox", { name: "Select All" }));
+		expect(screen.getByText("Window: 3×3 (x7)")).toBeInTheDocument();
+
+		// Deselect All -> only core1 remains -> 1×1 (x1)
+		fireEvent.click(screen.getByRole("checkbox", { name: "Select All" }));
+		expect(screen.getByText("Window: 1×1 (x1)")).toBeInTheDocument();
 	});
 
 	it("respects custom windowRules overrides when displaying Solver Window dimensions", async () => {
-		renderDialog({
-			currentCheckedModules: [
-				"bonus1",
-				"bonus2",
-				"upgrade_sigma",
-				"upgrade_tau",
-				"cosmetic1",
-			],
+		seedAndRender({
+			checkedModules: ["core1", "bonus1", "bonus2", "upgrade_theta", "upgrade_tau"],
 			windowRules: {
 				"1": [1, 1],
 				"2": [2, 1],
@@ -236,51 +363,50 @@ describe("ModuleSelectionDialog", () => {
 				default: [3, 3],
 			},
 		});
+
 		expect(await screen.findByText("Window: 3×3 (x5)")).toBeInTheDocument();
 	});
 
-	it("updates Solver Window dimensions immediately as module checkboxes are checked and unchecked", async () => {
-		const InteractiveWrapper = () => {
-			const [checkedModules, setCheckedModules] = React.useState<string[]>([
-				"bonus1",
-				"upgrade_sigma",
-			]);
-			const nonCoreIds = ["bonus1", "bonus2", "cosmetic1", "upgrade_sigma", "upgrade_tau"];
-			const allSelected = nonCoreIds.every((id) => checkedModules.includes(id));
+	it("disables Optimize and displays 'Window: — (x0)' when zero modules are checked", async () => {
+		seedAndRender({ checkedModules: [] });
 
-			return (
-				<ModuleSelectionDialog
-					{...defaultProps}
-					allModulesSelected={allSelected}
-					currentCheckedModules={checkedModules}
-					handleSelectAllChange={(checked) => {
-						setCheckedModules(checked ? nonCoreIds : []);
-					}}
-					handleValueChange={setCheckedModules}
-					isIndeterminate={checkedModules.length > 0 && !allSelected}
-				/>
-			);
-		};
+		expect(await screen.findByText("Window: — (x0)")).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "Optimize" })).toBeDisabled();
+	});
 
-		(usePlatformStore as unknown as Mock).mockReturnValue({
-			selectedPlatform: "explorer",
+	it("reverts uncommitted Module Selection changes to the initial snapshot when Cancel is clicked", async () => {
+		seedAndRender({
+			checkedModules: ["core1", "bonus1"],
 		});
 
-		render(<InteractiveWrapper />);
+		// Modify selection by checking Beta Bonus
+		fireEvent.click(await screen.findByRole("checkbox", { name: /Beta Bonus/i }));
+		expect(useTechStore.getState().checkedModules["hyperdrive"]).toContain("bonus2");
 
-		// Initially 2 modules checked -> 2×1 (x2)
-		expect(await screen.findByText("Window: 2×1 (x2)")).toBeInTheDocument();
+		// Click Cancel -> reverts to ["core1", "bonus1"] and closes dialog
+		fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
 
-		// Check a 3rd module ("Beta Bonus") -> 3 modules checked -> 2×2 (x3)
-		fireEvent.click(screen.getByRole("checkbox", { name: /Beta Bonus/i }));
-		expect(screen.getByText("Window: 2×2 (x3)")).toBeInTheDocument();
+		await waitFor(() => {
+			expect(useTechStore.getState().checkedModules["hyperdrive"]).toEqual([
+				"core1",
+				"bonus1",
+			]);
+			expect(useModuleSelectionDialogStore.getState().isOpen).toBe(false);
+		});
+	});
 
-		// Select All -> 5 modules checked -> 3×2 (x5)
-		fireEvent.click(screen.getByRole("checkbox", { name: "Select All" }));
-		expect(screen.getByText("Window: 3×2 (x5)")).toBeInTheDocument();
+	it("calls handleOptimize and closes dialog without reverting when Optimize is clicked", async () => {
+		seedAndRender({
+			checkedModules: ["core1", "bonus1"],
+		});
 
-		// Deselect All -> 0 modules checked -> Window: — (x0)
-		fireEvent.click(screen.getByRole("checkbox", { name: "Select All" }));
-		expect(screen.getByText("Window: — (x0)")).toBeInTheDocument();
+		fireEvent.click(await screen.findByRole("checkbox", { name: /Beta Bonus/i }));
+		fireEvent.click(screen.getByRole("button", { name: "Optimize" }));
+
+		await waitFor(() => {
+			expect(mockHandleOptimize).toHaveBeenCalledWith("hyperdrive");
+			expect(useModuleSelectionDialogStore.getState().isOpen).toBe(false);
+		});
+		expect(useTechStore.getState().checkedModules["hyperdrive"]).toContain("bonus2");
 	});
 });

@@ -1,28 +1,28 @@
 import { startTransition, useState } from "react";
 
-import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
-import { usePlatformStore } from "@/store/app/platformStore";
-import { useGridStore } from "@/store/grid/gridStore";
-import { useTechStore } from "@/store/tech/techStore";
+import { fetchShipTypes } from "@/hooks/useShipTypes/useShipTypes";
+import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { buildSerializer } from "@/utils/build/buildSerializer";
 import { Logger } from "@/utils/system/monitoring";
 
 /**
- * Custom hook for managing build file operations (save/load) in the DOM.
+ * Custom hook for managing Build File operations (save/load) in the DOM.
  *
  * @remarks
- * This hook acts as a thin DOM adapter. It delegates build serialization,
- * validation, and state parsing to the {@link buildSerializer} utility,
- * while handling DOM-specific tasks (e.g., download triggers), reactive
- * pending state (`isPending`), and React/Zustand store updates.
+ * Acts as a DOM file I/O adapter: delegates multi-store snapshot extraction and
+ * restoration to {@link sessionCoordinator}, delegates `.nms` JSON serialization
+ * and SHA-256 verification to {@link buildSerializer}, and resolves supported
+ * Platform Types asynchronously via {@link fetchShipTypes} only when loading a file
+ * (avoiding any render-time Suspense dependency).
  *
  * @returns {object} An object containing the load/save functions and the pending state.
- * @returns {Function} returns.saveBuildToFile - Serializes and downloads the current build.
- * @returns {Function} returns.loadBuildFromFile - Parses and restores a build from a file.
+ * @returns {Function} returns.saveBuildToFile - Serializes and downloads the current build as a `.nms` Build File.
+ * @returns {Function} returns.loadBuildFromFile - Parses, validates, and restores a build from a `.nms` Build File.
  * @returns {boolean} returns.isPending - Reactive pending/loading state for file operations.
  *
  * @see {@link ./useBuildFileManager.test.ts Unit Tests}
  * @see {@link buildSerializer}
+ * @see {@link sessionCoordinator}
  *
  * @hook
  *
@@ -31,19 +31,19 @@ import { Logger } from "@/utils/system/monitoring";
  * @example
  * ```tsx
  * const { saveBuildToFile, loadBuildFromFile, isPending } = useBuildFileManager();
+ * // returns { isPending: false, loadBuildFromFile: [Function], saveBuildToFile: [Function] }
  * ```
  */
 export const useBuildFileManager = () => {
-	const shipTypes = useFetchShipTypesSuspense();
 	const [isPending, setIsPending] = useState(false);
 
 	/**
-	 * Serializes the current application state and triggers a file download in the DOM.
+	 * Serializes the current application state and triggers a `.nms` Build File download in the DOM.
 	 *
 	 * @remarks
-	 * This method retrieves state from the grid, tech, and platform stores,
-	 * delegates serialization to {@link buildSerializer.saveBuild}, and then
-	 * triggers a browser download of the returned binary blob as a `.nms` file.
+	 * Captures a multi-store snapshot via {@link sessionCoordinator.getBuildSnapshot},
+	 * delegates serialization to {@link buildSerializer.saveBuild}, and triggers a
+	 * browser download of the returned binary blob.
 	 *
 	 * @param {string} buildName - The name to assign to the saved build.
 	 *
@@ -54,36 +54,15 @@ export const useBuildFileManager = () => {
 	 * @example
 	 * ```typescript
 	 * await saveBuildToFile("My Fighter Build");
-	 * // triggers browser download
+	 * // triggers browser download of My-Fighter-Build.nms
 	 * ```
 	 */
 	const saveBuildToFile = async (buildName: string): Promise<void> => {
 		setIsPending(true);
 
 		try {
-			const gridStoreState = useGridStore.getState();
-			const techStoreState = useTechStore.getState();
-			const platformStoreState = usePlatformStore.getState();
-
-			const { blob, filename } = await buildSerializer.saveBuild({
-				buildName,
-				gridState: {
-					grid: gridStoreState.grid,
-					gridFixed: gridStoreState.gridFixed,
-					initialGridDefinition: gridStoreState.initialGridDefinition,
-					isSharedGrid: gridStoreState.isSharedGrid,
-					result: gridStoreState.result,
-					superchargedFixed: gridStoreState.superchargedFixed,
-				},
-				shipType: platformStoreState.selectedPlatform,
-				techState: {
-					bonusStatus: techStoreState.bonusStatus,
-					checkedModules: techStoreState.checkedModules,
-					maxBonus: techStoreState.maxBonus,
-					solvedBonus: techStoreState.solvedBonus,
-					solveMethod: techStoreState.solveMethod,
-				},
-			});
+			const snapshot = sessionCoordinator.getBuildSnapshot(buildName);
+			const { blob, filename } = await buildSerializer.saveBuild(snapshot);
 
 			const url = URL.createObjectURL(blob);
 			const link = document.createElement("a");
@@ -102,15 +81,15 @@ export const useBuildFileManager = () => {
 	};
 
 	/**
-	 * Restores a build configuration from an uploaded file.
+	 * Restores a build configuration from an uploaded `.nms` Build File.
 	 *
 	 * @remarks
-	 * This method performs DOM File validation (extension and size checks), reads
-	 * the file contents as text, and delegates parsing/integrity validation to
-	 * {@link buildSerializer.loadBuild} within a React transition to manage
-	 * pending state and store updates.
+	 * Performs DOM File validation (extension and size checks), resolves supported
+	 * Platform Types lazily via {@link fetchShipTypes}, delegates parsing and checksum
+	 * verification to {@link buildSerializer.loadBuild}, and commits the multi-store
+	 * state via {@link sessionCoordinator.restoreBuildSnapshot} inside a React transition.
 	 *
-	 * @param {File} file - The `.nms` file to load.
+	 * @param {File} file - The `.nms` Build File to load.
 	 *
 	 * @returns {Promise<void>} Resolves when state is successfully restored.
 	 *
@@ -120,6 +99,7 @@ export const useBuildFileManager = () => {
 	 * ```typescript
 	 * const file = event.target.files[0];
 	 * await loadBuildFromFile(file);
+	 * // restores platform, grid, and tech store state from file
 	 * ```
 	 */
 	const loadBuildFromFile = async (file: File): Promise<void> => {
@@ -134,37 +114,18 @@ export const useBuildFileManager = () => {
 				throw new Error("File is too large. Build files should be under 10MB.");
 			}
 
-			const validShipTypes = Object.keys(shipTypes);
 			const text = await file.text();
 
 			if (!text) {
 				throw new Error("File is empty. Please select a valid build file.");
 			}
 
+			const shipTypes = await fetchShipTypes();
+			const validShipTypes = Object.keys(shipTypes);
 			const buildData = await buildSerializer.loadBuild(text, validShipTypes);
 
 			startTransition(() => {
-				const platformState = usePlatformStore.getState();
-
-				if (buildData.shipType !== platformState.selectedPlatform) {
-					platformState.setSelectedPlatform(
-						buildData.shipType,
-						validShipTypes,
-						true,
-						true
-					);
-				}
-
-				useGridStore.getState().restoreGridState({
-					...buildData.gridState,
-					buildName: buildData.name,
-				});
-
-				useTechStore.getState().restoreTechState({
-					bonusState: buildData.bonusState,
-					moduleState: buildData.moduleState,
-					techState: buildData.techState,
-				});
+				sessionCoordinator.restoreBuildSnapshot(buildData, validShipTypes);
 			});
 		} catch (error) {
 			Logger.error("Failed to load build file:", error);

@@ -2,6 +2,7 @@ import type { RecommendedBuild, TechTree } from "@/hooks/useTechTree/useTechTree
 import type { Grid } from "@/store/grid/gridStore";
 
 import { fetchTechTreeAsync } from "@/hooks/useTechTree/useTechTree";
+import { assignModuleToCell, resetCellContent } from "@/store/grid/gridFactories";
 import { createGrid } from "@/store/grid/gridStore";
 import { Logger } from "@/utils/system/monitoring";
 import { getTechTreeMaps } from "@/utils/tech/techTreeUtils";
@@ -391,9 +392,10 @@ export const deserialize = async (
 
 		for (let r = 0; r < newGrid.height; r++) {
 			for (let c = 0; c < newGrid.width; c++) {
+				const cell = newGrid.cells[r][c];
 				const gridChar = gridString[index];
-				newGrid.cells[r][c].active = gridChar !== "0";
-				newGrid.cells[r][c].supercharged = gridChar === "2";
+				cell.active = gridChar !== "0";
+				cell.supercharged = gridChar === "2";
 
 				const techChar = decompressedTech[index];
 				const techName = techChar === " " ? null : techMap[techChar];
@@ -401,39 +403,27 @@ export const deserialize = async (
 				const moduleId = moduleChar === " " ? null : moduleMap[moduleChar];
 				const adjBonusChar = decompressedAdjBonus[index];
 
-				// Reset cell properties
-				newGrid.cells[r][c].module = null;
-				newGrid.cells[r][c].label = "";
-				newGrid.cells[r][c].image = null;
-				newGrid.cells[r][c].bonus = 0.0;
-				newGrid.cells[r][c].value = 0;
-				newGrid.cells[r][c].adjacency = "none";
-				newGrid.cells[r][c].adjacency_bonus = adjBonusChar === "T" ? 1.0 : 0.0;
-				newGrid.cells[r][c].sc_eligible = false;
+				// Reset cell module properties while preserving active & supercharged
+				resetCellContent(cell);
+				cell.adjacency_bonus = adjBonusChar === "T" ? 1.0 : 0.0;
 
 				// Validate tech exists before assigning (handles API changes)
 				if (techName && !validTechKeys.has(techName)) {
 					Logger.warn(
 						`Cell [${r},${c}] references missing tech: ${techName}. Skipping cell content.`
 					);
-					newGrid.cells[r][c].tech = null;
-					newGrid.cells[r][c].active = false;
+					cell.tech = null;
+					cell.active = false;
 					skippedCellsCount++;
 				} else {
-					newGrid.cells[r][c].tech = techName;
+					cell.tech = techName;
 				}
 
 				if (moduleId && techName) {
 					const moduleData = modulesMap.get(`${techName}/${moduleId}`);
 
 					if (moduleData) {
-						newGrid.cells[r][c].module = moduleData.id;
-						newGrid.cells[r][c].label = moduleData.label;
-						newGrid.cells[r][c].image = moduleData.image;
-						newGrid.cells[r][c].bonus = moduleData.bonus ?? 0.0;
-						newGrid.cells[r][c].value = moduleData.value ?? 0;
-						newGrid.cells[r][c].adjacency = moduleData.adjacency ?? "none";
-						newGrid.cells[r][c].sc_eligible = moduleData.sc_eligible ?? false;
+						assignModuleToCell(cell, moduleData);
 					} else {
 						Logger.warn(
 							`Module data not found for tech: ${techName}, module ID: ${moduleId}. Cell state might be incomplete.`

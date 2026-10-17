@@ -146,9 +146,9 @@ vi.mock("@/utils/build/buildSerializer", () => ({
 	},
 }));
 
-// Mock useFetchShipTypesSuspense hook
+// Mock fetchShipTypes async resource
 vi.mock("@/hooks/useShipTypes/useShipTypes", () => ({
-	useFetchShipTypesSuspense: vi.fn(() => ({
+	fetchShipTypes: vi.fn(async () => ({
 		explorer: {},
 		fighter: {},
 		freighter: {},

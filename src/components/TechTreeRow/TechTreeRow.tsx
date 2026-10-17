@@ -102,17 +102,17 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 
 	switch (icon) {
 		case "check":
-			iconClassName = "mt-[7px] inline-block align-text-top";
+			iconClassName = "inline-block ";
 			iconStyle = { color: "var(--gray-a10)" };
 			tooltipContent = t("techTree.tooltips.validSolve");
 			break;
 		case "lightning":
-			iconClassName = "mt-1.5 inline-block h-4 w-4 align-text-top";
+			iconClassName = "inline-block";
 			iconStyle = { color: "var(--amber-a8)" };
 			tooltipContent = `${t("techTree.tooltips.boostedSolve")} +${percent}%`;
 			break;
 		case "warning":
-			iconClassName = "mt-2 inline-block align-text-top";
+			iconClassName = "inline-block";
 			iconStyle = { color: "var(--red-a8)" };
 			tooltipContent = `${t("techTree.tooltips.insufficientSpace")} -${percent}%`;
 			break;
@@ -219,9 +219,9 @@ const TechTreeRowLabel: React.FC = () => {
 	return (
 		<Text
 			as="div"
-			className="techRow__label block flex-1 leading-snug! sm:leading-tight!"
+			className="techRow__label block flex-1 leading-snug! sm:[transform:scaleY(0.95)] sm:leading-tight!"
 			size={isSmallAndUp ? "3" : "2"}
-			trim={isSmallAndUp ? "normal" : "both"}
+			trim={isSmallAndUp ? "both" : "both"}
 			weight="medium"
 			wrap="balance"
 		>
@@ -271,7 +271,6 @@ const TechTreeRowBadges: React.FC = () => {
 				className="ml-1! align-top font-mono! tabular-nums"
 				color={hasTechInGrid ? "gray" : techColor}
 				disabled={modules.length === 1 || (isGridFull && !hasTechInGrid) || solving}
-				mt="1"
 				onClick={handleOpenDialog}
 				radius="medium"
 				size="1"
@@ -330,7 +329,7 @@ const TechTreeRowAvatar: React.FC = () => {
 export const TechTreeRow = React.memo((props: TechTreeRowProps) => {
 	return (
 		<TechTreeRowProvider props={props}>
-			<div className="optimizationButton mt-2 mb-2 ml-0 flex items-center gap-2 sm:ml-1 lg:mr-1">
+			<div className="optimizationButton mb-3 flex items-center gap-2">
 				<TechTreeRowActions />
 				<TechTreeRowAvatar />
 

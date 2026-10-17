@@ -4,6 +4,7 @@ import { startTransition, useMemo } from "react";
 
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useScrollGridIntoView } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
+import { assignModuleToCell } from "@/store/grid/gridFactories";
 import {
 	createEmptyCell,
 	createGrid,
@@ -110,7 +111,7 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 
 					if (cellData) {
 						// Initialize with empty cell, then apply specific overrides
-						let cell = createEmptyCell(
+						const cell = createEmptyCell(
 							cellData.supercharged ?? false,
 							cellData.active ?? true
 						);
@@ -123,16 +124,7 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 							const module = modulesMap.get(`${cellData.tech}/${cellData.module}`);
 
 							if (module) {
-								cell = {
-									...cell,
-									adjacency: module.adjacency ?? "none",
-									bonus: module.bonus ?? 0,
-									image: module.image ?? null,
-									label: module.label ?? "",
-									sc_eligible: module.sc_eligible ?? false,
-									type: module.type ?? "", // Add the missing 'type' property
-									value: module.value ?? 0,
-								};
+								assignModuleToCell(cell, module);
 							} else {
 								// If module not found, reset the cell to empty state
 								resetCellContent(cell);

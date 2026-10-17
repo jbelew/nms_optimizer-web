@@ -1,40 +1,24 @@
-import type { GroupedModules, SelectionModule } from "./ModuleSelectionDialog";
+import type { TechTreeItem } from "@/types/tech";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React from "react";
+import React, { useEffect } from "react";
 import { Theme } from "@radix-ui/themes";
 
+import { TechTreeProvider } from "@/components/TechTree/TechTreeProvider";
 import { usePlatformStore } from "@/store/app/platformStore";
+import { useTechStore } from "@/store/tech/techStore";
+import { useModuleSelectionDialogStore } from "@/store/ui/uiStore";
 
 import { ModuleSelectionDialog } from "./ModuleSelectionDialog";
 
 import "./ModuleSelectionDialog.scss";
 
-// Helper function to group modules, adapted from useTechModuleManagement.ts
-/**
- *
- * @example
- */
-const groupModules = (modules: SelectionModule[]): GroupedModules => {
-	const groups: GroupedModules = {
-		atlantid: [],
-		bonus: [],
-		core: [],
-		cosmetic: [],
-		reactor: [],
-		upgrade: [],
-	};
+const createTechTreeLoader = (platform: "corvette" | "standard") => async () => {
+	const response = await fetch(`https://api.nms-optimizer.app/tech_tree/${platform}`);
+	const techTree: Record<string, TechTreeItem[]> = await response.json();
+	const hyperdriveTech = techTree.Hyperdrive.find((t) => t.key === "hyper")!;
+	const initialChecked = hyperdriveTech.modules.filter((m) => m.checked).map((m) => m.id);
 
-	modules.forEach((module) => {
-		const type = module.type || "upgrade";
-
-		if (groups[type]) {
-			groups[type].push(module);
-		} else {
-			groups.upgrade.push(module);
-		}
-	});
-
-	return groups;
+	return { hyperdriveTech, initialChecked };
 };
 
 const meta: Meta<typeof ModuleSelectionDialog> = {
@@ -42,25 +26,17 @@ const meta: Meta<typeof ModuleSelectionDialog> = {
 	decorators: [
 		(Story) => (
 			<Theme>
-				<Story />
+				<TechTreeProvider
+					handleOptimize={async () => {}}
+					isGridFull={false}
+					solving={false}
+				>
+					<Story />
+				</TechTreeProvider>
 			</Theme>
 		),
 	],
-	loaders: [
-		async () => {
-			const response = await fetch("https://api.nms-optimizer.app/tech_tree/standard");
-			const techTree: Record<string, { key: string; modules: SelectionModule[] }[]> =
-				await response.json();
-			const hyperdriveTech = techTree.Hyperdrive.find((t) => t.key === "hyper")!;
-			const modules = hyperdriveTech.modules;
-			const groupedModules = groupModules(modules);
-			const initialChecked = modules
-				.filter((m: SelectionModule) => m.checked)
-				.map((m: SelectionModule) => m.id);
-
-			return { groupedModules, initialChecked, modules };
-		},
-	],
+	loaders: [createTechTreeLoader("standard")],
 	parameters: {
 		backgrounds: {
 			default: "Default",
@@ -68,47 +44,29 @@ const meta: Meta<typeof ModuleSelectionDialog> = {
 		},
 		layout: "fullscreen",
 	},
-	render: function Render(args, { loaded }) {
-		const { groupedModules, initialChecked, modules } = loaded;
-		const [currentCheckedModules, setCurrentCheckedModules] = React.useState(initialChecked);
-
-		const nonCoreModuleIds = modules
-			.filter((m: SelectionModule) => m.type !== "core")
-			.map((m: SelectionModule) => m.id);
-
-		const allModulesSelected = nonCoreModuleIds.every((id: string) =>
-			currentCheckedModules.includes(id)
-		);
-
-		const isIndeterminate =
-			!allModulesSelected &&
-			nonCoreModuleIds.some((id: string) => currentCheckedModules.includes(id));
-
-		const handleSelectAllChange = (checked: "indeterminate" | boolean) => {
-			console.log("handleSelectAllChange", checked);
-
-			if (checked) {
-				setCurrentCheckedModules(nonCoreModuleIds);
-			} else {
-				setCurrentCheckedModules([]);
-			}
+	render: function Render(_args, { loaded }) {
+		const { hyperdriveTech, initialChecked } = loaded as {
+			hyperdriveTech: TechTreeItem;
+			initialChecked: string[];
 		};
 
-		return (
-			<ModuleSelectionDialog
-				{...args}
-				allModulesSelected={allModulesSelected}
-				currentCheckedModules={currentCheckedModules}
-				groupedModules={groupedModules}
-				handleSelectAllChange={handleSelectAllChange}
-				handleValueChange={(values) => {
-					console.log("handleValueChange", values);
-					setCurrentCheckedModules(values);
-				}}
-				isIndeterminate={isIndeterminate}
-				isOpen={args.isOpen ?? true}
-			/>
-		);
+		useEffect(() => {
+			useTechStore.setState({
+				activeGroups: { hyper: "normal" },
+				checkedModules: { hyper: initialChecked },
+				techGroups: { hyper: [hyperdriveTech] },
+			});
+			useModuleSelectionDialogStore.setState({
+				isOpen: true,
+				selectedTechData: {
+					tech: "hyper",
+					techColor: "blue",
+					techImage: "starship/hyper.webp",
+				},
+			});
+		}, [hyperdriveTech, initialChecked]);
+
+		return <ModuleSelectionDialog />;
 	},
 	title: "Components/ModuleSelectionDialog",
 };
@@ -118,21 +76,16 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-	args: {
-		handleOptimizeClick: async () => console.log("handleOptimizeClick"),
-		techColor: "blue",
-		techImage: "starship/hyper.webp",
-		translatedTechName: "Hyperdrive",
-	},
+	decorators: [
+		(Story) => {
+			usePlatformStore.setState({ selectedPlatform: "standard" });
+
+			return <Story />;
+		},
+	],
 };
 
 export const Corvette: Story = {
-	args: {
-		handleOptimizeClick: async () => console.log("handleOptimizeClick"),
-		techColor: "blue",
-		techImage: "starship/hyper.webp",
-		translatedTechName: "Hyperdrive",
-	},
 	decorators: [
 		(Story) => {
 			usePlatformStore.setState({ selectedPlatform: "corvette" });
@@ -140,19 +93,5 @@ export const Corvette: Story = {
 			return <Story />;
 		},
 	],
-	loaders: [
-		async () => {
-			const response = await fetch("https://api.nms-optimizer.app/tech_tree/corvette");
-			const techTree: Record<string, { key: string; modules: SelectionModule[] }[]> =
-				await response.json();
-			const hyperdriveTech = techTree.Hyperdrive.find((t) => t.key === "hyper")!;
-			const modules = hyperdriveTech.modules;
-			const groupedModules = groupModules(modules);
-			const initialChecked = modules
-				.filter((m: SelectionModule) => m.checked)
-				.map((m: SelectionModule) => m.id);
-
-			return { groupedModules, initialChecked, modules };
-		},
-	],
+	loaders: [createTechTreeLoader("corvette")],
 };

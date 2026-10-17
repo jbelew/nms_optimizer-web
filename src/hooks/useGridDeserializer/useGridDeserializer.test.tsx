@@ -156,6 +156,7 @@ describe("deserialize", () => {
 		expect(resultGrid?.cells[0][0].active).toBe(true);
 		expect(resultGrid?.cells[0][0].tech).toBe("shield");
 		expect(resultGrid?.cells[0][0].module).toBe("Cb");
+		expect(resultGrid?.cells[0][0].type).toBe("module");
 	});
 
 	it("should return null and log an error if fetch fails", async () => {

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
+import { resolveActiveTechVariant } from "@/store/tech/techRules";
 import { useTechStore } from "@/store/tech/techStore";
 import { determineWindowDimensions } from "@/utils/optimization/windowDimensions";
 
@@ -77,10 +78,7 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 
 	if (!technologyName) return null;
 
-	const activeVariant = technologyCategory?.length
-		? technologyCategory.find((variant) => variant.type === activeVariantType) ||
-			technologyCategory[0]
-		: null;
+	const activeVariant = resolveActiveTechVariant(technologyCategory, activeVariantType);
 	const windowDimensions = determineWindowDimensions(
 		moduleSelectionCount,
 		activeVariant?.window_rules

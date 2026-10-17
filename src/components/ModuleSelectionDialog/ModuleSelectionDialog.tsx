@@ -1,9 +1,21 @@
 /**
- * Interactive technology module configuration dialog module.
+ * Store-connected Module Selection dialog module.
+ *
+ * @remarks
+ * Subscribes to {@link useModuleSelectionDialogStore}, {@link useTechStore}, {@link useGridStore},
+ * and {@link usePlatformStore} to render a single shared dialog instance for configuring a
+ * Technology Category's Module Selection. Delegates all Module Group classification, alphabetical
+ * sorting, and Module Rank Order prerequisite rules to {@link groupModules},
+ * {@link getModulePrerequisites}, and {@link resolveActiveTechVariant}.
+ *
+ * @see {@link ./ModuleSelectionDialog.test.tsx Unit Tests}
+ * @see {@link ./ModuleSelectionDialog.stories.tsx Storybook}
+ *
+ * @module components/ModuleSelectionDialog/ModuleSelectionDialog
  */
 
-import type { GroupedModules, ModuleSelectionDialogProps, SelectionModule } from "@/types/props";
-import React, { memo, Suspense } from "react";
+import type { GroupedModules, SelectionModule } from "@/types/props";
+import React, { memo, Suspense, useCallback, useEffect, useRef, useTransition } from "react";
 import { CheckCircledIcon, InfoCircledIcon, MagicWandIcon } from "@radix-ui/react-icons";
 import {
 	Avatar,
@@ -16,28 +28,87 @@ import {
 	Separator,
 	Text,
 } from "@radix-ui/themes";
+import { formatDocumentTitle } from "@shared/page-metadata.js";
 import { Trans, useTranslation } from "react-i18next";
+import { useShallow } from "zustand/react/shallow";
+import { shallow } from "zustand/shallow";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
+import { useTechTree } from "@/components/TechTree/useTechTreeContext";
+import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { usePlatformStore } from "@/store/app/platformStore";
+import { useGridStore } from "@/store/grid/gridStore";
+import {
+	areAllModulesSelected,
+	getModulePrerequisites,
+	getSelectAllModuleIds,
+	getTechnologyTranslationKey,
+	groupModules,
+	MODULE_GROUP_ORDER,
+	resolveActiveTechVariant,
+} from "@/store/tech/techRules";
+import { useTechStore } from "@/store/tech/techStore";
+import { useModuleSelectionDialogStore } from "@/store/ui/uiStore";
 import { determineWindowDimensions } from "@/utils/optimization/windowDimensions";
 import { useDialog } from "@/utils/system/dialogUtils";
 
-import { MODULE_GROUP_ORDER, MODULE_RANK_ORDER } from "./constants";
-import { ModuleSelectionProvider } from "./ModuleSelectionContext";
-import { useModuleSelectionContext } from "./useModuleSelectionContext";
-
 /**
- * Shared types for module grouping and dialog properties.
+ * Shared types for module grouping and selection items.
  * @category Components
  */
-export type { GroupedModules, ModuleSelectionDialogProps, SelectionModule };
+export type { GroupedModules, SelectionModule };
 
+/** Default empty array for modules to ensure stable reference when dialog is closed. */
+const EMPTY_MODULES_ARRAY: SelectionModule[] = [];
 /** Path to the fallback technology icon. */
 const fallbackImage = "/assets/img/grid/infra.webp";
 /** Base path for grid module images. */
 const baseImagePath = "/assets/img/grid/";
+
+/**
+ * Props for the {@link ModuleCheckbox} component.
+ *
+ * @category Components
+ */
+interface ModuleCheckboxProps {
+	/** Whether the checkbox is disabled due to missing Module Rank Order prerequisites. */
+	isDisabled: boolean;
+	/** The module data to display. */
+	module: SelectionModule;
+	/** Accent color for the module avatar. */
+	techColor: React.ComponentProps<typeof Avatar>["color"];
+}
+
+/**
+ * Props for the {@link ModuleGroup} component.
+ *
+ * @category Components
+ */
+interface ModuleGroupProps {
+	/** Currently checked module IDs. */
+	currentCheckedModules: string[];
+	/** The unique key of the Module Group. */
+	groupName: string;
+	/** Pre-sorted list of modules in this group. */
+	modules: SelectionModule[];
+	/** Callback to close the dialog when opening instructions. */
+	onClose: () => void;
+	/** Accent color for module avatars. */
+	techColor: React.ComponentProps<typeof Avatar>["color"];
+	/** Optional display title override for the group. */
+	titleOverride?: string;
+}
+
+/**
+ * Props for the {@link SafeParagraph} component.
+ *
+ * @category Components
+ */
+interface SafeParagraphProps extends Omit<React.ComponentPropsWithoutRef<"p">, "style"> {
+	/** Optional style prop stripped from i18n `<Trans>` interpolation. */
+	style?: unknown;
+}
 
 /**
  * Parses and styles parenthetical text fragments within a string.
@@ -98,9 +169,10 @@ const formatLabel = (label: string): React.ReactNode => {
 /**
  * Individual module selection checkbox with icon and label.
  *
- * @param {object} props - Component properties.
- * @param {boolean} props.isDisabled - Whether the checkbox is disabled (e.g. due to missing prerequisites).
+ * @param {ModuleCheckboxProps} props - Component properties.
+ * @param {boolean} props.isDisabled - Whether the checkbox is disabled due to missing Module Rank Order prerequisites.
  * @param {SelectionModule} props.module - The module data to display.
+ * @param {React.ComponentProps<typeof Avatar>["color"]} props.techColor - Accent color for the module avatar.
  *
  * @returns {JSX.Element} The rendered checkbox label.
  *
@@ -108,11 +180,7 @@ const formatLabel = (label: string): React.ReactNode => {
  *
  * @category Components
  */
-const ModuleCheckbox: React.FC<{
-	isDisabled: boolean;
-	module: SelectionModule;
-	techColor: React.ComponentProps<typeof Avatar>["color"];
-}> = memo(({ isDisabled, module, techColor }) => {
+const ModuleCheckbox: React.FC<ModuleCheckboxProps> = memo(({ isDisabled, module, techColor }) => {
 	const imagePath = module.image
 		? `${baseImagePath}${module.image}?v=${typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "1.0"}`
 		: fallbackImage;
@@ -140,12 +208,15 @@ const ModuleCheckbox: React.FC<{
 ModuleCheckbox.displayName = "ModuleCheckbox";
 
 /**
- * Categorized group of module checkboxes.
+ * Categorized Module Group of checkboxes.
  *
- * @param {object} props - Component properties.
- * @param {string} props.groupName - The unique key of the module group.
- * @param {SelectionModule[]} props.modules - List of modules in this group.
- * @param {string} [props.titleOverride] - Optional display title for the group.
+ * @param {ModuleGroupProps} props - Component properties.
+ * @param {string[]} props.currentCheckedModules - Currently checked module IDs.
+ * @param {string} props.groupName - The unique key of the Module Group.
+ * @param {SelectionModule[]} props.modules - Pre-sorted list of modules in this group.
+ * @param {() => void} props.onClose - Callback to close the dialog when opening instructions.
+ * @param {React.ComponentProps<typeof Avatar>["color"]} props.techColor - Accent color for module avatars.
+ * @param {string} [props.titleOverride] - Optional display title override for the group.
  *
  * @returns {JSX.Element | null} The rendered group of checkboxes, or `null` if no modules are present.
  *
@@ -153,57 +224,22 @@ ModuleCheckbox.displayName = "ModuleCheckbox";
  *
  * @category Components
  */
-const ModuleGroup: React.FC<{
-	groupName: string;
-	modules: SelectionModule[];
-	techColor: React.ComponentProps<typeof Avatar>["color"];
-	titleOverride?: string;
-}> = ({ groupName, modules, techColor, titleOverride }) => {
+const ModuleGroup: React.FC<ModuleGroupProps> = ({
+	currentCheckedModules,
+	groupName,
+	modules,
+	onClose,
+	techColor,
+	titleOverride,
+}) => {
 	const { t } = useTranslation();
 	const { openDialog } = useDialog();
-	const { currentCheckedModules, onClose } = useModuleSelectionContext();
-
-	const sortedModules = ["bonus", "figurines", "trails"].includes(groupName)
-		? [...modules].sort((a, b) => (a.label ?? "").localeCompare(b.label ?? ""))
-		: modules;
-
-	const dependencyMap = new Map<string, string>();
-
-	if (["atlantid", "cosmetic", "reactor", "upgrade"].includes(groupName)) {
-		const rankToModuleMap = new Map<string, string>();
-
-		for (const module of modules) {
-			if (module.label) {
-				for (const rank of MODULE_RANK_ORDER) {
-					if (module.label.includes(rank)) {
-						rankToModuleMap.set(rank, module.id);
-						break;
-					}
-				}
-			}
-		}
-
-		for (const module of modules) {
-			if (module.label) {
-				const rankIndex = MODULE_RANK_ORDER.findIndex((rank) =>
-					module.label!.includes(rank)
-				);
-
-				if (rankIndex > 0) {
-					const prerequisiteRank = MODULE_RANK_ORDER[rankIndex - 1];
-					const prerequisiteModuleId = rankToModuleMap.get(prerequisiteRank);
-
-					if (prerequisiteModuleId) {
-						dependencyMap.set(module.id, prerequisiteModuleId);
-					}
-				}
-			}
-		}
-	}
 
 	if (!modules || modules.length === 0) {
 		return null;
 	}
+
+	const dependencyMap = getModulePrerequisites(groupName, modules);
 
 	return (
 		<div>
@@ -219,7 +255,7 @@ const ModuleGroup: React.FC<{
 						<InfoCircledIcon
 							className="shrink-0 cursor-pointer opacity-70 transition-opacity hover:opacity-100"
 							onClick={() => {
-								onClose?.();
+								onClose();
 								openDialog("instructions", { section: "section-4" });
 							}}
 						/>
@@ -232,7 +268,7 @@ const ModuleGroup: React.FC<{
 					<Trans components={{ p: <p /> }} i18nKey="moduleSelection.cosmeticInfo" />
 				</Blockquote>
 			)}
-			{sortedModules.map((module) => {
+			{modules.map((module) => {
 				const prerequisiteId = dependencyMap.get(module.id);
 				const isDisabled = prerequisiteId
 					? !currentCheckedModules.includes(prerequisiteId)
@@ -255,41 +291,176 @@ const ModuleGroup: React.FC<{
  * A paragraph component that strips the i18n style attribute to prevent runtime errors
  * in React 19 and replaces it with the equivalent Tailwind class.
  *
- * @param {React.ComponentPropsWithoutRef<"p"> & { style?: unknown }} props - Component props including style override.
+ * @param {SafeParagraphProps} props - Component props including style override.
  *
  * @returns {JSX.Element} A clean paragraph element.
  */
-const SafeParagraph: React.FC<React.ComponentPropsWithoutRef<"p"> & { style?: unknown }> = ({
-	style,
-	...props
-}) => <p {...props} className={style ? "mt-2" : undefined} />;
+const SafeParagraph: React.FC<SafeParagraphProps> = ({ style, ...props }) => (
+	<p {...props} className={style ? "mt-2" : undefined} />
+);
 
 /**
- * The primary content component for the module selection dialog.
+ * Store-connected dialog for configuring a Technology Category's Module Selection.
  *
- * @returns {JSX.Element} The rendered dialog body.
+ * @remarks
+ * Renders a single shared dialog instance driven by {@link useModuleSelectionDialogStore}.
+ * Snapshots initial selections on open so canceling or clicking the backdrop reverts
+ * uncommitted checkbox changes, and displays a live Solver Window dimension badge in the footer.
+ *
+ * @returns {JSX.Element | null} The rendered dialog when a Technology Category is selected, or `null`.
+ *
+ * @see {@link useModuleSelectionDialogStore}
+ * @see {@link useTechStore}
+ * @see {@link groupModules}
+ * @see {@link getModulePrerequisites}
+ * @see {@link determineWindowDimensions}
+ * @see {@link ./ModuleSelectionDialog.test.tsx Unit Tests}
+ * @see {@link ./ModuleSelectionDialog.stories.tsx Storybook}
  *
  * @component
  *
  * @category Components
+ *
+ * @example Rendering the shared Module Selection dialog
+ * ```tsx
+ * <ModuleSelectionDialog />
+ * // renders null when closed, or the active Technology Category's Module Selection dialog when open
+ * ```
  */
-const DialogBody: React.FC = () => {
+export const ModuleSelectionDialog: React.FC = memo(() => {
 	const { t } = useTranslation();
-	const {
-		allModulesSelected,
-		currentCheckedModules,
-		groupedModules,
-		handleSelectAllChange,
-		handleValueChange,
-		tech,
-		techColor,
-	} = useModuleSelectionContext();
-	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
-	const isCorvette = selectedShipType === "corvette";
+	const { handleOptimize, isGridFull } = useTechTree();
+	const { sendDeferredEvent } = useAnalytics();
+	const [, startTransition] = useTransition();
 
-	return (
+	const { closeDialog, isOpen, selectedTechData } = useModuleSelectionDialogStore(
+		useShallow((state) => ({
+			closeDialog: state.closeDialog,
+			isOpen: state.isOpen,
+			selectedTechData: state.selectedTechData,
+		}))
+	);
+
+	const activeTech = selectedTechData?.tech ?? "";
+	const techColor = selectedTechData?.techColor ?? "blue";
+	const techImage = selectedTechData?.techImage ?? null;
+
+	const setCheckedModules = useTechStore((state) => state.setCheckedModules);
+	const currentCheckedModules = useTechStore(
+		useShallow((state) => state.checkedModules[activeTech] || [])
+	);
+	const { activeGroupType, techGroup } = useTechStore(
+		useShallow((state) => ({
+			activeGroupType: state.activeGroups?.[activeTech] || "normal",
+			techGroup: state.techGroups?.[activeTech],
+		}))
+	);
+
+	const hasTechInGrid = useGridStore((state) => state.activeTechs?.has(activeTech) ?? false);
+	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
+	const isCorvette = selectedPlatform === "corvette";
+
+	const activeVariant = resolveActiveTechVariant(techGroup, activeGroupType);
+	const modules = activeVariant?.modules || EMPTY_MODULES_ARRAY;
+	const groupedModules = groupModules(modules);
+	const allModulesSelected = areAllModulesSelected(modules, currentCheckedModules);
+
+	const initialModulesRef = useRef<string[]>([]);
+	const lastOpenedTechRef = useRef<null | string>(null);
+	const optimizeClickedRef = useRef(false);
+
+	const translationKeyPart = getTechnologyTranslationKey(activeTech, techImage);
+	const translatedTechName = activeTech ? t(`technologies.${translationKeyPart}`) : "";
+
+	const currentCheckedModulesRef = useRef(currentCheckedModules);
+	useEffect(() => {
+		currentCheckedModulesRef.current = currentCheckedModules;
+	}, [currentCheckedModules]);
+
+	useEffect(() => {
+		if (!isOpen || !activeTech) {
+			lastOpenedTechRef.current = null;
+
+			return;
+		}
+
+		if (lastOpenedTechRef.current === activeTech) {
+			return;
+		}
+
+		lastOpenedTechRef.current = activeTech;
+		initialModulesRef.current = currentCheckedModulesRef.current;
+		optimizeClickedRef.current = false;
+
+		const appName = t("appName", { defaultValue: "NMS Optimizer" });
+		const pageTitle = formatDocumentTitle(`${translatedTechName} Selection`, appName);
+
+		sendDeferredEvent({
+			action: "page_view",
+			category: "engagement",
+			nonInteraction: true,
+			page: `${window.location.pathname}${window.location.search}#module-selection-${activeTech}`,
+			page_location: window.location.href,
+			page_title: pageTitle,
+		});
+	}, [activeTech, isOpen, sendDeferredEvent, t, translatedTechName]);
+
+	const handleValueChange = useCallback(
+		(moduleIds: string[]) => {
+			setCheckedModules(activeTech, () => moduleIds);
+		},
+		[activeTech, setCheckedModules]
+	);
+
+	const handleSelectAllChange = (checked: "indeterminate" | boolean) => {
+		handleValueChange(getSelectAllModuleIds(modules, checked));
+	};
+
+	const handleOptimizeClick = useCallback(async () => {
+		optimizeClickedRef.current = true;
+
+		if (isGridFull && !hasTechInGrid) {
+			closeDialog();
+
+			return;
+		}
+
+		await handleOptimize(activeTech);
+		closeDialog();
+	}, [activeTech, closeDialog, handleOptimize, hasTechInGrid, isGridFull]);
+
+	const handleClose = useCallback(() => {
+		startTransition(() => {
+			if (
+				!optimizeClickedRef.current &&
+				!shallow(currentCheckedModulesRef.current, initialModulesRef.current)
+			) {
+				handleValueChange(initialModulesRef.current);
+			}
+
+			closeDialog();
+		});
+	}, [closeDialog, handleValueChange]);
+
+	if (!selectedTechData) {
+		return null;
+	}
+
+	const isOptimizeDisabled = currentCheckedModules.length === 0;
+	const windowDimensions = determineWindowDimensions(
+		currentCheckedModules.length,
+		activeVariant?.window_rules
+	);
+	const windowBadgeText = windowDimensions
+		? t("moduleSelection.solverWindow", {
+				height: windowDimensions[1],
+				width: windowDimensions[0],
+			})
+		: t("moduleSelection.solverWindowEmpty");
+
+	const content = (
 		<>
-			{isCorvette && tech !== "trails" && (
+			{isCorvette && activeTech !== "trails" && (
 				<Text as="div" className="mb-3! block text-sm sm:text-base" mb="3">
 					<Trans
 						components={{
@@ -301,7 +472,7 @@ const DialogBody: React.FC = () => {
 					/>
 				</Text>
 			)}
-			{tech === "trails" && (
+			{activeTech === "trails" && (
 				<Text as="p" className="mb-3! block text-sm sm:text-base" mb="3">
 					<Trans
 						components={{ strong: <strong className="font-bold" /> }}
@@ -309,7 +480,7 @@ const DialogBody: React.FC = () => {
 					/>
 				</Text>
 			)}
-			{!isCorvette && tech !== "trails" && (
+			{!isCorvette && activeTech !== "trails" && (
 				<Text as="p" className="mb-3! block text-sm sm:text-base" mb="3">
 					<Trans i18nKey="moduleSelection.description" />
 				</Text>
@@ -365,15 +536,17 @@ const DialogBody: React.FC = () => {
 
 						let titleOverride: string | undefined;
 
-						if (groupName === "bonus" && tech === "trails") {
+						if (groupName === "bonus" && activeTech === "trails") {
 							titleOverride = t("moduleSelection.trails");
 						}
 
 						return (
 							<ModuleGroup
+								currentCheckedModules={currentCheckedModules}
 								groupName={groupName}
 								key={groupName}
 								modules={groupedModules[groupName]}
+								onClose={handleClose}
 								techColor={techColor}
 								titleOverride={titleOverride}
 							/>
@@ -383,31 +556,8 @@ const DialogBody: React.FC = () => {
 			</div>
 		</>
 	);
-};
 
-/**
- * The action bar component for the module selection dialog.
- *
- * @returns {JSX.Element} The rendered dialog footer with the Solver Window badge, Cancel, and Optimize buttons.
- *
- * @component
- *
- * @category Components
- */
-const DialogFooter: React.FC = () => {
-	const { t } = useTranslation();
-	const { currentCheckedModules, handleOptimizeClick, onClose, techColor, windowRules } =
-		useModuleSelectionContext();
-	const isOptimizeDisabled = currentCheckedModules.length === 0;
-	const windowDimensions = determineWindowDimensions(currentCheckedModules.length, windowRules);
-	const windowBadgeText = windowDimensions
-		? t("moduleSelection.solverWindow", {
-				height: windowDimensions[1],
-				width: windowDimensions[0],
-			})
-		: t("moduleSelection.solverWindowEmpty");
-
-	return (
+	const footer = (
 		<div className="mb-1 flex w-full items-center justify-between gap-2">
 			<Badge
 				className="font-mono! text-xs! tabular-nums sm:text-sm!"
@@ -419,7 +569,7 @@ const DialogFooter: React.FC = () => {
 				{windowBadgeText} (x{currentCheckedModules.length})
 			</Badge>
 			<div className="flex items-center gap-2">
-				<Button onClick={onClose} variant="soft">
+				<Button onClick={handleClose} variant="soft">
 					{t("moduleSelection.cancelButton")}
 				</Button>
 				<Button
@@ -433,61 +583,20 @@ const DialogFooter: React.FC = () => {
 			</div>
 		</div>
 	);
-};
-
-/**
- * Interactive dialog for selecting specific technology modules for optimization.
- *
- * @remarks
- * This dialog allows users to pick which modules they have installed for a given
- * technology. It handles prerequisite validation (e.g., must select 'S' class
- * before 'X' class if applicable) and triggers the optimization process.
- * It uses {@link ModuleSelectionProvider} to share state across its sub-components.
- *
- * @param {ModuleSelectionDialogProps} props - Component properties.
- *
- * @returns {JSX.Element} The rendered dialog root.
- *
- * @see {@link ModuleSelectionProvider}
- * @see {@link useModuleSelectionContext}
- * @see {@link AppDialog}
- *
- * @component
- *
- * @category Components
- *
- * @example
- * ```tsx
- * <ModuleSelectionDialog
- *   isOpen={true}
- *   onClose={() => {}}
- *   tech="pulse"
- *   translatedTechName="Pulse Drive"
- * />
- * ```
- */
-export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = memo((props) => {
-	const { t } = useTranslation();
-	const { isOpen, onClose, translatedTechName } = props;
 
 	return (
-		<ModuleSelectionProvider props={props}>
-			<Suspense fallback={null}>
-				<AppDialog
-					content={<DialogBody />}
-					footer={<DialogFooter />}
-					headerIcon={
-						<CheckCircledIcon
-							className="h-6 w-6"
-							style={{ color: "var(--accent-11)" }}
-						/>
-					}
-					isOpen={isOpen}
-					onClose={onClose}
-					title={t("moduleSelection.title", { techName: translatedTechName })}
-				/>
-			</Suspense>
-		</ModuleSelectionProvider>
+		<Suspense fallback={null}>
+			<AppDialog
+				content={content}
+				footer={footer}
+				headerIcon={
+					<CheckCircledIcon className="h-6 w-6" style={{ color: "var(--accent-11)" }} />
+				}
+				isOpen={isOpen}
+				onClose={handleClose}
+				title={t("moduleSelection.title", { techName: translatedTechName })}
+			/>
+		</Suspense>
 	);
 });
 

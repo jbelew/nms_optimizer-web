@@ -1,6 +1,8 @@
 import type { ApiResponse, Grid } from "./grid/gridStore";
 import type { BonusStatusData } from "./tech/techStore";
 import type { TechTreeItem } from "@/types/tech";
+import type { SaveBuildParams } from "@/utils/build/buildSerializer";
+import type { BuildFile } from "@/utils/validation/dataValidation";
 
 import { Logger } from "@/utils/system/monitoring";
 
@@ -71,9 +73,9 @@ function computeInitialCheckedModules(techGroups: { [key: string]: TechTreeItem[
  *
  * @remarks
  * This module centralizes actions that affect multiple stores simultaneously,
- * such as resetting a session or switching platforms. This prevents stores
- * from having "shotgun coupling" where they need to know about each other's
- * internals.
+ * such as resetting a session, switching platforms, or capturing/restoring a Build File.
+ * This prevents stores and DOM hooks from having "shotgun coupling" where they need to
+ * know about each other's internals.
  *
  * @category State
  */
@@ -103,6 +105,48 @@ export const sessionCoordinator = {
 			const status = computeBonusStatus(data.maxBonus);
 			techStore.setBonusStatus(tech, status);
 		}
+	},
+
+	/**
+	 * Extracts a complete multi-store snapshot of the active build for Build File serialization.
+	 *
+	 * @param {string} buildName - The display name to assign to the saved build.
+	 *
+	 * @returns {SaveBuildParams} The multi-store build state snapshot ready for `buildSerializer.saveBuild`.
+	 *
+	 * @see {@link useGridStore}
+	 * @see {@link useTechStore}
+	 * @see {@link usePlatformStore}
+	 *
+	 * @example
+	 * ```ts
+	 * const snapshot = sessionCoordinator.getBuildSnapshot("My Build");
+	 * ```
+	 */
+	getBuildSnapshot(buildName: string): SaveBuildParams {
+		const gridStoreState = useGridStore.getState();
+		const techStoreState = useTechStore.getState();
+		const platformStoreState = usePlatformStore.getState();
+
+		return {
+			buildName,
+			gridState: {
+				grid: gridStoreState.grid,
+				gridFixed: gridStoreState.gridFixed,
+				initialGridDefinition: gridStoreState.initialGridDefinition,
+				isSharedGrid: gridStoreState.isSharedGrid,
+				result: gridStoreState.result,
+				superchargedFixed: gridStoreState.superchargedFixed,
+			},
+			shipType: platformStoreState.selectedPlatform,
+			techState: {
+				bonusStatus: techStoreState.bonusStatus,
+				checkedModules: techStoreState.checkedModules,
+				maxBonus: techStoreState.maxBonus,
+				solvedBonus: techStoreState.solvedBonus,
+				solveMethod: techStoreState.solveMethod,
+			},
+		};
 	},
 
 	/**
@@ -143,6 +187,42 @@ export const sessionCoordinator = {
 
 		// 3. Reset UI session violation counters
 		useUiStore.getState().resetSession();
+	},
+
+	/**
+	 * Restores a validated Build File snapshot across the platform, grid, and tech stores.
+	 *
+	 * @param {BuildFile} buildData - The parsed and checksum-verified Build File payload.
+	 * @param {string[]} validShipTypes - Supported Platform Type identifiers.
+	 *
+	 * @returns {void} No return value.
+	 *
+	 * @see {@link useGridStore}
+	 * @see {@link useTechStore}
+	 * @see {@link usePlatformStore}
+	 *
+	 * @example
+	 * ```ts
+	 * sessionCoordinator.restoreBuildSnapshot(buildData, ["standard", "corvette"]);
+	 * ```
+	 */
+	restoreBuildSnapshot(buildData: BuildFile, validShipTypes: string[]): void {
+		const platformState = usePlatformStore.getState();
+
+		if (buildData.shipType !== platformState.selectedPlatform) {
+			platformState.setSelectedPlatform(buildData.shipType, validShipTypes, true, true);
+		}
+
+		useGridStore.getState().restoreGridState({
+			...buildData.gridState,
+			buildName: buildData.name,
+		});
+
+		useTechStore.getState().restoreTechState({
+			bonusState: buildData.bonusState,
+			moduleState: buildData.moduleState,
+			techState: buildData.techState,
+		});
 	},
 
 	/**

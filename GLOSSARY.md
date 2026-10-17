@@ -9,16 +9,28 @@ The hierarchical relationship (Theta &rarr; Tau &rarr; Sigma) between procedural
 _Avoid_: upgrade level, module level, module rank
 
 **Technology Category**:
-A functional system type (e.g., Pulse Engine, Deflector Shield) containing one or more variant groups of modules.
+A functional system type (e.g., Pulse Engine, Deflector Shield) containing one or more Technology Variants.
 _Avoid_: tech group, ship component, system type
+
+**Technology Variant**:
+A distinct configuration mode (e.g., `normal`, `max`) within a Technology Category that defines its available modules and Solver Window rules.
+_Avoid_: active group, tech group variant, group type
+
+**Module Group**:
+A functional sub-classification of modules within a Technology Variant (e.g., `core`, `figurines`, `bonus`, `upgrade`, `atlantid`, `reactor`, `cosmetic`, `trails`) governing display order and Module Rank Order rules.
+_Avoid_: module type bucket, module category, validation group
 
 **Module Selection**:
 The set of user-checked modules within a Technology Category that are selected as inputs for layout optimization.
 _Avoid_: selected modules, checked upgrades
 
 **Shared Grid**:
-A technology layout imported into the workspace from an encoded URL query parameter rather than configured manually or loaded from a saved file.
+A technology layout imported into the workspace from an encoded URL query parameter rather than configured manually or loaded from a Build File.
 _Avoid_: shared build, imported layout, URL grid
+
+**Build File**:
+A portable `.nms` JSON snapshot capturing the active Platform Type, grid layout, Module Selection, solver bonus scores, and a SHA-256 integrity checksum for saving or restoring a build from disk.
+_Avoid_: save file, exported build, layout file
 
 **Default Grid Layout**:
 The baseline slot configuration for the active Platform Type (or Ship Class), consisting of its initial active and supercharged slot states with no placed modules.
@@ -55,4 +67,3 @@ _Avoid_: pending worker, queued worker, background worker
 **Solver Window**:
 The bounding subgrid dimensions (width × height) dynamically allocated for a Technology Category based on its active Module Selection, within which localized module permutation and simulated annealing occur.
 _Avoid_: window size, search window, tech window, bounding box
-

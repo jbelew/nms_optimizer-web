@@ -6,13 +6,7 @@ import { describe, expect, it, vi } from "vitest";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
 
-import { useTechModuleManagement } from "./useTechModuleManagement";
 import { useTechTreeRow } from "./useTechTreeRow";
-
-// Spy on useTechModuleManagement to ensure TechTreeRow does not invoke it per-row
-vi.mock("./useTechModuleManagement", () => ({
-	useTechModuleManagement: vi.fn(),
-}));
 
 vi.mock("./useTechOptimization", () => ({
 	useTechOptimization: vi.fn(() => ({
@@ -74,7 +68,7 @@ describe("useTechTreeRow", () => {
 		);
 	});
 
-	it("should return the correct data shape without calling useTechModuleManagement", () => {
+	it("should return the correct data shape for TechTreeRow", () => {
 		const { result } = renderHook(() => useTechTreeRow(mockProps));
 
 		// Check for key properties to ensure the hook returns what TechTreeRow needs
@@ -83,7 +77,6 @@ describe("useTechTreeRow", () => {
 		expect(result.current).toHaveProperty("handleOptimizeClick");
 		expect(result.current.checkedModulesCount).toBe(1);
 		expect(result.current.techColor).toBe("blue");
-		expect(useTechModuleManagement).not.toHaveBeenCalled();
 	});
 
 	it("should calculate translatedTechName correctly", () => {

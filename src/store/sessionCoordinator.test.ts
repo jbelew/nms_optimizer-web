@@ -5,21 +5,33 @@ import { computeBonusStatus, sessionCoordinator } from "./sessionCoordinator";
 
 const mockGridStore = {
 	clearInteractionState: vi.fn(),
+	grid: { cells: [], height: 6, width: 10 },
+	gridFixed: true,
+	initialGridDefinition: undefined,
 	isSharedGrid: false,
 	resetGrid: vi.fn(),
+	restoreGridState: vi.fn(),
+	result: null,
 	setBuildName: vi.fn(),
 	setGrid: vi.fn(),
 	setIsSharedGrid: vi.fn(),
 	setResult: vi.fn(),
+	superchargedFixed: false,
 };
 
 const mockTechStore = {
+	bonusStatus: {},
+	checkedModules: { pulse: ["core"] },
 	clearAllBonusStatus: vi.fn(),
 	clearAllCheckedModules: vi.fn(),
 	clearAllModuleSelections: vi.fn(),
 	clearResult: vi.fn(),
 	clearTechGroups: vi.fn(),
+	maxBonus: { pulse: 100 },
 	resetSession: vi.fn(),
+	restoreTechState: vi.fn(),
+	solvedBonus: { pulse: 100 },
+	solveMethod: { pulse: "pattern" },
 };
 
 const mockPlatformStoreState = {
@@ -85,6 +97,7 @@ describe("computeBonusStatus rounding", () => {
 describe("sessionCoordinator", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
+		mockGridStore.isSharedGrid = false;
 	});
 
 	it("switchPlatform resets the optimization result in gridStore", () => {
@@ -210,6 +223,73 @@ describe("sessionCoordinator", () => {
 
 			expect(resetSessionSpy).toHaveBeenCalled();
 			resetSessionSpy.mockRestore();
+		});
+	});
+
+	describe("getBuildSnapshot & restoreBuildSnapshot", () => {
+		it("captures a multi-store snapshot in getBuildSnapshot", () => {
+			mockPlatformStoreState.selectedPlatform = "fighter";
+
+			const snapshot = sessionCoordinator.getBuildSnapshot("My Fighter");
+
+			expect(snapshot).toEqual({
+				buildName: "My Fighter",
+				gridState: {
+					grid: mockGridStore.grid,
+					gridFixed: true,
+					initialGridDefinition: undefined,
+					isSharedGrid: false,
+					result: null,
+					superchargedFixed: false,
+				},
+				shipType: "fighter",
+				techState: {
+					bonusStatus: {},
+					checkedModules: { pulse: ["core"] },
+					maxBonus: { pulse: 100 },
+					solvedBonus: { pulse: 100 },
+					solveMethod: { pulse: "pattern" },
+				},
+			});
+		});
+
+		it("restores platform, grid, and tech state in restoreBuildSnapshot", () => {
+			mockPlatformStoreState.selectedPlatform = "shuttle";
+
+			const buildFile = {
+				bonusState: { bonusStatus: {} },
+				checksum: "abc",
+				gridState: {
+					grid: { cells: [], height: 6, width: 10 },
+					gridFixed: false,
+					isSharedGrid: false,
+					result: null,
+					superchargedFixed: false,
+				},
+				moduleState: { moduleSelections: { pulse: ["core"] } },
+				name: "Loaded Fighter",
+				shipType: "fighter",
+				techState: { checkedModules: { pulse: ["core"] } },
+				timestamp: 123,
+			};
+
+			sessionCoordinator.restoreBuildSnapshot(buildFile, ["fighter", "shuttle"]);
+
+			expect(mockPlatformStoreState.setSelectedPlatform).toHaveBeenCalledWith(
+				"fighter",
+				["fighter", "shuttle"],
+				true,
+				true
+			);
+			expect(mockGridStore.restoreGridState).toHaveBeenCalledWith({
+				...buildFile.gridState,
+				buildName: "Loaded Fighter",
+			});
+			expect(mockTechStore.restoreTechState).toHaveBeenCalledWith({
+				bonusState: buildFile.bonusState,
+				moduleState: buildFile.moduleState,
+				techState: buildFile.techState,
+			});
 		});
 	});
 });

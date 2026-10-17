@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { createEmptyCell } from "./gridStore";
+import { assignModuleToCell, createEmptyCell } from "./gridStore";
 
 describe("createEmptyCell() createEmptyCell method", () => {
 	// Happy Path Tests
@@ -110,6 +110,42 @@ describe("createEmptyCell() createEmptyCell method", () => {
 				expect(cell).toHaveProperty("type");
 				expect(cell).toHaveProperty("value");
 			}
+		});
+	});
+
+	describe("assignModuleToCell", () => {
+		it("populates module properties onto an existing cell while preserving structural flags", () => {
+			const cell = createEmptyCell(true, true);
+			cell.tech = "pulse";
+			cell.adjacency_bonus = 1.0;
+
+			assignModuleToCell(cell, {
+				adjacency: "greater",
+				bonus: 14,
+				id: "S1",
+				image: "pulse-s.webp",
+				label: "Pulse Upgrade S",
+				sc_eligible: true,
+				type: "upgrade",
+				value: 3,
+			});
+
+			expect(cell).toEqual({
+				active: true,
+				adjacency: "greater",
+				adjacency_bonus: 1.0,
+				bonus: 14,
+				group_adjacent: false,
+				image: "pulse-s.webp",
+				label: "Pulse Upgrade S",
+				module: "S1",
+				sc_eligible: true,
+				supercharged: true,
+				tech: "pulse",
+				total: 0.0,
+				type: "upgrade",
+				value: 3,
+			});
 		});
 	});
 });
