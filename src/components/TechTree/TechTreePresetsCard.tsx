@@ -66,7 +66,7 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build, onApply }) => {
 	const isSmallAndUp = useBreakpoint("640px");
 
 	return (
-		<div className="grid grid-cols-[1fr_auto_auto] items-center gap-2 shadow-sm">
+		<div className="grid grid-cols-[1fr_auto_auto] items-center gap-2">
 			<Flex align="center" gap="2" minWidth="0">
 				<StackIcon
 					className="shrink-0"
@@ -97,7 +97,7 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build, onApply }) => {
 			<Button
 				className="cursor-pointer! font-medium"
 				onClick={() => onApply(build)}
-				size="1"
+				size="2"
 				variant="soft"
 			>
 				<MagicWandIcon height="15" style={{ color: "var(--accent-a11)" }} width="15" />
@@ -143,7 +143,7 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds, techTre
 	}, [openDialog]);
 
 	return (
-		<div className="mb-4 rounded-(--radius-2) bg-(--accent-a3) p-3 shadow-sm lg:bg-(--accent-surface)">
+		<div className="mb-4 rounded-(--radius-2) bg-(--accent-a3) p-3 sm:shadow-sm lg:bg-(--accent-surface)">
 			<Flex direction="column" gap="1" width="100%">
 				<Flex align="center" justify="between" width="100%">
 					<Flex align="center" gap="2">
@@ -179,7 +179,7 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds, techTre
 					/>
 				</Text>
 
-				<div className="mt-2 flex flex-col gap-3">
+				<div className="mt-2 mb-1 flex flex-col gap-3">
 					{builds.map((build, index) => (
 						<PresetCardItem
 							build={build}
