@@ -11,7 +11,7 @@ NMS Optimizer Web is a React-based frontend application for optimizing technolog
 
 ## Verification Gate (Definition of Done)
 
-Before marking any code task complete, execute this sequence:
+Before marking any code task complete, execute this sequence (also enforced automatically on `git commit` via Lefthook pre-commit hooks):
 
 1. `bun run typecheck` — Must report 0 TypeScript diagnostics (`tsgo`).
 2. `bun run test -- <path>` or `bun run test:related` — Ensure targeted unit/component tests pass.
@@ -24,14 +24,15 @@ Before marking any code task complete, execute this sequence:
 - **Single Test**: `bun run test -- src/path/to/file.test.tsx`.
 - **Storybook**: `bun run test:storybook` (unit test stories) and `bun run test:storybook:a11y` (CLI a11y audit).
 - **E2E Tests**: Do not run locally due to duration; CI runs them automatically. Only run locally (`bun run test:e2e:ci` or targeted spec) when actively debugging CI failures.
-- **Format**: `bun run format` (formats `src/`, `README.md`, markdown assets, and locale JSON bundles).
+- **Format**: Prefer `bunx prettier --write <touched-files>` (or let Lefthook format staged files on `git commit`); `bun run format` formats the entire repository (`src/`, `README.md`, markdown assets, and locale JSON bundles).
 
 ## Reference Guides (Progressive Disclosure)
 
 Read these specialized guides when working on matching branches:
 
+- **When naming props, variables, JSDoc, or test cases**: Read [`GLOSSARY.md`](GLOSSARY.md) for canonical domain terms (even when destructuring legacy store keys like `state.techGroups` or `state.checkedModules`).
 - **When writing CSS, SEO metadata, or commit messages**: Read [`docs/agents/project-rules.md`](docs/agents/project-rules.md) for critical iOS Safari GPU rendering workarounds, `<meta>` description preservation, and Angular commit conventions.
-- **When creating or refactoring UI components**: Read [`docs/agents/component-architecture.md`](docs/agents/component-architecture.md) for prop drilling prevention and the Colocated Hook Pattern.
+- **When creating or refactoring UI components**: Read [`docs/agents/component-architecture.md`](docs/agents/component-architecture.md) for dialog directory layout, prop drilling prevention, and the Colocated Hook Pattern.
 - **When writing Zustand stores, React hooks, or Tailwind styling**: Read [`docs/agents/code-style.md`](docs/agents/code-style.md) for Immer deep mutation rules, Tailwind v4 CSS-first config, and hook error handling.
 - **When writing or fixing tests or Storybook stories**: Read [`docs/agents/testing.md`](docs/agents/testing.md) for module mocking, console log bans, and Storybook bundle cache safeguards.
 - **When modifying Vite build config, SSG scripts, or server routing**: Read [`docs/agents/architecture.md`](docs/agents/architecture.md) for hybrid rendering flow and Rolldown chunking groups.
@@ -42,6 +43,7 @@ Read these specialized guides when working on matching branches:
 
 Issues and specs are tracked in GitHub Issues via the `gh` CLI. See `docs/agents/issue-tracker.md`.
 
+- **Reading issues**: Always pass `--json` (`gh issue view <n> --json number,title,body,labels,comments`); bare `gh issue view` fails due to GitHub's deprecated classic `projectCards` GraphQL field.
 - **Specs (`/to-spec`)**: Prefix titles with `spec:` (or `spec(<scope>):`) and apply the `spec` label. Once broken into child tickets via `/to-tickets`, remove `ready-for-agent` from the parent spec so only leaf tickets carry `ready-for-agent`.
 - **Implementing tickets (`/implement`)**: After committing and passing `code-review`, immediately update the ticket body (`- [ ]` → `- [x]`) and close the GitHub issue (`gh issue close <n> --comment "Resolved in <sha>."`); do not wait for `git push`.
 
