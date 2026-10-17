@@ -1,32 +1,22 @@
 import React, { lazy, Suspense } from "react";
 import { Flex } from "@radix-ui/themes";
-import { useTranslation } from "react-i18next";
 
 import AppFooter from "@/components/AppFooter/AppFooter";
 import AppHeader from "@/components/AppHeader/AppHeader";
-import { LanguageSelector } from "@/components/LanguageSelector/LanguageSelector";
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
-import {
-	TechTreeList,
-	TechTreeProvider,
-	TechTreeRoot,
-	TechTreeSkeleton,
-} from "@/components/TechTree/TechTree";
+import { TechTree, TechTreeSkeleton } from "@/components/TechTree/TechTree";
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useIdleMount } from "@/hooks/useIdleMount/useIdleMount";
+import { useOptimize } from "@/hooks/useOptimize/useOptimize";
 import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
-import { useFetchTechTreeSuspense } from "@/hooks/useTechTree/useTechTree";
+import { build, getBuildDate } from "@/routeConfig";
 import { useGridStore } from "@/store/grid/gridStore";
+import { useUiStore } from "@/store/ui/uiStore";
+import { useDialog } from "@/utils/system/dialogUtils";
 import { lazyNamed } from "@/utils/system/lazyNamed";
 
 import { MainAppGridSection } from "./MainAppGridSection";
-import {
-	useMainAppBuildManagement,
-	useMainAppGlobal,
-	useMainAppLayout,
-	useMainAppOptimization,
-} from "./useMainAppContext";
 
-const BuildNameDialog = lazy(() => import("@/components/AppDialog/BuildName/BuildNameDialog"));
 const OptimizationAlertDialog = lazy(
 	() => import("@/components/AppDialog/OptimizationAlert/OptimizationAlertDialog")
 );
@@ -39,13 +29,24 @@ const InstallPrompt = lazyNamed(
 	"InstallPrompt"
 );
 const ToastRenderer = lazyNamed(() => import("@/components/Toast/ToastRenderer"), "ToastRenderer");
-const SharedModuleSelectionDialog = lazyNamed(
-	() => import("@/components/ModuleSelectionDialog/SharedModuleSelectionDialog"),
-	"SharedModuleSelectionDialog"
-);
 
 /**
  * Inner component that triggers the ship types fetch via Suspense.
+ *
+ * @returns {null} Renders nothing once ship types resolve.
+ *
+ * @see {@link useFetchShipTypesSuspense}
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <Suspense fallback={null}>
+ *   <ShipTypesLoader />
+ * </Suspense>
+ * ```
  */
 export const ShipTypesLoader = () => {
 	useFetchShipTypesSuspense();
@@ -54,12 +55,30 @@ export const ShipTypesLoader = () => {
 };
 
 /**
- * Component that manages deferred background utilities.
+ * Props for {@link MainAppBackgroundServices}.
  */
-const MainAppBackgroundServices: React.FC = () => {
+interface MainAppBackgroundServicesProps {
+	/** Clears the current Pattern No Fit technology warning. */
+	clearPatternNoFitTech: () => void;
+	/** Re-runs optimization with forced solving for the current PNF technology. */
+	handleForceCurrentPnfOptimize: () => Promise<void>;
+	/** Technology key that triggered a Pattern No Fit warning, or null. */
+	patternNoFitTech: null | string;
+}
+
+/**
+ * Component that manages deferred background utilities.
+ *
+ * @param {MainAppBackgroundServicesProps} props - Component properties.
+ *
+ * @returns {JSX.Element | null} Deferred background services or null before idle mount.
+ */
+const MainAppBackgroundServices: React.FC<MainAppBackgroundServicesProps> = ({
+	clearPatternNoFitTech,
+	handleForceCurrentPnfOptimize,
+	patternNoFitTech,
+}) => {
 	const mount = useIdleMount();
-	const { clearPatternNoFitTech, handleForceCurrentPnfOptimize, patternNoFitTech } =
-		useMainAppOptimization();
 
 	if (!mount) return null;
 
@@ -79,99 +98,59 @@ const MainAppBackgroundServices: React.FC = () => {
 };
 
 /**
- * Component that renders the mobile toolbar.
+ * Component that renders the mobile toolbar on small screens.
+ *
+ * @returns {JSX.Element | null} The mobile toolbar on viewports under 640px, or null.
  */
 const MainAppMobileToolbar: React.FC = () => {
-	const { containerRef } = useMainAppLayout();
-	const { handleShowChangelog, hasModulesInGrid, isSmallScreen, isVisible, toolbarRef } =
-		useMainAppGlobal();
-	const { loadBuild, saveBuild } = useMainAppBuildManagement();
-	const { solving } = useMainAppOptimization();
-	const { t } = useTranslation();
+	const isSmallScreen = !useBreakpoint("640px");
 
 	if (!isSmallScreen) return null;
 
-	const { fileInputRef, handleFileSelect } = loadBuild;
-	const { handleBuildNameCancel, handleBuildNameConfirm, isSaveBuildDialogOpen } = saveBuild;
-
-	return (
-		<>
-			<MobileToolbar
-				gridRef={containerRef}
-				hasModulesInGrid={hasModulesInGrid}
-				isVisible={isVisible}
-				onLoadBuild={loadBuild.handleLoadBuild}
-				onSaveBuild={saveBuild.handleSaveBuild}
-				onShowChangelog={handleShowChangelog}
-				ref={toolbarRef as React.Ref<HTMLDivElement>}
-				solving={solving}
-			/>
-			<Suspense fallback={null}>
-				<BuildNameDialog
-					isOpen={isSaveBuildDialogOpen}
-					onCancel={handleBuildNameCancel}
-					onConfirm={handleBuildNameConfirm}
-				/>
-			</Suspense>
-			<input
-				accept=".nms"
-				aria-label={t("buttons.loadBuild")}
-				className="hidden"
-				onChange={handleFileSelect}
-				ref={fileInputRef}
-				type="file"
-			/>
-		</>
-	);
+	return <MobileToolbar />;
 };
 
 /**
  * Component that renders the application header.
+ *
+ * @returns {JSX.Element} The rendered application header.
+ *
+ * @see {@link AppHeader}
+ * @see {@link ./MainAppLayout.test.tsx Unit Tests}
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <MainAppHeader />
+ * ```
  */
 export const MainAppHeader: React.FC = () => {
-	const { handleShowChangelog, isLargeScreen, isSharedGrid, isSmallScreen } = useMainAppGlobal();
+	const { openDialog } = useDialog();
 
-	return (
-		<AppHeader.Provider onShowChangelog={handleShowChangelog}>
-			<AppHeader.Root>
-				{!isSharedGrid && !isLargeScreen && !isSmallScreen && (
-					<AppHeader.LeftControls>
-						<AppHeader.AccessibilityToggle />
-					</AppHeader.LeftControls>
-				)}
-
-				{!isSharedGrid && !isSmallScreen && (
-					<AppHeader.RightControls>
-						<AppHeader.ChangelogButton />
-						<AppHeader.UserStatsButton />
-						<AppHeader.PerformanceButton />
-						{isLargeScreen && <AppHeader.AccessibilityToggle />}
-						<LanguageSelector />
-					</AppHeader.RightControls>
-				)}
-
-				<AppHeader.LogoText />
-				<AppHeader.Logo />
-				<AppHeader.Subtitle />
-			</AppHeader.Root>
-		</AppHeader.Provider>
-	);
+	return <AppHeader onShowChangelog={() => openDialog("changelog")} />;
 };
 
 /**
  * Component that renders the application footer.
+ *
+ * @param {{ position: "bottom-desktop" | "bottom-mobile" }} props - Footer placement variant.
+ *
+ * @returns {JSX.Element | null} The rendered footer for the active breakpoint, or null.
  */
 const MainAppFooter: React.FC<{ position: "bottom-desktop" | "bottom-mobile" }> = ({
 	position,
 }) => {
-	const { buildDate, buildVersion, isLargeScreen } = useMainAppGlobal();
+	const isLargeScreen = useBreakpoint("1024px");
 
 	if (position === "bottom-mobile" && isLargeScreen) return null;
 	if (position === "bottom-desktop" && !isLargeScreen) return null;
 
 	return (
 		<div className={position === "bottom-mobile" ? "main-app__footer-wrapper" : ""}>
-			<AppFooter.Provider buildDate={buildDate} buildVersion={buildVersion}>
+			<AppFooter.Provider buildDate={getBuildDate()} buildVersion={build}>
 				<AppFooter.Root>
 					<AppFooter.Content />
 					<AppFooter.Support />
@@ -182,34 +161,42 @@ const MainAppFooter: React.FC<{ position: "bottom-desktop" | "bottom-mobile" }> 
 };
 
 /**
- * Inner component that renders the tech tree list/recommended builds.
+ * Props for {@link MainAppSidebarSection}.
  */
-const MainAppSidebarContent: React.FC = () => {
-	const { selectedShipType } = useMainAppGlobal();
-	const { handleOptimize, solving } = useMainAppOptimization();
-	const techTree = useFetchTechTreeSuspense(selectedShipType);
-	const isGridFull = useGridStore((state) => state.isGridFull);
-
-	return (
-		<TechTreeProvider handleOptimize={handleOptimize} isGridFull={isGridFull} solving={solving}>
-			<Flex direction="column" height="100%" minHeight="0">
-				<TechTreeRoot>
-					<TechTreeList techTree={techTree} />
-				</TechTreeRoot>
-			</Flex>
-			<Suspense fallback={null}>
-				<SharedModuleSelectionDialog />
-			</Suspense>
-		</TechTreeProvider>
-	);
-};
+interface MainAppSidebarSectionProps {
+	/** Callback to trigger optimization for a technology key. */
+	handleOptimize: (tech: string) => Promise<void>;
+	/** Flag indicating whether an optimization solve is in progress. */
+	solving: boolean;
+}
 
 /**
  * Component that renders the technology tree section.
+ *
+ * @param {MainAppSidebarSectionProps} props - Component properties.
+ *
+ * @returns {JSX.Element | null} The technology tree sidebar section, or null when viewing a shared grid.
+ *
+ * @see {@link TechTree}
+ * @see {@link ./MainAppLayout.test.tsx Unit Tests}
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <MainAppSidebarSection handleOptimize={handleOptimize} solving={false} />
+ * ```
  */
-export const MainAppSidebarSection: React.FC = () => {
-	const { gridHeight, gridTableTotalWidth } = useMainAppLayout();
-	const { isLargeScreen, isSharedGrid } = useMainAppGlobal();
+export const MainAppSidebarSection: React.FC<MainAppSidebarSectionProps> = ({
+	handleOptimize,
+	solving,
+}) => {
+	const gridHeight = useUiStore((state) => state.gridSectionHeight);
+	const gridTableTotalWidth = useUiStore((state) => state.gridTableWidth);
+	const isLargeScreen = useBreakpoint("1024px");
+	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 
 	if (isSharedGrid) return null;
 
@@ -226,7 +213,9 @@ export const MainAppSidebarSection: React.FC = () => {
 			width={!isLargeScreen && gridTableTotalWidth ? `${gridTableTotalWidth}px` : "100%"}
 		>
 			<Suspense fallback={<TechTreeSkeleton height={gridHeight} />}>
-				<MainAppSidebarContent />
+				<Flex direction="column" height="100%" minHeight="0">
+					<TechTree handleOptimize={handleOptimize} solving={solving} />
+				</Flex>
 			</Suspense>
 		</Flex>
 	);
@@ -234,9 +223,31 @@ export const MainAppSidebarSection: React.FC = () => {
 
 /**
  * Component that renders the application layout structure.
+ *
+ * @returns {JSX.Element} The rendered workspace layout.
+ *
+ * @see {@link MainAppGridSection}
+ * @see {@link MainAppSidebarSection}
+ * @see {@link ./MainAppLayout.test.tsx Unit Tests}
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <MainAppLayoutContent />
+ * ```
  */
 export const MainAppLayoutContent = () => {
-	const { gridContainerRef } = useMainAppOptimization();
+	const {
+		clearPatternNoFitTech,
+		gridContainerRef,
+		handleForceCurrentPnfOptimize,
+		handleOptimize,
+		patternNoFitTech,
+		solving,
+	} = useOptimize();
 
 	return (
 		<>
@@ -260,7 +271,10 @@ export const MainAppLayoutContent = () => {
 							ref={gridContainerRef}
 						>
 							<MainAppGridSection />
-							<MainAppSidebarSection />
+							<MainAppSidebarSection
+								handleOptimize={handleOptimize}
+								solving={solving}
+							/>
 						</Flex>
 					</div>
 
@@ -269,7 +283,11 @@ export const MainAppLayoutContent = () => {
 
 				<MainAppFooter position="bottom-desktop" />
 
-				<MainAppBackgroundServices />
+				<MainAppBackgroundServices
+					clearPatternNoFitTech={clearPatternNoFitTech}
+					handleForceCurrentPnfOptimize={handleForceCurrentPnfOptimize}
+					patternNoFitTech={patternNoFitTech}
+				/>
 			</main>
 		</>
 	);

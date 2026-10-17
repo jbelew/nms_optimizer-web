@@ -4,9 +4,12 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { registerToolbarForceShow } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
 import i18n from "@/test/i18n";
 
 import { MobileToolbar } from "./MobileToolbar";
+
+const mockForceShow = vi.fn();
 
 // Mock hooks used in MobileToolbar
 vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
@@ -15,8 +18,39 @@ vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
 	}),
 }));
 
+vi.mock("@/hooks/useScrollGridIntoView/useScrollGridIntoView", () => ({
+	registerToolbarForceShow: vi.fn(),
+}));
+
+vi.mock("@/hooks/useScrollHide/useScrollHide", () => ({
+	useScrollHide: () => ({
+		forceShow: mockForceShow,
+		isVisible: true,
+		toolbarRef: { current: null },
+	}),
+}));
+
+vi.mock("@/hooks/useLoadBuild/useLoadBuild", () => ({
+	useLoadBuild: () => ({
+		fileInputRef: { current: null },
+		handleFileSelect: vi.fn(),
+		handleLoadBuild: vi.fn(),
+		isLoadPending: false,
+	}),
+}));
+
+vi.mock("@/hooks/useSaveBuild/useSaveBuild", () => ({
+	useSaveBuild: () => ({
+		handleBuildNameCancel: vi.fn(),
+		handleBuildNameConfirm: vi.fn(),
+		handleSaveBuild: vi.fn(),
+		isSaveBuildDialogOpen: false,
+		isSavePending: false,
+	}),
+}));
+
 vi.mock("@/store/grid/gridStore", () => ({
-	useGridStore: vi.fn((selector) => selector({ isSharedGrid: false })),
+	useGridStore: vi.fn((selector) => selector({ hasModulesInGrid: true, isSharedGrid: false })),
 }));
 
 vi.mock("@/components/LanguageSelector/LanguageSelector", () => ({
@@ -28,6 +62,7 @@ vi.mock("@/store/ui/uiStore", () => ({
 		a11yMode: false,
 		toggleA11yMode: vi.fn(),
 	}),
+	useOptimizeStore: vi.fn((selector) => selector({ status: { type: "idle" } })),
 }));
 
 vi.mock("@/utils/system/dialogUtils", () => ({
@@ -46,10 +81,21 @@ describe("MobileToolbar", () => {
 	const mockOnLoadBuild = vi.fn();
 	const mockOnSaveBuild = vi.fn();
 	const mockOnShowChangelog = vi.fn();
-	const mockGridRef = { current: null };
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+	});
+
+	it("should register toolbar forceShow on mount", () => {
+		render(
+			<I18nextProvider i18n={i18n}>
+				<Theme>
+					<MobileToolbar />
+				</Theme>
+			</I18nextProvider>
+		);
+
+		expect(registerToolbarForceShow).toHaveBeenCalledWith(mockForceShow);
 	});
 
 	it("should render load, save, share, changelog, stats, and accessibility buttons", () => {
@@ -57,7 +103,6 @@ describe("MobileToolbar", () => {
 			<I18nextProvider i18n={i18n}>
 				<Theme>
 					<MobileToolbar
-						gridRef={mockGridRef}
 						hasModulesInGrid={true}
 						isVisible={true}
 						onLoadBuild={mockOnLoadBuild}
@@ -83,7 +128,6 @@ describe("MobileToolbar", () => {
 			<I18nextProvider i18n={i18n}>
 				<Theme>
 					<MobileToolbar
-						gridRef={mockGridRef}
 						hasModulesInGrid={true}
 						isVisible={true}
 						onLoadBuild={mockOnLoadBuild}
@@ -106,7 +150,6 @@ describe("MobileToolbar", () => {
 			<I18nextProvider i18n={i18n}>
 				<Theme>
 					<MobileToolbar
-						gridRef={mockGridRef}
 						hasModulesInGrid={true}
 						isVisible={true}
 						onLoadBuild={mockOnLoadBuild}
@@ -129,7 +172,6 @@ describe("MobileToolbar", () => {
 			<I18nextProvider i18n={i18n}>
 				<Theme>
 					<MobileToolbar
-						gridRef={mockGridRef}
 						hasModulesInGrid={true}
 						isVisible={true}
 						onLoadBuild={mockOnLoadBuild}
@@ -153,7 +195,6 @@ describe("MobileToolbar", () => {
 			<I18nextProvider i18n={i18n}>
 				<Theme>
 					<MobileToolbar
-						gridRef={mockGridRef}
 						hasModulesInGrid={true}
 						isVisible={true}
 						onLoadBuild={mockOnLoadBuild}

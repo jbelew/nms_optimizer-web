@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React, { createRef } from "react";
+import React from "react";
 
 import { MobileToolbar } from "./MobileToolbar";
 
@@ -33,7 +33,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
-		gridRef: createRef<HTMLDivElement>(),
 		hasModulesInGrid: true,
 		isVisible: true,
 		onLoadBuild: () => console.log("Load Build"),

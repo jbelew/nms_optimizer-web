@@ -6,15 +6,9 @@ import { useFetchTechTreeSuspense } from "@/hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 
-import { TechTreeList } from "./TechTreeList";
+import { TechTreeContent } from "./TechTreeContent";
 import { TechTreeProvider } from "./TechTreeProvider";
 import { TechTreeRoot } from "./TechTreeRoot";
-
-export { TechTreeList } from "./TechTreeList";
-
-export { TechTreeProvider } from "./TechTreeProvider";
-
-export { TechTreeRoot } from "./TechTreeRoot";
 
 export { TechTreeSkeleton } from "./TechTreeSkeleton";
 
@@ -80,7 +74,7 @@ export const TechTree: React.FC<TechTreeProps> = ({
 	return (
 		<TechTreeProvider handleOptimize={handleOptimize} isGridFull={isGridFull} solving={solving}>
 			<TechTreeRoot>
-				<TechTreeList techTree={techTree} />
+				<TechTreeContent techTree={techTree} />
 			</TechTreeRoot>
 			<Suspense fallback={null}>
 				<SharedModuleSelectionDialog />

@@ -36,7 +36,7 @@ export interface TechTreeRootProps {
  * @example
  * ```tsx
  * <TechTreeRoot>
- *   <TechTreeList techTree={techTree} />
+ *   <TechTreeContent techTree={techTree} />
  * </TechTreeRoot>
  * // Renders ScrollArea on desktop (>=1024px) or Box on mobile
  * ```

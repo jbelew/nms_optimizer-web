@@ -4,7 +4,6 @@ import React from "react";
 import { act, fireEvent, render, renderHook, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { GridProvider } from "@/components/GridTable/GridContext";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import {
 	__resetScrollGridIntoViewRef,
@@ -16,6 +15,7 @@ import GridTableButtons from "./GridTableButtons";
 
 const {
 	markTutorialFinishedMock,
+	mockHandleScreenshot,
 	mockResetGrid,
 	mockSendEvent,
 	mockSetIsSharedGrid,
@@ -24,6 +24,7 @@ const {
 	openDialogMock,
 } = vi.hoisted(() => ({
 	markTutorialFinishedMock: vi.fn(),
+	mockHandleScreenshot: vi.fn(),
 	mockResetGrid: vi.fn(),
 	mockSendEvent: vi.fn(),
 	mockSetIsSharedGrid: vi.fn(),
@@ -128,20 +129,16 @@ vi.mock("@/hooks/useToast/useToast", () => ({
 }));
 vi.mock("@/hooks/useScreenshot/useScreenshot", () => ({
 	useScreenshot: () => ({
-		handleScreenshot: vi.fn(),
+		handleScreenshot: mockHandleScreenshot,
 		isCapturing: false,
 	}),
 }));
 
-const mockGridRef = {
-	current: document.createElement("div"),
-} as React.RefObject<HTMLDivElement | null>;
-
 const renderComponent = (solving = false) => {
 	return render(
-		<GridProvider gridRef={mockGridRef}>
+		<div className="main-app__grid-section">
 			<GridTableButtons solving={solving} />
-		</GridProvider>
+		</div>
 	);
 };
 
@@ -160,6 +157,13 @@ describe("GridTableButtons", () => {
 		expect(screen.getByLabelText("buttons.about")).toBeInTheDocument();
 		expect(screen.getByLabelText("buttons.share")).toBeInTheDocument();
 		expect(screen.getByLabelText("Reset Grid Button")).toBeInTheDocument();
+	});
+
+	it("captures the enclosing .main-app__grid-section when screenshot button is clicked", () => {
+		const { container } = renderComponent(false);
+		const section = container.querySelector(".main-app__grid-section");
+		fireEvent.click(screen.getByLabelText("buttons.screenshot"));
+		expect(mockHandleScreenshot).toHaveBeenCalledWith(section);
 	});
 
 	it("does not render share button when isSharedGrid is true", () => {

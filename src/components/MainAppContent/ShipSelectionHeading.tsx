@@ -1,25 +1,35 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { Flex, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import {
-	ShipSelectionContent,
-	ShipSelectionProvider,
-	ShipSelectionRoot,
-	ShipSelectionSkeleton,
-	ShipSelectionTrigger,
-} from "@/components/ShipSelection/ShipSelection";
-
-import { useMainAppGlobal, useMainAppLayout, useMainAppOptimization } from "./useMainAppContext";
+import { ShipSelection } from "@/components/ShipSelection/ShipSelection";
+import { usePlatformStore } from "@/store/app/platformStore";
+import { useGridStore } from "@/store/grid/gridStore";
+import { useOptimizeStore, useUiStore } from "@/store/ui/uiStore";
 
 /**
  * A layout component that displays the current equipment platform and its selection control.
+ *
+ * @returns {JSX.Element} The rendered platform selector heading.
+ *
+ * @see {@link ShipSelection}
+ * @see {@link ./MainAppLayout.test.tsx Unit Tests}
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <ShipSelectionHeading />
+ * ```
  */
 export const ShipSelectionHeading: React.FC = () => {
 	const { t } = useTranslation();
-	const { gridTableTotalWidth } = useMainAppLayout();
-	const { isSharedGrid, selectedShipType } = useMainAppGlobal();
-	const { solving } = useMainAppOptimization();
+	const gridTableTotalWidth = useUiStore((state) => state.gridTableWidth);
+	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
+	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
+	const solving = useOptimizeStore((state) => state.status.type === "solving");
 
 	return (
 		<Flex
@@ -32,14 +42,7 @@ export const ShipSelectionHeading: React.FC = () => {
 			wrap="wrap"
 		>
 			<span className="main-app__ship-selection">
-				<Suspense fallback={<ShipSelectionSkeleton />}>
-					<ShipSelectionProvider disabled={isSharedGrid} solving={solving}>
-						<ShipSelectionRoot>
-							<ShipSelectionTrigger />
-							<ShipSelectionContent />
-						</ShipSelectionRoot>
-					</ShipSelectionProvider>
-				</Suspense>
+				<ShipSelection disabled={isSharedGrid} solving={solving} />
 			</span>
 
 			<Text
@@ -54,7 +57,7 @@ export const ShipSelectionHeading: React.FC = () => {
 				style={{ opacity: solving ? 0.365 : 1 }}
 				trim="end"
 			>
-				{t(`platforms.${selectedShipType}`)}
+				{t(`platforms.${selectedPlatform}`)}
 			</Text>
 		</Flex>
 	);

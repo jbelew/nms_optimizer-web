@@ -1,22 +1,12 @@
 // src/components/ShipSelection/ShipSelection.tsx
 
 import React, { Suspense } from "react";
+import { DropdownMenu } from "@radix-ui/themes";
 
 import { ShipSelectionContent } from "./ShipSelectionContent";
 import { ShipSelectionProvider } from "./ShipSelectionProvider";
-import { ShipSelectionRoot } from "./ShipSelectionRoot";
 import { ShipSelectionSkeleton } from "./ShipSelectionSkeleton";
 import { ShipSelectionTrigger } from "./ShipSelectionTrigger";
-
-export { ShipSelectionContent } from "./ShipSelectionContent";
-
-export { ShipSelectionProvider } from "./ShipSelectionProvider";
-
-export { ShipSelectionRoot } from "./ShipSelectionRoot";
-
-export { ShipSelectionSkeleton } from "./ShipSelectionSkeleton";
-
-export { ShipSelectionTrigger } from "./ShipSelectionTrigger";
 
 /**
  * Props for the `ShipSelection` component.
@@ -30,15 +20,32 @@ interface ShipSelectionProps {
 
 /**
  * The default composite ShipSelection component.
+ *
+ * @param {ShipSelectionProps} props - Component properties.
+ *
+ * @returns {JSX.Element} The rendered ship selection dropdown.
+ *
+ * @see {@link ShipSelectionProvider}
+ * @see {@link ./ShipSelectionTrigger.test.tsx Unit Tests}
+ * @see {@link ./ShipSelection.stories.tsx Storybook}
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <ShipSelection disabled={false} solving={false} />
+ * ```
  */
 export const ShipSelection: React.FC<ShipSelectionProps> = ({ disabled = false, solving }) => {
 	return (
 		<Suspense fallback={<ShipSelectionSkeleton />}>
 			<ShipSelectionProvider disabled={disabled} solving={solving}>
-				<ShipSelectionRoot>
+				<DropdownMenu.Root modal={false}>
 					<ShipSelectionTrigger />
 					<ShipSelectionContent />
-				</ShipSelectionRoot>
+				</DropdownMenu.Root>
 			</ShipSelectionProvider>
 		</Suspense>
 	);

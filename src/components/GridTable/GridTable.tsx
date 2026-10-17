@@ -1,21 +1,16 @@
 // src/components/GridTable/GridTable.tsx
 import React from "react";
 
+import GridShake from "@/components/GridShake/GridShake";
 import GridTableButtons from "@/components/GridTableButtons/GridTableButtons";
 import { useGridStore } from "@/store/grid/gridStore";
 
-import { GridProvider } from "./GridContext";
 import { GridTableContent } from "./GridTableContent";
 import { GridTableGrid } from "./GridTableGrid";
-import { GridTableRoot } from "./GridTableRoot";
-
-export { GridProvider } from "./GridContext";
 
 export { GridTableContent } from "./GridTableContent";
 
 export { GridTableGrid } from "./GridTableGrid";
-
-export { GridTableRoot } from "./GridTableRoot";
 
 export { GridTableButtons };
 
@@ -29,6 +24,25 @@ interface GridTableProps {
 
 /**
  * GridTable component.
+ *
+ * @param {GridTableProps} props - Component properties.
+ * @param {React.ForwardedRef<HTMLDivElement>} ref - Forwarded ref to the grid container.
+ *
+ * @returns {JSX.Element} The rendered grid table.
+ *
+ * @see {@link GridTableGrid}
+ * @see {@link GridTableContent}
+ * @see {@link ./GridTable.test.tsx Unit Tests}
+ * @see {@link ./GridTable.stories.tsx Storybook}
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <GridTable solving={false} />
+ * ```
  */
 export const GridTable = React.forwardRef<HTMLDivElement, GridTableProps>(({ solving }, ref) => {
 	const gridHeight = useGridStore((state) => state.grid.height);
@@ -41,14 +55,12 @@ export const GridTable = React.forwardRef<HTMLDivElement, GridTableProps>(({ sol
 	}
 
 	return (
-		<GridProvider gridRef={ref as React.RefObject<HTMLDivElement | null>}>
-			<GridTableRoot>
-				<GridTableGrid gridHeight={deferredHeight} gridRef={ref} solving={solving}>
-					<GridTableContent gridHeight={deferredHeight} />
-				</GridTableGrid>
-				<GridTableButtons solving={solving} />
-			</GridTableRoot>
-		</GridProvider>
+		<GridShake duration={500}>
+			<GridTableGrid gridHeight={deferredHeight} gridRef={ref} solving={solving}>
+				<GridTableContent gridHeight={deferredHeight} />
+			</GridTableGrid>
+			<GridTableButtons solving={solving} />
+		</GridShake>
 	);
 });
 

@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import * as Toast from "@radix-ui/react-toast";
 
-import { GridProvider } from "@/components/GridTable/GridContext";
 import { ToastProvider } from "@/hooks/useToast/useToast";
 import { createGrid, useGridStore } from "@/store/grid/gridStore";
 
@@ -19,20 +18,15 @@ const meta: Meta<typeof GridTableButtons> = {
 				});
 			}, []);
 
-			const gridRef = useRef<HTMLDivElement>(null);
-
 			return (
 				<Toast.Provider swipeDirection="right">
 					<ToastProvider>
-						<GridProvider gridRef={gridRef}>
-							<div
-								className="flex min-h-screen items-center justify-center p-4"
-								ref={gridRef}
-								style={{ margin: "0 auto", maxWidth: "800px" }}
-							>
-								<Story />
-							</div>
-						</GridProvider>
+						<div
+							className="main-app__grid-section flex min-h-screen items-center justify-center p-4"
+							style={{ margin: "0 auto", maxWidth: "800px" }}
+						>
+							<Story />
+						</div>
 					</ToastProvider>
 					<Toast.Viewport className="ToastViewport" />
 				</Toast.Provider>

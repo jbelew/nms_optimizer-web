@@ -1,25 +1,69 @@
 // src/components/MainAppContent/MainAppContent.tsx
 import "./MainAppContent.scss";
 
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
+import { Trans, useTranslation } from "react-i18next";
 
-import { MainAppProvider } from "./MainAppContext";
+import { useErrorDispatcher } from "@/hooks/useErrorDispatcher";
+import { useToast } from "@/hooks/useToast/useToast";
+import { usePlatformStore } from "@/store/app/platformStore";
+import { useGridStore } from "@/store/grid/gridStore";
+import { useSessionStore } from "@/store/ui/uiStore";
+
 import { MainAppLayoutContent, ShipTypesLoader } from "./MainAppLayout";
 
 /**
  * The primary layout component for the application's main functional area.
  *
  * @remarks
- * This component provides the necessary contexts and triggers the initial
- * data loading via Suspense. It wraps the core layout structure.
+ * Coordinates workspace-level lifecycle effects (shared-build notifications,
+ * session violation resets on platform switch, and toast error dispatching),
+ * triggers initial data loading via Suspense, and renders the core layout.
  *
  * @returns {JSX.Element} The orchestrated main application content.
  *
+ * @see {@link MainAppLayoutContent}
+ * @see {@link ./MainAppLayout.test.tsx Unit Tests}
+ * @see {@link ./MainAppContent.stories.tsx Storybook}
+ *
+ * @component
+ *
  * @category Components
+ *
+ * @example
+ * ```tsx
+ * <MainAppContent />
+ * ```
  */
 export const MainAppContent = () => {
+	const { t } = useTranslation();
+	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
+	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
+	const { resetSession } = useSessionStore();
+	const { showInfo } = useToast();
+
+	// Show information toast when viewing a read-only shared grid
+	useEffect(() => {
+		if (isSharedGrid) {
+			showInfo(
+				t("common.information", "Information"),
+				<Trans components={{ strong: <strong /> }} i18nKey="mainApp.viewingSharedBuild" />
+			);
+		}
+	}, [isSharedGrid, showInfo, t]);
+
+	// Reset error counts when platform changes
+	useEffect(() => {
+		if (selectedPlatform) {
+			resetSession();
+		}
+	}, [selectedPlatform, resetSession]);
+
+	// Monitor session errors and dispatch messages to toast
+	useErrorDispatcher();
+
 	return (
-		<MainAppProvider>
+		<>
 			{/* Load ship types and tech definitions - suspends and allows layout to render once ready */}
 			<Suspense fallback={null}>
 				<ShipTypesLoader />
@@ -27,6 +71,6 @@ export const MainAppContent = () => {
 
 			{/* Core application layout structure */}
 			<MainAppLayoutContent />
-		</MainAppProvider>
+		</>
 	);
 };

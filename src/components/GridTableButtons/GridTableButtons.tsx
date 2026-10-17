@@ -14,7 +14,6 @@ import { Button, IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
-import { useGridContext } from "@/components/GridTable/useGridContext";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useLoadBuild } from "@/hooks/useLoadBuild/useLoadBuild";
@@ -43,9 +42,26 @@ const SCROLL_OPTIONS = { skipOnLargeScreens: true };
 
 /**
  * A container component for the various action buttons located below the technology grid.
+ *
+ * @param {GridTableButtonsProps} props - Component properties.
+ *
+ * @returns {JSX.Element} The rendered grid action buttons.
+ *
+ * @see {@link useSaveBuild}
+ * @see {@link useLoadBuild}
+ * @see {@link ./GridTableButtons.test.tsx Unit Tests}
+ * @see {@link ./GridTableButtons.stories.tsx Storybook}
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <GridTableButtons solving={false} />
+ * ```
  */
 const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
-	const { gridRef } = useGridContext();
 	const { updateUrlForReset, updateUrlForShare } = useUrlSync();
 	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
 	const { t } = useTranslation();
@@ -72,9 +88,15 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 
 	/**
 	 * Handles the screenshot capture of the grid section.
+	 *
+	 * @param {React.MouseEvent<HTMLButtonElement>} event - The button click event.
+	 *
+	 * @returns {void}
 	 */
-	const handleScreenshotClick = () => {
-		const section = gridRef.current?.closest<HTMLElement>(".main-app__grid-section");
+	const handleScreenshotClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+		const section =
+			event.currentTarget.closest<HTMLElement>(".main-app__grid-section") ??
+			document.querySelector<HTMLElement>(".main-app__grid-section");
 
 		if (section) {
 			handleScreenshot(section);
@@ -182,13 +204,15 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 
 	return (
 		<>
-			<React.Suspense fallback={null}>
-				<BuildNameDialog
-					isOpen={isSaveBuildDialogOpen}
-					onCancel={handleBuildNameCancel}
-					onConfirm={handleBuildNameConfirm}
-				/>
-			</React.Suspense>
+			{isSmallAndUp && !isSharedGrid && (
+				<React.Suspense fallback={null}>
+					<BuildNameDialog
+						isOpen={isSaveBuildDialogOpen}
+						onCancel={handleBuildNameCancel}
+						onConfirm={handleBuildNameConfirm}
+					/>
+				</React.Suspense>
+			)}
 			<div className="gridTable-buttons__container" data-screenshot-exclude="true">
 				<div className="gridTable-buttons__left">
 					{renderResponsiveButton(
@@ -235,17 +259,17 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 									<DownloadIcon />
 								</IconButton>
 							</ConditionalTooltip>
+
+							<input
+								accept=".nms"
+								aria-label={t("buttons.loadBuild")}
+								className="hidden"
+								onChange={handleFileSelect}
+								ref={fileInputRef}
+								type="file"
+							/>
 						</>
 					)}
-
-					<input
-						accept=".nms"
-						aria-label={t("buttons.loadBuild")}
-						className="hidden"
-						onChange={handleFileSelect}
-						ref={fileInputRef}
-						type="file"
-					/>
 
 					{/* Share button - hidden on mobile, shown on sm and up */}
 					{isSmallAndUp && !isSharedGrid && (
