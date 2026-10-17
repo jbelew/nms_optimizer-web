@@ -179,7 +179,7 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds, techTre
 					/>
 				</Text>
 
-				<div className="mt-2 mb-1 flex flex-col gap-3">
+				<div className="mt-2 flex flex-col gap-3">
 					{builds.map((build, index) => (
 						<PresetCardItem
 							build={build}
