@@ -97,7 +97,6 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build, onApply }) => {
 			<Button
 				className="cursor-pointer! font-medium"
 				onClick={() => onApply(build)}
-				radius="medium"
 				size="1"
 				variant="soft"
 			>
