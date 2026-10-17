@@ -66,7 +66,7 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build, onApply }) => {
 	const isSmallAndUp = useBreakpoint("640px");
 
 	return (
-		<div className="grid grid-cols-[1fr_auto_auto] items-center gap-2">
+		<div className="grid grid-cols-[1fr_auto_auto] items-center gap-2 shadow-sm">
 			<Flex align="center" gap="2" minWidth="0">
 				<StackIcon
 					className="shrink-0"
