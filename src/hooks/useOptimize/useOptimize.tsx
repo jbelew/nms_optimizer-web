@@ -39,8 +39,6 @@ export interface UseOptimizeReturn {
 	handleOptimize: (tech: string, forced?: boolean) => Promise<void>;
 	/** The technology identifier that failed to fit using pattern solving, if any. */
 	patternNoFitTech: null | string;
-	/** The current progress percentage (0-100). */
-	progressPercent: number;
 	/** Whether an optimization is currently in progress. */
 	solving: boolean;
 }
@@ -66,7 +64,7 @@ const SCROLL_OPTIONS = { skipOnLargeScreens: true };
  *
  * @example
  * ```tsx
- * const { solving, progressPercent, handleOptimize } = useOptimize();
+ * const { solving, handleOptimize } = useOptimize();
  *
  * const onOptimize = () => {
  *   void handleOptimize("pulse");
@@ -74,16 +72,14 @@ const SCROLL_OPTIONS = { skipOnLargeScreens: true };
  *
  * return (
  *   <button onClick={onOptimize} disabled={solving}>
- *     {solving ? `Solving: ${progressPercent}%` : "Optimize Pulse"}
+ *     {solving ? "Solving..." : "Optimize Pulse"}
  *   </button>
  * );
- * };
  * ```
  */
 export const useOptimize = (): UseOptimizeReturn => {
 	const {
 		patternNoFitTech,
-		progressPercent,
 		setPatternNoFitTech,
 		setProgressPercent,
 		setShowErrorStore,
@@ -92,7 +88,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 	} = useOptimizeStore(
 		useShallow((s) => ({
 			patternNoFitTech: s.status.type === "warning" ? s.status.tech : null,
-			progressPercent: s.status.type === "solving" ? s.status.progress : 0,
 			setPatternNoFitTech: s.setPatternNoFitTech,
 			setProgressPercent: s.setProgressPercent,
 			setShowErrorStore: s.setShowError,
@@ -317,7 +312,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 		handleForceCurrentPnfOptimize,
 		handleOptimize,
 		patternNoFitTech,
-		progressPercent,
 		solving,
 	};
 };

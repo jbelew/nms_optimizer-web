@@ -114,8 +114,8 @@ describe("useOptimize", () => {
 		const { result } = renderHook(() => useOptimize());
 
 		expect(result.current.solving).toBe(false);
-		expect(result.current.progressPercent).toBe(0);
 		expect(result.current.patternNoFitTech).toBeNull();
+		expect("progressPercent" in result.current).toBe(false);
 	});
 
 	describe("handleOptimize workflow", () => {
@@ -143,7 +143,7 @@ describe("useOptimize", () => {
 			expect(result.current.solving).toBe(false);
 		});
 
-		it("should update progress state on 'progress' event", async () => {
+		it("should update progress state in useOptimizeStore on 'progress' event", async () => {
 			const { result } = renderHook(() => useOptimize());
 
 			await act(async () => {
@@ -158,7 +158,10 @@ describe("useOptimize", () => {
 				progressCallback({ progress_percent: 45 });
 			});
 
-			expect(result.current.progressPercent).toBe(45);
+			expect(useOptimizeStore.getState().status).toEqual({
+				progress: 45,
+				type: "solving",
+			});
 		});
 
 		it("should handle pattern no fit result", async () => {
