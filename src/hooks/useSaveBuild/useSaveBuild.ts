@@ -1,11 +1,24 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { create } from "zustand";
 
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBuildFileManager } from "@/hooks/useBuildFileManager/useBuildFileManager";
 import { useToast } from "@/hooks/useToast/useToast";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { Logger } from "@/utils/system/monitoring";
+
+/** Internal store sharing save-build dialog visibility and pending state across callers. */
+const useSaveBuildStateStore = create<{
+	isSaveBuildDialogOpen: boolean;
+	isSavePending: boolean;
+	setIsSaveBuildDialogOpen: (open: boolean) => void;
+	setIsSavePending: (pending: boolean) => void;
+}>((set) => ({
+	isSaveBuildDialogOpen: false,
+	isSavePending: false,
+	setIsSaveBuildDialogOpen: (isSaveBuildDialogOpen) => set({ isSaveBuildDialogOpen }),
+	setIsSavePending: (isSavePending) => set({ isSavePending }),
+}));
 
 /**
  * Return type for the `useSaveBuild` hook.
@@ -41,7 +54,7 @@ export interface UseSaveBuildReturn {
  * Custom hook for managing the "Save Build" workflow.
  *
  * @remarks
- * It manages the lifecycle of the save operation, including opening the naming
+ * It manages the lifecycle of the save operation, including opening the shared naming
  * dialog, executing the file generation via `useBuildFileManager`, and
  * reporting results through toasts and analytics.
  *
@@ -58,18 +71,8 @@ export interface UseSaveBuildReturn {
  *
  * @example
  * ```tsx
- * const MySaveButton = () => {
- *   const { handleSaveBuild, isSavePending, isSaveBuildDialogOpen } = useSaveBuild();
- *
- *   return (
- *     <>
- *       <button onClick={handleSaveBuild} disabled={isSavePending}>
- *         Download Build
- *       </button>
- *       {isSaveBuildDialogOpen && <BuildNameDialog onConfirm={...} />}
- *     </>
- *   );
- * };
+ * const { handleSaveBuild, isSavePending } = useSaveBuild();
+ * // returns shared save dialog state and handlers
  * ```
  */
 export const useSaveBuild = (): UseSaveBuildReturn => {
@@ -77,10 +80,10 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 	const { saveBuildToFile } = useBuildFileManager();
 	const { sendEvent } = useAnalytics();
 	const { showError, showSuccess } = useToast();
-	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
+	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
 
-	const [isSaveBuildDialogOpen, setIsSaveBuildDialogOpen] = useState(false);
-	const [isSavePending, setIsSavePending] = useState(false);
+	const { isSaveBuildDialogOpen, isSavePending, setIsSaveBuildDialogOpen, setIsSavePending } =
+		useSaveBuildStateStore();
 
 	/**
 	 * Opens the naming dialog to start the save process.
@@ -123,7 +126,7 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 				category: "ui",
 				method: "nms_file",
 				nonInteraction: false,
-				shipType: selectedShipType,
+				shipType: selectedPlatform,
 				value: 1,
 			});
 		} catch (error) {

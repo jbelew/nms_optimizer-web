@@ -46,6 +46,7 @@ const ToastRenderer = lazyNamed(() => import("@/components/Toast/ToastRenderer")
  * <Suspense fallback={null}>
  *   <ShipTypesLoader />
  * </Suspense>
+ * // suspends until ship types resolve, then renders null
  * ```
  */
 export const ShipTypesLoader = () => {
@@ -111,29 +112,6 @@ const MainAppMobileToolbar: React.FC = () => {
 };
 
 /**
- * Component that renders the application header.
- *
- * @returns {JSX.Element} The rendered application header.
- *
- * @see {@link AppHeader}
- * @see {@link ./MainAppLayout.test.tsx Unit Tests}
- *
- * @component
- *
- * @category Components
- *
- * @example
- * ```tsx
- * <MainAppHeader />
- * ```
- */
-export const MainAppHeader: React.FC = () => {
-	const { openDialog } = useDialog();
-
-	return <AppHeader onShowChangelog={() => openDialog("changelog")} />;
-};
-
-/**
  * Component that renders the application footer.
  *
  * @param {{ position: "bottom-desktop" | "bottom-mobile" }} props - Footer placement variant.
@@ -187,6 +165,7 @@ interface MainAppSidebarSectionProps {
  * @example
  * ```tsx
  * <MainAppSidebarSection handleOptimize={handleOptimize} solving={false} />
+ * // renders technology tree sidebar or null on shared grids
  * ```
  */
 export const MainAppSidebarSection: React.FC<MainAppSidebarSectionProps> = ({
@@ -237,9 +216,11 @@ export const MainAppSidebarSection: React.FC<MainAppSidebarSectionProps> = ({
  * @example
  * ```tsx
  * <MainAppLayoutContent />
+ * // renders workspace header, grid section, sidebar, and footers
  * ```
  */
 export const MainAppLayoutContent = () => {
+	const { openDialog } = useDialog();
 	const {
 		clearPatternNoFitTech,
 		gridContainerRef,
@@ -262,7 +243,7 @@ export const MainAppLayoutContent = () => {
 			<main className="main-app__container" id="main-content">
 				<div className="main-app__card lg:shadow-lg">
 					<div className="main-app__background-wrapper">
-						<MainAppHeader />
+						<AppHeader onShowChangelog={() => openDialog("changelog")} />
 
 						<Flex
 							align={{ initial: "center", md: "start" }}

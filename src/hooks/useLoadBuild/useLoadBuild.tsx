@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import type { RefObject } from "react";
 import { Code } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
@@ -8,12 +8,15 @@ import { useToast } from "@/hooks/useToast/useToast";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { Logger } from "@/utils/system/monitoring";
 
+/** Singleton ref to the hidden `.nms` file input shared across toolbar and grid button callers. */
+const sharedFileInputRef: RefObject<HTMLInputElement | null> = { current: null };
+
 /**
  * Return type for the `useLoadBuild` hook.
  */
 export interface UseLoadBuildReturn {
 	/** Ref to the hidden file input element. */
-	fileInputRef: React.RefObject<HTMLInputElement | null>;
+	fileInputRef: RefObject<HTMLInputElement | null>;
 	/** Processes the user's selected file. */
 	handleFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
 	/** Triggers the native file selection dialog. */
@@ -27,13 +30,13 @@ export interface UseLoadBuildReturn {
  *
  * @remarks
  * This hook handles the complete file loading workflow, including:
- * - Programmatic triggering of the file input.
+ * - Programmatic triggering of the shared file input.
  * - Validation and parsing of the selected file.
  * - Updating the global grid state.
  * - Error reporting and success notifications via toasts.
  * - Analytics tracking of load events.
  *
- * @returns {UseLoadBuildReturn} An object containing the file input ref and handlers.
+ * @returns {UseLoadBuildReturn} An object containing the shared file input ref and handlers.
  *
  * @see {@link useBuildFileManager} for the underlying parsing logic.
  * @see {@link useToast} for user notifications.
@@ -42,14 +45,8 @@ export interface UseLoadBuildReturn {
  *
  * @example
  * ```tsx
- * const { fileInputRef, handleLoadBuild, handleFileSelect, isLoadPending } = useLoadBuild();
- *
- * return (
- *   <>
- *     <input type="file" ref={fileInputRef} onChange={handleFileSelect} hidden />
- *     <Button onClick={handleLoadBuild} loading={isLoadPending}>Load</Button>
- *   </>
- * );
+ * const { handleLoadBuild, isLoadPending } = useLoadBuild();
+ * // returns shared file input ref and load handlers
  * ```
  */
 export const useLoadBuild = (): UseLoadBuildReturn => {
@@ -57,14 +54,17 @@ export const useLoadBuild = (): UseLoadBuildReturn => {
 	const { isPending, loadBuildFromFile } = useBuildFileManager();
 	const { showError, showSuccess } = useToast();
 	const { sendEvent } = useAnalytics();
-	const fileInputRef = useRef<HTMLInputElement>(null);
-	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
+	const fileInputRef = sharedFileInputRef;
+	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
 
 	/**
 	 * Programmatically clicks the hidden file input to open the browser's picker.
 	 *
 	 * @example
+	 * ```ts
 	 * handleLoadBuild();
+	 * // opens native file picker for .nms files
+	 * ```
 	 */
 	const handleLoadBuild = () => {
 		if (fileInputRef.current) {
@@ -83,7 +83,10 @@ export const useLoadBuild = (): UseLoadBuildReturn => {
 	 * @returns {Promise<void>} Resolves when the file is processed.
 	 *
 	 * @example
+	 * ```tsx
 	 * <input type="file" onChange={handleFileSelect} />
+	 * // parses selected .nms file and updates grid store
+	 * ```
 	 */
 	const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];
@@ -104,7 +107,7 @@ export const useLoadBuild = (): UseLoadBuildReturn => {
 					file_name: file.name,
 					method: "nms_file",
 					nonInteraction: false,
-					shipType: selectedShipType,
+					shipType: selectedPlatform,
 					value: 1,
 				});
 			} catch (error) {

@@ -42,6 +42,7 @@ interface GridTableProps {
  * @example
  * ```tsx
  * <GridTable solving={false} />
+ * // renders technology grid table and action buttons
  * ```
  */
 export const GridTable = React.forwardRef<HTMLDivElement, GridTableProps>(({ solving }, ref) => {

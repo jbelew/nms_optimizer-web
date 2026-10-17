@@ -22,6 +22,7 @@ import { useOptimizeStore, useUiStore } from "@/store/ui/uiStore";
  * @example
  * ```tsx
  * <ShipSelectionHeading />
+ * // renders platform selector dropdown and active platform label
  * ```
  */
 export const ShipSelectionHeading: React.FC = () => {

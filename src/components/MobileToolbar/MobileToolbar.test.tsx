@@ -10,6 +10,10 @@ import i18n from "@/test/i18n";
 import { MobileToolbar } from "./MobileToolbar";
 
 const mockForceShow = vi.fn();
+const mockHandleLoadBuild = vi.fn();
+const mockHandleSaveBuild = vi.fn();
+const mockOpenDialog = vi.fn();
+let solvingState = false;
 
 // Mock hooks used in MobileToolbar
 vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
@@ -34,7 +38,7 @@ vi.mock("@/hooks/useLoadBuild/useLoadBuild", () => ({
 	useLoadBuild: () => ({
 		fileInputRef: { current: null },
 		handleFileSelect: vi.fn(),
-		handleLoadBuild: vi.fn(),
+		handleLoadBuild: mockHandleLoadBuild,
 		isLoadPending: false,
 	}),
 }));
@@ -43,7 +47,7 @@ vi.mock("@/hooks/useSaveBuild/useSaveBuild", () => ({
 	useSaveBuild: () => ({
 		handleBuildNameCancel: vi.fn(),
 		handleBuildNameConfirm: vi.fn(),
-		handleSaveBuild: vi.fn(),
+		handleSaveBuild: mockHandleSaveBuild,
 		isSaveBuildDialogOpen: false,
 		isSavePending: false,
 	}),
@@ -62,12 +66,14 @@ vi.mock("@/store/ui/uiStore", () => ({
 		a11yMode: false,
 		toggleA11yMode: vi.fn(),
 	}),
-	useOptimizeStore: vi.fn((selector) => selector({ status: { type: "idle" } })),
+	useOptimizeStore: vi.fn((selector) =>
+		selector({ status: solvingState ? { progress: 0, type: "solving" } : { type: "idle" } })
+	),
 }));
 
 vi.mock("@/utils/system/dialogUtils", () => ({
 	useDialog: () => ({
-		openDialog: vi.fn(),
+		openDialog: mockOpenDialog,
 	}),
 }));
 
@@ -78,12 +84,9 @@ vi.mock("@/hooks/useUrlSync/useUrlSync", () => ({
 }));
 
 describe("MobileToolbar", () => {
-	const mockOnLoadBuild = vi.fn();
-	const mockOnSaveBuild = vi.fn();
-	const mockOnShowChangelog = vi.fn();
-
 	beforeEach(() => {
 		vi.clearAllMocks();
+		solvingState = false;
 	});
 
 	it("should register toolbar forceShow on mount", () => {
@@ -102,14 +105,7 @@ describe("MobileToolbar", () => {
 		render(
 			<I18nextProvider i18n={i18n}>
 				<Theme>
-					<MobileToolbar
-						hasModulesInGrid={true}
-						isVisible={true}
-						onLoadBuild={mockOnLoadBuild}
-						onSaveBuild={mockOnSaveBuild}
-						onShowChangelog={mockOnShowChangelog}
-						solving={false}
-					/>
+					<MobileToolbar />
 				</Theme>
 			</I18nextProvider>
 		);
@@ -123,18 +119,11 @@ describe("MobileToolbar", () => {
 		expect(screen.getByLabelText("buttons.accessibility")).toBeDefined();
 	});
 
-	it("should call onLoadBuild when the load button is clicked", () => {
+	it("should call handleLoadBuild when the load button is clicked", () => {
 		render(
 			<I18nextProvider i18n={i18n}>
 				<Theme>
-					<MobileToolbar
-						hasModulesInGrid={true}
-						isVisible={true}
-						onLoadBuild={mockOnLoadBuild}
-						onSaveBuild={mockOnSaveBuild}
-						onShowChangelog={mockOnShowChangelog}
-						solving={false}
-					/>
+					<MobileToolbar />
 				</Theme>
 			</I18nextProvider>
 		);
@@ -142,21 +131,14 @@ describe("MobileToolbar", () => {
 		const loadButton = screen.getByLabelText("buttons.loadBuild");
 		fireEvent.click(loadButton);
 
-		expect(mockOnLoadBuild).toHaveBeenCalledTimes(1);
+		expect(mockHandleLoadBuild).toHaveBeenCalledTimes(1);
 	});
 
-	it("should call onSaveBuild when the save button is clicked", () => {
+	it("should call handleSaveBuild when the save button is clicked", () => {
 		render(
 			<I18nextProvider i18n={i18n}>
 				<Theme>
-					<MobileToolbar
-						hasModulesInGrid={true}
-						isVisible={true}
-						onLoadBuild={mockOnLoadBuild}
-						onSaveBuild={mockOnSaveBuild}
-						onShowChangelog={mockOnShowChangelog}
-						solving={false}
-					/>
+					<MobileToolbar />
 				</Theme>
 			</I18nextProvider>
 		);
@@ -164,21 +146,16 @@ describe("MobileToolbar", () => {
 		const saveButton = screen.getByLabelText("buttons.saveBuild");
 		fireEvent.click(saveButton);
 
-		expect(mockOnSaveBuild).toHaveBeenCalledTimes(1);
+		expect(mockHandleSaveBuild).toHaveBeenCalledTimes(1);
 	});
 
 	it("should disable load and save buttons when solving is active", () => {
+		solvingState = true;
+
 		render(
 			<I18nextProvider i18n={i18n}>
 				<Theme>
-					<MobileToolbar
-						hasModulesInGrid={true}
-						isVisible={true}
-						onLoadBuild={mockOnLoadBuild}
-						onSaveBuild={mockOnSaveBuild}
-						onShowChangelog={mockOnShowChangelog}
-						solving={true}
-					/>
+					<MobileToolbar />
 				</Theme>
 			</I18nextProvider>
 		);
@@ -190,18 +167,11 @@ describe("MobileToolbar", () => {
 		expect(saveButton.hasAttribute("disabled")).toBe(true);
 	});
 
-	it("should call onLoadBuild when the child SVG icon of the load button is clicked", () => {
+	it("should call handleLoadBuild when the child SVG icon of the load button is clicked", () => {
 		render(
 			<I18nextProvider i18n={i18n}>
 				<Theme>
-					<MobileToolbar
-						hasModulesInGrid={true}
-						isVisible={true}
-						onLoadBuild={mockOnLoadBuild}
-						onSaveBuild={mockOnSaveBuild}
-						onShowChangelog={mockOnShowChangelog}
-						solving={false}
-					/>
+					<MobileToolbar />
 				</Theme>
 			</I18nextProvider>
 		);
@@ -211,6 +181,6 @@ describe("MobileToolbar", () => {
 		expect(svg).toBeInTheDocument();
 		fireEvent.click(svg!);
 
-		expect(mockOnLoadBuild).toHaveBeenCalledTimes(1);
+		expect(mockHandleLoadBuild).toHaveBeenCalledTimes(1);
 	});
 });

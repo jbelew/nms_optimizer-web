@@ -33,6 +33,7 @@ import { MainAppLayoutContent, ShipTypesLoader } from "./MainAppLayout";
  * @example
  * ```tsx
  * <MainAppContent />
+ * // mounts MainAppContent workspace
  * ```
  */
 export const MainAppContent = () => {

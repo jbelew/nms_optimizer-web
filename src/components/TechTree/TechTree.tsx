@@ -60,14 +60,20 @@ interface TechTreeProps {
  * @component
  *
  * @category Components
+ *
+ * @example
+ * ```tsx
+ * <TechTree handleOptimize={handleOptimize} solving={false} />
+ * // renders technology tree list and shared module selection dialog
+ * ```
  */
 export const TechTree: React.FC<TechTreeProps> = ({
 	handleOptimize,
 	solving,
 	techTree: techTreeProp,
 }) => {
-	const selectedShipType = usePlatformStore((state) => state.selectedPlatform) || "standard";
-	const fetchedTechTree = useFetchTechTreeSuspense(selectedShipType);
+	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform) || "standard";
+	const fetchedTechTree = useFetchTechTreeSuspense(selectedPlatform);
 	const techTree = techTreeProp || fetchedTechTree;
 	const isGridFull = useGridStore((state) => state.isGridFull);
 

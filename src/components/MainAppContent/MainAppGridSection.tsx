@@ -31,6 +31,7 @@ import { ShipSelectionHeading } from "./ShipSelectionHeading";
  * @example
  * ```tsx
  * <MainAppGridSection />
+ * // renders technology grid section and action buttons
  * ```
  */
 export const MainAppGridSection: React.FC = () => {

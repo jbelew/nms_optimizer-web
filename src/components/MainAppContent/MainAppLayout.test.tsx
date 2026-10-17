@@ -6,6 +6,7 @@ import { I18nextProvider } from "react-i18next";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import AppHeader from "@/components/AppHeader/AppHeader";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
@@ -13,7 +14,7 @@ import { useSessionStore } from "@/store/ui/uiStore";
 import i18n from "@/test/i18n";
 
 import { MainAppContent } from "./MainAppContent";
-import { MainAppHeader, MainAppSidebarSection } from "./MainAppLayout";
+import { MainAppSidebarSection } from "./MainAppLayout";
 
 const { mockResetSession, mockShowInfo } = vi.hoisted(() => ({
 	mockResetSession: vi.fn(),
@@ -117,14 +118,14 @@ describe("MainAppLayout Visibility & Lifecycle Logic", () => {
 		useSessionStore.setState({ resetSession: mockResetSession });
 	});
 
-	describe("MainAppHeader", () => {
+	describe("AppHeader in Layout", () => {
 		it("should render both left and right controls on Tablet (not small, not large)", () => {
 			vi.mocked(useBreakpoint).mockImplementation((bp: string) => bp === "640px");
 
 			render(
 				<I18nextProvider i18n={i18n}>
 					<Theme>
-						<MainAppHeader />
+						<AppHeader onShowChangelog={vi.fn()} />
 					</Theme>
 				</I18nextProvider>
 			);
@@ -143,7 +144,7 @@ describe("MainAppLayout Visibility & Lifecycle Logic", () => {
 			render(
 				<I18nextProvider i18n={i18n}>
 					<Theme>
-						<MainAppHeader />
+						<AppHeader onShowChangelog={vi.fn()} />
 					</Theme>
 				</I18nextProvider>
 			);
@@ -159,7 +160,7 @@ describe("MainAppLayout Visibility & Lifecycle Logic", () => {
 			render(
 				<I18nextProvider i18n={i18n}>
 					<Theme>
-						<MainAppHeader />
+						<AppHeader onShowChangelog={vi.fn()} />
 					</Theme>
 				</I18nextProvider>
 			);

@@ -59,6 +59,7 @@ const SCROLL_OPTIONS = { skipOnLargeScreens: true };
  * @example
  * ```tsx
  * <GridTableButtons solving={false} />
+ * // renders grid action buttons
  * ```
  */
 const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
@@ -204,14 +205,24 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 
 	return (
 		<>
-			{isSmallAndUp && !isSharedGrid && (
-				<React.Suspense fallback={null}>
-					<BuildNameDialog
-						isOpen={isSaveBuildDialogOpen}
-						onCancel={handleBuildNameCancel}
-						onConfirm={handleBuildNameConfirm}
+			{!isSharedGrid && (
+				<>
+					<React.Suspense fallback={null}>
+						<BuildNameDialog
+							isOpen={isSaveBuildDialogOpen}
+							onCancel={handleBuildNameCancel}
+							onConfirm={handleBuildNameConfirm}
+						/>
+					</React.Suspense>
+					<input
+						accept=".nms"
+						aria-label={t("buttons.loadBuild")}
+						className="hidden"
+						onChange={handleFileSelect}
+						ref={fileInputRef}
+						type="file"
 					/>
-				</React.Suspense>
+				</>
 			)}
 			<div className="gridTable-buttons__container" data-screenshot-exclude="true">
 				<div className="gridTable-buttons__left">
@@ -259,15 +270,6 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 									<DownloadIcon />
 								</IconButton>
 							</ConditionalTooltip>
-
-							<input
-								accept=".nms"
-								aria-label={t("buttons.loadBuild")}
-								className="hidden"
-								onChange={handleFileSelect}
-								ref={fileInputRef}
-								type="file"
-							/>
 						</>
 					)}
 

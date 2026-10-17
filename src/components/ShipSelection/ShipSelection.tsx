@@ -36,6 +36,7 @@ interface ShipSelectionProps {
  * @example
  * ```tsx
  * <ShipSelection disabled={false} solving={false} />
+ * // renders platform selection dropdown menu
  * ```
  */
 export const ShipSelection: React.FC<ShipSelectionProps> = ({ disabled = false, solving }) => {
