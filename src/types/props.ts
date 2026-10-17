@@ -43,6 +43,8 @@ export interface ModuleSelectionDialogProps {
 	techImage: null | string;
 	/** Localized name of the technology being configured. */
 	translatedTechName: string;
+	/** Optional mapping of module count thresholds to `[width, height]` Solver Window dimensions. */
+	windowRules?: Record<string, [number, number]>;
 }
 
 /**

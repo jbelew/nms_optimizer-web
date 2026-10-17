@@ -704,7 +704,9 @@
 		"trailsInfo": "<strong>Le Scie di Nave Stellare sono cambiate con la v6.2 (Aggiornamento Remnant)!</strong> Nella maggior parte dei casi, seleziona non più di <strong>tre Scie di Nave Stellare</strong>. La Statuetta Tentacolare <strong>non</strong> aumenta la velocità in atmosfera! Le Scie di Nave Stellare vengono applicate in ordine di priorità, con <strong>[P1] Cromatica</strong> che ha la priorità più alta. ",
 		"description": "I moduli suggeriti sono selezionati per impostazione predefinita. Puoi aggiungere o rimuovere moduli specifici per personalizzare l'ottimizzazione di questa tecnologia.",
 		"optimizeButton": "Ottimizza",
-		"cancelButton": "Annulla"
+		"cancelButton": "Annulla",
+		"solverWindow": "Finestra: {{width}}×{{height}}",
+		"solverWindowEmpty": "Finestra: —"
 	},
 	"seo": {
 		"mainPageTitle": "Calcolatore Layout Tecnologia e Bonus Adiacenza No Man's Sky",

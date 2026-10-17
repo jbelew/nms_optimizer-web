@@ -21,6 +21,7 @@ import { Trans, useTranslation } from "react-i18next";
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { usePlatformStore } from "@/store/app/platformStore";
+import { determineWindowDimensions } from "@/utils/optimization/windowDimensions";
 import { useDialog } from "@/utils/system/dialogUtils";
 
 import { MODULE_GROUP_ORDER, MODULE_RANK_ORDER } from "./constants";
@@ -387,7 +388,7 @@ const DialogBody: React.FC = () => {
 /**
  * The action bar component for the module selection dialog.
  *
- * @returns {JSX.Element} The rendered dialog footer with Cancel and Optimize buttons.
+ * @returns {JSX.Element} The rendered dialog footer with the Solver Window badge, Cancel, and Optimize buttons.
  *
  * @component
  *
@@ -395,22 +396,40 @@ const DialogBody: React.FC = () => {
  */
 const DialogFooter: React.FC = () => {
 	const { t } = useTranslation();
-	const { currentCheckedModules, handleOptimizeClick, onClose } = useModuleSelectionContext();
+	const { currentCheckedModules, handleOptimizeClick, onClose, techColor, windowRules } =
+		useModuleSelectionContext();
 	const isOptimizeDisabled = currentCheckedModules.length === 0;
+	const windowDimensions = determineWindowDimensions(currentCheckedModules.length, windowRules);
+	const windowBadgeText = windowDimensions
+		? t("moduleSelection.solverWindow", {
+				height: windowDimensions[1],
+				width: windowDimensions[0],
+			})
+		: t("moduleSelection.solverWindowEmpty");
 
 	return (
-		<div className="mb-1 flex justify-end gap-2">
-			<Button onClick={onClose} variant="soft">
-				{t("moduleSelection.cancelButton")}
-			</Button>
-			<Button
-				aria-label={t("moduleSelection.optimizeButton")}
-				disabled={isOptimizeDisabled}
-				onClick={handleOptimizeClick}
+		<div className="mb-1 flex w-full items-center justify-between gap-2">
+			<Badge
+				className="font-mono! tabular-nums"
+				color={isOptimizeDisabled ? "gray" : techColor}
+				size="2"
+				variant="surface"
 			>
-				<MagicWandIcon />
-				{t("moduleSelection.optimizeButton")}
-			</Button>
+				{windowBadgeText}
+			</Badge>
+			<div className="flex items-center gap-2">
+				<Button onClick={onClose} variant="soft">
+					{t("moduleSelection.cancelButton")}
+				</Button>
+				<Button
+					aria-label={t("moduleSelection.optimizeButton")}
+					disabled={isOptimizeDisabled}
+					onClick={handleOptimizeClick}
+				>
+					<MagicWandIcon />
+					{t("moduleSelection.optimizeButton")}
+				</Button>
+			</div>
 		</div>
 	);
 };

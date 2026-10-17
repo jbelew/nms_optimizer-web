@@ -687,7 +687,9 @@
 		"optimizeButton": "Otimizar",
 		"cancelButton": "Cancelar",
 		"tooltip": "{{techName}} Seleção de Módulo",
-		"aboutUpgradeLabelsTooltip": "Sobre Rótulos de Melhoria"
+		"aboutUpgradeLabelsTooltip": "Sobre Rótulos de Melhoria",
+		"solverWindow": "Janela: {{width}}×{{height}}",
+		"solverWindowEmpty": "Janela: —"
 	},
 	"seo": {
 		"mainPageTitle": "Calculadora de Tecnologia e Adjacência de No Man's Sky",

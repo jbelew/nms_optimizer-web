@@ -687,7 +687,9 @@
 		"optimizeButton": "Optimiser",
 		"cancelButton": "Annuler",
 		"tooltip": "Sélection de Module {{techName}}",
-		"aboutUpgradeLabelsTooltip": "À propos des étiquettes d'amélioration"
+		"aboutUpgradeLabelsTooltip": "À propos des étiquettes d'amélioration",
+		"solverWindow": "Fenêtre : {{width}}×{{height}}",
+		"solverWindowEmpty": "Fenêtre : —"
 	},
 	"seo": {
 		"mainPageTitle": "Calculateur de Technologie et d'Adjacence No Man's Sky",

@@ -199,6 +199,7 @@ export const SharedModuleSelectionDialog: React.FC = () => {
 			techColor={techColor}
 			techImage={techImage}
 			translatedTechName={translatedTechName}
+			windowRules={activeGroup?.window_rules}
 		/>
 	);
 };

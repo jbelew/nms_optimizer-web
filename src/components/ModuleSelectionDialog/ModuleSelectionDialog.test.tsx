@@ -11,7 +11,7 @@ import { ModuleSelectionDialog } from "./ModuleSelectionDialog";
 vi.mock("react-i18next", () => ({
 	Trans: ({ i18nKey }: { i18nKey: string }) => <span>{i18nKey}</span>,
 	useTranslation: () => ({
-		t: (key: string, options?: { techName?: string }) => {
+		t: (key: string, options?: { height?: number; techName?: string; width?: number }) => {
 			if (key === "moduleSelection.title") return `Modules for ${options?.techName}`;
 			if (key === "moduleSelection.trails") return "Starship Trails";
 			if (key === "moduleSelection.figurines") return "Figurines";
@@ -20,6 +20,9 @@ vi.mock("react-i18next", () => ({
 			if (key === "moduleSelection.selectAll") return "Select All";
 			if (key === "moduleSelection.optimizeButton") return "Optimize";
 			if (key === "moduleSelection.cancelButton") return "Cancel";
+			if (key === "moduleSelection.solverWindow")
+				return `Window: ${options?.width}×${options?.height}`;
+			if (key === "moduleSelection.solverWindowEmpty") return "Window: —";
 			if (key.startsWith("moduleSelection.")) return key.split(".").pop();
 
 			return key;
@@ -196,5 +199,88 @@ describe("ModuleSelectionDialog", () => {
 		await vi.waitFor(() => {
 			expect(defaultProps.handleOptimizeClick).toHaveBeenCalled();
 		});
+	});
+
+	it("renders Solver Window dimensions in the footer when modules are selected", async () => {
+		renderDialog({
+			currentCheckedModules: [
+				"bonus1",
+				"bonus2",
+				"upgrade_sigma",
+				"upgrade_tau",
+				"cosmetic1",
+			],
+		});
+		expect(await screen.findByText("Window: 3×2")).toBeInTheDocument();
+	});
+
+	it("renders 'Window: —' in the footer when zero modules are selected", async () => {
+		renderDialog({ currentCheckedModules: [] });
+		expect(await screen.findByText("Window: —")).toBeInTheDocument();
+	});
+
+	it("respects custom windowRules overrides when displaying Solver Window dimensions", async () => {
+		renderDialog({
+			currentCheckedModules: [
+				"bonus1",
+				"bonus2",
+				"upgrade_sigma",
+				"upgrade_tau",
+				"cosmetic1",
+			],
+			windowRules: {
+				"1": [1, 1],
+				"2": [2, 1],
+				"4": [2, 2],
+				"6": [3, 3],
+				default: [3, 3],
+			},
+		});
+		expect(await screen.findByText("Window: 3×3")).toBeInTheDocument();
+	});
+
+	it("updates Solver Window dimensions immediately as module checkboxes are checked and unchecked", async () => {
+		const InteractiveWrapper = () => {
+			const [checkedModules, setCheckedModules] = React.useState<string[]>([
+				"bonus1",
+				"upgrade_sigma",
+			]);
+			const nonCoreIds = ["bonus1", "bonus2", "cosmetic1", "upgrade_sigma", "upgrade_tau"];
+			const allSelected = nonCoreIds.every((id) => checkedModules.includes(id));
+
+			return (
+				<ModuleSelectionDialog
+					{...defaultProps}
+					allModulesSelected={allSelected}
+					currentCheckedModules={checkedModules}
+					handleSelectAllChange={(checked) => {
+						setCheckedModules(checked ? nonCoreIds : []);
+					}}
+					handleValueChange={setCheckedModules}
+					isIndeterminate={checkedModules.length > 0 && !allSelected}
+				/>
+			);
+		};
+
+		(usePlatformStore as unknown as Mock).mockReturnValue({
+			selectedPlatform: "explorer",
+		});
+
+		render(<InteractiveWrapper />);
+
+		// Initially 2 modules checked -> 2×1
+		expect(await screen.findByText("Window: 2×1")).toBeInTheDocument();
+
+		// Check a 3rd module ("Beta Bonus") -> 3 modules checked -> 2×2
+		fireEvent.click(screen.getByRole("checkbox", { name: /Beta Bonus/i }));
+		expect(screen.getByText("Window: 2×2")).toBeInTheDocument();
+
+		// Select All -> 5 modules checked -> 3×2
+		fireEvent.click(screen.getByRole("checkbox", { name: "Select All" }));
+		expect(screen.getByText("Window: 3×2")).toBeInTheDocument();
+
+		// Deselect All -> 0 modules checked -> Window: —
+		fireEvent.click(screen.getByRole("checkbox", { name: "Select All" }));
+		expect(screen.getByText("Window: —")).toBeInTheDocument();
 	});
 });

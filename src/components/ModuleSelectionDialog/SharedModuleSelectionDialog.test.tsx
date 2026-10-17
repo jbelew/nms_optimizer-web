@@ -32,6 +32,7 @@ interface MockPresentationalProps {
 	isOpen: boolean;
 	onClose: () => void;
 	tech: string;
+	windowRules?: Record<string, [number, number]>;
 }
 
 // Mock presentation component
@@ -41,10 +42,12 @@ vi.mock("./ModuleSelectionDialog", () => ({
 		isOpen,
 		onClose,
 		tech,
+		windowRules,
 	}: MockPresentationalProps) => (
 		<div data-testid="mock-presentational-dialog">
 			<span>IsOpen: {isOpen ? "yes" : "no"}</span>
 			<span>Tech: {tech}</span>
+			<span>WindowRules: {windowRules ? JSON.stringify(windowRules) : "none"}</span>
 			<button onClick={handleOptimizeClick}>Optimize Button</button>
 			<button onClick={onClose}>Cancel Button</button>
 		</div>
@@ -217,5 +220,45 @@ describe("SharedModuleSelectionDialog", () => {
 
 		expect(mockHandleAllCheckboxesChange).not.toHaveBeenCalled();
 		expect(mockCloseDialog).toHaveBeenCalled();
+	});
+
+	test("passes the active technology group's window_rules to ModuleSelectionDialog", () => {
+		const mockWindowRules: Record<string, [number, number]> = {
+			"1": [1, 1],
+			"6": [3, 2],
+			default: [4, 4],
+		};
+
+		vi.mocked(useModuleSelectionDialogStore).mockReturnValue({
+			closeDialog: mockCloseDialog,
+			isOpen: true,
+			selectedTechData: {
+				tech: "hyperdrive",
+				techColor: "blue",
+				techImage: "hyperdrive.webp",
+			},
+		} as unknown as ReturnType<typeof useModuleSelectionDialogStore>);
+
+		vi.mocked(useTechStore).mockReturnValue({
+			activeGroupType: "normal",
+			techGroup: [
+				{
+					color: "blue",
+					image: "hyperdrive.webp",
+					key: "hyperdrive",
+					label: "Hyperdrive",
+					module_count: 2,
+					modules: [],
+					type: "normal",
+					window_rules: mockWindowRules,
+				},
+			],
+		} as unknown as ReturnType<typeof useTechStore>);
+
+		render(<SharedModuleSelectionDialog />);
+
+		expect(
+			screen.getByText(`WindowRules: ${JSON.stringify(mockWindowRules)}`)
+		).toBeInTheDocument();
 	});
 });

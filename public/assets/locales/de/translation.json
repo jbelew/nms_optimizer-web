@@ -687,7 +687,9 @@
 		"optimizeButton": "Optimieren",
 		"cancelButton": "Abbrechen",
 		"tooltip": "{{techName}} Modulauswahl",
-		"aboutUpgradeLabelsTooltip": "Über Upgrade-Bezeichnungen"
+		"aboutUpgradeLabelsTooltip": "Über Upgrade-Bezeichnungen",
+		"solverWindow": "Fenster: {{width}}×{{height}}",
+		"solverWindowEmpty": "Fenster: —"
 	},
 	"seo": {
 		"mainPageTitle": "No Man's Sky Tech-Layout- & Adjazenzbonus-Rechner",

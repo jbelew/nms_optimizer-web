@@ -711,7 +711,9 @@
 		"trailsInfo": "<strong>Starship Trails have changed with v7.0 Cosmos!</strong> In most cases, select no more than three Starship Trails. <strong>For the maximum bonus</strong>, if you have the Expedition 23 Astronaut figurine, select 5 Starship Trails. Starship Trails are applied in priority order, with <strong>[P1] Chromatic</strong> having the highest priority. ",
 		"description": "Suggested modules are selected by default. You can add or remove specific modules to customize this technology's optimization.",
 		"optimizeButton": "Optimize",
-		"cancelButton": "Cancel"
+		"cancelButton": "Cancel",
+		"solverWindow": "Window: {{width}}×{{height}}",
+		"solverWindowEmpty": "Window: —"
 	},
 	"seo": {
 		"mainPageTitle": "No Man's Sky Tech Layout & Adjacency Calculator",
