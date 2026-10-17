@@ -8,7 +8,6 @@ NMS Optimizer Web is a React-based frontend application for optimizing technolog
 - **Strict TypeScript**: Write explicit types, interfaces, and discriminated unions. The `any` type is strictly prohibited.
 - **Zero Linter Suppressions**: Resolve underlying type or logic issues; inline `eslint-disable` comments are disallowed.
 - **Documentation**: Document all public APIs, functions, and complex utilities with JSDoc containing `@param` and `@returns` types.
-- **Knowledge Graph**: Check `graphify-out/` for codebase navigation (`venv/bin/graphify query "<question>"`). Broad `grep`/`find` across `src/` is prohibited unless `graphify query` returns no results. Always run `venv/bin/graphify update .` after modifying code.
 
 ## Verification Gate (Definition of Done)
 
@@ -17,7 +16,6 @@ Before marking any code task complete, execute this sequence:
 1. `bun run typecheck` — Must report 0 TypeScript diagnostics (`tsgo`).
 2. `bun run test -- <path>` or `bun run test` — Ensure targeted unit/component tests pass.
 3. `bun run lint` — Must report 0 oxlint/ESLint errors.
-4. `venv/bin/graphify update .` — Synchronize the knowledge graph.
 
 ## Key Commands & Gotchas
 
@@ -38,8 +36,16 @@ Read these specialized guides when working on matching branches:
 - **When writing or fixing tests or Storybook stories**: Read [`docs/agents/testing.md`](docs/agents/testing.md) for module mocking, console log bans, and Storybook bundle cache safeguards.
 - **When modifying Vite build config, SSG scripts, or server routing**: Read [`docs/agents/architecture.md`](docs/agents/architecture.md) for hybrid rendering flow and Rolldown chunking groups.
 
-### Workflow References
+## Agent skills
 
-- **When interacting with GitHub issues, PRs, or `/wayfinder`**: Read [`docs/agents/issue-tracker.md`](docs/agents/issue-tracker.md).
-- **When updating issue labels or triage states**: Read [`docs/agents/triage-labels.md`](docs/agents/triage-labels.md).
-- **When referencing domain terminology or ADRs**: Read [`docs/agents/domain.md`](docs/agents/domain.md) and [`CONTEXT.md`](CONTEXT.md).
+### Issue tracker
+
+Issues and specs are tracked in GitHub Issues via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Uses the five default canonical triage labels (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context layout (`GLOSSARY.md` at the repo root and ADRs in `docs/adr/`). See `docs/agents/domain.md`.

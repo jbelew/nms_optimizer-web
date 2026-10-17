@@ -52,3 +52,7 @@ _Avoid_: silent reload, stealth update, background push
 A newly installed service worker sitting in the `waiting` state ready to activate once the active client session permits cutover.
 _Avoid_: pending worker, queued worker, background worker
 
+**Solver Window**:
+The bounding subgrid dimensions (width × height) dynamically allocated for a Technology Category based on its active Module Selection, within which localized module permutation and simulated annealing occur.
+_Avoid_: window size, search window, tech window, bounding box
+
