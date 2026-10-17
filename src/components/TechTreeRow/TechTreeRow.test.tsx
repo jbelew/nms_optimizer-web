@@ -1,5 +1,5 @@
 import type { GridStore } from "@/store/grid/gridStore";
-import type { TechStore } from "@/store/tech/techStore";
+import type { BonusStatusData, TechStore } from "@/store/tech/techStore";
 import type { ModuleSelectionDialogState, ShakeState } from "@/store/ui/uiStore";
 import type { TechTreeRowProps } from "@/types/props";
 import { fireEvent, render, screen } from "@testing-library/react";
@@ -365,5 +365,121 @@ describe("TechTreeRow", () => {
 			techColor: "blue",
 			techImage: "test.webp",
 		});
+	});
+
+	it("should not render BonusStatusIcon for single-module tech group even if in grid and solved", () => {
+		setupMocks(true);
+		const mockValidStatus: BonusStatusData = { icon: "check", percent: 0 };
+		mockUseTechStore.mockImplementation((selector?: (state: TechStore) => unknown) => {
+			const state: Partial<TechStore> = {
+				checkedModules: { testTech: ["module1"] },
+				clearTechMaxBonus: mockClearTechMaxBonus,
+				clearTechSolvedBonus: mockClearTechSolvedBonus,
+				getBonusStatus: vi.fn((): BonusStatusData | null => mockValidStatus),
+				maxBonus: { testTech: 100 },
+				solvedBonus: { testTech: 100 },
+				techGroups: {
+					testTech: [
+						{
+							color: "blue",
+							image: null,
+							key: "testTech",
+							label: "Test Tech Group",
+							module_count: 1,
+							modules: [
+								{
+									active: false,
+									adjacency: "",
+									adjacency_bonus: 0,
+									bonus: 0,
+									id: "module1",
+									image: "",
+									label: "Module 1",
+									sc_eligible: false,
+									supercharged: false,
+									tech: "testTech",
+									type: "",
+									value: 0,
+								},
+							],
+							type: "normal",
+						},
+					],
+				},
+			};
+
+			return selector ? selector(state as TechStore) : (state as TechStore);
+		});
+
+		renderWithProviders(<TechTreeRow {...defaultProps} />);
+
+		expect(
+			screen.queryByRole("button", { name: "techTree.tooltips.validSolve" })
+		).not.toBeInTheDocument();
+	});
+
+	it("should render BonusStatusIcon for multi-module tech group when in grid and solved", () => {
+		setupMocks(true);
+		const mockValidStatus: BonusStatusData = { icon: "check", percent: 0 };
+		mockUseTechStore.mockImplementation((selector?: (state: TechStore) => unknown) => {
+			const state: Partial<TechStore> = {
+				checkedModules: { testTech: ["module1", "module2"] },
+				clearTechMaxBonus: mockClearTechMaxBonus,
+				clearTechSolvedBonus: mockClearTechSolvedBonus,
+				getBonusStatus: vi.fn((): BonusStatusData | null => mockValidStatus),
+				maxBonus: { testTech: 100 },
+				solvedBonus: { testTech: 100 },
+				techGroups: {
+					testTech: [
+						{
+							color: "blue",
+							image: null,
+							key: "testTech",
+							label: "Test Tech Group",
+							module_count: 2,
+							modules: [
+								{
+									active: false,
+									adjacency: "",
+									adjacency_bonus: 0,
+									bonus: 0,
+									id: "module1",
+									image: "",
+									label: "Module 1",
+									sc_eligible: false,
+									supercharged: false,
+									tech: "testTech",
+									type: "",
+									value: 0,
+								},
+								{
+									active: false,
+									adjacency: "",
+									adjacency_bonus: 0,
+									bonus: 0,
+									id: "module2",
+									image: "",
+									label: "Module 2",
+									sc_eligible: false,
+									supercharged: false,
+									tech: "testTech",
+									type: "",
+									value: 0,
+								},
+							],
+							type: "normal",
+						},
+					],
+				},
+			};
+
+			return selector ? selector(state as TechStore) : (state as TechStore);
+		});
+
+		renderWithProviders(<TechTreeRow {...defaultProps} />);
+
+		expect(
+			screen.getByRole("button", { name: "techTree.tooltips.validSolve" })
+		).toBeInTheDocument();
 	});
 });

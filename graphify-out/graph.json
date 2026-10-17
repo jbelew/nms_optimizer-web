@@ -68,8 +68,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "storybook_splashhider",
-      "community": 133,
-      "community_name": "splashScreen.ts",
+      "community": 13,
+      "community_name": "LifecycleCoordinator",
       "norm_label": "splashhider.tsx"
     },
     {
@@ -80,8 +80,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "storybook_splashhider_splashhider",
-      "community": 133,
-      "community_name": "splashScreen.ts",
+      "community": 13,
+      "community_name": "LifecycleCoordinator",
       "norm_label": "splashhider()"
     },
     {
@@ -4804,8 +4804,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "shared_page_registry_getrouteddialogs",
-      "community": 27,
-      "community_name": "page-metadata.js",
+      "community": 10,
+      "community_name": "RoutedDialogs.integration.test.tsx",
       "norm_label": "getrouteddialogs()"
     },
     {
@@ -4874,7 +4874,7 @@
       "_origin": "ast",
       "id": "src_app_test",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "app.test.tsx"
     },
     {
@@ -5008,8 +5008,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_appdialog_base_appdialog_test",
-      "community": 143,
-      "community_name": "AppDialog.tsx",
+      "community": 10,
+      "community_name": "RoutedDialogs.integration.test.tsx",
       "norm_label": "appdialog.test.tsx"
     },
     {
@@ -5179,8 +5179,8 @@
       "source_location": "L250",
       "_origin": "ast",
       "id": "src_components_appdialog_base_appdialog_appdialog",
-      "community": 143,
-      "community_name": "AppDialog.tsx",
+      "community": 10,
+      "community_name": "RoutedDialogs.integration.test.tsx",
       "norm_label": "appdialog"
     },
     {
@@ -5310,8 +5310,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_appdialog_common_dynamicradixicon",
-      "community": 31,
-      "community_name": "dialogUtils.ts",
+      "community": 54,
+      "community_name": "iconRegistry.ts",
       "norm_label": "dynamicradixicon.tsx"
     },
     {
@@ -5323,8 +5323,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_appdialog_common_dynamicradixicon_dynamicradixiconprops",
-      "community": 31,
-      "community_name": "dialogUtils.ts",
+      "community": 54,
+      "community_name": "iconRegistry.ts",
       "norm_label": "dynamicradixiconprops"
     },
     {
@@ -5335,8 +5335,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_appdialog_common_dynamicradixicon_dynamicradixicon",
-      "community": 31,
-      "community_name": "dialogUtils.ts",
+      "community": 54,
+      "community_name": "iconRegistry.ts",
       "norm_label": "dynamicradixicon()"
     },
     {
@@ -5346,8 +5346,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_appdialog_common_loremipsumskeleton",
-      "community": 121,
-      "community_name": "RoutedDialogs.tsx",
+      "community": 10,
+      "community_name": "RoutedDialogs.integration.test.tsx",
       "norm_label": "loremipsumskeleton.tsx"
     },
     {
@@ -5358,8 +5358,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_appdialog_common_loremipsumskeleton_loremipsumskeleton",
-      "community": 121,
-      "community_name": "RoutedDialogs.tsx",
+      "community": 10,
+      "community_name": "RoutedDialogs.integration.test.tsx",
       "norm_label": "loremipsumskeleton()"
     },
     {
@@ -5369,8 +5369,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_appdialog_error_errorcontent_test",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "error/errorcontent.test.tsx"
     },
     {
@@ -5381,8 +5381,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_appdialog_error_errorcontent_test_renderwithdialog",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "renderwithdialog()"
     },
     {
@@ -5392,8 +5392,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_appdialog_error_errorcontent",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "error/errorcontent.tsx"
     },
     {
@@ -5404,8 +5404,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_appdialog_error_errorcontent_errorcontent",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "errorcontent()"
     },
     {
@@ -5415,8 +5415,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_appdialog_error_errordialog_stories",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "errordialog.stories.tsx"
     },
     {
@@ -5428,8 +5428,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_appdialog_error_errordialog_stories_story",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "story"
     },
     {
@@ -5439,8 +5439,8 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "src_components_appdialog_error_errordialog_stories_default",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "default"
     },
     {
@@ -5450,8 +5450,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_appdialog_error_errordialog_test",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "errordialog.test.tsx"
     },
     {
@@ -5461,8 +5461,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_appdialog_error_errordialog",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "errordialog.tsx"
     },
     {
@@ -5474,8 +5474,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_appdialog_error_errordialog_errordialogprops",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "errordialogprops"
     },
     {
@@ -5486,8 +5486,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_appdialog_error_errordialog_errordialog",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "errordialog()"
     },
     {
@@ -7718,7 +7718,7 @@
       "_origin": "ast",
       "id": "src_components_errorboundary_errorboundary_test",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "errorboundary.test.tsx"
     },
     {
@@ -7730,7 +7730,7 @@
       "_origin": "ast",
       "id": "src_components_errorboundary_errorboundary_test_throwerror",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "throwerror()"
     },
     {
@@ -7742,7 +7742,7 @@
       "_origin": "ast",
       "id": "src_components_errorboundary_errorboundary_test_safecomponent",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "safecomponent()"
     },
     {
@@ -7753,7 +7753,7 @@
       "_origin": "ast",
       "id": "src_components_errorboundary_errorboundary",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "errorboundary.tsx"
     },
     {
@@ -7766,7 +7766,7 @@
       "_origin": "ast",
       "id": "src_components_errorboundary_errorboundary_props",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "props"
     },
     {
@@ -7779,7 +7779,7 @@
       "_origin": "ast",
       "id": "src_components_errorboundary_errorboundary_state",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "state"
     },
     {
@@ -7792,7 +7792,7 @@
       "_origin": "ast",
       "id": "src_components_errorboundary_errorboundary_errorboundary",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "errorboundary"
     },
     {
@@ -7804,7 +7804,7 @@
       "_origin": "ast",
       "id": "src_components_errorboundary_errorboundary_errorboundary_constructor",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": ".constructor()"
     },
     {
@@ -7816,7 +7816,7 @@
       "_origin": "ast",
       "id": "src_components_errorboundary_errorboundary_errorboundary_getderivedstatefromerror",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": ".getderivedstatefromerror()"
     },
     {
@@ -7828,7 +7828,7 @@
       "_origin": "ast",
       "id": "src_components_errorboundary_errorboundary_errorboundary_componentdidcatch",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": ".componentdidcatch()"
     },
     {
@@ -7840,7 +7840,7 @@
       "_origin": "ast",
       "id": "src_components_errorboundary_errorboundary_errorboundary_render",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": ".render()"
     },
     {
@@ -7850,8 +7850,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_errorboundary_errorcontent_stories",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "errorcontent.stories.tsx"
     },
     {
@@ -7863,8 +7863,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_errorboundary_errorcontent_stories_story",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "story"
     },
     {
@@ -7874,8 +7874,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_components_errorboundary_errorcontent_stories_pagevariant",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "pagevariant"
     },
     {
@@ -7885,8 +7885,8 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "src_components_errorboundary_errorcontent_stories_witherrormessage",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "witherrormessage"
     },
     {
@@ -7896,8 +7896,8 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "src_components_errorboundary_errorcontent_stories_withstacktrace",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "withstacktrace"
     },
     {
@@ -7907,8 +7907,8 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "src_components_errorboundary_errorcontent_stories_withcomponentstack",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "withcomponentstack"
     },
     {
@@ -7918,8 +7918,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_errorboundary_errorcontent_test",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "errorboundary/errorcontent.test.tsx"
     },
     {
@@ -7929,8 +7929,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_errorboundary_errorcontent",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "errorboundary/errorcontent.tsx"
     },
     {
@@ -7942,8 +7942,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_errorboundary_errorcontent_errorcontentprops",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "errorcontentprops"
     },
     {
@@ -7954,8 +7954,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_errorboundary_errorcontent_defaultmessage",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "defaultmessage()"
     },
     {
@@ -7966,8 +7966,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_errorboundary_errorcontent_insetmessage",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "insetmessage()"
     },
     {
@@ -7978,8 +7978,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_errorboundary_errorcontent_errorcontent",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "errorcontent()"
     },
     {
@@ -7989,8 +7989,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_errorboundary_errordisplay_test",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "errordisplay.test.tsx"
     },
     {
@@ -8000,8 +8000,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_errorboundary_errordisplay",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "errordisplay.tsx"
     },
     {
@@ -8013,8 +8013,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_errorboundary_errordisplay_errordisplayprops",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "errordisplayprops"
     },
     {
@@ -8025,8 +8025,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_errorboundary_errordisplay_errordisplay",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "errordisplay()"
     },
     {
@@ -8037,7 +8037,7 @@
       "_origin": "ast",
       "id": "src_components_errorboundary_routeerror_test",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "routeerror.test.tsx"
     },
     {
@@ -8048,7 +8048,7 @@
       "_origin": "ast",
       "id": "src_components_errorboundary_routeerror",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "routeerror.tsx"
     },
     {
@@ -8060,7 +8060,7 @@
       "_origin": "ast",
       "id": "src_components_errorboundary_routeerror_routeerror",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "routeerror()"
     },
     {
@@ -8071,7 +8071,7 @@
       "_origin": "ast",
       "id": "src_components_errorboundary_errorhandler_test",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "errorhandler.test.ts"
     },
     {
@@ -8082,7 +8082,7 @@
       "_origin": "ast",
       "id": "src_components_errorboundary_errorhandler",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "errorhandler.ts"
     },
     {
@@ -8094,7 +8094,7 @@
       "_origin": "ast",
       "id": "src_components_errorboundary_errorhandler_handleerror",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "handleerror()"
     },
     {
@@ -8531,8 +8531,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_gridtable_gridcontext",
-      "community": 63,
-      "community_name": "GridTableButtons.stories.tsx",
+      "community": 28,
+      "community_name": "useAnalytics",
       "norm_label": "gridcontext.tsx"
     },
     {
@@ -8543,8 +8543,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_gridtable_gridcontext_gridprovider",
-      "community": 63,
-      "community_name": "GridTableButtons.stories.tsx",
+      "community": 28,
+      "community_name": "useAnalytics",
       "norm_label": "gridprovider()"
     },
     {
@@ -8715,8 +8715,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_gridtable_creategridcontext",
-      "community": 63,
-      "community_name": "GridTableButtons.stories.tsx",
+      "community": 28,
+      "community_name": "useAnalytics",
       "norm_label": "creategridcontext.ts"
     },
     {
@@ -8728,8 +8728,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_gridtable_creategridcontext_gridcontextvalue",
-      "community": 63,
-      "community_name": "GridTableButtons.stories.tsx",
+      "community": 28,
+      "community_name": "useAnalytics",
       "norm_label": "gridcontextvalue"
     },
     {
@@ -8739,8 +8739,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_components_gridtable_creategridcontext_gridcontext",
-      "community": 63,
-      "community_name": "GridTableButtons.stories.tsx",
+      "community": 28,
+      "community_name": "useAnalytics",
       "norm_label": "gridcontext"
     },
     {
@@ -8750,8 +8750,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_gridtable_usegridcontext",
-      "community": 63,
-      "community_name": "GridTableButtons.stories.tsx",
+      "community": 28,
+      "community_name": "useAnalytics",
       "norm_label": "usegridcontext.ts"
     },
     {
@@ -8773,8 +8773,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_gridtablebuttons_gridtablebuttons_stories",
-      "community": 63,
-      "community_name": "GridTableButtons.stories.tsx",
+      "community": 28,
+      "community_name": "useAnalytics",
       "norm_label": "gridtablebuttons.stories.tsx"
     },
     {
@@ -8784,8 +8784,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_components_gridtablebuttons_gridtablebuttons_stories_meta",
-      "community": 63,
-      "community_name": "GridTableButtons.stories.tsx",
+      "community": 28,
+      "community_name": "useAnalytics",
       "norm_label": "meta"
     },
     {
@@ -8797,8 +8797,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_gridtablebuttons_gridtablebuttons_stories_story",
-      "community": 63,
-      "community_name": "GridTableButtons.stories.tsx",
+      "community": 28,
+      "community_name": "useAnalytics",
       "norm_label": "story"
     },
     {
@@ -8808,8 +8808,8 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "src_components_gridtablebuttons_gridtablebuttons_stories_default",
-      "community": 63,
-      "community_name": "GridTableButtons.stories.tsx",
+      "community": 28,
+      "community_name": "useAnalytics",
       "norm_label": "default"
     },
     {
@@ -8819,8 +8819,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_gridtablebuttons_gridtablebuttons_test",
-      "community": 54,
-      "community_name": "useScrollGridIntoView.ts",
+      "community": 28,
+      "community_name": "useAnalytics",
       "norm_label": "gridtablebuttons.test.tsx"
     },
     {
@@ -8830,8 +8830,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_components_gridtablebuttons_gridtablebuttons_test_marktutorialfinishedmock_mockresetgrid_mocksendevent_mocksetissharedgrid_mockupdateurlforreset_mockupdateurlforshare_opendialogmock",
-      "community": 54,
-      "community_name": "useScrollGridIntoView.ts",
+      "community": 28,
+      "community_name": "useAnalytics",
       "norm_label": "{\n\tmarktutorialfinishedmock,\n\tmockresetgrid,\n\tmocksendevent,\n\tmocksetissharedgrid,\n\tmockupdateurlforreset,\n\tmockupdateurlforshare,\n\topendialogmock,\n}"
     },
     {
@@ -8841,8 +8841,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_components_gridtablebuttons_gridtablebuttons_test_setgridstorestate_usegridstore",
-      "community": 54,
-      "community_name": "useScrollGridIntoView.ts",
+      "community": 28,
+      "community_name": "useAnalytics",
       "norm_label": "{ setgridstorestate, usegridstore }"
     },
     {
@@ -8852,8 +8852,8 @@
       "source_location": "L136",
       "_origin": "ast",
       "id": "src_components_gridtablebuttons_gridtablebuttons_test_mockgridref",
-      "community": 54,
-      "community_name": "useScrollGridIntoView.ts",
+      "community": 28,
+      "community_name": "useAnalytics",
       "norm_label": "mockgridref"
     },
     {
@@ -8864,8 +8864,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_gridtablebuttons_gridtablebuttons_test_rendercomponent",
-      "community": 54,
-      "community_name": "useScrollGridIntoView.ts",
+      "community": 28,
+      "community_name": "useAnalytics",
       "norm_label": "rendercomponent()"
     },
     {
@@ -9224,8 +9224,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_mainappcontent_mainappcontent",
-      "community": 136,
-      "community_name": "MainAppLayout.tsx",
+      "community": 63,
+      "community_name": "MainAppContent.tsx",
       "norm_label": "mainappcontent.tsx"
     },
     {
@@ -9236,8 +9236,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_mainappcontent_mainappcontent_mainappcontent",
-      "community": 136,
-      "community_name": "MainAppLayout.tsx",
+      "community": 63,
+      "community_name": "MainAppContent.tsx",
       "norm_label": "mainappcontent()"
     },
     {
@@ -9247,8 +9247,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_mainappcontent_mainappcontext",
-      "community": 18,
-      "community_name": "useMainAppLogic.tsx",
+      "community": 63,
+      "community_name": "MainAppContent.tsx",
       "norm_label": "mainappcontext.tsx"
     },
     {
@@ -9259,8 +9259,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_mainappcontent_mainappcontext_mainappprovider",
-      "community": 18,
-      "community_name": "useMainAppLogic.tsx",
+      "community": 63,
+      "community_name": "MainAppContent.tsx",
       "norm_label": "mainappprovider()"
     },
     {
@@ -9382,8 +9382,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_mainappcontent_mainapplayout_shiptypesloader",
-      "community": 136,
-      "community_name": "MainAppLayout.tsx",
+      "community": 63,
+      "community_name": "MainAppContent.tsx",
       "norm_label": "shiptypesloader()"
     },
     {
@@ -9466,8 +9466,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_mainappcontent_mainapplayout_mainapplayoutcontent",
-      "community": 136,
-      "community_name": "MainAppLayout.tsx",
+      "community": 63,
+      "community_name": "MainAppContent.tsx",
       "norm_label": "mainapplayoutcontent()"
     },
     {
@@ -9536,8 +9536,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_mainappcontent_usemainappcontext_usemainappbuildmanagement",
-      "community": 136,
-      "community_name": "MainAppLayout.tsx",
+      "community": 28,
+      "community_name": "useAnalytics",
       "norm_label": "usemainappbuildmanagement()"
     },
     {
@@ -9559,8 +9559,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_mainappcontent_usemainapplogic_test",
-      "community": 54,
-      "community_name": "useScrollGridIntoView.ts",
+      "community": 18,
+      "community_name": "useMainAppLogic.tsx",
       "norm_label": "usemainapplogic.test.ts"
     },
     {
@@ -9570,8 +9570,8 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "src_components_mainappcontent_usemainapplogic_test_mockshowinfo",
-      "community": 54,
-      "community_name": "useScrollGridIntoView.ts",
+      "community": 18,
+      "community_name": "useMainAppLogic.tsx",
       "norm_label": "mockshowinfo"
     },
     {
@@ -10297,8 +10297,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_routeddialogs_routeddialogs",
-      "community": 121,
-      "community_name": "RoutedDialogs.tsx",
+      "community": 10,
+      "community_name": "RoutedDialogs.integration.test.tsx",
       "norm_label": "routeddialogs.tsx"
     },
     {
@@ -10308,8 +10308,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_components_routeddialogs_routeddialogs_markdowncontentrenderer",
-      "community": 121,
-      "community_name": "RoutedDialogs.tsx",
+      "community": 10,
+      "community_name": "RoutedDialogs.integration.test.tsx",
       "norm_label": "markdowncontentrenderer"
     },
     {
@@ -10319,8 +10319,8 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "src_components_routeddialogs_routeddialogs_markdown_dialogs",
-      "community": 121,
-      "community_name": "RoutedDialogs.tsx",
+      "community": 10,
+      "community_name": "RoutedDialogs.integration.test.tsx",
       "norm_label": "markdown_dialogs"
     },
     {
@@ -10331,8 +10331,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_routeddialogs_routeddialogs_routeddialogs",
-      "community": 121,
-      "community_name": "RoutedDialogs.tsx",
+      "community": 10,
+      "community_name": "RoutedDialogs.integration.test.tsx",
       "norm_label": "routeddialogs()"
     },
     {
@@ -11096,7 +11096,7 @@
       "label": "PresetsCardContent()",
       "file_type": "code",
       "source_file": "src/components/TechTree/TechTreePresetsCard.tsx",
-      "source_location": "L113",
+      "source_location": "L117",
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtree_techtreepresetscard_presetscardcontent",
@@ -11108,7 +11108,7 @@
       "label": "TechTreePresetsCard()",
       "file_type": "code",
       "source_file": "src/components/TechTree/TechTreePresetsCard.tsx",
-      "source_location": "L211",
+      "source_location": "L220",
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtree_techtreepresetscard_techtreepresetscard",
@@ -11299,8 +11299,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_techtree_techtreeskeleton",
-      "community": 57,
-      "community_name": "MessageSpinner.tsx",
+      "community": 78,
+      "community_name": "useBreakpoint",
       "norm_label": "techtreeskeleton.tsx"
     },
     {
@@ -11311,8 +11311,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtree_techtreeskeleton_techtreeskeleton",
-      "community": 57,
-      "community_name": "MessageSpinner.tsx",
+      "community": 78,
+      "community_name": "useBreakpoint",
       "norm_label": "techtreeskeleton()"
     },
     {
@@ -11546,7 +11546,7 @@
       "label": "renderIcon()",
       "file_type": "code",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L40",
+      "source_location": "L42",
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtreerow_techtreerow_rendericon",
@@ -11558,7 +11558,7 @@
       "label": "BonusStatusIcon()",
       "file_type": "code",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L66",
+      "source_location": "L84",
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtreerow_techtreerow_bonusstatusicon",
@@ -11570,7 +11570,7 @@
       "label": "TechTreeRowActions()",
       "file_type": "code",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L136",
+      "source_location": "L158",
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtreerow_techtreerow_techtreerowactions",
@@ -11582,7 +11582,7 @@
       "label": "TechTreeRowLabel()",
       "file_type": "code",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L193",
+      "source_location": "L215",
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtreerow_techtreerow_techtreerowlabel",
@@ -11594,7 +11594,7 @@
       "label": "TechTreeRowBadges()",
       "file_type": "code",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L217",
+      "source_location": "L239",
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtreerow_techtreerow_techtreerowbadges",
@@ -11606,7 +11606,7 @@
       "label": "TechTreeRowAvatar()",
       "file_type": "code",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L283",
+      "source_location": "L311",
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_techtreerow_techtreerow_techtreerowavatar",
@@ -11618,7 +11618,7 @@
       "label": "TechTreeRow",
       "file_type": "code",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L302",
+      "source_location": "L330",
       "_origin": "ast",
       "id": "src_components_techtreerow_techtreerow_techtreerow",
       "community": 95,
@@ -12481,8 +12481,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_useapplayout_useapplayout",
-      "community": 78,
-      "community_name": "useBreakpoint",
+      "community": 18,
+      "community_name": "useMainAppLogic.tsx",
       "norm_label": "useapplayout.tsx"
     },
     {
@@ -12494,8 +12494,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_hooks_useapplayout_useapplayout_applayout",
-      "community": 78,
-      "community_name": "useBreakpoint",
+      "community": 18,
+      "community_name": "useMainAppLogic.tsx",
       "norm_label": "applayout"
     },
     {
@@ -12506,8 +12506,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_hooks_useapplayout_useapplayout_useapplayout",
-      "community": 78,
-      "community_name": "useBreakpoint",
+      "community": 18,
+      "community_name": "useMainAppLogic.tsx",
       "norm_label": "useapplayout()"
     },
     {
@@ -12916,8 +12916,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_uselatest_uselatest",
-      "community": 28,
-      "community_name": "useAnalytics",
+      "community": 46,
+      "community_name": "useOptimize.tsx",
       "norm_label": "uselatest.ts"
     },
     {
@@ -12928,8 +12928,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_hooks_uselatest_uselatest_uselatest",
-      "community": 28,
-      "community_name": "useAnalytics",
+      "community": 46,
+      "community_name": "useOptimize.tsx",
       "norm_label": "uselatest()"
     },
     {
@@ -13036,7 +13036,7 @@
       "_origin": "ast",
       "id": "src_hooks_useoptimize_useoptimize_test",
       "community": 46,
-      "community_name": "useOptimize.test.tsx",
+      "community_name": "useOptimize.tsx",
       "norm_label": "useoptimize.test.tsx"
     },
     {
@@ -13047,7 +13047,7 @@
       "_origin": "ast",
       "id": "src_hooks_useoptimize_useoptimize_test_mockcreatesocket",
       "community": 46,
-      "community_name": "useOptimize.test.tsx",
+      "community_name": "useOptimize.tsx",
       "norm_label": "mockcreatesocket"
     },
     {
@@ -13058,7 +13058,7 @@
       "_origin": "ast",
       "id": "src_hooks_useoptimize_useoptimize_test_mockusebreakpoint",
       "community": 46,
-      "community_name": "useOptimize.test.tsx",
+      "community_name": "useOptimize.tsx",
       "norm_label": "mockusebreakpoint"
     },
     {
@@ -13069,7 +13069,7 @@
       "_origin": "ast",
       "id": "src_hooks_useoptimize_useoptimize_test_mockuseanalytics",
       "community": 46,
-      "community_name": "useOptimize.test.tsx",
+      "community_name": "useOptimize.tsx",
       "norm_label": "mockuseanalytics"
     },
     {
@@ -13080,7 +13080,7 @@
       "_origin": "ast",
       "id": "src_hooks_useoptimize_useoptimize_test_mockusegridstore",
       "community": 46,
-      "community_name": "useOptimize.test.tsx",
+      "community_name": "useOptimize.tsx",
       "norm_label": "mockusegridstore"
     },
     {
@@ -13091,7 +13091,7 @@
       "_origin": "ast",
       "id": "src_hooks_useoptimize_useoptimize_test_mockusetechstore",
       "community": 46,
-      "community_name": "useOptimize.test.tsx",
+      "community_name": "useOptimize.tsx",
       "norm_label": "mockusetechstore"
     },
     {
@@ -13102,7 +13102,7 @@
       "_origin": "ast",
       "id": "src_hooks_useoptimize_useoptimize_test_mockuseplatformstore",
       "community": 46,
-      "community_name": "useOptimize.test.tsx",
+      "community_name": "useOptimize.tsx",
       "norm_label": "mockuseplatformstore"
     },
     {
@@ -13112,8 +13112,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_useoptimize_useoptimize",
-      "community": 28,
-      "community_name": "useAnalytics",
+      "community": 46,
+      "community_name": "useOptimize.tsx",
       "norm_label": "useoptimize.tsx"
     },
     {
@@ -13125,8 +13125,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_hooks_useoptimize_useoptimize_useoptimizereturn",
-      "community": 28,
-      "community_name": "useAnalytics",
+      "community": 46,
+      "community_name": "useOptimize.tsx",
       "norm_label": "useoptimizereturn"
     },
     {
@@ -13136,8 +13136,8 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "src_hooks_useoptimize_useoptimize_scroll_options",
-      "community": 28,
-      "community_name": "useAnalytics",
+      "community": 46,
+      "community_name": "useOptimize.tsx",
       "norm_label": "scroll_options"
     },
     {
@@ -13148,8 +13148,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_hooks_useoptimize_useoptimize_useoptimize",
-      "community": 28,
-      "community_name": "useAnalytics",
+      "community": 46,
+      "community_name": "useOptimize.tsx",
       "norm_label": "useoptimize()"
     },
     {
@@ -13334,8 +13334,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_usescrollgridintoview_usescrollgridintoview_test",
-      "community": 54,
-      "community_name": "useScrollGridIntoView.ts",
+      "community": 18,
+      "community_name": "useMainAppLogic.tsx",
       "norm_label": "usescrollgridintoview.test.ts"
     },
     {
@@ -13345,8 +13345,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_usescrollgridintoview_usescrollgridintoview",
-      "community": 54,
-      "community_name": "useScrollGridIntoView.ts",
+      "community": 18,
+      "community_name": "useMainAppLogic.tsx",
       "norm_label": "usescrollgridintoview.ts"
     },
     {
@@ -13356,8 +13356,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_hooks_usescrollgridintoview_usescrollgridintoview_sharedgridcontainerref",
-      "community": 54,
-      "community_name": "useScrollGridIntoView.ts",
+      "community": 18,
+      "community_name": "useMainAppLogic.tsx",
       "norm_label": "sharedgridcontainerref"
     },
     {
@@ -13368,8 +13368,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_hooks_usescrollgridintoview_usescrollgridintoview_registertoolbarforceshow",
-      "community": 54,
-      "community_name": "useScrollGridIntoView.ts",
+      "community": 18,
+      "community_name": "useMainAppLogic.tsx",
       "norm_label": "registertoolbarforceshow()"
     },
     {
@@ -13380,8 +13380,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_hooks_usescrollgridintoview_usescrollgridintoview_usescrollgridintoview",
-      "community": 28,
-      "community_name": "useAnalytics",
+      "community": 46,
+      "community_name": "useOptimize.tsx",
       "norm_label": "usescrollgridintoview()"
     },
     {
@@ -13392,8 +13392,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_hooks_usescrollgridintoview_usescrollgridintoview_resetscrollgridintoviewref",
-      "community": 54,
-      "community_name": "useScrollGridIntoView.ts",
+      "community": 18,
+      "community_name": "useMainAppLogic.tsx",
       "norm_label": "__resetscrollgridintoviewref()"
     },
     {
@@ -14149,8 +14149,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_routeconfig",
-      "community": 18,
-      "community_name": "useMainAppLogic.tsx",
+      "community": 31,
+      "community_name": "dialogUtils.ts",
       "norm_label": "routeconfig.ts"
     },
     {
@@ -14160,8 +14160,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_routeconfig_build",
-      "community": 18,
-      "community_name": "useMainAppLogic.tsx",
+      "community": 31,
+      "community_name": "dialogUtils.ts",
       "norm_label": "build"
     },
     {
@@ -14171,8 +14171,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_routeconfig_languages",
-      "community": 18,
-      "community_name": "useMainAppLogic.tsx",
+      "community": 31,
+      "community_name": "dialogUtils.ts",
       "norm_label": "languages"
     },
     {
@@ -14184,8 +14184,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_routeconfig_pagename",
-      "community": 18,
-      "community_name": "useMainAppLogic.tsx",
+      "community": 31,
+      "community_name": "dialogUtils.ts",
       "norm_label": "pagename"
     },
     {
@@ -14197,8 +14197,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_routeconfig_languagecode",
-      "community": 18,
-      "community_name": "useMainAppLogic.tsx",
+      "community": 31,
+      "community_name": "dialogUtils.ts",
       "norm_label": "languagecode"
     },
     {
@@ -14221,7 +14221,7 @@
       "_origin": "ast",
       "id": "src_routes",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "routes.tsx"
     },
     {
@@ -14244,7 +14244,7 @@
       "_origin": "ast",
       "id": "src_routes_dialog_route_paths",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "dialog_route_paths"
     },
     {
@@ -14255,7 +14255,7 @@
       "_origin": "ast",
       "id": "src_routes_pageroutes",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "pageroutes"
     },
     {
@@ -14266,7 +14266,7 @@
       "_origin": "ast",
       "id": "src_routes_languageroutes",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "languageroutes"
     },
     {
@@ -14277,7 +14277,7 @@
       "_origin": "ast",
       "id": "src_routes_routes",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "routes"
     },
     {
@@ -14358,7 +14358,7 @@
       "_origin": "ast",
       "id": "src_store_app_platformstore_platformstate",
       "community": 46,
-      "community_name": "useOptimize.test.tsx",
+      "community_name": "useOptimize.tsx",
       "norm_label": "platformstate"
     },
     {
@@ -15567,8 +15567,8 @@
       "source_location": "L747",
       "_origin": "ast",
       "id": "src_store_ui_uistore_useoptimizestore",
-      "community": 64,
-      "community_name": "useOptimizeStore",
+      "community": 23,
+      "community_name": "network.ts",
       "norm_label": "useoptimizestore"
     },
     {
@@ -16062,8 +16062,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_utils_analytics_tracking_initializeanalytics",
-      "community": 2,
-      "community_name": "tracking.ts",
+      "community": 144,
+      "community_name": "monitoring.ts",
       "norm_label": "initializeanalytics()"
     },
     {
@@ -16492,8 +16492,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_utils_browser_environment_isbot",
-      "community": 34,
-      "community_name": "setupServiceWorker.ts",
+      "community": 144,
+      "community_name": "monitoring.ts",
       "norm_label": "isbot()"
     },
     {
@@ -16679,8 +16679,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_icons_iconregistry_test",
-      "community": 10,
-      "community_name": "RoutedDialogs.integration.test.tsx",
+      "community": 54,
+      "community_name": "iconRegistry.ts",
       "norm_label": "iconregistry.test.ts"
     },
     {
@@ -16690,8 +16690,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_icons_iconregistry",
-      "community": 10,
-      "community_name": "RoutedDialogs.integration.test.tsx",
+      "community": 54,
+      "community_name": "iconRegistry.ts",
       "norm_label": "iconregistry.ts"
     },
     {
@@ -16701,8 +16701,8 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "src_utils_icons_iconregistry_radixiconregistry",
-      "community": 10,
-      "community_name": "RoutedDialogs.integration.test.tsx",
+      "community": 54,
+      "community_name": "iconRegistry.ts",
       "norm_label": "radixiconregistry"
     },
     {
@@ -16714,8 +16714,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_utils_icons_iconregistry_dialogiconandstyle",
-      "community": 10,
-      "community_name": "RoutedDialogs.integration.test.tsx",
+      "community": 54,
+      "community_name": "iconRegistry.ts",
       "norm_label": "dialogiconandstyle"
     },
     {
@@ -16725,8 +16725,8 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "src_utils_icons_iconregistry_staticiconmap",
-      "community": 10,
-      "community_name": "RoutedDialogs.integration.test.tsx",
+      "community": 54,
+      "community_name": "iconRegistry.ts",
       "norm_label": "staticiconmap"
     },
     {
@@ -16736,8 +16736,8 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "src_utils_icons_iconregistry_staticiconstyle",
-      "community": 10,
-      "community_name": "RoutedDialogs.integration.test.tsx",
+      "community": 54,
+      "community_name": "iconRegistry.ts",
       "norm_label": "staticiconstyle"
     },
     {
@@ -16747,8 +16747,8 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "src_utils_icons_iconregistry_iconmap",
-      "community": 10,
-      "community_name": "RoutedDialogs.integration.test.tsx",
+      "community": 54,
+      "community_name": "iconRegistry.ts",
       "norm_label": "iconmap"
     },
     {
@@ -16758,8 +16758,8 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "src_utils_icons_iconregistry_iconstyle",
-      "community": 10,
-      "community_name": "RoutedDialogs.integration.test.tsx",
+      "community": 54,
+      "community_name": "iconRegistry.ts",
       "norm_label": "iconstyle"
     },
     {
@@ -16770,8 +16770,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_utils_icons_iconregistry_getdialogiconandstyle",
-      "community": 10,
-      "community_name": "RoutedDialogs.integration.test.tsx",
+      "community": 54,
+      "community_name": "iconRegistry.ts",
       "norm_label": "getdialogiconandstyle()"
     },
     {
@@ -16967,8 +16967,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_system_bootpipeline_test",
-      "community": 2,
-      "community_name": "tracking.ts",
+      "community": 144,
+      "community_name": "monitoring.ts",
       "norm_label": "bootpipeline.test.tsx"
     },
     {
@@ -17016,8 +17016,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_utils_system_bootpipeline_registerdefaultdeferredservices",
-      "community": 2,
-      "community_name": "tracking.ts",
+      "community": 144,
+      "community_name": "monitoring.ts",
       "norm_label": "registerdefaultdeferredservices()"
     },
     {
@@ -17123,8 +17123,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_utils_system_dialogutils_dialogtype",
-      "community": 30,
-      "community_name": "reportWebVitals.ts",
+      "community": 9,
+      "community_name": "AppFooter.tsx",
       "norm_label": "dialogtype"
     },
     {
@@ -17272,8 +17272,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_system_lifecyclecoordinator_test",
-      "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community": 144,
+      "community_name": "monitoring.ts",
       "norm_label": "lifecyclecoordinator.test.ts"
     },
     {
@@ -17283,8 +17283,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_system_lifecyclecoordinator",
-      "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community": 144,
+      "community_name": "monitoring.ts",
       "norm_label": "lifecyclecoordinator.ts"
     },
     {
@@ -17296,8 +17296,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_utils_system_lifecyclecoordinator_applifecyclephase",
-      "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community": 144,
+      "community_name": "monitoring.ts",
       "norm_label": "applifecyclephase"
     },
     {
@@ -17322,8 +17322,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_utils_system_lifecyclecoordinator_deferredtaskhandler",
-      "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community": 144,
+      "community_name": "monitoring.ts",
       "norm_label": "deferredtaskhandler"
     },
     {
@@ -17348,8 +17348,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_utils_system_lifecyclecoordinator_lifecyclelistener",
-      "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community": 144,
+      "community_name": "monitoring.ts",
       "norm_label": "lifecyclelistener"
     },
     {
@@ -17793,7 +17793,7 @@
       "_origin": "ast",
       "id": "src_utils_system_monitoring_captureexception",
       "community": 3,
-      "community_name": "lifecycleCoordinator.ts",
+      "community_name": "routes.tsx",
       "norm_label": "captureexception()"
     },
     {
@@ -18075,8 +18075,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_utils_system_setupserviceworker_setupserviceworkerregistration",
-      "community": 34,
-      "community_name": "setupServiceWorker.ts",
+      "community": 144,
+      "community_name": "monitoring.ts",
       "norm_label": "setupserviceworkerregistration()"
     },
     {
@@ -18086,8 +18086,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_system_splashscreen_test",
-      "community": 133,
-      "community_name": "splashScreen.ts",
+      "community": 13,
+      "community_name": "LifecycleCoordinator",
       "norm_label": "splashscreen.test.ts"
     },
     {
@@ -18097,8 +18097,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_system_splashscreen",
-      "community": 133,
-      "community_name": "splashScreen.ts",
+      "community": 13,
+      "community_name": "LifecycleCoordinator",
       "norm_label": "splashscreen.ts"
     },
     {
@@ -18109,8 +18109,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_utils_system_splashscreen_hidesplashscreenandshowbackground",
-      "community": 133,
-      "community_name": "splashScreen.ts",
+      "community": 13,
+      "community_name": "LifecycleCoordinator",
       "norm_label": "hidesplashscreenandshowbackground()"
     },
     {
@@ -19822,8 +19822,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_agents_code_style",
-      "community": 70,
-      "community_name": "Code Style Guidelines",
+      "community": 65,
+      "community_name": "AGENTS.md",
       "norm_label": "code-style.md"
     },
     {
@@ -19998,8 +19998,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_agents_issue_tracker",
-      "community": 65,
-      "community_name": "AGENTS.md",
+      "community": 66,
+      "community_name": "Issue tracker: GitHub",
       "norm_label": "issue-tracker.md"
     },
     {
@@ -47837,7 +47837,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTree/TechTreePresetsCard.tsx",
-      "source_location": "L113",
+      "source_location": "L117",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtree_techtreepresetscard",
@@ -47859,7 +47859,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTree/TechTreePresetsCard.tsx",
-      "source_location": "L211",
+      "source_location": "L220",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtree_techtreepresetscard",
@@ -48146,7 +48146,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTree/TechTreePresetsCard.tsx",
-      "source_location": "L117",
+      "source_location": "L121",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtree_techtreepresetscard_presetscardcontent",
@@ -48158,7 +48158,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTree/TechTreePresetsCard.tsx",
-      "source_location": "L116",
+      "source_location": "L120",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtree_techtreepresetscard_presetscardcontent",
@@ -48170,7 +48170,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTree/TechTreePresetsCard.tsx",
-      "source_location": "L118",
+      "source_location": "L122",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtree_techtreepresetscard_presetscardcontent",
@@ -48182,7 +48182,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTree/TechTreePresetsCard.tsx",
-      "source_location": "L115",
+      "source_location": "L119",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtree_techtreepresetscard_presetscardcontent",
@@ -48722,7 +48722,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L138",
+      "source_location": "L160",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow_techtreerowactions",
@@ -48734,7 +48734,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L220",
+      "source_location": "L242",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow_techtreerowbadges",
@@ -49086,6 +49086,18 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow_test",
+      "target": "src_store_tech_techstore_bonusstatusdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/TechTreeRow/TechTreeRow.test.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_techtreerow_techtreerow_test",
       "target": "src_store_tech_techstore_techstore",
       "confidence_score": 1.0
     },
@@ -49201,7 +49213,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L66",
+      "source_location": "L84",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow",
@@ -49223,7 +49235,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L40",
+      "source_location": "L42",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow",
@@ -49234,7 +49246,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L302",
+      "source_location": "L330",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow",
@@ -49245,7 +49257,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L136",
+      "source_location": "L158",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow",
@@ -49256,7 +49268,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L283",
+      "source_location": "L311",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow",
@@ -49267,7 +49279,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L217",
+      "source_location": "L239",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow",
@@ -49278,7 +49290,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L193",
+      "source_location": "L215",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow",
@@ -49470,7 +49482,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L101",
+      "source_location": "L123",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow_bonusstatusicon",
@@ -49483,7 +49495,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L68",
+      "source_location": "L90",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow_bonusstatusicon",
@@ -49495,7 +49507,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L117",
+      "source_location": "L139",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow_bonusstatusicon",
@@ -49506,7 +49518,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L148",
+      "source_location": "L170",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow_techtreerowactions",
@@ -49518,7 +49530,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L194",
+      "source_location": "L216",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow_techtreerowlabel",
@@ -49530,7 +49542,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L195",
+      "source_location": "L217",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow_techtreerowlabel",
@@ -49542,7 +49554,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L233",
+      "source_location": "L255",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow_techtreerowbadges",
@@ -49554,7 +49566,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L219",
+      "source_location": "L241",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow_techtreerowbadges",
@@ -49566,7 +49578,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L221",
+      "source_location": "L243",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow_techtreerowbadges",
@@ -49578,7 +49590,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/TechTreeRow/TechTreeRow.tsx",
-      "source_location": "L284",
+      "source_location": "L312",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_techtreerow_techtreerow_techtreerowavatar",
@@ -69186,5 +69198,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "db910a04c438b10abde246de23cccca24293413d"
+  "built_at_commit": "e3fe64692d25ac7972d801037002374def6a716c"
 }

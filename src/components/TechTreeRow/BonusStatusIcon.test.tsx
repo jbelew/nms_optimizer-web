@@ -63,13 +63,21 @@ describe("BonusStatusIcon Component", () => {
 		});
 	});
 
-	const renderComponent = (techSolvedBonus: number, status: BonusStatusData | null = null) => {
+	const renderComponent = (
+		techSolvedBonus: number,
+		status: BonusStatusData | null = null,
+		moduleCount?: number
+	) => {
 		mockGetBonusStatus.mockReturnValue(status);
 
 		return render(
 			<I18nextProvider i18n={i18n}>
 				<Theme>
-					<BonusStatusIcon tech="test-tech" techSolvedBonus={techSolvedBonus} />
+					<BonusStatusIcon
+						moduleCount={moduleCount}
+						tech="test-tech"
+						techSolvedBonus={techSolvedBonus}
+					/>
 				</Theme>
 			</I18nextProvider>
 		);
@@ -95,7 +103,7 @@ describe("BonusStatusIcon Component", () => {
 		});
 	});
 
-	describe("Rendering based on bonus values", () => {
+	describe("Rendering based on bonus values and module count", () => {
 		it("should return null when techSolvedBonus is 0 and no cached data", () => {
 			const { container } = renderComponent(0, null);
 			// Theme wrapper renders a div, so check if it has any children
@@ -117,6 +125,24 @@ describe("BonusStatusIcon Component", () => {
 			const status: BonusStatusData = { icon: "warning", percent: 100 };
 			const { container } = renderComponent(-5, status);
 			expect(container.querySelector(".radix-themes")?.childNodes.length).toBe(0);
+		});
+
+		it("should return null when moduleCount is 1 even if positive bonus and status exist", () => {
+			const status: BonusStatusData = { icon: "check", percent: 0 };
+			const { container } = renderComponent(10, status, 1);
+			expect(container.querySelector(".radix-themes")?.childNodes.length).toBe(0);
+		});
+
+		it("should return null when moduleCount is 0 even if positive bonus and status exist", () => {
+			const status: BonusStatusData = { icon: "check", percent: 0 };
+			const { container } = renderComponent(10, status, 0);
+			expect(container.querySelector(".radix-themes")?.childNodes.length).toBe(0);
+		});
+
+		it("should render an icon when moduleCount is greater than 1, techSolvedBonus is positive, and status exists", () => {
+			const status: BonusStatusData = { icon: "check", percent: 0 };
+			const { container } = renderComponent(10, status, 3);
+			expect(container.querySelector("svg")).not.toBeNull();
 		});
 
 		it("should render an icon when techSolvedBonus is positive and status exists", () => {

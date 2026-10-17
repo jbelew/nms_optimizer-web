@@ -28,6 +28,8 @@ import { useTechTreeRowContext } from "./useTechTreeRowContext";
  * Props for the `BonusStatusIcon` component.
  */
 interface BonusStatusIconProps {
+	/** Total count of modules in the technology group. If <= 1, no icon is rendered. */
+	moduleCount?: number;
 	/** Unique identifier for the technology. */
 	tech: string;
 	/** The actual bonus achieved in the most recent solve. */
@@ -57,18 +59,38 @@ function renderIcon(
 /**
  * A component that displays a status icon representing the optimization quality of a technology.
  *
+ * @remarks
+ * Renders an optimization quality indicator based on solved bonus stats. Returns `null` if the
+ * bonus score is non-positive, status data is unavailable, or the tech group has 1 or fewer modules.
+ *
  * @param {BonusStatusIconProps} props - The component props.
+ * @param {number} [props.moduleCount] - Total count of modules in the technology group.
  * @param {string} props.tech - Unique identifier for the technology.
  * @param {number} props.techSolvedBonus - The actual bonus achieved in the most recent solve.
  *
- * @returns {React.ReactNode} The rendered status icon, or null if bonus score is non-positive or status is unavailable.
+ * @returns {React.ReactNode} The rendered status icon, or null if bonus score is non-positive, moduleCount <= 1, or status is unavailable.
+ *
+ * @see {@link ./BonusStatusIcon.test.tsx Unit Tests}
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <BonusStatusIcon moduleCount={4} tech="pulse" techSolvedBonus={100} />
+ * ```
  */
-export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ tech, techSolvedBonus }) => {
+export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
+	moduleCount,
+	tech,
+	techSolvedBonus,
+}) => {
 	const { t } = useTranslation();
 	const getBonusStatus = useTechStore((s) => s.getBonusStatus);
 	const status = getBonusStatus(tech);
 
-	if (techSolvedBonus <= 0 || !status) {
+	if ((typeof moduleCount === "number" && moduleCount <= 1) || techSolvedBonus <= 0 || !status) {
 		return null;
 	}
 
@@ -197,8 +219,9 @@ const TechTreeRowLabel: React.FC = () => {
 	return (
 		<Text
 			as="div"
-			className="techRow__label block flex-1 pt-1"
+			className="techRow__label block flex-1 leading-snug!"
 			size={isSmallAndUp ? "3" : "2"}
+			trim="both"
 			weight="medium"
 			wrap="balance"
 		>
@@ -263,7 +286,13 @@ const TechTreeRowBadges: React.FC = () => {
 
 	return (
 		<>
-			{hasTechInGrid && <BonusStatusIcon tech={tech} techSolvedBonus={techSolvedBonus} />}
+			{hasTechInGrid && modules.length > 1 && (
+				<BonusStatusIcon
+					moduleCount={modules.length}
+					tech={tech}
+					techSolvedBonus={techSolvedBonus}
+				/>
+			)}
 			{modules.length > 1 ? (
 				<ConditionalTooltip
 					label={t("moduleSelection.tooltip", { techName: translatedTechName })}
@@ -302,16 +331,16 @@ const TechTreeRowAvatar: React.FC = () => {
 export const TechTreeRow = React.memo((props: TechTreeRowProps) => {
 	return (
 		<TechTreeRowProvider props={props}>
-			<div className="items-top optimizationButton mt-2 mb-2 ml-0 flex gap-2 sm:ml-1 lg:mr-1">
+			<div className="optimizationButton mt-2 mb-2 ml-0 flex items-center gap-2 sm:ml-1 lg:mr-1">
 				<TechTreeRowActions />
 				<TechTreeRowAvatar />
 
-				<div className="grid flex-1 grid-cols-[1fr_auto] items-start gap-2">
-					<div className="flex justify-start">
+				<div className="grid flex-1 grid-cols-[1fr_auto] items-center gap-2">
+					<div className="flex items-center justify-start">
 						<TechTreeRowLabel />
 					</div>
 
-					<div className="flex items-start justify-end gap-1">
+					<div className="flex items-center justify-end gap-1">
 						<TechTreeRowBadges />
 					</div>
 				</div>
