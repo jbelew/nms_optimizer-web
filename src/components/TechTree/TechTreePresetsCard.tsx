@@ -159,7 +159,7 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds, techTre
 					</Flex>
 				</Flex>
 
-				<Text as="p" size="2">
+				<Text as="p" className="text-sm sm:text-base">
 					<Trans
 						components={{
 							5: (
