@@ -1,3 +1,4 @@
+import type { WindowDimensions } from "@/types/tech";
 import type { FC } from "react";
 import { Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
@@ -10,6 +11,8 @@ import { Trans, useTranslation } from "react-i18next";
 interface OptimizationAlertContentProps {
 	/** The display name of the technology that could not be optimized. **Must not be empty.** */
 	technologyName: string;
+	/** Optional `[width, height]` Solver Window dimensions required for the active Module Selection. */
+	windowDimensions?: null | WindowDimensions;
 }
 
 /**
@@ -17,15 +20,16 @@ interface OptimizationAlertContentProps {
  *
  * @remarks
  * This component handles the internal state of the optimization failure alert.
- * It provides the user with an explanation of why the layout failed and
- * offers a "Force Optimize" option as a more computationally intensive
- * alternative.
+ * It provides the user with an explanation of why the layout failed—including
+ * the required Solver Window dimensions when available—and offers a
+ * "Force Optimize" option as a more computationally intensive alternative.
  *
  * @param {OptimizationAlertContentProps} props - Component properties.
  *
  * @returns {JSX.Element} The rendered alert content.
  *
  * @see {@link ./OptimizationAlertContent.test.tsx Unit Tests}
+ * @see {@link WindowDimensions}
  *
  * @component
  *
@@ -35,10 +39,14 @@ interface OptimizationAlertContentProps {
  * ```tsx
  * <OptimizationAlertContent
  *   technologyName="Pulse Engine"
+ *   windowDimensions={[3, 2]}
  * />
  * ```
  */
-export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({ technologyName }) => {
+export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({
+	technologyName,
+	windowDimensions,
+}) => {
 	const { t } = useTranslation();
 
 	return (
@@ -56,8 +64,20 @@ export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({ te
 							/>
 						),
 					}}
-					i18nKey="dialogs.optimizationAlert.insufficientSpace"
-					values={{ technologyName }}
+					i18nKey={
+						windowDimensions
+							? "dialogs.optimizationAlert.insufficientSpaceWithWindow"
+							: "dialogs.optimizationAlert.insufficientSpace"
+					}
+					values={
+						windowDimensions
+							? {
+									height: windowDimensions[1],
+									technologyName,
+									width: windowDimensions[0],
+								}
+							: { technologyName }
+					}
 				/>
 			</Text>
 			<Text as="p" mb="4" size={{ initial: "2", sm: "3" }}>

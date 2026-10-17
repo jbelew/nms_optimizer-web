@@ -7,12 +7,23 @@ import { OptimizationAlertContent } from "./OptimizationAlertContent";
 
 // Mock react-i18next
 vi.mock("react-i18next", () => ({
-	Trans: ({ i18nKey, values }: { i18nKey: string; values?: Record<string, unknown> }) => {
+	Trans: ({
+		i18nKey,
+		values,
+	}: {
+		i18nKey: string;
+		values?: { height?: number; technologyName?: string; width?: number };
+	}) => {
 		// Simple mock that renders with values
-		if ((values as Record<string, string> | undefined)?.technologyName) {
+		if (values?.technologyName) {
+			const dimensionsPart =
+				values.width !== undefined && values.height !== undefined
+					? ` (${values.width}×${values.height})`
+					: "";
+
 			return (
 				<span>
-					{i18nKey} [{(values as Record<string, string>).technologyName}]
+					{i18nKey} [{values.technologyName}]{dimensionsPart}
 				</span>
 			);
 		}
@@ -47,6 +58,26 @@ describe("OptimizationAlertContent", () => {
 
 	test("should render insufficient space message with technology name", () => {
 		renderWithDialog(<OptimizationAlertContent technologyName={testTechName} />);
+		expect(
+			screen.getByText(/dialogs\.optimizationAlert\.insufficientSpace \[TestTech\]/)
+		).toBeInTheDocument();
+	});
+
+	test("should render insufficientSpaceWithWindow when windowDimensions are provided", () => {
+		renderWithDialog(
+			<OptimizationAlertContent technologyName={testTechName} windowDimensions={[3, 2]} />
+		);
+		expect(
+			screen.getByText(
+				/dialogs\.optimizationAlert\.insufficientSpaceWithWindow \[TestTech\] \(3×2\)/
+			)
+		).toBeInTheDocument();
+	});
+
+	test("should fall back to insufficientSpace when windowDimensions is null", () => {
+		renderWithDialog(
+			<OptimizationAlertContent technologyName={testTechName} windowDimensions={null} />
+		);
 		expect(
 			screen.getByText(/dialogs\.optimizationAlert\.insufficientSpace \[TestTech\]/)
 		).toBeInTheDocument();

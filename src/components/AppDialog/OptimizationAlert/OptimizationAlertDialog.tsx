@@ -2,8 +2,11 @@ import type { FC } from "react";
 import { Suspense } from "react";
 import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
+import { useShallow } from "zustand/react/shallow";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
+import { useTechStore } from "@/store/tech/techStore";
+import { determineWindowDimensions } from "@/utils/optimization/windowDimensions";
 
 import { OptimizationAlertContent } from "./OptimizationAlertContent";
 
@@ -17,7 +20,7 @@ interface OptimizationAlertDialogProps {
 	onClose: () => void;
 	/** Asynchronous callback to trigger a "forced" optimization solve. */
 	onForceOptimize: () => Promise<void>;
-	/** The display name of the technology that triggered the alert. `null` to suppress. */
+	/** The Technology Category identifier that triggered the alert. `null` to suppress. */
 	technologyName: null | string;
 }
 
@@ -25,9 +28,10 @@ interface OptimizationAlertDialogProps {
  * A specialized dialog component that warns users when a pattern-based optimization fails.
  *
  * @remarks
- * This component provides the user with two choices: dismiss the warning or attempt a "forced" solve
- * using more intensive algorithms. It wraps the {@link OptimizationAlertContent} inside
- * a standard {@link AppDialog}.
+ * This component derives the required Solver Window dimensions from the failed Technology Category
+ * and its active Module Selection count in {@link useTechStore}, and provides the user with
+ * two choices: dismiss the warning or attempt a "forced" solve using more intensive algorithms.
+ * It wraps the {@link OptimizationAlertContent} inside a standard {@link AppDialog}.
  *
  * @param {OptimizationAlertDialogProps} props - Component properties.
  *
@@ -37,6 +41,8 @@ interface OptimizationAlertDialogProps {
  * @see {@link ./OptimizationAlertDialog.stories.tsx Storybook}
  * @see {@link AppDialog}
  * @see {@link OptimizationAlertContent}
+ * @see {@link determineWindowDimensions}
+ * @see {@link useTechStore}
  *
  * @component
  *
@@ -46,7 +52,7 @@ interface OptimizationAlertDialogProps {
  * ```tsx
  * <OptimizationAlertDialog
  *   isOpen={isWarningVisible}
- *   technologyName="Hyperdrive"
+ *   technologyName="pulse"
  *   onClose={hideFn}
  *   onForceOptimize={forceFn}
  * />
@@ -59,8 +65,26 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 	technologyName,
 }) => {
 	const { t } = useTranslation();
+	const categoryKey = technologyName ?? "";
+
+	const { activeVariantType, moduleSelectionCount, technologyCategory } = useTechStore(
+		useShallow((state) => ({
+			activeVariantType: state.activeGroups?.[categoryKey] || "normal",
+			moduleSelectionCount: state.checkedModules?.[categoryKey]?.length ?? 0,
+			technologyCategory: state.techGroups?.[categoryKey],
+		}))
+	);
 
 	if (!technologyName) return null;
+
+	const activeVariant = technologyCategory?.length
+		? technologyCategory.find((variant) => variant.type === activeVariantType) ||
+			technologyCategory[0]
+		: null;
+	const windowDimensions = determineWindowDimensions(
+		moduleSelectionCount,
+		activeVariant?.window_rules
+	);
 
 	const footer = (
 		<div className="flex justify-end gap-2">
@@ -85,7 +109,12 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 	return (
 		<Suspense fallback={null}>
 			<AppDialog
-				content={<OptimizationAlertContent technologyName={technologyName} />}
+				content={
+					<OptimizationAlertContent
+						technologyName={technologyName}
+						windowDimensions={windowDimensions}
+					/>
+				}
 				footer={footer}
 				isOpen={isOpen}
 				onClose={onClose}

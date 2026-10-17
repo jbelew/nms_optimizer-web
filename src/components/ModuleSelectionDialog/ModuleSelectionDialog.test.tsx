@@ -211,12 +211,12 @@ describe("ModuleSelectionDialog", () => {
 				"cosmetic1",
 			],
 		});
-		expect(await screen.findByText("Window: 3×2")).toBeInTheDocument();
+		expect(await screen.findByText("Window: 3×2 (x5)")).toBeInTheDocument();
 	});
 
-	it("renders 'Window: —' in the footer when zero modules are selected", async () => {
+	it("renders 'Window: — (x0)' in the footer when zero modules are selected", async () => {
 		renderDialog({ currentCheckedModules: [] });
-		expect(await screen.findByText("Window: —")).toBeInTheDocument();
+		expect(await screen.findByText("Window: — (x0)")).toBeInTheDocument();
 	});
 
 	it("respects custom windowRules overrides when displaying Solver Window dimensions", async () => {
@@ -236,7 +236,7 @@ describe("ModuleSelectionDialog", () => {
 				default: [3, 3],
 			},
 		});
-		expect(await screen.findByText("Window: 3×3")).toBeInTheDocument();
+		expect(await screen.findByText("Window: 3×3 (x5)")).toBeInTheDocument();
 	});
 
 	it("updates Solver Window dimensions immediately as module checkboxes are checked and unchecked", async () => {
@@ -268,19 +268,19 @@ describe("ModuleSelectionDialog", () => {
 
 		render(<InteractiveWrapper />);
 
-		// Initially 2 modules checked -> 2×1
-		expect(await screen.findByText("Window: 2×1")).toBeInTheDocument();
+		// Initially 2 modules checked -> 2×1 (x2)
+		expect(await screen.findByText("Window: 2×1 (x2)")).toBeInTheDocument();
 
-		// Check a 3rd module ("Beta Bonus") -> 3 modules checked -> 2×2
+		// Check a 3rd module ("Beta Bonus") -> 3 modules checked -> 2×2 (x3)
 		fireEvent.click(screen.getByRole("checkbox", { name: /Beta Bonus/i }));
-		expect(screen.getByText("Window: 2×2")).toBeInTheDocument();
+		expect(screen.getByText("Window: 2×2 (x3)")).toBeInTheDocument();
 
-		// Select All -> 5 modules checked -> 3×2
+		// Select All -> 5 modules checked -> 3×2 (x5)
 		fireEvent.click(screen.getByRole("checkbox", { name: "Select All" }));
-		expect(screen.getByText("Window: 3×2")).toBeInTheDocument();
+		expect(screen.getByText("Window: 3×2 (x5)")).toBeInTheDocument();
 
-		// Deselect All -> 0 modules checked -> Window: —
+		// Deselect All -> 0 modules checked -> Window: — (x0)
 		fireEvent.click(screen.getByRole("checkbox", { name: "Select All" }));
-		expect(screen.getByText("Window: —")).toBeInTheDocument();
+		expect(screen.getByText("Window: — (x0)")).toBeInTheDocument();
 	});
 });

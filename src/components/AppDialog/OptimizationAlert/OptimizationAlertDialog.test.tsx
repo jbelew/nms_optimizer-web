@@ -2,15 +2,34 @@ import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { vi } from "vitest";
 
+import { useTechStore } from "@/store/tech/techStore";
+
 import OptimizationAlertDialog from "./OptimizationAlertDialog";
 
 // Mock react-i18next
 vi.mock("react-i18next", () => ({
-	Trans: ({ i18nKey, values }: { i18nKey?: string; values?: Record<string, unknown> }) => {
-		if ((values as Record<string, string> | undefined)?.technologyName) {
+	Trans: ({
+		i18nKey,
+		values,
+	}: {
+		i18nKey?: string;
+		values?: { height?: number; technologyName?: string; width?: number };
+	}) => {
+		if (i18nKey === "dialogs.optimizationAlert.insufficientSpaceWithWindow") {
 			return (
 				<span>
-					{i18nKey} [{(values as Record<string, string>).technologyName}]
+					There&apos;s not a large enough window (requires {values?.width}×
+					{values?.height}) to effectively place the selected modules for{" "}
+					<span>{values?.technologyName}</span>.
+				</span>
+			);
+		}
+
+		if (i18nKey === "dialogs.optimizationAlert.insufficientSpace") {
+			return (
+				<span>
+					There&apos;s not a large enough window to effectively place the selected modules
+					for <span>{values?.technologyName}</span>.
 				</span>
 			);
 		}
@@ -50,15 +69,6 @@ vi.mock("@/components/AppDialog/Base/AppDialog", () => ({
 	},
 }));
 
-// Mock OptimizationAlertContent to verify it's being passed correctly
-vi.mock("./OptimizationAlertContent", () => ({
-	OptimizationAlertContent: ({ technologyName }: { technologyName?: string }) => (
-		<div data-testid="optimization-alert-content">
-			<span>{technologyName}</span>
-		</div>
-	),
-}));
-
 describe("OptimizationAlertDialog", () => {
 	const mockOnClose = vi.fn();
 	const mockOnForceOptimize = vi.fn().mockResolvedValue(undefined);
@@ -67,6 +77,11 @@ describe("OptimizationAlertDialog", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		mockOnForceOptimize.mockResolvedValue(undefined);
+		useTechStore.setState({
+			activeGroups: {},
+			checkedModules: {},
+			techGroups: {},
+		});
 	});
 
 	test("should not render when technologyName is null", () => {
@@ -233,5 +248,124 @@ describe("OptimizationAlertDialog", () => {
 		await waitFor(() => {
 			expect(asyncMockOnForceOptimize).toHaveBeenCalledTimes(1);
 		});
+	});
+
+	test("renders required Solver Window dimensions derived from the failed Technology Category and its Module Selection count", async () => {
+		useTechStore.setState({
+			activeGroups: { pulse: "normal" },
+			checkedModules: {
+				pulse: ["PE", "PC", "PU1", "PU2", "PU3"],
+			},
+			techGroups: {
+				pulse: [
+					{
+						color: "blue",
+						image: "pulse.webp",
+						key: "pulse",
+						label: "Pulse Engine",
+						module_count: 5,
+						modules: [],
+						type: "normal",
+						window_rules: {
+							"1": [1, 1],
+							"2": [2, 1],
+							"4": [2, 2],
+							"6": [3, 2],
+							default: [4, 4],
+						},
+					},
+				],
+			},
+		});
+
+		render(
+			<OptimizationAlertDialog
+				isOpen={true}
+				onClose={mockOnClose}
+				onForceOptimize={mockOnForceOptimize}
+				technologyName="pulse"
+			/>
+		);
+
+		expect(
+			await screen.findByText(
+				/There's not a large enough window \(requires 3×2\) to effectively place the selected modules for/i
+			)
+		).toBeInTheDocument();
+		expect(screen.getByText("pulse")).toBeInTheDocument();
+	});
+
+	test("respects custom window_rules on the active Technology Category variant", async () => {
+		useTechStore.setState({
+			activeGroups: { trails: "max" },
+			checkedModules: {
+				trails: ["T1", "T2", "T3", "T4", "T5"],
+			},
+			techGroups: {
+				trails: [
+					{
+						color: "amber",
+						image: "trails.webp",
+						key: "trails",
+						label: "Starship Trails",
+						module_count: 5,
+						modules: [],
+						type: "normal",
+						window_rules: {
+							"6": [3, 2],
+							default: [4, 4],
+						},
+					},
+					{
+						color: "amber",
+						image: "trails.webp",
+						key: "trails",
+						label: "Starship Trails",
+						module_count: 5,
+						modules: [],
+						type: "max",
+						window_rules: {
+							"5": [3, 3],
+							default: [4, 3],
+						},
+					},
+				],
+			},
+		});
+
+		render(
+			<OptimizationAlertDialog
+				isOpen={true}
+				onClose={mockOnClose}
+				onForceOptimize={mockOnForceOptimize}
+				technologyName="trails"
+			/>
+		);
+
+		expect(
+			await screen.findByText(
+				/There's not a large enough window \(requires 3×3\) to effectively place the selected modules for/i
+			)
+		).toBeInTheDocument();
+		expect(screen.getByText("trails")).toBeInTheDocument();
+	});
+
+	test("falls back to generic space warning text when Solver Window dimensions are unavailable", async () => {
+		render(
+			<OptimizationAlertDialog
+				isOpen={true}
+				onClose={mockOnClose}
+				onForceOptimize={mockOnForceOptimize}
+				technologyName="unknown-tech"
+			/>
+		);
+
+		expect(
+			await screen.findByText(
+				/There's not a large enough window to effectively place the selected modules for/i
+			)
+		).toBeInTheDocument();
+		expect(screen.queryByText(/requires/i)).not.toBeInTheDocument();
+		expect(screen.getByText("unknown-tech")).toBeInTheDocument();
 	});
 });

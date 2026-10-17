@@ -114,6 +114,7 @@
 		"optimizationAlert": {
 			"warning": "–kzzkt– Aviso! –kzzkt–",
 			"insufficientSpace": "Não há espaço suficiente para posicionar eficazmente os módulos selecionados para <1>{{technologyName}}</1>. Isso geralmente acontece quando muitas tecnologias são selecionadas.",
+			"insufficientSpaceWithWindow": "Não há espaço suficiente (requer <1>{{width}}×{{height}}</1>) para posicionar eficazmente os módulos selecionados para <1>{{technologyName}}</1>. Isso geralmente acontece quando muitas tecnologias são selecionadas.",
 			"forceOptimizeSuggestion": "Você pode tentar a <1>\"Otimização Forçada\"</1> para uma busca mais intensiva, mas ela pode não encontrar o layout ideal. Considere reordenar suas tecnologias ou selecionar menos módulos.",
 			"cancelButton": "Cancelar",
 			"forceOptimizeButton": "Forçar Otimização"

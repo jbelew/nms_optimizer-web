@@ -114,6 +114,7 @@
 		"optimizationAlert": {
 			"warning": "–kzzkt– ¡Advertencia! –kzzkt–",
 			"insufficientSpace": "No hay una ventana lo suficientemente grande para colocar eficazmente los módulos seleccionados para <1>{{technologyName}}</1>. Esto suele ocurrir cuando se seleccionan demasiadas tecnologías en tu diseño.",
+			"insufficientSpaceWithWindow": "No hay una ventana lo suficientemente grande (requiere <1>{{width}}×{{height}}</1>) para colocar eficazmente los módulos seleccionados para <1>{{technologyName}}</1>. Esto suele ocurrir cuando se seleccionan demasiadas tecnologías en tu diseño.",
 			"forceOptimizeSuggestion": "Puedes intentar <1>\"Forzar Optimización\"</1> para una resolución más intensiva, pero es posible que no encuentre un diseño óptimo. Considera reordenar tus tecnologías o seleccionar menos para mejorar los resultados.",
 			"cancelButton": "Cancelar",
 			"forceOptimizeButton": "Forzar Optimización"

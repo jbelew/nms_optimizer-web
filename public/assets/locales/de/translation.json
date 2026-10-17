@@ -114,6 +114,7 @@
 		"optimizationAlert": {
 			"warning": "–kzzkt– Warnung! –kzzkt–",
 			"insufficientSpace": "Es gibt keinen ausreichend großen Bereich, um die ausgewählten Module für <1>{{technologyName}}</1> effektiv zu platzieren. Dies passiert oft, wenn zu viele Technologien gleichzeitig ausgewählt sind.",
+			"insufficientSpaceWithWindow": "Es gibt keinen ausreichend großen Bereich (erfordert <1>{{width}}×{{height}}</1>), um die ausgewählten Module für <1>{{technologyName}}</1> effektiv zu platzieren. Dies passiert oft, wenn zu viele Technologien gleichzeitig ausgewählt sind.",
 			"forceOptimizeSuggestion": "Du kannst <1>\"Optimierung Erzwingen\"</1> für eine intensivere Berechnung versuchen, aber es wird eventuell kein ideales Layout gefunden. Erwäge, deine Technologien umzusortieren oder weniger auszuwählen.",
 			"cancelButton": "Abbrechen",
 			"forceOptimizeButton": "Optimierung Erzwingen"

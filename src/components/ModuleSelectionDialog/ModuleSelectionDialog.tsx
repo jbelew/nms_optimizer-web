@@ -410,12 +410,13 @@ const DialogFooter: React.FC = () => {
 	return (
 		<div className="mb-1 flex w-full items-center justify-between gap-2">
 			<Badge
-				className="font-mono! tabular-nums"
+				className="font-mono! text-xs! tabular-nums sm:text-sm!"
 				color={isOptimizeDisabled ? "gray" : techColor}
-				size="2"
+				radius="medium"
+				size="1"
 				variant="surface"
 			>
-				{windowBadgeText}
+				{windowBadgeText} (x{currentCheckedModules.length})
 			</Badge>
 			<div className="flex items-center gap-2">
 				<Button onClick={onClose} variant="soft">
