@@ -7,10 +7,10 @@ Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all o
 - **Create an issue**: `gh issue create --title "..." --body "..."`. Use a heredoc for multi-line bodies.
 - **Read an issue**: `gh issue view <number> --json number,title,body,labels,comments`.
 - **List issues**: `gh issue list --state open --json number,title,body,labels,comments --jq '[.[] | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]'` with appropriate `--label` and `--state` filters.
-- **Make an issue a sub-issue of a parent**: `gh issue create --parent <parent> ...`, or `gh issue edit <parent> --add-sub-issue <child>` afterwards (`gh` 2.94+). Older `gh`: `gh api --method POST repos/<owner>/<repo>/issues/<parent>/sub_issues -F sub_issue_id=<child-db-id>` (database id, as in **Blocking** below). Without sub-issues, put `Part of #<parent>` at the top of the child body.
+- **Make an issue a sub-issue of a parent**: `gh api --method POST repos/{owner}/{repo}/issues/<parent>/sub_issues -F sub_issue_id=<child-db-id>` (numeric database id from `gh api repos/{owner}/{repo}/issues/<n> --jq .id`, as in **Blocking** below). On `gh` 2.94+: `gh issue create --parent <parent> ...` or `gh issue edit <parent> --add-sub-issue <child>`. Without sub-issues, put `Part of #<parent>` at the top of the child body.
 - **Comment on an issue**: `gh issue comment <number> --body "..."`
 - **Apply / remove labels**: `gh issue edit <number> --add-label "..."` / `--remove-label "..."`
-- **Close**: `gh issue close <number> --comment "..."`
+- **Close / resolve a ticket**: check off completed acceptance criteria (`- [ ]` → `- [x]`) in the issue body (`gh issue edit <number> --body "..."`), then close with `gh issue close <number> --comment "Resolved in <sha>."`. When committing in a sibling repo (e.g. `nms_optimizer-service` for a ticket tracked in `jbelew/nms_optimizer-web`), pass `-R jbelew/nms_optimizer-web`.
 
 Infer the repo from `git remote -v`; `gh` does this automatically when run inside a clone.
 
@@ -28,11 +28,14 @@ GitHub shares one number space across issues and PRs, so a bare `#42` may be eit
 
 ## When a skill says "publish to the issue tracker"
 
-Create a GitHub issue.
+Create a GitHub issue:
+
+- **Specs (`/to-spec`)**: Prefix the issue title with `spec:` (or `spec(<scope>):`) and apply the `spec` label (`gh issue create --title "spec: ..." --label "spec"`).
+- **Tickets (`/to-tickets`)**: Use Conventional Commit prefixes (`feat:`, `fix:`, `refactor:`, etc.) for child ticket titles, link each child as a sub-issue of the parent spec, and ensure the parent spec carries `spec` without `ready-for-agent` (`gh issue edit <parent> --add-label spec --remove-label ready-for-agent`) so only actionable leaf tickets carry `ready-for-agent`.
 
 ## When a skill says "fetch the relevant ticket"
 
-Read it as in **Read an issue** above.
+Read it as in **Read an issue** above. When `/implement` completes (after commit and `code-review` pass), immediately resolve the ticket as in **Close / resolve a ticket** above—check off `- [ ]` → `- [x]` in the issue body and close the issue with the commit SHA. Do not defer closing until `git push`.
 
 ## Wayfinding operations
 

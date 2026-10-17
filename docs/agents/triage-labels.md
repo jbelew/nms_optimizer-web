@@ -12,4 +12,6 @@ The skills speak in terms of five canonical triage roles. This file maps those r
 
 When a skill mentions a role (e.g. "apply the AFK-ready triage label"), use the corresponding label string from this table.
 
+In addition to the five triage roles, umbrella specification issues created by `/to-spec` use the `spec` label (and a `spec:` title prefix) to distinguish parent specs from actionable implementation tickets.
+
 Edit the "Label in our tracker" column to match whatever vocabulary you actually use.

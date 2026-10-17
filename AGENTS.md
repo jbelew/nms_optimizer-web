@@ -42,9 +42,12 @@ Read these specialized guides when working on matching branches:
 
 Issues and specs are tracked in GitHub Issues via the `gh` CLI. See `docs/agents/issue-tracker.md`.
 
+- **Specs (`/to-spec`)**: Prefix titles with `spec:` (or `spec(<scope>):`) and apply the `spec` label. Once broken into child tickets via `/to-tickets`, remove `ready-for-agent` from the parent spec so only leaf tickets carry `ready-for-agent`.
+- **Implementing tickets (`/implement`)**: After committing and passing `code-review`, immediately update the ticket body (`- [ ]` → `- [x]`) and close the GitHub issue (`gh issue close <n> --comment "Resolved in <sha>."`); do not wait for `git push`.
+
 ### Triage labels
 
-Uses the five default canonical triage labels (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See `docs/agents/triage-labels.md`.
+Uses the five default canonical triage labels (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`) plus `spec` for umbrella specifications. See `docs/agents/triage-labels.md`.
 
 ### Domain docs
 
