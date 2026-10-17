@@ -1,14 +1,13 @@
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
 import js from "@eslint/js";
-import jsdoc from "eslint-plugin-jsdoc";
-import perfectionist from "eslint-plugin-perfectionist";
-import importX from "eslint-plugin-import-x";
-
 import prettierConfig from "eslint-config-prettier";
+import importX from "eslint-plugin-import-x";
+import jsdoc from "eslint-plugin-jsdoc";
+import oxlint from "eslint-plugin-oxlint";
+import perfectionist from "eslint-plugin-perfectionist";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import storybook from "eslint-plugin-storybook";
-import oxlint from "eslint-plugin-oxlint";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
@@ -208,7 +207,6 @@ export default tseslint.config(
 			"**/source_images/**",
 			"**/tmp/**",
 			"**/.wrangler/**",
-			"**/.beads/**",
 			"**/.lighthouseci/**",
 			"**/.elsikora/**",
 			"**/.git/**",
@@ -227,7 +225,12 @@ export default tseslint.config(
 	//
 	{
 		...shared,
-		files: ["scripts/**/*.{js,mjs,cjs,ts}", "functions/**/*.{js,ts}", "shared/**/*.{js,ts}", "*.{js,mjs,cjs,ts}"],
+		files: [
+			"scripts/**/*.{js,mjs,cjs,ts}",
+			"functions/**/*.{js,ts}",
+			"shared/**/*.{js,ts}",
+			"*.{js,mjs,cjs,ts}",
+		],
 		rules: {
 			...shared.rules,
 			"import-x/no-relative-parent-imports": "off",

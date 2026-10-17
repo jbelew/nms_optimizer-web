@@ -67,12 +67,6 @@ seo_report/*
 # Lighthouse temporary directories
 .lighthouseci/
 
-# Dolt database files (added by bd init)
-.dolt/
-*.db
-
-# Beads / Dolt files (added by bd init)
-**/.beads-credential-key
 docs/nestjs-replatform-analysis.md
 
 # Cloudflare Scripts

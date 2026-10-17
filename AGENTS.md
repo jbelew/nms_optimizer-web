@@ -7,14 +7,14 @@ NMS Optimizer Web is a React-based frontend application for optimizing technolog
 - **Package Manager**: Exclusively use **Bun** (version 1.2.0+). Always invoke scripts with `bun`.
 - **Strict TypeScript**: Write explicit types, interfaces, and discriminated unions. The `any` type is strictly prohibited.
 - **Zero Linter Suppressions**: Resolve underlying type or logic issues; inline `eslint-disable` comments are disallowed.
-- **Documentation**: Document all public APIs, functions, and complex utilities with JSDoc containing `@param` and `@returns` types.
+- **Documentation**: Document all public APIs, functions, and complex utilities with JSDoc containing `@param` and `@returns` types (conforming to the `agentic-jsdoc` skill).
 
 ## Verification Gate (Definition of Done)
 
 Before marking any code task complete, execute this sequence:
 
 1. `bun run typecheck` — Must report 0 TypeScript diagnostics (`tsgo`).
-2. `bun run test -- <path>` or `bun run test` — Ensure targeted unit/component tests pass.
+2. `bun run test -- <path>` or `bun run test:related` — Ensure targeted unit/component tests pass.
 3. `bun run lint` — Must report 0 oxlint/ESLint errors.
 
 ## Key Commands & Gotchas
@@ -24,7 +24,7 @@ Before marking any code task complete, execute this sequence:
 - **Single Test**: `bun run test -- src/path/to/file.test.tsx`.
 - **Storybook**: `bun run test:storybook` (unit test stories) and `bun run test:storybook:a11y` (CLI a11y audit).
 - **E2E Tests**: Do not run locally due to duration; CI runs them automatically. Only run locally (`bun run test:e2e:ci` or targeted spec) when actively debugging CI failures.
-- **Format**: `bun run format` (formats `src/`, `README.md`, and markdown assets).
+- **Format**: `bun run format` (formats `src/`, `README.md`, markdown assets, and locale JSON bundles).
 
 ## Reference Guides (Progressive Disclosure)
 

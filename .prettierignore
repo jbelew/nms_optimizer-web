@@ -6,6 +6,5 @@ coverage/
 venv/
 node_modules/
 .agents/
-.beads/
 .lighthouseci/
 .wrangler/

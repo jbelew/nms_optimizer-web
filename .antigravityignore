@@ -26,8 +26,6 @@ __pycache__/
 *.webm
 
 # Database & Agent Tool States
-.beads/
-.dolt/
 .wrangler/
 .git/
 

@@ -1,7 +1,0 @@
-# Beads Configuration File
-# Updated to disable automatic git push and avoid credential prompts
-
-backup:
-  enabled: true
-  interval: 15m
-  git-push: false

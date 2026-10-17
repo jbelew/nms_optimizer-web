@@ -10,8 +10,8 @@ If the user passes a ticket reference, fetch it from the issue tracker and state
 
 Call the Skill tool with "tdd" where possible, at pre-agreed seams.
 
-Run typechecking regularly, single test files regularly, and the full test suite once at the end.
+Run typechecking (`bun run typecheck`) and targeted test files (`bun run test -- <path>`) regularly during development, and `bun run test:related` once at the end.
 
-Once done, call the Skill tool with "code-review" to review the work.
+Commit your work to the current branch (scoping to the touched files).
 
-Commit your work to the current branch.
+Once committed, call the Skill tool with "code-review" against `HEAD~1` to review the commit, amending if any fixes are required.
