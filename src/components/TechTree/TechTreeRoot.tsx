@@ -68,7 +68,7 @@ export const TechTreeRoot: React.FC<TechTreeRootProps> = ({ children }) => {
 				ref={viewportRef}
 				scrollbars="vertical"
 				style={{
-					borderRadius: "var(--radius-2)",
+					borderRadius: "var(--radius-3)",
 					flexGrow: 1,
 					minHeight: 0,
 					padding: "var(--space-4)",

@@ -143,7 +143,7 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds, techTre
 	}, [openDialog]);
 
 	return (
-		<div className="mb-4 rounded-(--radius-2) bg-(--accent-a3) p-3 sm:shadow-sm lg:bg-(--accent-surface)">
+		<div className="mb-4 rounded-(--radius-3) bg-(--accent-a3) p-3 sm:shadow-sm lg:bg-(--accent-surface)">
 			<Flex direction="column" gap="1" width="100%">
 				<Flex align="center" justify="between" width="100%">
 					<Flex align="center" gap="2">

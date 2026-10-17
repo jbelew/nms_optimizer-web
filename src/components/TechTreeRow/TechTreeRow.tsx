@@ -219,9 +219,9 @@ const TechTreeRowLabel: React.FC = () => {
 	return (
 		<Text
 			as="div"
-			className="techRow__label block flex-1 leading-snug!"
+			className="techRow__label block flex-1 leading-snug! sm:leading-tight!"
 			size={isSmallAndUp ? "3" : "2"}
-			trim="both"
+			trim={isSmallAndUp ? "normal" : "both"}
 			weight="medium"
 			wrap="balance"
 		>
