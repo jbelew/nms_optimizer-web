@@ -59,6 +59,10 @@ describe("techTreeUtils", () => {
 								value: 10,
 							},
 						],
+						window_rules: {
+							"1": [1, 1],
+							default: [4, 4],
+						},
 					},
 				],
 			};
@@ -67,6 +71,10 @@ describe("techTreeUtils", () => {
 			expect(result.validTechKeys.has("photon")).toBe(true);
 			expect(result.techColors.photon).toBe("red");
 			expect(result.modulesMap.has("photon/photon_mod")).toBe(true);
+			expect(result.techGroups.photon?.[0]?.window_rules).toEqual({
+				"1": [1, 1],
+				default: [4, 4],
+			});
 		});
 	});
 });

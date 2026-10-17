@@ -113,4 +113,16 @@ export interface TechTreeItem {
 	modules: Module[];
 	/** Optional type classification (e.g., `'normal'`, `'weapon'`). */
 	type?: string;
+	/** Optional mapping of module count thresholds to `[width, height]` Solver Window dimensions. */
+	window_rules?: Record<string, [number, number]>;
 }
+
+/**
+ * Tuple representing `[width, height]` Solver Window dimensions in grid cells.
+ */
+export type WindowDimensions = [width: number, height: number];
+
+/**
+ * Mapping of module count threshold keys (or `"default"`) to Solver Window dimensions.
+ */
+export type WindowRules = Record<string, WindowDimensions>;
