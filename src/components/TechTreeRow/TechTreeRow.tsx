@@ -308,7 +308,7 @@ export const TechTreeRow = React.memo(({ tech, techColor, techImage }: TechTreeR
 	);
 
 	return (
-		<div className="optimizationButton mb-3 flex items-center gap-2">
+		<div className="optimizationButton mb-3 flex items-center gap-2 last:mb-0">
 			<ConditionalTooltip label={optimizeTooltipLabel}>
 				<IconButton
 					aria-label={`${optimizeTooltipLabel} ${translatedTechName}`}
