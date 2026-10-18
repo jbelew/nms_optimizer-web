@@ -75,7 +75,7 @@ const TechTreeSectionHeader: React.FC<{ section: string }> = ({ section }) => {
 			{imagePath && (
 				<img
 					alt={section}
-					className="mt-[1px] mr-1 ml-1 opacity-35"
+					className="mt-[1px] mr-1 ml-1 opacity-35 sm:mt-[3px]"
 					height="24"
 					src={imagePath}
 					srcSet={`${imagePath.replace(".webp", "@2x.webp")} 2x`}
