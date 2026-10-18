@@ -316,9 +316,9 @@ export interface TechStore {
  * Determines whether all currently checked modules match the default checked modules
  * for each technology's active Technology Variant.
  *
- * @param {TechStore} state - The technology store state draft.
+ * @param state - The technology store state draft.
  *
- * @returns {boolean} `true` if all module selections match their active variant defaults.
+ * @returns `true` if all module selections match their active variant defaults.
  */
 const computeIsDefaultModuleSelection = (state: TechStore): boolean => {
 	const techKeys = Object.keys(state.techGroups);
@@ -347,7 +347,7 @@ const computeIsDefaultModuleSelection = (state: TechStore): boolean => {
 /**
  * Helper to synchronize snake_case aliases and derived flags with camelCase fields.
  *
- * @param {TechStore} state - The mutable state draft.
+ * @param state - The mutable state draft.
  */
 const syncAliases = (state: TechStore) => {
 	if (!state) return;
@@ -364,9 +364,9 @@ const syncAliases = (state: TechStore) => {
 /**
  * Computes default checked modules across all registered technology groups.
  *
- * @param {TechStore} state - The technology store state draft.
+ * @param state - The technology store state draft.
  *
- * @returns {Record<string, string[]>} Mapping of tech keys to arrays of default checked module IDs.
+ * @returns Mapping of tech keys to arrays of default checked module IDs.
  */
 const computeDefaultCheckedModules = (state: TechStore): Record<string, string[]> => {
 	return Object.keys(state.techGroups).reduce(

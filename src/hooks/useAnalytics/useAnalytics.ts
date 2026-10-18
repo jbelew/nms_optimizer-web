@@ -12,9 +12,9 @@ import { sendDeferredEvent, sendEvent } from "@/utils/analytics/tracking";
  * the main thread free during the interaction. Use `sendEvent` for late-firing
  * events (Web Vitals, `visibilitychange`) that must dispatch synchronously.
  *
- * @returns {object} An object containing the tracking functions.
- * @returns {Function} returns.sendEvent - Synchronous event dispatcher.
- * @returns {Function} returns.sendDeferredEvent - INP-friendly deferred event dispatcher.
+ * @returns An object containing the tracking functions.
+ * @returns returns.sendEvent - Synchronous event dispatcher.
+ * @returns returns.sendDeferredEvent - INP-friendly deferred event dispatcher.
  *
  * @see {@link sendEvent} for the underlying tracking logic.
  * @see {@link sendDeferredEvent} for the INP-friendly deferred variant.

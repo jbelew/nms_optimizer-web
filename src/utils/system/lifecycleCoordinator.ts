@@ -128,7 +128,7 @@ export class LifecycleCoordinator {
 	/**
 	 * Creates a new {@link LifecycleCoordinator} instance.
 	 *
-	 * @param {LifecycleCoordinatorOptions} [options={}] - Optional lifecycle configuration.
+	 * @param [options={}] - Optional lifecycle configuration.
 	 */
 	constructor(options: LifecycleCoordinatorOptions = {}) {
 		this.options = options;
@@ -148,7 +148,7 @@ export class LifecycleCoordinator {
 	 * If a task fails or throws an exception, the error is logged and captured via Sentry,
 	 * but execution continues for all remaining registered deferred tasks.
 	 *
-	 * @returns {Promise<void>} Resolves when all registered deferred tasks have settled.
+	 * @returns Resolves when all registered deferred tasks have settled.
 	 *
 	 * @see {@link registerDeferredTask}
 	 *
@@ -173,7 +173,7 @@ export class LifecycleCoordinator {
 	/**
 	 * Retrieves all registered deferred tasks, sorted by priority in descending order.
 	 *
-	 * @returns {DeferredTask[]} Array of registered deferred tasks.
+	 * @returns Array of registered deferred tasks.
 	 *
 	 * @category Utilities
 	 *
@@ -192,7 +192,7 @@ export class LifecycleCoordinator {
 	/**
 	 * Retrieves the fatal error that caused the `FATAL` phase transition, if any.
 	 *
-	 * @returns {unknown} The captured error or null.
+	 * @returns The captured error or null.
 	 */
 	public getFatalError(): unknown {
 		return this.fatalError;
@@ -201,7 +201,7 @@ export class LifecycleCoordinator {
 	/**
 	 * Retrieves the current lifecycle phase.
 	 *
-	 * @returns {AppLifecyclePhase} The current application lifecycle phase.
+	 * @returns The current application lifecycle phase.
 	 *
 	 * @example
 	 * ```ts
@@ -216,9 +216,9 @@ export class LifecycleCoordinator {
 	/**
 	 * Checks if a deferred task with the given name is currently registered.
 	 *
-	 * @param {string} name - Name of the deferred task.
+	 * @param name - Name of the deferred task.
 	 *
-	 * @returns {boolean} True if registered, false otherwise.
+	 * @returns True if registered, false otherwise.
 	 *
 	 * @category Utilities
 	 *
@@ -236,7 +236,7 @@ export class LifecycleCoordinator {
 	/**
 	 * Checks if the application is in a fatal boot error state.
 	 *
-	 * @returns {boolean} True if the phase is `FATAL`.
+	 * @returns True if the phase is `FATAL`.
 	 *
 	 * @example
 	 * ```ts
@@ -252,7 +252,7 @@ export class LifecycleCoordinator {
 	/**
 	 * Checks if the application React tree has hydrated (`HYDRATED`, `READY`, or `IDLE`).
 	 *
-	 * @returns {boolean} True if mounted/hydrated, false otherwise.
+	 * @returns True if mounted/hydrated, false otherwise.
 	 *
 	 * @example
 	 * ```ts
@@ -266,7 +266,7 @@ export class LifecycleCoordinator {
 	/**
 	 * Checks if the application has reached or passed the `READY` phase (`READY` or `IDLE`).
 	 *
-	 * @returns {boolean} True if ready or idle, false otherwise.
+	 * @returns True if ready or idle, false otherwise.
 	 *
 	 * @example
 	 * ```ts
@@ -282,9 +282,9 @@ export class LifecycleCoordinator {
 	/**
 	 * Transitions the coordinator to the `FATAL` phase and invokes fatal error handling.
 	 *
-	 * @param {unknown} error - The fatal error or rejection reason.
+	 * @param error - The fatal error or rejection reason.
 	 *
-	 * @returns {void} Side-effects only.
+	 * @returns Side-effects only.
 	 *
 	 * @example
 	 * ```ts
@@ -298,7 +298,7 @@ export class LifecycleCoordinator {
 	/**
 	 * Signals that the React tree has mounted to the DOM, transitioning to `HYDRATED`.
 	 *
-	 * @returns {void} Side-effects only.
+	 * @returns Side-effects only.
 	 *
 	 * @example
 	 * ```ts
@@ -314,7 +314,7 @@ export class LifecycleCoordinator {
 	/**
 	 * Signals that the primary application view has mounted and rendered, transitioning to `READY`.
 	 *
-	 * @returns {void} Side-effects only.
+	 * @returns Side-effects only.
 	 *
 	 * @example
 	 * ```ts
@@ -330,10 +330,10 @@ export class LifecycleCoordinator {
 	 * Registers a one-shot callback to be executed when the specified lifecycle phase is reached.
 	 * If the coordinator is already in the target phase, the callback executes synchronously.
 	 *
-	 * @param {AppLifecyclePhase} targetPhase - The lifecycle phase to wait for.
-	 * @param {() => void} callback - The function to execute once the phase is reached.
+	 * @param targetPhase - The lifecycle phase to wait for.
+	 * @param callback - The function to execute once the phase is reached.
 	 *
-	 * @returns {() => void} Unsubscribe function to cancel the listener before it fires.
+	 * @returns Unsubscribe function to cancel the listener before it fires.
 	 *
 	 * @example
 	 * ```ts
@@ -420,7 +420,7 @@ export class LifecycleCoordinator {
 	 * Resets the coordinator to its initial `BOOTING` state and clears all listeners and tasks.
 	 * Useful for isolating test cases.
 	 *
-	 * @returns {void} Side-effects only.
+	 * @returns Side-effects only.
 	 *
 	 * @example
 	 * ```ts
@@ -439,9 +439,9 @@ export class LifecycleCoordinator {
 	/**
 	 * Sets or overrides the fatal error handler callback.
 	 *
-	 * @param {(error: unknown) => void} handler - Custom fatal error callback to execute when entering `FATAL`.
+	 * @param handler - Custom fatal error callback to execute when entering `FATAL`.
 	 *
-	 * @returns {void}
+	 * @returns Side-effects only.
 	 *
 	 * @example
 	 * ```ts
@@ -457,9 +457,9 @@ export class LifecycleCoordinator {
 	/**
 	 * Subscribes a listener callback to all lifecycle phase transitions.
 	 *
-	 * @param {LifecycleListener} listener - Callback invoked on phase transitions with `(newPhase, prevPhase)`.
+	 * @param listener - Callback invoked on phase transitions with `(newPhase, prevPhase)`.
 	 *
-	 * @returns {() => void} Unsubscribe function to remove the listener.
+	 * @returns Unsubscribe function to remove the listener.
 	 *
 	 * @example
 	 * ```ts
@@ -483,10 +483,10 @@ export class LifecycleCoordinator {
 	 * Transitions are directional and ignore redundant transitions to the active phase.
 	 * Once in `FATAL`, no further transitions are permitted.
 	 *
-	 * @param {AppLifecyclePhase} nextPhase - The destination phase.
-	 * @param {unknown} [errorContext] - Optional error context if transitioning to `FATAL`.
+	 * @param nextPhase - The destination phase.
+	 * @param [errorContext] - Optional error context if transitioning to `FATAL`.
 	 *
-	 * @returns {void} Side-effects only.
+	 * @returns Side-effects only.
 	 */
 	public transitionTo(nextPhase: AppLifecyclePhase, errorContext?: unknown): void {
 		if (this.phase === nextPhase) {
@@ -537,9 +537,9 @@ export class LifecycleCoordinator {
 	/**
 	 * Unregisters a deferred task by name.
 	 *
-	 * @param {string} name - Name of the deferred task to unregister.
+	 * @param name - Name of the deferred task to unregister.
 	 *
-	 * @returns {boolean} True if the task was found and removed, false otherwise.
+	 * @returns True if the task was found and removed, false otherwise.
 	 *
 	 * @category Utilities
 	 *
@@ -619,9 +619,9 @@ export class LifecycleCoordinator {
 	/**
 	 * Executes a single deferred task with isolated error trapping.
 	 *
-	 * @param {DeferredTask} task - The deferred task descriptor to execute.
+	 * @param task - The deferred task descriptor to execute.
 	 *
-	 * @returns {Promise<void>} Resolves when task execution completes or fails safely.
+	 * @returns Resolves when task execution completes or fails safely.
 	 *
 	 * @private
 	 *
@@ -647,7 +647,7 @@ export class LifecycleCoordinator {
 	/**
 	 * Executes fatal error handling.
 	 *
-	 * @param {unknown} error - The fatal error to process.
+	 * @param error - The fatal error to process.
 	 *
 	 * @private
 	 */
@@ -724,9 +724,9 @@ export class LifecycleCoordinator {
  * 1. Purges the splash screen components (`#vpss`, `#vpss-style`) to clean up the DOM.
  * 2. Redirects the browser to the static `/500.html` error recovery page, passing the error description.
  *
- * @param {unknown} error - The fatal error or rejection reason captured during startup.
+ * @param error - The fatal error or rejection reason captured during startup.
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
  * @see {@link LifecycleCoordinator}
  *

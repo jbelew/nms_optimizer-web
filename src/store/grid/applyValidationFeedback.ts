@@ -49,9 +49,9 @@ const feedbackMap: Record<
  * triggers the grid shake animation, and—on the 3rd violation of the same
  * restriction in a session—dispatches a localized warning toast once.
  *
- * @param {ValidationResult} result - The validation result containing the reason for failure.
+ * @param result - The validation result containing the reason for failure.
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
  * @see {@link validateToggleActive}
  * @see {@link validateToggleSupercharged}

@@ -9,9 +9,9 @@ import { useSyncExternalStore } from "react";
  * `window.matchMedia` API. This hook is useful for implementing responsive
  * logic in JavaScript.
  *
- * @param {string} breakpoint - The minimum width breakpoint to track (e.g., "768px"). **Must be a valid CSS length.**
+ * @param breakpoint - The minimum width breakpoint to track (e.g., "768px"). **Must be a valid CSS length.**
  *
- * @returns {boolean} `true` if the viewport is at least as wide as the `breakpoint`, otherwise `false`.
+ * @returns `true` if the viewport is at least as wide as the `breakpoint`, otherwise `false`.
  *
  * @see {@link ./useBreakpoint.test.tsx Unit Tests}
  * @see {@link import('@/hooks/useAppLayout/useAppLayout').useAppLayout} for layout-specific responsive logic.

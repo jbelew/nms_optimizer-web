@@ -113,7 +113,7 @@ export const Logger = {
 	/**
 	 * Clears the in-memory log buffer.
 	 *
-	 * @returns {void}
+	 * @returns Side-effects only.
 	 *
 	 * @example
 	 * ```ts
@@ -130,11 +130,11 @@ export const Logger = {
 	 *
 	 * Automatically handles both `Error` objects and generic error messages.
 	 *
-	 * @param {string} message - The error description. **Must not be empty.**
-	 * @param {unknown} [error] - The error object or exception caught.
-	 * @param {Record<string, unknown>} [data] - Additional context for the error report.
+	 * @param message - The error description. **Must not be empty.**
+	 * @param [error] - The error object or exception caught.
+	 * @param [data] - Additional context for the error report.
 	 *
-	 * @returns {void}
+	 * @returns Side-effects only.
 	 *
 	 * @example
 	 * ```ts
@@ -164,7 +164,7 @@ export const Logger = {
 	/**
 	 * Retrieves the current circular buffer of log entries.
 	 *
-	 * @returns {LogEntry[]} A copy of the current log entries in memory.
+	 * @returns A copy of the current log entries in memory.
 	 *
 	 * @example
 	 * ```ts
@@ -179,10 +179,10 @@ export const Logger = {
 	/**
 	 * Logs an informational message to the console and memory.
 	 *
-	 * @param {string} message - The message to log. **Must not be empty.**
-	 * @param {Record<string, unknown>} [data] - Optional metadata to include.
+	 * @param message - The message to log. **Must not be empty.**
+	 * @param [data] - Optional metadata to include.
 	 *
-	 * @returns {void}
+	 * @returns Side-effects only.
 	 *
 	 * @example
 	 * ```ts
@@ -199,9 +199,9 @@ export const Logger = {
 	/**
 	 * Internal method to add a log entry to memory and maintain the buffer size.
 	 *
-	 * @param {LogLevel} level - The log level.
-	 * @param {string} message - The log message.
-	 * @param {Record<string, unknown>} [data] - Optional metadata.
+	 * @param level - The log level.
+	 * @param message - The log message.
+	 * @param [data] - Optional metadata.
 	 *
 	 * @example Internal log dispatch
 	 * ```ts
@@ -228,11 +228,11 @@ export const Logger = {
 	/**
 	 * Logs a warning message and sends it to Sentry (unless skipped).
 	 *
-	 * @param {string} message - The warning message. **Must not be empty.**
-	 * @param {Record<string, unknown>} [data] - Optional metadata to include in the Sentry report.
-	 * @param {boolean} [skipSentry=false] - If true, prevents sending the warning to Sentry.
+	 * @param message - The warning message. **Must not be empty.**
+	 * @param [data] - Optional metadata to include in the Sentry report.
+	 * @param [skipSentry=false] - If true, prevents sending the warning to Sentry.
 	 *
-	 * @returns {void}
+	 * @returns Side-effects only.
 	 *
 	 * @example
 	 * ```ts
@@ -261,7 +261,7 @@ export const Logger = {
  * This function initializes Sentry synchronously to ensure it catches early errors
  * and wraps the router creator properly.
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
  * @category Utilities
  *
@@ -324,10 +324,10 @@ export const initializeSentry = () => {
 /**
  * Wrapper for Sentry's `captureException` that is safe to use when Sentry is disabled.
  *
- * @param {unknown} error - The caught exception or error object.
- * @param {Record<string, unknown>} [options] - Additional context for the error report.
+ * @param error - The caught exception or error object.
+ * @param [options] - Additional context for the error report.
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
  * @example
  * ```ts
@@ -345,9 +345,9 @@ export const captureException = (error: unknown, options?: Record<string, unknow
  * Wrapper for createBrowserRouter that includes Sentry tracing if enabled.
  * Uses a dynamic check to avoid static Sentry imports in the main entry point.
  *
- * @param {RouteObject[]} routes - Array of route objects to initialize.
+ * @param routes - Array of route objects to initialize.
  *
- * @returns {ReturnType<typeof createBrowserRouter>} The instrumented or standard router.
+ * @returns The instrumented or standard router.
  *
  * @example
  * ```ts
@@ -367,9 +367,9 @@ export const createAppRouter = (routes: RouteObject[]) => {
 /**
  * Internal test helper to inject a Sentry mock.
  *
- * @param {SentrySDK | null} instance - The mock object to use as Sentry SDK.
+ * @param instance - The mock object to use as Sentry SDK.
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
  * @example
  * ```ts

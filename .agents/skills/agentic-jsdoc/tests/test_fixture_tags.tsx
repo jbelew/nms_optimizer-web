@@ -10,8 +10,8 @@ import { useEffect } from "react";
  * Fetches the user's legacy profile data.
  *
  * @deprecated
- * @param {string} userId - The user's unique identifier.
- * @returns {Promise<object>} The raw profile object.
+ * @param userId - The user's unique identifier.
+ * @returns The raw profile object.
  * @category Utilities
  *
  * @example
@@ -27,8 +27,8 @@ export async function fetchLegacyProfile(userId: string): Promise<object> {
 /**
  * Parses a JSON config string into a typed configuration object.
  *
- * @param {string} raw - The raw JSON string to parse.
- * @returns {Record<string, unknown>} The parsed configuration.
+ * @param raw - The raw JSON string to parse.
+ * @returns The parsed configuration.
  * @category Utilities
  *
  * @example
@@ -43,7 +43,7 @@ export function parseConfig(raw: string): Record<string, unknown> {
   return parsed as Record<string, unknown>;
 }
 
-// ── Vague types ({any}, {*}) ───────────────────────────────────────
+// ── Vague / redundant JSDoc types ({any}, {*}) ─────────────────────
 
 /**
  * Merges two data sources into a single result.
@@ -66,7 +66,7 @@ export function mergeSources(primary: unknown, secondary: unknown): unknown {
 /**
  * Logs page views to the analytics service on mount.
  *
- * @param {string} pageName - The name of the page to track.
+ * @param pageName - The name of the page to track.
  * @category Hooks
  *
  * @example
@@ -83,8 +83,8 @@ export function usePageView(pageName: string) {
 /**
  * Formats a Unix timestamp into a human-readable date string.
  *
- * @param {number} timestamp - The Unix timestamp in milliseconds.
- * @returns {string} The formatted date string.
+ * @param timestamp - The Unix timestamp in milliseconds.
+ * @returns The formatted date string.
  * @category Utilities
  *
  * @example

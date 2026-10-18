@@ -20,9 +20,9 @@ interface ParsedRow {
  * verify alignment separately.
  *
  * @template T - Optional narrowed return type when columns are known at compile time.
- * @param {string} raw - The raw CSV line to parse.
- * @param {number} index - The zero-based position of this row in the file.
- * @returns {ParsedRow} The parsed column values and their source index.
+ * @param raw - The raw CSV line to parse.
+ * @param index - The zero-based position of this row in the file.
+ * @returns The parsed column values and their source index.
  * @throws {SyntaxError} Throws if the row contains an unterminated quoted field.
  * @see {@link validateCSVHeaders}
  * @category Utilities

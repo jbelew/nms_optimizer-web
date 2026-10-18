@@ -32,7 +32,7 @@ const StatusContext = React.createContext<string>("active");
 /**
  * Returns the current status from context.
  *
- * @returns {string} The active status value.
+ * @returns The active status value.
  * @see {@link StatusContext}
  * @see [useStatusColor Tests](./useStatusColor.test.ts)
  * @category Hooks

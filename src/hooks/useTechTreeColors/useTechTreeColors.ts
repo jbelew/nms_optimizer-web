@@ -11,9 +11,9 @@ import { fetchTechTreeColors } from "@/utils/api/techTreeColorsResource";
  * within Suspense boundaries. It provides a mapping of technology keys to their
  * assigned UI theme colors across all categories (Starship, Multi-Tool, etc.).
  *
- * @param {boolean} [enabled=true] - Whether to execute the fetch.
+ * @param [enabled=true] - Whether to execute the fetch.
  *
- * @returns {Record<string, string>} A dictionary mapping tech keys to color strings.
+ * @returns A dictionary mapping tech keys to color strings.
  *
  * @see {@link fetchTechTreeColors} for the underlying resource registry.
  *

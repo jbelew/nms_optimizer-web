@@ -15,7 +15,7 @@ import { buildLocalizedPath, useSupportedLanguages } from "@/utils/system/dialog
  * and `<link>` tags into `<head>`, injects JSON-LD structured data schemas,
  * synchronizes `document.documentElement.lang`, and dispatches the GA4 `page_view` event.
  *
- * @returns {JSX.Element} Hoisted document head metadata elements.
+ * @returns Hoisted document head metadata elements.
  *
  * @see {@link getPageMetadata}
  * @see {@link buildLocalizedPath}

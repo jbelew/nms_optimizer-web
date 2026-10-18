@@ -60,7 +60,7 @@ const RoutedDialogs = lazyNamed(
  * This component handles the core logic of the application after the initial
  * setup in the `App` component.
  *
- * @returns {JSX.Element | null} The application content, or `null` if a fatal error occurs.
+ * @returns The application content, or `null` if a fatal error occurs.
  *
  * @see {@link App}
  * @see {@link useDialog}
@@ -204,7 +204,7 @@ const AppContent: FC = () => {
  *
  * It wraps the entire application in a `DialogProvider` to enable routed modals.
  *
- * @returns {JSX.Element} The rendered root component.
+ * @returns The rendered root component.
  *
  * @see {@link DialogProvider}
  * @see {@link Seo}

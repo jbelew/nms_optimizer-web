@@ -10,7 +10,7 @@ import { z } from "zod";
  * Strictly enforces email format and minimum name length. Used primarily
  * for form validation.
  * 
- * @see {@link UserProfile}
+ * @see {@link CreateUserPayload}
  * @category Utilities
  */
 export const CreateUserSchema = z.object({

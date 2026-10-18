@@ -22,11 +22,11 @@ export type ValidationResult =
  * Rejects toggling when a module is currently placed in the cell (`"moduleLocked"`) or when
  * the platform locks the entire grid layout (`"gridFixed"`).
  *
- * @param {object} params - Input parameters.
- * @param {Cell} params.cell - The target grid cell.
- * @param {boolean} params.gridFixed - Whether the entire grid layout is locked.
+ * @param params - Input parameters.
+ * @param params.cell - The target grid cell.
+ * @param params.gridFixed - Whether the entire grid layout is locked.
  *
- * @returns {ValidationResult} Discriminated union indicating validity or the violated Slot Restriction reason.
+ * @returns Discriminated union indicating validity or the violated Slot Restriction reason.
  *
  * @see {@link ValidationResult}
  * @see {@link ./gridRules.test.ts Unit Tests}
@@ -59,14 +59,14 @@ export function validateToggleActive(params: { cell: Cell; gridFixed: boolean })
  * fixed supercharged layouts (`"superchargedFixed"`), top-4 row limits (`"rowLimit"`),
  * and the maximum of 4 supercharged slots (`"superchargedLimit"`).
  *
- * @param {object} params - Input parameters.
- * @param {Cell} params.cell - The target grid cell.
- * @param {number} params.rowIndex - Zero-based row index of the cell.
- * @param {boolean} params.gridFixed - Whether the entire grid layout is locked.
- * @param {boolean} params.superchargedFixed - Whether the supercharged slots are locked.
- * @param {number} params.totalSupercharged - Current total number of supercharged cells in the grid.
+ * @param params - Input parameters.
+ * @param params.cell - The target grid cell.
+ * @param params.rowIndex - Zero-based row index of the cell.
+ * @param params.gridFixed - Whether the entire grid layout is locked.
+ * @param params.superchargedFixed - Whether the supercharged slots are locked.
+ * @param params.totalSupercharged - Current total number of supercharged cells in the grid.
  *
- * @returns {ValidationResult} Discriminated union indicating validity or the violated Slot Restriction reason.
+ * @returns Discriminated union indicating validity or the violated Slot Restriction reason.
  *
  * @see {@link ValidationResult}
  * @see {@link ./gridRules.test.ts Unit Tests}
@@ -140,13 +140,13 @@ export const LAST_N_ROWS_THRESHOLD = 3;
  * - Its index matches `lastActiveRowIndex`.
  * - Its index is within the last {@link LAST_N_ROWS_THRESHOLD} rows of the grid (`rowIndex >= totalRows - LAST_N_ROWS_THRESHOLD`).
  *
- * @param {object} params - Precomputed row indices and grid dimensions.
- * @param {number} params.firstInactiveRowIndex - Index of the first row where every cell is inactive, or `-1`.
- * @param {number} params.lastActiveRowIndex - Index of the last row containing at least one active cell, or `-1`.
- * @param {number} params.rowIndex - Zero-based index of the candidate row.
- * @param {number} params.totalRows - Total number of rows in the grid (`grid.cells.length`).
+ * @param params - Precomputed row indices and grid dimensions.
+ * @param params.firstInactiveRowIndex - Index of the first row where every cell is inactive, or `-1`.
+ * @param params.lastActiveRowIndex - Index of the last row containing at least one active cell, or `-1`.
+ * @param params.rowIndex - Zero-based index of the candidate row.
+ * @param params.totalRows - Total number of rows in the grid (`grid.cells.length`).
  *
- * @returns {{ canActivateRow: boolean; canDeactivateRow: boolean }} Flags indicating whether the activate and deactivate controls should be shown for the row.
+ * @returns Flags indicating whether the activate and deactivate controls should be shown for the row.
  *
  * @see {@link LAST_N_ROWS_THRESHOLD}
  * @see {@link ./rowActivation.test.ts Unit Tests}

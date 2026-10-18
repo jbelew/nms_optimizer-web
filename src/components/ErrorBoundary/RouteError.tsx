@@ -29,7 +29,7 @@ import { handleError } from "./errorHandler";
  * view readiness to the {@link lifecycleCoordinator}, and renders the standard
  * `ErrorContent` in its 'page' variant.
  *
- * @returns {JSX.Element} The rendered route error page.
+ * @returns The rendered route error page.
  *
  * @see {@link useRouteError}
  * @see {@link handleError}

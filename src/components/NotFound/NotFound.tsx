@@ -34,7 +34,7 @@ import { Button } from "@radix-ui/themes";
  * meta tags, tracks broken link navigation via analytics, and ensures the splash
  * screen is dismissed by signaling readiness to the {@link lifecycleCoordinator}.
  *
- * @returns {JSX.Element} The rendered 404 page.
+ * @returns The rendered 404 page.
  *
  * @see {@link formatErrorDocumentTitle}
  * @see {@link sendEvent}

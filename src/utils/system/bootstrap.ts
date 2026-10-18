@@ -7,10 +7,17 @@ import { Logger } from "@/utils/system/monitoring";
 /**
  * Performs idempotent application-level migrations and cleanups.
  *
- * This should be called once during application bootstrap, before the React
- * tree is mounted, to ensure the environment is in a consistent state.
+ * @remarks
+ * Called once during application bootstrap, before the React tree is mounted,
+ * to ensure local storage keys and shared-grid state are consistent.
  *
- * @category Utils
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * performBootstrapMigrations();
+ * // migrates legacy localStorage keys and schedules idle cleanup
+ * ```
  */
 export const performBootstrapMigrations = () => {
 	if (typeof window === "undefined" || !window.localStorage) {

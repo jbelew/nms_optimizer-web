@@ -20,8 +20,7 @@ export interface ButtonProps {
  * It wraps the generic HTML button with application-specific styling and 
  * strict interaction handlers. 
  * 
- * @param {ButtonProps} props - The component properties.
- * @returns {JSX.Element} The rendered button UI.
+ * @see {@link ButtonProps}
  * @see {@link ./PrimaryButton.stories.tsx Stories}
  * @see {@link ./PrimaryButton.test.tsx Tests}
  * @component

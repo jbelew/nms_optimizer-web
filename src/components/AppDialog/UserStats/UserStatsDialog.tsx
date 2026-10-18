@@ -25,9 +25,9 @@ interface UserStatsDialogProps {
  * content only when the dialog is requested, minimizing the initial bundle size.
  * It wraps the dynamic content in a standard {@link AppDialog} configured via the Unified Page Registry.
  *
- * @param {UserStatsDialogProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element} The rendered statistics dialog.
+ * @returns The rendered statistics dialog.
  *
  * @see {@link AppDialog}
  * @see {@link import('./userStatsContent').UserStatsContent}

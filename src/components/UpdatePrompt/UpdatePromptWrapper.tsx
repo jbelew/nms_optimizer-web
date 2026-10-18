@@ -21,7 +21,7 @@ const UpdatePrompt = lazy(() => import("./UpdatePrompt"));
  * manages its display and analytics tracking. This approach optimizes the
  * critical path by deferring the loading of update-related UI and styles.
  *
- * @returns {JSX.Element | null} The rendered update prompt, or `null` if no update is available.
+ * @returns The rendered update prompt, or `null` if no update is available.
  *
  * @see {@link useUpdateCheck}
  * @see {@link useAnalytics}
@@ -82,7 +82,7 @@ export const UpdatePromptWrapper: FC = () => {
 	 * even if the service worker activation fails to trigger the browser's
 	 * automatic reload or the `controllerchange` event.
 	 *
-	 * @returns {void} Side-effects only.
+	 * @returns Side-effects only.
 	 *
 	 * @see {@link evictStaleServiceWorkers}
 	 *

@@ -40,9 +40,9 @@ interface OptimizationAlertDialogProps {
  * two choices: dismiss the warning or attempt a "forced" solve using more intensive algorithms.
  * It wraps the {@link OptimizationAlertContent} inside a standard {@link AppDialog}.
  *
- * @param {OptimizationAlertDialogProps} [props={}] - Optional component property overrides.
+ * @param [props={}] - Optional component property overrides.
  *
- * @returns {JSX.Element | null} The rendered dialog, or `null` if no technology is targeted.
+ * @returns The rendered dialog, or `null` if no technology is targeted.
  *
  * @see {@link ./OptimizationAlertDialog.test.tsx Unit Tests}
  * @see {@link ./OptimizationAlertDialog.stories.tsx Storybook}

@@ -55,7 +55,7 @@ type LanguageCode = (typeof languages)[number];
 /**
  * Retrieves the application build date string defined at compile time.
  *
- * @returns {string} The ISO date string of the build.
+ * @returns The ISO date string of the build.
  *
  * @category Utilities
  *

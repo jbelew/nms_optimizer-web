@@ -7,6 +7,19 @@ import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 
 /**
  * A responsive skeleton component for the tech tree.
+ *
+ * @remarks
+ * Renders an inlay spinner on desktop viewports (`>= 1024px`) and shimmer skeleton rows on mobile viewports.
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <TechTreeSkeleton height={600} />
+ * // renders responsive technology tree loading placeholder
+ * ```
  */
 export const TechTreeSkeleton: React.FC<{ height?: null | number }> = ({ height }) => {
 	const { t } = useTranslation();

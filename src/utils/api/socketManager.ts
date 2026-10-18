@@ -45,7 +45,7 @@ export const SOCKET_OPTIONS: Partial<ManagerOptions & SocketOptions> = {
  * Uses the global `WS_URL` and predefined `SOCKET_OPTIONS`. Includes
  * internal logging for connection lifecycle tracking.
  *
- * @returns {Promise<Socket | null>} A new `Socket` instance, or `null` if initialization fails.
+ * @returns A new `Socket` instance, or `null` if initialization fails.
  *
  * @see {@link WS_URL}
  * @see {@link SOCKET_OPTIONS}

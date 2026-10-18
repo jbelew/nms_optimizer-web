@@ -37,9 +37,9 @@ interface BuildNameContentProps {
  * for Enter and Escape keys. This component is typically used within a dialog
  * to name a user's technology layout before saving.
  *
- * @param {BuildNameContentProps & { ref?: React.Ref<BuildNameContentRef> }} props - Component properties including optional ref.
+ * @param props - Component properties including optional ref.
  *
- * @returns {JSX.Element} The rendered build name input UI.
+ * @returns The rendered build name input UI.
  *
  * @see {@link isValidFilename}
  * @see {@link generateBuildNameWithType}
@@ -74,9 +74,9 @@ export const BuildNameContent = ({
 	/**
 	 * Validates the input string for empty or illegal characters.
 	 *
-	 * @param {string} value - The build name to validate.
+	 * @param value - The build name to validate.
 	 *
-	 * @returns {string | null} Error message if invalid, otherwise null.
+	 * @returns Error message if invalid, otherwise null.
 	 *
 	 * @example Logic usage
 	 * ```typescript
@@ -103,7 +103,7 @@ export const BuildNameContent = ({
 	/**
 	 * Generates a random themed name and updates the input state.
 	 *
-	 * @returns {void}
+	 * @returns Side-effects only.
 	 *
 	 * @example Interaction handler
 	 * ```typescript
@@ -120,9 +120,9 @@ export const BuildNameContent = ({
 	/**
 	 * Updates local state and triggers validation on input change.
 	 *
-	 * @param {React.ChangeEvent<HTMLInputElement>} e - The input change event.
+	 * @param e - The input change event.
 	 *
-	 * @returns {void}
+	 * @returns Side-effects only.
 	 *
 	 * @example Interaction handler
 	 * ```typescript
@@ -138,7 +138,7 @@ export const BuildNameContent = ({
 	/**
 	 * Validates and submits the current build name.
 	 *
-	 * @returns {void}
+	 * @returns Side-effects only.
 	 *
 	 * @example Interaction handler
 	 * ```typescript
@@ -161,7 +161,7 @@ export const BuildNameContent = ({
 	/**
 	 * Resets state and notifies the parent of cancellation.
 	 *
-	 * @returns {void}
+	 * @returns Side-effects only.
 	 *
 	 * @example Interaction handler
 	 * ```typescript
@@ -178,9 +178,9 @@ export const BuildNameContent = ({
 	/**
 	 * Dispatches actions based on keyboard input.
 	 *
-	 * @param {React.KeyboardEvent<HTMLInputElement>} e - The keyboard event.
+	 * @param e - The keyboard event.
 	 *
-	 * @returns {void}
+	 * @returns Side-effects only.
 	 *
 	 * @example Interaction handler
 	 * ```typescript

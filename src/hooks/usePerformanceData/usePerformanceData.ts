@@ -18,10 +18,10 @@ export type { PerformanceMetric };
  * The data includes metrics like TBT (Total Blocking Time), LCP (Largest Contentful Paint),
  * and custom optimization solve durations.
  *
- * @param {string} [startDate] - ISO string for the start of the reporting period.
- * @param {string} [endDate] - ISO string for the end of the reporting period.
+ * @param [startDate] - ISO string for the start of the reporting period.
+ * @param [endDate] - ISO string for the end of the reporting period.
  *
- * @returns {PerformanceMetric[]} An array of aggregate performance metrics.
+ * @returns An array of aggregate performance metrics.
  *
  * @see {@link fetchPerformanceData} for the API resource implementation.
  *

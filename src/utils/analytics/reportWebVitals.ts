@@ -32,10 +32,10 @@ type SendEventFunction = (event: GA4Event) => void;
  * detailed subpart breakdowns (input delay, processing duration, presentation delay) and
  * target element selectors are captured.
  *
- * @param {Metric} metric - The web vitals metric to send.
- * @param {SendEventFunction} sendEvent - The function to send the event.
+ * @param metric - The web vitals metric to send.
+ * @param sendEvent - The function to send the event.
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
  * @category Utilities
  *
@@ -101,7 +101,7 @@ const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
 /**
  * Captures Total Blocking Time (TBT) and reports it to analytics.
  *
- * @param {SendEventFunction} sendEvent - The function to send the event.
+ * @param sendEvent - The function to send the event.
  *
  * @example
  * ```ts
@@ -156,9 +156,9 @@ const reportTBT = (sendEvent: SendEventFunction) => {
  * This function tracks CLS, INP, FCP, LCP, and TTFB using the `web-vitals` library.
  * It is typically called during application initialization.
  *
- * @param {SendEventFunction} sendEvent - The function to call for each metric. **Must be a valid function.**
+ * @param sendEvent - The function to call for each metric. **Must be a valid function.**
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
  * @see {@link sendVitalsMetric}
  *

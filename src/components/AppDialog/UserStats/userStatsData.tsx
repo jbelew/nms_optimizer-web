@@ -149,10 +149,10 @@ const LazyRechartsChart = lazy(async () => {
  * Fetches user stats and tech tree colors in parallel and aggregates the data
  * into a format suitable for Recharts pie charts.
  *
- * @param {Object} props - Component properties.
- * @param {boolean} props.isOpen - Whether the parent dialog is open, used to gate color fetching.
+ * @param props - Component properties.
+ * @param props.isOpen - Whether the parent dialog is open, used to gate color fetching.
  *
- * @returns {JSX.Element} The rendered statistics data view.
+ * @returns The rendered statistics data view.
  *
  * @see {@link fetchUserStats}
  * @see {@link fetchTechTreeColors}
@@ -190,10 +190,10 @@ export const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	 * data to a list of `{ name: string, value: number }` pairs. It also groups small entries
 	 * into an "other" category based on a 2% threshold.
 	 *
-	 * @param {UserStat[] | null} rawData - The list of statistics from the API.
-	 * @param {string[]} shipTypes - Filter for specific ship types.
+	 * @param rawData - The list of statistics from the API.
+	 * @param shipTypes - Filter for specific ship types.
 	 *
-	 * @returns {Array<{ name: string, value: number }>} Aggregated and filtered chart data.
+	 * @returns Aggregated and filtered chart data.
 	 *
 	 * @example
 	 * ```typescript
@@ -251,10 +251,10 @@ export const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	/**
 	 * Renders a labeled section containing a pie chart.
 	 *
-	 * @param {Array<{ name: string, value: number }>} chartData - Data to plot.
-	 * @param {string} titleKey - Translation key for the section header.
+	 * @param chartData - Data to plot.
+	 * @param titleKey - Translation key for the section header.
 	 *
-	 * @returns {JSX.Element} The chart section.
+	 * @returns The chart section.
 	 *
 	 * @example
 	 * ```tsx

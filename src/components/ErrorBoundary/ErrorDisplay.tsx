@@ -43,9 +43,9 @@ interface ErrorDisplayProps {
  * in a readable, monospace layout. It is primarily used within the `ErrorContent`
  * component to provide debugging information.
  *
- * @param {ErrorDisplayProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element} The rendered error details view.
+ * @returns The rendered error details view.
  *
  * @component
  *

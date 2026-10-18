@@ -24,7 +24,7 @@ import { useTooltipState } from "@/utils/system/tooltipUtils";
  * that only one tooltip is ever rendered in the DOM, maximizing performance
  * and preventing overlap, while still utilizing high-quality theme-aware styling.
  *
- * @returns {JSX.Element | null} The rendered singleton tooltip, or `null` if no active position is provided.
+ * @returns The rendered singleton tooltip, or `null` if no active position is provided.
  *
  * @see {@link useTooltipState}
  *

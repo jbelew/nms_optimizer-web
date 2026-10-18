@@ -60,10 +60,10 @@ export interface TechTreeProps {
 /**
  * Renders a Technology Section header with its decorative icon and localized title.
  *
- * @param {object} props - Component properties.
- * @param {string} props.section - The Technology Section identifier (e.g., `"Weaponry"`).
+ * @param props - Component properties.
+ * @param props.section - The Technology Section identifier (e.g., `"Weaponry"`).
  *
- * @returns {JSX.Element} The rendered Technology Section header.
+ * @returns The rendered Technology Section header.
  */
 const TechTreeSectionHeader: React.FC<{ section: string }> = ({ section }) => {
 	const { t } = useTranslation();
@@ -100,10 +100,10 @@ const TechTreeSectionHeader: React.FC<{ section: string }> = ({ section }) => {
  * desktop `ScrollArea` (`>= 1024px`, resetting scroll position on Platform Type switches) or a
  * mobile `Box`.
  *
- * @param {TechTreeProps} props - Component properties.
- * @param {TechTreeType} [props.techTree] - Optional pre-fetched technology tree payload.
+ * @param props - Component properties.
+ * @param [props.techTree] - Optional pre-fetched technology tree payload.
  *
- * @returns {JSX.Element} The rendered technology tree layout.
+ * @returns The rendered technology tree layout.
  *
  * @see {@link TechTreePresetsCard}
  * @see {@link TechTreeRow}

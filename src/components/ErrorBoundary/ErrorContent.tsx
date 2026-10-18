@@ -86,9 +86,9 @@ const InsetMessage = () => (
  * It automatically ensures the splash screen is hidden and adapts its
  * styling based on the `variant` (full page overlay vs. inset card).
  *
- * @param {ErrorContentProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element} The rendered error UI.
+ * @returns The rendered error UI.
  *
  * @see {@link ErrorDisplay}
  *

@@ -41,9 +41,9 @@ export interface AppHeaderProps {
  * accessibility toggle, language selector, and Routed Dialog triggers (`changelog`, `userstats`, `performance`),
  * automatically hiding non-applicable controls when viewing a Shared Grid or on small viewports.
  *
- * @param {AppHeaderProps} props - Optional component properties.
+ * @param props - Optional component properties.
  *
- * @returns {React.ReactElement} The rendered banner header element.
+ * @returns The rendered banner header element.
  *
  * @see {@link useDialog}
  * @see {@link ./AppHeader.test.tsx Unit Tests}

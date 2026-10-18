@@ -55,7 +55,7 @@ export class OptimizationManager {
 	/**
 	 * Initializes a new manager instance.
 	 *
-	 * @param {OptimizationOptions} options - Solvers configuration and callbacks.
+	 * @param options - Solvers configuration and callbacks.
 	 *
 	 * @example
 	 * ```ts
@@ -74,7 +74,7 @@ export class OptimizationManager {
 	/**
 	 * Tears down the WebSocket connection and removes listeners.
 	 *
-	 * @returns {void}
+	 * @returns Side-effects only.
 	 *
 	 * @example
 	 * ```ts
@@ -94,7 +94,7 @@ export class OptimizationManager {
 	/**
 	 * Connects to the server and initiates the optimization request.
 	 *
-	 * @returns {void}
+	 * @returns Side-effects only.
 	 *
 	 * @example
 	 * ```ts
@@ -270,9 +270,9 @@ export class OptimizationManager {
 /**
  * Validates that a value conforms to the `ApiResponse` structure.
  *
- * @param {unknown} value - The value to validate.
+ * @param value - The value to validate.
  *
- * @returns {value is ApiResponse} True if valid.
+ * @returns True if valid.
  *
  * @example
  * ```ts

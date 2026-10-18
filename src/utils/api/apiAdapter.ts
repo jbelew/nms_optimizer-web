@@ -8,9 +8,9 @@
 /**
  * Recursively converts camelCase keys of an object to snake_case.
  *
- * @param {unknown} obj - The object to convert.
+ * @param obj - The object to convert.
  *
- * @returns {unknown} The converted object with snake_case keys.
+ * @returns The converted object with snake_case keys.
  *
  * @example
  * ```typescript
@@ -50,9 +50,9 @@ export function camelToSnake(obj: unknown): unknown {
 /**
  * Recursively converts snake_case keys of an object to camelCase.
  *
- * @param {unknown} obj - The object to convert.
+ * @param obj - The object to convert.
  *
- * @returns {unknown} The converted object with camelCase keys.
+ * @returns The converted object with camelCase keys.
  *
  * @example
  * ```typescript

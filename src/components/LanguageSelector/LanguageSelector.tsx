@@ -62,7 +62,7 @@ const languageFlagPaths: LanguageFlagPaths = {
  * Changing the language updates the global `i18next` state, synchronizes the
  * URL path prefix, and sends an analytics event.
  *
- * @returns {JSX.Element} The rendered language selection dropdown.
+ * @returns The rendered language selection dropdown.
  *
  * @see {@link useTranslation} for internationalization state.
  * @see {@link useAnalytics} for event tracking.
@@ -107,9 +107,9 @@ export const LanguageSelector: React.FC = () => {
 	 * @remarks
 	 * Automatically handles URL prefixing (e.g., `/fr/`) and preserves query parameters.
 	 *
-	 * @param {string} newLang - The ISO language code to switch to. **Must be supported.**
+	 * @param newLang - The ISO language code to switch to. **Must be supported.**
 	 *
-	 * @returns {void} Side-effects only.
+	 * @returns Side-effects only.
 	 *
 	 * @example
 	 * ```ts
@@ -141,7 +141,7 @@ export const LanguageSelector: React.FC = () => {
 	 * @remarks
 	 * Redirects to the localized `/translation/` route while preserving query parameters.
 	 *
-	 * @returns {void} Side-effects only.
+	 * @returns Side-effects only.
 	 *
 	 * @example
 	 * ```ts

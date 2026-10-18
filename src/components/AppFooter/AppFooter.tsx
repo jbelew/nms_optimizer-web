@@ -35,9 +35,9 @@ export interface AppFooterProps {
  * Privacy Policy Routed Dialog trigger, build metadata (`buildVersion` and `buildDate`),
  * and community support links.
  *
- * @param {AppFooterProps} props - Optional build metadata overrides.
+ * @param props - Optional build metadata overrides.
  *
- * @returns {React.ReactElement} The rendered footer element.
+ * @returns The rendered footer element.
  *
  * @see {@link useDialog}
  * @see {@link ./AppFooter.test.tsx Unit Tests}

@@ -20,7 +20,7 @@ import { lifecycleCoordinator } from "@/utils/system/lifecycleCoordinator";
  * @remarks
  * Delegates view readiness and splash dismissal to the {@link lifecycleCoordinator}.
  *
- * @returns {Promise<void>} A promise that resolves once readiness is signaled.
+ * @returns A promise that resolves once readiness is signaled.
  *
  * @deprecated Use {@link lifecycleCoordinator.markReady} instead.
  *

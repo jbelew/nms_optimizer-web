@@ -24,7 +24,7 @@ import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
  * and opens the donation page in a new tab after a 100ms delay to ensure
  * the event is dispatched.
  *
- * @returns {JSX.Element} The rendered donation button.
+ * @returns The rendered donation button.
  *
  * @see {@link useAnalytics} - Used for tracking click events.
  * @see {@link useBreakpoint} - Used for responsive sizing.
@@ -47,9 +47,9 @@ export default function BuyMeACoffee() {
 	/**
 	 * Handles the button click, tracks analytics, and opens the external URL.
 	 *
-	 * @param {React.MouseEvent<HTMLAnchorElement>} event - The click event.
+	 * @param event - The click event.
 	 *
-	 * @returns {void}
+	 * @returns Side-effects only.
 	 *
 	 * @example Interaction handler
 	 * ```typescript

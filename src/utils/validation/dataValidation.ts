@@ -39,9 +39,9 @@ export type BuildFile = {
 /**
  * Validates that an unknown object conforms to the BuildFile interface.
  *
- * @param {unknown} obj - The object to validate.
+ * @param obj - The object to validate.
  *
- * @returns {obj is BuildFile} True if valid.
+ * @returns True if valid.
  *
  * @category Utilities
  *
@@ -116,9 +116,9 @@ const FILENAME_REGEX = new RegExp(
 /**
  * Validates if a string is a valid filename.
  *
- * @param {string} filename - The filename to validate.
+ * @param filename - The filename to validate.
  *
- * @returns {boolean} True if valid.
+ * @returns True if valid.
  *
  * @category Utilities
  *
@@ -135,9 +135,9 @@ export const isValidFilename = (filename: string): boolean => {
 /**
  * Sanitizes a string for use as a safe filename.
  *
- * @param {string} filename - The raw string to sanitize.
+ * @param filename - The raw string to sanitize.
  *
- * @returns {string} Sanitized filename.
+ * @returns Sanitized filename.
  *
  * @category Utilities
  *
@@ -175,9 +175,9 @@ export const sanitizeFilename = (filename: string): string => {
 /**
  * Validates that an unknown object conforms to the RecommendedBuild interface.
  *
- * @param {unknown} obj - The object to validate.
+ * @param obj - The object to validate.
  *
- * @returns {obj is RecommendedBuild} True if valid.
+ * @returns True if valid.
  *
  * @category Utilities
  *

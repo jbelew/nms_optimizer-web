@@ -24,7 +24,7 @@ import { NmsToast } from "./Toast";
  * when a configuration is present. This component should be mounted once at
  * the application's root to avoid multiple overlapping notification systems.
  *
- * @returns {JSX.Element | null} The rendered toast notification, or `null` if none are active.
+ * @returns The rendered toast notification, or `null` if none are active.
  *
  * @see {@link useToast}
  * @see {@link NmsToast}

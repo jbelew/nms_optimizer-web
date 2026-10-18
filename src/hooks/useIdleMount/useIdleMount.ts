@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 /**
  * Custom hook that defers mounting of children until the browser is idle.
  *
- * @param {number} [timeout=2000] - Maximum time to wait before forcing a mount.
- * @param {number} [delay=1000] - Fallback timeout if requestIdleCallback is not supported.
+ * @param [timeout=2000] - Maximum time to wait before forcing a mount.
+ * @param [delay=1000] - Fallback timeout if requestIdleCallback is not supported.
  *
- * @returns {boolean} Whether the component should mount.
+ * @returns Whether the component should mount.
  *
  * @example
  * ```tsx

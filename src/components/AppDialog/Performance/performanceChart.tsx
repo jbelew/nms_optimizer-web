@@ -292,9 +292,9 @@ interface PerformanceChartProps {
  * It renders a responsive grid of summary cards followed by a single,
  * dynamic ComposedChart that handles both aggregate and detail views.
  *
- * @param {PerformanceChartProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element} The rendered performance dashboard UI.
+ * @returns The rendered performance dashboard UI.
  *
  * @component
  *

@@ -49,9 +49,9 @@ const SHIP_TYPE_NAMES: Record<string, string> = {
  * Translates technical ship type keys (e.g., `'living'`) into their
  * readable equivalents (e.g., `'Living'`).
  *
- * @param {string} shipType - The internal ship type identifier. **Must not be null.**
+ * @param shipType - The internal ship type identifier. **Must not be null.**
  *
- * @returns {string} The localized display name, or the input `shipType` if no mapping exists.
+ * @returns The localized display name, or the input `shipType` if no mapping exists.
  *
  * @see {@link SHIP_TYPE_NAMES}
  *
@@ -74,9 +74,9 @@ const getShipTypeName = (shipType: string): string => {
  * The output is automatically sanitized to be safe for use as a filename
  * using {@link sanitizeFilename}.
  *
- * @param {string} shipType - The ship type identifier used as a prefix.
+ * @param shipType - The ship type identifier used as a prefix.
  *
- * @returns {string} A sanitized, randomly generated build name.
+ * @returns A sanitized, randomly generated build name.
  *
  * @see {@link getShipTypeName}
  * @see {@link sanitizeFilename}

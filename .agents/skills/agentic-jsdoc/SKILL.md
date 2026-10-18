@@ -1,100 +1,49 @@
 ---
 name: agentic-jsdoc
-description: "Writes and reviews JSDoc optimized for LLM parsing in React/TypeScript projects. Use when writing new code, adding documentation, or reviewing existing JSDoc for LLM-friendly structure, type clarity, and semantic richness."
+description: "JSDoc standard for TypeScript, JavaScript, and React. Use when writing, updating, or reviewing JSDoc comments or documenting code."
 license: AGPL-3.0-only
 ---
 
-# Agentic JSDoc Patterns
+# Agentic JSDoc
 
-Provide JSDoc conventions that improve LLM comprehension for code generation, documentation, and RAG retrieval.
+Apply this standard to all **exported and top-level declarations**: functions, classes, methods, React components, custom hooks, contexts, validation schemas, and interfaces/types. Skip local variables inside functions unless non-obvious.
 
-## Core Principles
+When writing or reviewing **React components, route components, context hooks, data-fetching hooks (React Query/SWR), Zustand stores, or Zod/Yup schemas**, also read [`reference/react.md`](reference/react.md).
 
-1. **TypeScript-flavor JSDoc** — even in plain JS files
-2. **Hierarchical structure** — Summary → @remarks (Description) → Tags → Example
-3. **Semantic richness** — every tag carries a description, not just a type.
-4. **Markdown formatting** — use markdown backticks for `variables`, `types`, and `functionNames` within descriptions to improve entity extraction.
+## Block Specification
 
-## When Writing Code
+Focus JSDoc on contracts the TypeScript signature cannot express (rationale, invariants, thrown errors, defaults, deprecations, symbol/test links, and usage examples). Every JSDoc block follows this tag order; include every tag that applies:
 
-Apply these rules to every exported function, class, method, React component, custom hook, and type. **Internal local variables within functions do not require JSDoc unless they are exceptionally complex.**
+1. **Summary** — One-sentence purpose on the opening line. Wrap inline code identifiers (`variables`, `types`, `functions`) in backticks.
+2. **`@remarks`** — Rationale, constraints, and behavior details (the "why"). Required on exported functions, components, hooks, stores, and contexts.
+3. **`@typedef`** — Inline object shape (`@typedef {Object} Name` and `@property {type} name - Description`) **only in plain `.js`/`.jsx` files**. In `.ts`/`.tsx` files, document the native TypeScript `interface` or `type` directly (summary block on the declaration plus inline `/** */` on every property).
+4. **`@template`** — Generic type parameter description when non-obvious: `@template T - Description`.
+5. **`@param`** — Parameter description:
+   - **`.ts`/`.tsx`:** Omit `{type}` (the signature already carries it): `@param name - Description`. Omit `@param props` on React components (document the `Props` interface instead).
+   - **Plain `.js`/`.jsx`:** Include a concrete TypeScript-flavor type: `@param {type} name - Description` (use unions or `{unknown}`, never `{any}` or `{*}`).
+6. **`@returns`** — Return value description:
+   - **`.ts`/`.tsx`:** Omit `{type}`: `@returns Description`. For side-effect-only hooks returning `void`, write `@returns Side-effects only.` Omit `@returns` on React components unless the render return is conditional/non-obvious.
+   - **Plain `.js`/`.jsx`:** Include explicit return type (unwrapping Promises): `@returns {Promise<User[]>} Description`.
+7. **`@throws`** — Every error thrown directly or by called APIs (e.g., `JSON.parse` → `@throws {SyntaxError}`, runtime guards → `@throws {TypeError}`, or `<Suspense>` boundaries): `@throws {ErrorType} Condition`. Always include `{ErrorType}` even in `.ts`/`.tsx` (TypeScript signatures do not type exceptions).
+8. **`@deprecated`** — Always name the replacement: `@deprecated Use \`replacementSymbol\` instead.`
+9. **`@default`** — Initial or fallback value on React contexts, config objects, or optional parameters: `@default { theme: "system" }`.
+10. **`@see`** — Cross-references using TypeDoc `{@link}` syntax:
+    - **Symbol links** for code dependencies (interfaces, types, schemas, contexts, stores, hooks, helpers): `@see {@link SymbolName}`.
+    - **File links** only for `.test.*` and `.stories.*` files (which have no exported symbol): `@see {@link ./MyComponent.test.tsx Tests}`, `@see {@link ./MyComponent.stories.tsx Stories}`.
+    - Always use `{@link ...}`, never Markdown `[Label](./path)` links or file paths for code symbols.
+11. **`@component` / `@hook`** — Architecture marker on React components (`@component`) and custom or store hooks (`@hook`).
+12. **`@category`** — TypeDoc grouping on public exports: `@category Components`, `@category Hooks`, or `@category Utilities`.
+13. **`@example`** — Working usage snippet ending with an output or effect comment (`// returns { id: "123" }` or `// mounts PrimaryButton`). Required on exported functions, components, and hooks.
 
-### 0. Research Context
+## Writing JSDoc
 
-Before writing JSDoc, proactively search for associated files that should be linked via `@see`:
-- Search for `.test.ts/tsx` files (e.g. `MyComponent.test.tsx`).
-- Search for `.stories.tsx` files (e.g. `MyComponent.stories.tsx`).
-- Search for associated Zod/Yup schemas or Context providers.
+1. **Discover `@see` targets:** Search for sibling `.test.*` and `.stories.*` files, plus associated Props interfaces, Zod/Yup schemas, Context providers, and stores.
+2. **Document declarations:** Write JSDoc on every exported and top-level declaration in scope (including inline `/** */` comments on every interface and schema property) matching the **Block Specification** and [`reference/react.md`](reference/react.md). See `examples/good_*` for reference templates.
 
-### 1. Use TypeScript-Compatible JSDoc Syntax
+**Done when:** Every exported and top-level declaration in target scope satisfies all applicable rules in the Block Specification and `reference/react.md`, with `@see` links verified against actual symbols and sibling test/story files.
 
-- Use `@type`, `@typedef`, and `@param {type}` strictly.
-- Define complex object shapes with `@typedef {Object}` in plain JS files, or document the TypeScript `interface`/`type` directly in `.ts`/`.tsx` files. Do not use both — prefer the native TypeScript type when available.
-- Prefer union types (`{string|null}`) over vague types (`{*}`, `{any}`).
-- Use `@template` for generic type parameters to maintain strong typing awareness.
+## Reviewing JSDoc
 
-### 2. Follow the Hierarchical Block Structure
-
-Every JSDoc block must follow this order:
-
-```
-1. Summary       — One-sentence purpose (the "What")
-2. @remarks      — Detailed context, rationale, and constraints (the "Why")
-3. @typedef      — Inline type definitions, if needed
-4. @template     — Generic type declarations
-5. @param        — All parameters: {type} name - Description
-6. @returns      — Explicit return shape (e.g., for Promises and Custom Hooks)
-7. @throws       — Documented errors for better try/catch generation
-8. @deprecated   — If deprecated, explicitly state *what to use instead*
-9. @default      — Default values for contexts, config objects, or optional params
-10. @see          — Links to related functions, components, schemas, or files
-11. @hook / @component — Architecture primitive markers
-12. @category    — TypeDoc grouping (e.g., Hooks, Components, Utilities)
-13. @example     — Working usage example (most important for correct LLM usage)
-```
-
-### 3. Tag Rules & Context
-
-- **`@param`**: Always include a description after the type — `{type} name - Description`. 
-- **`@returns`**: Be explicit about the return shape. For Promises, specify the resolved type: `{Promise<User[]>}`. For custom hooks returning `void`, explicitly state `@returns {void} Side-effects only.`
-- **`@throws`**: Document every thrown error. This directly improves LLM-generated error handling.
-- **`@deprecated`**: Never just use `@deprecated`. Always follow with "Use `OtherFunction` instead."
-- **`@default`**: Use on React contexts, config objects, and optional parameters to document the initial or fallback value (e.g., `@default { theme: "system" }`).
-- **`@see`**: Aggressively use `@see` to link dependencies. Use **TypeDoc symbol references** for all code symbols — e.g., `@see {@link MyContext}`, `@see {@link useAuth}`, `@see {@link UserSchema}`. **Never** use file-path `{@link ./path}` syntax for code symbols; always reference the exported symbol name directly. File-path `{@link}` syntax is **only** permitted for test and story files that have no exported symbol to reference — e.g., `@see {@link ./MyComponent.test.tsx Unit Tests}`, `@see {@link ./MyComponent.stories.tsx Storybook}`. Avoid raw Markdown links `[Label](./path)` entirely.
-- **`@example`**: Required for any non-trivial function. Wrap code in a fenced code block **with** a language identifier (e.g., ` ```tsx ` or ` ```ts `) for TypeDoc syntax highlighting. Must include expected output as comments (e.g., `// returns "value"` or `// mounts Component`).
-
-### 4. Special Contexts: Architecture Primitives
-
-For React components, hooks, stores, routing, and validation schemas, read `reference/react.md` for detailed JSDoc patterns covering:
-- React Components & Props interfaces
-- React Router (route/page components)
-- Validation Schemas (Zod/Yup)
-- Data Fetching (React Query / SWR)
-- Zustand Stores
-- React Context Hooks
-
-### 5. Documentation Engine Compatibility (TypeDoc)
-
-To natively support enterprise documentation pipelines (like TypeDoc or JSDoc-to-Markdown generators), append categorization tags to top-level architecture modules:
-- Use `@category Hooks`, `@category Components`, or `@category Utilities` prominently on public exports to group outputs visually.
-
-## When Reviewing Code
-
-Check every **exported or top-level** JSDoc block against these criteria. Internal local variables are generally exempt from strict JSDoc requirements to keep code concise.
-
-Check every JSDoc block against these criteria:
-
-1. **Summary present?** — First line must be a concise one-sentence description.
-2. **Description present?** — Non-trivial functions need a "why" paragraph after a blank line, using markdown backticks for code references.
-3. **TypeScript-flavor types?** — No `{*}` or `{any}`. Object shapes use `@typedef` or TypeScript types.
-4. **All `@param` tags have descriptions?** — `{type} name` alone is insufficient.
-5. **React/Store Types Documented?** — If it's a component or store, are the interfaces explicitly documented?
-6. **`@returns` is explicit?** — Especially for Promises, custom hooks, and complex objects. Side-effect hooks must say `{void}`.
-7. **`@throws` documented?** — Any function that can throw must document it. Ensure `<Suspense>` paths are caught.
-8. **Deprecations are actionable?** — Check if `@deprecated` explains the migration path.
-9. **Defaults documented?** — Do React contexts, config objects, and optional params use `@default` to document initial values?
-10. **RAG Linkage?** — Are all `@see` tags using TypeDoc symbol references (`{@link SymbolName}`) for code? File-path `{@link ./path}` is **only** valid for `.test.*` and `.stories.*` files. Markdown-style `@see [Label](./path)` is always a violation.
-11. **`@example` included?** — Required for exported/public functions. Must explicitly trace output via `// returns X`.
-
-Flag violations and provide corrected JSDoc inline. Reference files in `examples/` for canonical patterns when suggesting fixes.
+1. **Audit declarations:** Check every exported and top-level declaration (including supporting interfaces, contexts, and schemas) against every rule in the **Block Specification** and [`reference/react.md`](reference/react.md).
+2. **Report and fix:** Flag each violation by symbol and tag, and provide the corrected JSDoc block inline. Leave compliant blocks untouched.
 

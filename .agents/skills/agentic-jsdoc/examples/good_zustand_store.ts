@@ -12,7 +12,7 @@ interface SessionState {
   /**
    * Action to securely set the session token in state.
    * 
-   * @param {string} token - The raw JWT token string.
+   * @param token - The raw JWT token string.
    */
   setToken: (token: string) => void;
 }
@@ -24,7 +24,7 @@ interface SessionState {
  * Provides access to the global `token` and actions related to updating
  * the secure session lifecycle.
  * 
- * @returns {import("zustand").UseBoundStore<import("zustand").StoreApi<SessionState>>} The initialized Zustand hook.
+ * @returns The initialized Zustand session hook.
  * @see {@link SessionState}
  * @hook
  * @category Hooks

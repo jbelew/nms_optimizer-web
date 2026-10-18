@@ -16,7 +16,7 @@ import "./ErrorContent.scss";
  * disruption message, and provides links for reporting the issue on GitHub.
  * It also handles automated analytics reporting of the error and stack trace.
  *
- * @returns {JSX.Element} The rendered error content.
+ * @returns The rendered error content.
  *
  * @see {@link useAnalytics}
  * @see {@link useOptimizeStore}

@@ -26,7 +26,7 @@ import "./OfflineBanner.scss";
  * relies on a backend solver for its primary functionality, this banner
  * effectively disables the UI until a connection is restored.
  *
- * @returns {JSX.Element | null} The rendered offline overlay, or `null` if online.
+ * @returns The rendered offline overlay, or `null` if online.
  *
  * @component
  *

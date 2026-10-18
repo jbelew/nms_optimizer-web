@@ -21,9 +21,9 @@ let sharedForceShow: (() => void) | null = null;
  * toolbar when scrolling is triggered. This is a singleton-style registration
  * shared across all instances of the hook.
  *
- * @param {function(): void} fn - The `forceShow` function, typically from `useScrollHide`.
+ * @param fn - The `forceShow` function, typically from `useScrollHide`.
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
  * @see {@link import('@/hooks/useScrollHide/useScrollHide').useScrollHide} for the source of the `forceShow` callback.
  *
@@ -50,10 +50,10 @@ export const registerToolbarForceShow = (fn: () => void) => {
  * to prevent interaction latency (INP) by allowing the active interaction
  * frame to paint first.
  *
- * @param {object} [options] - Configuration for the scroll behavior.
- * @param {boolean} [options.skipOnLargeScreens=false] - Whether to ignore scroll requests on viewports >= 1024px.
+ * @param [options] - Configuration for the scroll behavior.
+ * @param [options.skipOnLargeScreens=false] - Whether to ignore scroll requests on viewports >= 1024px.
  *
- * @returns {{ gridContainerRef: React.MutableRefObject<HTMLDivElement | null>, scrollIntoView: () => void }} The shared container ref and a function to trigger the scroll.
+ * @returns The shared container ref and a function to trigger the scroll.
  *
  * @see {@link useBreakpoint} for responsive offset calculations.
  * @see {@link registerToolbarForceShow} for global toolbar coordination.
@@ -153,7 +153,7 @@ export const useScrollGridIntoView = (options?: { skipOnLargeScreens?: boolean }
  * Resets both the container ref singleton and the shared toolbar force-show callback
  * to ensure complete isolation between test runs.
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
  * @example Internal reset
  * ```typescript

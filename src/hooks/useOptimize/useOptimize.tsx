@@ -68,7 +68,7 @@ let mountedCount = 0;
  * `OptimizationAlertDialog`) can call `useOptimize()` directly without prop-drilling or
  * intermediate context providers.
  *
- * @returns {UseOptimizeReturn} An object containing the optimization state and trigger handlers.
+ * @returns An object containing the optimization state and trigger handlers.
  *
  * @see {@link OptimizationManager} for the underlying socket logic.
  * @see {@link sessionCoordinator.resetTechnology} for pre-solve Technology Reset.

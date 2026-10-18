@@ -44,9 +44,9 @@ interface UpdatePromptProps {
  * service worker. On desktop viewports, it automatically focuses the "Refresh Now"
  * button for convenience.
  *
- * @param {UpdatePromptProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element} The rendered update prompt modal.
+ * @returns The rendered update prompt modal.
  *
  * @see {@link AppDialog}
  * @see {@link useBreakpoint}

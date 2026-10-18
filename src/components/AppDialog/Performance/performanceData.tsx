@@ -21,10 +21,10 @@ const PerformanceChart = lazy(() =>
  * 3. Consumes the streamable data via the `usePerformanceData` hook.
  * 4. Renders the lazy-loaded `PerformanceChart` visualization.
  *
- * @param {Object} props - Component properties.
- * @param {boolean} props.isOpen - Indicates if the parent dialog is visible.
+ * @param props - Component properties.
+ * @param props.isOpen - Indicates if the parent dialog is visible.
  *
- * @returns {JSX.Element} The performance dashboard UI or a "no data" message.
+ * @returns The performance dashboard UI or a "no data" message.
  *
  * @see {@link PerformanceChart}
  * @see {@link fetchPerformanceData}

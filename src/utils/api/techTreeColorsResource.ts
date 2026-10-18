@@ -15,7 +15,7 @@ let techTreeColorsPromise: null | Promise<Record<string, string>> = null;
  * It is used primarily by components that need to colorize tech items without
  * knowing the specific ship type currently being optimized.
  *
- * @returns {Promise<Record<string, string>>} A promise resolving to a mapping of tech keys to hex colors.
+ * @returns A promise resolving to a mapping of tech keys to hex colors.
  *
  * @see {@link fetchTechTreeAsync} for the underlying tech tree fetching.
  *

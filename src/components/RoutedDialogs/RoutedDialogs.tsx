@@ -54,7 +54,7 @@ const MARKDOWN_DIALOGS = getRoutedDialogs().filter((d) => d.componentType === "m
  * markdown `AppDialog` or the lazy-loaded `UserStatsDialog` / `PerformanceDialog`
  * (when not in a Docker build).
  *
- * @returns {JSX.Element | null} The active Routed Dialog container, or `null` when suppressed.
+ * @returns The active Routed Dialog container, or `null` when suppressed.
  *
  * @see {@link useDialog}
  * @see {@link AppDialog}

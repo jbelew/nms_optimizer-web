@@ -31,9 +31,9 @@ const GRID_SERIALIZATION_CONSTANTS = {
  * Used internally for compacting grid serialization tokens, reducing the length of
  * strings representing long runs of identical cell states or tech codes.
  *
- * @param {string} input - The string to compress.
+ * @param input - The string to compress.
  *
- * @returns {string} The compressed string.
+ * @returns The compressed string.
  *
  * @category Utilities
  *
@@ -72,9 +72,9 @@ const compressRLE = (input: string): string => {
  * Restores the original string by expanding character-count pairs.
  * Inverse operation of {@link compressRLE}.
  *
- * @param {string} input - The compressed string to decompress.
+ * @param input - The compressed string to decompress.
  *
- * @returns {string} The decompressed string.
+ * @returns The decompressed string.
  *
  * @see {@link compressRLE}
  *
@@ -122,9 +122,9 @@ const decompressRLE = (input: string): string => {
  *
  * This compact representation allows sharing complex grid layouts via URL hash or parameters.
  *
- * @param {Grid} grid - The grid object to serialize.
+ * @param grid - The grid object to serialize.
  *
- * @returns {string} An encoded string representing the grid state.
+ * @returns An encoded string representing the grid state.
  *
  * @see {@link Grid}
  * @see {@link compressRLE}
@@ -207,11 +207,11 @@ export const serialize = (grid: Grid): string => {
  * still exist and have up-to-date properties. Handles backward compatibility
  * with older shared links by validating against the latest API data.
  *
- * @param {string} serializedGrid - The encoded grid string to deserialize.
- * @param {string} shipType - The ship type context for fetching tech tree data.
- * @param {function(Record<string, string>): void} setTechColors - Callback to update the tech color registry.
+ * @param serializedGrid - The encoded grid string to deserialize.
+ * @param shipType - The ship type context for fetching tech tree data.
+ * @param setTechColors - Callback to update the tech color registry.
  *
- * @returns {Promise<Grid | null>} A promise resolving to the restored {@link Grid} object, or `null` if deserialization fails.
+ * @returns A promise resolving to the restored {@link Grid} object, or `null` if deserialization fails.
  *
  * @see {@link Grid}
  * @see {@link decompressRLE}

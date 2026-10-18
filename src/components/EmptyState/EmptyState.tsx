@@ -15,6 +15,19 @@ const DEFAULT_ICON = <InfoCircledIcon height="40" style={{ color: "var(--red-9)"
 
 /**
  * A standardized component for displaying empty states across the application.
+ *
+ * @remarks
+ * Renders a centered icon, title, optional description, and optional call-to-action button.
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <EmptyState title="No data available" description="Try again later." />
+ * // renders centered empty state placeholder
+ * ```
  */
 export const EmptyState: React.FC<EmptyStateProps> = ({
 	actionLabel,

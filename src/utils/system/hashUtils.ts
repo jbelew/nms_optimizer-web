@@ -20,9 +20,9 @@
  *
  * **Requires a secure context (HTTPS) in most browsers.**
  *
- * @param {string} data - The input string to hash. **Must not be null.**
+ * @param data - The input string to hash. **Must not be null.**
  *
- * @returns {Promise<string>} A promise that resolves to the hex-encoded hash string.
+ * @returns A promise that resolves to the hex-encoded hash string.
  *
  * @category Utilities
  *

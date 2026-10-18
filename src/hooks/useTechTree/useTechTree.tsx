@@ -41,7 +41,7 @@ const cache = new Map<string, Promise<TechTree>>();
 /**
  * Clears the internal tech tree promise cache.
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
  * @example Cache reset
  * ```typescript
@@ -58,9 +58,9 @@ export const clearTechTreeCache = () => {
  * @remarks
  * Provides a cleaner API for standard fetch requests.
  *
- * @param {string} [shipType="standard"] - The identifier for the ship type.
+ * @param [shipType="standard"] - The identifier for the ship type.
  *
- * @returns {Promise<TechTree>} A promise resolving to the tech tree data.
+ * @returns A promise resolving to the tech tree data.
  *
  * @see {@link fetchTechTreeAsync}
  *
@@ -82,9 +82,9 @@ export function fetchTechTree(shipType: string = "standard"): Promise<TechTree> 
  * Uses internal caching to prevent redundant requests. Updates the
  * `TechTreeLoadingStore` to reflect the network status during the request.
  *
- * @param {string} [shipType="standard"] - The identifier for the ship type (e.g., "fighter", "solar").
+ * @param [shipType="standard"] - The identifier for the ship type (e.g., "fighter", "solar").
  *
- * @returns {Promise<TechTree>} A promise resolving to the `TechTree` data.
+ * @returns A promise resolving to the `TechTree` data.
  *
  * @see `useTechTreeLoadingStore` in `src/store/ui/uiStore.ts` for monitoring fetch status.
  * @see {@link apiCall} for the underlying network implementation.
@@ -149,9 +149,9 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
  * from the fetched tree upon successful retrieval. It uses React's `use()` hook
  * to throw the fetch promise and trigger `<Suspense>` loaders.
  *
- * @param {string} [shipType="standard"] - The identifier for the ship type.
+ * @param [shipType="standard"] - The identifier for the ship type.
  *
- * @returns {TechTree} The loaded technology tree data structure.
+ * @returns The loaded technology tree data structure.
  *
  * @see {@link fetchTechTree} for the promise creator.
  * @see {@link useGridStore} for grid initialization.

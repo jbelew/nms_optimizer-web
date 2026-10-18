@@ -57,9 +57,9 @@ interface TechTreePresetsCardProps {
 /**
  * Single item row inside the {@link TechTreePresetsCard}.
  *
- * @param {PresetCardItemProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element} The rendered preset item row.
+ * @returns The rendered preset item row.
  */
 const PresetCardItem: React.FC<PresetCardItemProps> = ({ build, onApply }) => {
 	const { t } = useTranslation();
@@ -111,9 +111,9 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build, onApply }) => {
 /**
  * Inner content layout for {@link TechTreePresetsCard}.
  *
- * @param {PresetsCardContentProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element} The rendered presets card UI.
+ * @returns The rendered presets card UI.
  */
 const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds, techTree }) => {
 	const { t } = useTranslation();
@@ -212,10 +212,10 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds, techTre
  * preconfigured layouts for platforms with fixed supercharged slots, delegating
  * grid materialization to `sessionCoordinator.applyRecommendedBuild`.
  *
- * @param {TechTreePresetsCardProps} props - Component properties.
- * @param {TechTree} props.techTree - The technology tree payload containing `recommended_builds`.
+ * @param props - Component properties.
+ * @param props.techTree - The technology tree payload containing `recommended_builds`.
  *
- * @returns {JSX.Element | null} The rendered presets card, or `null` if no Recommended Builds exist.
+ * @returns The rendered presets card, or `null` if no Recommended Builds exist.
  *
  * @see {@link sessionCoordinator}
  * @see {@link ./TechTreePresetsCard.test.tsx Unit Tests}

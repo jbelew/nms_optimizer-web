@@ -1,14 +1,21 @@
 /**
  * Executes a function when the browser is idle.
  *
- * This is a wrapper around `requestIdleCallback` with a fallback to `setTimeout`
+ * @remarks
+ * Wraps `requestIdleCallback` with a fallback to `setTimeout`
  * for environments where `requestIdleCallback` is not supported.
  *
- * @param {() => void} fn - The function to execute.
- * @param {object} options - Configuration options.
- * @param {number} [options.timeout=2000] - Maximum time to wait before forcing execution.
+ * @param fn - The function to execute.
+ * @param options - Configuration options.
+ * @param options.timeout - Maximum time to wait before forcing execution.
  *
- * @category Utils
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * runWhenIdle(() => preloadAssets(), { timeout: 1000 });
+ * // schedules callback during browser idle period
+ * ```
  */
 export function runWhenIdle(fn: () => void, options: { timeout?: number } = {}): void {
 	const { timeout = 2000 } = options;

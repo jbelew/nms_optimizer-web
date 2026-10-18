@@ -81,7 +81,7 @@ class ErrorBoundary extends Component<Props, State> {
 	/**
 	 * Initializes the error boundary with a clean state.
 	 *
-	 * @param {Props} props - Component properties.
+	 * @param props - Component properties.
 	 *
 	 * @example Initialization
 	 * ```typescript
@@ -96,9 +96,9 @@ class ErrorBoundary extends Component<Props, State> {
 	/**
 	 * Updates the internal state so the next render will show the fallback UI.
 	 *
-	 * @param {Error} error - The caught exception.
+	 * @param error - The caught exception.
 	 *
-	 * @returns {State} The new component state.
+	 * @returns The new component state.
 	 *
 	 * @example State update
 	 * ```typescript
@@ -112,8 +112,8 @@ class ErrorBoundary extends Component<Props, State> {
 	/**
 	 * Executes side effects after an error is caught, such as logging or analytics.
 	 *
-	 * @param {Error} error - The caught exception.
-	 * @param {ErrorInfo} errorInfo - The component stack trace.
+	 * @param error - The caught exception.
+	 * @param errorInfo - The component stack trace.
 	 *
 	 * @example Side effects
 	 * ```typescript
@@ -129,7 +129,7 @@ class ErrorBoundary extends Component<Props, State> {
 	/**
 	 * Renders children normally, or the error UI if a crash occurred.
 	 *
-	 * @returns {ReactNode} The rendered component tree or fallback UI.
+	 * @returns The rendered component tree or fallback UI.
 	 *
 	 * @example Lifecycle render
 	 * ```tsx

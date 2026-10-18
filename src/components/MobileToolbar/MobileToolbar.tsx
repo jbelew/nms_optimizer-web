@@ -44,7 +44,7 @@ import { useDialog } from "@/utils/system/dialogUtils";
  * It owns its scroll-hide lifecycle via {@link useScrollHide} and registers `forceShow` with
  * {@link registerToolbarForceShow} so programmatic grid scrolling reveals the toolbar.
  *
- * @returns {JSX.Element} The rendered mobile toolbar.
+ * @returns The rendered mobile toolbar.
  *
  * @see {@link LanguageSelector}
  * @see {@link useA11yStore}
@@ -83,7 +83,7 @@ export const MobileToolbar: React.FC = () => {
 	/**
 	 * Generates a share link and opens the share dialog.
 	 *
-	 * @returns {void}
+	 * @returns Side-effects only.
 	 */
 	const handleShareClick = () => {
 		startShareTransition(() => {

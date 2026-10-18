@@ -59,9 +59,9 @@ interface PerformanceContentProps {
  * The static description is visible immediately, while the data-dependent
  * dashboard is wrapped in Suspense and an ErrorBoundary.
  *
- * @param {PerformanceContentProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element} The rendered performance content UI.
+ * @returns The rendered performance content UI.
  *
  * @see {@link PerformanceData}
  * @see {@link DashboardSkeleton}

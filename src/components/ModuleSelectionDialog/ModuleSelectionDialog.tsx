@@ -114,9 +114,9 @@ interface SafeParagraphProps extends Omit<React.ComponentPropsWithoutRef<"p">, "
 /**
  * Resolves the versioned asset path for a module's icon, falling back to the default grid icon.
  *
- * @param {string | null | undefined} image - Relative module image path within `/assets/img/grid/`.
+ * @param image - Relative module image path within `/assets/img/grid/`.
  *
- * @returns {string} The resolved versioned image path or fallback icon path.
+ * @returns The resolved versioned image path or fallback icon path.
  *
  * @category Utilities
  */
@@ -128,9 +128,9 @@ const resolveModuleImagePath = (image?: null | string): string =>
 /**
  * Parses and styles parenthetical text fragments within a string.
  *
- * @param {string} text - The input text containing parentheses.
+ * @param text - The input text containing parentheses.
  *
- * @returns {React.ReactNode} Formatted React nodes with styled badges.
+ * @returns Formatted React nodes with styled badges.
  *
  * @category Utilities
  */
@@ -158,9 +158,9 @@ const formatParentheses = (text: string): React.ReactNode => {
 /**
  * Parses and styles bracketed text fragments within a technology label.
  *
- * @param {string} label - The input label string.
+ * @param label - The input label string.
  *
- * @returns {React.ReactNode} Formatted React nodes with code blocks.
+ * @returns Formatted React nodes with code blocks.
  *
  * @category Utilities
  */
@@ -234,15 +234,15 @@ ModuleCheckbox.displayName = "ModuleCheckbox";
 /**
  * Categorized Module Group of checkboxes.
  *
- * @param {ModuleGroupProps} props - Component properties.
- * @param {string[]} props.currentCheckedModules - Currently checked module IDs.
- * @param {string} props.groupName - The unique key of the Module Group.
- * @param {SelectionModule[]} props.modules - Pre-sorted list of modules in this group.
- * @param {() => void} props.onClose - Callback to close the dialog when opening instructions.
- * @param {React.ComponentProps<typeof Avatar>["color"]} props.techColor - Accent color for module avatars.
- * @param {string} [props.titleOverride] - Optional display title override for the group.
+ * @param props - Component properties.
+ * @param props.currentCheckedModules - Currently checked module IDs.
+ * @param props.groupName - The unique key of the Module Group.
+ * @param props.modules - Pre-sorted list of modules in this group.
+ * @param props.onClose - Callback to close the dialog when opening instructions.
+ * @param props.techColor - Accent color for module avatars.
+ * @param [props.titleOverride] - Optional display title override for the group.
  *
- * @returns {JSX.Element | null} The rendered group of checkboxes, or `null` if no modules are present.
+ * @returns The rendered group of checkboxes, or `null` if no modules are present.
  *
  * @component
  *
@@ -315,9 +315,9 @@ const ModuleGroup: React.FC<ModuleGroupProps> = ({
  * A paragraph component that strips the i18n style attribute to prevent runtime errors
  * in React 19 and replaces it with the equivalent Tailwind class.
  *
- * @param {SafeParagraphProps} props - Component props including style override.
+ * @param props - Component props including style override.
  *
- * @returns {JSX.Element} A clean paragraph element.
+ * @returns A clean paragraph element.
  */
 const SafeParagraph: React.FC<SafeParagraphProps> = ({ style, ...props }) => (
 	<p {...props} className={style ? "mt-2" : undefined} />

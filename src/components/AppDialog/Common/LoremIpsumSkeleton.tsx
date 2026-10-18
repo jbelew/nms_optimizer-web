@@ -9,7 +9,7 @@ import { Skeleton, Text } from "@radix-ui/themes";
  * primarily contain blocks of text (like the "About" or "Instructions" pages).
  * It uses the Radix UI `Skeleton` component for a consistent look and feel.
  *
- * @returns {JSX.Element} The rendered text skeleton.
+ * @returns The rendered text skeleton.
  *
  * @component
  *

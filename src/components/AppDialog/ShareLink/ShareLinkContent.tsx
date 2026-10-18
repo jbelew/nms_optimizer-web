@@ -18,9 +18,9 @@ interface ShareLinkContentProps {
  * This component uses a `TextArea` to display the (potentially long) serialized grid URL
  * and includes a feedback mechanism (checkmark icon) when the link is successfully copied.
  *
- * @param {ShareLinkContentProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element} The rendered share link UI.
+ * @returns The rendered share link UI.
  *
  * @see {@link ./ShareLinkContent.test.tsx Unit Tests}
  *

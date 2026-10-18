@@ -3,9 +3,17 @@ import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "@/types/t
 /**
  * Calculates the total number of non-empty modules defined in a recommended build layout.
  *
- * @param {RecommendedBuild} build - The recommended build containing a 2D layout.
+ * @param build - The recommended build containing a 2D layout.
  *
- * @returns {number} The count of modules in the layout.
+ * @returns The count of modules in the layout.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * const total = countBuildModules(recommendedBuild);
+ * // returns 12
+ * ```
  */
 export const countBuildModules = (build: RecommendedBuild): number => {
 	if (!build.layout) return 0;
@@ -32,9 +40,9 @@ export interface TechTreeMaps {
 /**
  * Processes the TechTree to extract useful flat maps for fast lookups.
  *
- * @param {TechTree | null} techTree - The hierarchical technology tree data.
+ * @param techTree - The hierarchical technology tree data.
  *
- * @returns {TechTreeMaps} Flat maps for modules, colors, and valid keys.
+ * @returns Flat maps for modules, colors, and valid keys.
  *
  * @example
  * ```ts

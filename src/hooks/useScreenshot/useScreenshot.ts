@@ -37,7 +37,7 @@ interface UseScreenshotReturn {
  * - Uses a 2x pixel ratio on narrow screens (< 640px) for sharper mobile output, 1x otherwise.
  * - Temporarily hides UI elements marked with `data-screenshot-exclude="true"`.
  *
- * @returns {UseScreenshotReturn} State and handler for the screenshot workflow.
+ * @returns State and handler for the screenshot workflow.
  *
  * @see {@link UseScreenshotReturn}
  *

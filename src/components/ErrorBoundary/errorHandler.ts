@@ -29,10 +29,10 @@ import { captureException, Logger } from "@/utils/system/monitoring";
  * NOT performed here. Destructive cleanup should only happen via explicit user
  * action to avoid wiping local state on every React crash.
  *
- * @param {Error} error - The caught exception. **Must not be null.**
- * @param {ErrorInfo} [errorInfo] - The React component stack metadata.
+ * @param error - The caught exception. **Must not be null.**
+ * @param [errorInfo] - The React component stack metadata.
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
  * @see {@link sendEvent}
  *

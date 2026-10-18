@@ -44,11 +44,11 @@ interface BonusStatusIconProps {
 /**
  * Renders the appropriate Radix icon element for a solved bonus status type.
  *
- * @param {string | null} iconType - Status icon key (`"check"`, `"lightning"`, or `"warning"`).
- * @param {string} className - CSS class names applied to the icon.
- * @param {React.CSSProperties} style - Inline color style applied to the icon.
+ * @param iconType - Status icon key (`"check"`, `"lightning"`, or `"warning"`).
+ * @param className - CSS class names applied to the icon.
+ * @param style - Inline color style applied to the icon.
  *
- * @returns {React.ReactNode} The rendered icon element, or `null` when unrecognized.
+ * @returns The rendered icon element, or `null` when unrecognized.
  */
 function renderIcon(
 	iconType: null | string,
@@ -75,12 +75,12 @@ function renderIcon(
  * Returns `null` if `techSolvedBonus` is non-positive, status data is unavailable, or the active
  * Technology Variant has 1 or fewer modules.
  *
- * @param {BonusStatusIconProps} props - Component properties.
- * @param {number} [props.moduleCount] - Total count of modules in the active Technology Variant.
- * @param {string} props.tech - Unique identifier for the Technology Category.
- * @param {number} props.techSolvedBonus - The actual bonus achieved in the most recent solve.
+ * @param props - Component properties.
+ * @param [props.moduleCount] - Total count of modules in the active Technology Variant.
+ * @param props.tech - Unique identifier for the Technology Category.
+ * @param props.techSolvedBonus - The actual bonus achieved in the most recent solve.
  *
- * @returns {React.ReactNode} The rendered status icon wrapped in a tooltip/popover, or `null`.
+ * @returns The rendered status icon wrapped in a tooltip/popover, or `null`.
  *
  * @see {@link useTechStore}
  * @see {@link ./BonusStatusIcon.test.tsx Unit Tests}

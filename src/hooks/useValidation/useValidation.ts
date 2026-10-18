@@ -16,10 +16,10 @@ interface UseDebouncedValidationOptions {
  * triggering validation on every keystroke. It handles timer cleanup on unmount
  * to prevent memory leaks and state updates on unmounted components.
  *
- * @param {(value: string) => null | string} validator - A function that takes the current value and returns an error string or `null` if valid. **Must be a pure function.**
- * @param {UseDebouncedValidationOptions} [options={}] - Configuration for the debounce behavior.
+ * @param validator - A function that takes the current value and returns an error string or `null` if valid. **Must be a pure function.**
+ * @param [options={}] - Configuration for the debounce behavior.
  *
- * @returns {{ error: string | null, handleChange: (value: string) => void }} State containing the current error and a handler for input changes.
+ * @returns State containing the current error and a handler for input changes.
  *
  * @hook
  *

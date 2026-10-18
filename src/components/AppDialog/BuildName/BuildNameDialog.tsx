@@ -36,9 +36,9 @@ interface BuildNameDialogProps {
  * It wraps the `BuildNameContent` within a standard `AppDialog`, providing a
  * localized title and specific styling for the naming input workflow.
  *
- * @param {BuildNameDialogProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element} The rendered build naming dialog.
+ * @returns The rendered build naming dialog.
  *
  * @see {@link AppDialogRoot}
  * @see {@link BuildNameContent}

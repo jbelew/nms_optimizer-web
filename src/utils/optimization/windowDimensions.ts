@@ -38,10 +38,10 @@ export const STANDARD_WINDOW_RULES: Readonly<WindowRules> = {
  * physically fit `count`, dimensions are escalated to the technology's `"default"` rule
  * or the smallest fitting rule in {@link STANDARD_WINDOW_RULES}.
  *
- * @param {number} count - The number of active modules selected for optimization.
- * @param {WindowRules | null} [windowRules] - Optional mapping of module count thresholds or `"default"` to `[width, height]` dimensions.
+ * @param count - The number of active modules selected for optimization.
+ * @param [windowRules] - Optional mapping of module count thresholds or `"default"` to `[width, height]` dimensions.
  *
- * @returns {WindowDimensions | null} The resolved `[width, height]` Solver Window dimensions, or `null` when `count < 1`.
+ * @returns The resolved `[width, height]` Solver Window dimensions, or `null` when `count < 1`.
  *
  * @default STANDARD_WINDOW_RULES
  *
@@ -125,10 +125,10 @@ export function determineWindowDimensions(
  * Finds the dimensions associated with the smallest numeric threshold key in `rules`
  * that satisfies `predicate`.
  *
- * @param {Readonly<WindowRules>} rules - Window rules dictionary to inspect.
- * @param {(threshold: number, dimensions: WindowDimensions) => boolean} predicate - Filter condition for candidate numeric thresholds.
+ * @param rules - Window rules dictionary to inspect.
+ * @param predicate - Filter condition for candidate numeric thresholds.
  *
- * @returns {WindowDimensions | null} The matching `[width, height]` tuple, or `null` if none match.
+ * @returns The matching `[width, height]` tuple, or `null` if none match.
  *
  * @category Utilities
  */

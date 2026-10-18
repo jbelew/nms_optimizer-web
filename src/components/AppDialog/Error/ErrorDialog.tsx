@@ -30,9 +30,9 @@ interface ErrorDialogProps {
  * renders the error dialog. It also accepts props for controlled use in
  * testing and Storybook.
  *
- * @param {ErrorDialogProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element | null} The rendered error dialog, or `null` if no error is active.
+ * @returns The rendered error dialog, or `null` if no error is active.
  *
  * @see {@link useOptimizeStore}
  * @see {@link AppDialog}

@@ -32,7 +32,7 @@ export const ThemeContext = createContext<ThemeContextValue>({
  * @remarks
  * Must be used within a component wrapped by `ThemeProvider`.
  * 
- * @returns {ThemeContextValue} The current theme state and mutation actions.
+ * @returns The current theme state and mutation actions.
  * @see {@link ThemeContext}
  * @hook
  * @category Hooks

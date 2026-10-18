@@ -36,6 +36,23 @@ interface AppDialogProps {
 
 /**
  * A compound dialog component providing layout and context.
+ *
+ * @remarks
+ * Manages Escape-key dismissal, Radix Dialog portal/overlay composition, and `AppDialogContext` propagation.
+ *
+ * @see {@link AppDialogProps}
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <AppDialog.Root isOpen={isOpen} onClose={handleClose}>
+ *   <AppDialog.Title title="Settings" />
+ * </AppDialog.Root>
+ * // renders modal dialog root
+ * ```
  */
 export const AppDialogRoot: React.FC<AppDialogProps> = ({
 	children,
@@ -102,11 +119,17 @@ export interface AppDialogTitleProps {
  * @remarks
  * Resolves header title text and icon directly from the Page Registry when `pageId` or `titleKey` is provided.
  *
- * @param {AppDialogTitleProps} props - The component props.
+ * @see {@link AppDialogTitleProps}
  *
- * @returns {JSX.Element} The rendered dialog title.
+ * @component
  *
  * @category Components
+ *
+ * @example
+ * ```tsx
+ * <AppDialogTitle pageId="about" />
+ * // renders styled dialog header and separator
+ * ```
  */
 export const AppDialogTitle: React.FC<AppDialogTitleProps> = ({
 	children,
@@ -160,11 +183,19 @@ export interface AppDialogBodyProps {
  * @remarks
  * Encapsulates the scrollable body content of the modal dialog and applies routed dialog padding.
  *
- * @param {AppDialogBodyProps} props - The component props.
+ * @see {@link AppDialogBodyProps}
  *
- * @returns {JSX.Element} The rendered dialog body section.
+ * @component
  *
  * @category Components
+ *
+ * @example
+ * ```tsx
+ * <AppDialogBody pageId="about">
+ *   <p>Content</p>
+ * </AppDialogBody>
+ * // renders scrollable modal content section
+ * ```
  */
 export const AppDialogBody: React.FC<AppDialogBodyProps> = ({ children, pageId, titleKey }) => {
 	const page = pageId ? getPageById(pageId) : getPageByDialogTitleKey(titleKey);
@@ -189,11 +220,22 @@ export interface AppDialogFooterProps {
 /**
  * Footer component for AppDialog.
  *
- * @param {AppDialogFooterProps} props - The component props.
+ * @remarks
+ * Renders action controls aligned at the bottom of the dialog frame.
  *
- * @returns {JSX.Element} The rendered dialog footer.
+ * @see {@link AppDialogFooterProps}
+ *
+ * @component
  *
  * @category Components
+ *
+ * @example
+ * ```tsx
+ * <AppDialogFooter>
+ *   <Button>Close</Button>
+ * </AppDialogFooter>
+ * // renders dialog footer container
+ * ```
  */
 export const AppDialogFooter: React.FC<AppDialogFooterProps> = ({ children }) => {
 	return <div className="appDialog__footer">{children}</div>;

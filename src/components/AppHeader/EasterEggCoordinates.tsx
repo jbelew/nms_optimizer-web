@@ -8,7 +8,7 @@ import { Code, DataList } from "@radix-ui/themes";
  * This is lazily loaded to strip the DataList, Code, and static text from the critical path bundle.
  * It provides in-game coordinates for various significant locations in the NMS universe.
  *
- * @returns {JSX.Element} The rendered list of coordinates.
+ * @returns The rendered list of coordinates.
  *
  * @component
  *

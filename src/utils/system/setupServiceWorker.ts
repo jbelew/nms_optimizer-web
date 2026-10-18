@@ -48,11 +48,11 @@ if (typeof window !== "undefined") {
  * If `registration.update()` fails (e.g. offline, timeout, network glitch), it safely falls
  * back to activating the existing waiting worker immediately.
  *
- * @param {((reload?: boolean) => Promise<void>) | undefined} [updateSW] - Function provided by Vite PWA / Workbox to trigger service worker activation.
- * @param {ServiceWorkerRegistration} [customRegistration] - Optional registration override for testing.
- * @param {number} [maxTimeoutMs=3000] - Maximum milliseconds to wait for network update check and installation before proceeding.
+ * @param [updateSW] - Function provided by Vite PWA / Workbox to trigger service worker activation.
+ * @param [customRegistration] - Optional registration override for testing.
+ * @param [maxTimeoutMs=3000] - Maximum milliseconds to wait for network update check and installation before proceeding.
  *
- * @returns {Promise<void>} Resolves when activation and reload have been initiated.
+ * @returns Resolves when activation and reload have been initiated.
  *
  * @default 3000
  *
@@ -199,7 +199,7 @@ export async function activateLatestServiceWorker(
  * Used for self-healing recovery when a client is stranded on stale or corrupt
  * service worker state, or during emergency reset actions.
  *
- * @returns {Promise<boolean>} Resolves to true if any service workers were unregistered, false otherwise.
+ * @returns Resolves to true if any service workers were unregistered, false otherwise.
  *
  * @see {@link ./setupServiceWorker.test.ts Unit Tests}
  *
@@ -245,7 +245,7 @@ export async function evictStaleServiceWorkers(): Promise<boolean> {
 /**
  * Determines whether the application tab is currently hidden or idle.
  *
- * @returns {boolean} True if the tab is hidden or inactive for longer than the idle threshold.
+ * @returns True if the tab is hidden or inactive for longer than the idle threshold.
  *
  * @category Utilities
  *
@@ -266,11 +266,17 @@ export function isAppHiddenOrIdle(): boolean {
 /**
  * Sets the last user activity timestamp for testing purposes.
  *
- * @param {number} timestamp - The unix timestamp in milliseconds.
+ * @param timestamp - The unix timestamp in milliseconds.
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
- * @internal
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * setLastUserActivityForTesting(Date.now() - 600_000);
+ * // overrides internal activity timestamp for idle tests
+ * ```
  */
 export function setLastUserActivityForTesting(timestamp: number): void {
 	lastUserActivityTimestamp = timestamp;
@@ -288,7 +294,7 @@ export function setLastUserActivityForTesting(timestamp: number): void {
  * function that triggers the service worker update to avoid race conditions
  * during registration.
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
  * @see {@link isBot}
  * @see {@link ./setupServiceWorker.test.ts Unit Tests}

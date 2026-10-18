@@ -22,9 +22,9 @@ interface PrerenderedMarkdownRendererProps {
  * injects its contents using `dangerouslySetInnerHTML`. This strategy is used
  * for larger documents to ensure immediate interactivity and SEO.
  *
- * @param {PrerenderedMarkdownRendererProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element | null} The injected article, or `null` if no content is found.
+ * @returns The injected article, or `null` if no content is found.
  *
  * @see {@link import('./MarkdownContentRenderer').MarkdownContentRenderer}
  *
@@ -55,7 +55,7 @@ const PrerenderedMarkdownRenderer: React.FC<PrerenderedMarkdownRendererProps> = 
 		/**
 		 * Attempts to scroll to the target ID within the article.
 		 *
-		 * @returns {boolean} `true` if scrolled, otherwise `false`.
+		 * @returns `true` if scrolled, otherwise `false`.
 		 *
 		 * @example Logic usage
 		 * ```typescript

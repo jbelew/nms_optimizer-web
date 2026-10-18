@@ -36,9 +36,9 @@ interface RowControlButtonProps {
  * - The layout is locked.
  * - Data is loading.
  *
- * @param {RowControlButtonProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element} The rendered row control buttons.
+ * @returns The rendered row control buttons.
  *
  * @see {@link RowControlButtonProps}
  * @see {@link getRowControlEligibility}

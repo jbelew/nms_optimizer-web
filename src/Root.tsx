@@ -28,7 +28,7 @@ import { createAppRouter } from "@/utils/system/monitoring";
  * Sets up StrictMode, global ErrorBoundary, Radix UI Theme, tooltip provider,
  * toast provider, and router provider while synchronizing theme and accessibility classes.
  *
- * @returns {JSX.Element} The rendered root component with all providers.
+ * @returns The rendered root component with all providers.
  *
  * @see {@link useThemeStore}
  * @see {@link useA11yStore}

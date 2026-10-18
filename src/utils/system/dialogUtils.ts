@@ -15,9 +15,9 @@ import { safeGetItem, safeSetItem } from "@/utils/browser/environment";
  * Inspects the active `i18next` resource store data keys to determine which
  * language bundles are registered.
  *
- * @param {I18nInstance} i18nInstance - The `i18next` instance.
+ * @param i18nInstance - The `i18next` instance.
  *
- * @returns {string[]} An array of supported language codes (e.g., `['en', 'es', 'fr']`).
+ * @returns An array of supported language codes (e.g., `['en', 'es', 'fr']`).
  *
  * @see {@link useSupportedLanguages}
  *
@@ -40,7 +40,7 @@ export const getSupportedLanguages = (i18nInstance: I18nInstance): string[] => {
  * Reads the active `i18next` instance from `useTranslation` and delegates to
  * {@link getSupportedLanguages}.
  *
- * @returns {string[]} An array of supported language codes.
+ * @returns An array of supported language codes.
  *
  * @see {@link getSupportedLanguages}
  *
@@ -154,10 +154,10 @@ export const DialogContext = createContext<DialogContextType | undefined>(undefi
  * Matches the localized or root `pathname` against the Unified Page Registry
  * and validates that the matched route represents a Routed Dialog.
  *
- * @param {string} pathname - The current URL pathname to parse.
- * @param {string[]} supportedLangs - The list of language codes currently supported by the app.
+ * @param pathname - The current URL pathname to parse.
+ * @param supportedLangs - The list of language codes currently supported by the app.
  *
- * @returns {DialogType} The matching Routed Dialog identifier, or `null` if none matches.
+ * @returns The matching Routed Dialog identifier, or `null` if none matches.
  *
  * @see {@link getPageByPath}
  *
@@ -188,11 +188,11 @@ export const getActiveDialogFromPathname = (
  * to its primary language subtag (e.g., `"en-US"` → `"en"`), and prefixes non-English
  * locales while keeping English routes at the root.
  *
- * @param {string} pathname - Current pathname (with or without an existing locale prefix).
- * @param {string} targetLang - Target ISO language code or locale tag (e.g., `'en'`, `'fr'`, `'en-US'`).
- * @param {string[]} [supportedLangs=languages] - Supported language codes used to strip an existing prefix.
+ * @param pathname - Current pathname (with or without an existing locale prefix).
+ * @param targetLang - Target ISO language code or locale tag (e.g., `'en'`, `'fr'`, `'en-US'`).
+ * @param [supportedLangs=languages] - Supported language codes used to strip an existing prefix.
  *
- * @returns {string} The localized pathname ending with a trailing slash.
+ * @returns The localized pathname ending with a trailing slash.
  *
  * @default languages
  *
@@ -233,9 +233,9 @@ export const buildLocalizedPath = (
  * manages persistent `localStorage` flags (`userVisited`, `tutorialFinished`),
  * and provides methods to open and close dialogs while preserving language and query parameters.
  *
- * @param {DialogProviderProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {React.ReactElement} The context provider with dialog state.
+ * @returns The context provider with dialog state.
  *
  * @see {@link DialogProviderProps}
  * @see {@link useDialog}
@@ -355,7 +355,7 @@ export const DialogProvider: React.FC<DialogProviderProps> = ({ children }) => {
  * Reads the active {@link DialogContext} provided by {@link DialogProvider} and throws
  * if invoked outside a provider boundary.
  *
- * @returns {DialogContextType} The active dialog context value.
+ * @returns The active dialog context value.
  *
  * @throws {Error} If called outside of a {@link DialogProvider}.
  *

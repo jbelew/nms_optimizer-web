@@ -129,11 +129,11 @@ const useToastStore = create<ToastContextType>((set, get) => ({
  * Dispatches directly to the underlying toast Zustand store so store-level Slot Restriction
  * warnings and network handlers can surface user-friendly toasts without imperative callback singletons.
  *
- * @param {string} title - The primary text displayed at the top of the toast.
- * @param {ReactNode} description - The detailed warning or error message.
- * @param {number} [duration] - Optional expiry delay in milliseconds.
+ * @param title - The primary text displayed at the top of the toast.
+ * @param description - The detailed warning or error message.
+ * @param [duration] - Optional expiry delay in milliseconds.
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
  * @see {@link ToastProvider}
  * @see {@link useToast}
@@ -157,9 +157,9 @@ export const showGlobalError: ShowToastFn = (title, description, duration) => {
  * Subscribes to the toast store to manage visibility, configuration, and automatic
  * global click/touch dismissal of active toasts.
  *
- * @param {ToastProviderProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {React.ReactElement} The provider element wrapping children.
+ * @returns The provider element wrapping children.
  *
  * @see {@link ToastProviderProps}
  * @see {@link useToast}
@@ -216,7 +216,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
  * Reads the active {@link ToastContext} provided by {@link ToastProvider} and throws
  * if invoked outside a provider boundary.
  *
- * @returns {ToastContextType} The toast context containing notification handlers.
+ * @returns The toast context containing notification handlers.
  *
  * @throws {Error} If called outside of a {@link ToastProvider}.
  *

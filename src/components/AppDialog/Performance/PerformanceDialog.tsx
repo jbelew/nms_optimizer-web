@@ -25,9 +25,9 @@ interface PerformanceDialogProps {
  * to be code-split along with its charting dependencies. It uses configuration
  * derived from the Unified Page Registry.
  *
- * @param {PerformanceDialogProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element} The rendered performance dialog.
+ * @returns The rendered performance dialog.
  *
  * @see {@link PerformanceContent}
  * @see {@link AppDialog}

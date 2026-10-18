@@ -18,9 +18,9 @@ interface YouTubeEmbedProps {
  * Renders a responsive iframe pointing to a YouTube video. Designed to be
  * integrated seamlessly into the markdown rendering pipeline.
  *
- * @param {YouTubeEmbedProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element} The rendered iframe wrapped in a Radix Box.
+ * @returns The rendered iframe wrapped in a Radix Box.
  *
  * @component
  *

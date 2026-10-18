@@ -6,10 +6,10 @@ import type { Module } from "@/types/tech";
  *
  * Initialized with default values for adjacency, image, and module.
  *
- * @param {boolean} [supercharged=false] - Initial supercharged state.
- * @param {boolean} [active=false] - Initial active state.
+ * @param [supercharged=false] - Initial supercharged state.
+ * @param [active=false] - Initial active state.
  *
- * @returns {Cell} A new `Cell` object with default values.
+ * @returns A new `Cell` object with default values.
  *
  * @see {@link Cell}
  *
@@ -43,10 +43,10 @@ export const createEmptyCell = (supercharged = false, active = false): Cell => (
  *
  * Initializes a `Grid` object with a 2D array of empty cells.
  *
- * @param {number} width - Number of columns.
- * @param {number} height - Number of rows.
+ * @param width - Number of columns.
+ * @param height - Number of rows.
  *
- * @returns {Grid} A new `Grid` object populated with empty cells.
+ * @returns A new `Grid` object populated with empty cells.
  *
  * @see {@link Grid}
  * @see {@link createEmptyCell}
@@ -77,10 +77,10 @@ export const createGrid = (width: number, height: number): Grid => ({
  * Structural properties (`active`, `supercharged`, `tech`, `adjacency_bonus`) are preserved
  * unless explicitly overwritten by the caller.
  *
- * @param {Cell} cell - The target cell to hydrate in-place.
- * @param {Partial<Module> & { id?: null | string }} moduleData - The module metadata to apply.
+ * @param cell - The target cell to hydrate in-place.
+ * @param moduleData - The module metadata to apply.
  *
- * @returns {Cell} The mutated `Cell` instance.
+ * @returns The mutated `Cell` instance.
  *
  * @see {@link Cell}
  * @see {@link createCellFromModuleData}
@@ -113,9 +113,9 @@ export const assignModuleToCell = (
 /**
  * Maps raw module data to the `Cell` structure used by the grid.
  *
- * @param {Module} moduleData - The raw module metadata.
+ * @param moduleData - The raw module metadata.
  *
- * @returns {Cell} A populated `Cell` object.
+ * @returns A populated `Cell` object.
  *
  * @see {@link assignModuleToCell}
  *
@@ -145,9 +145,9 @@ export const createCellFromModuleData = (moduleData: Module): Cell => {
  *
  * Structural state includes whether the cell is `active` and whether it is `supercharged`.
  *
- * @param {Cell} cell - The cell object to modify in-place. **Will be mutated.**
+ * @param cell - The cell object to modify in-place. **Will be mutated.**
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
  * @see {@link Cell}
  * @see {@link createEmptyCell}

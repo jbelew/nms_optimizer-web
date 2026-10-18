@@ -41,9 +41,9 @@ const SCROLL_OPTIONS = { skipOnLargeScreens: true };
 /**
  * A container component for the various action buttons located below the technology grid.
  *
- * @param {GridTableButtonsProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element} The rendered grid action buttons.
+ * @returns The rendered grid action buttons.
  *
  * @see {@link useBuildFileManager}
  * @see {@link ./GridTableButtons.test.tsx Unit Tests}
@@ -89,9 +89,9 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	/**
 	 * Handles the screenshot capture of the grid section.
 	 *
-	 * @param {React.MouseEvent<HTMLButtonElement>} event - The button click event.
+	 * @param event - The button click event.
 	 *
-	 * @returns {void}
+	 * @returns Side-effects only.
 	 */
 	const handleScreenshotClick = (event: React.MouseEvent<HTMLButtonElement>) => {
 		const section =

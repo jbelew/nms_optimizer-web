@@ -23,9 +23,9 @@ interface UserStatsContentProps {
  * through pie charts for different equipment categories. Data is fetched from
  * the analytics backend. This component is typically rendered within a dialog.
  *
- * @param {UserStatsContentProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element} The rendered statistics content UI.
+ * @returns The rendered statistics content UI.
  *
  * @see {@link ./UserStatsContent.test.tsx Unit Tests}
  * @see {@link import('@/hooks/useUserStats/useUserStats').useUserStats}

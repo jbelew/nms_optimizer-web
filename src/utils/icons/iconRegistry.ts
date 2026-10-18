@@ -133,9 +133,9 @@ const iconStyle: Record<string, CSSProperties> = {
  * defined in the Unified Page Registry, defaulting to an accent color if
  * no specific style is mapped.
  *
- * @param {string} [titleKey] - The translation key for the dialog title.
+ * @param [titleKey] - The translation key for the dialog title.
  *
- * @returns {DialogIconAndStyle} An object containing the `IconComponent` and its `style`.
+ * @returns An object containing the `IconComponent` and its `style`.
  *
  * @see {@link PAGE_REGISTRY}
  * @see {@link iconMap}

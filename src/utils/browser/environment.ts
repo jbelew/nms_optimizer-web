@@ -41,7 +41,7 @@ const BOT_BRAND_PATTERN = /headless|lighthouse|phantom|webdriver/i;
  * automated visitors to improve SEO and prevent unwanted interactions.
  * **Note: This is not a security-critical check.**
  *
- * @returns {boolean} `true` if the visitor is likely a bot, false otherwise.
+ * @returns `true` if the visitor is likely a bot, false otherwise.
  *
  * @see {@link ./environment.test.ts Unit Tests}
  *
@@ -98,7 +98,7 @@ export function isBot(): boolean {
  * This utility uses the `ontouchstart` event property and `navigator.maxTouchPoints`
  * to determine if the hardware supports touch interaction.
  *
- * @returns {boolean} `true` if the device supports touch, otherwise `false`.
+ * @returns `true` if the device supports touch, otherwise `false`.
  *
  * @category Utilities
  *
@@ -124,7 +124,7 @@ export const isTouchDevice = (): boolean => {
  * Detects standalone mode via the standard CSS media query `(display-mode: standalone)`
  * and the iOS-specific `navigator.standalone` property.
  *
- * @returns {boolean} `true` if running as an installed PWA in standalone mode, otherwise `false`.
+ * @returns `true` if running as an installed PWA in standalone mode, otherwise `false`.
  *
  * @see {@link ./environment.test.ts Unit Tests}
  *
@@ -158,7 +158,7 @@ export const isStandalone = (): boolean => {
  * Uses user agent sniffing and touch point detection (for iPads running desktop UA)
  * while excluding non-Safari browsers (Chrome, Edge, CriOS, etc.).
  *
- * @returns {boolean} `true` if current browser is Safari on iOS/iPadOS, otherwise `false`.
+ * @returns `true` if current browser is Safari on iOS/iPadOS, otherwise `false`.
  *
  * @see {@link ./environment.test.ts Unit Tests}
  *
@@ -186,9 +186,9 @@ export const isIosSafari = (): boolean => {
 /**
  * Safely retrieves an item from `localStorage`.
  *
- * @param {string} key - The key to retrieve. **Must not be empty.**
+ * @param key - The key to retrieve. **Must not be empty.**
  *
- * @returns {string | null} The stored string value, or `null` if not found or access is blocked.
+ * @returns The stored string value, or `null` if not found or access is blocked.
  *
  * @see {@link safeSetItem}
  * @see {@link safeRemoveItem}
@@ -217,10 +217,10 @@ export const safeGetItem = (key: string): null | string => {
 /**
  * Safely stores an item in `localStorage`.
  *
- * @param {string} key - The key to set. **Must not be empty.**
- * @param {string} value - The string value to store.
+ * @param key - The key to set. **Must not be empty.**
+ * @param value - The string value to store.
  *
- * @returns {boolean} `true` if the item was successfully saved, otherwise `false`.
+ * @returns `true` if the item was successfully saved, otherwise `false`.
  *
  * @see {@link safeGetItem}
  *
@@ -250,9 +250,9 @@ export const safeSetItem = (key: string, value: string): boolean => {
 /**
  * Safely removes an item from `localStorage`.
  *
- * @param {string} key - The key to remove. **Must not be empty.**
+ * @param key - The key to remove. **Must not be empty.**
  *
- * @returns {boolean} `true` if the item was successfully removed, otherwise `false`.
+ * @returns `true` if the item was successfully removed, otherwise `false`.
  *
  * @see {@link safeGetItem}
  *
@@ -282,7 +282,7 @@ export const safeRemoveItem = (key: string): boolean => {
 /**
  * Safely clears all items from `localStorage`.
  *
- * @returns {boolean} `true` if the storage was successfully cleared, otherwise `false`.
+ * @returns `true` if the storage was successfully cleared, otherwise `false`.
  *
  * @see {@link safeRemoveItem}
  *

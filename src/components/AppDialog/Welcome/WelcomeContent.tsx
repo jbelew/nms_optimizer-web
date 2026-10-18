@@ -25,9 +25,9 @@ interface WelcomeContentProps {
  * and a direct link to the detailed instructions. It utilizes `react-i18next`
  * for localized messaging and `Trans` components for complex inline icons.
  *
- * @param {WelcomeContentProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element} The rendered welcome content.
+ * @returns The rendered welcome content.
  *
  * @see {@link useDialog}
  * @see {@link DynamicRadixIcon}
@@ -69,9 +69,9 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onClose }) => {
 	/**
 	 * Closes the welcome dialog and immediately opens the instructions dialog.
 	 *
-	 * @param {React.MouseEvent} e - The click event.
+	 * @param e - The click event.
 	 *
-	 * @returns {void}
+	 * @returns Side-effects only.
 	 *
 	 * @example Interaction handler
 	 * ```typescript

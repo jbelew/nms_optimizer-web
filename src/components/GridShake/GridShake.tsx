@@ -34,9 +34,9 @@ interface GridShakeProps {
  * container whenever a shake event is triggered. This is used as sensory
  * feedback for invalid user actions (e.g., clicking a locked cell).
  *
- * @param {GridShakeProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element} The container wrapping the children.
+ * @returns The container wrapping the children.
  *
  * @see {@link useShakeStore}
  *

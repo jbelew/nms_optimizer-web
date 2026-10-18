@@ -70,10 +70,10 @@ export const ALPHABETICAL_MODULE_GROUPS = ["bonus", "figurines", "trails"] as co
  * Core modules are always locked as checked, so "Select All" status is evaluated against
  * the selectable non-core modules.
  *
- * @param {Array<{ id: string; type?: string }>} modules - All available modules for the Technology Variant.
- * @param {string[]} checkedIds - Currently selected module IDs.
+ * @param modules - All available modules for the Technology Variant.
+ * @param checkedIds - Currently selected module IDs.
  *
- * @returns {boolean} `true` when every non-core module ID is present in `checkedIds`.
+ * @returns `true` when every non-core module ID is present in `checkedIds`.
  *
  * @see {@link getSelectAllModuleIds}
  * @see {@link ./techRules.test.ts Unit Tests}
@@ -104,10 +104,10 @@ export function areAllModulesSelected(
  * lower-rank module ID (e.g., `Tau`, `Sigma`) to the module ID of its immediate higher-rank
  * prerequisite (`Theta` for `Tau`, `Tau` for `Sigma`) according to {@link MODULE_RANK_ORDER}.
  *
- * @param {string} groupName - The Module Group identifier.
- * @param {Array<{ id: string; label?: string }>} modules - Modules belonging to the specified Module Group.
+ * @param groupName - The Module Group identifier.
+ * @param modules - Modules belonging to the specified Module Group.
  *
- * @returns {Map<string, string>} Map from dependent module ID to prerequisite module ID.
+ * @returns Map from dependent module ID to prerequisite module ID.
  *
  * @see {@link MODULE_RANK_ORDER}
  * @see {@link RANKED_MODULE_GROUPS}
@@ -172,10 +172,10 @@ export function getModulePrerequisites(
  * Selecting all includes every non-core module followed by every core module. Deselecting all
  * retains only the mandatory core modules.
  *
- * @param {Array<{ id: string; type?: string }>} modules - All available modules for the Technology Variant.
- * @param {"indeterminate" | boolean} checked - The target checked state from the "Select All" toggle.
+ * @param modules - All available modules for the Technology Variant.
+ * @param checked - The target checked state from the "Select All" toggle.
  *
- * @returns {string[]} The resulting array of module IDs to persist in the Module Selection.
+ * @returns The resulting array of module IDs to persist in the Module Selection.
  *
  * @see {@link areAllModulesSelected}
  * @see {@link ./techRules.test.ts Unit Tests}
@@ -214,10 +214,10 @@ export function getSelectAllModuleIds(
  * so image paths like `"starship/pulse.webp"` map to `"starship.pulse"`. Falls back to
  * `tech` when `techImage` is null or empty.
  *
- * @param {string} tech - The Technology Category identifier.
- * @param {null | string} [techImage] - Optional relative icon path for the Technology Category.
+ * @param tech - The Technology Category identifier.
+ * @param [techImage] - Optional relative icon path for the Technology Category.
  *
- * @returns {string} The dot-separated translation key segment under `technologies.*`.
+ * @returns The dot-separated translation key segment under `technologies.*`.
  *
  * @see {@link ./techRules.test.ts Unit Tests}
  *
@@ -244,9 +244,9 @@ export function getTechnologyTranslationKey(tech: string, techImage?: null | str
  *
  * @template { { id: string; label?: string; type?: string } } T
  *
- * @param {T[]} modules - The available modules for the active Technology Variant.
+ * @param modules - The available modules for the active Technology Variant.
  *
- * @returns {Record<string, T[]>} Dictionary of module arrays keyed by Module Group name.
+ * @returns Dictionary of module arrays keyed by Module Group name.
  *
  * @see {@link MODULE_GROUP_ORDER}
  * @see {@link ALPHABETICAL_MODULE_GROUPS}
@@ -311,10 +311,10 @@ export function groupModules<T extends { id: string; label?: string; type?: stri
  *
  * @template { { type?: string } } T
  *
- * @param {T[] | undefined} variants - The list of Technology Variants for a Technology Category.
- * @param {string} [activeVariantType="normal"] - The active variant type identifier.
+ * @param variants - The list of Technology Variants for a Technology Category.
+ * @param [activeVariantType="normal"] - The active variant type identifier.
  *
- * @returns {T | undefined} The matching Technology Variant, or `undefined` if `variants` is empty.
+ * @returns The matching Technology Variant, or `undefined` if `variants` is empty.
  *
  * @see {@link ./techRules.test.ts Unit Tests}
  *
@@ -349,11 +349,11 @@ export function resolveActiveTechVariant<T extends { type?: string }>(
  * Enforces the rule that removing a higher-rank module (e.g., `Theta`) automatically
  * deselects all lower-rank modules (e.g., `Tau`, `Sigma`) in the same rank-validated Module Group.
  *
- * @param {string[]} prevChecked - The previously checked module IDs.
- * @param {string[]} newChecked - The proposed new list of checked module IDs.
- * @param {Array<{ id: string; label: string; type?: string }>} modules - All available modules for the Technology Variant.
+ * @param prevChecked - The previously checked module IDs.
+ * @param newChecked - The proposed new list of checked module IDs.
+ * @param modules - All available modules for the Technology Variant.
  *
- * @returns {string[]} The validated and adjusted list of checked module IDs.
+ * @returns The validated and adjusted list of checked module IDs.
  *
  * @see {@link MODULE_RANK_ORDER}
  * @see {@link RANKED_MODULE_GROUPS}

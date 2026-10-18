@@ -46,7 +46,7 @@ export const USER_VISIT_KEY = "userVisited";
  * addition to the Home Screen. For all other platforms, it allows native browser
  * install mechanisms to handle installation without obstruction.
  *
- * @returns {null} Non-rendering component (side-effects only).
+ * @returns Non-rendering component (side-effects only).
  *
  * @see {@link useToast}
  * @see {@link ./InstallPrompt.test.tsx Unit Tests}

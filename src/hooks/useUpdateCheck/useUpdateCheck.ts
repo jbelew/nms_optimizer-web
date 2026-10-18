@@ -28,9 +28,9 @@ interface VersionPayload {
  * If an actual update is available or if verification fails (offline fail-safe),
  * it invokes the provided `onUpdateAvailable` callback with the `updateSW` function.
  *
- * @param {(updateSW: (reloadPage?: boolean) => Promise<void>) => void} onUpdateAvailable - Callback function that receives the `updateSW` function from the service worker.
+ * @param onUpdateAvailable - Callback function that receives the `updateSW` function from the service worker.
  *
- * @returns {void} Side-effects only; registers event listeners.
+ * @returns Side-effects only; registers event listeners.
  *
  * @see {@link ./useUpdateCheck.test.ts Unit Tests}
  *

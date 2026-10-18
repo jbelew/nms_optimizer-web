@@ -130,9 +130,9 @@ const stripLabel = (label: string | undefined): string => {
  * Determines the short Module Rank Order badge identifier (`S1`–`S3`, `F1`–`F3`, `R1`–`R3`, `C1`–`C3`, `1`–`3`)
  * from a technology module's display label based on its tier (Theta, Tau, Sigma).
  *
- * @param {string | undefined} label - The display label of the technology module.
+ * @param label - The display label of the technology module.
  *
- * @returns {string} The Module Rank Order badge code, or an empty string if not applicable.
+ * @returns The Module Rank Order badge code, or an empty string if not applicable.
  */
 const getModuleRankBadge = (label: string | undefined): string => {
 	if (!label) return "";
@@ -179,12 +179,12 @@ type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
 /**
  * Generates an accessible, descriptive WAI-ARIA label for a grid slot.
  *
- * @param {Cell} cell - The cell data model.
- * @param {number} rowIndex - 0-based row coordinate.
- * @param {number} columnIndex - 0-based column coordinate.
- * @param {TranslateFn} t - Translation function.
+ * @param cell - The cell data model.
+ * @param rowIndex - 0-based row coordinate.
+ * @param columnIndex - 0-based column coordinate.
+ * @param t - Translation function.
  *
- * @returns {string} The formatted accessible label for the slot.
+ * @returns The formatted accessible label for the slot.
  */
 const getGridCellAriaLabel = (
 	cell: Cell,
@@ -318,9 +318,9 @@ export interface GridCellProps {
  * computes visual state classes, Module Rank Order badges, and WAI-ARIA slot announcements, and translates
  * mouse, touch gesture, and roving-tabindex keyboard events into grid store actions.
  *
- * @param {GridCellProps} props - Component properties containing 0-based row and column coordinates.
+ * @param props - Component properties containing 0-based row and column coordinates.
  *
- * @returns {React.ReactElement} The rendered grid cell element wrapped in a conditional module tooltip.
+ * @returns The rendered grid cell element wrapped in a conditional module tooltip.
  *
  * @see {@link useGridStore}
  * @see {@link useTechStore}

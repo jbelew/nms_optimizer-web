@@ -81,7 +81,7 @@ export const env = {
 	/**
 	 * Checks if the application is running in development mode.
 	 *
-	 * @returns {boolean} True if in dev mode.
+	 * @returns True if in dev mode.
 	 *
 	 * @example
 	 * ```ts
@@ -121,7 +121,7 @@ const globalIsInstalled =
  * 4.  **Timeout Safeguard**: Resolves to `true` after 3s if the network silently drops
  *     the requests without an immediate error.
  *
- * @returns {Promise<boolean>} A promise resolving to `true` if blocking is detected.
+ * @returns A promise resolving to `true` if blocking is detected.
  *
  * @see {@link getAdBlockerDetectionResult}
  * @see {@link ./tracking.test.ts Unit Tests}
@@ -265,7 +265,7 @@ const detectAdBlocker = (): Promise<boolean> => {
  * logic only runs once per session and caches the result for synchronous access in
  * {@link sendEvent}.
  *
- * @returns {Promise<boolean>} A promise resolving to `true` if blocking is detected.
+ * @returns A promise resolving to `true` if blocking is detected.
  *
  * @see {@link detectAdBlocker}
  * @see {@link initializeAnalytics}
@@ -297,7 +297,7 @@ const getAdBlockerDetectionResult = async (): Promise<boolean> => {
 /**
  * Attempts to retrieve the Client ID from the Google Analytics cookie (`_ga`).
  *
- * @returns {string|null} The extracted ID or null.
+ * @returns The extracted ID or null.
  *
  * @category Utilities
  *
@@ -318,7 +318,7 @@ const getGaClientIdFromCookie = (): null | string => {
 /**
  * Initialize the analytics client with a unique client ID.
  *
- * @returns {string} The initialized client ID.
+ * @returns The initialized client ID.
  *
  * @category Utilities
  *
@@ -351,7 +351,7 @@ export const initializeAnalyticsClient = (): string => {
 /**
  * Gets the current client ID, initializing it if necessary.
  *
- * @returns {string} The active client ID.
+ * @returns The active client ID.
  *
  * @category Utilities
  *
@@ -372,11 +372,11 @@ const getClientId = (): string => {
 /**
  * Sends an analytics event to the backend for server-side relay.
  *
- * @param {string} eventName - Name of the event.
- * @param {AnalyticsEventParams} [params={}] - Event parameters.
- * @param {string} [userId] - Optional user ID.
+ * @param eventName - Name of the event.
+ * @param [params={}] - Event parameters.
+ * @param [userId] - Optional user ID.
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
  * @category Utilities
  *
@@ -446,7 +446,7 @@ export const sendServerEvent = (
 /**
  * Initializes Google Analytics tracking.
  *
- * @returns {Promise<void>} Resolves when initialization is complete or skipped.
+ * @returns Resolves when initialization is complete or skipped.
  *
  * @category Utilities
  *
@@ -527,7 +527,7 @@ export const initializeAnalytics = async () => {
 /**
  * Validates that an event has required properties.
  *
- * @param {GA4Event} event - Event to validate.
+ * @param event - Event to validate.
  *
  * @throws {Error} If action or category is missing.
  *
@@ -552,9 +552,9 @@ const validateEvent = (event: GA4Event): void => {
 /**
  * Sends an event to Google Analytics, automatically choosing the transport method.
  *
- * @param {GA4Event} event - Event to send.
+ * @param event - Event to send.
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
  * @category Utilities
  *
@@ -604,7 +604,7 @@ const dispatchEvent = (event: GA4Event, isBlocked: boolean): void => {
  * instance. It automatically injects `tracking_source` and `transport`
  * metadata.
  *
- * @param {GA4Event} event - The structured event payload to transmit.
+ * @param event - The structured event payload to transmit.
  *
  * @example
  * ```ts
@@ -634,7 +634,7 @@ export const sendEvent = (event: GA4Event): void => {
  * interaction. Do NOT use this for late-firing events (Web Vitals,
  * `visibilitychange`, unload) — those must call `sendEvent` synchronously.
  *
- * @param {GA4Event} event - The structured event payload to transmit.
+ * @param event - The structured event payload to transmit.
  *
  * @example
  * ```ts
@@ -654,7 +654,7 @@ export const sendDeferredEvent = (event: GA4Event): void => {
 /**
  * Reset analytics initialization state for testing.
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
  * @category Utilities
  *

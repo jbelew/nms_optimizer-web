@@ -10,9 +10,9 @@ import { useLayoutEffect, useRef } from "react";
  *
  * @template T - The type of the value being tracked.
  *
- * @param {T} value - The value to store in the ref.
+ * @param value - The value to store in the ref.
  *
- * @returns {import('react').MutableRefObject<T>} A ref object whose `.current` property matches the latest `value`.
+ * @returns A ref object whose `.current` property matches the latest `value`.
  *
  * @hook
  *

@@ -51,7 +51,7 @@ export const TooltipActionsContext = createContext<TooltipActions | undefined>(u
  *
  * Provides a graceful fallback for test environments to simplify component testing.
  *
- * @returns {TooltipState} The current tooltip state.
+ * @returns The current tooltip state.
  *
  * @throws {Error} If called outside of a `TooltipProvider` in non-test environments.
  *
@@ -85,7 +85,7 @@ export const useTooltipState = () => {
  *
  * Provides a graceful fallback for test environments to simplify component testing.
  *
- * @returns {TooltipActions} The show and hide functions.
+ * @returns The show and hide functions.
  *
  * @throws {Error} If called outside of a `TooltipProvider` in non-test environments.
  *

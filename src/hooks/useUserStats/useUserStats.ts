@@ -17,7 +17,7 @@ export type { UserStat };
  * It must be used within a `<Suspense>` boundary. The statistics provide a high-level
  * overview of global optimization trends, such as total builds saved and popular platforms.
  *
- * @returns {UserStat[]} An array of global user statistics.
+ * @returns An array of global user statistics.
  *
  * @see {@link fetchUserStats} for the underlying resource logic.
  * @see {@link ./useUserStats.test.ts Unit Tests}

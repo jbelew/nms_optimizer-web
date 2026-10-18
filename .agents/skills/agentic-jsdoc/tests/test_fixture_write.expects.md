@@ -11,8 +11,7 @@ Load `agentic-jsdoc`, then ask: **"Write JSDoc for every export in this file."**
 ### AlertBanner component
 - [ ] Summary line describing what it renders
 - [ ] `@remarks` block for detailed rationale
-- [ ] `@param {AlertBannerProps} props - ...` with description
-- [ ] `@returns {JSX.Element}`
+- [ ] No boilerplate `@param props` or `@returns {JSX.Element}`
 - [ ] `@see {@link AlertBannerProps}` — code symbol, uses `{@link}`
 - [ ] `@see {@link ./AlertBanner.test.tsx Tests}` — file reference, uses `{@link}`
 - [ ] `@component` tag present
@@ -30,7 +29,7 @@ Load `agentic-jsdoc`, then ask: **"Write JSDoc for every export in this file."**
 ### useNotifications hook
 - [ ] Summary line
 - [ ] `@remarks` block for usage constraints
-- [ ] `@returns {NotificationContextValue}` with description
+- [ ] `@returns` with description (no redundant `{NotificationContextValue}` type box)
 - [ ] `@see {@link NotificationContext}` — code symbol, uses `{@link}`
 - [ ] `@hook` tag present
 - [ ] `@category Hooks`
@@ -48,17 +47,17 @@ Load `agentic-jsdoc`, then ask: **"Write JSDoc for every export in this file."**
 ### truncateMessage utility
 - [ ] Summary line
 - [ ] `@remarks` block for implementation details
-- [ ] `@param {string} message - ...` with description
-- [ ] `@param {number} maxLength - ...` with description
-- [ ] `@returns {string}` with description
+- [ ] `@param message - ...` with description (no redundant `{string}`)
+- [ ] `@param maxLength - ...` with description (no redundant `{number}`)
+- [ ] `@returns` with description (no redundant `{string}`)
 - [ ] `@category Utilities`
 - [ ] `@example` with output comment (e.g., `// returns "Hello…"`)
 
 ### useDocumentTitle hook
 - [ ] Summary line
 - [ ] `@remarks` block for side-effect explanation
-- [ ] `@param {string} title - ...` with description
-- [ ] `@returns {void} Side-effects only.`
+- [ ] `@param title - ...` with description (no redundant `{string}`)
+- [ ] `@returns Side-effects only.`
 - [ ] `@hook` tag present
 - [ ] `@category Hooks`
 - [ ] `@example` with output comment

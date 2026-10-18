@@ -89,12 +89,12 @@ const KEY_MODULE_SELECTIONS = "moduleSelections" as const;
  * to enforce the critical order required for checksum stability (gridState -> techState -> bonusState -> moduleState)
  * while bypassing the alphabetical `sort-objects` ESLint rule without inline comments.
  *
- * @param {unknown} gridState - The serialized grid state structure.
- * @param {unknown} techState - The serialized tech state structure.
- * @param {unknown} bonusState - The serialized bonus state structure.
- * @param {unknown} moduleState - The serialized module state structure.
+ * @param gridState - The serialized grid state structure.
+ * @param techState - The serialized tech state structure.
+ * @param bonusState - The serialized bonus state structure.
+ * @param moduleState - The serialized module state structure.
  *
- * @returns {Record<string, unknown>} The key-ordered checksum payload object.
+ * @returns The key-ordered checksum payload object.
  *
  * @see {@link buildSerializer.loadBuild}
  * @see {@link buildSerializer.saveBuild}
@@ -141,10 +141,10 @@ export const buildSerializer = {
 	 * This function parses the provided JSON text, validates that it conforms to the `BuildFile` schema,
 	 * performs a checksum integrity verification, and validates ship type compatibility.
 	 *
-	 * @param {string} text - The JSON text content of the build file.
-	 * @param {string[]} validShipTypes - Array of supported ship type identifiers.
+	 * @param text - The JSON text content of the build file.
+	 * @param validShipTypes - Array of supported ship type identifiers.
 	 *
-	 * @returns {Promise<BuildFile>} A promise resolving to the parsed and validated BuildFile object.
+	 * @returns A promise resolving to the parsed and validated BuildFile object.
 	 *
 	 * @throws {Error} If text is empty or invalid JSON, structure is invalid, checksum fails, or ship type is unsupported.
 	 *
@@ -220,9 +220,9 @@ export const buildSerializer = {
 	 * formats it as a `BuildFile` structure with alphabetically sorted top-level keys,
 	 * and returns it as a binary `Blob` and a sanitized filename.
 	 *
-	 * @param {SaveBuildParams} params - The parameters representing the build state to save.
+	 * @param params - The parameters representing the build state to save.
 	 *
-	 * @returns {Promise<{ blob: Blob; filename: string }>} A promise resolving to the serialised binary `Blob` and the `.nms` sanitized filename.
+	 * @returns A promise resolving to the serialised binary `Blob` and the `.nms` sanitized filename.
 	 *
 	 * @throws {Error} If SHA-256 computation or JSON serialization fails.
 	 *

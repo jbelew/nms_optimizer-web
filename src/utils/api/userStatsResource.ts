@@ -17,7 +17,7 @@ let userStatsPromise: null | Promise<UserStat[]> = null;
  * It is primarily used by components that display community trends and
  * popular technology configurations.
  *
- * @returns {Promise<UserStat[]>} A promise resolving to an array of statistics objects.
+ * @returns A promise resolving to an array of statistics objects.
  *
  * @see {@link apiCall} for the underlying network implementation.
  * @see {@link import('@/hooks/useUserStats/useUserStats').useUserStats} for the React hook consumer.
@@ -53,7 +53,7 @@ export const fetchUserStats = (): Promise<UserStat[]> => {
 /**
  * Resets the cached promise for user statistics.
  *
- * @returns {void}
+ * @returns Side-effects only.
  *
  * @example
  * resetUserStatsCache();

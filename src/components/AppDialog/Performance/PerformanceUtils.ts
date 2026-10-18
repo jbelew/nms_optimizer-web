@@ -9,11 +9,11 @@ import type { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanc
  * For CLS, values are scaled from thousands (raw telemetry) to the 0.00-1.00 range.
  * All other metrics are rounded to the nearest integer.
  *
- * @param {string} metric - The name of the metric (e.g., `LCP`, `CLS`).
- * @param {number} value - The raw numeric value from telemetry.
- * @param {boolean} [includeUnit=true] - Whether to include the unit suffix (e.g., "ms").
+ * @param metric - The name of the metric (e.g., `LCP`, `CLS`).
+ * @param value - The raw numeric value from telemetry.
+ * @param [includeUnit=true] - Whether to include the unit suffix (e.g., "ms").
  *
- * @returns {string} The formatted string suitable for UI display.
+ * @returns The formatted string suitable for UI display.
  *
  * @category Utilities
  *
@@ -140,10 +140,10 @@ const METRIC_COLOR_MAP: Record<string, string> = {
  * @remarks
  * Maps Core Web Vital metric names to Radix UI color tokens.
  *
- * @param {string} name - The name of the performance metric (e.g., `LCP`).
- * @param {number | string} [weight=10] - The Radix color weight or alpha token (e.g., 11, "a3").
+ * @param name - The name of the performance metric (e.g., `LCP`).
+ * @param [weight=10] - The Radix color weight or alpha token (e.g., 11, "a3").
  *
- * @returns {string} A CSS variable reference to the Radix color.
+ * @returns A CSS variable reference to the Radix color.
  *
  * @category Utilities
  *
@@ -165,10 +165,10 @@ export const getMetricColor = (name: string, weight: number | string = 10): stri
  * @remarks
  * Uses standard "Good", "Needs Improvement", and "Poor" ranges for each CWV metric.
  *
- * @param {string} metric - The name of the metric (e.g., `LCP`, `FCP`).
- * @param {number | undefined | null} value - The actual metric value.
+ * @param metric - The name of the metric (e.g., `LCP`, `FCP`).
+ * @param value - The actual metric value.
  *
- * @returns {string} A CSS variable reference to a green, amber, or red color.
+ * @returns A CSS variable reference to a green, amber, or red color.
  *
  * @category Utilities
  *
@@ -200,11 +200,11 @@ export const getStatusColor = (metric: string, value: null | number | undefined)
  * produce output scores of exactly 90 or 50. At the `p90` control point the
  * erf approximation yields ~82, and at `p50` it yields exactly 50.
  *
- * @param {number} value - The actual metric value (e.g., milliseconds for LCP).
- * @param {number} p90 - The "Good" threshold control point for the log-normal curve.
- * @param {number} p50 - The median control point for the log-normal curve.
+ * @param value - The actual metric value (e.g., milliseconds for LCP).
+ * @param p90 - The "Good" threshold control point for the log-normal curve.
+ * @param p50 - The median control point for the log-normal curve.
  *
- * @returns {number} An integer score between 0 and 100.
+ * @returns An integer score between 0 and 100.
  *
  * @category Utilities
  *
@@ -271,10 +271,10 @@ const formatterCache = new Map<string, Intl.DateTimeFormat>();
  * @remarks
  * This utility optimizes performance by caching formatters by locale and options.
  *
- * @param {string} locale - The user locale (e.g., `en-US`).
- * @param {Intl.DateTimeFormatOptions} options - Standard Intl formatting options.
+ * @param locale - The user locale (e.g., `en-US`).
+ * @param options - Standard Intl formatting options.
  *
- * @returns {Intl.DateTimeFormat} A cached or new formatter instance.
+ * @returns A cached or new formatter instance.
  *
  * @category Utilities
  *
@@ -306,11 +306,11 @@ export const getFormatter = (
  * match the last valid numeric point in the input data, ensuring trend lines
  * "land" on the current raw value shown in summary cards.
  *
- * @param {(number | undefined)[]} data - The sequence of numeric values.
- * @param {number} period - The window size (e.g., 5).
- * @param {boolean} [anchorEnd=false] - Whether to force the last point to match the raw data.
+ * @param data - The sequence of numeric values.
+ * @param period - The window size (e.g., 5).
+ * @param [anchorEnd=false] - Whether to force the last point to match the raw data.
  *
- * @returns {(number | undefined)[]} The smoothed timeseries.
+ * @returns The smoothed timeseries.
  *
  * @category Utilities
  *
@@ -362,12 +362,12 @@ export const calculateSMA = (
  * 4. Sub-samples data if it exceeds `maxPoints`.
  * 5. Calculates 3-point SMAs for all active metrics.
  *
- * @param {PerformanceMetric[]} raw - The raw array of metric records from the API.
- * @param {string} locale - The user locale for date formatting.
- * @param {number} maxPoints - Maximum number of points (e.g., 168 for 7 days or 72 for 3 days).
- * @param {number} [smaPeriod=3] - The window size for SMA smoothing.
+ * @param raw - The raw array of metric records from the API.
+ * @param locale - The user locale for date formatting.
+ * @param maxPoints - Maximum number of points (e.g., 168 for 7 days or 72 for 3 days).
+ * @param [smaPeriod=3] - The window size for SMA smoothing.
  *
- * @returns {{ chartData: ChartDataPoint[]; summary: RawPerformanceSummary | null; uniqueMetrics: string[] }} Transformed data, decoupled summary, and active metric names.
+ * @returns Transformed data, decoupled summary, and active metric names.
  *
  * @see {@link ChartDataPoint}
  * @see {@link calculateSMA}
@@ -739,9 +739,9 @@ export const transformPerformanceData = (
  * to the previous point's data to determine trends. By using the transformed data,
  * it ensures that summary cards and trend arrows stay synchronized with the visual chart.
  *
- * @param {ChartDataPoint[]} chartData - The transformed performance data used for the chart.
+ * @param chartData - The transformed performance data used for the chart.
  *
- * @returns {RawPerformanceSummary | null} Summary data for cards and arrows.
+ * @returns Summary data for cards and arrows.
  *
  * @category Utilities
  *
@@ -853,9 +853,9 @@ export interface RawPerformanceSummary {
  * This utility helps visualize performance trends across application releases.
  * It enforces a minimum gap between markers to prevent overlapping labels.
  *
- * @param {ChartDataPoint[]} chartData - The transformed timeseries data.
+ * @param chartData - The transformed timeseries data.
  *
- * @returns {{ timestamp: number; version: string }[]} A list of version change events.
+ * @returns A list of version change events.
  *
  * @category Utilities
  *

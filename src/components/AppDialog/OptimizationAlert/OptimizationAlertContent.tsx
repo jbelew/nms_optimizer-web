@@ -24,9 +24,9 @@ interface OptimizationAlertContentProps {
  * the required Solver Window dimensions when available—and offers a
  * "Force Optimize" option as a more computationally intensive alternative.
  *
- * @param {OptimizationAlertContentProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element} The rendered alert content.
+ * @returns The rendered alert content.
  *
  * @see {@link ./OptimizationAlertContent.test.tsx Unit Tests}
  * @see {@link WindowDimensions}

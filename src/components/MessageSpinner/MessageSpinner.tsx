@@ -42,7 +42,7 @@ export interface MessageSpinnerProps {
  * Subcomponent that selects and fades in a single randomized flavor message
  * after a short delay so quick solves complete without visual clutter.
  *
- * @returns {JSX.Element} The rendered flavor text element.
+ * @returns The rendered flavor text element.
  */
 const DelayedFlavorMessage: React.FC = () => {
 	const { t } = useTranslation();
@@ -91,9 +91,9 @@ const DelayedFlavorMessage: React.FC = () => {
  * is `true` (e.g., during layout optimization), hides the `<Spinner />` and instead
  * displays a determinate `<Progress />` bar accompanied by a delayed flavor message.
  *
- * @param {MessageSpinnerProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element | null} The rendered loading or progress UI, or `null` if not visible.
+ * @returns The rendered loading or progress UI, or `null` if not visible.
  *
  * @component
  *

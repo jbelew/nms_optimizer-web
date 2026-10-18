@@ -1,45 +1,36 @@
 # Architecture Primitives: React & State Management
 
-Detailed JSDoc patterns for React components, routing, state management, and data fetching.
+## React Components ([`examples/good_react_component.tsx`](../examples/good_react_component.tsx))
 
-## React Components
+1. **Props interface:** Add a summary JSDoc block on the `Props` interface and an inline `/** */` description on every property.
+2. **Component block:** Include Summary, `@remarks`, `@see {@link PropsInterface}`, `@component`, and `@category Components`. Omit boilerplate `@param props` and `@returns {JSX.Element}` lines—the `Props` interface and component signature already express them.
+3. **Tests & stories:** When sibling `.test.*` or `.stories.*` files exist, link them with file links (`@see {@link ./MyComponent.test.tsx Tests}`, `@see {@link ./MyComponent.stories.tsx Stories}`).
+4. **Suspense & errors:** Document defensive throws or `<Suspense>` boundaries in `@remarks` or `@throws`.
+5. **Example:** Render the component in `@example` and end with `// mounts ComponentName`.
 
-> See `examples/good_react_component.tsx` and `examples/bad_react_component.tsx` for a before/after comparison.
+## React Router Components ([`examples/good_route_component.tsx`](../examples/good_route_component.tsx))
 
-LLMs heavily rely on the **Props Interface** rather than the component function itself.
+For top-level route/page components that read URL parameters via `useParams()` or `useSearchParams()` (which do not appear in `Props`), document each route parameter with `[URL/paramName]` notation:
+- `@param [URL/projectId] - The active project ID extracted via \`useParams()\`.`
 
-1. Document every property in the `interface` using JSDoc.
-2. In the component JSDoc, do not re-document destructured props. Just refer to the Props interface.
-3. **Tests & Stories**: Proactively search for associated test and story files (e.g. `MyComponent.test.tsx`, `MyComponent.stories.tsx`). If they exist, ALWAYS use the `{@link RelativePath Label}` syntax (e.g., `@see {@link ./MyComponent.stories.tsx Stories}`). This pulls in test coverage and visual variants automatically.
-4. Include an `@example` of how to render the component.
-5. **Suspense & Errors**: If the component throws errors defensively or suspends, note this explicitly in the `@remarks` or using `@throws`.
+## Validation Schemas: Zod & Yup ([`examples/good_zod_schema.ts`](../examples/good_zod_schema.ts))
 
-## React Router (Route Components)
+Pair runtime schemas and compile-time types with bidirectional symbol links (and inline `/** */` descriptions on each schema field):
+- On the schema (`CreateUserSchema`): `@see {@link CreateUserPayload}`
+- On the inferred or standalone type (`CreateUserPayload`): `@see {@link CreateUserSchema}`
 
-> See `examples/good_route_component.tsx` for a complete example.
+## Data Fetching: React Query & SWR ([`examples/good_api_fetcher.ts`](../examples/good_api_fetcher.ts))
 
-When a component is a top-level route/page, document the expected URL parameters natively fetched via `useParams()` or `useSearchParams()`. Since they won't appear in the `Props` interface, list them out in the `@remarks` or using `@param` with `[URL]` notation (e.g., `@param {string} [URL/projectId] - The active project ID mapped by the router`).
+On query/mutation hooks (e.g., `useUserQuery`), document the cache invalidation keys managed by the hook as a bullet point inside `@remarks`.
 
-## Validation Schemas (Zod/Yup)
+## Zustand Stores ([`examples/good_zustand_store.ts`](../examples/good_zustand_store.ts))
 
-> See `examples/good_zod_schema.ts` for a complete example.
+1. Document the `State` interface with a summary block and inline `/** */` comments on every state property and action.
+2. On the `useStore` hook, include `@remarks`, `@returns Description`, `@see {@link StateInterface}`, `@hook`, `@category Hooks`, and `@example` (omit verbose `import("zustand").UseBoundStore<...>` type annotations).
 
-Whenever documenting a TypeScript type paired with a Zod schema or Yup runtime validation (whether a standalone `interface` or an inferred type via `z.infer`), you MUST include `@see {@link MySchema}` on the type and `@see {@link MyType}` on the schema to keep LLMs aligned between compile-time and runtime validation.
+## React Context & Hooks ([`examples/good_react_context.tsx`](../examples/good_react_context.tsx))
 
-## Data Fetching (React Query / SWR)
+1. Document the context value interface (`Summary` + inline `/** */` per property).
+2. Document the `createContext` declaration with a summary and `@default` showing the initial value.
+3. On the consumer hook (`useMyContext`), include `@remarks` (provider requirement), `@returns Description`, `@see {@link MyContext}`, `@hook`, `@category Hooks`, and `@example`.
 
-> See `examples/good_api_fetcher.ts` and `examples/bad_api_fetcher.ts` for a before/after comparison.
-
-When creating abstract fetching hooks (e.g. `useUserQuery`), strictly define the cache invalidation keys or unique identifiers managed by the hook in a dedicated bullet point inside the `@remarks` so LLMs know exactly what tokens invalidate the data natively.
-
-## Zustand Stores
-
-> See `examples/good_zustand_store.ts` for a complete example.
-
-When documenting a generated `useStore` hook from Zustand, ensure the `@returns` explicitly reflects the hook nature (e.g., `@returns {import("zustand").UseBoundStore...}`) and must strictly `@see {@link StateInterface}` the State interface above it.
-
-## React Context Hooks
-
-> See `examples/good_react_context.tsx` for a complete example.
-
-When exporting a custom hook like `useMyContext`, strictly `@see {@link MyContext}` and include the `@hook` tag so RAG engines can map the usage correctly.

@@ -50,9 +50,9 @@ type ToastProps = {
  * icons and CSS class modifiers. It includes a progress-tracked auto-close
  * and a manual "Dismiss" button.
  *
- * @param {ToastProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element} The rendered toast notification.
+ * @returns The rendered toast notification.
  *
  * @see {@link import('@/components/ErrorBoundary/ErrorDisplay').ErrorDisplay}
  * @see {@link ./Toast.stories.tsx Storybook}

@@ -24,9 +24,9 @@ type SentryIntegration =
 /**
  * Mock initialization.
  *
- * @param {BrowserOptions} _options - SDK configuration options.
+ * @param _options - SDK configuration options.
  *
- * @returns {void}
+ * @returns Side-effects only.
  *
  * @example
  * ```ts
@@ -39,10 +39,10 @@ export const init = (_options: BrowserOptions) => {};
 /**
  * Mock exception capture.
  *
- * @param {unknown} _error - Exception to report.
- * @param {Record<string, unknown>} [_options] - Capture context.
+ * @param _error - Exception to report.
+ * @param [_options] - Capture context.
  *
- * @returns {void}
+ * @returns Side-effects only.
  *
  * @example
  * ```ts
@@ -55,10 +55,10 @@ export const captureException = (_error: unknown, _options?: Record<string, unkn
 /**
  * Mock message capture.
  *
- * @param {string} _message - Message to report.
- * @param {Record<string, unknown>} [_options] - Capture context.
+ * @param _message - Message to report.
+ * @param [_options] - Capture context.
  *
- * @returns {void}
+ * @returns Side-effects only.
  *
  * @example
  * ```ts
@@ -71,9 +71,9 @@ export const captureMessage = (_message: string, _options?: Record<string, unkno
 /**
  * Mock breadcrumbs integration.
  *
- * @param {Parameters<typeof SentryBreadcrumbsIntegration>[0]} [_options] - Integration config.
+ * @param [_options] - Integration config.
  *
- * @returns {SentryIntegration} Mock integration.
+ * @returns Mock integration.
  *
  * @example
  * ```ts
@@ -88,9 +88,9 @@ export const breadcrumbsIntegration = (
 /**
  * Mock browser tracing integration.
  *
- * @param {Parameters<typeof SentryRouterTracingIntegration>[0]} [_options] - Integration config.
+ * @param [_options] - Integration config.
  *
- * @returns {SentryIntegration} Mock integration.
+ * @returns Mock integration.
  *
  * @example
  * ```ts
@@ -105,9 +105,9 @@ export const reactRouterV7BrowserTracingIntegration = (
 /**
  * Mock router wrapper.
  *
- * @param {typeof createBrowserRouter} cb - The callback to wrap.
+ * @param cb - The callback to wrap.
  *
- * @returns {(routes: RouteObject[]) => ReturnType<typeof createBrowserRouter>} Instrumented creator.
+ * @returns Instrumented creator.
  *
  * @example
  * ```ts
@@ -121,7 +121,7 @@ export const wrapCreateBrowserRouterV7 =
 
 /**
  * Mock user setting.
- * @returns {void}
+ * @returns Side-effects only.
  *
  * @example
  * ```ts
@@ -133,7 +133,7 @@ export const setUser = () => {};
 
 /**
  * Mock tag setting.
- * @returns {void}
+ * @returns Side-effects only.
  *
  * @example
  * ```ts
@@ -145,7 +145,7 @@ export const setTag = () => {};
 
 /**
  * Mock extra context setting.
- * @returns {void}
+ * @returns Side-effects only.
  *
  * @example
  * ```ts
@@ -157,7 +157,7 @@ export const setExtra = () => {};
 
 /**
  * Mock breadcrumb adding.
- * @returns {void}
+ * @returns Side-effects only.
  *
  * @example
  * ```ts

@@ -18,10 +18,10 @@ const performanceDataPromises = new Map<string, Promise<PerformanceMetric[]>>();
  * for a specified date range. Results are cached per range to optimize
  * performance. A cache-busting timestamp is included to ensure freshness.
  *
- * @param {string} [startDate="30daysAgo"] - The start date for the data (GA4 relative format or YYYY-MM-DD).
- * @param {string} [endDate="today"] - The end date for the data.
+ * @param [startDate="30daysAgo"] - The start date for the data (GA4 relative format or YYYY-MM-DD).
+ * @param [endDate="today"] - The end date for the data.
  *
- * @returns {Promise<PerformanceMetric[]>} A promise resolving to an array of performance metrics.
+ * @returns A promise resolving to an array of performance metrics.
  *
  * @throws {Error} Throws if the `apiCall` fails.
  *
@@ -83,7 +83,7 @@ export const fetchPerformanceData = (
  * Use this to force a fresh fetch of performance metrics, typically used
  * after a significant period has passed or when re-entering the dashboard.
  *
- * @returns {void}
+ * @returns Side-effects only.
  *
  * @example
  * ```ts

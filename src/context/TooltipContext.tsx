@@ -14,10 +14,10 @@ const WARM_THRESHOLD = 500;
  * screen position, and visibility logic (delays, "warm" transitions). Using a
  * single provider prevents multiple tooltips from overlapping and optimizes performance.
  *
- * @param {object} props - Component properties.
- * @param {React.ReactNode} props.children - The application tree to wrap.
+ * @param props - Component properties.
+ * @param props.children - The application tree to wrap.
  *
- * @returns {JSX.Element} The state and actions context providers.
+ * @returns The state and actions context providers.
  *
  * @see {@link import('@/utils/system/tooltipUtils').useTooltipState}
  * @see {@link import('@/utils/system/tooltipUtils').useTooltipActions}

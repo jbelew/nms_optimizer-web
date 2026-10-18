@@ -14,7 +14,7 @@ import { languages } from "./routeConfig";
 /**
  * Lazily loads the 404 Not Found component.
  *
- * @returns {Promise<{ Component: React.ComponentType }>} A promise resolving to the component for lazy loading.
+ * @returns A promise resolving to the component for lazy loading.
  */
 const NotFound = async () => {
 	const { default: Component } = await import("./components/NotFound/NotFound");

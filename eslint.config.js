@@ -113,42 +113,42 @@ const jsdocRules = {
 				"accessibility",
 				"security",
 				"category",
-				"template",
-				"default",
 			],
 		},
 	],
-	// Enforce {@link} instead of Markdown links for cross-references
+	// In TypeScript, rely on the AST for types and forbid redundant {type} annotations on @param/@returns
+	"jsdoc/no-types": "warn",
+	// Mark `import type { Symbol }` references used in `{@link Symbol}` as used for no-unused-vars
 	"jsdoc/no-undefined-types": [
 		"warn",
 		{
-			definedTypes: [
-				"JSX",
-				"React",
-				"TouchEvent",
-				"MouseEvent",
-				"KeyboardEvent",
-				"ChangeEvent",
-				"RequestInit",
-				"ReactNode",
-				"Ref",
-				"MutableRefObject",
-				"ComponentType",
-				"SVGProps",
-				"SVGSVGElement",
-				"HTMLElement",
-				"NodeJS",
-			],
+			disableReporting: true,
+			markVariablesAsUsed: true,
 		},
 	],
 	"jsdoc/require-description": "warn",
-	// Examples are added selectively by the agentic-jsdoc skill — blanket enforcement is too noisy
-	"jsdoc/require-example": "off",
+	"jsdoc/require-example": [
+		"warn",
+		{
+			contexts: [
+				"ExportNamedDeclaration > FunctionDeclaration",
+				"ExportDefaultDeclaration > FunctionDeclaration",
+				"ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > ArrowFunctionExpression",
+				"ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > FunctionExpression",
+			],
+			enableFixer: false,
+		},
+	],
 	"jsdoc/require-hyphen-before-param-description": "warn",
+	// Force JSDoc on exported/public functions, classes, interfaces, types, and variable declarations
 	"jsdoc/require-jsdoc": [
 		"warn",
 		{
-			contexts: ["TSInterfaceDeclaration", "TSTypeAliasDeclaration"],
+			contexts: [
+				"TSInterfaceDeclaration",
+				"TSTypeAliasDeclaration",
+				"ExportNamedDeclaration[declaration.type='VariableDeclaration']",
+			],
 			enableFixer: false,
 			publicOnly: true,
 			require: {
@@ -160,10 +160,7 @@ const jsdocRules = {
 		},
 	],
 	"jsdoc/require-param-description": "warn",
-	// Types are handled by TypeScript, so don't enforce them in JSDoc (user preference)
-	"jsdoc/require-param-type": "off",
 	"jsdoc/require-returns-description": "warn",
-	"jsdoc/require-returns-type": "off",
 	"jsdoc/require-throws": "warn",
 	"jsdoc/sort-tags": [
 		"warn",

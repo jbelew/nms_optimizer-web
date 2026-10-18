@@ -29,9 +29,9 @@ interface DynamicRadixIconProps {
  * explicitly registered icons are bundled. It applies standard dimensions and
  * colors based on the provided props.
  *
- * @param {DynamicRadixIconProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {JSX.Element | null} The rendered icon component, or `null` if not found.
+ * @returns The rendered icon component, or `null` if not found.
  *
  * @see {@link radixIconRegistry}
  *
