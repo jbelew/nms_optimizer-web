@@ -1,6 +1,7 @@
 import { act } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import * as toastModule from "@/hooks/useToast/useToast";
 import { useUiStore } from "@/store/ui/uiStore";
 
 import { createGrid, useGridStore } from "./gridStore";
@@ -256,6 +257,50 @@ describe("GridStore actions with validation", () => {
 
 			shakeSpy.mockRestore();
 			incrementSpy.mockRestore();
+		});
+	});
+
+	describe("Slot Restriction threshold warning toast", () => {
+		it("dispatches showGlobalError once on the 3rd violation of a reason and resets after resetSession", () => {
+			const errorToastSpy = vi.spyOn(toastModule, "showGlobalError");
+			act(() => {
+				useGridStore.setState({ gridFixed: true });
+			});
+
+			// 1st and 2nd attempts shake the grid without dispatching a toast
+			act(() => {
+				useGridStore.getState().toggleCellActive(0, 0);
+				useGridStore.getState().toggleCellActive(0, 0);
+			});
+			expect(errorToastSpy).not.toHaveBeenCalled();
+
+			// 3rd attempt dispatches the restriction warning toast once
+			act(() => {
+				useGridStore.getState().toggleCellActive(0, 0);
+			});
+			expect(errorToastSpy).toHaveBeenCalledTimes(1);
+			expect(errorToastSpy).toHaveBeenCalledWith(
+				"restrictions.title",
+				"restrictions.gridFixed",
+				5000
+			);
+
+			// 4th attempt does not re-dispatch in the same session
+			act(() => {
+				useGridStore.getState().toggleCellActive(0, 0);
+			});
+			expect(errorToastSpy).toHaveBeenCalledTimes(1);
+
+			// Resetting the session allows the 3rd subsequent violation to dispatch again
+			act(() => {
+				useUiStore.getState().resetSession();
+				useGridStore.getState().toggleCellActive(0, 0);
+				useGridStore.getState().toggleCellActive(0, 0);
+				useGridStore.getState().toggleCellActive(0, 0);
+			});
+			expect(errorToastSpy).toHaveBeenCalledTimes(2);
+
+			errorToastSpy.mockRestore();
 		});
 	});
 });

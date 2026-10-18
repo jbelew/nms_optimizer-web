@@ -10,30 +10,12 @@ import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/enviro
 const SHAKE_ANIMATION_DURATION = 500;
 let lastShakeTime = 0;
 
-/** Represents a single notification or error message displayed to the user. */
-export interface ErrorMessage {
-	/** Whether the user is allowed to manually dismiss this message. */
-	dismissible: boolean;
-	/** Unique identifier for the message. */
-	id: string;
-	/** The human-readable message string. */
-	message: string;
-	/** Unix timestamp when the message was generated. */
-	timestamp: number;
-	/** The severity level of the message. */
-	type: "error" | "info" | "warning";
-}
-
 /**
  * Actions shape for the UI store.
  *
  * @category Actions
  */
 export interface UiActions {
-	/** Adds a new error message to the global queue. */
-	addError: (message: string, type?: ErrorMessage["type"]) => string;
-	/** Clears all active error messages from the store. */
-	clearErrors: () => void;
 	/** Close the module selection dialog and clear its state. */
 	closeModuleSelectionDialog: () => void;
 	/** Increments the `gridFixedCount` counter. */
@@ -48,8 +30,6 @@ export interface UiActions {
 	incrementSuperchargedLimitCount: () => void;
 	/** Open the module selection dialog with specific tech data. */
 	openModuleSelectionDialog: (data: SelectedTechData) => void;
-	/** Removes a specific error message from the queue by its ID. */
-	removeError: (id: string) => void;
 	/** Resets all session violation counters to zero. */
 	resetSession: () => void;
 	/** Sets the accessibility mode to a specific state. */
@@ -84,9 +64,9 @@ export interface UiActions {
  * @remarks
  * This store is the central source of truth for all non-domain UI state, including:
  * - Theme and appearance
- * - Global notifications and errors
  * - Modal/Dialog visibility
  * - Accessibility modes
+ * - Slot Restriction counters and shake state
  *
  * @see {@link useUiStore}
  * @see {@link UiState}
@@ -163,8 +143,6 @@ interface UiState {
 	a11yMode: boolean;
 	/** Current theme appearance. */
 	appearance: ThemeAppearance;
-	/** An array of active error messages. */
-	errors: ErrorMessage[];
 	/** Count of attempts to modify any cell while the entire grid layout is locked. */
 	gridFixedCount: number;
 	/** Current height of the grid section. */
@@ -195,17 +173,13 @@ interface UiState {
  * Consolidated Zustand store managing global UI states.
  *
  * @remarks
- * This store replaces several thin legacy stores (`a11yStore`, `errorStore`, `sessionStore`, etc.)
- * with a single centralized state. It uses `immer` for mutation safety and `persist` for
- * local storage synchronization.
- *
- * It manages:
+ * This store manages:
  * 1. Theme management (persisted)
  * 2. Form/validation error shake feedback
  * 3. Tech tree loading state
  * 4. Shared module selection dialog state
  * 5. Layout dimensions (height/width)
- * 6. Session restriction counters (grid fixed, module locked, etc.)
+ * 6. Slot Restriction counters (grid fixed, module locked, etc.)
  * 7. Optimization solve status
  *
  * @hook
@@ -222,28 +196,9 @@ export const useUiStore = create<UiStore>()(
 		persist(
 			(set) => ({
 				a11yMode: false,
-				addError: (message: string, type: ErrorMessage["type"] = "error") => {
-					const id = crypto.randomUUID();
-					set((state) => ({
-						errors: [
-							...state.errors,
-							{
-								dismissible: true,
-								id,
-								message,
-								timestamp: Date.now(),
-								type,
-							},
-						],
-					}));
-
-					return id;
-				},
 				appearance: "dark",
-				clearErrors: () => set({ errors: [] }),
 				closeModuleSelectionDialog: () =>
 					set({ isModuleSelectionDialogOpen: false, selectedTechData: null }),
-				errors: [],
 				gridFixedCount: 0,
 				gridSectionHeight: null,
 				gridTableWidth: undefined,
@@ -263,10 +218,6 @@ export const useUiStore = create<UiStore>()(
 				openModuleSelectionDialog: (data) =>
 					set({ isModuleSelectionDialogOpen: true, selectedTechData: data }),
 				optimizeStatus: { type: "idle" },
-				removeError: (id: string) =>
-					set((state) => ({
-						errors: state.errors.filter((error) => error.id !== id),
-					})),
 				resetSession: () => {
 					lastShakeTime = 0;
 					set({
@@ -356,18 +307,6 @@ export const useUiStore = create<UiStore>()(
 );
 
 /**
- * Shape of the backward-compatible ErrorState interface.
- *
- * @category State
- */
-export interface ErrorState {
-	addError: (message: string, type?: ErrorMessage["type"]) => string;
-	clearErrors: () => void;
-	errors: ErrorMessage[];
-	removeError: (id: string) => void;
-}
-
-/**
  * Shape of the backward-compatible ModuleSelectionDialogState interface.
  *
  * @category State
@@ -388,25 +327,6 @@ export interface OptimizeState {
 	setShowError: (show: boolean, severity?: OptimizeErrorType, details?: Error | null) => void;
 	setSolving: (solving: boolean) => void;
 	status: OptimizeStatus;
-}
-
-/**
- * Shape of the backward-compatible SessionState interface.
- *
- * @category State
- */
-export interface SessionState {
-	grid_fixed: number;
-	incrementGridFixed: () => void;
-	incrementModuleLocked: () => void;
-	incrementRowLimit: () => void;
-	incrementSuperchargedFixed: () => void;
-	incrementSuperchargedLimit: () => void;
-	module_locked: number;
-	resetSession: () => void;
-	row_limit: number;
-	supercharged_fixed: number;
-	supercharged_limit: number;
 }
 
 /**
@@ -636,112 +556,6 @@ export const useA11yStore = Object.assign(
 );
 
 /**
- * Backward-compatible custom hook for managing global error notifications.
- */
-export const useErrorStore = Object.assign(
-	<T = ErrorState>(selector?: (state: ErrorState) => T): T => {
-		return useUiStore(
-			useShallow((s) => {
-				const subState: ErrorState = {
-					addError: s.addError,
-					clearErrors: s.clearErrors,
-					errors: s.errors,
-					removeError: s.removeError,
-				};
-
-				return selector ? selector(subState) : (subState as unknown as T);
-			})
-		);
-	},
-	{
-		getState: (): ErrorState => {
-			const s = useUiStore.getState();
-
-			return {
-				addError: s.addError,
-				clearErrors: s.clearErrors,
-				errors: s.errors,
-				removeError: s.removeError,
-			};
-		},
-		setState: (updates: Partial<ErrorState>) => {
-			useUiStore.setState(updates);
-		},
-	}
-);
-
-/**
- * Backward-compatible custom hook for tracking transient session-level interaction metrics.
- */
-export const useSessionStore = Object.assign(
-	<T = SessionState>(selector?: (state: SessionState) => T): T => {
-		return useUiStore(
-			useShallow((s) => {
-				const subState: SessionState = {
-					grid_fixed: s.gridFixedCount,
-					incrementGridFixed: s.incrementGridFixedCount,
-					incrementModuleLocked: s.incrementModuleLockedCount,
-					incrementRowLimit: s.incrementRowLimitCount,
-					incrementSuperchargedFixed: s.incrementSuperchargedFixedCount,
-					incrementSuperchargedLimit: s.incrementSuperchargedLimitCount,
-					module_locked: s.moduleLockedCount,
-					resetSession: s.resetSession,
-					row_limit: s.rowLimitCount,
-					supercharged_fixed: s.superchargedFixedCount,
-					supercharged_limit: s.superchargedLimitCount,
-				};
-
-				return selector ? selector(subState) : (subState as unknown as T);
-			})
-		);
-	},
-	{
-		getState: (): SessionState => {
-			const s = useUiStore.getState();
-
-			return {
-				grid_fixed: s.gridFixedCount,
-				incrementGridFixed: s.incrementGridFixedCount,
-				incrementModuleLocked: s.incrementModuleLockedCount,
-				incrementRowLimit: s.incrementRowLimitCount,
-				incrementSuperchargedFixed: s.incrementSuperchargedFixedCount,
-				incrementSuperchargedLimit: s.incrementSuperchargedLimitCount,
-				module_locked: s.moduleLockedCount,
-				resetSession: s.resetSession,
-				row_limit: s.rowLimitCount,
-				supercharged_fixed: s.superchargedFixedCount,
-				supercharged_limit: s.superchargedLimitCount,
-			};
-		},
-		setState: (updates: Partial<SessionState>) => {
-			const mappedUpdates: Partial<UiStore> = {};
-			if ("grid_fixed" in updates) mappedUpdates.gridFixedCount = updates.grid_fixed;
-			if ("module_locked" in updates) mappedUpdates.moduleLockedCount = updates.module_locked;
-			if ("row_limit" in updates) mappedUpdates.rowLimitCount = updates.row_limit;
-			if ("supercharged_fixed" in updates)
-				mappedUpdates.superchargedFixedCount = updates.supercharged_fixed;
-			if ("supercharged_limit" in updates)
-				mappedUpdates.superchargedLimitCount = updates.supercharged_limit;
-			// Note: increment* methods and resetSession are typically not set via setState in prod,
-			// but we can map them if tests need it.
-			if ("incrementGridFixed" in updates)
-				mappedUpdates.incrementGridFixedCount = updates.incrementGridFixed;
-			if ("incrementModuleLocked" in updates)
-				mappedUpdates.incrementModuleLockedCount = updates.incrementModuleLocked;
-			if ("incrementRowLimit" in updates)
-				mappedUpdates.incrementRowLimitCount = updates.incrementRowLimit;
-			if ("incrementSuperchargedFixed" in updates)
-				mappedUpdates.incrementSuperchargedFixedCount = updates.incrementSuperchargedFixed;
-			if ("incrementSuperchargedLimit" in updates)
-				mappedUpdates.incrementSuperchargedLimitCount = updates.incrementSuperchargedLimit;
-			if ("resetSession" in updates) mappedUpdates.resetSession = updates.resetSession;
-
-			useUiStore.setState(mappedUpdates);
-		},
-	}
-);
-
-/**
  * Backward-compatible custom hook for tracking the status and errors of optimization solves.
  */
 export const useOptimizeStore = Object.assign(
@@ -792,10 +606,8 @@ if (typeof window !== "undefined") {
 	const w = window as typeof window & {
 		__E2E_EXPOSE__?: boolean;
 		useA11yStore?: typeof useA11yStore;
-		useErrorStore?: typeof useErrorStore;
 		useModuleSelectionStore?: unknown;
 		useOptimizeStore?: typeof useOptimizeStore;
-		useSessionStore?: typeof useSessionStore;
 		useShakeStore?: typeof useShakeStore;
 		useUiStore?: typeof useUiStore;
 	};
@@ -804,8 +616,6 @@ if (typeof window !== "undefined") {
 		w["useUiStore"] = useUiStore;
 		w["useShakeStore"] = useShakeStore;
 		w["useA11yStore"] = useA11yStore;
-		w["useErrorStore"] = useErrorStore;
-		w["useSessionStore"] = useSessionStore;
 		w["useOptimizeStore"] = useOptimizeStore;
 	}
 }

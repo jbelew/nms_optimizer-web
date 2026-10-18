@@ -6,7 +6,6 @@ import { immer } from "zustand/middleware/immer";
 import { shallow } from "zustand/shallow";
 
 import { UI_TIMING } from "@/constants";
-import { useUiStore } from "@/store/ui/uiStore";
 import { resolveInitialPlatform } from "@/utils/browser/platformResolver";
 import { Logger } from "@/utils/system/monitoring";
 
@@ -364,9 +363,7 @@ export const useGridStore = create<GridStore>()(
 						}
 
 						if (cell.module) {
-							const uiState = useUiStore.getState();
-							uiState.incrementModuleLockedCount();
-							uiState.triggerShake();
+							applyValidationFeedback({ reason: "moduleLocked", valid: false });
 
 							return;
 						}

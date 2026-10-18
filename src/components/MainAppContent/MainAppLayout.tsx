@@ -20,10 +20,6 @@ import { MainAppGridSection } from "./MainAppGridSection";
 const OptimizationAlertDialog = lazy(
 	() => import("@/components/AppDialog/OptimizationAlert/OptimizationAlertDialog")
 );
-const ErrorMessageRenderer = lazyNamed(
-	() => import("@/components/ErrorMessageRenderer/ErrorMessageRenderer"),
-	"ErrorMessageRenderer"
-);
 const InstallPrompt = lazyNamed(
 	() => import("@/components/InstallPrompt/InstallPrompt"),
 	"InstallPrompt"
@@ -69,7 +65,6 @@ const MainAppBackgroundServices: React.FC = () => {
 		<Suspense fallback={null}>
 			<InstallPrompt />
 			<OptimizationAlertDialog />
-			<ErrorMessageRenderer />
 			<ToastRenderer />
 		</Suspense>
 	);

@@ -89,7 +89,7 @@ const AppHeaderUserStatsButton: React.FC = () => {
 				aria-label={t("buttons.userStats") ?? ""}
 				onClick={() => openDialog("userstats")}
 				onMouseEnter={() => {
-					void import("@/routes/UserStatsRoute");
+					void import("@/components/AppDialog/UserStats/UserStatsDialog");
 				}}
 				variant="soft"
 			>

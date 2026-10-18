@@ -16,19 +16,15 @@ import { useOptimizeStore } from "@/store/ui/uiStore";
 
 import { Seo } from "./components/Seo/Seo";
 import { UpdatePromptWrapper } from "./components/UpdatePrompt/UpdatePromptWrapper";
-import { DialogProvider } from "./context/dialogContext";
 import { useAnalytics } from "./hooks/useAnalytics/useAnalytics";
 import { useFileHandling } from "./hooks/useFileHandling/useFileHandling";
-import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
 import { fetchTechTree } from "./hooks/useTechTree/useTechTree";
 import { useUrlSync } from "./hooks/useUrlSync/useUrlSync";
 import { isBot } from "./utils/browser/environment";
-import { useDialog } from "./utils/system/dialogUtils";
+import { DialogProvider, useDialog } from "./utils/system/dialogUtils";
 import { lazyNamed } from "./utils/system/lazyNamed";
 import { lifecycleCoordinator } from "./utils/system/lifecycleCoordinator";
 import { Logger } from "./utils/system/monitoring";
-
-const IS_DOCKER_BUILD = import.meta.env.VITE_DOCKER === "true";
 
 /**
  * Lazy-loaded component that displays a banner when the user is offline.
@@ -54,16 +50,6 @@ const RoutedDialogs = lazyNamed(
 	() => import("./components/RoutedDialogs/RoutedDialogs"),
 	"RoutedDialogs"
 );
-
-/**
- * Lazy-loaded route component for displaying global user equipment statistics.
- */
-const UserStatsRoute = lazyNamed(() => import("./routes/UserStatsRoute"), "UserStatsRoute");
-
-/**
- * Lazy-loaded route component for displaying application performance metrics.
- */
-const PerformanceRoute = lazyNamed(() => import("./routes/PerformanceRoute"), "PerformanceRoute");
 
 /**
  * Inner component that manages core data loading and dialog orchestration.
@@ -95,9 +81,8 @@ const AppContent: FC = () => {
 	const { t } = useTranslation();
 	const location = useLocation();
 
-	// Use the URL hooks within the DialogProvider context
+	// Synchronize URL parameters with store state within the DialogProvider context
 	useUrlSync();
-	useSeoAndTitle();
 
 	const [isIdle, setIsIdle] = useState(() => lifecycleCoordinator.getPhase() === "IDLE");
 	const [welcomeDismissed, setWelcomeDismissed] = useState(false);
@@ -176,19 +161,9 @@ const AppContent: FC = () => {
 					/>
 				</Suspense>
 			) : null}
-			{activeDialog && activeDialog !== "userstats" && activeDialog !== "performance" ? (
+			{activeDialog ? (
 				<Suspense fallback={null}>
 					<RoutedDialogs />
-				</Suspense>
-			) : null}
-			{activeDialog === "userstats" && !IS_DOCKER_BUILD ? (
-				<Suspense fallback={null}>
-					<UserStatsRoute />
-				</Suspense>
-			) : null}
-			{activeDialog === "performance" && !IS_DOCKER_BUILD ? (
-				<Suspense fallback={null}>
-					<PerformanceRoute />
 				</Suspense>
 			) : null}
 
@@ -222,7 +197,7 @@ const AppContent: FC = () => {
  *
  * @remarks
  * This component sets up the high-level application environment, including:
- * - SEO and Title management via `useSeoAndTitle`.
+ * - SEO metadata, document title, and `page_view` telemetry via {@link Seo}.
  * - URL validation and sanitization.
  * - Global update detection for the PWA via UpdatePromptWrapper.
  * - Root-level error handling via ErrorDialog.
@@ -232,6 +207,7 @@ const AppContent: FC = () => {
  * @returns {JSX.Element} The rendered root component.
  *
  * @see {@link DialogProvider}
+ * @see {@link Seo}
  * @see {@link ErrorDialog}
  * @see {@link UpdatePromptWrapper}
  *

@@ -19,10 +19,9 @@ import { describe, expect, it, vi } from "vitest";
 import PerformanceDialog from "@/components/AppDialog/Performance/PerformanceDialog";
 import UserStatsDialog from "@/components/AppDialog/UserStats/UserStatsDialog";
 import { RoutedDialogs } from "@/components/RoutedDialogs/RoutedDialogs";
-import { DialogProvider } from "@/context/dialogContext";
 import i18n from "@/test/i18n";
 import { getDialogIconAndStyle, radixIconRegistry } from "@/utils/icons/iconRegistry";
-import { useDialog } from "@/utils/system/dialogUtils";
+import { DialogProvider, useDialog } from "@/utils/system/dialogUtils";
 
 // Mock MarkdownContentRenderer to avoid async file loads in unit/integration test
 vi.mock("@/components/AppDialog/Markdown/MarkdownContentRenderer", () => ({

@@ -4,7 +4,6 @@ import "./MainAppContent.scss";
 import React, { Suspense, useEffect } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
-import { useErrorDispatcher } from "@/hooks/useErrorDispatcher";
 import { useToast } from "@/hooks/useToast/useToast";
 import { useGridStore } from "@/store/grid/gridStore";
 
@@ -14,9 +13,8 @@ import { MainAppLayoutContent, ShipTypesLoader } from "./MainAppLayout";
  * The primary layout component for the application's main functional area.
  *
  * @remarks
- * Coordinates workspace-level lifecycle effects (Shared Grid notifications
- * and toast error dispatching), triggers initial data loading via Suspense,
- * and renders the core layout.
+ * Coordinates workspace-level lifecycle effects (Shared Grid notifications),
+ * triggers initial data loading via Suspense, and renders the core layout.
  *
  * @returns {JSX.Element} The orchestrated main application content.
  *
@@ -48,9 +46,6 @@ export const MainAppContent = () => {
 			);
 		}
 	}, [isSharedGrid, showInfo, t]);
-
-	// Monitor session errors and dispatch messages to toast
-	useErrorDispatcher();
 
 	return (
 		<>

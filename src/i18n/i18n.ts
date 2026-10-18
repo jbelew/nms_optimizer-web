@@ -21,16 +21,19 @@ export const nativeLanguageNames: { [key: string]: string } = {
 };
 
 /**
- * Bootstraps the `i18next` library with essential plugins and configuration.
+ * Promise that resolves once `i18next` has initialized and loaded the active locale namespace.
  *
- * It configures:
+ * @remarks
+ * Configures:
  * 1. `Backend`: Loads JSON translation files from the `/assets/locales/` directory.
  * 2. `LanguageDetector`: Extracts the active language from the URL path.
- * 3. `initReactI18next`: Bridges i18next with the React component lifecycle.
+ * 3. `initReactI18next`: Bridges `i18next` with the React component lifecycle.
  *
- * **Defaults to English if the detected language is unsupported.**
+ * Defaults to English if the detected language is unsupported.
+ *
+ * @category Utilities
  */
-void i18n
+export const i18nReady = i18n
 	.use(Backend)
 	.use(LanguageDetector)
 	.use(initReactI18next)

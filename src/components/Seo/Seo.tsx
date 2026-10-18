@@ -1,29 +1,42 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { DEFAULT_BASE_URL, getPageMetadata } from "@shared/page-metadata.js";
 import { OG_LOCALE_MAP } from "@shared/seo-schema.js";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
-import { useSupportedLanguages } from "@/hooks/useSupportedLanguages";
+import { sendEvent } from "@/utils/analytics/tracking";
+import { buildLocalizedPath, useSupportedLanguages } from "@/utils/system/dialogUtils";
 
 /**
- * Normalizes a path to ensure it ends with a trailing slash.
+ * Declarative SEO and route metadata module for React 19.
  *
- * @param {string} p - The path to normalize.
+ * @remarks
+ * Computes unified route metadata once per navigation, hoists `<title>`, `<meta>`,
+ * and `<link>` tags into `<head>`, injects JSON-LD structured data schemas,
+ * synchronizes `document.documentElement.lang`, and dispatches the GA4 `page_view` event.
  *
- * @returns {string} The normalized path.
- */
-const normalizePath = (p: string) => (p.endsWith("/") ? p : `${p}/`);
-
-/**
- * Declarative SEO component for React 19.
- * Handles title, meta tags, and structured data by rendering them directly in the component.
- * React 19 will automatically hoist these to the document head.
+ * @returns {JSX.Element} Hoisted document head metadata elements.
+ *
+ * @see {@link getPageMetadata}
+ * @see {@link buildLocalizedPath}
+ * @see {@link sendEvent}
+ * @see {@link ./Seo.test.tsx Unit Tests}
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <Seo />
+ * // renders head tags and dispatches page_view telemetry
+ * ```
  */
 export const Seo: React.FC = () => {
 	const { i18n, t } = useTranslation();
 	const location = useLocation();
 	const supportedLangs = useSupportedLanguages();
+	const prevUrlRef = useRef<string>(document.referrer);
 
 	const {
 		canonicalUrl,
@@ -43,6 +56,22 @@ export const Seo: React.FC = () => {
 			t,
 		});
 	}, [location.pathname, i18n.language, t, supportedLangs]);
+
+	useEffect(() => {
+		document.documentElement.lang = i18n.language;
+
+		// Dispatch manual page_view event with resolved document title
+		sendEvent({
+			action: "page_view",
+			category: "engagement",
+			page: location.pathname + location.search,
+			page_location: window.location.href,
+			page_referrer: prevUrlRef.current,
+			page_title: pageTitle,
+		});
+
+		prevUrlRef.current = window.location.href;
+	}, [location.pathname, location.search, i18n.language, pageTitle]);
 
 	useEffect(() => {
 		// Clean up any existing JSON-LD schema scripts (from SSG or previous client-side routes)
@@ -105,10 +134,7 @@ export const Seo: React.FC = () => {
 				rel="alternate"
 			/>
 			{supportedLangs.map((lang) => {
-				const path =
-					lang === "en"
-						? normalizePath(cleanPath || "/")
-						: `/${lang}${normalizePath(cleanPath)}`;
+				const path = buildLocalizedPath(cleanPath || "/", lang, supportedLangs);
 
 				return (
 					<link

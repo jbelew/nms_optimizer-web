@@ -10,24 +10,18 @@ import AppHeader from "@/components/AppHeader/AppHeader";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
-import { useSessionStore } from "@/store/ui/uiStore";
 import i18n from "@/test/i18n";
 
 import { MainAppContent } from "./MainAppContent";
 import { MainAppSidebarSection } from "./MainAppLayout";
 
-const { mockResetSession, mockShowInfo } = vi.hoisted(() => ({
-	mockResetSession: vi.fn(),
+const { mockShowInfo } = vi.hoisted(() => ({
 	mockShowInfo: vi.fn(),
 }));
 
 // Mock the breakpoint hook
 vi.mock("@/hooks/useBreakpoint/useBreakpoint", () => ({
 	useBreakpoint: vi.fn(),
-}));
-
-vi.mock("@/hooks/useErrorDispatcher", () => ({
-	useErrorDispatcher: vi.fn(),
 }));
 
 vi.mock("@/hooks/useToast/useToast", () => ({
@@ -114,8 +108,6 @@ describe("MainAppLayout Visibility & Lifecycle Logic", () => {
 			(selector: (state: unknown) => unknown) =>
 				selector({ selectedPlatform: selectedPlatformState })
 		);
-
-		useSessionStore.setState({ resetSession: mockResetSession });
 	});
 
 	describe("AppHeader in Layout", () => {

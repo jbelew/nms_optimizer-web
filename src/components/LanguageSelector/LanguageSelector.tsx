@@ -31,7 +31,7 @@ import xxFlagPath from "@/assets/svg/flags/xx.svg";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { languages, nativeLanguageNames } from "@/i18n/i18n";
-import { useErrorStore } from "@/store/ui/uiStore";
+import { buildLocalizedPath } from "@/utils/system/dialogUtils";
 
 /**
  * Mapping of language codes to their respective SVG flag asset paths.
@@ -85,7 +85,6 @@ export const LanguageSelector: React.FC = () => {
 	const location = useLocation();
 	const currentLanguage = i18n.language.split("-")[0]; // Get base language code
 	const { sendDeferredEvent } = useAnalytics();
-	const { clearErrors } = useErrorStore();
 	const [, startTransition] = useTransition();
 
 	const availableLanguageCodes = ((i18n.options.supportedLngs as string[]) || []).filter((code) =>
@@ -118,20 +117,7 @@ export const LanguageSelector: React.FC = () => {
 	 * ```
 	 */
 	const handleLanguageChange = (newLang: string) => {
-		clearErrors(); // Clear existing errors to prevent re-display on remount
-
-		const pathParts = location.pathname.split("/").filter(Boolean);
-		const langCand = pathParts[0];
-		let basePath = location.pathname;
-
-		if (languages.includes(langCand)) {
-			basePath = location.pathname.substring(langCand.length + 1) || "/";
-		}
-
-		// Ensure trailing slash
-		const normalizePath = (p: string) => (p.endsWith("/") ? p : `${p}/`);
-		const newPath =
-			newLang === "en" ? normalizePath(basePath) : `/${newLang}${normalizePath(basePath)}`;
+		const newPath = buildLocalizedPath(location.pathname, newLang, languages);
 
 		// Use startTransition to keep dropdown responsive while handling heavy updates
 		startTransition(() => {
@@ -150,10 +136,10 @@ export const LanguageSelector: React.FC = () => {
 	};
 
 	/**
-	 * Navigates the user to the translation request route.
+	 * Navigates the user to the translation request Routed Dialog.
 	 *
 	 * @remarks
-	 * Redirects to the localized `/translation/` page.
+	 * Redirects to the localized `/translation/` route while preserving query parameters.
 	 *
 	 * @returns {void} Side-effects only.
 	 *
@@ -163,8 +149,7 @@ export const LanguageSelector: React.FC = () => {
 	 * ```
 	 */
 	const handleRequestTranslationClick = () => {
-		const lang = (i18n.language || "en").split("-")[0];
-		const path = lang === "en" ? "/translation/" : `/${lang}/translation/`;
+		const path = buildLocalizedPath("/translation/", i18n.language, languages);
 		navigate(path + window.location.search);
 	};
 

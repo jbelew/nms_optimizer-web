@@ -1,11 +1,16 @@
 import { render } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
 import { MemoryRouter } from "react-router-dom";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import i18n from "@/test/i18n";
+import { sendEvent } from "@/utils/analytics/tracking";
 
 import { Seo } from "./Seo";
+
+vi.mock("@/utils/analytics/tracking", () => ({
+	sendEvent: vi.fn(),
+}));
 
 describe("Seo Component", () => {
 	const renderSeo = (path = "/") => {
@@ -19,16 +24,19 @@ describe("Seo Component", () => {
 	};
 
 	beforeEach(() => {
+		vi.clearAllMocks();
 		document.title = "";
+		document.documentElement.lang = "";
 		// Clean up head
 		document.head
 			.querySelectorAll("meta, link, script[type='application/ld+json']")
 			.forEach((el) => el.remove());
 	});
 
-	it("should render title tag", () => {
+	it("should render title tag and synchronize document language", () => {
 		renderSeo();
 		expect(document.title).toContain("NMS Optimizer");
+		expect(document.documentElement.lang).toBe("en");
 	});
 
 	it("should render description meta tag", () => {
@@ -52,7 +60,7 @@ describe("Seo Component", () => {
 		expect(script?.textContent).toContain("WebSite");
 	});
 
-	it("should render formatted title for the instructions tracer route", () => {
+	it("should render formatted title and dispatch page_view for the instructions route", () => {
 		i18n.addResource(
 			"en",
 			"translation",
@@ -62,9 +70,17 @@ describe("Seo Component", () => {
 		i18n.addResource("en", "translation", "appName", "NMS Optimizer");
 		renderSeo("/instructions/");
 		expect(document.title).toBe("How to Optimize Your Tech Layout | NMS Optimizer");
+		expect(sendEvent).toHaveBeenCalledWith(
+			expect.objectContaining({
+				action: "page_view",
+				category: "engagement",
+				page: "/instructions/",
+				page_title: "How to Optimize Your Tech Layout | NMS Optimizer",
+			})
+		);
 	});
 
-	it("should render formatted title for the root home page", () => {
+	it("should render formatted title and dispatch page_view for the root home page", () => {
 		i18n.addResource(
 			"en",
 			"translation",
@@ -76,9 +92,17 @@ describe("Seo Component", () => {
 		expect(document.title).toBe(
 			"No Man's Sky Tech Layout & Adjacency Calculator | NMS Optimizer"
 		);
+		expect(sendEvent).toHaveBeenCalledWith(
+			expect.objectContaining({
+				action: "page_view",
+				category: "engagement",
+				page: "/",
+				page_title: "No Man's Sky Tech Layout & Adjacency Calculator | NMS Optimizer",
+			})
+		);
 	});
 
-	it("should render formatted title for the translation contributor route", () => {
+	it("should render formatted title and dispatch page_view for the translation contributor route", () => {
 		i18n.addResource(
 			"en",
 			"translation",
@@ -88,12 +112,28 @@ describe("Seo Component", () => {
 		i18n.addResource("en", "translation", "appName", "NMS Optimizer");
 		renderSeo("/translation/");
 		expect(document.title).toBe("Help Translate NMS Optimizer: Join the Team | NMS Optimizer");
+		expect(sendEvent).toHaveBeenCalledWith(
+			expect.objectContaining({
+				action: "page_view",
+				category: "engagement",
+				page: "/translation/",
+				page_title: "Help Translate NMS Optimizer: Join the Team | NMS Optimizer",
+			})
+		);
 	});
 
-	it("should render formatted title for the performance metrics route", () => {
+	it("should render formatted title and dispatch page_view for the performance metrics route", () => {
 		i18n.addResource("en", "translation", "seo.performancePageTitle", "Performance Metrics");
 		i18n.addResource("en", "translation", "appName", "NMS Optimizer");
 		renderSeo("/performance/");
 		expect(document.title).toBe("Performance Metrics | NMS Optimizer");
+		expect(sendEvent).toHaveBeenCalledWith(
+			expect.objectContaining({
+				action: "page_view",
+				category: "engagement",
+				page: "/performance/",
+				page_title: "Performance Metrics | NMS Optimizer",
+			})
+		);
 	});
 });

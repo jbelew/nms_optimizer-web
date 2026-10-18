@@ -71,3 +71,11 @@ _Avoid_: pending worker, queued worker, background worker
 **Solver Window**:
 The bounding subgrid dimensions (width × height) dynamically allocated for a Technology Category based on its active Module Selection, within which localized module permutation and simulated annealing occur.
 _Avoid_: window size, search window, tech window, bounding box
+
+**Slot Restriction**:
+A rule preventing an invalid grid cell modification (locked grid layout, occupied module slot, supercharged row limit, fixed supercharged layout, or maximum supercharged count) that provides immediate shake feedback and a one-time session warning after repeated attempts.
+_Avoid_: cell error, validation error, session error
+
+**Routed Dialog**:
+A modal view bound to a canonical, localized URL path (such as `/about/`, `/instructions/`, `/changelog/`, `/userstats/`, or `/performance/`) so it can be bookmarked, shared, and indexed independently of the workspace grid.
+_Avoid_: modal page, route wrapper, dialog route

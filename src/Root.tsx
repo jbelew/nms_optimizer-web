@@ -8,7 +8,7 @@
  * @category Components
  */
 
-import React, { StrictMode, useEffect } from "react";
+import React, { StrictMode, Suspense, useEffect } from "react";
 import { Provider as ToastProviderRadix, Viewport as ToastViewport } from "@radix-ui/react-toast";
 import { Theme } from "@radix-ui/themes";
 import { RouterProvider } from "react-router-dom";
@@ -82,7 +82,9 @@ export const Root = () => {
 						<TooltipManager />
 						<ToastProviderRadix swipeDirection="right">
 							<ToastProvider>
-								<RouterProvider router={router} />
+								<Suspense fallback={null}>
+									<RouterProvider router={router} />
+								</Suspense>
 							</ToastProvider>
 							<ToastViewport className="ToastViewport" />
 						</ToastProviderRadix>

@@ -42,8 +42,6 @@ interface Window {
 		setConsumer(callback: (params: { files: FileSystemFileHandle[] }) => void): void;
 	};
 
-	/** Direct access to the `ErrorStore` for E2E testing. */
-	useErrorStore: import("./store/ui/uiStore").useErrorStore;
 	/** Direct access to the `GridStore` for E2E testing. */
 	useGridStore: import("./store/grid/gridStore").useGridStore;
 	/** Direct access to the `ModuleSelectionStore` for E2E testing. */
@@ -55,8 +53,6 @@ interface Window {
 		};
 		setState: (updates: { moduleSelections?: Record<string, string[]> }) => void;
 	};
-	/** Direct access to the `SessionStore` for E2E testing. */
-	useSessionStore: import("./store/ui/uiStore").useSessionStore;
 	/** Direct access to the `ShakeStore` for E2E testing. */
 	useShakeStore: import("./store/ui/uiStore").useShakeStore;
 	/** Direct access to the `TechBonusStore` for E2E testing. */

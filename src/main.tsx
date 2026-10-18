@@ -6,23 +6,20 @@ import "@radix-ui/themes/components.css";
 import "@radix-ui/themes/utilities.css";
 // Main App CSS
 import "@/index.css";
-// i18n
-import "@/i18n/i18n"; // Initialize i18next
 
 import React from "react";
 
+import { i18nReady } from "@/i18n/i18n";
 import { Root } from "@/Root";
 import { bootApp, handleFatalBootstrapError } from "@/utils/system/bootPipeline";
 
 export { Root };
 
-// Delegate application mounting to the boot pipeline without side-effects during test imports.
+// Delegate application mounting to the boot pipeline after i18n initializes, without side-effects during test imports.
 if (typeof document !== "undefined" && !import.meta.env.VITEST) {
-	try {
-		void bootApp({ rootComponent: <Root /> }).catch((error: unknown) => {
+	void i18nReady
+		.then(() => bootApp({ rootComponent: <Root /> }))
+		.catch((error: unknown) => {
 			handleFatalBootstrapError(error);
 		});
-	} catch (error: unknown) {
-		handleFatalBootstrapError(error);
-	}
 }
