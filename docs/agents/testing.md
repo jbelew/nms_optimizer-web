@@ -31,8 +31,8 @@ Best practices for unit, component, and integration tests in the NMS Optimizer W
 ## Live Chrome Debugging & Lighthouse Audits (WSL2)
 
 - **Refactor Baseline & Validation Gate**:
-    - Before starting a significant UI, layout, routing, or bundle refactor, build the production bundle (`bun run build`), start the preview server (`bun run preview -- --host 127.0.0.1 --port 4173`), and capture a baseline Lighthouse / Web Vitals audit (desktop and mobile) in Chrome.
-    - Upon completing the refactor, rebuild (`bun run build`), purge the preview Service Worker and Cache Storage, and run a validation Lighthouse audit to confirm zero regressions in Performance score, CLS (`0`), LCP, and TBT before committing. Only stop the preview server after validation completes.
+    - Before editing source files in any multi-file refactor (including `/improve-codebase-architecture` deepenings, store/hook consolidations, UI, layout, routing, bootstrap, or bundle changes), build the production bundle (`bun run build`), run `bun run perf:check`, start the preview server (`bun run preview -- --host 127.0.0.1 --port 4173`), and capture a baseline Lighthouse / Web Vitals audit (desktop and mobile) in Chrome.
+    - Upon completing the refactor, rebuild (`bun run build`), run `bun run perf:check`, purge the preview Service Worker and Cache Storage, and run a validation Lighthouse audit to confirm zero regressions in bundle size, Performance score, CLS (`0`), LCP, and TBT before committing. Only stop the preview server after validation completes.
 - **Connecting `chrome-devtools-mcp` (`browser` subagent) to Windows Chrome in WSL2**:
     - `chrome-devtools-mcp` (`--autoConnect`) reads `/home/jbelew/.config/google-chrome/DevToolsActivePort` on Linux, whereas Windows Chrome writes `/mnt/c/Users/John Belew/AppData/Local/Google/Chrome/User Data/DevToolsActivePort`.
     - Copy the file as a regular file before invoking the `browser` subagent (a symlink is rejected by `chrome-devtools-mcp`):

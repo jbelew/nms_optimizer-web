@@ -1,18 +1,37 @@
+import { act } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { usePlatformStore } from "./platformStore";
+import { apiCall } from "@/utils/api/network";
+
+import {
+	fetchPlatforms,
+	getPlatformFromStorage,
+	getPlatformFromUrl,
+	resetPlatformsCache,
+	resolveInitialPlatform,
+	usePlatformStore,
+} from "./platformStore";
+
+vi.mock("@/utils/api/network", () => ({
+	apiCall: vi.fn(),
+}));
 
 describe("PlatformStore", () => {
-	const validShipTypes = ["standard", "explorer", "fighter", "hauler"];
+	const mockCatalog = {
+		explorer: { label: "Explorer", type: "Starship" },
+		fighter: { label: "Fighter", type: "Starship" },
+		hauler: { label: "Hauler", type: "Starship" },
+		standard: { label: "Standard", type: "Starship" },
+	};
 
 	beforeEach(() => {
-		// Reset store state
-		usePlatformStore.setState({ selectedPlatform: "standard" });
-		// Clear localStorage
+		resetPlatformsCache();
+		usePlatformStore.setState({
+			platforms: mockCatalog,
+			selectedPlatform: "standard",
+		});
 		localStorage.clear();
-		// Clear URL params
 		window.history.replaceState({}, "", window.location.pathname);
-		// Clear console warnings
 		vi.clearAllMocks();
 	});
 
@@ -21,34 +40,38 @@ describe("PlatformStore", () => {
 		window.history.replaceState({}, "", window.location.pathname);
 	});
 
-	describe("Initial state", () => {
+	describe("Initial state & resolution helpers", () => {
 		it("should have selectedPlatform set to 'standard' by default", () => {
 			const store = usePlatformStore.getState();
 			expect(store.selectedPlatform).toBe("standard");
 		});
 
-		it("should have setSelectedPlatform function", () => {
-			const store = usePlatformStore.getState();
-			expect(typeof store.setSelectedPlatform).toBe("function");
-		});
+		it("should resolve platform from URL, localStorage, or fallback to standard", () => {
+			expect(getPlatformFromUrl()).toBeNull();
+			expect(getPlatformFromStorage()).toBeNull();
+			expect(resolveInitialPlatform()).toBe("standard");
 
-		it("should have initializePlatform function", () => {
-			const store = usePlatformStore.getState();
-			expect(typeof store.initializePlatform).toBe("function");
+			localStorage.setItem("selectedPlatform", "hauler");
+			expect(getPlatformFromStorage()).toBe("hauler");
+			expect(resolveInitialPlatform()).toBe("hauler");
+
+			window.history.replaceState({}, "", "/?platform=fighter");
+			expect(getPlatformFromUrl()).toBe("fighter");
+			expect(resolveInitialPlatform()).toBe("fighter");
 		});
 	});
 
 	describe("setSelectedPlatform", () => {
-		it("should set a valid platform", () => {
+		it("should set a valid platform using internal catalog validation", () => {
 			const { setSelectedPlatform } = usePlatformStore.getState();
-			setSelectedPlatform("explorer", validShipTypes);
+			setSelectedPlatform("explorer");
 
 			expect(usePlatformStore.getState().selectedPlatform).toBe("explorer");
 		});
 
 		it("should save platform to localStorage", () => {
 			const { setSelectedPlatform } = usePlatformStore.getState();
-			setSelectedPlatform("fighter", validShipTypes);
+			setSelectedPlatform("fighter");
 
 			expect(localStorage.getItem("selectedPlatform")).toBe("fighter");
 		});
@@ -57,7 +80,7 @@ describe("PlatformStore", () => {
 			const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 			const { setSelectedPlatform } = usePlatformStore.getState();
 
-			setSelectedPlatform("invalid", validShipTypes);
+			setSelectedPlatform("invalid");
 
 			expect(usePlatformStore.getState().selectedPlatform).toBe("standard");
 			expect(localStorage.getItem("selectedPlatform")).toBe("standard");
@@ -74,7 +97,7 @@ describe("PlatformStore", () => {
 			window.history.replaceState({}, "", url.toString());
 
 			const { initializePlatform } = usePlatformStore.getState();
-			initializePlatform(validShipTypes);
+			initializePlatform();
 
 			expect(usePlatformStore.getState().selectedPlatform).toBe("fighter");
 		});
@@ -83,14 +106,14 @@ describe("PlatformStore", () => {
 			localStorage.setItem("selectedPlatform", "hauler");
 
 			const { initializePlatform } = usePlatformStore.getState();
-			initializePlatform(validShipTypes);
+			initializePlatform();
 
 			expect(usePlatformStore.getState().selectedPlatform).toBe("hauler");
 		});
 
 		it("should default to 'standard' when no platform source is valid", () => {
 			const { initializePlatform } = usePlatformStore.getState();
-			initializePlatform(validShipTypes);
+			initializePlatform();
 
 			expect(usePlatformStore.getState().selectedPlatform).toBe("standard");
 		});
@@ -102,7 +125,7 @@ describe("PlatformStore", () => {
 			localStorage.setItem("selectedPlatform", "explorer");
 
 			const { initializePlatform } = usePlatformStore.getState();
-			initializePlatform(validShipTypes);
+			initializePlatform();
 
 			expect(usePlatformStore.getState().selectedPlatform).toBe("explorer");
 		});
@@ -113,44 +136,77 @@ describe("PlatformStore", () => {
 			window.history.replaceState({}, "", url.toString());
 
 			const { initializePlatform } = usePlatformStore.getState();
-			initializePlatform(validShipTypes);
+			initializePlatform();
 
 			expect(localStorage.getItem("selectedPlatform")).toBe("fighter");
 		});
 
-		it("should handle empty validShipTypes array", () => {
+		it("should handle empty catalog when initializing", () => {
+			usePlatformStore.setState({ platforms: {} });
 			const url = new URL(window.location.href);
 			url.searchParams.set("platform", "fighter");
 			window.history.replaceState({}, "", url.toString());
 
 			const { initializePlatform } = usePlatformStore.getState();
-			initializePlatform([]);
+			initializePlatform();
 
 			expect(usePlatformStore.getState().selectedPlatform).toBe("standard");
 		});
 	});
 
-	describe("Integration", () => {
-		it("should handle complete workflow: initialize then update", () => {
-			const { initializePlatform, setSelectedPlatform } = usePlatformStore.getState();
+	describe("fetchPlatforms", () => {
+		it("should populate platforms catalog and preserve valid URL platform", async () => {
+			window.history.replaceState({}, "", "/?platform=hauler");
+			usePlatformStore.setState({ platforms: null, selectedPlatform: "hauler" });
 
-			initializePlatform(validShipTypes);
-			expect(usePlatformStore.getState().selectedPlatform).toBe("standard");
+			const remoteCatalog = {
+				atlantid: { label: "Atlantid", type: "Starship" },
+				hauler: { label: "Hauler", type: "Starship" },
+				sentinel: { label: "Sentinel", type: "Starship" },
+			};
+			vi.mocked(apiCall).mockResolvedValue(remoteCatalog);
 
-			setSelectedPlatform("explorer", validShipTypes);
-			expect(usePlatformStore.getState().selectedPlatform).toBe("explorer");
+			await act(async () => {
+				await fetchPlatforms();
+			});
+
+			expect(usePlatformStore.getState().platforms).toEqual(remoteCatalog);
+			expect(usePlatformStore.getState().selectedPlatform).toBe("hauler");
 		});
 
-		it("should maintain state consistency across operations", () => {
-			const { setSelectedPlatform } = usePlatformStore.getState();
+		it("should default to 'standard' and not be overwritten by first catalog entry when URL/storage are empty", async () => {
+			usePlatformStore.setState({ platforms: null, selectedPlatform: "standard" });
 
-			setSelectedPlatform("fighter", validShipTypes);
-			expect(usePlatformStore.getState().selectedPlatform).toBe("fighter");
+			const remoteCatalog = {
+				atlantid: { label: "Atlantid", type: "Starship" },
+				standard: { label: "Standard", type: "Starship" },
+			};
+			vi.mocked(apiCall).mockResolvedValue(remoteCatalog);
 
-			setSelectedPlatform("hauler", validShipTypes);
-			expect(usePlatformStore.getState().selectedPlatform).toBe("hauler");
+			await act(async () => {
+				await fetchPlatforms();
+			});
 
-			expect(localStorage.getItem("selectedPlatform")).toBe("hauler");
+			expect(usePlatformStore.getState().selectedPlatform).toBe("standard");
+		});
+
+		it("should reset selectedPlatform to 'standard' when URL parameter is not in fetched catalog", async () => {
+			const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+			window.history.replaceState({}, "", "/?platform=invalid-ship");
+			usePlatformStore.setState({ platforms: null, selectedPlatform: "invalid-ship" });
+
+			const remoteCatalog = {
+				atlantid: { label: "Atlantid", type: "Starship" },
+				standard: { label: "Standard", type: "Starship" },
+			};
+			vi.mocked(apiCall).mockResolvedValue(remoteCatalog);
+
+			await act(async () => {
+				await fetchPlatforms();
+			});
+
+			expect(usePlatformStore.getState().selectedPlatform).toBe("standard");
+			warnSpy.mockRestore();
 		});
 	});
 
@@ -158,13 +214,11 @@ describe("PlatformStore", () => {
 		it("should handle platform names with different cases", () => {
 			const { setSelectedPlatform } = usePlatformStore.getState();
 
-			// Lowercase should work
-			setSelectedPlatform("explorer", validShipTypes);
+			setSelectedPlatform("explorer");
 			expect(usePlatformStore.getState().selectedPlatform).toBe("explorer");
 
-			// Invalid case should fallback
 			const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
-			setSelectedPlatform("EXPLORER", validShipTypes);
+			setSelectedPlatform("EXPLORER");
 			expect(usePlatformStore.getState().selectedPlatform).toBe("standard");
 			warnSpy.mockRestore();
 		});
@@ -173,7 +227,7 @@ describe("PlatformStore", () => {
 			const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 			const { setSelectedPlatform } = usePlatformStore.getState();
 
-			setSelectedPlatform("special-platform!", validShipTypes);
+			setSelectedPlatform("special-platform!");
 			expect(usePlatformStore.getState().selectedPlatform).toBe("standard");
 
 			warnSpy.mockRestore();
@@ -183,7 +237,7 @@ describe("PlatformStore", () => {
 			const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 			const { setSelectedPlatform } = usePlatformStore.getState();
 
-			setSelectedPlatform("", validShipTypes);
+			setSelectedPlatform("");
 			expect(usePlatformStore.getState().selectedPlatform).toBe("standard");
 
 			warnSpy.mockRestore();

@@ -1,6 +1,6 @@
 import "./ShipSelection.scss";
 
-import type { ShipTypeDetail } from "@/hooks/useShipTypes/useShipTypes";
+import type { PlatformDetail } from "@/store/app/platformStore";
 import React, { Suspense, useCallback, useMemo, useTransition } from "react";
 import { GearIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator, Spinner } from "@radix-ui/themes";
@@ -9,9 +9,8 @@ import { useNavigate } from "react-router-dom";
 
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
-import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
 import { useToast } from "@/hooks/useToast/useToast";
-import { usePlatformStore } from "@/store/app/platformStore";
+import { usePlatformsSuspense, usePlatformStore } from "@/store/app/platformStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { Logger } from "@/utils/system/monitoring";
 
@@ -33,7 +32,7 @@ export interface ShipSelectionProps {
  * Details for a grouped Platform Type entry within the dropdown menu.
  */
 interface GroupedPlatformType {
-	details: ShipTypeDetail;
+	details: PlatformDetail;
 	key: string;
 	label: string;
 }
@@ -76,16 +75,14 @@ const ShipSelectionSkeleton: React.FC = () => {
 const ShipSelectionMenu: React.FC<ShipSelectionProps> = ({ disabled = false, solving }) => {
 	const { t } = useTranslation();
 	const { showInfo } = useToast();
-	const platformTypes = useFetchShipTypesSuspense();
+	const platformCatalog = usePlatformsSuspense();
 	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
 	const { sendDeferredEvent } = useAnalytics();
 	const [isPending, startTransition] = useTransition();
 	const navigate = useNavigate();
 
-	const platformKeys = Object.keys(platformTypes);
-
 	const groupedPlatformTypes = useMemo(() => {
-		return Object.entries(platformTypes).reduce<Record<string, GroupedPlatformType[]>>(
+		return Object.entries(platformCatalog).reduce<Record<string, GroupedPlatformType[]>>(
 			(acc, [key, details]) => {
 				const type = details.type;
 				if (!acc[type]) acc[type] = [];
@@ -95,7 +92,7 @@ const ShipSelectionMenu: React.FC<ShipSelectionProps> = ({ disabled = false, sol
 			},
 			{}
 		);
-	}, [platformTypes, t]);
+	}, [platformCatalog, t]);
 
 	const handleOptionSelect = useCallback(
 		(option: string) => {
@@ -109,7 +106,7 @@ const ShipSelectionMenu: React.FC<ShipSelectionProps> = ({ disabled = false, sol
 						);
 					}
 
-					sessionCoordinator.switchPlatform(option, platformKeys);
+					sessionCoordinator.switchPlatform(option);
 				});
 
 				const searchParams = new URLSearchParams(window.location.search);
@@ -129,7 +126,7 @@ const ShipSelectionMenu: React.FC<ShipSelectionProps> = ({ disabled = false, sol
 				});
 			}
 		},
-		[selectedPlatform, showInfo, t, platformKeys, navigate, sendDeferredEvent]
+		[selectedPlatform, showInfo, t, navigate, sendDeferredEvent]
 	);
 
 	const isDisabled = disabled || isPending || solving;
@@ -189,9 +186,9 @@ const ShipSelectionMenu: React.FC<ShipSelectionProps> = ({ disabled = false, sol
  * radio options, coordinates platform switching via {@link sessionCoordinator.switchPlatform}, updates
  * URL query parameters, and emits analytics telemetry.
  *
- * @param {ShipSelectionProps} props - Component properties.
+ * @param props - Component properties.
  *
- * @returns {React.ReactElement} The rendered platform selection dropdown wrapped in Suspense.
+ * @returns The rendered platform selection dropdown wrapped in Suspense.
  *
  * @see {@link sessionCoordinator}
  * @see {@link usePlatformStore}

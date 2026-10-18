@@ -16,9 +16,10 @@ import type { Root as ReactRoot } from "react-dom/client";
 import React from "react";
 import { createRoot } from "react-dom/client";
 
+import { fetchTechTreeAsync } from "@/hooks/useTechTree/useTechTree";
 import { Root } from "@/Root";
+import { fetchPlatforms, resolveInitialPlatform } from "@/store/app/platformStore";
 import { initializeAnalytics, initializeAnalyticsClient } from "@/utils/analytics/tracking";
-import { preloadInitialState } from "@/utils/api/apiPreload";
 import { performBootstrapMigrations } from "@/utils/system/bootstrap";
 import {
 	handleFatalBootstrapError,
@@ -27,6 +28,35 @@ import {
 import { initializeSentry, Logger } from "@/utils/system/monitoring";
 
 export { handleFatalBootstrapError };
+
+/**
+ * Initiates critical Platform Catalog and technology tree fetches early during idle bootstrap.
+ *
+ * @remarks
+ * Populates the React Suspense caches for {@link fetchPlatforms} and {@link fetchTechTreeAsync}
+ * using the heuristically resolved initial Platform Type.
+ *
+ * @returns Side-effects only.
+ *
+ * @see {@link fetchPlatforms}
+ * @see {@link fetchTechTreeAsync}
+ * @see {@link resolveInitialPlatform}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * preloadInitialState();
+ * // initiates Platform Catalog and technology tree fetches into Suspense caches
+ * ```
+ */
+export const preloadInitialState = (): void => {
+	if (typeof window === "undefined") return;
+
+	void fetchPlatforms();
+	const guessedPlatform = resolveInitialPlatform();
+	void fetchTechTreeAsync(guessedPlatform);
+};
 
 /**
  * Configuration options for the application {@link bootApp} pipeline.
@@ -98,9 +128,9 @@ export interface BootResult {
  * 2. `ga4-analytics`: GA4 analytics client and event tracker initialization (priority 5).
  * 3. `service-worker`: PWA service worker registration and update listeners (priority 0).
  *
- * @param {LifecycleCoordinator} coordinator - The lifecycle coordinator instance to register tasks on.
+ * @param coordinator - The lifecycle coordinator instance to register tasks on.
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
  * @see {@link preloadInitialState}
  * @see {@link initializeAnalyticsClient}
@@ -157,9 +187,9 @@ export const registerDefaultDeferredServices = (coordinator: LifecycleCoordinato
  * 4. Resolves the target DOM container and mounts the React root tree.
  * 5. Transitions the application lifecycle to `HYDRATED`.
  *
- * @param {BootOptions} [options={}] - Configuration options for the boot pipeline.
+ * @param [options={}] - Configuration options for the boot pipeline.
  *
- * @returns {Promise<BootResult>} The boot result containing the mounted root, coordinator, and cleanup function.
+ * @returns The boot result containing the mounted root, coordinator, and cleanup function.
  *
  * @throws {Error} Throws if the target DOM root container cannot be found or if mounting fails.
  *

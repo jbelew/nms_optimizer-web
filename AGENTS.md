@@ -7,7 +7,11 @@ NMS Optimizer Web is a React-based frontend application for optimizing technolog
 - **Package Manager**: Exclusively use **Bun** (version 1.2.0+). Always invoke scripts with `bun`.
 - **Strict TypeScript**: Write explicit types, interfaces, and discriminated unions. The `any` type is strictly prohibited.
 - **Zero Linter Suppressions**: Resolve underlying type or logic issues; inline `eslint-disable` comments are disallowed.
-- **Documentation**: Document all public APIs, functions, and complex utilities with JSDoc containing `@param` and `@returns` types (conforming to the `agentic-jsdoc` skill).
+- **Documentation**: Document all exported and top-level declarations, public APIs, functions, and complex utilities with JSDoc (conforming to the `agentic-jsdoc` skill; omit redundant `{type}` annotations on `@param` and `@returns` in `.ts`/`.tsx` files).
+
+## Pre-Refactor Baseline Gate (Before Editing Code)
+
+Before modifying any source files in a multi-file refactor (including `/improve-codebase-architecture` deepenings, store/hook consolidations, UI, layout, routing, bootstrap, or bundle changes), capture a baseline performance & bundle check (`bun run build && bun run perf:check`, plus a Lighthouse / Web Vitals baseline audit against `bun run preview` when touching UI, layout, routing, bootstrap, or bundle chunks; see [`docs/agents/testing.md`](docs/agents/testing.md)).
 
 ## Verification Gate (Definition of Done)
 
@@ -15,8 +19,8 @@ Before marking any code task complete, execute this sequence (also enforced auto
 
 1. `bun run typecheck` — Must report 0 TypeScript diagnostics (`tsgo`).
 2. `bun run test -- <path>` or `bun run test:related` — Ensure targeted unit/component tests pass.
-3. `bun run lint` — Must report 0 oxlint/ESLint errors.
-4. **Significant Refactors (Lighthouse Baseline & Validation)**: Before starting a significant UI, layout, routing, or bundle refactor, run a baseline Lighthouse / Web Vitals audit against the production preview build (`bun run build && bun run preview`), and run a validation audit upon completion to confirm zero regressions in Performance score, CLS, LCP, and TBT (see [`docs/agents/testing.md`](docs/agents/testing.md)).
+3. `bun run lint` — Must report 0 oxlint/ESLint errors (use `bunx eslint --fix <touched-files>` to auto-fix `perfectionist` sorting).
+4. **Post-Refactor Validation**: Re-run `bun run build && bun run perf:check` (and the validation Lighthouse / Web Vitals audit against `bun run preview` after purging Service Worker / Cache Storage) to confirm zero regressions in bundle size, Performance score, CLS, LCP, and TBT (see [`docs/agents/testing.md`](docs/agents/testing.md)).
 
 ## Key Commands & Gotchas
 
@@ -31,27 +35,10 @@ Before marking any code task complete, execute this sequence (also enforced auto
 
 Read these specialized guides when working on matching branches:
 
-- **When naming props, variables, JSDoc, or test cases**: Read [`GLOSSARY.md`](GLOSSARY.md) for canonical domain terms (even when destructuring legacy store keys like `state.techGroups` or `state.checkedModules`).
+- **When naming props, variables, JSDoc, or test cases**: Read [`GLOSSARY.md`](GLOSSARY.md) for canonical domain terms (even when destructuring legacy store keys like `state.techGroups` or `state.checkedModules`) and [`docs/agents/domain.md`](docs/agents/domain.md) for ADR conventions.
 - **When writing CSS, SEO metadata, or commit messages**: Read [`docs/agents/project-rules.md`](docs/agents/project-rules.md) for critical iOS Safari GPU rendering workarounds, `<meta>` description preservation, and Angular commit conventions.
 - **When creating or refactoring UI components**: Read [`docs/agents/component-architecture.md`](docs/agents/component-architecture.md) for dialog directory layout, prop drilling prevention, and the Colocated Hook Pattern.
-- **When writing Zustand stores, React hooks, or Tailwind styling**: Read [`docs/agents/code-style.md`](docs/agents/code-style.md) for Immer deep mutation rules, Tailwind v4 CSS-first config, and pre-paint `useLayoutEffect` measurement rules.
+- **When writing Zustand stores, React hooks, or Tailwind styling**: Read [`docs/agents/code-style.md`](docs/agents/code-style.md) for `perfectionist` alphabetical sorting, Immer deep mutation rules, Tailwind v4 CSS-first config, and pre-paint `useLayoutEffect` measurement rules.
 - **When writing or fixing tests, Storybook stories, or running Chrome/Lighthouse audits**: Read [`docs/agents/testing.md`](docs/agents/testing.md) for module mocking, console log bans, Storybook bundle cache safeguards, and WSL2 Chrome DevTools / Lighthouse workflows.
 - **When modifying Vite build config, SSG scripts, or server routing**: Read [`docs/agents/architecture.md`](docs/agents/architecture.md) for hybrid rendering flow and Rolldown chunking groups.
-
-## Agent skills
-
-### Issue tracker
-
-Issues and specs are tracked in GitHub Issues via the `gh` CLI. See `docs/agents/issue-tracker.md`.
-
-- **Reading issues**: Always pass `--json` (`gh issue view <n> --json number,title,body,labels,comments`); bare `gh issue view` fails due to GitHub's deprecated classic `projectCards` GraphQL field.
-- **Specs (`/to-spec`)**: Prefix titles with `spec:` (or `spec(<scope>):`) and apply the `spec` label. Once broken into child tickets via `/to-tickets`, remove `ready-for-agent` from the parent spec so only leaf tickets carry `ready-for-agent`.
-- **Implementing tickets (`/implement`)**: After committing and passing `code-review`, immediately update the ticket body (`- [ ]` → `- [x]`) and close the GitHub issue (`gh issue close <n> --comment "Resolved in <sha>."`); do not wait for `git push`.
-
-### Triage labels
-
-Uses the five default canonical triage labels (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`) plus `spec` for umbrella specifications. See `docs/agents/triage-labels.md`.
-
-### Domain docs
-
-Single-context layout (`GLOSSARY.md` at the repo root and ADRs in `docs/adr/`). See `docs/agents/domain.md`.
+- **When reading, triaging, spec'ing, or closing GitHub issues (`/to-spec`, `/to-tickets`, `/implement`, `/triage`)**: Read [`docs/agents/issue-tracker.md`](docs/agents/issue-tracker.md) and [`docs/agents/triage-labels.md`](docs/agents/triage-labels.md) (always pass `--json` to `gh issue view`; prefix specs with `spec:` + `spec` label; close resolved tickets immediately on commit).

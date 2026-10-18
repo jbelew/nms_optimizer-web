@@ -2,13 +2,15 @@ import React from "react";
 import { act, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { fetchTechTreeAsync } from "@/hooks/useTechTree/useTechTree";
+import { fetchPlatforms, resolveInitialPlatform } from "@/store/app/platformStore";
 import { initializeAnalytics, initializeAnalyticsClient } from "@/utils/analytics/tracking";
-import { preloadInitialState } from "@/utils/api/apiPreload";
 import { setupServiceWorkerRegistration } from "@/utils/system/setupServiceWorker";
 
 import {
 	bootApp,
 	handleFatalBootstrapError,
+	preloadInitialState,
 	registerDefaultDeferredServices,
 } from "./bootPipeline";
 import { performBootstrapMigrations } from "./bootstrap";
@@ -24,8 +26,13 @@ vi.mock("@/utils/analytics/tracking", () => ({
 	initializeAnalyticsClient: vi.fn(),
 }));
 
-vi.mock("@/utils/api/apiPreload", () => ({
-	preloadInitialState: vi.fn(),
+vi.mock("@/store/app/platformStore", () => ({
+	fetchPlatforms: vi.fn(),
+	resolveInitialPlatform: vi.fn(() => "solar"),
+}));
+
+vi.mock("@/hooks/useTechTree/useTechTree", () => ({
+	fetchTechTreeAsync: vi.fn(),
 }));
 
 vi.mock("@/utils/system/setupServiceWorker", () => ({
@@ -301,17 +308,32 @@ describe("bootPipeline", () => {
 			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
 			registerDefaultDeferredServices(coordinator);
 
-			expect(preloadInitialState).not.toHaveBeenCalled();
+			expect(fetchPlatforms).not.toHaveBeenCalled();
+			expect(fetchTechTreeAsync).not.toHaveBeenCalled();
 			expect(initializeAnalyticsClient).not.toHaveBeenCalled();
 			expect(initializeAnalytics).not.toHaveBeenCalled();
 			expect(setupServiceWorkerRegistration).not.toHaveBeenCalled();
 
 			await coordinator.flushDeferredTasks();
 
-			expect(preloadInitialState).toHaveBeenCalledTimes(1);
+			expect(fetchPlatforms).toHaveBeenCalledTimes(1);
+			expect(resolveInitialPlatform).toHaveBeenCalledTimes(1);
+			expect(fetchTechTreeAsync).toHaveBeenCalledWith("solar");
 			expect(initializeAnalyticsClient).toHaveBeenCalledTimes(1);
 			expect(initializeAnalytics).toHaveBeenCalledTimes(1);
 			expect(setupServiceWorkerRegistration).toHaveBeenCalledTimes(1);
+		});
+
+		it("preloadInitialState should no-op when window is undefined", () => {
+			vi.stubGlobal("window", undefined);
+
+			preloadInitialState();
+
+			expect(fetchPlatforms).not.toHaveBeenCalled();
+			expect(resolveInitialPlatform).not.toHaveBeenCalled();
+			expect(fetchTechTreeAsync).not.toHaveBeenCalled();
+
+			vi.unstubAllGlobals();
 		});
 
 		it("should register default deferred services in bootApp unless skipDeferredServices is true", async () => {

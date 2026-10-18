@@ -57,17 +57,6 @@ vi.mock("./hooks/useUrlSync/useUrlSync", () => ({
 	})),
 }));
 
-// Mock useFetchShipTypesSuspense to avoid actual data fetching
-vi.mock("./hooks/useShipTypes/useShipTypes", () => ({
-	useFetchShipTypesSuspense: vi.fn(() => ({
-		standard: {
-			label: "Standard",
-			technologies: [],
-			type: "ship",
-		},
-	})),
-}));
-
 // Mock useTechTree to prevent network requests
 vi.mock("./hooks/useTechTree/useTechTree", () => ({
 	fetchTechTree: vi.fn(() => Promise.resolve({})),

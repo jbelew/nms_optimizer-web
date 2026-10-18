@@ -29,10 +29,6 @@ vi.mock("@/hooks/useToast/useToast", () => ({
 	}),
 }));
 
-vi.mock("@/hooks/useShipTypes/useShipTypes", () => ({
-	useFetchShipTypesSuspense: vi.fn(() => ({})),
-}));
-
 vi.mock("@/hooks/useUrlSync/useUrlSync", () => ({
 	useUrlSync: () => ({
 		updateUrlForReset: vi.fn(),
@@ -72,6 +68,7 @@ vi.mock("@/store/grid/gridStore", () => ({
 	),
 }));
 vi.mock("@/store/app/platformStore", () => ({
+	usePlatformsSuspense: vi.fn(() => ({})),
 	usePlatformStore: vi.fn((selector) => selector({ selectedPlatform: "standard" })),
 }));
 

@@ -74,12 +74,17 @@ vi.mock("@/hooks/useTechTree/useTechTree", async () => {
 	};
 });
 
-vi.mock("@/hooks/useShipTypes/useShipTypes", () => ({
-	useFetchShipTypesSuspense: () => ({
-		fighter: { label: "Fighter", type: "Starship" },
-		standard: { label: "Standard", type: "Starship" },
-	}),
-}));
+vi.mock("@/store/app/platformStore", async () => {
+	const actual = await vi.importActual("@/store/app/platformStore");
+
+	return {
+		...actual,
+		usePlatformsSuspense: () => ({
+			fighter: { label: "Fighter", type: "Starship" },
+			standard: { label: "Standard", type: "Starship" },
+		}),
+	};
+});
 
 const mockNavigate = vi.fn((to: string, options?: { replace?: boolean }) => {
 	const url = new URL(to, window.location.href);
@@ -133,7 +138,13 @@ describe("useUrlSync Integration", () => {
 		vi.clearAllMocks();
 
 		// Clean state across all stores
-		usePlatformStore.setState({ selectedPlatform: "standard" });
+		usePlatformStore.setState({
+			platforms: {
+				fighter: { label: "Fighter", type: "Starship" },
+				standard: { label: "Standard", type: "Starship" },
+			},
+			selectedPlatform: "standard",
+		});
 		useGridStore.setState({
 			buildName: null,
 			grid: createGrid(10, 6),

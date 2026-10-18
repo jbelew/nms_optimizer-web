@@ -13,7 +13,6 @@ import { TechTree, TechTreeSkeleton } from "@/components/TechTree/TechTree";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useIdleMount } from "@/hooks/useIdleMount/useIdleMount";
 import { useOptimize } from "@/hooks/useOptimize/useOptimize";
-import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
 import { useToast } from "@/hooks/useToast/useToast";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
@@ -28,15 +27,6 @@ const InstallPrompt = lazyNamed(
 	"InstallPrompt"
 );
 const ToastRenderer = lazyNamed(() => import("@/components/Toast/ToastRenderer"), "ToastRenderer");
-
-/**
- * Triggers the platform definitions fetch via Suspense.
- */
-const ShipTypesLoader: React.FC = () => {
-	useFetchShipTypesSuspense();
-
-	return null;
-};
 
 /**
  * Deferred background dialogs and toast renderer mounted on browser idle.
@@ -236,7 +226,7 @@ const MainAppSidebarSection: React.FC = () => {
  * layout measurements), triggers initial Platform Type loading via Suspense, and renders the
  * header, Platform Type selector, technology grid, sidebar, and footers.
  *
- * @returns {React.ReactElement} The orchestrated main application workspace.
+ * @returns The orchestrated main application workspace.
  *
  * @see {@link ./MainAppContent.test.tsx Unit Tests}
  * @see {@link ./MainAppContent.stories.tsx Storybook}
@@ -268,10 +258,6 @@ export const MainAppContent: React.FC = () => {
 
 	return (
 		<>
-			<Suspense fallback={null}>
-				<ShipTypesLoader />
-			</Suspense>
-
 			<MainAppMobileToolbar />
 
 			<a

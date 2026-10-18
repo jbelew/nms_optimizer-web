@@ -5,9 +5,8 @@ import { useTranslation } from "react-i18next";
 import { create } from "zustand";
 
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
-import { fetchShipTypes } from "@/hooks/useShipTypes/useShipTypes";
 import { useToast } from "@/hooks/useToast/useToast";
-import { usePlatformStore } from "@/store/app/platformStore";
+import { fetchPlatforms, usePlatformStore } from "@/store/app/platformStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { buildSerializer } from "@/utils/build/buildSerializer";
 import { Logger } from "@/utils/system/monitoring";
@@ -85,7 +84,7 @@ export interface UseBuildFileManagerReturn {
  * Internal hook providing the unified `.nms` Build File intake pipeline shared by
  * DOM file inputs and the PWA `window.launchQueue` file handler.
  *
- * @returns {(file: File) => Promise<void>} Asynchronous function that validates, restores, and reports on a `.nms` Build File.
+ * @returns Asynchronous function that validates, restores, and reports on a `.nms` Build File.
  */
 const useImportBuildFile = () => {
 	const { t } = useTranslation();
@@ -111,12 +110,12 @@ const useImportBuildFile = () => {
 					throw new Error("File is empty. Please select a valid build file.");
 				}
 
-				const platformTypes = await fetchShipTypes();
-				const validPlatformTypes = Object.keys(platformTypes);
+				const platformCatalog = await fetchPlatforms();
+				const validPlatformTypes = Object.keys(platformCatalog);
 				const buildData = await buildSerializer.loadBuild(text, validPlatformTypes);
 
 				startTransition(() => {
-					sessionCoordinator.restoreBuildSnapshot(buildData, validPlatformTypes);
+					sessionCoordinator.restoreBuildSnapshot(buildData);
 				});
 
 				showSuccess(
@@ -164,7 +163,7 @@ const useImportBuildFile = () => {
  * shared internal Zustand store. Both desktop (`GridTableButtons`) and mobile (`MobileToolbar`)
  * callers observe synchronized `isLoadPending`, `isSavePending`, and `isSaveBuildDialogOpen` states.
  *
- * @returns {UseBuildFileManagerReturn} Shared state flags, file input ref, and load/save handlers.
+ * @returns Shared state flags, file input ref, and load/save handlers.
  *
  * @see {@link ./useBuildFileManager.test.ts Unit Tests}
  * @see {@link useFileHandling}
@@ -207,7 +206,7 @@ export const useBuildFileManager = (): UseBuildFileManagerReturn => {
 	/**
 	 * Programmatically clicks the shared hidden file input to open the native file picker.
 	 *
-	 * @returns {void} Side-effects only.
+	 * @returns Side-effects only.
 	 */
 	const handleLoadBuild = () => {
 		if (sharedFileInputRef.current) {
@@ -219,9 +218,9 @@ export const useBuildFileManager = (): UseBuildFileManagerReturn => {
 	 * Extracts the selected `.nms` Build File from the input change event, runs the unified
 	 * intake pipeline, and resets the input value so the same file can be re-selected.
 	 *
-	 * @param {ChangeEvent<HTMLInputElement>} event - The browser file input change event.
+	 * @param event - The browser file input change event.
 	 *
-	 * @returns {Promise<void>} Resolves when the file import finishes.
+	 * @returns Resolves when the file import finishes.
 	 */
 	const handleFileSelect = async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
 		const file = event.target.files?.[0];
@@ -236,7 +235,7 @@ export const useBuildFileManager = (): UseBuildFileManagerReturn => {
 	/**
 	 * Opens the build-naming dialog to initiate a Build File export.
 	 *
-	 * @returns {void} Side-effects only.
+	 * @returns Side-effects only.
 	 */
 	const handleSaveBuild = () => {
 		setIsSaveBuildDialogOpen(true);
@@ -245,7 +244,7 @@ export const useBuildFileManager = (): UseBuildFileManagerReturn => {
 	/**
 	 * Closes the build-naming dialog without saving.
 	 *
-	 * @returns {void} Side-effects only.
+	 * @returns Side-effects only.
 	 */
 	const handleBuildNameCancel = () => {
 		setIsSaveBuildDialogOpen(false);
@@ -255,9 +254,9 @@ export const useBuildFileManager = (): UseBuildFileManagerReturn => {
 	 * Serializes the active multi-store build snapshot into a `.nms` Build File, triggers
 	 * a browser download, and reports completion or failure via toast and analytics.
 	 *
-	 * @param {string} buildName - The user-supplied name for the saved Build File.
+	 * @param buildName - The user-supplied name for the saved Build File.
 	 *
-	 * @returns {Promise<void>} Resolves when the save operation completes.
+	 * @returns Resolves when the save operation completes.
 	 */
 	const handleBuildNameConfirm = async (buildName: string): Promise<void> => {
 		setIsSaveBuildDialogOpen(false);
@@ -317,7 +316,7 @@ export const useBuildFileManager = (): UseBuildFileManagerReturn => {
  * and SHA-256 checksum validation, localized toast notifications, and `load_build` analytics
  * events without subscribing the root `App` component to store re-renders.
  *
- * @returns {void} Side-effects only.
+ * @returns Side-effects only.
  *
  * @see {@link useBuildFileManager}
  * @see {@link ./useBuildFileManager.test.ts Unit Tests}

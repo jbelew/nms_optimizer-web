@@ -6,7 +6,7 @@ import { immer } from "zustand/middleware/immer";
 import { shallow } from "zustand/shallow";
 
 import { UI_TIMING } from "@/constants";
-import { resolveInitialPlatform } from "@/utils/browser/platformResolver";
+import { resolveInitialPlatform } from "@/store/app/platformStore";
 import { Logger } from "@/utils/system/monitoring";
 
 import { applyValidationFeedback } from "./applyValidationFeedback";
@@ -73,10 +73,10 @@ export const useGridStore = create<GridStore>()(
 			 * Synchronizes `state.grid.cells` with `targetCells` while preserving object
 			 * references for unmodified cells and rows in the Immer draft.
 			 *
-			 * @param {GridStore} state - The current mutable Immer draft state.
-			 * @param {Cell[][]} targetCells - The target 2D cell matrix to apply.
+			 * @param state - The current mutable Immer draft state.
+			 * @param targetCells - The target 2D cell matrix to apply.
 			 *
-			 * @returns {void} Updates `state.grid` in place.
+			 * @returns Updates `state.grid` in place.
 			 */
 			const syncGridCellsInPlace = (state: GridStore, targetCells: Cell[][]): void => {
 				const targetHeight = targetCells.length;

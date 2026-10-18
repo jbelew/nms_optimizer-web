@@ -31,13 +31,20 @@ vi.mock("@/hooks/useToast/useToast", () => ({
 	}),
 }));
 
-vi.mock("@/hooks/useShipTypes/useShipTypes", () => ({
-	useFetchShipTypesSuspense: () => ({
-		corvette: { label: "Corvettes", type: "Starship" },
-		fighter: { label: "Fighter", type: "Starship" },
-		standard: { label: "Standard / Exotic", type: "Starship" },
-	}),
-}));
+const mockCatalog = {
+	corvette: { label: "Corvettes", type: "Starship" },
+	fighter: { label: "Fighter", type: "Starship" },
+	standard: { label: "Standard / Exotic", type: "Starship" },
+};
+
+vi.mock("@/store/app/platformStore", async () => {
+	const actual = await vi.importActual("@/store/app/platformStore");
+
+	return {
+		...actual,
+		usePlatformsSuspense: () => mockCatalog,
+	};
+});
 
 const mockT = vi.fn((key: string, defaultVal?: string) => {
 	if (key === "shipSelection.ariaLabel") return "Select ship type";
@@ -59,7 +66,7 @@ describe("ShipSelection", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		window.history.pushState({}, "", "/?platform=standard");
-		usePlatformStore.setState({ selectedPlatform: "standard" });
+		usePlatformStore.setState({ platforms: mockCatalog, selectedPlatform: "standard" });
 	});
 
 	const renderShipSelection = (props: Partial<React.ComponentProps<typeof ShipSelection>> = {}) =>

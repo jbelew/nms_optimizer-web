@@ -2,8 +2,8 @@ import type { GridStore } from "./gridTypes";
 import type { StorageValue } from "zustand/middleware";
 
 import { UI_TIMING } from "@/constants";
+import { resolveInitialPlatform } from "@/store/app/platformStore";
 import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
-import { resolveInitialPlatform } from "@/utils/browser/platformResolver";
 import { Logger } from "@/utils/system/monitoring";
 
 type SetItemFunction = (name: string, value: StorageValue<Partial<GridStore>>) => Promise<void>;
@@ -14,10 +14,10 @@ type SetItemFunction = (name: string, value: StorageValue<Partial<GridStore>>) =
  * This prevents excessive disk writes during rapid state changes (e.g., when
  * a user is rapidly clicking cells).
  *
- * @param {SetItemFunction} setItemFn - The storage setter function to debounce.
- * @param {number} msToWait - Delay in milliseconds. **Must be a positive integer.**
+ * @param setItemFn - The storage setter function to debounce.
+ * @param msToWait - Delay in milliseconds. **Must be a positive integer.**
  *
- * @returns {function(string, StorageValue<Partial<GridStore>>): Promise<void>} The debounced setter.
+ * @returns The debounced setter.
  *
  * @example
  * ```typescript

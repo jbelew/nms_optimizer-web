@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
-import { usePlatformStore } from "@/store/app/platformStore";
+import { usePlatformsSuspense, usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useDialog } from "@/utils/system/dialogUtils";
@@ -14,10 +13,10 @@ const ALLOWED_URL_QUERY_KEYS = ["platform", "grid"];
  * Sanitizes URL query parameters by stripping non-whitelisted keys and removing
  * orphaned `grid` parameters when `platform` is missing.
  *
- * @param {string} pathname - The URL pathname to preserve.
- * @param {string} search - The raw query string to validate.
+ * @param pathname - The URL pathname to preserve.
+ * @param search - The raw query string to validate.
  *
- * @returns {string} The sanitized search string (including leading `?` if non-empty).
+ * @returns The sanitized search string (including leading `?` if non-empty).
  */
 const sanitizeUrlSearchParams = (pathname: string, search: string): string => {
 	const currentParams = new URLSearchParams(search);
@@ -62,7 +61,7 @@ const sanitizeUrlSearchParams = (pathname: string, search: string): string => {
  * 3. **URL Normalization**: Enforces trailing slashes on non-file paths and keeps `?platform=` synchronized for returning users or deep links.
  * 4. **Shared Grid Reset**: Pushes a clean URL (`replace: false`) removing `?grid=` when a **Shared Grid** is reset.
  *
- * @returns {{ updateUrlForShare: () => string, updateUrlForReset: () => void }} Imperative helpers for share URL generation and reset URL cleanup.
+ * @returns Imperative helpers for share URL generation and reset URL cleanup.
  *
  * @see {@link sessionCoordinator}
  * @see {@link usePlatformStore}
@@ -87,7 +86,7 @@ export const useUrlSync = () => {
 	const location = useLocation();
 	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
-	const shipTypes = useFetchShipTypesSuspense();
+	const platforms = usePlatformsSuspense();
 
 	const { userVisited } = useDialog();
 
@@ -95,12 +94,12 @@ export const useUrlSync = () => {
 	const search = location?.search ?? window.location.search;
 
 	const isSyncingRef = useRef(false);
-	const shipTypesRef = useRef(shipTypes);
+	const platformsRef = useRef(platforms);
 	const prevIsSharedGridRef = useRef(isSharedGrid);
 
 	useEffect(() => {
-		shipTypesRef.current = shipTypes;
-	}, [shipTypes]);
+		platformsRef.current = platforms;
+	}, [platforms]);
 
 	/**
 	 * Removes the `grid` query parameter from the URL when resetting a Shared Grid.
@@ -157,11 +156,10 @@ export const useUrlSync = () => {
 			const platformFromUrl = urlParams.get("platform");
 			const gridFromUrl = urlParams.get("grid");
 
-			const currentShipTypes = shipTypesRef.current;
-			const validPlatformTypes = Object.keys(currentShipTypes);
+			const currentPlatforms = platformsRef.current;
 
-			if (validPlatformTypes.length === 0) {
-				Logger.warn("useUrlSync: Ship types not loaded yet, deferring URL sync");
+			if (!currentPlatforms || Object.keys(currentPlatforms).length === 0) {
+				Logger.warn("useUrlSync: Platform catalog not loaded yet, deferring URL sync");
 
 				return;
 			}
@@ -172,7 +170,6 @@ export const useUrlSync = () => {
 				const syncResult = sessionCoordinator.syncStateFromUrl({
 					gridFromUrl,
 					platformFromUrl,
-					validPlatformTypes,
 				});
 
 				if (syncResult instanceof Promise) {

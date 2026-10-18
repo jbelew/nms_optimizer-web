@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { PLATFORM_STORAGE_KEY } from "@/utils/browser/platformResolver";
+import { PLATFORM_STORAGE_KEY } from "@/store/app/platformStore";
 
 /**
  * Regression test for GridStore persistence race condition.

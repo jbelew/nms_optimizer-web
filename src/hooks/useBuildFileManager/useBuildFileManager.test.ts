@@ -36,15 +36,22 @@ vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
 	}),
 }));
 
-vi.mock("@/hooks/useShipTypes/useShipTypes", () => ({
-	fetchShipTypes: vi.fn(async () => ({
-		explorer: { label: "Explorer", type: "Starship" },
-		fighter: { label: "Fighter", type: "Starship" },
-		freighter: { label: "Freighter", type: "Freighter" },
-		shuttle: { label: "Shuttle", type: "Starship" },
-		standard: { label: "Standard", type: "Starship" },
-	})),
-}));
+const mockPlatformCatalog = {
+	explorer: { label: "Explorer", type: "Starship" },
+	fighter: { label: "Fighter", type: "Starship" },
+	freighter: { label: "Freighter", type: "Freighter" },
+	shuttle: { label: "Shuttle", type: "Starship" },
+	standard: { label: "Standard", type: "Starship" },
+};
+
+vi.mock("@/store/app/platformStore", async () => {
+	const actual = await vi.importActual("@/store/app/platformStore");
+
+	return {
+		...actual,
+		fetchPlatforms: vi.fn(async () => mockPlatformCatalog),
+	};
+});
 
 /**
  * Creates a synthetic file input ChangeEvent for testing `handleFileSelect`.
@@ -80,7 +87,10 @@ describe("useBuildFileManager", () => {
 		URL.revokeObjectURL = vi.fn();
 
 		sessionCoordinator.resetSession();
-		usePlatformStore.setState({ selectedPlatform: "freighter" });
+		usePlatformStore.setState({
+			platforms: mockPlatformCatalog,
+			selectedPlatform: "freighter",
+		});
 	});
 
 	afterEach(() => {

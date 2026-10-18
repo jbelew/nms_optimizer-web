@@ -56,6 +56,10 @@ _Avoid_: Community Builds, default builds, preset setups
 The vehicle or gear category being configured (e.g. Starship, Multi-Tool, Exosuit, Freighter).
 _Avoid_: ship type, vehicle type, gear type
 
+**Platform Catalog**:
+The complete registry of supported Platform Types and their classification metadata (display label and grouping category).
+_Avoid_: ship types, ship type dictionary, platform list
+
 **Ship Class**:
 The tier rating of a starship (`C`, `B`, `A`, `S`) determining available inventory dimensions and supercharged slot allocations.
 _Avoid_: ship rank, ship tier, platform class

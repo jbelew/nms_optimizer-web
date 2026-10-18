@@ -18,11 +18,17 @@ import { useUiStore } from "./ui/uiStore";
 /**
  * Orchestrates the calculation of bonus status data based on max bonus.
  *
- * @param {number} maxBonus - The maximum bonus value to evaluate.
+ * @param maxBonus - The maximum bonus value to evaluate.
  *
- * @returns {BonusStatusData} The calculated icon and percentage.
+ * @returns The calculated icon and percentage.
  *
- * @internal
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * const status = computeBonusStatus(105);
+ * // returns { icon: "lightning", percent: 5 }
+ * ```
  */
 export function computeBonusStatus(maxBonus: number): BonusStatusData {
 	const roundedMaxBonus = Math.round(maxBonus * 100) / 100;
@@ -45,9 +51,9 @@ export function computeBonusStatus(maxBonus: number): BonusStatusData {
 /**
  * Helper to compute initial checked modules based on persistent selection and defaults.
  *
- * @param {Record<string, TechTreeItem[]>} techGroups - The technology groups mapping.
+ * @param techGroups - The technology groups mapping.
  *
- * @returns {Record<string, string[]>} The resolved checked modules.
+ * @returns The resolved checked modules.
  */
 function computeInitialCheckedModules(techGroups: { [key: string]: TechTreeItem[] }) {
 	const techStore = useTechStore.getState();
@@ -91,10 +97,10 @@ export const sessionCoordinator = {
 	 * `getTechTreeMaps`, populates a 10×6 grid layout, and updates `useGridStore` while
 	 * preserving existing Module Selections and technology bonus statuses.
 	 *
-	 * @param {RecommendedBuild} build - The Recommended Build configuration to apply.
-	 * @param {TechTree} techTree - The complete technology tree payload for module lookup.
+	 * @param build - The Recommended Build configuration to apply.
+	 * @param techTree - The complete technology tree payload for module lookup.
 	 *
-	 * @returns {boolean} `true` if the build was valid and applied to `useGridStore`, otherwise `false`.
+	 * @returns `true` if the build was valid and applied to `useGridStore`, otherwise `false`.
 	 *
 	 * @see {@link isValidRecommendedBuild}
 	 * @see {@link getTechTreeMaps}
@@ -168,8 +174,8 @@ export const sessionCoordinator = {
 	 *
 	 * Updates both the grid layout and the tech-specific bonus/method metadata.
 	 *
-	 * @param {ApiResponse} data - The optimization result from the engine.
-	 * @param {string} tech - The unique technology identifier (e.g., 'pulse').
+	 * @param data - The optimization result from the engine.
+	 * @param tech - The unique technology identifier (e.g., 'pulse').
 	 */
 	commitOptimizationResult(data: ApiResponse, tech: string) {
 		const gridStore = useGridStore.getState();
@@ -193,9 +199,9 @@ export const sessionCoordinator = {
 	/**
 	 * Deserializes a Shared Grid token for the active Platform Type and applies it to the grid store.
 	 *
-	 * @param {string} serializedGrid - The encoded grid string from the `grid` query parameter.
+	 * @param serializedGrid - The encoded grid string from the `grid` query parameter.
 	 *
-	 * @returns {Promise<void>} Resolves when the Shared Grid is restored in the store.
+	 * @returns Resolves when the Shared Grid is restored in the store.
 	 *
 	 * @see {@link deserialize}
 	 * @see {@link useGridStore}
@@ -226,9 +232,9 @@ export const sessionCoordinator = {
 	/**
 	 * Extracts a complete multi-store snapshot of the active build for Build File serialization.
 	 *
-	 * @param {string} buildName - The display name to assign to the saved build.
+	 * @param buildName - The display name to assign to the saved build.
 	 *
-	 * @returns {SaveBuildParams} The multi-store build state snapshot ready for `buildSerializer.saveBuild`.
+	 * @returns The multi-store build state snapshot ready for `buildSerializer.saveBuild`.
 	 *
 	 * @see {@link useGridStore}
 	 * @see {@link useTechStore}
@@ -269,7 +275,7 @@ export const sessionCoordinator = {
 	/**
 	 * Generates a shareable URL containing the active Platform Type and serialized Shared Grid state.
 	 *
-	 * @returns {string} The full shareable URL string.
+	 * @returns The full shareable URL string.
 	 *
 	 * @see {@link serialize}
 	 *
@@ -302,11 +308,11 @@ export const sessionCoordinator = {
 	 *
 	 * Synchronizes initial module selections with persistent user preferences.
 	 *
-	 * @param {Record<string, string>} colors - Tech-to-color mapping.
-	 * @param {Record<string, TechTreeItem[]>} techGroups - Tech-to-groups mapping.
-	 * @param {Record<string, string>} activeGroups - Tech-to-active-group-ID mapping.
+	 * @param colors - Tech-to-color mapping.
+	 * @param techGroups - Tech-to-groups mapping.
+	 * @param activeGroups - Tech-to-active-group-ID mapping.
 	 *
-	 * @returns {void} Side-effects only.
+	 * @returns Side-effects only.
 	 */
 	initializeTechTree(
 		colors: { [key: string]: string },
@@ -325,7 +331,7 @@ export const sessionCoordinator = {
 	 * Orchestrates the reset of grid, tech, modules, and interaction stores,
 	 * ensuring all persisted state is also cleared.
 	 *
-	 * @returns {void} Side-effects only.
+	 * @returns Side-effects only.
 	 */
 	resetSession() {
 		const gridStore = useGridStore.getState();
@@ -349,9 +355,9 @@ export const sessionCoordinator = {
 	 * `maxBonus`, `solvedBonus`, `bonusStatus`, and `solveMethod` in `useTechStore`
 	 * while preserving its Module Selection and the rest of the grid layout.
 	 *
-	 * @param {string} tech - The Technology Category identifier to reset.
+	 * @param tech - The Technology Category identifier to reset.
 	 *
-	 * @returns {void} Side-effects only.
+	 * @returns Side-effects only.
 	 *
 	 * @example
 	 * ```ts
@@ -373,10 +379,10 @@ export const sessionCoordinator = {
 	/**
 	 * Restores a validated Build File snapshot across the platform, grid, and tech stores.
 	 *
-	 * @param {BuildFile} buildData - The parsed and checksum-verified Build File payload.
-	 * @param {string[]} validPlatformTypes - Supported Platform Type identifiers.
+	 * @param buildData - The parsed and checksum-verified Build File payload.
+	 * @param validPlatformTypes - Supported Platform Type identifiers.
 	 *
-	 * @returns {void} Side-effects only.
+	 * @returns Side-effects only.
 	 *
 	 * @see {@link useGridStore}
 	 * @see {@link useTechStore}
@@ -384,15 +390,15 @@ export const sessionCoordinator = {
 	 *
 	 * @example
 	 * ```ts
-	 * sessionCoordinator.restoreBuildSnapshot(buildData, ["standard", "corvette"]);
+	 * sessionCoordinator.restoreBuildSnapshot(buildData);
 	 * // updates platformStore, gridStore, and techStore from buildData
 	 * ```
 	 */
-	restoreBuildSnapshot(buildData: BuildFile, validPlatformTypes: string[]): void {
+	restoreBuildSnapshot(buildData: BuildFile): void {
 		const platformState = usePlatformStore.getState();
 
 		if (buildData.shipType !== platformState.selectedPlatform) {
-			platformState.setSelectedPlatform(buildData.shipType, validPlatformTypes);
+			platformState.setSelectedPlatform(buildData.shipType);
 		}
 
 		useGridStore.getState().restoreGridState({
@@ -412,9 +418,9 @@ export const sessionCoordinator = {
 	 *
 	 * Re-initializes checked modules based on the new groups and existing module selections.
 	 *
-	 * @param {Record<string, TechTreeItem[]>} techGroups - The new technology groups mapping.
+	 * @param techGroups - The new technology groups mapping.
 	 *
-	 * @returns {void} Side-effects only.
+	 * @returns Side-effects only.
 	 */
 	setTechGroups(techGroups: { [key: string]: TechTreeItem[] }) {
 		const techStore = useTechStore.getState();
@@ -426,29 +432,24 @@ export const sessionCoordinator = {
 	/**
 	 * Switches the active Platform Type and resets dependent grid, technology, and UI session state.
 	 *
-	 * @param {string} platform - The target Platform Type identifier.
-	 * @param {string[]} validPlatformTypes - Array of supported Platform Type identifiers.
-	 * @param {Grid} [newGrid=createGrid(10, 6)] - The initial Default Grid Layout for the platform.
+	 * @param platform - The target Platform Type identifier.
+	 * @param [newGrid=createGrid(10, 6)] - The initial Default Grid Layout for the platform.
 	 *
-	 * @returns {void} Side-effects only.
+	 * @returns Side-effects only.
 	 *
 	 * @example
 	 * ```ts
-	 * sessionCoordinator.switchPlatform("corvette", ["standard", "corvette"]);
+	 * sessionCoordinator.switchPlatform("corvette");
 	 * // updates platformStore, resets grid to Default Grid Layout, and clears tech/UI session state
 	 * ```
 	 */
-	switchPlatform(
-		platform: string,
-		validPlatformTypes: string[],
-		newGrid: Grid = createGrid(10, 6)
-	): void {
+	switchPlatform(platform: string, newGrid: Grid = createGrid(10, 6)): void {
 		const platformStore = usePlatformStore.getState();
 		const gridStore = useGridStore.getState();
 		const techStore = useTechStore.getState();
 
 		// 1. Validate and update Platform Type
-		platformStore.setSelectedPlatform(platform, validPlatformTypes);
+		platformStore.setSelectedPlatform(platform);
 
 		// 2. Update Grid and reset its metadata
 		gridStore.setGrid(newGrid);
@@ -475,19 +476,17 @@ export const sessionCoordinator = {
 	 * Shared Grid to a URL without a `grid` parameter, triggers a full Session Reset
 	 * to return the workspace to the Default Grid Layout.
 	 *
-	 * @param {object} params - The search parameter values and valid platforms.
-	 * @param {string | null} params.platformFromUrl - The `platform` query parameter.
-	 * @param {string | null} params.gridFromUrl - The `grid` layout query parameter.
-	 * @param {string[]} params.validPlatformTypes - Array of supported Platform Type identifiers.
+	 * @param params - The search parameter values.
+	 * @param params.platformFromUrl - The `platform` query parameter.
+	 * @param params.gridFromUrl - The `grid` layout query parameter.
 	 *
-	 * @returns {Promise<void> | void} Resolves when URL synchronization completes.
+	 * @returns Resolves when URL synchronization completes.
 	 *
 	 * @example
 	 * ```ts
 	 * await sessionCoordinator.syncStateFromUrl({
 	 *   gridFromUrl: null,
 	 *   platformFromUrl: "solar",
-	 *   validPlatformTypes: ["standard", "solar"],
 	 * });
 	 * // updates selectedPlatform to "solar" and resets grid/tech session state
 	 * ```
@@ -495,25 +494,22 @@ export const sessionCoordinator = {
 	syncStateFromUrl(params: {
 		gridFromUrl: null | string;
 		platformFromUrl: null | string;
-		validPlatformTypes: string[];
 	}): Promise<void> | void {
-		const { gridFromUrl, platformFromUrl, validPlatformTypes } = params;
+		const { gridFromUrl, platformFromUrl } = params;
 		const platformStore = usePlatformStore.getState();
 		const currentPlatform = platformStore.selectedPlatform;
 		const wasSharedGrid = useGridStore.getState().isSharedGrid;
 
 		// Sync platform first to avoid grid deserialization conflicts
 		if (platformFromUrl && platformFromUrl !== currentPlatform) {
-			if (validPlatformTypes.includes(platformFromUrl)) {
+			if (platformStore.isValidPlatform(platformFromUrl)) {
 				if (gridFromUrl) {
-					platformStore.setSelectedPlatform(platformFromUrl, validPlatformTypes);
+					platformStore.setSelectedPlatform(platformFromUrl);
 				} else {
-					sessionCoordinator.switchPlatform(platformFromUrl, validPlatformTypes);
+					sessionCoordinator.switchPlatform(platformFromUrl);
 				}
 			} else {
-				Logger.warn(
-					`sessionCoordinator: Invalid platform from URL: ${platformFromUrl}. Expected one of: ${validPlatformTypes.join(", ")}`
-				);
+				Logger.warn(`sessionCoordinator: Invalid platform from URL: ${platformFromUrl}.`);
 			}
 		}
 

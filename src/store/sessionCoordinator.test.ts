@@ -46,7 +46,24 @@ const mockTechStore = {
 	solveMethod: { pulse: "pattern" },
 };
 
-const mockPlatformStoreState = {
+const mockPlatformStoreState: {
+	isValidPlatform: (platform: null | string | undefined) => platform is string;
+	platforms: null | Record<string, { label: string; type: string }>;
+	selectedPlatform: string;
+	setSelectedPlatform: ReturnType<typeof vi.fn>;
+} = {
+	isValidPlatform: (platform): platform is string =>
+		typeof platform === "string" &&
+		platform.length > 0 &&
+		(mockPlatformStoreState.platforms === null ||
+			Object.prototype.hasOwnProperty.call(mockPlatformStoreState.platforms, platform)),
+	platforms: {
+		fighter: { label: "Fighter", type: "Starship" },
+		"new-platform": { label: "New Platform", type: "Starship" },
+		"old-platform": { label: "Old Platform", type: "Starship" },
+		shuttle: { label: "Shuttle", type: "Starship" },
+		"test-platform": { label: "Test Platform", type: "Starship" },
+	},
 	selectedPlatform: "test-platform",
 	setSelectedPlatform: vi.fn(),
 };
@@ -132,16 +149,9 @@ describe("sessionCoordinator", () => {
 	it("switchPlatform atomically updates platform, resets grid, clears tech state, and resets UI session", () => {
 		const newGrid = { cells: [] } as unknown as Grid;
 
-		sessionCoordinator.switchPlatform(
-			"new-platform",
-			["test-platform", "new-platform"],
-			newGrid
-		);
+		sessionCoordinator.switchPlatform("new-platform", newGrid);
 
-		expect(mockPlatformStoreState.setSelectedPlatform).toHaveBeenCalledWith("new-platform", [
-			"test-platform",
-			"new-platform",
-		]);
+		expect(mockPlatformStoreState.setSelectedPlatform).toHaveBeenCalledWith("new-platform");
 		expect(mockGridStore.setGrid).toHaveBeenCalledWith(newGrid);
 		expect(mockGridStore.setResult).toHaveBeenCalledWith(null);
 		expect(mockGridStore.setIsSharedGrid).toHaveBeenCalledWith(false);
@@ -189,13 +199,9 @@ describe("sessionCoordinator", () => {
 			sessionCoordinator.syncStateFromUrl({
 				gridFromUrl: "serialized-grid",
 				platformFromUrl: "new-platform",
-				validPlatformTypes: ["old-platform", "new-platform"],
 			});
 
-			expect(mockPlatformStoreState.setSelectedPlatform).toHaveBeenCalledWith(
-				"new-platform",
-				["old-platform", "new-platform"]
-			);
+			expect(mockPlatformStoreState.setSelectedPlatform).toHaveBeenCalledWith("new-platform");
 			expect(deserializeSpy).toHaveBeenCalledWith("serialized-grid");
 			deserializeSpy.mockRestore();
 		});
@@ -212,13 +218,9 @@ describe("sessionCoordinator", () => {
 			sessionCoordinator.syncStateFromUrl({
 				gridFromUrl: null,
 				platformFromUrl: "new-platform",
-				validPlatformTypes: ["old-platform", "new-platform"],
 			});
 
-			expect(switchPlatformSpy).toHaveBeenCalledWith("new-platform", [
-				"old-platform",
-				"new-platform",
-			]);
+			expect(switchPlatformSpy).toHaveBeenCalledWith("new-platform");
 			expect(deserializeSpy).not.toHaveBeenCalled();
 
 			switchPlatformSpy.mockRestore();
@@ -234,7 +236,6 @@ describe("sessionCoordinator", () => {
 			sessionCoordinator.syncStateFromUrl({
 				gridFromUrl: null,
 				platformFromUrl: null,
-				validPlatformTypes: ["test-platform"],
 			});
 
 			expect(resetSessionSpy).toHaveBeenCalled();
@@ -250,7 +251,6 @@ describe("sessionCoordinator", () => {
 			sessionCoordinator.syncStateFromUrl({
 				gridFromUrl: null,
 				platformFromUrl: null,
-				validPlatformTypes: ["test-platform"],
 			});
 
 			expect(resetSessionSpy).not.toHaveBeenCalled();
@@ -267,7 +267,6 @@ describe("sessionCoordinator", () => {
 			sessionCoordinator.syncStateFromUrl({
 				gridFromUrl: null,
 				platformFromUrl: "new-platform",
-				validPlatformTypes: ["old-platform", "new-platform"],
 			});
 
 			expect(resetSessionSpy).toHaveBeenCalled();
@@ -322,12 +321,9 @@ describe("sessionCoordinator", () => {
 				timestamp: 123,
 			};
 
-			sessionCoordinator.restoreBuildSnapshot(buildFile, ["fighter", "shuttle"]);
+			sessionCoordinator.restoreBuildSnapshot(buildFile);
 
-			expect(mockPlatformStoreState.setSelectedPlatform).toHaveBeenCalledWith("fighter", [
-				"fighter",
-				"shuttle",
-			]);
+			expect(mockPlatformStoreState.setSelectedPlatform).toHaveBeenCalledWith("fighter");
 			expect(mockGridStore.restoreGridState).toHaveBeenCalledWith({
 				...buildFile.gridState,
 				buildName: "Loaded Fighter",

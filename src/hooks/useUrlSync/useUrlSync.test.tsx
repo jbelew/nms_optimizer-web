@@ -1,4 +1,4 @@
-import type { PlatformState } from "@/store/app/platformStore";
+import type { PlatformCatalog, PlatformState } from "@/store/app/platformStore";
 import type { Location } from "react-router-dom";
 import type { Mock } from "vitest";
 import { act } from "react";
@@ -6,8 +6,7 @@ import { renderHook } from "@testing-library/react";
 import { useLocation } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
-import { usePlatformStore } from "@/store/app/platformStore";
+import { usePlatformsSuspense, usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useDialog } from "@/utils/system/dialogUtils";
@@ -19,10 +18,8 @@ vi.mock("@/store/grid/gridStore", () => ({
 	useGridStore: vi.fn() as unknown as Mock,
 }));
 vi.mock("@/store/app/platformStore", () => ({
+	usePlatformsSuspense: vi.fn() as unknown as Mock,
 	usePlatformStore: vi.fn() as unknown as Mock,
-}));
-vi.mock("@/hooks/useShipTypes/useShipTypes", () => ({
-	useFetchShipTypesSuspense: vi.fn() as unknown as Mock,
 }));
 const mockNavigate = vi.fn();
 vi.mock("react-router-dom", () => ({
@@ -51,9 +48,25 @@ describe("useUrlSync", () => {
 		setIsSharedGrid: mockSetIsSharedGrid,
 	};
 
-	let platformStoreState = {
+	let platformStoreState: {
+		initializePlatform: Mock;
+		isValidPlatform: (platform: null | string | undefined) => platform is string;
+		platforms: null | PlatformCatalog;
+		selectedPlatform: string;
+		setPlatforms: Mock;
+		setSelectedPlatform: Mock;
+	} = {
 		initializePlatform: vi.fn(),
+		isValidPlatform: (platform): platform is string =>
+			typeof platform === "string" &&
+			platform.length > 0 &&
+			(platformStoreState.platforms === null ||
+				Object.prototype.hasOwnProperty.call(platformStoreState.platforms, platform)),
+		platforms: {
+			"test-platform": { label: "Test Platform", type: "Starship" },
+		},
 		selectedPlatform: "test-platform",
+		setPlatforms: vi.fn(),
 		setSelectedPlatform: mockSetSelectedPlatform,
 	};
 
@@ -83,9 +96,20 @@ describe("useUrlSync", () => {
 		);
 		(useGridStore as unknown as { getState: Mock }).getState = vi.fn(() => gridStoreState);
 
+		const defaultCatalog: PlatformCatalog = {
+			"test-platform": { label: "Test Platform", type: "Starship" },
+		};
+
 		platformStoreState = {
 			initializePlatform: vi.fn(),
+			isValidPlatform: (platform): platform is string =>
+				typeof platform === "string" &&
+				platform.length > 0 &&
+				(platformStoreState.platforms === null ||
+					Object.prototype.hasOwnProperty.call(platformStoreState.platforms, platform)),
+			platforms: defaultCatalog,
 			selectedPlatform: "test-platform",
+			setPlatforms: vi.fn(),
 			setSelectedPlatform: mockSetSelectedPlatform.mockImplementation((platform: string) => {
 				platformStoreState.selectedPlatform = platform;
 			}),
@@ -102,9 +126,7 @@ describe("useUrlSync", () => {
 			() => platformStoreState
 		);
 
-		(useFetchShipTypesSuspense as unknown as Mock).mockReturnValue({
-			"test-platform": { label: "Test Platform", type: "Starship" },
-		});
+		(usePlatformsSuspense as unknown as Mock).mockReturnValue(defaultCatalog);
 	});
 
 	it("should update URL for sharing via sessionCoordinator.getShareUrl", () => {
@@ -154,11 +176,13 @@ describe("useUrlSync", () => {
 			.spyOn(sessionCoordinator, "deserializeSharedGrid")
 			.mockResolvedValue();
 		window.history.pushState({}, "", "/?grid=serialized-grid&platform=new-platform");
-		(useFetchShipTypesSuspense as unknown as Mock).mockReturnValue({
+		const catalog = {
 			"new-platform": { label: "New Platform", type: "Starship" },
-		});
+		};
+		platformStoreState.platforms = catalog;
+		(usePlatformsSuspense as unknown as Mock).mockReturnValue(catalog);
 		renderHook(() => useUrlSync());
-		expect(mockSetSelectedPlatform).toHaveBeenCalledWith("new-platform", ["new-platform"]);
+		expect(mockSetSelectedPlatform).toHaveBeenCalledWith("new-platform");
 		deserializeSpy.mockRestore();
 	});
 
@@ -166,10 +190,12 @@ describe("useUrlSync", () => {
 		const deserializeSpy = vi
 			.spyOn(sessionCoordinator, "deserializeSharedGrid")
 			.mockResolvedValue();
-		(useFetchShipTypesSuspense as unknown as Mock).mockReturnValue({
+		const catalog = {
 			"new-platform": { label: "New Platform", type: "Starship" },
 			"test-platform": { label: "Test Platform", type: "Starship" },
-		});
+		};
+		platformStoreState.platforms = catalog;
+		(usePlatformsSuspense as unknown as Mock).mockReturnValue(catalog);
 
 		renderHook(() => useUrlSync());
 
@@ -179,10 +205,7 @@ describe("useUrlSync", () => {
 		});
 
 		expect(deserializeSpy).toHaveBeenCalledWith("new-serialized-grid");
-		expect(mockSetSelectedPlatform).toHaveBeenCalledWith("new-platform", [
-			"new-platform",
-			"test-platform",
-		]);
+		expect(mockSetSelectedPlatform).toHaveBeenCalledWith("new-platform");
 		deserializeSpy.mockRestore();
 	});
 
