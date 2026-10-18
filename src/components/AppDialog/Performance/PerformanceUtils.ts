@@ -1,6 +1,75 @@
-import type { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
+import type React from "react";
 
-import type { ChartDataPoint } from "./PerformanceTypes";
+/**
+ * Represents a single point in the timeseries chart.
+ *
+ * @remarks
+ * Defines the data structure expected by Recharts components, containing standard
+ * metadata (timestamp, version) and dynamic metric keys corresponding to CWV names.
+ *
+ * @category Interfaces
+ */
+export interface ChartDataPoint {
+	/**
+	 * Dynamic per-metric values or ranges.
+	 * Metrics are stored as numbers (e.g., `1250`).
+	 * Ranges for bar charts are `[p50, p90]`.
+	 */
+	[metricName: string]: [number, number] | number | string | undefined;
+	/** The application version for this data point. */
+	appVersion?: string;
+	/** Localized formatted MM/DD string for X-axis display. */
+	displayDate: string;
+	/** Localized formatted hour string (e.g., "5 PM") for tooltip display. */
+	hour: string;
+	/** SMA-smoothed overall deficit (100 - score) for inverted chart. */
+	overall_deficit_p75_sma?: number;
+	/** Weighted overall p50 score (0-100). */
+	overall_p50?: number;
+	/** Weighted overall p75 score (0-100). */
+	overall_p75?: number;
+	/** Weighted overall p90 score (0-100). */
+	overall_p90?: number;
+	/** SMA-smoothed overall p75 score for trend line. */
+	overall_score_p75_sma?: number;
+	/** Overall score range [p90, p50] for bar chart visualization. */
+	overall_score_range?: [number, number];
+	/** Unix timestamp in milliseconds for consistent sorting. */
+	timestamp: number;
+}
+
+/**
+ * Represents a single performance metric aggregate record.
+ *
+ * @remarks
+ * Captures p50, p75, and p90 values for Core Web Vitals and other performance indicators
+ * consumed by the performance dashboard.
+ *
+ * @category Types
+ */
+export type PerformanceMetric = {
+	/** The application version associated with this metric. */
+	app_version: string;
+	/** The 75th percentile (p75) value of the metric for this time bucket. */
+	average_value: number;
+	/** The name of the performance metric (e.g., `LCP`, `FCP`, `INP`, `TBT`). */
+	metric_name: string;
+	/** The 50th percentile (p50) value of the metric. */
+	p50?: number;
+	/** The 75th percentile (p75) value of the metric. */
+	p75?: number;
+	/** The 90th percentile (p90) value of the metric. */
+	p90?: number;
+	/** The Unix timestamp in milliseconds for the hourly bucket. */
+	timestamp: number;
+};
+
+/**
+ * Supported lookback window lengths (in days) for the performance dashboard.
+ *
+ * @category Types
+ */
+export type PerformanceRange = 3 | 7 | 14;
 
 /**
  * Formats a metric value for display, handling metric-specific scaling (like CLS).

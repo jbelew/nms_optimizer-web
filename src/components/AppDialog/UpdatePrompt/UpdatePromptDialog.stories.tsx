@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import UpdatePrompt from "./UpdatePrompt";
+import { UpdatePrompt } from "./UpdatePromptDialog";
 
 const meta = {
 	component: UpdatePrompt,
@@ -17,7 +17,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
 	args: {
 		isOpen: true,
-		onDismiss: () => console.log("Dismiss clicked"),
-		onRefresh: () => console.log("Refresh clicked"),
+		onDismiss: () => {},
+		onRefresh: () => {},
 	},
 };

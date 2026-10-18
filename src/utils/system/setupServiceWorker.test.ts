@@ -904,3 +904,163 @@ describe("evictStaleServiceWorkers", () => {
 		expect(result).toBe(false);
 	});
 });
+
+describe("verifyStagedUpdateFreshness", () => {
+	beforeEach(() => {
+		vi.stubGlobal("fetch", vi.fn());
+	});
+
+	afterEach(() => {
+		vi.restoreAllMocks();
+		vi.unstubAllGlobals();
+	});
+
+	it("returns true and does not call updateSW when version.json indicates a newer release", async () => {
+		const { verifyStagedUpdateFreshness } = await import("./setupServiceWorker");
+		const mockUpdateSW = vi.fn();
+		vi.mocked(globalThis.fetch).mockResolvedValueOnce(
+			new Response(
+				JSON.stringify({
+					buildDate: "newer-date",
+					version: "newer-version",
+				}),
+				{ status: 200 },
+			),
+		);
+
+		const shouldPrompt = await verifyStagedUpdateFreshness(mockUpdateSW);
+
+		expect(shouldPrompt).toBe(true);
+		expect(mockUpdateSW).not.toHaveBeenCalled();
+	});
+
+	it("returns false and triggers Silent Background Activation updateSW(false) when version.json matches current build", async () => {
+		const { verifyStagedUpdateFreshness } = await import("./setupServiceWorker");
+		const mockUpdateSW = vi.fn().mockResolvedValue(undefined);
+		vi.mocked(globalThis.fetch).mockResolvedValueOnce(
+			new Response(
+				JSON.stringify({
+					buildDate: "test-date",
+					version: "test-version",
+				}),
+				{ status: 200 },
+			),
+		);
+
+		const shouldPrompt = await verifyStagedUpdateFreshness(mockUpdateSW);
+
+		expect(shouldPrompt).toBe(false);
+		expect(mockUpdateSW).toHaveBeenCalledWith(false);
+	});
+
+	it("returns true on network error or missing version fields as a fail-safe", async () => {
+		const { verifyStagedUpdateFreshness } = await import("./setupServiceWorker");
+		const mockUpdateSW = vi.fn();
+		vi.mocked(globalThis.fetch).mockRejectedValueOnce(new Error("Offline"));
+
+		await expect(verifyStagedUpdateFreshness(mockUpdateSW)).resolves.toBe(true);
+
+		vi.mocked(globalThis.fetch).mockResolvedValueOnce(
+			new Response(JSON.stringify({}), { status: 200 }),
+		);
+
+		await expect(verifyStagedUpdateFreshness(mockUpdateSW)).resolves.toBe(true);
+	});
+});
+
+describe("applyStagedServiceWorkerUpdate", () => {
+	beforeEach(() => {
+		vi.useFakeTimers();
+	});
+
+	afterEach(() => {
+		vi.useRealTimers();
+		vi.restoreAllMocks();
+	});
+
+	it("invokes activateLatestServiceWorker and schedules 2.5s fallback reload", async () => {
+		const { applyStagedServiceWorkerUpdate } = await import("./setupServiceWorker");
+		const originalLocation = window.location;
+		const mockReload = vi.fn();
+
+		Object.defineProperty(window, "location", {
+			configurable: true,
+			value: { ...originalLocation, reload: mockReload },
+			writable: true,
+		});
+
+		try {
+			const mockUpdateSW = vi.fn().mockResolvedValue(undefined);
+			await applyStagedServiceWorkerUpdate(mockUpdateSW);
+
+			expect(mockUpdateSW).toHaveBeenCalledWith(true);
+			expect(mockReload).not.toHaveBeenCalled();
+
+			vi.advanceTimersByTime(2500);
+			expect(mockReload).toHaveBeenCalledTimes(1);
+		} finally {
+			Object.defineProperty(window, "location", {
+				configurable: true,
+				value: originalLocation,
+				writable: true,
+			});
+		}
+	});
+
+	it("evicts stale service workers and caches and reloads when activation rejects", async () => {
+		const { applyStagedServiceWorkerUpdate } = await import("./setupServiceWorker");
+		const originalLocation = window.location;
+		const originalServiceWorker = navigator.serviceWorker;
+		const originalCaches = window.caches;
+		const mockReload = vi.fn();
+		const mockUnregister = vi.fn().mockResolvedValue(true);
+		const mockCacheDelete = vi.fn().mockResolvedValue(true);
+
+		Object.defineProperty(window, "location", {
+			configurable: true,
+			value: { ...originalLocation, reload: mockReload },
+			writable: true,
+		});
+		Object.defineProperty(navigator, "serviceWorker", {
+			configurable: true,
+			value: {
+				getRegistration: vi.fn().mockResolvedValue(undefined),
+				getRegistrations: vi.fn().mockResolvedValue([{ unregister: mockUnregister }]),
+			},
+			writable: true,
+		});
+		Object.defineProperty(window, "caches", {
+			configurable: true,
+			value: {
+				delete: mockCacheDelete,
+				keys: vi.fn().mockResolvedValue(["workbox-precache-v2"]),
+			},
+			writable: true,
+		});
+
+		try {
+			const mockUpdateSW = vi.fn().mockRejectedValue(new Error("Activation failed"));
+			await applyStagedServiceWorkerUpdate(mockUpdateSW);
+
+			expect(mockUnregister).toHaveBeenCalledTimes(1);
+			expect(mockCacheDelete).toHaveBeenCalledWith("workbox-precache-v2");
+			expect(mockReload).toHaveBeenCalledTimes(1);
+		} finally {
+			Object.defineProperty(window, "location", {
+				configurable: true,
+				value: originalLocation,
+				writable: true,
+			});
+			Object.defineProperty(navigator, "serviceWorker", {
+				configurable: true,
+				value: originalServiceWorker,
+				writable: true,
+			});
+			Object.defineProperty(window, "caches", {
+				configurable: true,
+				value: originalCaches,
+				writable: true,
+			});
+		}
+	});
+});

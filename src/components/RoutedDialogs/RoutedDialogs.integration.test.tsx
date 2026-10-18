@@ -6,7 +6,7 @@
  * Radix UI icons, and document titles across all supported locales.
  */
 
-import React, { Suspense } from "react";
+import React, { act, Suspense } from "react";
 import type { TFunction } from "i18next";
 import { Theme } from "@radix-ui/themes";
 import { render, screen } from "@testing-library/react";
@@ -30,13 +30,12 @@ vi.mock("@/components/AppDialog/Markdown/MarkdownContentRenderer", () => ({
 	),
 }));
 
-// Mock UserStatsContent and PerformanceContent
-vi.mock("@/components/AppDialog/UserStats/userStatsContent", () => ({
-	UserStatsContent: () => <div data-testid="userstats-content">User Stats Content</div>,
+vi.mock("@/utils/api/network", () => ({
+	apiCall: vi.fn().mockResolvedValue([]),
 }));
 
-vi.mock("@/components/AppDialog/Performance/performanceContent", () => ({
-	PerformanceContent: () => <div data-testid="performance-content">Performance Content</div>,
+vi.mock("@/hooks/useTechTree/useTechTree", () => ({
+	fetchTechTreeAsync: vi.fn().mockResolvedValue({}),
 }));
 
 const supportedLanguages = ["en", "es", "fr", "de", "it", "pt"];
@@ -142,39 +141,52 @@ describe("Routed Dialogs & Page Registry Integration", () => {
 
 	describe("Custom Routed Dialog Containers (UserStats & Performance)", () => {
 		it("renders UserStatsDialog with correct header derived from Page Registry", async () => {
-			render(
-				<I18nextProvider i18n={i18n}>
-					<Theme>
-						<UserStatsDialog
-							isOpen={true}
-							onClose={vi.fn()}
-						/>
-					</Theme>
-				</I18nextProvider>,
-			);
+			await act(async () => {
+				render(
+					<I18nextProvider i18n={i18n}>
+						<Theme>
+							<UserStatsDialog
+								isOpen={true}
+								onClose={vi.fn()}
+							/>
+						</Theme>
+					</I18nextProvider>,
+				);
+			});
 
 			const expectedTitle = i18n.t("dialogs.titles.userStats");
 			const matchingElements = await screen.findAllByText(expectedTitle);
 			expect(matchingElements.length).toBeGreaterThanOrEqual(1);
-			expect(screen.getByTestId("userstats-content")).toBeInTheDocument();
+			expect(
+				await screen.findByText(i18n.t("dialogs.userStats.description")),
+			).toBeInTheDocument();
 		});
 
 		it("renders PerformanceDialog with correct header and wide layout derived from Page Registry", async () => {
-			render(
-				<I18nextProvider i18n={i18n}>
-					<Theme>
-						<PerformanceDialog
-							isOpen={true}
-							onClose={vi.fn()}
-						/>
-					</Theme>
-				</I18nextProvider>,
-			);
+			await act(async () => {
+				render(
+					<I18nextProvider i18n={i18n}>
+						<Theme>
+							<PerformanceDialog
+								isOpen={true}
+								onClose={vi.fn()}
+							/>
+						</Theme>
+					</I18nextProvider>,
+				);
+			});
 
 			const expectedTitle = i18n.t("dialogs.titles.performance");
 			const matchingElements = await screen.findAllByText(expectedTitle);
 			expect(matchingElements.length).toBeGreaterThanOrEqual(1);
-			expect(screen.getByTestId("performance-content")).toBeInTheDocument();
+			expect(
+				await screen.findByText(
+					i18n.t(
+						"dialogs.performance.description",
+						"Aggregate Core Web Vitals and performance metrics from real user sessions (field data).",
+					),
+				),
+			).toBeInTheDocument();
 		});
 
 		it("maintains activeDialog as performance when deep-linked or navigated to metric sub-routes", async () => {

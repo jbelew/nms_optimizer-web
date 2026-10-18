@@ -18,10 +18,7 @@ import {
 	YAxis,
 } from "recharts";
 
-import type { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
-
-import type { ChartDataPoint } from "./PerformanceTypes";
-import { PerformanceDashboardLayout } from "./PerformanceLayout";
+import type { ChartDataPoint, PerformanceMetric, PerformanceRange } from "./PerformanceUtils";
 import {
 	CHART_TOOLTIP_STYLE,
 	formatMetricValue,
@@ -36,19 +33,97 @@ import {
 	transformPerformanceData,
 } from "./PerformanceUtils";
 
+/**
+ * Props for the {@link PerformanceDashboardLayout} component.
+ */
+interface PerformanceDashboardLayoutProps {
+	/** Summary metric cards row. */
+	cards: ReactNode;
+	/** Main timeseries chart container. */
+	chart: ReactNode;
+	/** Date range segmented control. */
+	range: ReactNode;
+}
+
+/**
+ * Internal layout component for the performance dashboard rows and gaps.
+ *
+ * @see {@link PerformanceDashboardLayoutProps}
+ *
+ * @component
+ */
+const PerformanceDashboardLayout: FC<PerformanceDashboardLayoutProps> = ({
+	cards,
+	chart,
+	range,
+}) => (
+	<Flex
+		direction="column"
+		gap="0"
+	>
+		{cards}
+		<Flex
+			justify="end"
+			mt={`${PERFORMANCE_LAYOUT.CARDS_TO_RANGE_GAP}px`}
+		>
+			{range}
+		</Flex>
+		<Flex mt={`${PERFORMANCE_LAYOUT.RANGE_TO_CHART_GAP}px`}>{chart}</Flex>
+	</Flex>
+);
+
+/** Default axis tick text style. */
 const CHART_TICK_STYLE = { fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 };
+
+/** Active dot radius configuration for metric lines. */
 const ACTIVE_DOT_STYLE = { r: 4 };
+
+/** Active dot radius configuration for the overall score line. */
 const OVERALL_DOT_STYLE = { r: 5 };
+
+/** Default inner margin for the ComposedChart canvas. */
 const CHART_MARGIN = { bottom: 0, left: 0, right: 10, top: 10 };
+
+/** Prevents pointer events on the floating Recharts tooltip wrapper. */
 const TOOLTIP_WRAPPER_STYLE = { pointerEvents: "none" as const };
+
+/** Prevents the Recharts tooltip from escaping the chart bounds. */
 const TOOLTIP_ALLOW_ESCAPE = { x: false, y: false };
+
+/** Resize debounce interval in milliseconds for ResponsiveContainer. */
 const RESPONSIVE_CONTAINER_DEBOUNCE = 50;
+
+/** Fixed Y-axis domain for the 0–100 overall Lighthouse score view. */
 const OVERALL_Y_DOMAIN: [number, number] = [0, 100];
+
+/**
+ * Resolves the semantic CSS color variable for a Lighthouse score band.
+ *
+ * @param score - Weighted Lighthouse score (0–100).
+ *
+ * @returns CSS color variable string.
+ */
 const SCORE_BAND_COLOR = (score: number | undefined): string =>
 	score === undefined ? "var(--gray-11)"
 	: score >= 90 ? "var(--green-11)"
 	: score >= 50 ? "var(--amber-11)"
 	: "var(--red-11)";
+
+/**
+ * Props for the {@link MetricSummaryCard} component.
+ */
+interface MetricSummaryCardProps {
+	/** Accessible label describing the metric card button. */
+	ariaLabel: string;
+	/** CSS border color for the selected state. */
+	borderColor: string;
+	/** Card body content. */
+	children: ReactNode;
+	/** Whether this metric card is currently selected. */
+	isSelected: boolean;
+	/** Callback invoked when the card is clicked or activated via keyboard. */
+	onActivate: () => void;
+}
 
 /**
  * Internal summary card used for both the OVERALL toggle and per-metric cards.
@@ -57,15 +132,11 @@ const SCORE_BAND_COLOR = (score: number | undefined): string =>
  * Encapsulates the shared Card structure, accessibility props (`role`,
  * `aria-pressed`, `tabIndex`), and keyboard activation behavior so styling
  * and a11y fixes stay consistent across all summary cards.
+ *
+ * @see {@link MetricSummaryCardProps}
+ *
+ * @component
  */
-interface MetricSummaryCardProps {
-	ariaLabel: string;
-	borderColor: string;
-	children: ReactNode;
-	isSelected: boolean;
-	onActivate: () => void;
-}
-
 const MetricSummaryCard: FC<MetricSummaryCardProps> = ({
 	ariaLabel,
 	borderColor,
@@ -339,9 +410,9 @@ interface PerformanceChartProps {
 	/** Whether a data transition is currently in flight. */
 	isPending?: boolean;
 	/** Callback triggered when the date range selection changes. */
-	onRangeChange?: (range: number) => void;
+	onRangeChange?: (range: PerformanceRange) => void;
 	/** Currently selected date range in days. */
-	range?: number;
+	range?: PerformanceRange;
 }
 
 /**
@@ -360,6 +431,9 @@ interface PerformanceChartProps {
  *
  * @returns The rendered performance dashboard UI.
  *
+ * @see {@link PerformanceChartProps}
+ * @see {@link ./performanceChart.test.tsx Unit Tests}
+ *
  * @component
  *
  * @category Components
@@ -367,6 +441,7 @@ interface PerformanceChartProps {
  * @example
  * ```tsx
  * <PerformanceChart data={mockData} />
+ * // renders performance dashboard cards and chart
  * ```
  */
 export const PerformanceChart: FC<PerformanceChartProps> = ({
@@ -812,7 +887,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 			}
 			range={
 				<SegmentedControl.Root
-					onValueChange={(v) => onRangeChange?.(Number(v))}
+					onValueChange={(v) => onRangeChange?.(Number(v) as PerformanceRange)}
 					size="1"
 					value={String(range || 3)}
 				>

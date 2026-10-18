@@ -11,11 +11,11 @@ import {
 	AppDialogTitle,
 } from "@/components/AppDialog/Base/AppDialog";
 import { ErrorDialog } from "@/components/AppDialog/Error/ErrorDialog";
+import { UpdatePromptDialog } from "@/components/AppDialog/UpdatePrompt/UpdatePromptDialog";
 import { useOptimizeStore } from "@/store/ui/uiStore";
 import { formatErrorDocumentTitle } from "@shared/page-metadata.js";
 
 import { Seo } from "./components/Seo/Seo";
-import { UpdatePromptWrapper } from "./components/UpdatePrompt/UpdatePromptWrapper";
 import { useAnalytics } from "./hooks/useAnalytics/useAnalytics";
 import { useFileHandling } from "./hooks/useBuildFileManager/useBuildFileManager";
 import { fetchTechTree } from "./hooks/useTechTree/useTechTree";
@@ -205,7 +205,7 @@ const AppContent: FC = () => {
  * This component sets up the high-level application environment, including:
  * - SEO metadata, document title, and `page_view` telemetry via {@link Seo}.
  * - URL validation and sanitization.
- * - Global update detection for the PWA via UpdatePromptWrapper.
+ * - Global update detection for the PWA via {@link UpdatePromptDialog}.
  * - Root-level error handling via ErrorDialog.
  *
  * It wraps the entire application in a `DialogProvider` to enable routed modals.
@@ -215,7 +215,7 @@ const AppContent: FC = () => {
  * @see {@link DialogProvider}
  * @see {@link Seo}
  * @see {@link ErrorDialog}
- * @see {@link UpdatePromptWrapper}
+ * @see {@link UpdatePromptDialog}
  *
  * @component
  *
@@ -268,7 +268,7 @@ const App: FC = () => {
 			<ErrorDialog />
 
 			{/* Update prompt - manages its own lifecycle and analytics */}
-			<UpdatePromptWrapper />
+			<UpdatePromptDialog />
 		</DialogProvider>
 	);
 };

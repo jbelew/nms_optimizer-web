@@ -35,6 +35,16 @@ if (typeof window !== "undefined") {
 }
 
 /**
+ * Payload interface for version information served from `/version.json`.
+ */
+interface VersionPayload {
+	/** ISO timestamp when the application was built. */
+	buildDate?: string;
+	/** Semantic version string of the release. */
+	version?: string;
+}
+
+/**
  * Verifies that the service worker about to be activated is the latest available version
  * on the server, and triggers the update and page reload.
  *
@@ -189,6 +199,51 @@ export async function activateLatestServiceWorker(
 		await updateSW(true);
 	} else if (typeof window !== "undefined") {
 		window.location.reload();
+	}
+}
+
+/**
+ * Activates a confirmed **Staged Worker** with a 2.5-second fallback reload timer and
+ * **PWA Self-Healing** eviction on activation failure.
+ *
+ * @remarks
+ * Calls {@link activateLatestServiceWorker} so that if newer deployments landed while
+ * the prompt was open, the client skips directly to the latest worker. If activation
+ * does not trigger a controlling reload within 2.5 seconds, forces `window.location.reload()`.
+ * If activation rejects, runs {@link evictStaleServiceWorkers} before reloading.
+ *
+ * @param updateSW - Callback provided by the Service Worker registration to trigger activation.
+ *
+ * @returns Resolves once activation or fallback recovery has been scheduled.
+ *
+ * @see {@link activateLatestServiceWorker}
+ * @see {@link evictStaleServiceWorkers}
+ * @see {@link ./setupServiceWorker.test.ts Unit Tests}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * await applyStagedServiceWorkerUpdate(updateSW);
+ * // activates staged worker with self-healing fallback
+ * ```
+ */
+export async function applyStagedServiceWorkerUpdate(
+	updateSW?: (reloadPage?: boolean) => Promise<void>,
+): Promise<void> {
+	try {
+		await activateLatestServiceWorker(updateSW);
+		setTimeout(() => {
+			if (typeof window !== "undefined") {
+				window.location.reload();
+			}
+		}, 2500);
+	} catch {
+		await evictStaleServiceWorkers().finally(() => {
+			if (typeof window !== "undefined") {
+				window.location.reload();
+			}
+		});
 	}
 }
 
@@ -414,5 +469,83 @@ export function setupServiceWorkerRegistration() {
 
 			window.addEventListener("load", handleLoad);
 		}
+	}
+}
+
+/**
+ * Verifies against `/version.json` whether a **Staged Worker** represents a release newer
+ * than the currently running client bundle, suppressing false-positive prompts via
+ * **Silent Background Activation**.
+ *
+ * @remarks
+ * If `/version.json` matches the running `__BUILD_DATE__` and `__APP_VERSION__`, the
+ * **Staged Worker** is commanded to activate silently (`updateSW(false)`) without
+ * reloading the page, and this function resolves to `false`. If a newer release is
+ * detected or if `/version.json` cannot be verified (offline fail-safe), it resolves
+ * to `true`.
+ *
+ * @param updateSW - Callback provided by the Service Worker registration to trigger activation.
+ *
+ * @returns Resolves to `true` when the user should be prompted for an update, or `false` when suppressed.
+ *
+ * @see {@link setupServiceWorkerRegistration}
+ * @see {@link ./setupServiceWorker.test.ts Unit Tests}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * const shouldPrompt = await verifyStagedUpdateFreshness(updateSW);
+ * // returns boolean
+ * ```
+ */
+export async function verifyStagedUpdateFreshness(
+	updateSW?: (reloadPage?: boolean) => Promise<void>,
+): Promise<boolean> {
+	try {
+		const response = await fetch("/version.json", { cache: "no-store" });
+
+		if (!response.ok) {
+			throw new Error(`Failed to fetch version.json: HTTP ${response.status}`);
+		}
+
+		const data = (await response.json()) as VersionPayload;
+
+		if (!data || (!data.buildDate && !data.version)) {
+			throw new Error("version.json response missing buildDate and version fields");
+		}
+
+		const latestBuildDate = data.buildDate;
+		const currentBuildDate = typeof __BUILD_DATE__ !== "undefined" ? __BUILD_DATE__ : undefined;
+
+		const latestVersion = data.version;
+		const currentVersion = typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : undefined;
+
+		const isDifferentVersion =
+			Boolean(latestBuildDate && currentBuildDate && latestBuildDate !== currentBuildDate)
+			|| Boolean(latestVersion && currentVersion && latestVersion !== currentVersion);
+
+		if (isDifferentVersion) {
+			return true;
+		}
+
+		Logger.info("Update prompt suppressed: running client matches latest release", {
+			currentBuildDate,
+			currentVersion,
+			latestBuildDate,
+			latestVersion,
+		});
+
+		if (updateSW) {
+			void updateSW(false);
+		}
+
+		return false;
+	} catch (error) {
+		Logger.error("Failed to verify version freshness; falling back to prompt", {
+			error,
+		});
+
+		return true;
 	}
 }

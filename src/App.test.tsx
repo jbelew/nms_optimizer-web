@@ -146,10 +146,6 @@ vi.mock("./components/RoutedDialogs/RoutedDialogs", () => ({
 	RoutedDialogs: () => <div data-testid="routed-dialogs">dialogs.titles.instructions</div>,
 }));
 
-vi.mock("./components/UpdatePrompt/UpdatePrompt", () => ({
-	default: () => <div data-testid="update-prompt" />,
-}));
-
 describe("App", () => {
 	beforeEach(() => {
 		// Reset the platform store before each test
