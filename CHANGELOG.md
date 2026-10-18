@@ -1,3 +1,22 @@
+# [8.4.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.3.0...v8.4.0) (2026-10-18)
+
+
+### Bug Fixes
+
+* **layout:** measure grid dimensions before paint to prevent desktop CLS ([eef86a6](https://github.com/jbelew/nms_optimizer-web/commit/eef86a64018c264716a5b64cff6289c2ad95484f))
+
+
+### Features
+
+* **optimization:** implement Solver Window types and calculation engine ([#799](https://github.com/jbelew/nms_optimizer-web/issues/799)) ([e5c357d](https://github.com/jbelew/nms_optimizer-web/commit/e5c357d2a5b145bad486d5bb105683da11985a12))
+* **ui:** display real-time Solver Window indicator in Module Selection dialog ([#800](https://github.com/jbelew/nms_optimizer-web/issues/800)) ([4b8cc5b](https://github.com/jbelew/nms_optimizer-web/commit/4b8cc5b0f7e7f2a36e2dc1be431218571abc635b))
+* **ui:** display required Solver Window dimensions in Optimization Alert dialog ([#801](https://github.com/jbelew/nms_optimizer-web/issues/801)) ([3fb1dd4](https://github.com/jbelew/nms_optimizer-web/commit/3fb1dd40fd0197fe0132c3da0942f864f5344640))
+
+
+### Performance Improvements
+
+* **optimize:** avoid re-rendering layout root on solver progress ticks ([438862d](https://github.com/jbelew/nms_optimizer-web/commit/438862d9a9fc0e95739e9799ad4162112e23d0f1))
+
 # [8.3.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.2.9...v8.3.0) (2026-10-16)
 
 
