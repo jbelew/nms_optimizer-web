@@ -32,9 +32,6 @@ vi.mock("react-router-dom", () => ({
 	})),
 	useNavigate: () => mockNavigate,
 }));
-vi.mock("@/context/RouteContext", () => ({
-	useRouteContext: vi.fn(() => ({ isKnownRoute: true })),
-}));
 vi.mock("@/utils/system/dialogUtils", () => ({
 	useDialog: vi.fn(() => ({ userVisited: false })),
 }));

@@ -1,8 +1,6 @@
-// src/hooks/useUrlSync/useUrlSync.tsx
 import { useCallback, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { useRouteContext } from "@/context/RouteContext";
 import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
@@ -87,7 +85,6 @@ const sanitizeUrlSearchParams = (pathname: string, search: string): string => {
 export const useUrlSync = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const { isKnownRoute } = useRouteContext();
 	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const shipTypes = useFetchShipTypesSuspense();
@@ -140,8 +137,6 @@ export const useUrlSync = () => {
 
 	// 2. Restore state from URL on mount and handle browser Back/Forward (popstate)
 	useEffect(() => {
-		if (!isKnownRoute) return;
-
 		const handlePopState = async () => {
 			if (isSyncingRef.current) return;
 
@@ -203,7 +198,7 @@ export const useUrlSync = () => {
 		return () => {
 			window.removeEventListener("popstate", onPopState);
 		};
-	}, [isKnownRoute]);
+	}, []);
 
 	// 3. Automatically clean up ?grid= parameter when a Shared Grid is reset
 	useEffect(() => {
