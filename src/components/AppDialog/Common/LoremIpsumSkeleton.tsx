@@ -24,7 +24,10 @@ import { Skeleton, Text } from "@radix-ui/themes";
 const LoremIpsumSkeleton: React.FC = () => {
 	return (
 		<article className="text-sm sm:text-base">
-			<Text as="p" mb="4">
+			<Text
+				as="p"
+				mb="4"
+			>
 				<Skeleton>
 					Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula
 					eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient
@@ -35,7 +38,10 @@ const LoremIpsumSkeleton: React.FC = () => {
 				</Skeleton>
 			</Text>
 
-			<Text as="p" mb="4">
+			<Text
+				as="p"
+				mb="4"
+			>
 				<Skeleton>
 					Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate
 					eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac,
@@ -46,7 +52,10 @@ const LoremIpsumSkeleton: React.FC = () => {
 				</Skeleton>
 			</Text>
 
-			<Text as="p" mb="4">
+			<Text
+				as="p"
+				mb="4"
+			>
 				<Skeleton>
 					Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit
 					amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus
@@ -57,7 +66,10 @@ const LoremIpsumSkeleton: React.FC = () => {
 				</Skeleton>
 			</Text>
 
-			<Text as="p" mb="4">
+			<Text
+				as="p"
+				mb="4"
+			>
 				<Skeleton>
 					Sed consequat, leo eget bibendum sodales, augue velit cursus nunc, quis gravida
 					magna mi a libero. Fusce vulputate eleifend sapien. Vestibulum purus quam,
@@ -69,7 +81,10 @@ const LoremIpsumSkeleton: React.FC = () => {
 				</Skeleton>
 			</Text>
 
-			<Text as="p" mb="4">
+			<Text
+				as="p"
+				mb="4"
+			>
 				<Skeleton mb="4">
 					Sed aliquam ultrices mauris. Integer ante arcu, accumsan a, consectetuer eget,
 					posuere ut, mauris. Praesent adipiscing. Phasellus ullamcorper ipsum rutrum

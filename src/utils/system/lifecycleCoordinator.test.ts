@@ -186,7 +186,7 @@ describe("LifecycleCoordinator", () => {
 
 			expect(sessionStorage.getItem("__preload_recovery__")).toBeNull();
 			const appReadyCalls = dispatchSpy.mock.calls.filter(
-				(call) => call[0].type === "app-ready"
+				(call) => call[0].type === "app-ready",
 			);
 			expect(appReadyCalls).toHaveLength(0);
 		});
@@ -279,8 +279,8 @@ describe("LifecycleCoordinator", () => {
 
 			expect(replaceMock).toHaveBeenCalledWith(
 				expect.stringContaining(
-					"/500.html?error_type=initialization_error&error_cause=Default%20Fatal%20Error"
-				)
+					"/500.html?error_type=initialization_error&error_cause=Default%20Fatal%20Error",
+				),
 			);
 
 			Object.defineProperty(window, "location", {
@@ -464,7 +464,7 @@ describe("LifecycleCoordinator", () => {
 			expect(executionOrder).toEqual(["fail", "healthy"]);
 			expect(Logger.error).toHaveBeenCalledWith(
 				'Deferred task "failing-task" failed:',
-				failingError
+				failingError,
 			);
 			expect(captureException).toHaveBeenCalledWith(failingError, {
 				level: "error",

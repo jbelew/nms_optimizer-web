@@ -182,7 +182,7 @@ describe("techRules", () => {
 
 		it("derives dot-separated translation keys from icon paths", () => {
 			expect(getTechnologyTranslationKey("pulse", "starship/pulse.webp")).toBe(
-				"starship.pulse"
+				"starship.pulse",
 			);
 			expect(getTechnologyTranslationKey("pulse", null)).toBe("pulse");
 		});

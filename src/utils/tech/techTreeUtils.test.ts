@@ -1,5 +1,6 @@
-import type { RecommendedBuild, TechTree } from "@/types/tech";
 import { describe, expect, test } from "vitest";
+
+import type { RecommendedBuild, TechTree } from "@/types/tech";
 
 import { countBuildModules, getTechTreeMaps } from "./techTreeUtils";
 

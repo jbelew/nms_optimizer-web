@@ -14,7 +14,6 @@
  * @module components/ModuleSelectionDialog/ModuleSelectionDialog
  */
 
-import type { GroupedModules, SelectionModule } from "@/types/props";
 import React, { memo, Suspense, useCallback, useEffect, useRef, useTransition } from "react";
 import { CheckCircledIcon, InfoCircledIcon, MagicWandIcon } from "@radix-ui/react-icons";
 import {
@@ -28,11 +27,11 @@ import {
 	Separator,
 	Text,
 } from "@radix-ui/themes";
-import { formatDocumentTitle } from "@shared/page-metadata.js";
 import { Trans, useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 import { shallow } from "zustand/shallow";
 
+import type { GroupedModules, SelectionModule } from "@/types/props";
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
@@ -51,6 +50,7 @@ import { useTechStore } from "@/store/tech/techStore";
 import { useModuleSelectionDialogStore } from "@/store/ui/uiStore";
 import { determineWindowDimensions } from "@/utils/optimization/windowDimensions";
 import { useDialog } from "@/utils/system/dialogUtils";
+import { formatDocumentTitle } from "@shared/page-metadata.js";
 
 /**
  * Shared types for module grouping and selection items.
@@ -121,9 +121,9 @@ interface SafeParagraphProps extends Omit<React.ComponentPropsWithoutRef<"p">, "
  * @category Utilities
  */
 const resolveModuleImagePath = (image?: null | string): string =>
-	image
-		? `${baseImagePath}${image}?v=${typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "1.0"}`
-		: fallbackImage;
+	image ?
+		`${baseImagePath}${image}?v=${typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "1.0"}`
+	:	fallbackImage;
 
 /**
  * Parses and styles parenthetical text fragments within a string.
@@ -147,7 +147,10 @@ const formatParentheses = (text: string): React.ReactNode => {
 		<React.Fragment key={index}>
 			{part}
 			{matches[index] && (
-				<Badge className="hidden! font-mono! sm:inline!" ml="1">
+				<Badge
+					className="hidden! font-mono! sm:inline!"
+					ml="1"
+				>
 					{matches[index].slice(1, -1)}
 				</Badge>
 			)}
@@ -203,18 +206,23 @@ const ModuleCheckbox: React.FC<ModuleCheckboxProps> = memo(
 		return (
 			<label
 				className={`mb-2 flex items-center gap-2 text-sm font-medium sm:text-base ${
-					isCore
-						? ""
-						: "cursor-pointer transition-colors duration-200 hover:text-(--accent-a12)"
+					isCore ? "" : (
+						"cursor-pointer transition-colors duration-200 hover:text-(--accent-a12)"
+					)
 				}`}
 				key={module.id}
 				style={isCore ? undefined : { cursor: "pointer" }}
 			>
-				{isCore ? (
-					<Checkbox checked={true} disabled={true} />
-				) : (
-					<CheckboxGroup.Item disabled={isDisabled} value={module.id} />
-				)}
+				{isCore ?
+					<Checkbox
+						checked={true}
+						disabled={true}
+					/>
+				:	<CheckboxGroup.Item
+						disabled={isDisabled}
+						value={module.id}
+					/>
+				}
 				<Avatar
 					alt={module.label}
 					color={techColor}
@@ -226,7 +234,7 @@ const ModuleCheckbox: React.FC<ModuleCheckboxProps> = memo(
 				<span className="flex-1">{formatLabel(module.label ?? module.id)}</span>
 			</label>
 		);
-	}
+	},
 );
 
 ModuleCheckbox.displayName = "ModuleCheckbox";
@@ -288,15 +296,21 @@ const ModuleGroup: React.FC<ModuleGroupProps> = ({
 			</div>
 
 			{groupName === "cosmetic" && (
-				<Blockquote className="text-sm sm:text-base" mb="3" mt="1">
-					<Trans components={{ p: <p /> }} i18nKey="moduleSelection.cosmeticInfo" />
+				<Blockquote
+					className="text-sm sm:text-base"
+					mb="3"
+					mt="1"
+				>
+					<Trans
+						components={{ p: <p /> }}
+						i18nKey="moduleSelection.cosmeticInfo"
+					/>
 				</Blockquote>
 			)}
 			{modules.map((module) => {
 				const prerequisiteId = dependencyMap.get(module.id);
-				const isDisabled = prerequisiteId
-					? !currentCheckedModules.includes(prerequisiteId)
-					: false;
+				const isDisabled =
+					prerequisiteId ? !currentCheckedModules.includes(prerequisiteId) : false;
 
 				return (
 					<ModuleCheckbox
@@ -320,7 +334,10 @@ const ModuleGroup: React.FC<ModuleGroupProps> = ({
  * @returns A clean paragraph element.
  */
 const SafeParagraph: React.FC<SafeParagraphProps> = ({ style, ...props }) => (
-	<p {...props} className={style ? "mt-2" : undefined} />
+	<p
+		{...props}
+		className={style ? "mt-2" : undefined}
+	/>
 );
 
 /**
@@ -362,7 +379,7 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 			closeDialog: state.closeDialog,
 			isOpen: state.isOpen,
 			selectedTechData: state.selectedTechData,
-		}))
+		})),
 	);
 
 	const activeTech = selectedTechData?.tech ?? "";
@@ -371,13 +388,13 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 
 	const setCheckedModules = useTechStore((state) => state.setCheckedModules);
 	const currentCheckedModules = useTechStore(
-		useShallow((state) => state.checkedModules[activeTech] || [])
+		useShallow((state) => state.checkedModules[activeTech] || []),
 	);
 	const { activeGroupType, techGroup } = useTechStore(
 		useShallow((state) => ({
 			activeGroupType: state.activeGroups?.[activeTech] || "normal",
 			techGroup: state.techGroups?.[activeTech],
-		}))
+		})),
 	);
 
 	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
@@ -432,7 +449,7 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 		(moduleIds: string[]) => {
 			setCheckedModules(activeTech, () => moduleIds);
 		},
-		[activeTech, setCheckedModules]
+		[activeTech, setCheckedModules],
 	);
 
 	const handleSelectAllChange = (checked: "indeterminate" | boolean) => {
@@ -448,8 +465,8 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 	const handleClose = useCallback(() => {
 		startTransition(() => {
 			if (
-				!optimizeClickedRef.current &&
-				!shallow(currentCheckedModulesRef.current, initialModulesRef.current)
+				!optimizeClickedRef.current
+				&& !shallow(currentCheckedModulesRef.current, initialModulesRef.current)
 			) {
 				handleValueChange(initialModulesRef.current);
 			}
@@ -465,19 +482,24 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 	const isOptimizeDisabled = currentCheckedModules.length === 0;
 	const windowDimensions = determineWindowDimensions(
 		currentCheckedModules.length,
-		activeVariant?.window_rules
+		activeVariant?.window_rules,
 	);
-	const windowBadgeText = windowDimensions
-		? t("moduleSelection.solverWindow", {
+	const windowBadgeText =
+		windowDimensions ?
+			t("moduleSelection.solverWindow", {
 				height: windowDimensions[1],
 				width: windowDimensions[0],
 			})
-		: t("moduleSelection.solverWindowEmpty");
+		:	t("moduleSelection.solverWindowEmpty");
 
 	const content = (
 		<>
 			{isCorvette && activeTech !== "trails" && (
-				<Text as="div" className="mb-3! block text-sm sm:text-base" mb="3">
+				<Text
+					as="div"
+					className="mb-3! block text-sm sm:text-base"
+					mb="3"
+				>
 					<Trans
 						components={{
 							i: <i />,
@@ -489,7 +511,11 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 				</Text>
 			)}
 			{activeTech === "trails" && (
-				<Text as="p" className="mb-3! block text-sm sm:text-base" mb="3">
+				<Text
+					as="p"
+					className="mb-3! block text-sm sm:text-base"
+					mb="3"
+				>
 					<Trans
 						components={{ strong: <strong className="font-bold" /> }}
 						i18nKey="moduleSelection.trailsInfo"
@@ -497,7 +523,11 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 				</Text>
 			)}
 			{!isCorvette && activeTech !== "trails" && (
-				<Text as="p" className="mb-3! block text-sm sm:text-base" mb="3">
+				<Text
+					as="p"
+					className="mb-3! block text-sm sm:text-base"
+					mb="3"
+				>
 					<Trans i18nKey="moduleSelection.description" />
 				</Text>
 			)}
@@ -507,11 +537,18 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 					checked={allModulesSelected}
 					onCheckedChange={handleSelectAllChange}
 				/>
-				<Text className="text-sm font-medium sm:text-base" ml="2">
+				<Text
+					className="text-sm font-medium sm:text-base"
+					ml="2"
+				>
 					{t("moduleSelection.selectAll")}
 				</Text>
 			</label>
-			<Separator className="mt-2" mb="3" size="4" />
+			<Separator
+				className="mt-2"
+				mb="3"
+				size="4"
+			/>
 			<div className="flex flex-col gap-2">
 				{groupedModules["core"]?.length > 0 && (
 					<div key="core">
@@ -532,7 +569,10 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 						))}
 					</div>
 				)}
-				<CheckboxGroup.Root onValueChange={handleValueChange} value={currentCheckedModules}>
+				<CheckboxGroup.Root
+					onValueChange={handleValueChange}
+					value={currentCheckedModules}
+				>
 					{MODULE_GROUP_ORDER.filter((g) => g !== "core").map((groupName) => {
 						if (!groupedModules[groupName]?.length) return null;
 
@@ -571,7 +611,10 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 				{windowBadgeText} (x{currentCheckedModules.length})
 			</Badge>
 			<div className="flex items-center gap-2">
-				<Button onClick={handleClose} variant="soft">
+				<Button
+					onClick={handleClose}
+					variant="soft"
+				>
 					{t("moduleSelection.cancelButton")}
 				</Button>
 				<Button
@@ -592,7 +635,10 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 				content={content}
 				footer={footer}
 				headerIcon={
-					<CheckCircledIcon className="h-6 w-6" style={{ color: "var(--accent-11)" }} />
+					<CheckCircledIcon
+						className="h-6 w-6"
+						style={{ color: "var(--accent-11)" }}
+					/>
 				}
 				isOpen={isOpen}
 				onClose={handleClose}

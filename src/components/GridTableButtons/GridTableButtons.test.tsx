@@ -1,6 +1,6 @@
 /// <reference types="@testing-library/jest-dom" />
-import type { Mock } from "vitest";
 import React from "react";
+import type { Mock } from "vitest";
 import { act, fireEvent, render, renderHook, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -64,7 +64,7 @@ const { setGridStoreState, useGridStore } = vi.hoisted(() => {
 		setGridStoreState: (
 			isShared: boolean,
 			hasModules: boolean,
-			isDefault: boolean = !hasModules && !isShared
+			isDefault: boolean = !hasModules && !isShared,
 		) => {
 			isSharedGrid = isShared;
 			hasModulesInGrid = hasModules;
@@ -125,7 +125,7 @@ const renderComponent = (solving = false) => {
 	return render(
 		<div className="main-app__grid-section">
 			<GridTableButtons solving={solving} />
-		</div>
+		</div>,
 	);
 };
 

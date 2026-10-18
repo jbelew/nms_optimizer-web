@@ -67,7 +67,11 @@ const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onDismiss, onRefresh }) =
 	const _isDesktop = useBreakpoint("1024px");
 
 	const content = (
-		<Text as="p" mb="2" size={{ initial: "2", sm: "3" }}>
+		<Text
+			as="p"
+			mb="2"
+			size={{ initial: "2", sm: "3" }}
+		>
 			{t("dialogs.updatePrompt.description", {
 				defaultValue:
 					"A new version of the application is available. Refresh now to get the latest features and bug fixes.",
@@ -77,7 +81,10 @@ const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onDismiss, onRefresh }) =
 
 	const footer = (
 		<div className="flex justify-end gap-2">
-			<Button onClick={onDismiss} variant="soft">
+			<Button
+				onClick={onDismiss}
+				variant="soft"
+			>
 				{t("dialogs.updatePrompt.later", { defaultValue: "Later" })}
 			</Button>
 			<Button onClick={onRefresh}>

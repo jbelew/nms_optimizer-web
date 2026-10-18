@@ -1,11 +1,11 @@
 // src/store/tech/techStore.ts
-import type { TechTreeItem } from "@/types/tech";
 import type { StorageValue } from "zustand/middleware";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { shallow } from "zustand/shallow";
 
+import type { TechTreeItem } from "@/types/tech";
 import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
 import { Logger } from "@/utils/system/monitoring";
 
@@ -25,7 +25,7 @@ type SetItemFunction = (name: string, value: StorageValue<Partial<TechStore>>) =
 
 function debounceSetItem(
 	setItemFn: SetItemFunction,
-	msToWait: number
+	msToWait: number,
 ): (name: string, value: StorageValue<Partial<TechStore>>) => Promise<void> {
 	let timeoutId: null | number = null;
 
@@ -162,7 +162,7 @@ export interface TechStore {
 		colors: { [key: string]: string },
 		techGroups: { [key: string]: TechTreeItem[] },
 		activeGroups: { [key: string]: string },
-		initialCheckedModules: { [key: string]: string[] }
+		initialCheckedModules: { [key: string]: string[] },
 	) => void;
 	/** Whether all currently checked modules match the default checked modules for each technology's active group variant. */
 	isDefaultModuleSelection: boolean;
@@ -260,7 +260,7 @@ export interface TechStore {
 	 */
 	setTechGroups: (
 		techGroups: { [key: string]: TechTreeItem[] },
-		initialCheckedModules: { [key: string]: string[] }
+		initialCheckedModules: { [key: string]: string[] },
 	) => void;
 	/**
 	 * Sets the maximum bonus value for a technology.
@@ -330,16 +330,15 @@ const computeIsDefaultModuleSelection = (state: TechStore): boolean => {
 	return techKeys.every((tech) => {
 		const activeVariant = resolveActiveTechVariant(
 			state.techGroups[tech],
-			state.activeGroups[tech]
+			state.activeGroups[tech],
 		);
-		const defaultIds = activeVariant
-			? activeVariant.modules.filter((m) => m.checked).map((m) => m.id)
-			: [];
+		const defaultIds =
+			activeVariant ? activeVariant.modules.filter((m) => m.checked).map((m) => m.id) : [];
 		const currentIds = state.checkedModules[tech] || [];
 
 		return (
-			currentIds.length === defaultIds.length &&
-			defaultIds.every((id) => currentIds.includes(id))
+			currentIds.length === defaultIds.length
+			&& defaultIds.every((id) => currentIds.includes(id))
 		);
 	});
 };
@@ -373,7 +372,7 @@ const computeDefaultCheckedModules = (state: TechStore): Record<string, string[]
 		(acc, tech) => {
 			const activeVariant = resolveActiveTechVariant(
 				state.techGroups[tech],
-				state.activeGroups[tech]
+				state.activeGroups[tech],
 			);
 
 			if (activeVariant) {
@@ -385,7 +384,7 @@ const computeDefaultCheckedModules = (state: TechStore): Record<string, string[]
 
 			return acc;
 		},
-		{} as Record<string, string[]>
+		{} as Record<string, string[]>,
 	);
 };
 
@@ -471,7 +470,7 @@ export const useTechStore = create<TechStore>()(
 				colors: { [key: string]: string },
 				techGroups: { [key: string]: TechTreeItem[] },
 				activeGroups: { [key: string]: string },
-				initialCheckedModules: { [key: string]: string[] }
+				initialCheckedModules: { [key: string]: string[] },
 			) => {
 				set((state: TechStore) => {
 					state.activeGroups = activeGroups;
@@ -508,9 +507,9 @@ export const useTechStore = create<TechStore>()(
 						string,
 						BonusStatusData
 					>;
-					state.checkedModules = (techState.checkedModules ??
-						moduleState.moduleSelections ??
-						{}) as Record<string, string[]>;
+					state.checkedModules = (techState.checkedModules
+						?? moduleState.moduleSelections
+						?? {}) as Record<string, string[]>;
 
 					syncAliases(state);
 				}),
@@ -537,7 +536,7 @@ export const useTechStore = create<TechStore>()(
 
 					const activeVariant = resolveActiveTechVariant(
 						state.techGroups[tech],
-						state.activeGroups[tech]
+						state.activeGroups[tech],
 					);
 					const modules = activeVariant ? activeVariant.modules : [];
 
@@ -557,7 +556,7 @@ export const useTechStore = create<TechStore>()(
 				}),
 			setTechGroups: (
 				techGroups: { [key: string]: TechTreeItem[] },
-				initialCheckedModules: { [key: string]: string[] }
+				initialCheckedModules: { [key: string]: string[] },
 			) => {
 				set((state: TechStore) => {
 					state.checkedModules = initialCheckedModules;
@@ -596,8 +595,8 @@ export const useTechStore = create<TechStore>()(
 				checkedModules: state.checkedModules,
 			}),
 			storage: debouncedStorage,
-		}
-	)
+		},
+	),
 );
 
 if (typeof window !== "undefined") {

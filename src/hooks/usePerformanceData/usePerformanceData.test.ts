@@ -1,4 +1,3 @@
-import type { PerformanceMetric } from "./usePerformanceData";
 import type { ReactNode } from "react";
 import { createElement, Suspense } from "react";
 import { renderHook } from "@testing-library/react";
@@ -6,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import * as resourceModule from "@/utils/api/performanceResource";
 
+import type { PerformanceMetric } from "./usePerformanceData";
 import { usePerformanceData } from "./usePerformanceData";
 
 vi.mock("@/utils/api/network", () => ({

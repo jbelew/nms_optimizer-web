@@ -54,7 +54,7 @@ describe("Network Utilities", () => {
 				"https://example.com",
 				expect.objectContaining({
 					signal: expect.any(AbortSignal),
-				})
+				}),
 			);
 		});
 
@@ -163,7 +163,7 @@ describe("Network Utilities", () => {
 			} as unknown as ReturnType<typeof useOptimizeStore.getState>);
 
 			await expect(
-				apiCall("https://example.com/api", { skipGlobalError: true })
+				apiCall("https://example.com/api", { skipGlobalError: true }),
 			).rejects.toThrow(HttpError);
 			expect(setShowErrorMock).not.toHaveBeenCalled();
 		});

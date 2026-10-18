@@ -13,10 +13,10 @@ import {
 } from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { IconButton, Separator, Theme } from "@radix-ui/themes";
-import { getPageByDialogTitleKey, getPageById } from "@shared/page-registry.js";
 import { useTranslation } from "react-i18next";
 
 import { getDialogIconAndStyle } from "@/utils/icons/iconRegistry";
+import { getPageByDialogTitleKey, getPageById } from "@shared/page-registry.js";
 
 interface AppDialogContextValue {
 	isOpen: boolean;
@@ -73,7 +73,10 @@ export const AppDialogRoot: React.FC<AppDialogProps> = ({
 
 	return (
 		<AppDialogContext.Provider value={contextValue}>
-			<DialogRoot onOpenChange={(open) => !open && onClose()} open={isOpen}>
+			<DialogRoot
+				onOpenChange={(open) => !open && onClose()}
+				open={isOpen}
+			>
 				<DialogPortal>
 					<Theme>
 						<DialogOverlay className="appDialog__overlay" />
@@ -151,9 +154,12 @@ export const AppDialogTitle: React.FC<AppDialogTitleProps> = ({
 				<h1 className="heading-styled flex items-start gap-2 text-xl sm:text-2xl">
 					{(headerIcon || IconComponent) && (
 						<div className="mt-px shrink-0 sm:mt-[4px]">
-							{headerIcon ||
-								(IconComponent && (
-									<IconComponent className="h-6 w-6" style={style} />
+							{headerIcon
+								|| (IconComponent && (
+									<IconComponent
+										className="h-6 w-6"
+										style={style}
+									/>
 								))}
 						</div>
 					)}
@@ -162,7 +168,13 @@ export const AppDialogTitle: React.FC<AppDialogTitleProps> = ({
 					</span>
 				</h1>
 			</DialogTitle>
-			<Separator color="cyan" decorative mt="2" orientation="horizontal" size="4" />
+			<Separator
+				color="cyan"
+				decorative
+				mt="2"
+				orientation="horizontal"
+				size="4"
+			/>
 			<DialogDescription className="sr-only">{displayTitle}</DialogDescription>
 		</div>
 	);
@@ -274,14 +286,22 @@ const LegacyAppDialog: React.FC<LegacyAppDialogProps> = ({
 	const resolvedSize = size || page?.dialogSize || "default";
 
 	return (
-		<AppDialogRoot className={className} isOpen={isOpen} onClose={onClose} size={resolvedSize}>
+		<AppDialogRoot
+			className={className}
+			isOpen={isOpen}
+			onClose={onClose}
+			size={resolvedSize}
+		>
 			<AppDialogTitle
 				headerIcon={headerIcon}
 				pageId={pageId}
 				title={title}
 				titleKey={resolvedTitleKey}
 			/>
-			<AppDialogBody pageId={pageId} titleKey={resolvedTitleKey}>
+			<AppDialogBody
+				pageId={pageId}
+				titleKey={resolvedTitleKey}
+			>
 				{content}
 			</AppDialogBody>
 			{footer && <AppDialogFooter>{footer}</AppDialogFooter>}

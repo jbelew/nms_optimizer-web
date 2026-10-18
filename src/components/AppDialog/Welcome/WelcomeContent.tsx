@@ -1,11 +1,11 @@
 import React from "react";
 import { Flex, Text } from "@radix-ui/themes";
-import { formatDocumentTitle } from "@shared/page-metadata.js";
 import { Trans, useTranslation } from "react-i18next";
 
 import DynamicRadixIcon from "@/components/AppDialog/Common/DynamicRadixIcon";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useDialog } from "@/utils/system/dialogUtils";
+import { formatDocumentTitle } from "@shared/page-metadata.js";
 
 import "./WelcomeContent.scss";
 
@@ -85,8 +85,14 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onClose }) => {
 	};
 
 	return (
-		<Flex className="welcomeContent text-sm sm:text-base" direction="column">
-			<Text mb="2" weight="medium">
+		<Flex
+			className="welcomeContent text-sm sm:text-base"
+			direction="column"
+		>
+			<Text
+				mb="2"
+				weight="medium"
+			>
 				{t("dialogs.welcome.description")}
 			</Text>
 			<ul className="welcomeContent__list pr-2">
@@ -106,13 +112,22 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onClose }) => {
 					/>
 				</li>
 				<li className="welcomeContent__item">
-					<Trans components={{ strong: <strong /> }} i18nKey="dialogs.welcome.item2" />
+					<Trans
+						components={{ strong: <strong /> }}
+						i18nKey="dialogs.welcome.item2"
+					/>
 				</li>
 				<li className="welcomeContent__item">
-					<Trans components={{ strong: <strong /> }} i18nKey="dialogs.welcome.item3" />
+					<Trans
+						components={{ strong: <strong /> }}
+						i18nKey="dialogs.welcome.item3"
+					/>
 				</li>
 				<li className="welcomeContent__item">
-					<Trans components={{ strong: <strong /> }} i18nKey="dialogs.welcome.item4" />
+					<Trans
+						components={{ strong: <strong /> }}
+						i18nKey="dialogs.welcome.item4"
+					/>
 				</li>
 				<li className="welcomeContent__item">
 					<Trans
@@ -146,7 +161,11 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onClose }) => {
 				</li>
 			</ul>
 
-			<Flex align="start" gap="2" mt="2">
+			<Flex
+				align="start"
+				gap="2"
+				mt="2"
+			>
 				<Text>
 					<Trans
 						components={{

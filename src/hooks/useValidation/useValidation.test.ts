@@ -24,7 +24,7 @@ describe("Validation Hooks", () => {
 		it("should debounce validation", () => {
 			const validator = vi.fn((val: string) => (val === "invalid" ? "error" : null));
 			const { result } = renderHook(() =>
-				useDebouncedValidation(validator, { debounceMs: 500 })
+				useDebouncedValidation(validator, { debounceMs: 500 }),
 			);
 
 			act(() => {
@@ -52,7 +52,7 @@ describe("Validation Hooks", () => {
 		it("should cancel previous timer on multiple changes", () => {
 			const validator = vi.fn(() => "error");
 			const { result } = renderHook(() =>
-				useDebouncedValidation(validator, { debounceMs: 500 })
+				useDebouncedValidation(validator, { debounceMs: 500 }),
 			);
 
 			act(() => {
@@ -81,7 +81,7 @@ describe("Validation Hooks", () => {
 		it("should cleanup timer on unmount", () => {
 			const validator = vi.fn(() => "error");
 			const { result, unmount } = renderHook(() =>
-				useDebouncedValidation(validator, { debounceMs: 500 })
+				useDebouncedValidation(validator, { debounceMs: 500 }),
 			);
 
 			act(() => {

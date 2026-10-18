@@ -37,7 +37,7 @@ const renderWithDialog = (component: React.ReactElement) => {
 	return render(
 		<Dialog.Root open={true}>
 			<Dialog.Content>{component}</Dialog.Content>
-		</Dialog.Root>
+		</Dialog.Root>,
 	);
 };
 

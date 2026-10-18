@@ -1,8 +1,8 @@
-import type { TechTree } from "@/hooks/useTechTree/useTechTree";
 import React from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
+import type { TechTree } from "@/hooks/useTechTree/useTechTree";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 
 import { TechTreePresetsCard } from "./TechTreePresetsCard";
@@ -23,7 +23,7 @@ vi.mock("react-i18next", () => ({
 					{React.cloneElement(
 						components[5] as React.ReactElement,
 						{},
-						"recommended builds"
+						"recommended builds",
 					)}
 				</span>
 			);

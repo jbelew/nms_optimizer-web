@@ -38,7 +38,7 @@ interface UseDebouncedValidationOptions {
  */
 export const useDebouncedValidation = (
 	validator: (value: string) => null | string,
-	{ debounceMs = 250 }: UseDebouncedValidationOptions = {}
+	{ debounceMs = 250 }: UseDebouncedValidationOptions = {},
 ) => {
 	const [error, setError] = useState<null | string>(null);
 	const debounceTimerRef = useRef<null | ReturnType<typeof setTimeout>>(null);

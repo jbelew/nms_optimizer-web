@@ -43,7 +43,7 @@ describe("NotFound component", () => {
 		render(
 			<MemoryRouter>
 				<NotFound />
-			</MemoryRouter>
+			</MemoryRouter>,
 		);
 
 		expect(screen.getByText("notFound.title")).toBeInTheDocument();
@@ -58,7 +58,7 @@ describe("NotFound component", () => {
 		render(
 			<MemoryRouter>
 				<NotFound />
-			</MemoryRouter>
+			</MemoryRouter>,
 		);
 
 		expect(markReadySpy).toHaveBeenCalledTimes(1);
@@ -69,7 +69,7 @@ describe("NotFound component", () => {
 		render(
 			<MemoryRouter>
 				<NotFound />
-			</MemoryRouter>
+			</MemoryRouter>,
 		);
 
 		expect(document.title).toBe("404: Not Found | NMS Optimizer");
@@ -79,7 +79,7 @@ describe("NotFound component", () => {
 				category: "navigation",
 				nonInteraction: true,
 				page_title: "404: Not Found | NMS Optimizer",
-			})
+			}),
 		);
 		expect(sendEvent).toHaveBeenCalledWith({
 			action: "not_found",

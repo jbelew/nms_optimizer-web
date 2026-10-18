@@ -34,7 +34,7 @@ describe("InstallPrompt", () => {
 					<ToastRenderer />
 				</ToastProvider>
 				<Toast.Viewport />
-			</Toast.Provider>
+			</Toast.Provider>,
 		);
 
 	it("should record first visit in localStorage and not show any prompt", () => {

@@ -28,10 +28,10 @@ export function camelToSnake(obj: unknown): unknown {
 	}
 
 	if (
-		typeof obj === "object" &&
-		!(obj instanceof Set) &&
-		!(obj instanceof Map) &&
-		!(obj instanceof Date)
+		typeof obj === "object"
+		&& !(obj instanceof Set)
+		&& !(obj instanceof Map)
+		&& !(obj instanceof Date)
 	) {
 		const newObj: Record<string, unknown> = {};
 		const record = obj as Record<string, unknown>;
@@ -70,10 +70,10 @@ export function snakeToCamel(obj: unknown): unknown {
 	}
 
 	if (
-		typeof obj === "object" &&
-		!(obj instanceof Set) &&
-		!(obj instanceof Map) &&
-		!(obj instanceof Date)
+		typeof obj === "object"
+		&& !(obj instanceof Set)
+		&& !(obj instanceof Map)
+		&& !(obj instanceof Date)
 	) {
 		const newObj: Record<string, unknown> = {};
 		const record = obj as Record<string, unknown>;

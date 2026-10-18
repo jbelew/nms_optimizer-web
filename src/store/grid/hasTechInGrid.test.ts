@@ -1,7 +1,7 @@
-import type { Grid } from "./gridStore";
 import { act } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 
+import type { Grid } from "./gridStore";
 import { createEmptyCell, createGrid, useGridStore } from "./gridStore";
 
 describe("hasTechInGrid selector in GridStore", () => {
@@ -40,7 +40,7 @@ describe("hasTechInGrid selector in GridStore", () => {
 			defaultGrid.cells.forEach((row) =>
 				row.forEach((cell) => {
 					Object.assign(cell, createEmptyCell(false, true)); // Active, no tech, not SC
-				})
+				}),
 			);
 			useGridStore.setState({ grid: defaultGrid });
 			useGridStore.getState().triggerRecompute();

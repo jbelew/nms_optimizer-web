@@ -1,14 +1,13 @@
-import type { ApiResponse, Grid } from "./grid/gridStore";
-import type { BonusStatusData } from "./tech/techStore";
 import type { RecommendedBuild, TechTree, TechTreeItem } from "@/types/tech";
 import type { SaveBuildParams } from "@/utils/build/buildSerializer";
 import type { BuildFile } from "@/utils/validation/dataValidation";
-
 import { deserialize, serialize } from "@/hooks/useGridDeserializer/gridSerializer";
 import { Logger } from "@/utils/system/monitoring";
 import { getTechTreeMaps } from "@/utils/tech/techTreeUtils";
 import { isValidRecommendedBuild } from "@/utils/validation/dataValidation";
 
+import type { ApiResponse, Grid } from "./grid/gridStore";
+import type { BonusStatusData } from "./tech/techStore";
 import { usePlatformStore } from "./app/platformStore";
 import { assignModuleToCell } from "./grid/gridFactories";
 import { createEmptyCell, createGrid, resetCellContent, useGridStore } from "./grid/gridStore";
@@ -74,7 +73,7 @@ function computeInitialCheckedModules(techGroups: { [key: string]: TechTreeItem[
 
 			return acc;
 		},
-		{} as { [key: string]: string[] }
+		{} as { [key: string]: string[] },
 	);
 }
 
@@ -140,7 +139,7 @@ export const sessionCoordinator = {
 				if (cellData) {
 					const cell = createEmptyCell(
 						cellData.supercharged ?? false,
-						cellData.active ?? true
+						cellData.active ?? true,
 					);
 
 					cell.tech = cellData.tech ?? null;
@@ -217,7 +216,7 @@ export const sessionCoordinator = {
 		const newGrid = await deserialize(
 			serializedGrid,
 			targetPlatform,
-			useTechStore.getState().setTechColors
+			useTechStore.getState().setTechColors,
 		);
 
 		if (newGrid) {
@@ -317,7 +316,7 @@ export const sessionCoordinator = {
 	initializeTechTree(
 		colors: { [key: string]: string },
 		techGroups: { [key: string]: TechTreeItem[] },
-		activeGroups: { [key: string]: string }
+		activeGroups: { [key: string]: string },
 	) {
 		const techStore = useTechStore.getState();
 		const initialCheckedModules = computeInitialCheckedModules(techGroups);

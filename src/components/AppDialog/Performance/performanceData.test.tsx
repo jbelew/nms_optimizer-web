@@ -82,7 +82,7 @@ describe("PerformanceData", () => {
 				<Suspense fallback={<div>Loading...</div>}>
 					<PerformanceData isOpen={true} />
 				</Suspense>
-			</Theme>
+			</Theme>,
 		);
 
 		// Card labels should be present

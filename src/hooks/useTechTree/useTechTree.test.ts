@@ -1,8 +1,8 @@
-import type { Module, TechTree, TechTreeItem } from "./useTechTree";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import * as apiCallModule from "@/utils/api/network";
 
+import type { Module, TechTree, TechTreeItem } from "./useTechTree";
 import { clearTechTreeCache, fetchTechTree, fetchTechTreeAsync } from "./useTechTree";
 
 // Mock apiCall
@@ -45,7 +45,7 @@ describe("useTechTree utilities", () => {
 			expect(mockApiCall).toHaveBeenCalledWith(
 				expect.stringContaining("tech_tree/standard"),
 				{},
-				10000
+				10000,
 			);
 		});
 
@@ -129,7 +129,7 @@ describe("useTechTree utilities", () => {
 			expect(mockApiCall).toHaveBeenCalledWith(
 				expect.stringContaining("tech_tree/standard"),
 				{},
-				10000
+				10000,
 			);
 		});
 	});
@@ -370,7 +370,7 @@ describe("useTechTree utilities", () => {
 				expect(mockApiCall).toHaveBeenCalledWith(
 					expect.stringContaining(`tech_tree/${shipType}`),
 					{},
-					10000
+					10000,
 				);
 			}
 		});

@@ -1,7 +1,8 @@
-import type { ChartDataPoint } from "./PerformanceTypes";
-import type { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
 import { describe, expect, it } from "vitest";
 
+import type { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
+
+import type { ChartDataPoint } from "./PerformanceTypes";
 import {
 	calculateSMA,
 	computeLogNormalScore,
@@ -268,7 +269,7 @@ describe("getStatusColor", () => {
 describe("getPerformanceSummary", () => {
 	it("returns null for empty data", () => {
 		expect(
-			getPerformanceSummary(transformPerformanceData([], "en-US", 0, 1, 0).chartData)
+			getPerformanceSummary(transformPerformanceData([], "en-US", 0, 1, 0).chartData),
 		).toBeNull();
 	});
 
@@ -280,9 +281,9 @@ describe("getPerformanceSummary", () => {
 					"en-US",
 					0,
 					1,
-					0
-				).chartData
-			)
+					0,
+				).chartData,
+			),
 		).toBeNull();
 	});
 
@@ -298,7 +299,7 @@ describe("getPerformanceSummary", () => {
 		];
 
 		const result = getPerformanceSummary(
-			transformPerformanceData(data, "en-US", 0, 1, 0).chartData
+			transformPerformanceData(data, "en-US", 0, 1, 0).chartData,
 		);
 		expect(result).not.toBeNull();
 		// Score at the p90 control point — high but not exactly 90
@@ -325,7 +326,7 @@ describe("getPerformanceSummary", () => {
 		];
 
 		const result = getPerformanceSummary(
-			transformPerformanceData(data, "en-US", 0, 1, 0).chartData
+			transformPerformanceData(data, "en-US", 0, 1, 0).chartData,
 		);
 		expect(result!.trends.LCP).toBe("improvement");
 	});
@@ -349,7 +350,7 @@ describe("getPerformanceSummary", () => {
 		];
 
 		const result = getPerformanceSummary(
-			transformPerformanceData(data, "en-US", 0, 1, 0).chartData
+			transformPerformanceData(data, "en-US", 0, 1, 0).chartData,
 		);
 		expect(result!.trends.LCP).toBe("regression");
 	});
@@ -366,7 +367,7 @@ describe("getPerformanceSummary", () => {
 		];
 
 		const result = getPerformanceSummary(
-			transformPerformanceData(data, "en-US", 0, 1, 0).chartData
+			transformPerformanceData(data, "en-US", 0, 1, 0).chartData,
 		);
 		expect(result!.trends.LCP).toBe("neutral");
 	});
@@ -390,7 +391,7 @@ describe("getPerformanceSummary", () => {
 		];
 
 		const result = getPerformanceSummary(
-			transformPerformanceData(data, "en-US", 0, 1, 0).chartData
+			transformPerformanceData(data, "en-US", 0, 1, 0).chartData,
 		);
 		// 5/2500 = 0.2% < 1% threshold
 		expect(result!.trends.LCP).toBe("neutral");
@@ -415,7 +416,7 @@ describe("getPerformanceSummary", () => {
 		];
 
 		const result = getPerformanceSummary(
-			transformPerformanceData(data, "en-US", 0, 1, 0).chartData
+			transformPerformanceData(data, "en-US", 0, 1, 0).chartData,
 		);
 		expect(result!.metrics.OVERALL).toBeDefined();
 		expect(result!.trends.OVERALL).toBe("improvement");
@@ -429,7 +430,7 @@ describe("getVersionChanges", () => {
 	it("returns empty array for fewer than 2 data points", () => {
 		expect(getVersionChanges([])).toEqual([]);
 		expect(getVersionChanges([{ appVersion: "v1", timestamp: 1 } as ChartDataPoint])).toEqual(
-			[]
+			[],
 		);
 	});
 
@@ -440,7 +441,7 @@ describe("getVersionChanges", () => {
 				({
 					appVersion: "v1",
 					timestamp: i,
-				}) as ChartDataPoint
+				}) as ChartDataPoint,
 		);
 		expect(getVersionChanges(data)).toEqual([]);
 	});
@@ -452,7 +453,7 @@ describe("getVersionChanges", () => {
 				({
 					appVersion: i < 5 ? "v1" : "v2",
 					timestamp: i * 1000,
-				}) as ChartDataPoint
+				}) as ChartDataPoint,
 		);
 
 		const result = getVersionChanges(data);
@@ -467,7 +468,7 @@ describe("getVersionChanges", () => {
 				({
 					appVersion: i < 2 ? "v1" : "v2",
 					timestamp: i * 1000,
-				}) as ChartDataPoint
+				}) as ChartDataPoint,
 		);
 
 		// Change at index 2 should be skipped (i <= 3)
@@ -481,9 +482,13 @@ describe("getVersionChanges", () => {
 			{ length: 15 },
 			(_, i) =>
 				({
-					appVersion: i < 5 ? "v1" : i < 6 ? "v2" : i < 7 ? "v3" : "v4",
+					appVersion:
+						i < 5 ? "v1"
+						: i < 6 ? "v2"
+						: i < 7 ? "v3"
+						: "v4",
 					timestamp: i * 1000,
-				}) as ChartDataPoint
+				}) as ChartDataPoint,
 		);
 
 		const result = getVersionChanges(data);
@@ -603,7 +608,7 @@ describe("transformPerformanceData", () => {
 
 		// Create 20 data points
 		const raw = Array.from({ length: 20 }, (_, i) =>
-			makeMetric(baseTs + i * hourMs, "LCP", 2500 + i * 10)
+			makeMetric(baseTs + i * hourMs, "LCP", 2500 + i * 10),
 		);
 
 		const { chartData } = transformPerformanceData(raw, "en", maxPoints, 1);
@@ -620,7 +625,7 @@ describe("transformPerformanceData", () => {
 
 		// Create 20 data points with rapid version changes
 		const raw = Array.from({ length: 20 }, (_, i) =>
-			makeMetric(baseTs + i * hourMs, "LCP", 2500, `v${Math.floor(i / 2)}`)
+			makeMetric(baseTs + i * hourMs, "LCP", 2500, `v${Math.floor(i / 2)}`),
 		);
 
 		const { chartData } = transformPerformanceData(raw, "en", maxPoints, 1);
@@ -640,7 +645,7 @@ describe("transformPerformanceData", () => {
 		// LCP increases by 100ms every hour.
 		// T+18h: 4300ms, T+19h: 4400ms
 		const raw = Array.from({ length: 20 }, (_, i) =>
-			makeMetric(baseTs + i * hourMs, "LCP", 2500 + i * 100)
+			makeMetric(baseTs + i * hourMs, "LCP", 2500 + i * 100),
 		);
 
 		const { chartData, summary } = transformPerformanceData(raw, "en", maxPoints, 1);
@@ -670,7 +675,7 @@ describe("transformPerformanceData", () => {
 		const baseTs = 1619370000000;
 
 		const raw = Array.from({ length: 48 }, (_, i) =>
-			makeMetric(baseTs + i * hourMs, "LCP", 2500 + i * 10)
+			makeMetric(baseTs + i * hourMs, "LCP", 2500 + i * 10),
 		);
 
 		const { summary: summaryHigh } = transformPerformanceData(raw, "en", 100, 3);
@@ -685,7 +690,7 @@ describe("transformPerformanceData", () => {
 
 		// Create 10 days of data
 		const raw = Array.from({ length: 10 * 24 }, (_, i) =>
-			makeMetric(baseTs + i * hourMs, "LCP", 2500 + i * 10)
+			makeMetric(baseTs + i * hourMs, "LCP", 2500 + i * 10),
 		);
 
 		const absoluteLatestTs = baseTs + (10 * 24 - 1) * hourMs;

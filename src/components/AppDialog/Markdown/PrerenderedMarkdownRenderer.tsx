@@ -44,9 +44,9 @@ const PrerenderedMarkdownRenderer: React.FC<PrerenderedMarkdownRendererProps> = 
 
 	// Find pre-rendered content in the DOM
 	const prerenderedElement =
-		typeof document !== "undefined"
-			? document.querySelector('[data-prerendered-markdown="true"]')
-			: null;
+		typeof document !== "undefined" ?
+			document.querySelector('[data-prerendered-markdown="true"]')
+		:	null;
 
 	// Scroll to target section if specified
 	useEffect(() => {

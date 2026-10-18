@@ -1,7 +1,7 @@
-import type { Cell } from "./gridStore";
 import { act } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 
+import type { Cell } from "./gridStore";
 import { createEmptyCell, createGrid, getRowControlEligibility, useGridStore } from "./gridStore";
 
 describe("activateRow and deActivateRow actions in GridStore", () => {
@@ -89,7 +89,7 @@ describe("activateRow and deActivateRow actions in GridStore", () => {
 			for (let r = 0; r < gridHeight; r++) {
 				if (r !== targetRowIndex) {
 					originalOtherRows.push(
-						JSON.parse(JSON.stringify(useGridStore.getState().grid.cells[r]))
+						JSON.parse(JSON.stringify(useGridStore.getState().grid.cells[r])),
 					);
 				}
 			}
@@ -170,7 +170,7 @@ describe("activateRow and deActivateRow actions in GridStore", () => {
 			for (let r = 0; r < gridHeight; r++) {
 				if (r !== targetRowIndex) {
 					originalOtherRows.push(
-						JSON.parse(JSON.stringify(useGridStore.getState().grid.cells[r]))
+						JSON.parse(JSON.stringify(useGridStore.getState().grid.cells[r])),
 					);
 				}
 			}
@@ -220,7 +220,7 @@ describe("getRowControlEligibility", () => {
 				lastActiveRowIndex: 5,
 				rowIndex: 0,
 				totalRows: 0,
-			})
+			}),
 		).toEqual({ canActivateRow: false, canDeactivateRow: false });
 	});
 
@@ -231,7 +231,7 @@ describe("getRowControlEligibility", () => {
 				lastActiveRowIndex: 1,
 				rowIndex: 2,
 				totalRows: 3,
-			})
+			}),
 		).toEqual({ canActivateRow: true, canDeactivateRow: false });
 	});
 
@@ -242,7 +242,7 @@ describe("getRowControlEligibility", () => {
 				lastActiveRowIndex: 1,
 				rowIndex: 2,
 				totalRows: 4,
-			})
+			}),
 		).toEqual({ canActivateRow: false, canDeactivateRow: false });
 	});
 
@@ -253,7 +253,7 @@ describe("getRowControlEligibility", () => {
 				lastActiveRowIndex: 7,
 				rowIndex: 7,
 				totalRows: 10,
-			})
+			}),
 		).toEqual({ canActivateRow: false, canDeactivateRow: true });
 	});
 
@@ -264,7 +264,7 @@ describe("getRowControlEligibility", () => {
 				lastActiveRowIndex: 1,
 				rowIndex: 1,
 				totalRows: 8,
-			})
+			}),
 		).toEqual({ canActivateRow: false, canDeactivateRow: false });
 	});
 
@@ -275,7 +275,7 @@ describe("getRowControlEligibility", () => {
 				lastActiveRowIndex: -1,
 				rowIndex: 0,
 				totalRows: 6,
-			})
+			}),
 		).toEqual({ canActivateRow: false, canDeactivateRow: false });
 	});
 
@@ -286,7 +286,7 @@ describe("getRowControlEligibility", () => {
 				lastActiveRowIndex: 9,
 				rowIndex: 9,
 				totalRows: 10,
-			})
+			}),
 		).toEqual({ canActivateRow: false, canDeactivateRow: true });
 	});
 });

@@ -59,7 +59,7 @@ interface Window {
 			clearAllBonusStatus: () => void;
 			setBonusStatus: (
 				tech: string,
-				bonus: import("./store/tech/techStore").BonusStatusData
+				bonus: import("./store/tech/techStore").BonusStatusData,
 			) => void;
 		};
 		setState: (updates: {

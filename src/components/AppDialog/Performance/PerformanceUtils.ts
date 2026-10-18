@@ -1,5 +1,6 @@
-import type { ChartDataPoint } from "./PerformanceTypes";
 import type { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
+
+import type { ChartDataPoint } from "./PerformanceTypes";
 
 /**
  * Formats a metric value for display, handling metric-specific scaling (like CLS).
@@ -112,14 +113,14 @@ export const CHART_TOOLTIP_STYLE: React.CSSProperties = {
  * @category Constants
  */
 export const FULL_DASHBOARD_HEIGHT =
-	PERFORMANCE_LAYOUT.CONTAINER_PADDING_Y +
-	PERFORMANCE_LAYOUT.DESCRIPTION_AREA_HEIGHT +
-	PERFORMANCE_LAYOUT.SUMMARY_CARDS_HEIGHT +
-	PERFORMANCE_LAYOUT.CARDS_TO_RANGE_GAP +
-	PERFORMANCE_LAYOUT.RANGE_HEIGHT +
-	PERFORMANCE_LAYOUT.RANGE_TO_CHART_GAP +
-	PERFORMANCE_LAYOUT.CHART_HEIGHT +
-	PERFORMANCE_LAYOUT.CHART_MARGIN_BOTTOM;
+	PERFORMANCE_LAYOUT.CONTAINER_PADDING_Y
+	+ PERFORMANCE_LAYOUT.DESCRIPTION_AREA_HEIGHT
+	+ PERFORMANCE_LAYOUT.SUMMARY_CARDS_HEIGHT
+	+ PERFORMANCE_LAYOUT.CARDS_TO_RANGE_GAP
+	+ PERFORMANCE_LAYOUT.RANGE_HEIGHT
+	+ PERFORMANCE_LAYOUT.RANGE_TO_CHART_GAP
+	+ PERFORMANCE_LAYOUT.CHART_HEIGHT
+	+ PERFORMANCE_LAYOUT.CHART_MARGIN_BOTTOM;
 
 /**
  * Maps Core Web Vital metric names to Radix UI color names.
@@ -285,7 +286,7 @@ const formatterCache = new Map<string, Intl.DateTimeFormat>();
  */
 export const getFormatter = (
 	locale: string,
-	options: Intl.DateTimeFormatOptions
+	options: Intl.DateTimeFormatOptions,
 ): Intl.DateTimeFormat => {
 	const key = `${locale}-${JSON.stringify(options)}`;
 
@@ -326,7 +327,7 @@ export const getFormatter = (
 export const calculateSMA = (
 	data: (number | undefined)[],
 	period: number,
-	anchorEnd = false
+	anchorEnd = false,
 ): (number | undefined)[] => {
 	const sma = data.map((_, index) => {
 		const start = Math.max(0, index - period + 1);
@@ -385,7 +386,7 @@ export const transformPerformanceData = (
 	locale: string,
 	maxPoints: number,
 	smaPeriod = 3,
-	rangeDays?: number
+	rangeDays?: number,
 ): {
 	chartData: ChartDataPoint[];
 	summary: null | RawPerformanceSummary;
@@ -507,7 +508,7 @@ export const transformPerformanceData = (
 				const score = computeLogNormalScore(
 					p[`${m}_p75`] as number,
 					config.p90,
-					config.p50
+					config.p50,
 				);
 				// Individual metrics use DEFICIT (0 is best, at bottom)
 				p[`${m}_deficit`] = 100 - score;
@@ -751,7 +752,7 @@ export const transformPerformanceData = (
  * ```
  */
 export const getPerformanceSummary = (
-	chartData: ChartDataPoint[]
+	chartData: ChartDataPoint[],
 ): null | RawPerformanceSummary => {
 	if (!chartData || chartData.length === 0) return null;
 
@@ -805,12 +806,10 @@ export const getPerformanceSummary = (
 
 		const previousMetric = findPreviousValidPoint((p) => p[`${m}_p75`] !== undefined);
 
-		const val2 = previousMetric
-			? (previousMetric[`${m}_p75`] as number | undefined)
-			: undefined;
-		const sma2 = previousMetric
-			? (previousMetric[`${m}_p75_sma`] as number | undefined)
-			: undefined;
+		const val2 =
+			previousMetric ? (previousMetric[`${m}_p75`] as number | undefined) : undefined;
+		const sma2 =
+			previousMetric ? (previousMetric[`${m}_p75_sma`] as number | undefined) : undefined;
 
 		if (val1 !== undefined) {
 			const config = LIGHTHOUSE_CONFIG[m];
@@ -865,7 +864,7 @@ export interface RawPerformanceSummary {
  * ```
  */
 export const getVersionChanges = (
-	chartData: ChartDataPoint[]
+	chartData: ChartDataPoint[],
 ): { timestamp: number; version: string }[] => {
 	const versionChanges: { timestamp: number; version: string }[] = [];
 

@@ -27,7 +27,7 @@ export const TechTreeSkeleton: React.FC<{ height?: null | number }> = ({ height 
 
 	return (
 		<>
-			{isLarge ? (
+			{isLarge ?
 				<ScrollArea
 					className="main-app__tech-tree-sidebar shadow-sm"
 					style={{
@@ -44,20 +44,30 @@ export const TechTreeSkeleton: React.FC<{ height?: null | number }> = ({ height 
 						isVisible={true}
 					/>
 				</ScrollArea>
-			) : (
-				<aside className="w-full grow pt-4" style={{ minHeight: "50vh" }}>
+			:	<aside
+					className="w-full grow pt-4"
+					style={{ minHeight: "50vh" }}
+				>
 					<Box className="flex flex-col gap-2">
 						{Array.from({ length: 5 }).map((_, i) => (
 							<React.Fragment key={i}>
-								<Skeleton height="44px" mt={i === 0 ? "0" : "4"} width="100%" />
+								<Skeleton
+									height="44px"
+									mt={i === 0 ? "0" : "4"}
+									width="100%"
+								/>
 								{Array.from({ length: 3 }).map((__, j) => (
-									<Skeleton height="32px" key={j} width="100%" />
+									<Skeleton
+										height="32px"
+										key={j}
+										width="100%"
+									/>
 								))}
 							</React.Fragment>
 						))}
 					</Box>
 				</aside>
-			)}
+			}
 		</>
 	);
 };

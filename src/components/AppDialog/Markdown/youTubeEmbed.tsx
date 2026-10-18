@@ -35,7 +35,10 @@ export const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({ title, videoId }) =>
 	const iframeTitle = title || "YouTube Video";
 
 	return (
-		<Box asChild mb="2">
+		<Box
+			asChild
+			mb="2"
+		>
 			<iframe
 				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 				allowFullScreen

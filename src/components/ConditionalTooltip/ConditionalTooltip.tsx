@@ -79,7 +79,7 @@ export const ConditionalTooltip: React.FC<ConditionalTooltipProps> = memo(
 					props.onPointerEnter(e);
 				}
 			},
-			[children, label, delayDuration, show]
+			[children, label, delayDuration, show],
 		);
 
 		/**
@@ -99,7 +99,7 @@ export const ConditionalTooltip: React.FC<ConditionalTooltipProps> = memo(
 					props.onPointerLeave(e);
 				}
 			},
-			[children, hide]
+			[children, hide],
 		);
 
 		/**
@@ -119,7 +119,7 @@ export const ConditionalTooltip: React.FC<ConditionalTooltipProps> = memo(
 					props.onClick(e);
 				}
 			},
-			[children, hide]
+			[children, hide],
 		);
 
 		if (isTouch) {
@@ -127,17 +127,17 @@ export const ConditionalTooltip: React.FC<ConditionalTooltipProps> = memo(
 		}
 
 		// Attach hover and click listeners directly to the child to avoid extra wrappers
-		return React.isValidElement(children)
-			? React.cloneElement(
+		return React.isValidElement(children) ?
+				React.cloneElement(
 					children as React.ReactElement,
 					{
 						onClick: handleClick,
 						onPointerEnter: handlePointerEnter,
 						onPointerLeave: handlePointerLeave,
-					} as React.HTMLAttributes<HTMLElement>
+					} as React.HTMLAttributes<HTMLElement>,
 				)
-			: (children as unknown as React.ReactElement);
-	}
+			:	(children as unknown as React.ReactElement);
+	},
 );
 
 ConditionalTooltip.displayName = "ConditionalTooltip";

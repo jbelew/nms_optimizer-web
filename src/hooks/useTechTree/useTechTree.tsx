@@ -12,9 +12,9 @@
  * @category Hooks
  */
 
-import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "@/types/tech";
 import { use, useEffect, useMemo } from "react";
 
+import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "@/types/tech";
 import { API_URL } from "@/constants";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
@@ -104,7 +104,12 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 			useUiStore.getState().setTechTreeLoading(true);
 		});
 
-		const baseUrl = API_URL ? (API_URL.endsWith("/") ? API_URL : `${API_URL}/`) : "/";
+		const baseUrl =
+			API_URL ?
+				API_URL.endsWith("/") ?
+					API_URL
+				:	`${API_URL}/`
+			:	"/";
 		const promise = apiCall<TechTree>(`${baseUrl}tech_tree/${shipType}`, {}, 10000)
 			.then((data) => {
 				if (data.recommended_builds && Array.isArray(data.recommended_builds)) {
@@ -113,14 +118,14 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 							if (!isValidRecommendedBuild(build)) {
 								Logger.error(
 									"Invalid recommended build found in tech tree:",
-									build
+									build,
 								);
 
 								return false;
 							}
 
 							return true;
-						}
+						},
 					);
 				}
 

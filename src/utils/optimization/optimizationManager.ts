@@ -1,6 +1,6 @@
-import type { ApiResponse, Cell, Grid } from "@/store/grid/gridStore";
 import type { Socket } from "socket.io-client";
 
+import type { ApiResponse, Cell, Grid } from "@/store/grid/gridStore";
 import { createEmptyCell } from "@/store/grid/gridStore";
 import { createSocket, TRANSPORT_ERROR_MESSAGES } from "@/utils/api/socketManager";
 import { Logger } from "@/utils/system/monitoring";
@@ -141,11 +141,11 @@ export class OptimizationManager {
 				// Translate progress data if it contains a best_grid
 				this.options.onProgress({
 					best_grid: (data.best_grid ?? data.bestGrid) as Grid | undefined,
-					progress_percent: (data.progress_percent ??
-						data.progressPercent ??
-						0) as number,
+					progress_percent: (data.progress_percent
+						?? data.progressPercent
+						?? 0) as number,
 				});
-			}
+			},
 		);
 
 		this.socket.once("optimization_result", (data: Record<string, unknown>) => {
@@ -182,7 +182,7 @@ export class OptimizationManager {
 			if (isTransportError && retryCount < MAX_TRANSPORT_RETRIES) {
 				Logger.warn(
 					`Optimization transport failure for ${tech} — retrying (${retryCount + 1}/${MAX_TRANSPORT_RETRIES})`,
-					{ error: errMessage }
+					{ error: errMessage },
 				);
 				this.cleanup();
 

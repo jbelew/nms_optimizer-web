@@ -33,7 +33,7 @@ describe("socketManager", () => {
 		expect(socket).toBe(mockSocket);
 		expect(Logger.info).toHaveBeenCalledWith(
 			expect.stringContaining("Creating new WebSocket connection"),
-			{ url: WS_URL }
+			{ url: WS_URL },
 		);
 	});
 
@@ -48,7 +48,7 @@ describe("socketManager", () => {
 		expect(socket).toBeNull();
 		expect(Logger.error).toHaveBeenCalledWith(
 			expect.stringContaining("Failed to create WebSocket instance"),
-			{ error }
+			{ error },
 		);
 	});
 });

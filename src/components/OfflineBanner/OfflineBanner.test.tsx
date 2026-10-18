@@ -53,8 +53,8 @@ describe("OfflineBanner", () => {
 		expect(screen.getByText("-kzzkt- Offline! -kzzkt-")).toBeInTheDocument();
 		expect(
 			screen.getByText(
-				"An internet connection is required to use this application. Please reconnect to access its features."
-			)
+				"An internet connection is required to use this application. Please reconnect to access its features.",
+			),
 		).toBeInTheDocument();
 	});
 

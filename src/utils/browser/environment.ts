@@ -76,7 +76,7 @@ export function isBot(): boolean {
 
 		if (
 			uaData?.brands?.some(
-				(b) => typeof b.brand === "string" && BOT_BRAND_PATTERN.test(b.brand)
+				(b) => typeof b.brand === "string" && BOT_BRAND_PATTERN.test(b.brand),
 			)
 		) {
 			return true;
@@ -112,8 +112,8 @@ export const isTouchDevice = (): boolean => {
 	if (typeof window === "undefined") return false;
 
 	return (
-		"ontouchstart" in window ||
-		(typeof navigator !== "undefined" && navigator.maxTouchPoints > 0)
+		"ontouchstart" in window
+		|| (typeof navigator !== "undefined" && navigator.maxTouchPoints > 0)
 	);
 };
 
@@ -140,13 +140,13 @@ export const isStandalone = (): boolean => {
 	if (typeof window === "undefined") return false;
 
 	const isDisplayStandalone =
-		typeof window.matchMedia === "function" &&
-		window.matchMedia("(display-mode: standalone)").matches;
+		typeof window.matchMedia === "function"
+		&& window.matchMedia("(display-mode: standalone)").matches;
 
 	const isIosStandalone =
-		typeof navigator !== "undefined" &&
-		"standalone" in navigator &&
-		Boolean((navigator as unknown as { standalone?: boolean }).standalone);
+		typeof navigator !== "undefined"
+		&& "standalone" in navigator
+		&& Boolean((navigator as unknown as { standalone?: boolean }).standalone);
 
 	return Boolean(isDisplayStandalone || isIosStandalone);
 };
@@ -175,8 +175,8 @@ export const isIosSafari = (): boolean => {
 
 	const ua = navigator.userAgent || "";
 	const isIos =
-		/iphone|ipad|ipod/i.test(ua) ||
-		(navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+		/iphone|ipad|ipod/i.test(ua)
+		|| (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
 	const isSafari = /safari/i.test(ua) && !/chrome|crios|android|edg|edgios|fxios|opr\//i.test(ua);
 
@@ -207,7 +207,7 @@ export const safeGetItem = (key: string): null | string => {
 		Logger.warn(
 			`Storage: Failed to get item "${key}" from localStorage`,
 			{ error: e, key },
-			true
+			true,
 		);
 	}
 
@@ -240,7 +240,7 @@ export const safeSetItem = (key: string, value: string): boolean => {
 		Logger.warn(
 			`Storage: Failed to set item "${key}" in localStorage`,
 			{ error: e, key },
-			true
+			true,
 		);
 	}
 
@@ -272,7 +272,7 @@ export const safeRemoveItem = (key: string): boolean => {
 		Logger.warn(
 			`Storage: Failed to remove item "${key}" from localStorage`,
 			{ error: e, key },
-			true
+			true,
 		);
 	}
 

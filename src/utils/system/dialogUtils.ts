@@ -1,12 +1,12 @@
-import type { PageName } from "@/routeConfig";
-import type { i18n as I18nInstance } from "i18next";
 import React, { createContext, use, useState } from "react";
-import { getPageByPath, ROUTED_DIALOG_IDS } from "@shared/page-registry.js";
+import type { i18n as I18nInstance } from "i18next";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import type { PageName } from "@/routeConfig";
 import { languages } from "@/routeConfig";
 import { safeGetItem, safeSetItem } from "@/utils/browser/environment";
+import { getPageByPath, ROUTED_DIALOG_IDS } from "@shared/page-registry.js";
 
 /**
  * Returns the list of language codes supported by the application.
@@ -100,7 +100,7 @@ export interface DialogContextType {
 	 */
 	openDialog: (
 		dialog: NonNullable<DialogType> | null,
-		data?: { section?: string; shareUrl?: string }
+		data?: { section?: string; shareUrl?: string },
 	) => void;
 	/** Optional ID of an element within a dialog to scroll to on mount. */
 	sectionToScrollTo: string | undefined;
@@ -171,13 +171,13 @@ export const DialogContext = createContext<DialogContextType | undefined>(undefi
  */
 export const getActiveDialogFromPathname = (
 	pathname: string,
-	supportedLangs: string[]
+	supportedLangs: string[],
 ): DialogType => {
 	const page = getPageByPath(pathname, supportedLangs);
 
-	return page?.isDialog && VALID_DIALOGS.has(page.id)
-		? (page.id as NonNullable<DialogType>)
-		: null;
+	return page?.isDialog && VALID_DIALOGS.has(page.id) ?
+			(page.id as NonNullable<DialogType>)
+		:	null;
 };
 
 /**
@@ -209,7 +209,7 @@ export const getActiveDialogFromPathname = (
 export const buildLocalizedPath = (
 	pathname: string,
 	targetLang: string,
-	supportedLangs: string[] = languages
+	supportedLangs: string[] = languages,
 ): string => {
 	const normalizedLang = (targetLang || "en").split("-")[0];
 	const pathParts = pathname.split("/").filter(Boolean);
@@ -275,7 +275,7 @@ export const DialogProvider: React.FC<DialogProviderProps> = ({ children }) => {
 	const openDialog = React.useCallback(
 		(
 			dialog: NonNullable<DialogType> | null,
-			data?: { section?: string; shareUrl?: string }
+			data?: { section?: string; shareUrl?: string },
 		) => {
 			if (data?.shareUrl) {
 				React.startTransition(() => {
@@ -292,7 +292,7 @@ export const DialogProvider: React.FC<DialogProviderProps> = ({ children }) => {
 				setSectionToScrollTo(undefined);
 			}
 		},
-		[i18n.language, navigate]
+		[i18n.language, navigate],
 	);
 
 	const closeDialog = React.useCallback(() => {
@@ -342,7 +342,7 @@ export const DialogProvider: React.FC<DialogProviderProps> = ({ children }) => {
 			shareUrl,
 			tutorialFinished,
 			userVisited,
-		]
+		],
 	);
 
 	return React.createElement(DialogContext.Provider, { value }, children);

@@ -25,7 +25,7 @@ i18n.addResourceBundle(
 		},
 	},
 	true,
-	true
+	true,
 );
 
 const meta = {

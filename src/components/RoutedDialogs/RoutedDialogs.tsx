@@ -15,25 +15,25 @@
 import type { FC } from "react";
 import { lazy, Suspense } from "react";
 import { Button } from "@radix-ui/themes";
-import { getRoutedDialogs } from "@shared/page-registry.js";
 import { useTranslation } from "react-i18next";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import LoremIpsumSkeleton from "@/components/AppDialog/Common/LoremIpsumSkeleton";
 import { useDialog } from "@/utils/system/dialogUtils";
+import { getRoutedDialogs } from "@shared/page-registry.js";
 
 const IS_DOCKER_BUILD = import.meta.env.VITE_DOCKER === "true";
 
 const MarkdownContentRenderer = lazy(() =>
 	import("@/components/AppDialog/Markdown/MarkdownContentRenderer").then((m) => ({
 		default: m.MarkdownContentRenderer,
-	}))
+	})),
 );
 
 const UserStatsDialog = lazy(() => import("@/components/AppDialog/UserStats/UserStatsDialog"));
 
 const PerformanceDialog = lazy(
-	() => import("@/components/AppDialog/Performance/PerformanceDialog")
+	() => import("@/components/AppDialog/Performance/PerformanceDialog"),
 );
 
 const CUSTOM_DIALOGS = {
@@ -81,14 +81,20 @@ export const RoutedDialogs: FC = () => {
 
 		return (
 			<Suspense fallback={null}>
-				<CustomDialog isOpen={true} onClose={closeDialog} />
+				<CustomDialog
+					isOpen={true}
+					onClose={closeDialog}
+				/>
 			</Suspense>
 		);
 	}
 
 	const footer = (
 		<div className="flex justify-end gap-2">
-			<Button onClick={closeDialog} variant="soft">
+			<Button
+				onClick={closeDialog}
+				variant="soft"
+			>
 				{t("common.closeDialog")}
 			</Button>
 		</div>

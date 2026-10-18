@@ -1,8 +1,8 @@
-import type { ApiResponse } from "@/store/grid/gridStore";
 import type { Socket } from "socket.io-client";
 import type { Mock } from "vitest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import type { ApiResponse } from "@/store/grid/gridStore";
 import { createSocket } from "@/utils/api/socketManager";
 
 import { OptimizationManager } from "./optimizationManager";
@@ -45,7 +45,7 @@ describe("OptimizationManager", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		mockCreateSocket.mockImplementation(() =>
-			Promise.resolve(createMockSocket() as unknown as Socket)
+			Promise.resolve(createMockSocket() as unknown as Socket),
 		);
 	});
 
@@ -234,7 +234,7 @@ describe("OptimizationManager", () => {
 
 		handleDisconnect("ping timeout");
 		expect(onError).toHaveBeenCalledWith(
-			expect.objectContaining({ message: expect.stringContaining("Disconnected") })
+			expect.objectContaining({ message: expect.stringContaining("Disconnected") }),
 		);
 	});
 
@@ -257,7 +257,7 @@ describe("OptimizationManager", () => {
 
 		handleDisconnect("transport close");
 		expect(onError).toHaveBeenCalledWith(
-			expect.objectContaining({ message: expect.stringContaining("transport close") })
+			expect.objectContaining({ message: expect.stringContaining("transport close") }),
 		);
 	});
 
@@ -304,7 +304,7 @@ describe("OptimizationManager", () => {
 			expect.objectContaining({
 				available_modules: ["module1"],
 				solve_type: "group1",
-			})
+			}),
 		);
 	});
 });

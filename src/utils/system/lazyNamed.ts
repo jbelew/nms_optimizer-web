@@ -16,9 +16,9 @@ import { lazy } from "react";
  */
 export function lazyNamed<T extends Record<string, unknown>>(
 	importFn: () => Promise<T>,
-	name: keyof T
+	name: keyof T,
 ) {
 	return lazy(() =>
-		importFn().then((module) => ({ default: module[name] as ComponentType<unknown> }))
+		importFn().then((module) => ({ default: module[name] as ComponentType<unknown> })),
 	);
 }

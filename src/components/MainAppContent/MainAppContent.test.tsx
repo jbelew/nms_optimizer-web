@@ -1,5 +1,5 @@
-import type { Mock } from "vitest";
 import React from "react";
+import type { Mock } from "vitest";
 import { Theme } from "@radix-ui/themes";
 import { render } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
@@ -64,7 +64,7 @@ vi.mock("@/store/grid/gridStore", () => ({
 			isSharedGrid: false,
 			lastActiveRowIndex: -1,
 			superchargedFixed: false,
-		})
+		}),
 	),
 }));
 vi.mock("@/store/app/platformStore", () => ({
@@ -93,12 +93,12 @@ describe("MainAppContent", () => {
 					isSharedGrid: isSharedGridState,
 					lastActiveRowIndex: -1,
 					superchargedFixed: false,
-				})
+				}),
 		);
 
 		(usePlatformStore as unknown as Mock).mockImplementation(
 			(selector: (state: unknown) => unknown) =>
-				selector({ selectedPlatform: selectedPlatformState })
+				selector({ selectedPlatform: selectedPlatformState }),
 		);
 	});
 
@@ -110,7 +110,7 @@ describe("MainAppContent", () => {
 						<MainAppContent />
 					</Theme>
 				</I18nextProvider>
-			</MemoryRouter>
+			</MemoryRouter>,
 		);
 
 	it("renders the technology tree sidebar section on editable grids", () => {
@@ -136,7 +136,7 @@ describe("MainAppContent", () => {
 				props: expect.objectContaining({
 					i18nKey: "mainApp.viewingSharedBuild",
 				}),
-			})
+			}),
 		);
 	});
 
@@ -162,8 +162,8 @@ describe("MainAppContent", () => {
 				}
 
 				if (
-					this.classList.contains("gridTable") ||
-					this.classList.contains("gridTable-empty")
+					this.classList.contains("gridTable")
+					|| this.classList.contains("gridTable-empty")
 				) {
 					return {
 						bottom: 424,
@@ -195,7 +195,7 @@ describe("MainAppContent", () => {
 			const { container } = renderWorkspace();
 
 			const techTreeSection = container.querySelector<HTMLElement>(
-				".main-app__tech-tree-section"
+				".main-app__tech-tree-section",
 			);
 			const shipSelector = container.querySelector<HTMLElement>(".main-app__ship-selector");
 

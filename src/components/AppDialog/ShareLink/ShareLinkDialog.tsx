@@ -80,11 +80,16 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, onClose, shareUrl }
 
 	const footer = (
 		<div className="flex justify-end gap-2">
-			<Button onClick={onClose} variant="soft">
+			<Button
+				onClick={onClose}
+				variant="soft"
+			>
 				{t("dialogs.shareLink.closeButton")}
 			</Button>
 			<Button onClick={handleCopyClick}>
-				{copied ? <CheckIcon /> : <CopyIcon />}
+				{copied ?
+					<CheckIcon />
+				:	<CopyIcon />}
 				{copied ? t("dialogs.shareLink.copiedButton") : t("dialogs.shareLink.copyButton")}
 			</Button>
 		</div>

@@ -1,7 +1,6 @@
 import type { FC } from "react";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { Button } from "@radix-ui/themes";
-import { formatErrorDocumentTitle } from "@shared/page-metadata.js";
 import { useTranslation } from "react-i18next";
 import { Outlet, useLocation } from "react-router-dom";
 
@@ -13,6 +12,7 @@ import {
 } from "@/components/AppDialog/Base/AppDialog";
 import { ErrorDialog } from "@/components/AppDialog/Error/ErrorDialog";
 import { useOptimizeStore } from "@/store/ui/uiStore";
+import { formatErrorDocumentTitle } from "@shared/page-metadata.js";
 
 import { Seo } from "./components/Seo/Seo";
 import { UpdatePromptWrapper } from "./components/UpdatePrompt/UpdatePromptWrapper";
@@ -48,7 +48,7 @@ const WelcomeContent = lazy(() => import("./components/AppDialog/Welcome/Welcome
  */
 const RoutedDialogs = lazyNamed(
 	() => import("./components/RoutedDialogs/RoutedDialogs"),
-	"RoutedDialogs"
+	"RoutedDialogs",
 );
 
 /**
@@ -143,7 +143,10 @@ const AppContent: FC = () => {
 		return (
 			<>
 				<title>{pageTitle}</title>
-				<meta content="noindex, nofollow" name="robots" />
+				<meta
+					content="noindex, nofollow"
+					name="robots"
+				/>
 			</>
 		);
 	}
@@ -152,7 +155,7 @@ const AppContent: FC = () => {
 		<>
 			<Seo />
 			<Outlet />
-			{shareUrl ? (
+			{shareUrl ?
 				<Suspense fallback={null}>
 					<ShareLinkDialog
 						isOpen={!!shareUrl}
@@ -160,16 +163,19 @@ const AppContent: FC = () => {
 						shareUrl={shareUrl || ""}
 					/>
 				</Suspense>
-			) : null}
-			{activeDialog ? (
+			:	null}
+			{activeDialog ?
 				<Suspense fallback={null}>
 					<RoutedDialogs />
 				</Suspense>
-			) : null}
+			:	null}
 
-			{showWelcome ? (
+			{showWelcome ?
 				<Suspense fallback={null}>
-					<AppDialogRoot isOpen={showWelcome} onClose={handleCloseWelcome}>
+					<AppDialogRoot
+						isOpen={showWelcome}
+						onClose={handleCloseWelcome}
+					>
 						<AppDialogTitle titleKey="dialogs.titles.welcome" />
 						<AppDialogBody>
 							<WelcomeContent onClose={handleCloseWelcome} />
@@ -187,7 +193,7 @@ const AppContent: FC = () => {
 						</AppDialogFooter>
 					</AppDialogRoot>
 				</Suspense>
-			) : null}
+			:	null}
 		</>
 	);
 };

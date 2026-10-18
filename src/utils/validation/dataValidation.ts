@@ -9,7 +9,6 @@
  */
 
 import type { RecommendedBuild } from "@/types/tech";
-
 import { Logger } from "@/utils/system/monitoring";
 
 /**
@@ -110,7 +109,7 @@ const CONTROL_CHARS = "\x00-\x1F";
  */
 const FILENAME_REGEX = new RegExp(
 	`^(?=.{1,255}$)(?!^(CON|PRn|AUX|NUL|COM[1-9]|LPT[1-9])$)[^<>:"/\\\\|?*${CONTROL_CHARS}]+(?<![ .])$`,
-	"i"
+	"i",
 );
 
 /**
@@ -225,13 +224,13 @@ export function isValidRecommendedBuild(obj: unknown): obj is RecommendedBuild {
 
 			// Basic structural check
 			const techValid =
-				!("tech" in cellData) ||
-				typeof cellData.tech === "string" ||
-				cellData.tech === null;
+				!("tech" in cellData)
+				|| typeof cellData.tech === "string"
+				|| cellData.tech === null;
 			const moduleValid =
-				!("module" in cellData) ||
-				typeof cellData.module === "string" ||
-				cellData.module === null;
+				!("module" in cellData)
+				|| typeof cellData.module === "string"
+				|| cellData.module === null;
 
 			return techValid && moduleValid;
 		});

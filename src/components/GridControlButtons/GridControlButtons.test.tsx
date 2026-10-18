@@ -25,7 +25,10 @@ vi.mock("react-i18next", () => ({
 // Mock ConditionalTooltip
 vi.mock("@/components/ConditionalTooltip/ConditionalTooltip", () => ({
 	ConditionalTooltip: ({ children, label }: { children: React.ReactNode; label: string }) => (
-		<div data-testid="tooltip" title={label}>
+		<div
+			data-testid="tooltip"
+			title={label}
+		>
 			{children}
 		</div>
 	),
@@ -99,12 +102,12 @@ describe("GridControlButtons", () => {
 		// For now, test that both can be rendered separately
 		const { rerender } = render(<GridControlButtons rowIndex={1} />);
 		expect(
-			screen.getByRole("button", { name: /gridControls\.activateRow/ })
+			screen.getByRole("button", { name: /gridControls\.activateRow/ }),
 		).toBeInTheDocument();
 
 		rerender(<GridControlButtons rowIndex={0} />);
 		expect(
-			screen.getByRole("button", { name: /gridControls\.deactivateRow/ })
+			screen.getByRole("button", { name: /gridControls\.deactivateRow/ }),
 		).toBeInTheDocument();
 	});
 
@@ -200,7 +203,7 @@ describe("GridControlButtons", () => {
 		// For now, verify each renders correctly individually
 		render(<GridControlButtons rowIndex={1} />);
 		expect(
-			screen.getByRole("button", { name: /gridControls\.activateRow/ })
+			screen.getByRole("button", { name: /gridControls\.activateRow/ }),
 		).toBeInTheDocument();
 	});
 });

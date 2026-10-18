@@ -1,10 +1,10 @@
 /// <reference types="@testing-library/jest-dom" />
 
-import type { Cell } from "@/store/grid/gridStore";
 import React from "react";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import type { Cell } from "@/store/grid/gridStore";
 import { createEmptyCell, createGrid } from "@/store/grid/gridFactories";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
@@ -71,7 +71,12 @@ describe("GridCell", () => {
 	describe("WAI-ARIA labels and slot states", () => {
 		it("renders descriptive aria-label and id for an active empty slot", () => {
 			setCellState(0, 0, { active: true, label: "", module: null, supercharged: false });
-			render(<GridCell columnIndex={0} rowIndex={0} />);
+			render(
+				<GridCell
+					columnIndex={0}
+					rowIndex={0}
+				/>,
+			);
 
 			const cellElement = screen.getByRole("gridcell");
 			expect(cellElement).toHaveAttribute("id", "grid-cell-0-0");
@@ -81,11 +86,16 @@ describe("GridCell", () => {
 
 		it("renders descriptive aria-label for an active supercharged empty slot", () => {
 			setCellState(1, 2, { active: true, label: "", module: null, supercharged: true });
-			render(<GridCell columnIndex={2} rowIndex={1} />);
+			render(
+				<GridCell
+					columnIndex={2}
+					rowIndex={1}
+				/>,
+			);
 
 			expect(screen.getByRole("gridcell")).toHaveAttribute(
 				"aria-label",
-				"Row 2, Column 3: Empty Slot (Supercharged)"
+				"Row 2, Column 3: Empty Slot (Supercharged)",
 			);
 		});
 
@@ -96,11 +106,16 @@ describe("GridCell", () => {
 				module: "shield-1",
 				supercharged: false,
 			});
-			render(<GridCell columnIndex={4} rowIndex={0} />);
+			render(
+				<GridCell
+					columnIndex={4}
+					rowIndex={0}
+				/>,
+			);
 
 			expect(screen.getByRole("gridcell")).toHaveAttribute(
 				"aria-label",
-				"Row 1, Column 5: Deflector Shield"
+				"Row 1, Column 5: Deflector Shield",
 			);
 		});
 
@@ -111,17 +126,27 @@ describe("GridCell", () => {
 				module: "photon-1",
 				supercharged: true,
 			});
-			render(<GridCell columnIndex={3} rowIndex={2} />);
+			render(
+				<GridCell
+					columnIndex={3}
+					rowIndex={2}
+				/>,
+			);
 
 			expect(screen.getByRole("gridcell")).toHaveAttribute(
 				"aria-label",
-				"Row 3, Column 4: Photon Cannon (Supercharged)"
+				"Row 3, Column 4: Photon Cannon (Supercharged)",
 			);
 		});
 
 		it("announces disabled slot in aria-label when cell is inactive", () => {
 			setCellState(4, 1, { active: false, label: "", module: null, supercharged: false });
-			render(<GridCell columnIndex={1} rowIndex={4} />);
+			render(
+				<GridCell
+					columnIndex={1}
+					rowIndex={4}
+				/>,
+			);
 
 			const cellElement = screen.getByRole("gridcell");
 			expect(cellElement).not.toHaveAttribute("aria-disabled");
@@ -130,11 +155,16 @@ describe("GridCell", () => {
 
 		it("announces disabled supercharged slot in aria-label when inactive and supercharged", () => {
 			setCellState(5, 9, { active: false, label: "", module: null, supercharged: true });
-			render(<GridCell columnIndex={9} rowIndex={5} />);
+			render(
+				<GridCell
+					columnIndex={9}
+					rowIndex={5}
+				/>,
+			);
 
 			expect(screen.getByRole("gridcell")).toHaveAttribute(
 				"aria-label",
-				"Row 6, Column 10: Disabled Slot (Supercharged)"
+				"Row 6, Column 10: Disabled Slot (Supercharged)",
 			);
 		});
 	});
@@ -167,7 +197,12 @@ describe("GridCell", () => {
 				label,
 				module: "mod-1",
 			});
-			render(<GridCell columnIndex={0} rowIndex={0} />);
+			render(
+				<GridCell
+					columnIndex={0}
+					rowIndex={0}
+				/>,
+			);
 
 			const badge = screen.getByText(expectedBadge);
 			expect(badge).toBeInTheDocument();
@@ -186,19 +221,29 @@ describe("GridCell", () => {
 					label,
 					module: "mod-1",
 				});
-				render(<GridCell columnIndex={0} rowIndex={0} />);
+				render(
+					<GridCell
+						columnIndex={0}
+						rowIndex={0}
+					/>,
+				);
 
 				expect(
-					screen.getByRole("gridcell").querySelector(".gridCell__label")
+					screen.getByRole("gridcell").querySelector(".gridCell__label"),
 				).not.toBeInTheDocument();
-			}
+			},
 		);
 	});
 
 	describe("Visual styling, corners, and tech accent colors", () => {
 		it("renders corner elements when not supercharged and no image is present", () => {
 			setCellState(0, 0, { active: false, image: null, supercharged: false });
-			render(<GridCell columnIndex={0} rowIndex={0} />);
+			render(
+				<GridCell
+					columnIndex={0}
+					rowIndex={0}
+				/>,
+			);
 
 			const cellElement = screen.getByRole("gridcell");
 			expect(cellElement.querySelector(".corner.top-left")).toBeInTheDocument();
@@ -206,15 +251,25 @@ describe("GridCell", () => {
 
 		it("does not render corner elements when an image is present or cell is supercharged", () => {
 			setCellState(0, 0, { active: false, image: "some-image.webp", supercharged: false });
-			const { rerender } = render(<GridCell columnIndex={0} rowIndex={0} />);
+			const { rerender } = render(
+				<GridCell
+					columnIndex={0}
+					rowIndex={0}
+				/>,
+			);
 			expect(
-				screen.getByRole("gridcell").querySelector(".corner.top-left")
+				screen.getByRole("gridcell").querySelector(".corner.top-left"),
 			).not.toBeInTheDocument();
 
 			setCellState(0, 0, { active: false, image: null, supercharged: true });
-			rerender(<GridCell columnIndex={0} rowIndex={0} />);
+			rerender(
+				<GridCell
+					columnIndex={0}
+					rowIndex={0}
+				/>,
+			);
 			expect(
-				screen.getByRole("gridcell").querySelector(".corner.top-left")
+				screen.getByRole("gridcell").querySelector(".corner.top-left"),
 			).not.toBeInTheDocument();
 		});
 
@@ -226,17 +281,27 @@ describe("GridCell", () => {
 				supercharged: true,
 				tech: "hyperdrive",
 			});
-			const { rerender } = render(<GridCell columnIndex={0} rowIndex={0} />);
+			const { rerender } = render(
+				<GridCell
+					columnIndex={0}
+					rowIndex={0}
+				/>,
+			);
 			expect(screen.getByRole("gridcell")).toHaveAttribute("data-accent-color", "purple");
 			expect(screen.getByRole("gridcell")).toHaveClass(
 				"gridCell--supercharged",
-				"gridCell--glow"
+				"gridCell--glow",
 			);
 
 			act(() => {
 				useTechStore.setState({ techColors: { hyperdrive: "blue" } });
 			});
-			rerender(<GridCell columnIndex={0} rowIndex={0} />);
+			rerender(
+				<GridCell
+					columnIndex={0}
+					rowIndex={0}
+				/>,
+			);
 			expect(screen.getByRole("gridcell")).toHaveAttribute("data-accent-color", "blue");
 
 			setCellState(0, 0, {
@@ -247,7 +312,12 @@ describe("GridCell", () => {
 				module: "hyper-1",
 				supercharged: false,
 			});
-			rerender(<GridCell columnIndex={0} rowIndex={0} />);
+			rerender(
+				<GridCell
+					columnIndex={0}
+					rowIndex={0}
+				/>,
+			);
 			expect(screen.getByRole("gridcell")).toHaveClass("gridCell--black");
 		});
 	});
@@ -257,7 +327,12 @@ describe("GridCell", () => {
 			setCellState(0, 0, {
 				...createEmptyCell(false, true),
 			});
-			render(<GridCell columnIndex={0} rowIndex={0} />);
+			render(
+				<GridCell
+					columnIndex={0}
+					rowIndex={0}
+				/>,
+			);
 			const cellElement = screen.getByRole("gridcell");
 
 			expect(fireEvent.contextMenu(cellElement)).toBe(false);
@@ -272,7 +347,12 @@ describe("GridCell", () => {
 
 		it("toggles active state on Space/Enter and supercharged state on s/S/Shift+Enter", () => {
 			setCellState(0, 0, createEmptyCell(false, false));
-			render(<GridCell columnIndex={0} rowIndex={0} />);
+			render(
+				<GridCell
+					columnIndex={0}
+					rowIndex={0}
+				/>,
+			);
 			const cellElement = screen.getByRole("gridcell");
 
 			fireEvent.keyDown(cellElement, { key: " " });
@@ -293,7 +373,12 @@ describe("GridCell", () => {
 
 		it("does not hijack browser shortcuts like Ctrl+S or Cmd+S", () => {
 			setCellState(0, 0, createEmptyCell(false, true));
-			render(<GridCell columnIndex={0} rowIndex={0} />);
+			render(
+				<GridCell
+					columnIndex={0}
+					rowIndex={0}
+				/>,
+			);
 			const cellElement = screen.getByRole("gridcell");
 
 			const notCancelled = fireEvent.keyDown(cellElement, { ctrlKey: true, key: "s" });
@@ -303,7 +388,12 @@ describe("GridCell", () => {
 
 		it("handles touch tap vs scroll or multi-touch gesture and updates gridCell--touched class", () => {
 			setCellState(0, 0, createEmptyCell(false, false));
-			render(<GridCell columnIndex={0} rowIndex={0} />);
+			render(
+				<GridCell
+					columnIndex={0}
+					rowIndex={0}
+				/>,
+			);
 			const cellElement = screen.getByRole("gridcell");
 
 			fireEvent.touchStart(cellElement, { touches: [{ clientX: 10, clientY: 10 }] });
@@ -345,7 +435,12 @@ describe("GridCell", () => {
 		it("blocks mouse, touch, and keyboard mutations when in Shared Grid read-only mode", () => {
 			useGridStore.setState({ isSharedGrid: true });
 			setCellState(0, 0, createEmptyCell(false, true));
-			render(<GridCell columnIndex={0} rowIndex={0} />);
+			render(
+				<GridCell
+					columnIndex={0}
+					rowIndex={0}
+				/>,
+			);
 			const cellElement = screen.getByRole("gridcell");
 
 			fireEvent.click(cellElement);
@@ -363,12 +458,27 @@ describe("GridCell", () => {
 		it("moves roving tabIndex and DOM focus across cells with Arrow, Home, and End keys", () => {
 			render(
 				<div>
-					<GridCell columnIndex={0} rowIndex={0} />
-					<GridCell columnIndex={1} rowIndex={0} />
-					<GridCell columnIndex={9} rowIndex={0} />
-					<GridCell columnIndex={0} rowIndex={1} />
-					<GridCell columnIndex={9} rowIndex={5} />
-				</div>
+					<GridCell
+						columnIndex={0}
+						rowIndex={0}
+					/>
+					<GridCell
+						columnIndex={1}
+						rowIndex={0}
+					/>
+					<GridCell
+						columnIndex={9}
+						rowIndex={0}
+					/>
+					<GridCell
+						columnIndex={0}
+						rowIndex={1}
+					/>
+					<GridCell
+						columnIndex={9}
+						rowIndex={5}
+					/>
+				</div>,
 			);
 
 			const cell00 = document.getElementById("grid-cell-0-0")!;

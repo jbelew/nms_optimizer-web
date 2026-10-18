@@ -1,6 +1,6 @@
-import type { PerformanceMetric } from "@/types/performance";
 import { use } from "react";
 
+import type { PerformanceMetric } from "@/types/performance";
 import { fetchPerformanceData } from "@/utils/api/performanceResource";
 
 /**

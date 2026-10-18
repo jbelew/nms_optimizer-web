@@ -84,7 +84,7 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 			activeVariantType: state.activeGroups?.[categoryKey] || "normal",
 			moduleSelectionCount: state.checkedModules?.[categoryKey]?.length ?? 0,
 			technologyCategory: state.techGroups?.[categoryKey],
-		}))
+		})),
 	);
 
 	if (!technologyName) return null;
@@ -92,7 +92,7 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 	const activeVariant = resolveActiveTechVariant(technologyCategory, activeVariantType);
 	const windowDimensions = determineWindowDimensions(
 		moduleSelectionCount,
-		activeVariant?.window_rules
+		activeVariant?.window_rules,
 	);
 
 	const footer = (

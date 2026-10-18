@@ -1,7 +1,7 @@
-import type { Cell, Grid } from "./gridStore";
 import { act } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 
+import type { Cell, Grid } from "./gridStore";
 import { createEmptyCell, createGrid, useGridStore } from "./gridStore";
 
 describe("isGridFull selector in GridStore", () => {
@@ -18,7 +18,7 @@ describe("isGridFull selector in GridStore", () => {
 			newGrid.cells.forEach((row) =>
 				row.forEach((cell) => {
 					Object.assign(cell, createEmptyCell(false, true)); // Default: active, no module, not SC
-				})
+				}),
 			);
 
 			// Apply test-specific cell configurations
@@ -54,7 +54,7 @@ describe("isGridFull selector in GridStore", () => {
 			defaultGrid.cells.forEach((row) =>
 				row.forEach((cell) => {
 					Object.assign(cell, createEmptyCell(false, true));
-				})
+				}),
 			);
 			useGridStore.setState({ grid: defaultGrid });
 			useGridStore.getState().triggerRecompute();
@@ -68,7 +68,7 @@ describe("isGridFull selector in GridStore", () => {
 				row.forEach((cell) => {
 					cell.active = false;
 					cell.module = null;
-				})
+				}),
 			);
 
 			cells[0][0].active = true;
@@ -103,7 +103,7 @@ describe("isGridFull selector in GridStore", () => {
 				row.forEach((cell) => {
 					cell.active = false;
 					cell.module = "mod_on_inactive"; // Module on an inactive cell
-				})
+				}),
 			);
 			cells[0][0].module = null; // one inactive without module
 		});
@@ -121,7 +121,7 @@ describe("isGridFull selector in GridStore", () => {
 				row.forEach((cell) => {
 					cell.active = false;
 					cell.module = null;
-				})
+				}),
 			);
 		});
 		expect(useGridStore.getState().isGridFull).toBe(false);
@@ -161,7 +161,7 @@ describe("isGridFull selector in GridStore", () => {
 						cell.active = false; // Make other cells inactive
 						cell.module = null;
 					}
-				})
+				}),
 			);
 
 			// Active cells, all with modules

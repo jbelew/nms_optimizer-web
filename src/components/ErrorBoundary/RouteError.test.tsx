@@ -24,7 +24,10 @@ vi.mock("react-router-dom", () => ({
 // Mock ErrorContent
 vi.mock("./ErrorContent", () => ({
 	ErrorContent: ({ error, variant }: { error?: Error; variant: string }) => (
-		<div data-testid="error-content" data-variant={variant}>
+		<div
+			data-testid="error-content"
+			data-variant={variant}
+		>
 			{error?.message}
 		</div>
 	),

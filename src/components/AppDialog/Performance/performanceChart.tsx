@@ -1,5 +1,3 @@
-import type { ChartDataPoint } from "./PerformanceTypes";
-import type { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
 import type { FC, KeyboardEvent, ReactNode } from "react";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
@@ -20,6 +18,9 @@ import {
 	YAxis,
 } from "recharts";
 
+import type { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
+
+import type { ChartDataPoint } from "./PerformanceTypes";
 import { PerformanceDashboardLayout } from "./PerformanceLayout";
 import {
 	CHART_TOOLTIP_STYLE,
@@ -44,13 +45,10 @@ const TOOLTIP_ALLOW_ESCAPE = { x: false, y: false };
 const RESPONSIVE_CONTAINER_DEBOUNCE = 50;
 const OVERALL_Y_DOMAIN: [number, number] = [0, 100];
 const SCORE_BAND_COLOR = (score: number | undefined): string =>
-	score === undefined
-		? "var(--gray-11)"
-		: score >= 90
-			? "var(--green-11)"
-			: score >= 50
-				? "var(--amber-11)"
-				: "var(--red-11)";
+	score === undefined ? "var(--gray-11)"
+	: score >= 90 ? "var(--green-11)"
+	: score >= 50 ? "var(--amber-11)"
+	: "var(--red-11)";
 
 /**
  * Internal summary card used for both the OVERALL toggle and per-metric cards.
@@ -98,7 +96,10 @@ const MetricSummaryCard: FC<MetricSummaryCardProps> = ({
 			}}
 			tabIndex={0}
 		>
-			<Flex align="center" direction="column">
+			<Flex
+				align="center"
+				direction="column"
+			>
 				{children}
 			</Flex>
 		</Card>
@@ -162,33 +163,59 @@ const ChartTooltipContent = memo<ChartTooltipContentProps>(function ChartTooltip
 		const threshold = METRIC_THRESHOLDS[selectedMetric] || 10000;
 
 		return (
-			<Flex direction="column" gap="1" style={CHART_TOOLTIP_STYLE}>
-				<Text color="gray" mb="1" size="1">
+			<Flex
+				direction="column"
+				gap="1"
+				style={CHART_TOOLTIP_STYLE}
+			>
+				<Text
+					color="gray"
+					mb="1"
+					size="1"
+				>
 					{item.displayDate} {item.hour}
-					{item.originalVersion || item.appVersion
-						? ` (${item.originalVersion || item.appVersion})`
-						: ""}
+					{item.originalVersion || item.appVersion ?
+						` (${item.originalVersion || item.appVersion})`
+					:	""}
 				</Text>
 				{p90 !== undefined && (
-					<Flex gap="4" justify="between">
+					<Flex
+						gap="4"
+						justify="between"
+					>
 						<Text color="gray">p90</Text>
-						<Text style={{ color: getStatusColor(selectedMetric, p90) }} weight="bold">
+						<Text
+							style={{ color: getStatusColor(selectedMetric, p90) }}
+							weight="bold"
+						>
 							{p90 > threshold ? `>${format(threshold)}` : format(p90)}
 						</Text>
 					</Flex>
 				)}
 				{p75 !== undefined && (
-					<Flex gap="4" justify="between">
+					<Flex
+						gap="4"
+						justify="between"
+					>
 						<Text color="gray">p75</Text>
-						<Text style={{ color: getStatusColor(selectedMetric, p75) }} weight="bold">
+						<Text
+							style={{ color: getStatusColor(selectedMetric, p75) }}
+							weight="bold"
+						>
 							{p75 > threshold ? `>${format(threshold)}` : format(p75)}
 						</Text>
 					</Flex>
 				)}
 				{p50 !== undefined && (
-					<Flex gap="4" justify="between">
+					<Flex
+						gap="4"
+						justify="between"
+					>
 						<Text color="gray">p50</Text>
-						<Text style={{ color: getStatusColor(selectedMetric, p50) }} weight="bold">
+						<Text
+							style={{ color: getStatusColor(selectedMetric, p50) }}
+							weight="bold"
+						>
 							{format(p50)}
 						</Text>
 					</Flex>
@@ -200,19 +227,39 @@ const ChartTooltipContent = memo<ChartTooltipContentProps>(function ChartTooltip
 	const score = item.overall_score_p75_sma as number | undefined;
 
 	return (
-		<Flex direction="column" gap="2" style={CHART_TOOLTIP_STYLE}>
-			<Flex direction="column" gap="0">
-				<Text color="gray" size="1">
+		<Flex
+			direction="column"
+			gap="2"
+			style={CHART_TOOLTIP_STYLE}
+		>
+			<Flex
+				direction="column"
+				gap="0"
+			>
+				<Text
+					color="gray"
+					size="1"
+				>
 					{item.displayDate} {item.hour}
-					{item.originalVersion || item.appVersion
-						? ` (${item.originalVersion || item.appVersion})`
-						: ""}
+					{item.originalVersion || item.appVersion ?
+						` (${item.originalVersion || item.appVersion})`
+					:	""}
 				</Text>
-				<Flex align="center" gap="2">
-					<Text size="3" style={{ color: SCORE_BAND_COLOR(score) }} weight="bold">
+				<Flex
+					align="center"
+					gap="2"
+				>
+					<Text
+						size="3"
+						style={{ color: SCORE_BAND_COLOR(score) }}
+						weight="bold"
+					>
 						{score !== undefined ? Math.round(score) : "—"}
 					</Text>
-					<Text color="gray" size="1">
+					<Text
+						color="gray"
+						size="1"
+					>
 						OVERALL SCORE
 					</Text>
 				</Flex>
@@ -232,8 +279,16 @@ const ChartTooltipContent = memo<ChartTooltipContentProps>(function ChartTooltip
 					const mScore = mDeficit !== undefined ? 100 - mDeficit : undefined;
 
 					return (
-						<Flex align="center" gap="4" justify="between" key={m}>
-							<Flex align="center" gap="2">
+						<Flex
+							align="center"
+							gap="4"
+							justify="between"
+							key={m}
+						>
+							<Flex
+								align="center"
+								gap="2"
+							>
 								<div
 									style={{
 										backgroundColor: getMetricColor(m, 11),
@@ -242,11 +297,17 @@ const ChartTooltipContent = memo<ChartTooltipContentProps>(function ChartTooltip
 										width: 8,
 									}}
 								/>
-								<Text size="1" style={{ color: getMetricColor(m, 11) }}>
+								<Text
+									size="1"
+									style={{ color: getMetricColor(m, 11) }}
+								>
 									{m}
 								</Text>
 							</Flex>
-							<Flex align="center" gap="2">
+							<Flex
+								align="center"
+								gap="2"
+							>
 								<Text
 									size="1"
 									style={{ color: getStatusColor(m, val) }}
@@ -254,7 +315,10 @@ const ChartTooltipContent = memo<ChartTooltipContentProps>(function ChartTooltip
 								>
 									{val !== undefined ? formatMetricValue(m, val) : "—"}
 								</Text>
-								<Text color="gray" size="1">
+								<Text
+									color="gray"
+									size="1"
+								>
 									({mScore !== undefined ? Math.round(mScore) : "—"})
 								</Text>
 							</Flex>
@@ -334,16 +398,16 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 	// Synchronize morphing state with metric changes (including back/forward navigation)
 	useEffect(() => {
 		if (
-			lastMetricRef.current !== null &&
-			selectedMetric !== null &&
-			lastMetricRef.current !== selectedMetric
+			lastMetricRef.current !== null
+			&& selectedMetric !== null
+			&& lastMetricRef.current !== selectedMetric
 		) {
 			// Trigger morphing for detail-to-detail transitions
 			setIsMorphing(true);
 			if (morphTimeoutRef.current) clearTimeout(morphTimeoutRef.current);
 			morphTimeoutRef.current = setTimeout(
 				() => setIsMorphing(false),
-				LINE_ANIMATION_DURATION
+				LINE_ANIMATION_DURATION,
 			);
 		}
 
@@ -368,7 +432,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 	const locale = i18n.language;
 	const { chartData, summary, uniqueMetrics } = useMemo(
 		() => transformPerformanceData(data, locale, PERFORMANCE_LAYOUT.MAX_CHART_POINTS, 3, range),
-		[data, locale, range]
+		[data, locale, range],
 	);
 
 	const versionChanges = getVersionChanges(chartData);
@@ -378,9 +442,8 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 	const overallScore = summary?.metrics.OVERALL?.score;
 	const overallTrend = summary?.trends.OVERALL ?? "neutral";
 
-	const yDomain: [number, number] = selectedMetric
-		? [0, METRIC_THRESHOLDS[selectedMetric] || 10000]
-		: OVERALL_Y_DOMAIN;
+	const yDomain: [number, number] =
+		selectedMetric ? [0, METRIC_THRESHOLDS[selectedMetric] || 10000] : OVERALL_Y_DOMAIN;
 	const selectedMetricConfig = selectedMetric ? LIGHTHOUSE_CONFIG[selectedMetric] : null;
 
 	const xTickFormatter = (val: number) => {
@@ -405,7 +468,11 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 	return (
 		<PerformanceDashboardLayout
 			cards={
-				<Flex gap="3" justify="between" wrap="wrap">
+				<Flex
+					gap="3"
+					justify="between"
+					wrap="wrap"
+				>
 					{/* Overall Summary Toggle Card */}
 					<MetricSummaryCard
 						ariaLabel="View overall performance summary"
@@ -413,10 +480,16 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 						isSelected={selectedMetric === null}
 						onActivate={() => updateSelectedMetric(null)}
 					>
-						<Text size="1" weight="bold">
+						<Text
+							size="1"
+							weight="bold"
+						>
 							OVERALL
 						</Text>
-						<Flex align="center" gap="1">
+						<Flex
+							align="center"
+							gap="1"
+						>
 							<Text
 								size="5"
 								style={{ color: SCORE_BAND_COLOR(overallScore) }}
@@ -458,7 +531,10 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 								>
 									{metric}
 								</Text>
-								<Flex align="center" gap="1">
+								<Flex
+									align="center"
+									gap="1"
+								>
 									<Text
 										size="5"
 										style={{ color: getStatusColor(metric, val) }}
@@ -512,7 +588,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 							/>
 
 							{/* Dynamic Background Threshold Bands */}
-							{selectedMetric ? (
+							{selectedMetric ?
 								<>
 									{/* Detail View: Highlight the 'Good' zone */}
 									<ReferenceArea
@@ -528,8 +604,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 										y={selectedMetricConfig?.p90 || 1000}
 									/>
 								</>
-							) : (
-								<>
+							:	<>
 									{/* Overall Ceiling: Success (90-100 score) and Needs Improvement (50-90 score) */}
 									<ReferenceArea
 										fill="var(--green-a4)"
@@ -571,7 +646,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 										y={20}
 									/>
 								</>
-							)}
+							}
 
 							{versionChanges.map((change) => (
 								<ReferenceLine
@@ -588,9 +663,9 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 										offset={4}
 										position="insideTopLeft"
 										value={
-											change.version.startsWith("v")
-												? change.version
-												: `v${change.version}`
+											change.version.startsWith("v") ?
+												change.version
+											:	`v${change.version}`
 										}
 									/>
 								</ReferenceLine>
@@ -635,9 +710,9 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 							{/* Unified Dynamic Range Bar (Stable Identity) */}
 							<Bar
 								dataKey={
-									selectedMetric
-										? `${selectedMetric}_range`
-										: "overall_score_range"
+									selectedMetric ?
+										`${selectedMetric}_range`
+									:	"overall_score_range"
 								}
 								fill={getMetricColor(selectedMetric ?? "OVERALL", 11)}
 								fillOpacity={0.2}
@@ -685,7 +760,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 								key="overall-trend-line"
 								stroke={getMetricColor(
 									"OVERALL",
-									selectedMetric === null ? 11 : "a7"
+									selectedMetric === null ? 11 : "a7",
 								)}
 								strokeOpacity={selectedMetric === null ? 1 : 0.8}
 								strokeWidth={selectedMetric === null ? 3 : 1.75}

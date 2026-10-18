@@ -55,5 +55,10 @@ export const RouteError = () => {
 		lifecycleCoordinator.markReady();
 	}, [error]);
 
-	return <ErrorContent error={error} variant="page" />;
+	return (
+		<ErrorContent
+			error={error}
+			variant="page"
+		/>
+	);
 };

@@ -70,10 +70,10 @@ export const getTechTreeMaps = (techTree: null | TechTree): TechTreeMaps => {
 
 			for (const item of categoryItems) {
 				if (
-					typeof item === "object" &&
-					item !== null &&
-					"key" in item &&
-					"modules" in item
+					typeof item === "object"
+					&& item !== null
+					&& "key" in item
+					&& "modules" in item
 				) {
 					const techItem = item as TechTreeItem;
 					validTechKeys.add(techItem.key);

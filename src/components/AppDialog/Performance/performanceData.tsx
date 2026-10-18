@@ -8,7 +8,7 @@ import { fetchPerformanceData } from "@/utils/api/performanceResource";
 import { safeGetItem, safeSetItem } from "@/utils/browser/environment";
 
 const PerformanceChart = lazy(() =>
-	import("./performanceChart").then((m) => ({ default: m.PerformanceChart }))
+	import("./performanceChart").then((m) => ({ default: m.PerformanceChart })),
 );
 
 /**

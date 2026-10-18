@@ -17,7 +17,7 @@ describe("registerCellTap action in GridStore", () => {
 			defaultTestGrid.cells.forEach((row) =>
 				row.forEach((cell) => {
 					Object.assign(cell, createEmptyCell(false, false)); // Default: inactive, not supercharged
-				})
+				}),
 			);
 			useGridStore.setState({
 				grid: defaultTestGrid,

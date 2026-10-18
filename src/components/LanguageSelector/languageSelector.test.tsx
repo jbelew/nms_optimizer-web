@@ -34,7 +34,12 @@ vi.mock("react-i18next", async (importOriginal) => {
  * @example
  */
 const mockWindowLocation = (search: string) => {
-	const formattedSearch = search ? (search.startsWith("?") ? search : "?" + search) : "";
+	const formattedSearch =
+		search ?
+			search.startsWith("?") ?
+				search
+			:	"?" + search
+		:	"";
 	Object.defineProperty(window, "location", {
 		configurable: true,
 		value: {
@@ -177,7 +182,7 @@ describe("LanguageSelector Accessibility", () => {
 				<MemoryRouter>
 					<LanguageSelector />
 				</MemoryRouter>
-			</Theme>
+			</Theme>,
 		);
 
 		const triggerButton = screen.getByRole("button", { name: "Change language" });

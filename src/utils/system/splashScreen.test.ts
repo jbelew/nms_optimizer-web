@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { lifecycleCoordinator } from "./lifecycleCoordinator";
@@ -63,7 +64,7 @@ describe("splashScreen", () => {
 		expect(lifecycleCoordinator.isReady()).toBe(true);
 
 		const appReadyEvents = dispatchSpy.mock.calls.filter(
-			(call) => call[0].type === "app-ready"
+			(call) => call[0].type === "app-ready",
 		);
 		expect(appReadyEvents).toHaveLength(0);
 

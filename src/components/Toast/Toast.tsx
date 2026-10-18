@@ -77,30 +77,35 @@ export const NmsToast = ({
 }: ToastProps) => {
 	const { t } = useTranslation();
 	const titleClassName =
-		variant === "error"
-			? "Toast__title Toast__title--error"
-			: variant === "success"
-				? "Toast__title Toast__title--success"
-				: "Toast__title";
+		variant === "error" ? "Toast__title Toast__title--error"
+		: variant === "success" ? "Toast__title Toast__title--success"
+		: "Toast__title";
 
 	const icon =
-		variant === "error" ? (
-			<ExclamationTriangleIcon className="Toast__icon Toast__icon--error" />
-		) : variant === "success" ? (
-			<CheckCircledIcon className="Toast__icon Toast__icon--success" />
-		) : (
-			<InfoCircledIcon className="Toast__icon Toast__icon--info" />
-		);
+		variant === "error" ? <ExclamationTriangleIcon className="Toast__icon Toast__icon--error" />
+		: variant === "success" ? <CheckCircledIcon className="Toast__icon Toast__icon--success" />
+		: <InfoCircledIcon className="Toast__icon Toast__icon--info" />;
 
 	return (
-		<ToastRoot className="Toast" duration={duration} onOpenChange={onOpenChange} open={open}>
+		<ToastRoot
+			className="Toast"
+			duration={duration}
+			onOpenChange={onOpenChange}
+			open={open}
+		>
 			<div className="Toast__title-container">
 				{icon}
 				<ToastTitle className={`${titleClassName} heading-styled mb-1`}>{title}</ToastTitle>
 			</div>
-			<Separator mb="1" size="4" />
+			<Separator
+				mb="1"
+				size="4"
+			/>
 			<ToastDescription asChild>
-				<Text as="div" className="Toast__description text-sm font-normal sm:text-base">
+				<Text
+					as="div"
+					className="Toast__description text-sm font-normal sm:text-base"
+				>
 					{description}
 				</Text>
 			</ToastDescription>

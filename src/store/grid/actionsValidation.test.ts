@@ -171,7 +171,7 @@ describe("GridStore actions with validation", () => {
 			expect(errorToastSpy).toHaveBeenCalledWith(
 				"restrictions.title",
 				"restrictions.gridFixed",
-				5000
+				5000,
 			);
 
 			// 4th attempt does not re-dispatch in the same session

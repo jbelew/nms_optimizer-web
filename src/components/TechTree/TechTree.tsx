@@ -1,10 +1,10 @@
 import "./TechTreeSection.scss";
 
-import type { TechTreeItem, TechTree as TechTreeType } from "@/hooks/useTechTree/useTechTree";
 import React, { lazy, Suspense, useEffect, useMemo, useRef } from "react";
 import { Box, ScrollArea, Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import type { TechTreeItem, TechTree as TechTreeType } from "@/hooks/useTechTree/useTechTree";
 import { EmptyState } from "@/components/EmptyState/EmptyState";
 import { TechTreeRow } from "@/components/TechTreeRow/TechTreeRow";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
@@ -26,7 +26,7 @@ export { TechTreeSkeleton } from "./TechTreeSkeleton";
 const ModuleSelectionDialog = lazy(() =>
 	import("@/components/ModuleSelectionDialog/ModuleSelectionDialog").then((m) => ({
 		default: m.ModuleSelectionDialog,
-	}))
+	})),
 );
 
 /**
@@ -152,7 +152,7 @@ export const TechTree: React.FC<TechTreeProps> = ({ techTree: techTreeProp }) =>
 			if (Array.isArray(value)) {
 				const validItems = value.filter(
 					(item) =>
-						item && typeof item === "object" && "label" in item && "modules" in item
+						item && typeof item === "object" && "label" in item && "modules" in item,
 				) as TechTreeItem[];
 
 				if (validItems.length > 0 || value.length === 0) {
@@ -169,7 +169,7 @@ export const TechTree: React.FC<TechTreeProps> = ({ techTree: techTreeProp }) =>
 	const hasPresets = Boolean(techTree.recommended_builds?.length);
 
 	const content =
-		sections.length === 0 ? (
+		sections.length === 0 ?
 			(() => {
 				Logger.warn("TechTree: No technology categories found to render.", {
 					techTreeKeys: Object.keys(techTree),
@@ -182,12 +182,14 @@ export const TechTree: React.FC<TechTreeProps> = ({ techTree: techTreeProp }) =>
 					/>
 				);
 			})()
-		) : (
-			<div className={`tech-tree-content ${hasPresets ? "" : "mt-4 lg:mt-0"}`.trim()}>
+		:	<div className={`tech-tree-content ${hasPresets ? "" : "mt-4 lg:mt-0"}`.trim()}>
 				<TechTreePresetsCard techTree={techTree} />
 
 				{sections.map((section) => (
-					<div className="sidebar__section mb-6 last:mb-0 lg:mb-6" key={section}>
+					<div
+						className="sidebar__section mb-6 last:mb-0 lg:mb-6"
+						key={section}
+					>
 						<TechTreeSectionHeader section={section} />
 
 						<Separator
@@ -206,12 +208,11 @@ export const TechTree: React.FC<TechTreeProps> = ({ techTree: techTreeProp }) =>
 						))}
 					</div>
 				))}
-			</div>
-		);
+			</div>;
 
 	return (
 		<>
-			{isLarge ? (
+			{isLarge ?
 				<ScrollArea
 					className="main-app__tech-tree-sidebar shadow-sm"
 					ref={viewportRef}
@@ -227,9 +228,7 @@ export const TechTree: React.FC<TechTreeProps> = ({ techTree: techTreeProp }) =>
 				>
 					{content}
 				</ScrollArea>
-			) : (
-				<Box mt="4">{content}</Box>
-			)}
+			:	<Box mt="4">{content}</Box>}
 			<Suspense fallback={null}>
 				<ModuleSelectionDialog />
 			</Suspense>

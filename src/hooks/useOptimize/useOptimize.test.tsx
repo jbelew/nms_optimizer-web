@@ -1,11 +1,11 @@
-import type { PlatformState } from "@/store/app/platformStore";
-import type * as GridStoreModule from "@/store/grid/gridStore";
-import type { GridStore } from "@/store/grid/gridStore";
-import type { TechStore } from "@/store/tech/techStore";
 import type { Socket } from "socket.io-client";
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import type { PlatformState } from "@/store/app/platformStore";
+import type * as GridStoreModule from "@/store/grid/gridStore";
+import type { GridStore } from "@/store/grid/gridStore";
+import type { TechStore } from "@/store/tech/techStore";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { usePlatformStore } from "@/store/app/platformStore";
@@ -98,7 +98,7 @@ describe("useOptimize", () => {
 			() =>
 				({
 					selectedPlatform: mockUsePlatformStore(),
-				}) as unknown as PlatformState
+				}) as unknown as PlatformState,
 		);
 
 		mockUsePlatformStore.mockReturnValue("standard");
@@ -151,7 +151,7 @@ describe("useOptimize", () => {
 			});
 
 			const progressCallback = mockSocket.on.mock.calls.find(
-				(call) => call[0] === "progress"
+				(call) => call[0] === "progress",
 			)?.[1];
 
 			act(() => {
@@ -172,7 +172,7 @@ describe("useOptimize", () => {
 			});
 
 			const resultCallback = mockSocket.once.mock.calls.find(
-				(call) => call[0] === "optimization_result"
+				(call) => call[0] === "optimization_result",
 			)?.[1];
 
 			act(() => {

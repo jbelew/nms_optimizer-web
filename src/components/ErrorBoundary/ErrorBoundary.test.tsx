@@ -21,11 +21,9 @@ vi.mock("./ErrorContent", () => ({
 			{children || (
 				<div>
 					<div>errorContent.boundaryError</div>
-					{variant === "page" ? (
+					{variant === "page" ?
 						<div>errorContent.defaultMessage</div>
-					) : (
-						<div>errorContent.insetMessage</div>
-					)}
+					:	<div>errorContent.insetMessage</div>}
 				</div>
 			)}
 		</div>
@@ -72,7 +70,7 @@ describe("ErrorBoundary", () => {
 			render(
 				<ErrorBoundary>
 					<SafeComponent />
-				</ErrorBoundary>
+				</ErrorBoundary>,
 			);
 
 			expect(screen.getByText("Safe component")).toBeInTheDocument();
@@ -84,12 +82,12 @@ describe("ErrorBoundary", () => {
 					<ErrorBoundary>
 						<ThrowError shouldThrow={true} />
 					</ErrorBoundary>
-				</Suspense>
+				</Suspense>,
 			);
 
 			// ErrorPage displays error information
 			await waitFor(() =>
-				expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument()
+				expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument(),
 			);
 		});
 
@@ -97,7 +95,7 @@ describe("ErrorBoundary", () => {
 			render(
 				<ErrorBoundary>
 					<ThrowError shouldThrow={true} />
-				</ErrorBoundary>
+				</ErrorBoundary>,
 			);
 
 			expect(screen.queryByText("Child rendered successfully")).not.toBeInTheDocument();
@@ -112,7 +110,7 @@ describe("ErrorBoundary", () => {
 			render(
 				<ErrorBoundary>
 					<ThrowError shouldThrow={true} />
-				</ErrorBoundary>
+				</ErrorBoundary>,
 			);
 
 			expect(handleErrorSpy).toHaveBeenCalled();
@@ -128,12 +126,12 @@ describe("ErrorBoundary", () => {
 					<ErrorBoundary>
 						<ThrowError shouldThrow={true} />
 					</ErrorBoundary>
-				</Suspense>
+				</Suspense>,
 			);
 
 			// Check that ErrorPage is rendered (which means state was updated)
 			await waitFor(() =>
-				expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument()
+				expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument(),
 			);
 		});
 
@@ -143,12 +141,12 @@ describe("ErrorBoundary", () => {
 					<ErrorBoundary>
 						<ThrowError shouldThrow={true} />
 					</ErrorBoundary>
-				</Suspense>
+				</Suspense>,
 			);
 
 			// Verify error page is displayed
 			await waitFor(() =>
-				expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument()
+				expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument(),
 			);
 		});
 	});
@@ -163,11 +161,11 @@ describe("ErrorBoundary", () => {
 							<ThrowError shouldThrow={true} />
 						</div>
 					</ErrorBoundary>
-				</Suspense>
+				</Suspense>,
 			);
 
 			await waitFor(() =>
-				expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument()
+				expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument(),
 			);
 		});
 	});
@@ -191,11 +189,11 @@ describe("ErrorBoundary", () => {
 					<ErrorBoundary>
 						<ThrowError shouldThrow={true} />
 					</ErrorBoundary>
-				</Suspense>
+				</Suspense>,
 			);
 
 			await waitFor(() =>
-				expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument()
+				expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument(),
 			);
 
 			// Re-render with the same error
@@ -204,14 +202,14 @@ describe("ErrorBoundary", () => {
 					<ErrorBoundary>
 						<ThrowError shouldThrow={true} />
 					</ErrorBoundary>
-				</Suspense>
+				</Suspense>,
 			);
 
 			// Should still show error page
 			await waitFor(() =>
 				expect(
-					screen.getByText((content) => content.includes("errorContent.defaultMessage"))
-				).toBeInTheDocument()
+					screen.getByText((content) => content.includes("errorContent.defaultMessage")),
+				).toBeInTheDocument(),
 			);
 		});
 
@@ -219,7 +217,7 @@ describe("ErrorBoundary", () => {
 			const { rerender } = render(
 				<ErrorBoundary>
 					<SafeComponent />
-				</ErrorBoundary>
+				</ErrorBoundary>,
 			);
 
 			expect(screen.getByText("Safe component")).toBeInTheDocument();
@@ -228,7 +226,7 @@ describe("ErrorBoundary", () => {
 			rerender(
 				<ErrorBoundary>
 					<SafeComponent />
-				</ErrorBoundary>
+				</ErrorBoundary>,
 			);
 
 			expect(screen.getByText("Safe component")).toBeInTheDocument();

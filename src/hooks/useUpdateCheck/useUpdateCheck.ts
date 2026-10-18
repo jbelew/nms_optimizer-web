@@ -58,16 +58,16 @@ interface VersionPayload {
  * ```
  */
 export const useUpdateCheck = (
-	onUpdateAvailable: (updateSW: (reloadPage?: boolean) => Promise<void>) => void
+	onUpdateAvailable: (updateSW: (reloadPage?: boolean) => Promise<void>) => void,
 ) => {
 	useEffect(() => {
 		const handleNewVersion = async (event: Event) => {
 			if (!(event instanceof CustomEvent)) return;
 
 			const updateSW =
-				typeof event.detail === "function"
-					? (event.detail as (reloadPage?: boolean) => Promise<void>)
-					: undefined;
+				typeof event.detail === "function" ?
+					(event.detail as (reloadPage?: boolean) => Promise<void>)
+				:	undefined;
 
 			try {
 				const response = await fetch("/version.json", { cache: "no-store" });
@@ -92,9 +92,9 @@ export const useUpdateCheck = (
 
 				const isDifferentVersion =
 					Boolean(
-						latestBuildDate && currentBuildDate && latestBuildDate !== currentBuildDate
-					) ||
-					Boolean(latestVersion && currentVersion && latestVersion !== currentVersion);
+						latestBuildDate && currentBuildDate && latestBuildDate !== currentBuildDate,
+					)
+					|| Boolean(latestVersion && currentVersion && latestVersion !== currentVersion);
 
 				if (isDifferentVersion) {
 					onUpdateAvailable(updateSW ?? (async () => {}));

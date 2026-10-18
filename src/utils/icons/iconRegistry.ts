@@ -28,6 +28,7 @@ import {
 	RocketIcon,
 	Share1Icon,
 } from "@radix-ui/react-icons";
+
 import { PAGE_REGISTRY } from "@shared/page-registry.js";
 
 /**
@@ -106,7 +107,7 @@ const iconMap: Record<string, ElementType> = {
 	...Object.fromEntries(
 		Object.values(PAGE_REGISTRY)
 			.filter((p) => p.dialogTitleKey && p.iconName && radixIconRegistry[p.iconName])
-			.map((p) => [p.dialogTitleKey as string, radixIconRegistry[p.iconName as string]])
+			.map((p) => [p.dialogTitleKey as string, radixIconRegistry[p.iconName as string]]),
 	),
 };
 
@@ -120,7 +121,7 @@ const iconStyle: Record<string, CSSProperties> = {
 	...Object.fromEntries(
 		Object.values(PAGE_REGISTRY)
 			.filter((p) => p.dialogTitleKey && p.iconStyle)
-			.map((p) => [p.dialogTitleKey as string, p.iconStyle as CSSProperties])
+			.map((p) => [p.dialogTitleKey as string, p.iconStyle as CSSProperties]),
 	),
 };
 

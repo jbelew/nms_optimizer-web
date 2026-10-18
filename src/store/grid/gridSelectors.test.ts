@@ -48,7 +48,7 @@ describe("Grid Store Selectors", () => {
 			expect(useGridStore.getState().totalSuperchargedCells).toBe(0); // Initial check
 			const currentStoredGrid = useGridStore.getState().grid;
 			const modifiedCells = currentStoredGrid.cells.map((row) =>
-				row.map((cell) => ({ ...cell }))
+				row.map((cell) => ({ ...cell })),
 			);
 			modifiedCells[0][0].supercharged = true;
 			const gridWithModification = { ...currentStoredGrid, cells: modifiedCells };
@@ -63,7 +63,7 @@ describe("Grid Store Selectors", () => {
 			expect(useGridStore.getState().totalSuperchargedCells).toBe(2); // Initial check
 			const currentStoredGrid = useGridStore.getState().grid;
 			const modifiedCells = currentStoredGrid.cells.map((row) =>
-				row.map((cell) => ({ ...cell }))
+				row.map((cell) => ({ ...cell })),
 			);
 			modifiedCells[0][0].supercharged = false;
 			const gridWithModification = { ...currentStoredGrid, cells: modifiedCells };
@@ -111,7 +111,7 @@ describe("Grid Store Selectors", () => {
 			expect(useGridStore.getState().hasModulesInGrid).toBe(false); // Initial check
 			const currentStoredGrid1 = useGridStore.getState().grid;
 			const modifiedCells1 = currentStoredGrid1.cells.map((row) =>
-				row.map((cell) => ({ ...cell }))
+				row.map((cell) => ({ ...cell })),
 			);
 			modifiedCells1[0][0].module = "New Module";
 			const gridWithModification1 = { ...currentStoredGrid1, cells: modifiedCells1 };
@@ -126,7 +126,7 @@ describe("Grid Store Selectors", () => {
 			expect(useGridStore.getState().hasModulesInGrid).toBe(true); // Initial check
 			const currentStoredGrid1 = useGridStore.getState().grid;
 			const modifiedCells1 = currentStoredGrid1.cells.map((row) =>
-				row.map((cell) => ({ ...cell }))
+				row.map((cell) => ({ ...cell })),
 			);
 			modifiedCells1[0][0].module = null; // Remove one module
 			const gridWithModification1 = { ...currentStoredGrid1, cells: modifiedCells1 };
@@ -134,7 +134,7 @@ describe("Grid Store Selectors", () => {
 			expect(useGridStore.getState().hasModulesInGrid).toBe(true); // cells[0][1] should still have 'Another Module'
 			const currentStoredGrid2 = useGridStore.getState().grid;
 			const modifiedCells2 = currentStoredGrid2.cells.map((row) =>
-				row.map((cell) => ({ ...cell }))
+				row.map((cell) => ({ ...cell })),
 			);
 			modifiedCells2[0][1].module = null; // Remove the last module
 			const gridWithModification2 = { ...currentStoredGrid2, cells: modifiedCells2 };

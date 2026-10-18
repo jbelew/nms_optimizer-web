@@ -1,7 +1,8 @@
-import type { WindowDimensions } from "@/types/tech";
 import type { FC } from "react";
 import { Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
+
+import type { WindowDimensions } from "@/types/tech";
 
 /**
  * Properties for the `OptimizationAlertContent` component.
@@ -54,7 +55,11 @@ export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({
 			<span className="errorContent__title block pb-2 text-center text-xl font-semibold tracking-widest">
 				{t("dialogs.optimizationAlert.warning")}
 			</span>
-			<Text as="p" mb="2" size={{ initial: "2", sm: "3" }}>
+			<Text
+				as="p"
+				mb="2"
+				size={{ initial: "2", sm: "3" }}
+			>
 				<Trans
 					components={{
 						1: (
@@ -65,22 +70,26 @@ export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({
 						),
 					}}
 					i18nKey={
-						windowDimensions
-							? "dialogs.optimizationAlert.insufficientSpaceWithWindow"
-							: "dialogs.optimizationAlert.insufficientSpace"
+						windowDimensions ?
+							"dialogs.optimizationAlert.insufficientSpaceWithWindow"
+						:	"dialogs.optimizationAlert.insufficientSpace"
 					}
 					values={
-						windowDimensions
-							? {
-									height: windowDimensions[1],
-									technologyName,
-									width: windowDimensions[0],
-								}
-							: { technologyName }
+						windowDimensions ?
+							{
+								height: windowDimensions[1],
+								technologyName,
+								width: windowDimensions[0],
+							}
+						:	{ technologyName }
 					}
 				/>
 			</Text>
-			<Text as="p" mb="4" size={{ initial: "2", sm: "3" }}>
+			<Text
+				as="p"
+				mb="4"
+				size={{ initial: "2", sm: "3" }}
+			>
 				<Trans
 					components={{
 						1: <strong />,

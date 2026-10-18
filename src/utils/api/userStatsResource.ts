@@ -1,5 +1,4 @@
 import type { UserStat } from "@/types/userStats";
-
 import { API_URL } from "@/constants";
 
 import { apiCall } from "./network";
@@ -35,7 +34,7 @@ export const fetchUserStats = (): Promise<UserStat[]> => {
 		userStatsPromise = apiCall<UserStat[]>(
 			API_URL + "analytics/popular_data?start_date=28daysAgo&end_date=today",
 			{},
-			10000
+			10000,
 		)
 			.then((data) => {
 				return data;

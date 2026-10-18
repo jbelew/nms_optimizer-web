@@ -30,7 +30,7 @@ describe("seo-schema.js", () => {
 		expect(softwareApp["@id"]).toBe(`${url}#software`);
 		expect(softwareApp.inLanguage).toBe(lang);
 		expect(softwareApp.screenshot).toBe(
-			"https://nms-optimizer.app/assets/img/screenshots/screenshot.png"
+			"https://nms-optimizer.app/assets/img/screenshots/screenshot.png",
 		);
 		expect(softwareApp.softwareVersion).toBe("test-version");
 		expect(Array.isArray(softwareApp.featureList)).toBe(true);
@@ -38,7 +38,7 @@ describe("seo-schema.js", () => {
 		// Test explicit version override
 		const customSchemas = getLocalizedSchema(mockT, lang, url, "v7.6.1");
 		const customSoftwareApp = customSchemas.find(
-			(s) => s["@type"] === "SoftwareApplication"
+			(s) => s["@type"] === "SoftwareApplication",
 		) as Record<string, unknown>;
 		expect(customSoftwareApp.softwareVersion).toBe("7.6.1");
 

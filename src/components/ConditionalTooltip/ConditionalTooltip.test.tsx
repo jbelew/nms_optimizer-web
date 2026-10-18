@@ -35,7 +35,7 @@ describe("ConditionalTooltip", () => {
 		render(
 			<ConditionalTooltip label="Test Label">
 				<button>Hover me</button>
-			</ConditionalTooltip>
+			</ConditionalTooltip>,
 		);
 
 		const trigger = screen.getByText("Hover me");
@@ -48,7 +48,7 @@ describe("ConditionalTooltip", () => {
 		render(
 			<ConditionalTooltip label="Test Label">
 				<button>Leave me</button>
-			</ConditionalTooltip>
+			</ConditionalTooltip>,
 		);
 
 		const trigger = screen.getByText("Leave me");
@@ -62,7 +62,7 @@ describe("ConditionalTooltip", () => {
 		render(
 			<ConditionalTooltip label="Test Label">
 				<button>Click me</button>
-			</ConditionalTooltip>
+			</ConditionalTooltip>,
 		);
 
 		const trigger = screen.getByText("Click me");
@@ -76,7 +76,7 @@ describe("ConditionalTooltip", () => {
 		render(
 			<ConditionalTooltip label="Test Label">
 				<button onClick={originalOnClick}>Click me</button>
-			</ConditionalTooltip>
+			</ConditionalTooltip>,
 		);
 
 		const trigger = screen.getByText("Click me");
@@ -92,7 +92,7 @@ describe("ConditionalTooltip", () => {
 		render(
 			<ConditionalTooltip label="Test Label">
 				<button>Touch me</button>
-			</ConditionalTooltip>
+			</ConditionalTooltip>,
 		);
 
 		const trigger = screen.getByText("Touch me");
@@ -103,9 +103,12 @@ describe("ConditionalTooltip", () => {
 
 	it("should pass custom delayDuration", () => {
 		render(
-			<ConditionalTooltip delayDuration={1234} label="Test Label">
+			<ConditionalTooltip
+				delayDuration={1234}
+				label="Test Label"
+			>
 				<button>Custom delay</button>
-			</ConditionalTooltip>
+			</ConditionalTooltip>,
 		);
 
 		const trigger = screen.getByText("Custom delay");

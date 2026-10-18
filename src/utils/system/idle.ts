@@ -21,9 +21,9 @@ export function runWhenIdle(fn: () => void, options: { timeout?: number } = {}):
 	const { timeout = 2000 } = options;
 
 	if (
-		typeof window !== "undefined" &&
-		typeof (window as unknown as { requestIdleCallback?: unknown }).requestIdleCallback ===
-			"function"
+		typeof window !== "undefined"
+		&& typeof (window as unknown as { requestIdleCallback?: unknown }).requestIdleCallback
+			=== "function"
 	) {
 		(
 			window as typeof window & {

@@ -6,11 +6,9 @@
  * Radix UI icons, and document titles across all supported locales.
  */
 
-import type { TFunction } from "i18next";
 import React, { Suspense } from "react";
+import type { TFunction } from "i18next";
 import { Theme } from "@radix-ui/themes";
-import { formatDocumentTitle, getPageMetadata } from "@shared/page-metadata.js";
-import { getRoutedDialogs, PAGE_REGISTRY } from "@shared/page-registry.js";
 import { render, screen } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
 import { MemoryRouter } from "react-router-dom";
@@ -22,6 +20,8 @@ import { RoutedDialogs } from "@/components/RoutedDialogs/RoutedDialogs";
 import i18n from "@/test/i18n";
 import { getDialogIconAndStyle, radixIconRegistry } from "@/utils/icons/iconRegistry";
 import { DialogProvider, useDialog } from "@/utils/system/dialogUtils";
+import { formatDocumentTitle, getPageMetadata } from "@shared/page-metadata.js";
+import { getRoutedDialogs, PAGE_REGISTRY } from "@shared/page-registry.js";
 
 // Mock MarkdownContentRenderer to avoid async file loads in unit/integration test
 vi.mock("@/components/AppDialog/Markdown/MarkdownContentRenderer", () => ({
@@ -69,7 +69,7 @@ describe("Routed Dialogs & Page Registry Integration", () => {
 				if (dialog.iconStyle) {
 					expect(style).toEqual(dialog.iconStyle);
 				}
-			}
+			},
 		);
 	});
 
@@ -105,7 +105,7 @@ describe("Routed Dialogs & Page Registry Integration", () => {
 						expect(meta.title).toBe(expectedDocTitle);
 						expect(dialogHeaderTitle).toBeTruthy();
 						expect(dialogHeaderTitle).not.toContain(" | ");
-					}
+					},
 				);
 			});
 		});
@@ -127,14 +127,14 @@ describe("Routed Dialogs & Page Registry Integration", () => {
 								</Theme>
 							</DialogProvider>
 						</I18nextProvider>
-					</MemoryRouter>
+					</MemoryRouter>,
 				);
 
 				const expectedTitle = i18n.t(dialog.dialogTitleKey!);
 				const matchingElements = await screen.findAllByText(expectedTitle);
 				expect(matchingElements.length).toBeGreaterThanOrEqual(1);
 				expect(
-					await screen.findByTestId(`markdown-${dialog.markdownFileName || dialog.id}`)
+					await screen.findByTestId(`markdown-${dialog.markdownFileName || dialog.id}`),
 				).toBeInTheDocument();
 			});
 		});
@@ -145,9 +145,12 @@ describe("Routed Dialogs & Page Registry Integration", () => {
 			render(
 				<I18nextProvider i18n={i18n}>
 					<Theme>
-						<UserStatsDialog isOpen={true} onClose={vi.fn()} />
+						<UserStatsDialog
+							isOpen={true}
+							onClose={vi.fn()}
+						/>
 					</Theme>
-				</I18nextProvider>
+				</I18nextProvider>,
 			);
 
 			const expectedTitle = i18n.t("dialogs.titles.userStats");
@@ -160,9 +163,12 @@ describe("Routed Dialogs & Page Registry Integration", () => {
 			render(
 				<I18nextProvider i18n={i18n}>
 					<Theme>
-						<PerformanceDialog isOpen={true} onClose={vi.fn()} />
+						<PerformanceDialog
+							isOpen={true}
+							onClose={vi.fn()}
+						/>
 					</Theme>
-				</I18nextProvider>
+				</I18nextProvider>,
 			);
 
 			const expectedTitle = i18n.t("dialogs.titles.performance");
@@ -185,7 +191,7 @@ describe("Routed Dialogs & Page Registry Integration", () => {
 							<ActiveDialogSpy />
 						</DialogProvider>
 					</I18nextProvider>
-				</MemoryRouter>
+				</MemoryRouter>,
 			);
 
 			expect(screen.getByTestId("active-dialog-spy")).toHaveTextContent("performance");

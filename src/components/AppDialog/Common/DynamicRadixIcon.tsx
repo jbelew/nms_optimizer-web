@@ -76,7 +76,12 @@ const DynamicRadixIcon: React.FC<DynamicRadixIconProps> = ({
 		...style,
 	};
 
-	return <IconComponent className={className} style={iconStyles} />;
+	return (
+		<IconComponent
+			className={className}
+			style={iconStyles}
+		/>
+	);
 };
 
 export default DynamicRadixIcon;

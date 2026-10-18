@@ -9,13 +9,13 @@
  * @category Utilities
  */
 
+import { useEffect } from "react";
 import type {
 	BrowserOptions,
 	breadcrumbsIntegration as SentryBreadcrumbsIntegration,
 	reactRouterV7BrowserTracingIntegration as SentryRouterTracingIntegration,
 } from "@sentry/react";
 import type { RouteObject } from "react-router-dom";
-import { useEffect } from "react";
 import * as Sentry from "@sentry/react";
 import {
 	createBrowserRouter,
@@ -68,7 +68,7 @@ type SentryIntegration =
 interface SentrySDK {
 	/** Automatic breadcrumb collection */
 	breadcrumbsIntegration: (
-		options: Parameters<typeof SentryBreadcrumbsIntegration>[0]
+		options: Parameters<typeof SentryBreadcrumbsIntegration>[0],
 	) => SentryIntegration;
 	/** Captures an exception and sends it to Sentry */
 	captureException: (error: unknown, options?: Record<string, unknown>) => void;
@@ -78,11 +78,11 @@ interface SentrySDK {
 	init: (options: BrowserOptions) => void;
 	/** Performance tracing integration for React Router v7 */
 	reactRouterV7BrowserTracingIntegration: (
-		options: Parameters<typeof SentryRouterTracingIntegration>[0]
+		options: Parameters<typeof SentryRouterTracingIntegration>[0],
 	) => SentryIntegration;
 	/** Instrumentation for React Router v7 */
 	wrapCreateBrowserRouterV7: (
-		cb: typeof createBrowserRouter
+		cb: typeof createBrowserRouter,
 	) => (routes: RouteObject[]) => ReturnType<typeof createBrowserRouter>;
 }
 

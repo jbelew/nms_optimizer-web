@@ -17,7 +17,11 @@ describe("ErrorContent", () => {
 
 	it("should toggle error-boundary-visible class on document.body during lifecycle", () => {
 		const { unmount } = render(
-			<ErrorContent error={mockError} errorInfo={mockErrorInfo} variant="page" />
+			<ErrorContent
+				error={mockError}
+				errorInfo={mockErrorInfo}
+				variant="page"
+			/>,
 		);
 
 		expect(document.body.classList.contains("error-boundary-visible")).toBe(true);
@@ -27,46 +31,66 @@ describe("ErrorContent", () => {
 	});
 
 	it("should render page variant correctly", () => {
-		render(<ErrorContent error={mockError} errorInfo={mockErrorInfo} variant="page" />);
+		render(
+			<ErrorContent
+				error={mockError}
+				errorInfo={mockErrorInfo}
+				variant="page"
+			/>,
+		);
 
 		expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument();
 		expect(screen.getByText("Test error")).toBeInTheDocument();
 		// Check for default page message
 		expect(
-			screen.getByText((content) => content.includes("errorContent.defaultMessage"))
+			screen.getByText((content) => content.includes("errorContent.defaultMessage")),
 		).toBeInTheDocument();
 	});
 
 	it("should render inset variant correctly", () => {
 		(useBreakpoint as Mock).mockReturnValue(false); // Mobile view
-		render(<ErrorContent error={mockError} errorInfo={mockErrorInfo} variant="inset" />);
+		render(
+			<ErrorContent
+				error={mockError}
+				errorInfo={mockErrorInfo}
+				variant="inset"
+			/>,
+		);
 
 		expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument();
 		expect(screen.getByText("Test error")).toBeInTheDocument();
 		// Check for inset message
 		expect(
-			screen.getByText((content) => content.includes("errorContent.insetMessage"))
+			screen.getByText((content) => content.includes("errorContent.insetMessage")),
 		).toBeInTheDocument();
 	});
 
 	it("should render children if provided", () => {
 		render(
-			<ErrorContent error={mockError} errorInfo={mockErrorInfo} variant="page">
+			<ErrorContent
+				error={mockError}
+				errorInfo={mockErrorInfo}
+				variant="page"
+			>
 				Custom Error Message
-			</ErrorContent>
+			</ErrorContent>,
 		);
 
 		expect(screen.getByText("Custom Error Message")).toBeInTheDocument();
 		// Should not render default message
 		expect(
-			screen.queryByText((content) => content.includes("errorContent.defaultMessage"))
+			screen.queryByText((content) => content.includes("errorContent.defaultMessage")),
 		).not.toBeInTheDocument();
 	});
 
 	it("should render large inset variant with scroll area", () => {
 		(useBreakpoint as Mock).mockReturnValue(true); // Desktop view
 		const { container } = render(
-			<ErrorContent error={mockError} errorInfo={mockErrorInfo} variant="inset" />
+			<ErrorContent
+				error={mockError}
+				errorInfo={mockErrorInfo}
+				variant="inset"
+			/>,
 		);
 
 		// Check for scroll area container class or style

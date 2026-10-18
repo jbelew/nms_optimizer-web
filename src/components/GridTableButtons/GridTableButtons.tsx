@@ -25,7 +25,7 @@ import { useTechStore } from "@/store/tech/techStore";
 import { useDialog } from "@/utils/system/dialogUtils";
 
 const BuildNameDialog = React.lazy(
-	() => import("@/components/AppDialog/BuildName/BuildNameDialog")
+	() => import("@/components/AppDialog/BuildName/BuildNameDialog"),
 );
 
 /**
@@ -95,8 +95,8 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	 */
 	const handleScreenshotClick = (event: React.MouseEvent<HTMLButtonElement>) => {
 		const section =
-			event.currentTarget.closest<HTMLElement>(".main-app__grid-section") ??
-			document.querySelector<HTMLElement>(".main-app__grid-section");
+			event.currentTarget.closest<HTMLElement>(".main-app__grid-section")
+			?? document.querySelector<HTMLElement>(".main-app__grid-section");
 
 		if (section) {
 			handleScreenshot(section);
@@ -171,34 +171,32 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 		onClick: () => void,
 		disabled: boolean,
 		className: string,
-		variant: "soft" | "solid" = "soft"
+		variant: "soft" | "solid" = "soft",
 	) => {
 		const translatedLabel = t(labelKey);
 
-		return isSmallAndUp ? (
-			<Button
-				aria-label={translatedLabel}
-				className={className}
-				disabled={disabled}
-				onClick={onClick}
-				size="2"
-				variant={variant}
-			>
-				{icon}
-				<span className="hidden sm:inline">{translatedLabel}</span>
-			</Button>
-		) : (
-			<IconButton
-				aria-label={translatedLabel}
-				className={className}
-				disabled={disabled}
-				onClick={onClick}
-				size="2"
-				variant={variant}
-			>
-				{icon}
-			</IconButton>
-		);
+		return isSmallAndUp ?
+				<Button
+					aria-label={translatedLabel}
+					className={className}
+					disabled={disabled}
+					onClick={onClick}
+					size="2"
+					variant={variant}
+				>
+					{icon}
+					<span className="hidden sm:inline">{translatedLabel}</span>
+				</Button>
+			:	<IconButton
+					aria-label={translatedLabel}
+					className={className}
+					disabled={disabled}
+					onClick={onClick}
+					size="2"
+					variant={variant}
+				>
+					{icon}
+				</IconButton>;
 	};
 
 	return (
@@ -222,7 +220,10 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 					/>
 				</>
 			)}
-			<div className="gridTable-buttons__container" data-screenshot-exclude="true">
+			<div
+				className="gridTable-buttons__container"
+				data-screenshot-exclude="true"
+			>
 				<div className="gridTable-buttons__left">
 					{renderResponsiveButton(
 						<InfoCircledIcon />,
@@ -230,14 +231,14 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 						handleShowInstructions,
 						solving || isInfoPending,
 						`gridTable__button gridTable__button--instructions ${instructionGlowClass}`,
-						instructionsVariant as "soft" | "solid"
+						instructionsVariant as "soft" | "solid",
 					)}
 					{renderResponsiveButton(
 						<QuestionMarkCircledIcon />,
 						"buttons.about",
 						handleShowAboutPage,
 						solving || isInfoPending,
-						"gridTable__button gridTable__button--about"
+						"gridTable__button gridTable__button--about",
 					)}
 
 					{/* Load/Save buttons - hidden on mobile, shown on sm and up */}

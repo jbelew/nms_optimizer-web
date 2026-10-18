@@ -88,7 +88,7 @@ export const LanguageSelector: React.FC = () => {
 	const [, startTransition] = useTransition();
 
 	const availableLanguageCodes = ((i18n.options.supportedLngs as string[]) || []).filter((code) =>
-		languages.includes(code)
+		languages.includes(code),
 	);
 
 	const supportedLanguages = availableLanguageCodes
@@ -159,7 +159,7 @@ export const LanguageSelector: React.FC = () => {
 	return (
 		<DropdownMenu.Root modal={false}>
 			<DropdownMenu.Trigger>
-				{!isSm || isMd ? (
+				{!isSm || isMd ?
 					<Button
 						aria-label={t("languageInfo.changeLanguage") || "Change language"}
 						variant="soft"
@@ -171,11 +171,13 @@ export const LanguageSelector: React.FC = () => {
 							src={currentFlagPath}
 							width="20"
 						/>
-						<Separator decorative orientation="vertical" />
+						<Separator
+							decorative
+							orientation="vertical"
+						/>
 						<DropdownMenu.TriggerIcon />
 					</Button>
-				) : (
-					<IconButton
+				:	<IconButton
 						aria-label={t("languageInfo.changeLanguage") || "Change language"}
 						variant="soft"
 					>
@@ -187,9 +189,12 @@ export const LanguageSelector: React.FC = () => {
 							width="16"
 						/>
 					</IconButton>
-				)}
+				}
 			</DropdownMenu.Trigger>
-			<DropdownMenu.Content align="end" sideOffset={5}>
+			<DropdownMenu.Content
+				align="end"
+				sideOffset={5}
+			>
 				<DropdownMenu.Label className="selectLanguage__header heading-styled">
 					{t("languageInfo.selectLanguage") || "Select Language"}
 				</DropdownMenu.Label>
@@ -198,7 +203,10 @@ export const LanguageSelector: React.FC = () => {
 					value={currentLanguage}
 				>
 					{supportedLanguages.map(({ code, flagPath, label }) => (
-						<DropdownMenu.RadioItem key={code} value={code}>
+						<DropdownMenu.RadioItem
+							key={code}
+							value={code}
+						>
 							<img
 								alt=""
 								aria-hidden="true"
@@ -212,8 +220,14 @@ export const LanguageSelector: React.FC = () => {
 					))}
 				</DropdownMenu.RadioGroup>
 				<DropdownMenu.Separator />
-				<DropdownMenu.Item className="font-medium" onClick={handleRequestTranslationClick}>
-					<GlobeIcon className="mr-2 h-auto w-5" style={{ color: "var(--accent-a11)" }} />
+				<DropdownMenu.Item
+					className="font-medium"
+					onClick={handleRequestTranslationClick}
+				>
+					<GlobeIcon
+						className="mr-2 h-auto w-5"
+						style={{ color: "var(--accent-a11)" }}
+					/>
 					{t("translationRequest.openDialogLabel")}
 				</DropdownMenu.Item>
 			</DropdownMenu.Content>

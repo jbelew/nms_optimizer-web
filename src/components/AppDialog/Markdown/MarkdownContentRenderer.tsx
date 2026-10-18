@@ -79,15 +79,15 @@ const LinkRenderer: React.FC<{ children?: React.ReactNode; href?: string }> = ({
 
 		try {
 			const baseOrigin =
-				typeof window !== "undefined"
-					? window.location.origin
-					: "https://nms-optimizer.app";
+				typeof window !== "undefined" ?
+					window.location.origin
+				:	"https://nms-optimizer.app";
 			const parsed = new URL(href, baseOrigin);
 
 			return (
-				parsed.origin === baseOrigin ||
-				parsed.hostname === "nms-optimizer.app" ||
-				parsed.hostname.endsWith(".nms-optimizer.app")
+				parsed.origin === baseOrigin
+				|| parsed.hostname === "nms-optimizer.app"
+				|| parsed.hostname.endsWith(".nms-optimizer.app")
 			);
 		} catch {
 			return false;
@@ -116,7 +116,10 @@ const LinkRenderer: React.FC<{ children?: React.ReactNode; href?: string }> = ({
  * @returns A Radix UI Blockquote component.
  */
 const BlockquoteRenderer: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
-	<Blockquote mb="2" mt="2">
+	<Blockquote
+		mb="2"
+		mt="2"
+	>
 		{children}
 	</Blockquote>
 );
@@ -196,7 +199,13 @@ const H2Renderer: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
 			>
 				{children}
 			</Heading>
-			<Separator decorative mb="2" mt="2" orientation="horizontal" size="3" />
+			<Separator
+				decorative
+				mb="2"
+				mt="2"
+				orientation="horizontal"
+				size="3"
+			/>
 		</>
 	);
 };
@@ -210,7 +219,11 @@ const H2Renderer: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
  * @returns A Radix UI Heading component representing an h3 section.
  */
 const H3Renderer: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
-	<Heading className="text-sm! sm:text-base!" mb="1" style={{ color: "var(--accent-a11)" }}>
+	<Heading
+		className="text-sm! sm:text-base!"
+		mb="1"
+		style={{ color: "var(--accent-a11)" }}
+	>
 		{children}
 	</Heading>
 );
@@ -221,7 +234,12 @@ const H3Renderer: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
  * @returns A Radix UI Separator component representing a horizontal rule.
  */
 const HrRenderer: React.FC = () => (
-	<Separator decorative mb="2" orientation="horizontal" size="4" />
+	<Separator
+		decorative
+		mb="2"
+		orientation="horizontal"
+		size="4"
+	/>
 );
 
 /**
@@ -237,7 +255,10 @@ const IframeRenderer: React.FC<{ src?: string; title?: string }> = ({ src, title
 	const iframeTitle = title || "Embedded Content";
 
 	return (
-		<Box asChild mb="2">
+		<Box
+			asChild
+			mb="2"
+		>
 			<iframe
 				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 				allowFullScreen
@@ -267,7 +288,14 @@ const ImgRenderer: React.FC<{ alt?: string; src?: string; title?: string }> = ({
 	alt,
 	src,
 	title,
-}) => <img alt={alt} src={src} style={{ maxWidth: "100%" }} title={title} />;
+}) => (
+	<img
+		alt={alt}
+		src={src}
+		style={{ maxWidth: "100%" }}
+		title={title}
+	/>
+);
 
 /**
  * Custom renderer for keyboard input (`kbd`) elements.
@@ -302,7 +330,10 @@ const LiRenderer: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
  * @returns A Box wrapper containing an ordered list with custom padding.
  */
 const OlRenderer: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
-	<Box asChild mb="2">
+	<Box
+		asChild
+		mb="2"
+	>
 		<ol className="list-decimal pl-6">{children}</ol>
 	</Box>
 );
@@ -330,7 +361,10 @@ const ParagraphRenderer: React.FC<{ children?: React.ReactNode }> = ({ children 
 	}
 
 	return (
-		<Text as="p" mb="2">
+		<Text
+			as="p"
+			mb="2"
+		>
 			{children}
 		</Text>
 	);
@@ -356,7 +390,14 @@ const RadixIconRenderer: React.FC<{
 }> = (props) => {
 	const { color, name, size, ...rest } = props;
 
-	return <DynamicRadixIcon color={color} name={name} size={size} {...rest} />;
+	return (
+		<DynamicRadixIcon
+			color={color}
+			name={name}
+			size={size}
+			{...rest}
+		/>
+	);
 };
 
 /**
@@ -380,7 +421,10 @@ const StrongRenderer: React.FC<{ children?: React.ReactNode }> = ({ children }) 
  * @returns A Box wrapper containing an unordered list.
  */
 const UlRenderer: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
-	<Box asChild mb="2">
+	<Box
+		asChild
+		mb="2"
+	>
 		<ul className="list-disc pl-6">{children}</ul>
 	</Box>
 );
@@ -568,11 +612,13 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
 	}
 
 	return (
-		<article className="text-sm sm:text-base" ref={articleRef}>
-			{isLoading || !remarkGfm || !rehypeRaw ? (
+		<article
+			className="text-sm sm:text-base"
+			ref={articleRef}
+		>
+			{isLoading || !remarkGfm || !rehypeRaw ?
 				<LoremIpsumSkeleton />
-			) : (
-				<H2Context.Provider value={contextValue}>
+			:	<H2Context.Provider value={contextValue}>
 					<LazyReactMarkdown
 						components={MARKDOWN_COMPONENTS}
 						rehypePlugins={[rehypeRaw]}
@@ -581,7 +627,7 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
 						{markdown}
 					</LazyReactMarkdown>
 				</H2Context.Provider>
-			)}
+			}
 		</article>
 	);
 };

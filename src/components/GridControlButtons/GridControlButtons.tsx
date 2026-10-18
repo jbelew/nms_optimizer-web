@@ -91,11 +91,13 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex }) => {
 						size="1"
 						variant="ghost"
 					>
-						{isMediumOrLarger ? (
-							<PlusCircledIcon className="shrink-0" height="20" width="20" />
-						) : (
-							<PlusCircledIcon className="shrink-0" />
-						)}
+						{isMediumOrLarger ?
+							<PlusCircledIcon
+								className="shrink-0"
+								height="20"
+								width="20"
+							/>
+						:	<PlusCircledIcon className="shrink-0" />}
 					</IconButton>
 				</ConditionalTooltip>
 			)}
@@ -112,11 +114,13 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex }) => {
 						size="1"
 						variant="ghost"
 					>
-						{isMediumOrLarger ? (
-							<MinusCircledIcon className="shrink-0" height="20" width="20" />
-						) : (
-							<MinusCircledIcon className="shrink-0" />
-						)}
+						{isMediumOrLarger ?
+							<MinusCircledIcon
+								className="shrink-0"
+								height="20"
+								width="20"
+							/>
+						:	<MinusCircledIcon className="shrink-0" />}
 					</IconButton>
 				</ConditionalTooltip>
 			)}

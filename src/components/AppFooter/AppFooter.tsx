@@ -61,7 +61,11 @@ const AppFooter: React.FC<AppFooterProps> = ({
 	const { openDialog } = useDialog();
 
 	return (
-		<footer className="app-footer" data-build-date={buildDate} key={i18n.language}>
+		<footer
+			className="app-footer"
+			data-build-date={buildDate}
+			key={i18n.language}
+		>
 			<Flex
 				align="center"
 				className="app-footer__wrapper"
@@ -135,7 +139,12 @@ const AppFooter: React.FC<AppFooterProps> = ({
 					{buildDate && `(${new Date(buildDate).toLocaleString()})`}
 				</div>
 
-				<Separator decorative mb="1" mt="1" size="3" />
+				<Separator
+					decorative
+					mb="1"
+					mt="1"
+					size="3"
+				/>
 				<Flex
 					align="center"
 					className="app-footer__support"
@@ -147,7 +156,11 @@ const AppFooter: React.FC<AppFooterProps> = ({
 						<Trans i18nKey="footer.supportPrompt" />
 					</div>
 					<Buymeacoffee />
-					<Button asChild size="1" variant="surface">
+					<Button
+						asChild
+						size="1"
+						variant="surface"
+					>
 						<a
 							href="https://github.com/jbelew/nms_optimizer-web/stargazers"
 							rel="noopener noreferrer"

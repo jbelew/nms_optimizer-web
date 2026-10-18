@@ -1,4 +1,3 @@
-import type { RecommendedBuild, TechTree, TechTreeItem } from "./useTechTree";
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -7,6 +6,7 @@ import { useTechStore } from "@/store/tech/techStore";
 import { useTechTreeLoadingStore, useUiStore } from "@/store/ui/uiStore";
 import * as apiCallModule from "@/utils/api/network";
 
+import type { RecommendedBuild, TechTree, TechTreeItem } from "./useTechTree";
 import { clearTechTreeCache, useFetchTechTreeSuspense } from "./useTechTree";
 
 // Mock apiCall
@@ -77,7 +77,7 @@ describe("useFetchTechTreeSuspense", () => {
 		initializeTechTree: (
 			colors: Record<string, string>,
 			techGroups: Record<string, TechTreeItem[]>,
-			activeGroups: Record<string, string>
+			activeGroups: Record<string, string>,
 		) => void;
 		setActiveGroup: (key: string, type: string) => void;
 		setActiveGroups: (groups: Record<string, string>) => void;
@@ -232,7 +232,7 @@ describe("useFetchTechTreeSuspense", () => {
 			() => {
 				expect(mockInitializeTechTree).toHaveBeenCalled();
 			},
-			{ timeout: 2000 }
+			{ timeout: 2000 },
 		);
 
 		const colorsArg = mockInitializeTechTree.mock.calls[0][0];
@@ -254,7 +254,7 @@ describe("useFetchTechTreeSuspense", () => {
 			() => {
 				expect(mockInitializeTechTree).toHaveBeenCalled();
 			},
-			{ timeout: 2000 }
+			{ timeout: 2000 },
 		);
 
 		const groupsArg = mockInitializeTechTree.mock.calls[0][1];
@@ -277,7 +277,7 @@ describe("useFetchTechTreeSuspense", () => {
 			() => {
 				expect(mockInitializeTechTree).toHaveBeenCalled();
 			},
-			{ timeout: 2000 }
+			{ timeout: 2000 },
 		);
 
 		const callArg = mockInitializeTechTree.mock.calls[0]?.[2];
@@ -301,7 +301,7 @@ describe("useFetchTechTreeSuspense", () => {
 			() => {
 				expect(mockSetLoading).toHaveBeenCalledWith(false);
 			},
-			{ timeout: 2000 }
+			{ timeout: 2000 },
 		);
 	});
 
@@ -319,7 +319,7 @@ describe("useFetchTechTreeSuspense", () => {
 			() => {
 				expect(mockSetInitialGridDefinition).toHaveBeenCalled();
 			},
-			{ timeout: 2000 }
+			{ timeout: 2000 },
 		);
 
 		expect(mockSetGridFromInitialDefinition).toHaveBeenCalled();
@@ -353,7 +353,7 @@ describe("useFetchTechTreeSuspense", () => {
 			() => {
 				expect(mockInitializeTechTree).toHaveBeenCalled();
 			},
-			{ timeout: 2000 }
+			{ timeout: 2000 },
 		);
 
 		const callArg = mockInitializeTechTree.mock.calls[0]?.[2];
@@ -451,7 +451,7 @@ describe("useFetchTechTreeSuspense", () => {
 			expect(mockApiCall).toHaveBeenCalledWith(
 				expect.stringContaining("tech_tree/explorer"),
 				{},
-				10000
+				10000,
 			);
 		});
 	});
@@ -515,7 +515,7 @@ describe("useFetchTechTreeSuspense", () => {
 			() => {
 				expect(mockInitializeTechTree).toHaveBeenCalled();
 			},
-			{ timeout: 2000 }
+			{ timeout: 2000 },
 		);
 
 		const colorsArg = mockInitializeTechTree.mock.calls[0][0];
@@ -555,7 +555,7 @@ describe("useFetchTechTreeSuspense", () => {
 			() => {
 				expect(mockInitializeTechTree).toHaveBeenCalled();
 			},
-			{ timeout: 2000 }
+			{ timeout: 2000 },
 		);
 
 		// Should only include valid items in groups

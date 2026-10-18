@@ -286,7 +286,7 @@ export const usePlatformStore = create<PlatformState>()(
 		setSelectedPlatform: (platform) => {
 			if (!get().isValidPlatform(platform)) {
 				Logger.warn(
-					`Attempted to set invalid platform: ${platform}. Falling back to standard.`
+					`Attempted to set invalid platform: ${platform}. Falling back to standard.`,
 				);
 				platform = DEFAULT_PLATFORM;
 			}
@@ -298,7 +298,7 @@ export const usePlatformStore = create<PlatformState>()(
 			safeSetItem(PLATFORM_STORAGE_KEY, platform);
 			syncAnalyticsPlatformProperty(platform);
 		},
-	}))
+	})),
 );
 
 /**
@@ -327,7 +327,12 @@ export function fetchPlatforms(): Promise<PlatformCatalog> {
 	const cacheKey = "platforms";
 
 	if (!catalogCache.has(cacheKey)) {
-		const baseUrl = API_URL ? (API_URL.endsWith("/") ? API_URL : `${API_URL}/`) : "/";
+		const baseUrl =
+			API_URL ?
+				API_URL.endsWith("/") ?
+					API_URL
+				:	`${API_URL}/`
+			:	"/";
 		const promise = apiCall<PlatformCatalog>(`${baseUrl}platforms`, {}, 10000)
 			.then((data) => {
 				const platformStore = usePlatformStore.getState();

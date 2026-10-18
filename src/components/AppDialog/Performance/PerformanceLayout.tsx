@@ -29,12 +29,18 @@ export const PerformanceDashboardLayout: FC<{
 	/** The range selector row content. */
 	range: ReactNode;
 }> = ({ cards, chart, range }) => (
-	<Flex direction="column" gap="0">
+	<Flex
+		direction="column"
+		gap="0"
+	>
 		{/* Summary Cards Row */}
 		{cards}
 
 		{/* Range Selector Row */}
-		<Flex justify="end" mt={`${PERFORMANCE_LAYOUT.CARDS_TO_RANGE_GAP}px`}>
+		<Flex
+			justify="end"
+			mt={`${PERFORMANCE_LAYOUT.CARDS_TO_RANGE_GAP}px`}
+		>
 			{range}
 		</Flex>
 

@@ -61,7 +61,10 @@ export const ErrorDialog: FC<ErrorDialogProps> = ({ isOpen: propIsOpen, onClose:
 
 	const footer = (
 		<div className="flex justify-end gap-2">
-			<Button onClick={handleClose} variant="soft">
+			<Button
+				onClick={handleClose}
+				variant="soft"
+			>
 				{t("common.closeDialog")}
 			</Button>
 		</div>

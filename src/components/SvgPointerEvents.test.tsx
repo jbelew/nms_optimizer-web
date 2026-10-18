@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+
 import React from "react";
 import { GearIcon, ResetIcon } from "@radix-ui/react-icons";
 import { Button, IconButton } from "@radix-ui/themes";
@@ -46,12 +47,23 @@ describe("Global SVG Icon Pointer-Event Delegation (#767)", () => {
 	it("verifies that clicking an SVG icon child inside a button triggers the button's action handler", () => {
 		const handleClick = vi.fn();
 		render(
-			<button aria-label="Action" onClick={handleClick} type="button">
-				<svg data-testid="test-svg" height="16" width="16">
-					<path d="M0 0h16v16H0z" data-testid="test-path" />
+			<button
+				aria-label="Action"
+				onClick={handleClick}
+				type="button"
+			>
+				<svg
+					data-testid="test-svg"
+					height="16"
+					width="16"
+				>
+					<path
+						d="M0 0h16v16H0z"
+						data-testid="test-path"
+					/>
 				</svg>
 				<span>Click me</span>
-			</button>
+			</button>,
 		);
 
 		const svg = screen.getByTestId("test-svg");
@@ -77,7 +89,7 @@ describe("Global SVG Icon Pointer-Event Delegation (#767)", () => {
 				tabIndex={0}
 			>
 				<ResetIcon data-testid="reset-icon" />
-			</div>
+			</div>,
 		);
 
 		const svg = screen.getByTestId("reset-icon");
@@ -97,7 +109,7 @@ describe("Global SVG Icon Pointer-Event Delegation (#767)", () => {
 			>
 				<GearIcon data-testid="gear-icon" />
 				<span>Settings</span>
-			</div>
+			</div>,
 		);
 
 		const svg = screen.getByTestId("gear-icon");
@@ -111,14 +123,20 @@ describe("Global SVG Icon Pointer-Event Delegation (#767)", () => {
 
 		render(
 			<>
-				<Button aria-label="Radix Button" onClick={handleButtonClick}>
+				<Button
+					aria-label="Radix Button"
+					onClick={handleButtonClick}
+				>
 					<ResetIcon data-testid="radix-btn-icon" />
 					<span>Reset</span>
 				</Button>
-				<IconButton aria-label="Radix Icon Button" onClick={handleIconButtonClick}>
+				<IconButton
+					aria-label="Radix Icon Button"
+					onClick={handleIconButtonClick}
+				>
 					<GearIcon data-testid="radix-icon-btn-icon" />
 				</IconButton>
-			</>
+			</>,
 		);
 
 		const btnIcon = screen.getByTestId("radix-btn-icon");
@@ -133,9 +151,14 @@ describe("Global SVG Icon Pointer-Event Delegation (#767)", () => {
 	it("verifies disabled buttons do not trigger handlers even when child SVG is clicked", () => {
 		const handleClick = vi.fn();
 		render(
-			<button aria-label="Disabled" disabled onClick={handleClick} type="button">
+			<button
+				aria-label="Disabled"
+				disabled
+				onClick={handleClick}
+				type="button"
+			>
 				<ResetIcon data-testid="disabled-icon" />
-			</button>
+			</button>,
 		);
 
 		const svg = screen.getByTestId("disabled-icon");
@@ -146,10 +169,17 @@ describe("Global SVG Icon Pointer-Event Delegation (#767)", () => {
 	it("preserves accessibility attributes and tooltip functionality on icon buttons", () => {
 		render(
 			<ConditionalTooltip label="Reset the grid layout">
-				<button aria-label="Reset Grid" data-testid="accessible-btn" type="button">
-					<ResetIcon aria-hidden="true" data-testid="accessible-icon" />
+				<button
+					aria-label="Reset Grid"
+					data-testid="accessible-btn"
+					type="button"
+				>
+					<ResetIcon
+						aria-hidden="true"
+						data-testid="accessible-icon"
+					/>
 				</button>
-			</ConditionalTooltip>
+			</ConditionalTooltip>,
 		);
 
 		const button = screen.getByTestId("accessible-btn");

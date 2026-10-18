@@ -85,10 +85,10 @@ export function useScreenshot(): UseScreenshotReturn {
 				const height = originalTextY + spaceBelowLabel;
 
 				const elementsToHide = element.querySelectorAll<HTMLElement>(
-					'[data-screenshot-exclude="true"]'
+					'[data-screenshot-exclude="true"]',
 				);
 				const originalVisibilities = Array.from(elementsToHide).map(
-					(el) => el.style.visibility
+					(el) => el.style.visibility,
 				);
 
 				let canvas: HTMLCanvasElement;
@@ -109,7 +109,7 @@ export function useScreenshot(): UseScreenshotReturn {
 					});
 				} finally {
 					elementsToHide.forEach(
-						(el, i) => (el.style.visibility = originalVisibilities[i])
+						(el, i) => (el.style.visibility = originalVisibilities[i]),
 					);
 				}
 
@@ -123,9 +123,8 @@ export function useScreenshot(): UseScreenshotReturn {
 					// Keep the exact same distance from the grid as the original code
 					const y = element.offsetHeight + 5;
 
-					const part1 = buildName
-						? `Layout "${buildName}" created with `
-						: "Layout created with ";
+					const part1 =
+						buildName ? `Layout "${buildName}" created with ` : "Layout created with ";
 					const part2 = "https://nms-optimizer.app";
 
 					const w1 = ctx.measureText(part1).width;
@@ -205,7 +204,7 @@ export function useScreenshot(): UseScreenshotReturn {
 				showSuccess(
 					t("toast.screenshotSaved.title"),
 					t("toast.screenshotSaved.description"),
-					5000
+					5000,
 				);
 				sendEvent({
 					action: "screenshot_build",
@@ -219,13 +218,13 @@ export function useScreenshot(): UseScreenshotReturn {
 				showError(
 					t("toast.screenshotError.title"),
 					t("toast.screenshotError.description"),
-					5000
+					5000,
 				);
 			} finally {
 				setIsCapturing(false);
 			}
 		},
-		[t, showSuccess, showError, sendEvent, buildName]
+		[t, showSuccess, showError, sendEvent, buildName],
 	);
 
 	return { handleScreenshot, isCapturing };

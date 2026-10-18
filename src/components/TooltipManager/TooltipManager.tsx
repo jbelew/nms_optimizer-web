@@ -55,8 +55,15 @@ export const TooltipManager: React.FC = () => {
 	};
 
 	return (
-		<Tooltip className="font-medium!" content={label} open={isOpen}>
-			<div aria-hidden="true" style={style} />
+		<Tooltip
+			className="font-medium!"
+			content={label}
+			open={isOpen}
+		>
+			<div
+				aria-hidden="true"
+				style={style}
+			/>
 		</Tooltip>
 	);
 };

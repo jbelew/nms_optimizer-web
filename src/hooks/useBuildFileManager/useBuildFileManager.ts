@@ -126,9 +126,9 @@ const useImportBuildFile = () => {
 						"Build ",
 						createElement(Code, null, file.name),
 						" ",
-						t("toast.buildLoaded.loadedMessage")
+						t("toast.buildLoaded.loadedMessage"),
 					),
-					5000
+					5000,
 				);
 
 				sendEvent({
@@ -149,7 +149,7 @@ const useImportBuildFile = () => {
 				useBuildFileStateStore.getState().setIsLoadPending(false);
 			}
 		},
-		[sendEvent, showError, showSuccess, t]
+		[sendEvent, showError, showSuccess, t],
 	);
 };
 
@@ -348,7 +348,7 @@ export const useFileHandling = (): void => {
 							}
 						}
 					}
-				}
+				},
 			);
 		}
 	}, [importBuildFile]);

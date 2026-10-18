@@ -84,7 +84,7 @@ describe("useMarkdownContent", () => {
 			expect(result.current.isLoading).toBe(false);
 			expect(result.current.markdown).toContain("Failed to load content");
 			expect(result.current.error).toContain(
-				"Markdown content not found for non-existent-file"
+				"Markdown content not found for non-existent-file",
 			);
 		});
 
@@ -154,7 +154,7 @@ describe("useMarkdownContent", () => {
 			expect(result.current.isLoading).toBe(false);
 			expect(result.current.markdown).toContain("Failed to load content");
 			expect(result.current.error).toContain(
-				"Markdown content not found for network-error-file"
+				"Markdown content not found for network-error-file",
 			);
 		});
 

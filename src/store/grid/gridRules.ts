@@ -180,8 +180,8 @@ export function getRowControlEligibility(params: {
 
 	const canActivateRow = params.rowIndex === params.firstInactiveRowIndex;
 	const canDeactivateRow =
-		params.rowIndex === params.lastActiveRowIndex &&
-		params.rowIndex >= params.totalRows - LAST_N_ROWS_THRESHOLD;
+		params.rowIndex === params.lastActiveRowIndex
+		&& params.rowIndex >= params.totalRows - LAST_N_ROWS_THRESHOLD;
 
 	return { canActivateRow, canDeactivateRow };
 }

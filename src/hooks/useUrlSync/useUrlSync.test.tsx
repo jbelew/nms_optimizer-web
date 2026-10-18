@@ -1,11 +1,11 @@
-import type { PlatformCatalog, PlatformState } from "@/store/app/platformStore";
+import { act } from "react";
 import type { Location } from "react-router-dom";
 import type { Mock } from "vitest";
-import { act } from "react";
 import { renderHook } from "@testing-library/react";
 import { useLocation } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import type { PlatformCatalog, PlatformState } from "@/store/app/platformStore";
 import { usePlatformsSuspense, usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
@@ -58,10 +58,10 @@ describe("useUrlSync", () => {
 	} = {
 		initializePlatform: vi.fn(),
 		isValidPlatform: (platform): platform is string =>
-			typeof platform === "string" &&
-			platform.length > 0 &&
-			(platformStoreState.platforms === null ||
-				Object.prototype.hasOwnProperty.call(platformStoreState.platforms, platform)),
+			typeof platform === "string"
+			&& platform.length > 0
+			&& (platformStoreState.platforms === null
+				|| Object.prototype.hasOwnProperty.call(platformStoreState.platforms, platform)),
 		platforms: {
 			"test-platform": { label: "Test Platform", type: "Starship" },
 		},
@@ -92,7 +92,7 @@ describe("useUrlSync", () => {
 		};
 
 		(useGridStore as unknown as Mock).mockImplementation((selector) =>
-			typeof selector === "function" ? selector(gridStoreState) : gridStoreState
+			typeof selector === "function" ? selector(gridStoreState) : gridStoreState,
 		);
 		(useGridStore as unknown as { getState: Mock }).getState = vi.fn(() => gridStoreState);
 
@@ -103,10 +103,13 @@ describe("useUrlSync", () => {
 		platformStoreState = {
 			initializePlatform: vi.fn(),
 			isValidPlatform: (platform): platform is string =>
-				typeof platform === "string" &&
-				platform.length > 0 &&
-				(platformStoreState.platforms === null ||
-					Object.prototype.hasOwnProperty.call(platformStoreState.platforms, platform)),
+				typeof platform === "string"
+				&& platform.length > 0
+				&& (platformStoreState.platforms === null
+					|| Object.prototype.hasOwnProperty.call(
+						platformStoreState.platforms,
+						platform,
+					)),
 			platforms: defaultCatalog,
 			selectedPlatform: "test-platform",
 			setPlatforms: vi.fn(),
@@ -117,13 +120,13 @@ describe("useUrlSync", () => {
 
 		(usePlatformStore as unknown as Mock).mockImplementation(
 			(selector: (state: PlatformState) => unknown) => {
-				return typeof selector === "function"
-					? selector(platformStoreState)
-					: platformStoreState;
-			}
+				return typeof selector === "function" ?
+						selector(platformStoreState)
+					:	platformStoreState;
+			},
 		);
 		(usePlatformStore as unknown as { getState: Mock }).getState = vi.fn(
-			() => platformStoreState
+			() => platformStoreState,
 		);
 
 		(usePlatformsSuspense as unknown as Mock).mockReturnValue(defaultCatalog);

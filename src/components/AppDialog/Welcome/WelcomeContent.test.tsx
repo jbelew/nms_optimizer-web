@@ -1,4 +1,3 @@
-import type { DialogContextType } from "@/utils/system/dialogUtils";
 import type { ReactNode } from "react";
 import { cloneElement, isValidElement } from "react";
 import { Theme } from "@radix-ui/themes";
@@ -6,6 +5,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
 
+import type { DialogContextType } from "@/utils/system/dialogUtils";
 import { DialogContext } from "@/utils/system/dialogUtils";
 
 import WelcomeContent from "./WelcomeContent";
@@ -27,10 +27,11 @@ interface TransProps {
 vi.mock("react-i18next", () => ({
 	Trans: ({ children, components, i18nKey }: TransProps) => {
 		if (components) {
-			const comp = Array.isArray(components)
-				? components[0]
-				: (components as Record<string, ReactNode>)[1] ||
-					(components as Record<string, ReactNode>).link;
+			const comp =
+				Array.isArray(components) ?
+					components[0]
+				:	(components as Record<string, ReactNode>)[1]
+					|| (components as Record<string, ReactNode>).link;
 
 			if (comp && isValidElement(comp)) {
 				return (
@@ -72,7 +73,7 @@ describe("WelcomeContent", () => {
 				<Theme>
 					<WelcomeContent onClose={onClose} />
 				</Theme>
-			</DialogContext.Provider>
+			</DialogContext.Provider>,
 		);
 
 		expect(mockSendEvent).toHaveBeenCalledWith(
@@ -80,7 +81,7 @@ describe("WelcomeContent", () => {
 				action: "page_view",
 				category: "engagement",
 				page_title: "dialogs.titles.welcome | appName",
-			})
+			}),
 		);
 	});
 
@@ -91,7 +92,7 @@ describe("WelcomeContent", () => {
 				<Theme>
 					<WelcomeContent onClose={onClose} />
 				</Theme>
-			</DialogContext.Provider>
+			</DialogContext.Provider>,
 		);
 
 		expect(screen.getByText("dialogs.welcome.description")).toBeInTheDocument();
@@ -107,7 +108,7 @@ describe("WelcomeContent", () => {
 				<Theme>
 					<WelcomeContent onClose={onClose} />
 				</Theme>
-			</DialogContext.Provider>
+			</DialogContext.Provider>,
 		);
 
 		const link = screen.getByRole("button", { name: "see the complete instructions" });

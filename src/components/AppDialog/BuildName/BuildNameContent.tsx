@@ -67,7 +67,7 @@ export const BuildNameContent = ({
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const persistedBuildName = useGridStore((state) => state.buildName);
 	const [buildName, setBuildName] = useState(
-		() => persistedBuildName || generateBuildNameWithType(selectedShipType)
+		() => persistedBuildName || generateBuildNameWithType(selectedShipType),
 	);
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -197,8 +197,17 @@ export const BuildNameContent = ({
 
 	return (
 		<>
-			<Flex direction="column" gap="2" mb="2">
-				<Text as="label" htmlFor="build-name-input" size="2" weight="medium">
+			<Flex
+				direction="column"
+				gap="2"
+				mb="2"
+			>
+				<Text
+					as="label"
+					htmlFor="build-name-input"
+					size="2"
+					weight="medium"
+				>
 					{t("dialog.buildName.description")}
 				</Text>
 				<Flex gap="2">
@@ -222,7 +231,11 @@ export const BuildNameContent = ({
 					</IconButton>
 				</Flex>
 				{validationError && (
-					<Text color="red" ml="1" size="1">
+					<Text
+						color="red"
+						ml="1"
+						size="1"
+					>
 						{validationError}
 					</Text>
 				)}

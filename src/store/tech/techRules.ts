@@ -91,7 +91,7 @@ export const ALPHABETICAL_MODULE_GROUPS = ["bonus", "figurines", "trails"] as co
  */
 export function areAllModulesSelected(
 	modules: { id: string; type?: string }[],
-	checkedIds: string[]
+	checkedIds: string[],
 ): boolean {
 	return modules.filter((m) => m.type !== "core").every((m) => checkedIds.includes(m.id));
 }
@@ -126,7 +126,7 @@ export function areAllModulesSelected(
  */
 export function getModulePrerequisites(
 	groupName: string,
-	modules: { id: string; label?: string }[]
+	modules: { id: string; label?: string }[],
 ): Map<string, string> {
 	const dependencyMap = new Map<string, string>();
 
@@ -193,7 +193,7 @@ export function getModulePrerequisites(
  */
 export function getSelectAllModuleIds(
 	modules: { id: string; type?: string }[],
-	checked: "indeterminate" | boolean
+	checked: "indeterminate" | boolean,
 ): string[] {
 	const coreModuleIds = modules.filter((m) => m.type === "core").map((m) => m.id);
 
@@ -265,7 +265,7 @@ export function getTechnologyTranslationKey(tech: string, techImage?: null | str
  * ```
  */
 export function groupModules<T extends { id: string; label?: string; type?: string }>(
-	modules: T[]
+	modules: T[],
 ): Record<string, T[]> {
 	const groups: Record<string, T[]> = {
 		atlantid: [],
@@ -331,15 +331,15 @@ export function groupModules<T extends { id: string; label?: string; type?: stri
  */
 export function resolveActiveTechVariant<T extends { type?: string }>(
 	variants: T[] | undefined,
-	activeVariantType = "normal"
+	activeVariantType = "normal",
 ): T | undefined {
 	if (!variants?.length) {
 		return undefined;
 	}
 
-	return variants.length > 1
-		? variants.find((v) => v.type === activeVariantType) || variants[0]
-		: variants[0];
+	return variants.length > 1 ?
+			variants.find((v) => v.type === activeVariantType) || variants[0]
+		:	variants[0];
 }
 
 /**
@@ -377,7 +377,7 @@ export function resolveActiveTechVariant<T extends { type?: string }>(
 export function validateModuleSelections(
 	prevChecked: string[],
 	newChecked: string[],
-	modules: { id: string; label: string; type?: string }[]
+	modules: { id: string; label: string; type?: string }[],
 ): string[] {
 	const newSet = new Set(newChecked);
 	const removedIds = prevChecked.filter((id) => !newSet.has(id));
@@ -410,8 +410,8 @@ export function validateModuleSelections(
 		for (const lowerRank of lowerRanks) {
 			for (const candidate of modules) {
 				if (
-					(candidate.type || "upgrade") === groupName &&
-					candidate.label?.includes(lowerRank)
+					(candidate.type || "upgrade") === groupName
+					&& candidate.label?.includes(lowerRank)
 				) {
 					finalChecked.delete(candidate.id);
 				}

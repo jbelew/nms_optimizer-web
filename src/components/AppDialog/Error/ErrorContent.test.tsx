@@ -52,7 +52,7 @@ const renderWithDialog = (component: React.ReactElement) => {
 				</Dialog.Description>
 				{component}
 			</Dialog.Content>
-		</Dialog.Root>
+		</Dialog.Root>,
 	);
 };
 
@@ -76,7 +76,7 @@ describe("ErrorContent", () => {
 		const githubLink = screen.getByRole("link");
 		expect(githubLink).toHaveAttribute(
 			"href",
-			"https://github.com/jbelew/nms_optimizer-web/issues"
+			"https://github.com/jbelew/nms_optimizer-web/issues",
 		);
 		expect(githubLink).toHaveAttribute("target", "_blank");
 		expect(githubLink).toHaveAttribute("rel", "noopener noreferrer");
@@ -96,7 +96,7 @@ describe("ErrorContent", () => {
 					</Dialog.Description>
 					<ErrorContent />
 				</Dialog.Content>
-			</Dialog.Root>
+			</Dialog.Root>,
 		);
 
 		// Content should still be in document (verifying component renders)

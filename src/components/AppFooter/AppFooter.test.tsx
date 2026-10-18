@@ -21,7 +21,7 @@ describe("AppFooter Component", () => {
 				<Theme>
 					<AppFooter buildVersion="1.0.0" />
 				</Theme>
-			</I18nextProvider>
+			</I18nextProvider>,
 		);
 	};
 

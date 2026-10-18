@@ -1,14 +1,14 @@
-import type { Cell, Grid, GridStore } from "./gridTypes";
-import type { Module } from "@/types/tech";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { shallow } from "zustand/shallow";
 
+import type { Module } from "@/types/tech";
 import { UI_TIMING } from "@/constants";
 import { resolveInitialPlatform } from "@/store/app/platformStore";
 import { Logger } from "@/utils/system/monitoring";
 
+import type { Cell, Grid, GridStore } from "./gridTypes";
 import { applyValidationFeedback } from "./applyValidationFeedback";
 import { createCellFromModuleData, createGrid, resetCellContent } from "./gridFactories";
 import { debouncedStorage } from "./gridPersistence";
@@ -84,9 +84,9 @@ export const useGridStore = create<GridStore>()(
 				const currentCells = state.grid?.cells;
 
 				const hasMatchingDimensions =
-					Array.isArray(currentCells) &&
-					currentCells.length === targetHeight &&
-					currentCells.every((row, r) => row?.length === targetCells[r]?.length);
+					Array.isArray(currentCells)
+					&& currentCells.length === targetHeight
+					&& currentCells.every((row, r) => row?.length === targetCells[r]?.length);
 
 				if (!hasMatchingDimensions) {
 					state.grid.cells = targetCells;
@@ -127,10 +127,10 @@ export const useGridStore = create<GridStore>()(
 			 */
 			const applyGridDefinition = (
 				state: GridStore,
-				definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean }
+				definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean },
 			) => {
 				const newCells: Cell[][] = definition.grid.map((row) =>
-					row.map(createCellFromModuleData)
+					row.map(createCellFromModuleData),
 				);
 				syncGridCellsInPlace(state, newCells);
 				state.gridFixed = definition.gridFixed;
@@ -180,8 +180,8 @@ export const useGridStore = create<GridStore>()(
 				const initialCells = state.initialGridDefinition?.grid;
 				const hasInitialCells = Array.isArray(initialCells) && initialCells.length > 0;
 				let isDefault =
-					!state.isSharedGrid &&
-					(!hasInitialCells || initialCells.length === cells.length);
+					!state.isSharedGrid
+					&& (!hasInitialCells || initialCells.length === cells.length);
 
 				for (let r = 0; r < cells.length; r++) {
 					const row = cells[r];
@@ -210,18 +210,16 @@ export const useGridStore = create<GridStore>()(
 
 						if (isDefault) {
 							const initialCell = hasInitialCells ? initialCells[r]?.[c] : undefined;
-							const expectedActive = initialCell
-								? (initialCell.active ?? true)
-								: false;
-							const expectedSupercharged = initialCell
-								? (initialCell.supercharged ?? false)
-								: false;
+							const expectedActive =
+								initialCell ? (initialCell.active ?? true) : false;
+							const expectedSupercharged =
+								initialCell ? (initialCell.supercharged ?? false) : false;
 							const expectedModule = initialCell?.id || null;
 
 							if (
-								cell.active !== expectedActive ||
-								cell.supercharged !== expectedSupercharged ||
-								cell.module !== expectedModule
+								cell.active !== expectedActive
+								|| cell.supercharged !== expectedSupercharged
+								|| cell.module !== expectedModule
 							) {
 								isDefault = false;
 							}
@@ -318,9 +316,9 @@ export const useGridStore = create<GridStore>()(
 							lastTapCell[0] === rowIndex && lastTapCell[1] === columnIndex;
 
 						if (
-							isSameCell &&
-							timeSinceLastTap < UI_TIMING.DOUBLE_TAP_THRESHOLD &&
-							timeSinceLastTap > 0
+							isSameCell
+							&& timeSinceLastTap < UI_TIMING.DOUBLE_TAP_THRESHOLD
+							&& timeSinceLastTap > 0
 						) {
 							const validation = validateToggleSupercharged({
 								cell,
@@ -562,8 +560,8 @@ export const useGridStore = create<GridStore>()(
 					...currentState,
 					...stateFromStorage,
 					initialGridDefinition:
-						stateFromStorage.initialGridDefinition ||
-						currentState.initialGridDefinition,
+						stateFromStorage.initialGridDefinition
+						|| currentState.initialGridDefinition,
 					isSharedGrid: false,
 				};
 			},
@@ -587,8 +585,8 @@ export const useGridStore = create<GridStore>()(
 				return dataToPersist;
 			},
 			storage: debouncedStorage,
-		}
-	)
+		},
+	),
 );
 
 // Always expose for E2E if the flag is set, using a method that survives minification

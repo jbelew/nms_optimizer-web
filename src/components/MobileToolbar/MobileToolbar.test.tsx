@@ -62,7 +62,7 @@ vi.mock("@/store/ui/uiStore", () => ({
 		toggleA11yMode: vi.fn(),
 	}),
 	useOptimizeStore: vi.fn((selector) =>
-		selector({ status: solvingState ? { progress: 0, type: "solving" } : { type: "idle" } })
+		selector({ status: solvingState ? { progress: 0, type: "solving" } : { type: "idle" } }),
 	),
 }));
 
@@ -84,7 +84,7 @@ describe("MobileToolbar", () => {
 				<Theme>
 					<MobileToolbar />
 				</Theme>
-			</I18nextProvider>
+			</I18nextProvider>,
 		);
 
 		expect(registerToolbarForceShow).toHaveBeenCalledWith(mockForceShow);
@@ -96,7 +96,7 @@ describe("MobileToolbar", () => {
 				<Theme>
 					<MobileToolbar />
 				</Theme>
-			</I18nextProvider>
+			</I18nextProvider>,
 		);
 
 		// Verify buttons by their translation keys / aria-labels
@@ -114,7 +114,7 @@ describe("MobileToolbar", () => {
 				<Theme>
 					<MobileToolbar />
 				</Theme>
-			</I18nextProvider>
+			</I18nextProvider>,
 		);
 
 		const loadButton = screen.getByLabelText("buttons.loadBuild");
@@ -129,7 +129,7 @@ describe("MobileToolbar", () => {
 				<Theme>
 					<MobileToolbar />
 				</Theme>
-			</I18nextProvider>
+			</I18nextProvider>,
 		);
 
 		const saveButton = screen.getByLabelText("buttons.saveBuild");
@@ -146,7 +146,7 @@ describe("MobileToolbar", () => {
 				<Theme>
 					<MobileToolbar />
 				</Theme>
-			</I18nextProvider>
+			</I18nextProvider>,
 		);
 
 		const loadButton = screen.getByLabelText("buttons.loadBuild");
@@ -162,7 +162,7 @@ describe("MobileToolbar", () => {
 				<Theme>
 					<MobileToolbar />
 				</Theme>
-			</I18nextProvider>
+			</I18nextProvider>,
 		);
 
 		const loadButton = screen.getByLabelText("buttons.loadBuild");

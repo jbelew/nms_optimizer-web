@@ -16,7 +16,7 @@ const createMatchMediaMock = (matches: boolean) => {
 	const addEventListenerMock = vi.fn(function (
 		this: MediaQueryList,
 		type: string,
-		listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void
+		listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void,
 	) {
 		if (type === "change") {
 			listeners.push(listener);
@@ -26,7 +26,7 @@ const createMatchMediaMock = (matches: boolean) => {
 	const removeEventListenerMock = vi.fn(function (
 		this: MediaQueryList,
 		type: string,
-		listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void
+		listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void,
 	) {
 		if (type === "change") {
 			const index = listeners.indexOf(listener);
@@ -42,7 +42,7 @@ const createMatchMediaMock = (matches: boolean) => {
 		// Alias for older methods
 		addListener: vi.fn(function (
 			this: MediaQueryList,
-			listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void
+			listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void,
 		) {
 			listeners.push(listener);
 		}),
@@ -58,7 +58,7 @@ const createMatchMediaMock = (matches: boolean) => {
 		removeEventListener: removeEventListenerMock,
 		removeListener: vi.fn(function (
 			this: MediaQueryList,
-			listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void
+			listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void,
 		) {
 			const index = listeners.indexOf(listener);
 
@@ -111,7 +111,7 @@ describe("useBreakpoint", () => {
 		expect(matchMediaMock.removeEventListener).toHaveBeenCalledTimes(1);
 		expect(matchMediaMock.removeEventListener).toHaveBeenCalledWith(
 			"change",
-			matchMediaMock.addEventListener.mock.calls[0][1]
+			matchMediaMock.addEventListener.mock.calls[0][1],
 		);
 	});
 

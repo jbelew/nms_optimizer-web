@@ -59,7 +59,11 @@ const OfflineBanner: React.FC = () => {
 	}
 
 	return (
-		<div aria-live="polite" className="offline w-full p-4 text-center" role="alert">
+		<div
+			aria-live="polite"
+			className="offline w-full p-4 text-center"
+			role="alert"
+		>
 			<div className="offline__logo mb-4">
 				<svg
 					aria-hidden="true"
@@ -75,7 +79,10 @@ const OfflineBanner: React.FC = () => {
 				</svg>
 			</div>
 			<h1 className="offline__title text-2xl font-semibold tracking-widest">
-				<Trans defaults="-kzzkt- Offline! -kzzkt-" i18nKey="offline.title" />
+				<Trans
+					defaults="-kzzkt- Offline! -kzzkt-"
+					i18nKey="offline.title"
+				/>
 			</h1>
 			<span className="text-sm sm:text-base">
 				<Trans

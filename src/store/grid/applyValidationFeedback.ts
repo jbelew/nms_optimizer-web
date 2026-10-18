@@ -1,13 +1,14 @@
+import i18n from "i18next";
+
+import type { UiActions, UiStore } from "@/store/ui/uiStore";
+import { showGlobalError } from "@/hooks/useToast/useToast";
+import { useUiStore } from "@/store/ui/uiStore";
+
 import type {
 	validateToggleActive,
 	validateToggleSupercharged,
 	ValidationResult,
 } from "./gridRules";
-import type { UiActions, UiStore } from "@/store/ui/uiStore";
-import i18n from "i18next";
-
-import { showGlobalError } from "@/hooks/useToast/useToast";
-import { useUiStore } from "@/store/ui/uiStore";
 
 type RestrictionCountKey =
 	| "gridFixedCount"
@@ -92,8 +93,8 @@ export function applyValidationFeedback(result: ValidationResult): void {
 		if (nextCount === RESTRICTION_WARNING_THRESHOLD) {
 			const messageKey = `restrictions.${result.reason}`;
 			const title =
-				i18n.t("restrictions.title", { defaultValue: "restrictions.title" }) ||
-				"restrictions.title";
+				i18n.t("restrictions.title", { defaultValue: "restrictions.title" })
+				|| "restrictions.title";
 			const description =
 				i18n.t(messageKey, { count: nextCount, defaultValue: messageKey }) || messageKey;
 

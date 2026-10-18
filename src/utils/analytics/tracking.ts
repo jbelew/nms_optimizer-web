@@ -28,9 +28,9 @@
  *
  * @category Utilities
  */
-import type { AnalyticsEventParams, GA4Event } from "@/types/analytics";
 import type ReactGA from "react-ga4";
 
+import type { AnalyticsEventParams, GA4Event } from "@/types/analytics";
 import { API_URL, TRACKING_ID } from "@/constants";
 import { isBot, safeGetItem, safeSetItem } from "@/utils/browser/environment";
 import { Logger } from "@/utils/system/monitoring";
@@ -159,7 +159,7 @@ const detectAdBlocker = (): Promise<boolean> => {
 						} finally {
 							clearTimeout(timeoutId);
 						}
-					})
+					}),
 				);
 
 				return false;
@@ -389,7 +389,7 @@ const getClientId = (): string => {
 export const sendServerEvent = (
 	eventName: string,
 	params: AnalyticsEventParams = {},
-	userId?: string
+	userId?: string,
 ): void => {
 	try {
 		const payload: AnalyticsEventPayload = {
@@ -407,7 +407,12 @@ export const sendServerEvent = (
 			payload.userId = userId;
 		}
 
-		const baseUrl = API_URL ? (API_URL.endsWith("/") ? API_URL : `${API_URL}/`) : "/";
+		const baseUrl =
+			API_URL ?
+				API_URL.endsWith("/") ?
+					API_URL
+				:	`${API_URL}/`
+			:	"/";
 		const endpoint = `${baseUrl}api/events`;
 
 		if (navigator.sendBeacon) {

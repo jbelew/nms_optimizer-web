@@ -387,12 +387,12 @@ describe("TechStore", () => {
 				{},
 				mockTechGroups,
 				{},
-				{ "test-tech": ["theta_id", "tau_id", "sigma_id"] }
+				{ "test-tech": ["theta_id", "tau_id", "sigma_id"] },
 			);
 
 			// Deselect Theta
 			setCheckedModules("test-tech", (prev) =>
-				(prev || []).filter((id) => id !== "theta_id")
+				(prev || []).filter((id) => id !== "theta_id"),
 			);
 
 			// Check that Tau and Sigma are also deselected
@@ -464,7 +464,7 @@ describe("TechStore", () => {
 				{},
 				mockTechGroups,
 				{},
-				{ "test-tech": ["theta_id", "tau_id", "sigma_id"] }
+				{ "test-tech": ["theta_id", "tau_id", "sigma_id"] },
 			);
 
 			// Deselect Tau
@@ -539,12 +539,12 @@ describe("TechStore", () => {
 				{},
 				mockTechGroups,
 				{},
-				{ "test-tech": ["theta_id", "tau_id", "sigma_id"] }
+				{ "test-tech": ["theta_id", "tau_id", "sigma_id"] },
 			);
 
 			// Deselect Sigma
 			setCheckedModules("test-tech", (prev) =>
-				(prev || []).filter((id) => id !== "sigma_id")
+				(prev || []).filter((id) => id !== "sigma_id"),
 			);
 
 			// Check that Theta and Tau are kept
@@ -634,7 +634,7 @@ describe("TechStore", () => {
 				{},
 				mockTechGroups,
 				{},
-				{ "test-tech": ["core_id", "theta_id", "tau_id", "sigma_id"] }
+				{ "test-tech": ["core_id", "theta_id", "tau_id", "sigma_id"] },
 			);
 
 			// Deselect Core
@@ -770,12 +770,12 @@ describe("TechStore", () => {
 				{},
 				mockTechGroups,
 				{ "test-tech": "photonix" },
-				{ "test-tech": ["theta_photonix", "tau_photonix", "sigma_photonix"] }
+				{ "test-tech": ["theta_photonix", "tau_photonix", "sigma_photonix"] },
 			);
 
 			// Deselect Theta Photonix
 			setCheckedModules("test-tech", (prev) =>
-				(prev || []).filter((id) => id !== "theta_photonix")
+				(prev || []).filter((id) => id !== "theta_photonix"),
 			);
 
 			// Check that Tau and Sigma Photonix are also deselected
@@ -787,7 +787,7 @@ describe("TechStore", () => {
 
 			// Deselect Theta Normal
 			setCheckedModules("test-tech", (prev) =>
-				(prev || []).filter((id) => id !== "theta_normal")
+				(prev || []).filter((id) => id !== "theta_normal"),
 			);
 
 			// Check that Tau and Sigma Normal are also deselected
@@ -885,7 +885,7 @@ describe("TechStore", () => {
 				{},
 				mockTechGroups,
 				{ "test-tech": "photonix" },
-				{ "test-tech": ["mod_photonix_unchecked", "mod_photonix_checked"] }
+				{ "test-tech": ["mod_photonix_unchecked", "mod_photonix_checked"] },
 			);
 
 			// Reset
@@ -975,7 +975,7 @@ describe("TechStore", () => {
 				{},
 				mockTechGroups,
 				{ hyperdrive: "normal", pulse: "normal" },
-				{ hyperdrive: ["HD1"], pulse: ["P1", "P2"] }
+				{ hyperdrive: ["HD1"], pulse: ["P1", "P2"] },
 			);
 
 			const hyperdriveRefBefore = useTechStore.getState().checkedModules["hyperdrive"];

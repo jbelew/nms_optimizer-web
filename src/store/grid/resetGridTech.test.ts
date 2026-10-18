@@ -1,7 +1,7 @@
-import type { Cell } from "./gridStore";
 import { act } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 
+import type { Cell } from "./gridStore";
 import { createEmptyCell, createGrid, useGridStore } from "./gridStore";
 
 describe("resetGridTech action in GridStore", () => {
@@ -18,7 +18,7 @@ describe("resetGridTech action in GridStore", () => {
 			newGrid.cells.forEach((row) =>
 				row.forEach((cell) => {
 					Object.assign(cell, createEmptyCell(false, true)); // Default: active, not SC, no module/tech
-				})
+				}),
 			);
 			cellConfigurator(newGrid.cells);
 			useGridStore.setState({ grid: newGrid, isSharedGrid: false, result: null });
@@ -34,7 +34,7 @@ describe("resetGridTech action in GridStore", () => {
 			defaultGrid.cells.forEach((row) =>
 				row.forEach((cell) => {
 					Object.assign(cell, createEmptyCell(false, true));
-				})
+				}),
 			);
 			useGridStore.setState({ grid: defaultGrid });
 		});

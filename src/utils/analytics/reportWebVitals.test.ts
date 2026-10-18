@@ -1,7 +1,7 @@
-import type { GA4Event } from "./tracking";
 import { vi } from "vitest";
 import { onCLS, onFCP, onINP, onLCP, onTTFB } from "web-vitals/attribution";
 
+import type { GA4Event } from "./tracking";
 import { reportWebVitals } from "./reportWebVitals";
 
 // Mock web-vitals/attribution library
@@ -325,7 +325,7 @@ describe("reportWebVitals", () => {
 		expect(mockSendEvent).toHaveBeenCalledWith(
 			expect.objectContaining({
 				nonInteraction: true,
-			})
+			}),
 		);
 	});
 
@@ -345,7 +345,7 @@ describe("reportWebVitals", () => {
 		expect(mockSendEvent).toHaveBeenCalledWith(
 			expect.objectContaining({
 				category: "performance",
-			})
+			}),
 		);
 	});
 
@@ -365,7 +365,7 @@ describe("reportWebVitals", () => {
 		expect(mockSendEvent).toHaveBeenLastCalledWith(
 			expect.objectContaining({
 				value: 55, // Math.round(0.0549 * 1000) = 55
-			})
+			}),
 		);
 	});
 });

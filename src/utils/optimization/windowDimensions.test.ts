@@ -1,5 +1,6 @@
-import type { WindowRules } from "@/types/tech";
 import { describe, expect, test } from "vitest";
+
+import type { WindowRules } from "@/types/tech";
 
 import { determineWindowDimensions, STANDARD_WINDOW_RULES } from "./windowDimensions";
 
@@ -74,7 +75,7 @@ describe("determineWindowDimensions", () => {
 		const largeDimensions = determineWindowDimensions(18, pulseSpitterRules);
 		expect(largeDimensions).not.toBeNull();
 		expect((largeDimensions?.[0] ?? 0) * (largeDimensions?.[1] ?? 0)).toBeGreaterThanOrEqual(
-			18
+			18,
 		);
 	});
 

@@ -1,8 +1,8 @@
-import type { Grid } from "./grid/gridStore";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { serialize } from "@/hooks/useGridDeserializer/gridSerializer";
 
+import type { Grid } from "./grid/gridStore";
 import { computeBonusStatus, sessionCoordinator } from "./sessionCoordinator";
 
 vi.mock("@/hooks/useGridDeserializer/gridSerializer", () => ({
@@ -53,10 +53,10 @@ const mockPlatformStoreState: {
 	setSelectedPlatform: ReturnType<typeof vi.fn>;
 } = {
 	isValidPlatform: (platform): platform is string =>
-		typeof platform === "string" &&
-		platform.length > 0 &&
-		(mockPlatformStoreState.platforms === null ||
-			Object.prototype.hasOwnProperty.call(mockPlatformStoreState.platforms, platform)),
+		typeof platform === "string"
+		&& platform.length > 0
+		&& (mockPlatformStoreState.platforms === null
+			|| Object.prototype.hasOwnProperty.call(mockPlatformStoreState.platforms, platform)),
 	platforms: {
 		fighter: { label: "Fighter", type: "Starship" },
 		"new-platform": { label: "New Platform", type: "Starship" },
@@ -89,7 +89,7 @@ vi.mock("./grid/gridStore", () => {
 		createEmptyCell,
 		createGrid: vi.fn((width = 10, height = 6) => ({
 			cells: Array.from({ length: height }, () =>
-				Array.from({ length: width }, () => createEmptyCell(false, false))
+				Array.from({ length: width }, () => createEmptyCell(false, false)),
 			),
 			height,
 			width,
@@ -423,7 +423,7 @@ describe("sessionCoordinator", () => {
 					],
 					title: "Test Build",
 				},
-				mockTechTree
+				mockTechTree,
 			);
 
 			expect(applied).toBe(true);
@@ -442,21 +442,21 @@ describe("sessionCoordinator", () => {
 					tech: "weapon",
 					type: "weapon",
 					value: 1,
-				})
+				}),
 			);
 			expect(newGrid.cells[0][1]).toEqual(
 				expect.objectContaining({
 					active: false,
 					module: null,
 					tech: null,
-				})
+				}),
 			);
 			expect(newGrid.cells[1][0]).toEqual(
 				expect.objectContaining({
 					active: true,
 					module: null,
 					tech: null,
-				})
+				}),
 			);
 			expect(newGrid.cells[1][1]).toEqual(
 				expect.objectContaining({
@@ -466,7 +466,7 @@ describe("sessionCoordinator", () => {
 					label: "X-Class",
 					module: "X1",
 					tech: "shield",
-				})
+				}),
 			);
 			expect(mockTechStore.clearAllModuleSelections).not.toHaveBeenCalled();
 			expect(mockTechStore.clearAllBonusStatus).not.toHaveBeenCalled();
@@ -480,7 +480,7 @@ describe("sessionCoordinator", () => {
 					],
 					title: "Missing Module Build",
 				},
-				mockTechTree
+				mockTechTree,
 			);
 
 			expect(applied).toBe(true);
@@ -490,7 +490,7 @@ describe("sessionCoordinator", () => {
 					active: true,
 					module: null,
 					tech: null,
-				})
+				}),
 			);
 		});
 
@@ -498,16 +498,16 @@ describe("sessionCoordinator", () => {
 			expect(
 				sessionCoordinator.applyRecommendedBuild(
 					{ layout: [], title: "Empty" },
-					mockTechTree
-				)
+					mockTechTree,
+				),
 			).toBe(false);
 			expect(
 				sessionCoordinator.applyRecommendedBuild(
 					null as unknown as Parameters<
 						typeof sessionCoordinator.applyRecommendedBuild
 					>[0],
-					mockTechTree
-				)
+					mockTechTree,
+				),
 			).toBe(false);
 			expect(mockGridStore.setGrid).not.toHaveBeenCalled();
 		});

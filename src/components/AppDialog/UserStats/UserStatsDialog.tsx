@@ -46,7 +46,10 @@ const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 
 	const footer = (
 		<div className="flex justify-end gap-2">
-			<Button onClick={onClose} variant="soft">
+			<Button
+				onClick={onClose}
+				variant="soft"
+			>
 				{t("dialogs.userStats.closeButton")}
 			</Button>
 		</div>
@@ -56,7 +59,14 @@ const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 		<Suspense fallback={null}>
 			<AppDialog
 				content={
-					<Suspense fallback={<Skeleton height="900px" width="100%" />}>
+					<Suspense
+						fallback={
+							<Skeleton
+								height="900px"
+								width="100%"
+							/>
+						}
+					>
 						<UserStatsContent isOpen={isOpen} />
 					</Suspense>
 				}

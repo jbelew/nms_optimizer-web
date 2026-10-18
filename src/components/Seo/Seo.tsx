@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useRef } from "react";
-import { DEFAULT_BASE_URL, getPageMetadata } from "@shared/page-metadata.js";
-import { OG_LOCALE_MAP } from "@shared/seo-schema.js";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
 import { sendEvent } from "@/utils/analytics/tracking";
 import { buildLocalizedPath, useSupportedLanguages } from "@/utils/system/dialogUtils";
+import { DEFAULT_BASE_URL, getPageMetadata } from "@shared/page-metadata.js";
+import { OG_LOCALE_MAP } from "@shared/seo-schema.js";
 
 /**
  * Declarative SEO and route metadata module for React 19.
@@ -123,9 +123,18 @@ export const Seo: React.FC = () => {
 	return (
 		<>
 			<title>{pageTitle}</title>
-			<meta content={pageDescription} name="description" />
-			<meta content={pageKeywords} name="keywords" />
-			<link href={canonicalUrl} rel="canonical" />
+			<meta
+				content={pageDescription}
+				name="description"
+			/>
+			<meta
+				content={pageKeywords}
+				name="keywords"
+			/>
+			<link
+				href={canonicalUrl}
+				rel="canonical"
+			/>
 
 			{/* hreflang tags */}
 			<link
@@ -147,28 +156,79 @@ export const Seo: React.FC = () => {
 			})}
 
 			{/* Open Graph */}
-			<meta content={t("appName")} property="og:site_name" />
-			<meta content={pageTitle} property="og:title" />
-			<meta content={pageDescription} property="og:description" />
-			<meta content={ogImageUrl} property="og:image" />
-			<meta content="image/png" property="og:image:type" />
-			<meta content="1280" property="og:image:width" />
-			<meta content="880" property="og:image:height" />
-			<meta content={ogImageAlt} property="og:image:alt" />
-			<meta content={canonicalUrl} property="og:url" />
-			<meta content={ogLocale} property="og:locale" />
+			<meta
+				content={t("appName")}
+				property="og:site_name"
+			/>
+			<meta
+				content={pageTitle}
+				property="og:title"
+			/>
+			<meta
+				content={pageDescription}
+				property="og:description"
+			/>
+			<meta
+				content={ogImageUrl}
+				property="og:image"
+			/>
+			<meta
+				content="image/png"
+				property="og:image:type"
+			/>
+			<meta
+				content="1280"
+				property="og:image:width"
+			/>
+			<meta
+				content="880"
+				property="og:image:height"
+			/>
+			<meta
+				content={ogImageAlt}
+				property="og:image:alt"
+			/>
+			<meta
+				content={canonicalUrl}
+				property="og:url"
+			/>
+			<meta
+				content={ogLocale}
+				property="og:locale"
+			/>
 			{Object.entries(OG_LOCALE_MAP).map(([code, locale]) => {
 				if (code === i18n.language) return null;
 
-				return <meta content={locale} key={code} property="og:locale:alternate" />;
+				return (
+					<meta
+						content={locale}
+						key={code}
+						property="og:locale:alternate"
+					/>
+				);
 			})}
 
 			{/* Twitter */}
-			<meta content="summary_large_image" name="twitter:card" />
-			<meta content={pageTitle} name="twitter:title" />
-			<meta content={pageDescription} name="twitter:description" />
-			<meta content={ogImageUrl} name="twitter:image" />
-			<meta content={ogImageAlt} name="twitter:image:alt" />
+			<meta
+				content="summary_large_image"
+				name="twitter:card"
+			/>
+			<meta
+				content={pageTitle}
+				name="twitter:title"
+			/>
+			<meta
+				content={pageDescription}
+				name="twitter:description"
+			/>
+			<meta
+				content={ogImageUrl}
+				name="twitter:image"
+			/>
+			<meta
+				content={ogImageAlt}
+				name="twitter:image:alt"
+			/>
 		</>
 	);
 };

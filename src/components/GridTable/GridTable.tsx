@@ -72,14 +72,19 @@ export const GridTable = React.forwardRef<HTMLDivElement, GridTableProps>(({ sol
 	const gridWidth = useGridStore((state) => state.grid.width);
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const progressPercent = useOptimizeStore((state) =>
-		state.status.type === "solving" ? state.status.progress : 0
+		state.status.type === "solving" ? state.status.progress : 0,
 	);
 
 	const deferredHeight = React.useDeferredValue(gridHeight);
 	const deferredWidth = React.useDeferredValue(gridWidth);
 
 	if (!deferredHeight || !deferredWidth) {
-		return <div className="gridTable-empty" ref={ref}></div>;
+		return (
+			<div
+				className="gridTable-empty"
+				ref={ref}
+			></div>
+		);
 	}
 
 	const totalAriaColumnCount = deferredWidth + 1;

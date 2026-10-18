@@ -24,7 +24,7 @@ vi.mock("@/store/grid/gridStore", () => ({
 	})),
 	createGrid: vi.fn((width, height) => ({
 		cells: Array.from({ length: height }, () =>
-			Array.from({ length: width }, () => createEmptyCell())
+			Array.from({ length: width }, () => createEmptyCell()),
 		),
 		height,
 		width,
@@ -180,13 +180,13 @@ describe("deserialize", () => {
 			"[ERROR] %s",
 			expect.stringContaining("Error fetching tech tree:"),
 			expect.any(Error),
-			undefined
+			undefined,
 		);
 		expect(consoleErrorSpy).toHaveBeenCalledWith(
 			"[ERROR] %s",
 			expect.stringContaining("Tech tree data is empty. Fetch likely failed."),
 			undefined,
-			undefined
+			undefined,
 		);
 		expect(mockSetTechColors).not.toHaveBeenCalled();
 		consoleErrorSpy.mockRestore();
@@ -205,7 +205,7 @@ describe("deserialize", () => {
 		expect(consoleWarnSpy).toHaveBeenCalledWith(
 			"[WARN] %s",
 			expect.stringContaining("No serialized grid data found. Skipping deserialization."),
-			undefined
+			undefined,
 		);
 		expect(mockSetTechColors).not.toHaveBeenCalled();
 		consoleWarnSpy.mockRestore();
@@ -227,7 +227,7 @@ describe("deserialize", () => {
 			"[ERROR] %s",
 			expect.stringContaining("Error deserializing grid:"),
 			expect.any(URIError),
-			undefined
+			undefined,
 		);
 		expect(mockSetTechColors).not.toHaveBeenCalled();
 		consoleErrorSpy.mockRestore();
@@ -247,7 +247,7 @@ describe("deserialize", () => {
 			"[ERROR] %s",
 			expect.stringContaining("Invalid serialized grid format"),
 			expect.any(Error),
-			expect.objectContaining({ received: 3 })
+			expect.objectContaining({ received: 3 }),
 		);
 		expect(mockSetTechColors).not.toHaveBeenCalled();
 		consoleErrorSpy.mockRestore();
@@ -268,7 +268,7 @@ describe("deserialize", () => {
 			"[ERROR] %s",
 			expect.stringContaining("Invalid serialized grid format: String length mismatch."),
 			undefined,
-			undefined
+			undefined,
 		);
 		expect(mockSetTechColors).not.toHaveBeenCalled();
 		consoleErrorSpy.mockRestore();
@@ -291,7 +291,7 @@ describe("deserialize", () => {
 			"[ERROR] %s",
 			expect.stringContaining("Invalid serialized grid format: String length mismatch."),
 			undefined,
-			undefined
+			undefined,
 		);
 		expect(mockSetTechColors).not.toHaveBeenCalled();
 		consoleErrorSpy.mockRestore();

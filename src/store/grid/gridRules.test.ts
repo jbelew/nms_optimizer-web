@@ -1,6 +1,6 @@
-import type { Cell } from "./gridTypes";
 import { describe, expect, it } from "vitest";
 
+import type { Cell } from "./gridTypes";
 import { validateToggleActive, validateToggleSupercharged } from "./gridRules";
 
 describe("gridRules - validateToggleActive", () => {

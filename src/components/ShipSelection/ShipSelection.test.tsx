@@ -72,8 +72,11 @@ describe("ShipSelection", () => {
 	const renderShipSelection = (props: Partial<React.ComponentProps<typeof ShipSelection>> = {}) =>
 		render(
 			<Theme>
-				<ShipSelection solving={false} {...props} />
-			</Theme>
+				<ShipSelection
+					solving={false}
+					{...props}
+				/>
+			</Theme>,
 		);
 
 	it("renders trigger button with localized accessible name", () => {
@@ -90,7 +93,7 @@ describe("ShipSelection", () => {
 		rerender(
 			<Theme>
 				<ShipSelection solving={true} />
-			</Theme>
+			</Theme>,
 		);
 		expect(screen.getByRole("button", { name: "Select ship type" })).toBeDisabled();
 	});
@@ -126,7 +129,7 @@ describe("ShipSelection", () => {
 				action: "select_content",
 				content_type: "platform",
 				item_id: "fighter",
-			})
+			}),
 		);
 	});
 
@@ -135,7 +138,7 @@ describe("ShipSelection", () => {
 		window.history.pushState(
 			{},
 			"",
-			"/es/?platform=standard&grid=SOME_SERIALIZED_GRID#module-selection"
+			"/es/?platform=standard&grid=SOME_SERIALIZED_GRID#module-selection",
 		);
 
 		renderShipSelection();
@@ -156,7 +159,7 @@ describe("ShipSelection", () => {
 
 		expect(mockShowInfo).toHaveBeenCalledWith(
 			"shipSelection.corvetteWarning.title",
-			expect.anything()
+			expect.anything(),
 		);
 		expect(mockNavigate).toHaveBeenCalledWith("/?platform=corvette");
 	});

@@ -1,10 +1,10 @@
-import type { BonusStatusData } from "./techStore";
-import type { TechTreeItem } from "@/hooks/useTechTree/useTechTree";
 import { beforeEach, describe, expect, it } from "vitest";
 
+import type { TechTreeItem } from "@/hooks/useTechTree/useTechTree";
 import { createGrid, useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 
+import type { BonusStatusData } from "./techStore";
 import { useTechStore } from "./techStore";
 
 describe("ModuleSelectionStore - Ship Type Switching", () => {

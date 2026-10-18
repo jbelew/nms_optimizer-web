@@ -109,7 +109,7 @@ export class HttpError extends Error {
 export async function apiCall<T = unknown>(
 	url: string,
 	options: ApiCallOptions = {},
-	timeout: number = 10000
+	timeout: number = 10000,
 ): Promise<T> {
 	const { isCritical = false, skipGlobalError = false, ...fetchOptions } = options;
 
@@ -125,7 +125,7 @@ export async function apiCall<T = unknown>(
 				.setShowError(
 					true,
 					"fatal",
-					error instanceof Error ? error : new Error(String(error))
+					error instanceof Error ? error : new Error(String(error)),
 				);
 		}
 
@@ -161,7 +161,7 @@ export async function apiCall<T = unknown>(
 export async function fetchJson<T>(
 	url: string,
 	options?: RequestInit,
-	timeout: number = 10000
+	timeout: number = 10000,
 ): Promise<T> {
 	const response = await fetchWithTimeout(url, options, timeout);
 
@@ -198,7 +198,7 @@ export async function fetchJson<T>(
 export async function fetchWithTimeout(
 	url: string,
 	options: RequestInit = {},
-	timeoutMs: number = 10000
+	timeoutMs: number = 10000,
 ): Promise<Response> {
 	const controller = new AbortController();
 	let timeoutTriggered = false;

@@ -10,12 +10,12 @@
  * @category Utilities
  */
 
-import type { LifecycleCoordinator } from "@/utils/system/lifecycleCoordinator";
-import type { setupServiceWorkerRegistration } from "@/utils/system/setupServiceWorker";
-import type { Root as ReactRoot } from "react-dom/client";
 import React from "react";
+import type { Root as ReactRoot } from "react-dom/client";
 import { createRoot } from "react-dom/client";
 
+import type { LifecycleCoordinator } from "@/utils/system/lifecycleCoordinator";
+import type { setupServiceWorkerRegistration } from "@/utils/system/setupServiceWorker";
 import { fetchTechTreeAsync } from "@/hooks/useTechTree/useTechTree";
 import { Root } from "@/Root";
 import { fetchPlatforms, resolveInitialPlatform } from "@/store/app/platformStore";
@@ -256,7 +256,7 @@ export const bootApp = async (options: BootOptions = {}): Promise<BootResult> =>
 					Logger.warn(
 						"Caught and suppressed module import failure (Safari flake):",
 						{ errorMessage },
-						true
+						true,
 					);
 
 					return true;
@@ -273,16 +273,16 @@ export const bootApp = async (options: BootOptions = {}): Promise<BootResult> =>
 				if (!coordinator.isReady()) {
 					const filename = event.filename || "";
 					const isOurScript =
-						!filename ||
-						filename.startsWith(window.location.origin) ||
-						filename.startsWith("/") ||
-						filename.includes("/src/") ||
-						filename.includes("/build/");
+						!filename
+						|| filename.startsWith(window.location.origin)
+						|| filename.startsWith("/")
+						|| filename.includes("/src/")
+						|| filename.includes("/build/");
 
 					if (isOurScript) {
 						handleFatal(
-							event.error ||
-								new Error(errorMessage || "Uncaught initialization error")
+							event.error
+								|| new Error(errorMessage || "Uncaught initialization error"),
 						);
 					}
 				}
@@ -295,14 +295,14 @@ export const bootApp = async (options: BootOptions = {}): Promise<BootResult> =>
 					const reason = event.reason;
 					const stack = reason?.stack || "";
 					const isOurScript =
-						!stack ||
-						stack.includes(window.location.origin) ||
-						stack.includes("/src/") ||
-						stack.includes("/build/");
+						!stack
+						|| stack.includes(window.location.origin)
+						|| stack.includes("/src/")
+						|| stack.includes("/build/");
 
 					if (isOurScript) {
 						handleFatal(
-							reason || new Error("Unhandled promise rejection during bootstrap")
+							reason || new Error("Unhandled promise rejection during bootstrap"),
 						);
 					}
 				}

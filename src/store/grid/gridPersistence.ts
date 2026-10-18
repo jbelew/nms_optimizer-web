@@ -1,10 +1,11 @@
-import type { GridStore } from "./gridTypes";
 import type { StorageValue } from "zustand/middleware";
 
 import { UI_TIMING } from "@/constants";
 import { resolveInitialPlatform } from "@/store/app/platformStore";
 import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
 import { Logger } from "@/utils/system/monitoring";
+
+import type { GridStore } from "./gridTypes";
 
 type SetItemFunction = (name: string, value: StorageValue<Partial<GridStore>>) => Promise<void>;
 
@@ -27,7 +28,7 @@ type SetItemFunction = (name: string, value: StorageValue<Partial<GridStore>>) =
  */
 function debounceSetItem(
 	setItemFn: SetItemFunction,
-	msToWait: number
+	msToWait: number,
 ): (name: string, value: StorageValue<Partial<GridStore>>) => Promise<void> {
 	let timeoutId: null | number = null;
 
@@ -89,7 +90,7 @@ export const debouncedStorage = {
 			} catch (parseError) {
 				Logger.error(
 					`GridStore: Failed to parse stored data for key "${name}". Data may be corrupted.`,
-					parseError
+					parseError,
 				);
 
 				return null;
@@ -100,7 +101,7 @@ export const debouncedStorage = {
 
 			if (storedGridPlatform && storedGridPlatform !== currentPlatform) {
 				Logger.warn(
-					`GridStore: Discarding stored grid due to platform mismatch. Stored: ${storedGridPlatform}, Current: ${currentPlatform}`
+					`GridStore: Discarding stored grid due to platform mismatch. Stored: ${storedGridPlatform}, Current: ${currentPlatform}`,
 				);
 
 				return null;

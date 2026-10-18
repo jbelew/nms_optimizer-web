@@ -143,7 +143,8 @@ export interface GridActions {
 	}) => void;
 	/** Stores the initial definition for later resets. */
 	setInitialGridDefinition: (
-		definition: undefined | { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean }
+		definition:
+			undefined | { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean },
 	) => void;
 	/** Marks the grid as being from a shared URL. */
 	setIsSharedGrid: (isShared: boolean) => void;

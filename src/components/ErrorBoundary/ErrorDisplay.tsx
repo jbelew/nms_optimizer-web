@@ -68,7 +68,10 @@ export const ErrorDisplay = ({
 	const hasStackTrace = error?.stack || errorInfo?.componentStack;
 
 	return (
-		<div className={`flex flex-col items-center gap-4 ${className}`} style={containerStyle}>
+		<div
+			className={`flex flex-col items-center gap-4 ${className}`}
+			style={containerStyle}
+		>
 			{children && <p className="text-sm sm:text-base">{children}</p>}
 			<div
 				className="mt-2 mb-2 w-full text-left font-mono text-sm sm:text-base"
@@ -79,12 +82,18 @@ export const ErrorDisplay = ({
 				}}
 			>
 				{error?.message && (
-					<Code className="block" color="red">
+					<Code
+						className="block"
+						color="red"
+					>
 						<strong>{t("errorDisplay.errorLabel")}</strong> {error.message}
 					</Code>
 				)}
 				{hasStackTrace && (
-					<Code className="block" color="red">
+					<Code
+						className="block"
+						color="red"
+					>
 						<strong>{t("errorDisplay.stackTraceLabel")}</strong>
 					</Code>
 				)}

@@ -59,7 +59,10 @@ vi.mock("@/components/AppDialog/Base/AppDialog", () => ({
 		if (!isOpen) return null;
 
 		return (
-			<div data-testid="app-dialog" role="dialog">
+			<div
+				data-testid="app-dialog"
+				role="dialog"
+			>
 				<h2>{titleKey}</h2>
 				<div>{content}</div>
 				<div>{footer}</div>
@@ -91,7 +94,7 @@ describe("OptimizationAlertDialog", () => {
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
 				technologyName={null}
-			/>
+			/>,
 		);
 
 		// Component should not render when technologyName is null
@@ -105,7 +108,7 @@ describe("OptimizationAlertDialog", () => {
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
 				technologyName={testTechName}
-			/>
+			/>,
 		);
 
 		expect(await screen.findByTestId("app-dialog")).toBeInTheDocument();
@@ -118,7 +121,7 @@ describe("OptimizationAlertDialog", () => {
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
 				technologyName={testTechName}
-			/>
+			/>,
 		);
 
 		// AppDialog won't render content when isOpen is false
@@ -132,7 +135,7 @@ describe("OptimizationAlertDialog", () => {
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
 				technologyName={testTechName}
-			/>
+			/>,
 		);
 
 		expect(await screen.findByText("dialogs.titles.optimizationAlert")).toBeInTheDocument();
@@ -145,7 +148,7 @@ describe("OptimizationAlertDialog", () => {
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
 				technologyName={testTechName}
-			/>
+			/>,
 		);
 
 		expect(await screen.findByText(testTechName)).toBeInTheDocument();
@@ -158,7 +161,7 @@ describe("OptimizationAlertDialog", () => {
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
 				technologyName={testTechName}
-			/>
+			/>,
 		);
 
 		const closeButton = await screen.findByText("Close");
@@ -174,11 +177,11 @@ describe("OptimizationAlertDialog", () => {
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
 				technologyName={testTechName}
-			/>
+			/>,
 		);
 
 		const forceOptimizeButton = await screen.findByText(
-			"dialogs.optimizationAlert.forceOptimizeButton"
+			"dialogs.optimizationAlert.forceOptimizeButton",
 		);
 		forceOptimizeButton.click();
 
@@ -194,7 +197,7 @@ describe("OptimizationAlertDialog", () => {
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
 				technologyName="TechA"
-			/>
+			/>,
 		);
 
 		expect(await screen.findByText("TechA")).toBeInTheDocument();
@@ -205,7 +208,7 @@ describe("OptimizationAlertDialog", () => {
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
 				technologyName="TechB"
-			/>
+			/>,
 		);
 
 		expect(await screen.findByText("TechB")).toBeInTheDocument();
@@ -218,7 +221,7 @@ describe("OptimizationAlertDialog", () => {
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
 				technologyName={testTechName}
-			/>
+			/>,
 		);
 
 		// Both titleKey and title are passed to AppDialog
@@ -228,7 +231,7 @@ describe("OptimizationAlertDialog", () => {
 
 	test("should handle async onForceOptimize", async () => {
 		const asyncMockOnForceOptimize = vi.fn(
-			() => new Promise<void>((resolve) => setTimeout(resolve, 100))
+			() => new Promise<void>((resolve) => setTimeout(resolve, 100)),
 		);
 
 		render(
@@ -237,11 +240,11 @@ describe("OptimizationAlertDialog", () => {
 				onClose={mockOnClose}
 				onForceOptimize={asyncMockOnForceOptimize}
 				technologyName={testTechName}
-			/>
+			/>,
 		);
 
 		const forceOptimizeButton = await screen.findByText(
-			"dialogs.optimizationAlert.forceOptimizeButton"
+			"dialogs.optimizationAlert.forceOptimizeButton",
 		);
 		forceOptimizeButton.click();
 
@@ -284,13 +287,13 @@ describe("OptimizationAlertDialog", () => {
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
 				technologyName="pulse"
-			/>
+			/>,
 		);
 
 		expect(
 			await screen.findByText(
-				/There's not a large enough window \(requires 3×2\) to effectively place the selected modules for/i
-			)
+				/There's not a large enough window \(requires 3×2\) to effectively place the selected modules for/i,
+			),
 		).toBeInTheDocument();
 		expect(screen.getByText("pulse")).toBeInTheDocument();
 	});
@@ -339,13 +342,13 @@ describe("OptimizationAlertDialog", () => {
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
 				technologyName="trails"
-			/>
+			/>,
 		);
 
 		expect(
 			await screen.findByText(
-				/There's not a large enough window \(requires 3×3\) to effectively place the selected modules for/i
-			)
+				/There's not a large enough window \(requires 3×3\) to effectively place the selected modules for/i,
+			),
 		).toBeInTheDocument();
 		expect(screen.getByText("trails")).toBeInTheDocument();
 	});
@@ -357,13 +360,13 @@ describe("OptimizationAlertDialog", () => {
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
 				technologyName="unknown-tech"
-			/>
+			/>,
 		);
 
 		expect(
 			await screen.findByText(
-				/There's not a large enough window to effectively place the selected modules for/i
-			)
+				/There's not a large enough window to effectively place the selected modules for/i,
+			),
 		).toBeInTheDocument();
 		expect(screen.queryByText(/requires/i)).not.toBeInTheDocument();
 		expect(screen.getByText("unknown-tech")).toBeInTheDocument();

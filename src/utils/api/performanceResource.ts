@@ -1,5 +1,4 @@
 import type { PerformanceMetric } from "@/types/performance";
-
 import { API_URL } from "@/constants";
 
 import { apiCall } from "./network";
@@ -36,7 +35,7 @@ const performanceDataPromises = new Map<string, Promise<PerformanceMetric[]>>();
  */
 export const fetchPerformanceData = (
 	startDate = "30daysAgo",
-	endDate = "today"
+	endDate = "today",
 ): Promise<PerformanceMetric[]> => {
 	const rangeKey = `${startDate}-${endDate}`;
 
@@ -45,7 +44,7 @@ export const fetchPerformanceData = (
 		const promise = apiCall<PerformanceMetric[]>(
 			`${API_URL}analytics/performance_data?start_date=${startDate}&end_date=${endDate}&_=${timestamp}`,
 			{ skipGlobalError: true },
-			10000
+			10000,
 		)
 			.then((data) => {
 				return data;

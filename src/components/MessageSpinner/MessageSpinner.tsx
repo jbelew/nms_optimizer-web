@@ -131,7 +131,11 @@ export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 	const hasProgress = showProgress && progressPercent !== undefined;
 
 	return (
-		<div aria-live="polite" className={containerClasses.trim()} role="status">
+		<div
+			aria-live="polite"
+			className={containerClasses.trim()}
+			role="status"
+		>
 			{!showProgress && <Spinner className="MessageSpinner__spinner" />}
 
 			{hasMessage && (

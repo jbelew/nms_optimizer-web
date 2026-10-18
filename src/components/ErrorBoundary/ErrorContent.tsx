@@ -150,7 +150,13 @@ export const ErrorContent = ({ children, error, errorInfo, variant }: ErrorConte
 					<ExclamationTriangleIcon className="error-content__icon h-5 w-5" />
 					<span>{t("errorContent.boundaryError")}</span>
 				</h2>
-				<Separator decorative mb="4" mt="2" orientation="horizontal" size="4" />
+				<Separator
+					decorative
+					mb="4"
+					mt="2"
+					orientation="horizontal"
+					size="4"
+				/>
 			</section>
 
 			<div className="error-content__body">
@@ -158,7 +164,10 @@ export const ErrorContent = ({ children, error, errorInfo, variant }: ErrorConte
 					{children || (variant === "page" ? <DefaultMessage /> : <InsetMessage />)}
 				</div>
 
-				<ErrorDisplay error={error} errorInfo={errorInfo} />
+				<ErrorDisplay
+					error={error}
+					errorInfo={errorInfo}
+				/>
 
 				<div className="mt-4 mr-1 mb-1 flex justify-end gap-2">
 					<Button
@@ -167,11 +176,15 @@ export const ErrorContent = ({ children, error, errorInfo, variant }: ErrorConte
 						size="2"
 						variant="soft"
 					>
-						{isResetting
-							? t("errorContent.resetting")
-							: t("errorContent.clearAndReload")}
+						{isResetting ?
+							t("errorContent.resetting")
+						:	t("errorContent.clearAndReload")}
 					</Button>
-					<Button onClick={handleReload} size="2" variant="solid">
+					<Button
+						onClick={handleReload}
+						size="2"
+						variant="solid"
+					>
 						{t("common.reload")}
 					</Button>
 				</div>

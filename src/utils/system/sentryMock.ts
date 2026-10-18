@@ -82,7 +82,7 @@ export const captureMessage = (_message: string, _options?: Record<string, unkno
  * ```
  */
 export const breadcrumbsIntegration = (
-	_options?: Parameters<typeof SentryBreadcrumbsIntegration>[0]
+	_options?: Parameters<typeof SentryBreadcrumbsIntegration>[0],
 ): SentryIntegration => ({ name: "mock-breadcrumbs" }) as SentryIntegration;
 
 /**
@@ -99,7 +99,7 @@ export const breadcrumbsIntegration = (
  * ```
  */
 export const reactRouterV7BrowserTracingIntegration = (
-	_options?: Parameters<typeof SentryRouterTracingIntegration>[0]
+	_options?: Parameters<typeof SentryRouterTracingIntegration>[0],
 ): SentryIntegration => ({ name: "mock-tracing" }) as SentryIntegration;
 
 /**

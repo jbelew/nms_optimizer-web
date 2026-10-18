@@ -1,11 +1,11 @@
 import "./GridCell.scss";
 
-import type { Cell } from "@/store/grid/gridStore";
 import React, { useRef, useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
 import { create } from "zustand";
 import { useShallow } from "zustand/react/shallow";
 
+import type { Cell } from "@/store/grid/gridStore";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
@@ -49,7 +49,7 @@ interface GridFocusState {
 		currentCol: number,
 		width: number,
 		height: number,
-		isCtrlOrMeta: boolean
+		isCtrlOrMeta: boolean,
 	) => boolean;
 	setFocusedCell: (row: number, col: number) => void;
 }
@@ -151,19 +151,19 @@ const getModuleRankBadge = (label: string | undefined): string => {
 	if (lowerLabel.includes("reactor")) return `R${tier}`;
 
 	const isBooster =
-		lowerLabel.includes("booster") ||
-		lowerLabel.includes("habitation") ||
-		lowerLabel.includes("array") ||
-		lowerLabel.includes("arcadia") ||
-		lowerLabel.includes("ion barrier") ||
-		lowerLabel.includes("deflector shield") ||
-		lowerLabel.includes("mag-field") ||
-		lowerLabel.includes("thunderbird") ||
-		lowerLabel.includes("torpedo") ||
-		lowerLabel.includes("landing") ||
-		lowerLabel.includes("platform") ||
-		lowerLabel.includes("defense cannon") ||
-		lowerLabel.includes("deadeye");
+		lowerLabel.includes("booster")
+		|| lowerLabel.includes("habitation")
+		|| lowerLabel.includes("array")
+		|| lowerLabel.includes("arcadia")
+		|| lowerLabel.includes("ion barrier")
+		|| lowerLabel.includes("deflector shield")
+		|| lowerLabel.includes("mag-field")
+		|| lowerLabel.includes("thunderbird")
+		|| lowerLabel.includes("torpedo")
+		|| lowerLabel.includes("landing")
+		|| lowerLabel.includes("platform")
+		|| lowerLabel.includes("defense cannon")
+		|| lowerLabel.includes("deadeye");
 
 	if (isBooster) return `C${tier}`;
 	if (lowerLabel.includes("upgrade")) return tier;
@@ -190,7 +190,7 @@ const getGridCellAriaLabel = (
 	cell: Cell,
 	rowIndex: number,
 	columnIndex: number,
-	t: TranslateFn
+	t: TranslateFn,
 ): string => {
 	const row = rowIndex + 1;
 	const col = columnIndex + 1;
@@ -198,26 +198,29 @@ const getGridCellAriaLabel = (
 	let content: string;
 
 	if (!cell.active) {
-		content = cell.supercharged
-			? t("gridTable.disabledSuperchargedSlot", {
+		content =
+			cell.supercharged ?
+				t("gridTable.disabledSuperchargedSlot", {
 					defaultValue: "Disabled Slot (Supercharged)",
 				})
-			: t("gridTable.disabledSlot", { defaultValue: "Disabled Slot" });
+			:	t("gridTable.disabledSlot", { defaultValue: "Disabled Slot" });
 	} else if (cell.module) {
 		const rawLabel = stripLabel(cell.label);
 		const cleanedLabel = rawLabel || cell.module;
-		content = cell.supercharged
-			? t("gridTable.superchargedWithContent", {
+		content =
+			cell.supercharged ?
+				t("gridTable.superchargedWithContent", {
 					content: cleanedLabel,
 					defaultValue: `${cleanedLabel} (Supercharged)`,
 				})
-			: cleanedLabel;
+			:	cleanedLabel;
 	} else {
-		content = cell.supercharged
-			? t("gridTable.superchargedSlot", {
+		content =
+			cell.supercharged ?
+				t("gridTable.superchargedSlot", {
 					defaultValue: "Empty Slot (Supercharged)",
 				})
-			: t("gridTable.emptySlot", { defaultValue: "Empty Slot" });
+			:	t("gridTable.emptySlot", { defaultValue: "Empty Slot" });
 	}
 
 	return t("gridTable.cellAriaLabel", {
@@ -240,7 +243,11 @@ const EmptyCellIcon: React.FC<{ fillColor: string }> = ({ fillColor }) => (
 		width="100%"
 		xmlns="http://www.w3.org/2000/svg"
 	>
-		<g stroke="none" style={{ fill: fillColor }} transform="translate(0,256) scale(0.1,-0.1)">
+		<g
+			stroke="none"
+			style={{ fill: fillColor }}
+			transform="translate(0,256) scale(0.1,-0.1)"
+		>
 			<path d="M422 1114 c-29 -13 -33 -19 -28 -39 8 -32 -15 -88 -45 -109 -13 -9 -41 -16 -62 -16 -33 0 -40 -4 -52 -32 -12 -31 -11 -34 16 -66 38 -43 40 -98 4 -140 -29 -35 -30 -43 -10 -82 12 -24 22 -30 48 -30 18 0 43 -7 56 -16 27 -20 53 -76 45 -99 -5 -11 6 -21 41 -36 l46 -20 25 24 c42 42 101 41 149 -3 19 -17 23 -17 58 -3 31 13 37 20 37 45 0 61 44 107 101 108 31 0 38 5 53 36 16 35 16 37 -3 58 -47 50 -47 127 1 161 20 13 20 18 9 55 -11 38 -14 40 -52 40 -33 0 -47 6 -76 35 -28 28 -34 41 -32 67 4 43 -4 54 -45 68 -31 10 -36 9 -64 -20 -43 -42 -101 -42 -144 0 -33 34 -31 34 -76 14z m227 -213 c44 -31 63 -65 63 -115 0 -58 -26 -103 -72 -127 -122 -66 -254 61 -194 187 19 41 33 52 81 70 44 15 87 10 122 -15z" />
 			<path d="M910 597 c0 -27 -36 -48 -76 -45 -38 3 -39 2 -37 -27 3 -50 -6 -75 -32 -87 -34 -15 -31 -42 6 -69 27 -19 30 -26 26 -55 -7 -42 16 -64 59 -57 25 4 35 0 51 -21 26 -33 56 -33 77 -1 13 19 25 25 54 25 48 0 62 14 55 55 -4 26 0 36 21 52 33 26 34 65 4 78 -19 8 -23 18 -23 52 0 51 -23 80 -51 65 -24 -12 -59 1 -74 27 -12 24 -60 29 -60 8z m84 -128 c52 -41 18 -139 -48 -139 -39 0 -79 41 -79 80 0 24 7 40 27 57 34 28 65 29 100 2z" />
 		</g>
@@ -273,7 +280,7 @@ const ModuleContent: React.FC<{ cell: Cell; rowIndex: number }> = ({ cell, rowIn
 				srcSet={`${url1x} 1x, ${url2x} 2x`}
 				width="64"
 			/>
-			{moduleRankBadge ? (
+			{moduleRankBadge ?
 				<span
 					className={`gridCell__label mt-1 text-xl sm:text-3xl lg:text-4xl ${
 						moduleRankBadge.length > 1 ? "gridCell__label--corvette" : "gridCell__label"
@@ -281,7 +288,7 @@ const ModuleContent: React.FC<{ cell: Cell; rowIndex: number }> = ({ cell, rowIn
 				>
 					{moduleRankBadge}
 				</span>
-			) : null}
+			:	null}
 		</>
 	);
 };
@@ -295,7 +302,9 @@ const EmptyContent: React.FC<{
 	showEmptyIcon: boolean;
 }> = ({ cell, emptyIconFillColor, showEmptyIcon }) => (
 	<>
-		{showEmptyIcon ? <EmptyCellIcon fillColor={emptyIconFillColor} /> : null}
+		{showEmptyIcon ?
+			<EmptyCellIcon fillColor={emptyIconFillColor} />
+		:	null}
 		{!cell.supercharged && !cell.image ? CORNER_SPANS : null}
 	</>
 );
@@ -342,7 +351,7 @@ const GridCell: React.FC<GridCellProps> = ({ columnIndex, rowIndex }) => {
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const currentTechColorFromStore = useTechStore((state) => state.techColors[cell.tech ?? ""]);
 	const isRovingFocused = useGridFocusStore(
-		(state) => state.focusedRow === rowIndex && state.focusedCol === columnIndex
+		(state) => state.focusedRow === rowIndex && state.focusedCol === columnIndex,
 	);
 
 	const [isTouching, setIsTouching] = useState(false);
@@ -433,10 +442,10 @@ const GridCell: React.FC<GridCellProps> = ({ columnIndex, rowIndex }) => {
 			const isModifier = event.ctrlKey || event.metaKey;
 
 			if (
-				(key === " " || key === "Enter") &&
-				!event.shiftKey &&
-				!isModifier &&
-				!event.altKey
+				(key === " " || key === "Enter")
+				&& !event.shiftKey
+				&& !isModifier
+				&& !event.altKey
 			) {
 				event.preventDefault();
 				if (isSharedGrid) return;
@@ -449,8 +458,8 @@ const GridCell: React.FC<GridCellProps> = ({ columnIndex, rowIndex }) => {
 			}
 
 			if (
-				((key === "s" || key === "S") && !isModifier && !event.altKey) ||
-				(key === "Enter" && event.shiftKey && !isModifier && !event.altKey)
+				((key === "s" || key === "S") && !isModifier && !event.altKey)
+				|| (key === "Enter" && event.shiftKey && !isModifier && !event.altKey)
 			) {
 				event.preventDefault();
 				if (isSharedGrid) return;
@@ -523,28 +532,31 @@ const GridCell: React.FC<GridCellProps> = ({ columnIndex, rowIndex }) => {
 			role="gridcell"
 			tabIndex={isRovingFocused ? 0 : -1}
 		>
-			{cell.module && cell.active ? (
-				<ModuleContent cell={cell} rowIndex={rowIndex} />
-			) : (
-				<EmptyContent
+			{cell.module && cell.active ?
+				<ModuleContent
+					cell={cell}
+					rowIndex={rowIndex}
+				/>
+			:	<EmptyContent
 					cell={cell}
 					emptyIconFillColor={emptyIconFillColor}
 					showEmptyIcon={showEmptyIcon}
 				/>
-			)}
+			}
 		</div>
 	);
 
 	const tooltipContent = stripLabel(cell.label);
 	const isTooltipVisible = cell.module && cell.active;
 
-	return isTooltipVisible ? (
-		<ConditionalTooltip delayDuration={500} label={tooltipContent ?? ""}>
-			{cellElement}
-		</ConditionalTooltip>
-	) : (
-		cellElement
-	);
+	return isTooltipVisible ?
+			<ConditionalTooltip
+				delayDuration={500}
+				label={tooltipContent ?? ""}
+			>
+				{cellElement}
+			</ConditionalTooltip>
+		:	cellElement;
 };
 
 export default React.memo(GridCell);

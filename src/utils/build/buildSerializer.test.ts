@@ -119,17 +119,17 @@ describe("buildSerializer", () => {
 
 		it("should throw an error if the text is empty or whitespace", async () => {
 			await expect(buildSerializer.loadBuild("", ["freighter"])).rejects.toThrow(
-				"File is empty. Please select a valid build file."
+				"File is empty. Please select a valid build file.",
 			);
 
 			await expect(buildSerializer.loadBuild("   ", ["freighter"])).rejects.toThrow(
-				"File is empty. Please select a valid build file."
+				"File is empty. Please select a valid build file.",
 			);
 		});
 
 		it("should throw an error if the text contains invalid JSON", async () => {
 			await expect(
-				buildSerializer.loadBuild("{ invalid json }", ["freighter"])
+				buildSerializer.loadBuild("{ invalid json }", ["freighter"]),
 			).rejects.toThrow("File contains invalid JSON. The build file may be corrupted.");
 		});
 
@@ -143,7 +143,7 @@ describe("buildSerializer", () => {
 			});
 
 			await expect(buildSerializer.loadBuild(incompleteJson, ["freighter"])).rejects.toThrow(
-				/The build file couldn.*t be loaded/i
+				/The build file couldn.*t be loaded/i,
 			);
 		});
 
@@ -166,7 +166,7 @@ describe("buildSerializer", () => {
 			});
 
 			await expect(buildSerializer.loadBuild(badChecksumJson, ["freighter"])).rejects.toThrow(
-				"Build file integrity check failed. The file may have been corrupted or tampered with."
+				"Build file integrity check failed. The file may have been corrupted or tampered with.",
 			);
 		});
 
@@ -174,7 +174,7 @@ describe("buildSerializer", () => {
 			const validJson = createValidBuildJson(); // has shipType: freighter
 
 			await expect(buildSerializer.loadBuild(validJson, ["fighter"])).rejects.toThrow(
-				'Unsupported ship type: "freighter". Valid types are: fighter.'
+				'Unsupported ship type: "freighter". Valid types are: fighter.',
 			);
 		});
 	});

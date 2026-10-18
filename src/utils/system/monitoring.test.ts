@@ -103,7 +103,7 @@ describe("monitoring utilities", () => {
 				error,
 				{
 					extra: "context",
-				}
+				},
 			);
 
 			expect(sentryMock.captureException).toHaveBeenCalledWith(error, {

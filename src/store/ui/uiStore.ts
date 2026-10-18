@@ -1,9 +1,9 @@
-import type { TechColor } from "@/types/tech";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { useShallow } from "zustand/react/shallow";
 
+import type { TechColor } from "@/types/tech";
 import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
 
 /** Duration of the shake CSS animation in milliseconds. */
@@ -236,11 +236,10 @@ export const useUiStore = create<UiStore>()(
 				setGridTableWidth: (gridTableWidth) => set({ gridTableWidth }),
 				setPatternNoFitTech: (tech) =>
 					set((state) => ({
-						optimizeStatus: tech
-							? { tech, type: "warning" }
-							: state.optimizeStatus.type === "warning"
-								? { type: "idle" }
-								: state.optimizeStatus,
+						optimizeStatus:
+							tech ? { tech, type: "warning" }
+							: state.optimizeStatus.type === "warning" ? { type: "idle" }
+							: state.optimizeStatus,
 					})),
 				setProgressPercent: (percent) =>
 					set((state) => {
@@ -250,19 +249,17 @@ export const useUiStore = create<UiStore>()(
 					}),
 				setShowError: (show, severity = "recoverable", details = null) =>
 					set((state) => ({
-						optimizeStatus: show
-							? { details, severity, type: "error" }
-							: state.optimizeStatus.type === "error"
-								? { type: "idle" }
-								: state.optimizeStatus,
+						optimizeStatus:
+							show ? { details, severity, type: "error" }
+							: state.optimizeStatus.type === "error" ? { type: "idle" }
+							: state.optimizeStatus,
 					})),
 				setSolving: (solving) =>
 					set((state) => ({
-						optimizeStatus: solving
-							? { progress: 0, type: "solving" }
-							: state.optimizeStatus.type === "solving"
-								? { type: "idle" }
-								: state.optimizeStatus,
+						optimizeStatus:
+							solving ? { progress: 0, type: "solving" }
+							: state.optimizeStatus.type === "solving" ? { type: "idle" }
+							: state.optimizeStatus,
 					})),
 				setTechTreeLoading: (isTechTreeLoading) => set({ isTechTreeLoading }),
 				shakeCount: 0,
@@ -301,9 +298,9 @@ export const useUiStore = create<UiStore>()(
 						safeSetItem(name, JSON.stringify(value));
 					},
 				},
-			}
-		)
-	)
+			},
+		),
+	),
 );
 
 /**
@@ -386,7 +383,7 @@ export const useShakeStore = Object.assign(
 				};
 
 				return selector ? selector(subState) : (subState as unknown as T);
-			})
+			}),
 		);
 	},
 	{
@@ -409,7 +406,7 @@ export const useShakeStore = Object.assign(
 				});
 			});
 		},
-	}
+	},
 );
 
 /**
@@ -426,7 +423,7 @@ export const useThemeStore = Object.assign(
 				};
 
 				return selector ? selector(subState) : (subState as unknown as T);
-			})
+			}),
 		);
 	},
 	{
@@ -442,7 +439,7 @@ export const useThemeStore = Object.assign(
 		setState: (updates: Partial<ThemeState>) => {
 			useUiStore.setState(updates);
 		},
-	}
+	},
 );
 
 /**
@@ -458,7 +455,7 @@ export const useTechTreeLoadingStore = Object.assign(
 				};
 
 				return selector ? selector(subState) : (subState as unknown as T);
-			})
+			}),
 		);
 	},
 	{
@@ -476,7 +473,7 @@ export const useTechTreeLoadingStore = Object.assign(
 			if ("setLoading" in updates) mappedUpdates.setTechTreeLoading = updates.setLoading;
 			useUiStore.setState(mappedUpdates);
 		},
-	}
+	},
 );
 
 /**
@@ -494,7 +491,7 @@ export const useModuleSelectionDialogStore = Object.assign(
 				};
 
 				return selector ? selector(subState) : (subState as unknown as T);
-			})
+			}),
 		);
 	},
 	{
@@ -519,7 +516,7 @@ export const useModuleSelectionDialogStore = Object.assign(
 				mappedUpdates.selectedTechData = updates.selectedTechData;
 			useUiStore.setState(mappedUpdates);
 		},
-	}
+	},
 );
 
 /**
@@ -536,7 +533,7 @@ export const useA11yStore = Object.assign(
 				};
 
 				return selector ? selector(subState) : (subState as unknown as T);
-			})
+			}),
 		);
 	},
 	{
@@ -552,7 +549,7 @@ export const useA11yStore = Object.assign(
 		setState: (updates: Partial<A11yState>) => {
 			useUiStore.setState(updates);
 		},
-	}
+	},
 );
 
 /**
@@ -571,7 +568,7 @@ export const useOptimizeStore = Object.assign(
 				};
 
 				return selector ? selector(subState) : (subState as unknown as T);
-			})
+			}),
 		);
 	},
 	{
@@ -598,7 +595,7 @@ export const useOptimizeStore = Object.assign(
 
 			useUiStore.setState(mappedUpdates);
 		},
-	}
+	},
 );
 
 // Always expose for E2E if the flag is set

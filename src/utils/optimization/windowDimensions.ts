@@ -60,7 +60,7 @@ export const STANDARD_WINDOW_RULES: Readonly<WindowRules> = {
  */
 export function determineWindowDimensions(
 	count: number,
-	windowRules?: null | WindowRules
+	windowRules?: null | WindowRules,
 ): null | WindowDimensions {
 	if (!Number.isFinite(count) || count < 1) {
 		return null;
@@ -79,7 +79,7 @@ export function determineWindowDimensions(
 	} else {
 		const nearestHigherRule = findSmallestNumericRule(
 			rules,
-			(threshold) => threshold > normalizedCount
+			(threshold) => threshold > normalizedCount,
 		);
 
 		if (nearestHigherRule) {
@@ -92,15 +92,15 @@ export function determineWindowDimensions(
 	// Capacity safety escalation: ensure width * height >= normalizedCount
 	if (width * height < normalizedCount) {
 		if (
-			"default" in rules &&
-			rules.default &&
-			rules.default[0] * rules.default[1] >= normalizedCount
+			"default" in rules
+			&& rules.default
+			&& rules.default[0] * rules.default[1] >= normalizedCount
 		) {
 			[width, height] = rules.default;
 		} else {
 			const fittingStandardRule = findSmallestNumericRule(
 				STANDARD_WINDOW_RULES,
-				(_threshold, [stdWidth, stdHeight]) => stdWidth * stdHeight >= normalizedCount
+				(_threshold, [stdWidth, stdHeight]) => stdWidth * stdHeight >= normalizedCount,
 			);
 
 			if (fittingStandardRule) {
@@ -134,7 +134,7 @@ export function determineWindowDimensions(
  */
 function findSmallestNumericRule(
 	rules: Readonly<WindowRules>,
-	predicate: (threshold: number, dimensions: WindowDimensions) => boolean
+	predicate: (threshold: number, dimensions: WindowDimensions) => boolean,
 ): null | WindowDimensions {
 	const matchingThresholds = Object.keys(rules)
 		.filter((key) => /^\d+$/.test(key) && Boolean(rules[key]))

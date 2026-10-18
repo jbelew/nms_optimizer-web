@@ -1,6 +1,6 @@
-import type { UserStat } from "@/types/userStats";
 import { use } from "react";
 
+import type { UserStat } from "@/types/userStats";
 import { fetchUserStats } from "@/utils/api/userStatsResource";
 
 /**

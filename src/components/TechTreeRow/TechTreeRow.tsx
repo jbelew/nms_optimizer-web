@@ -1,6 +1,5 @@
 import "./TechTreeRow.scss";
 
-import type { TechTreeRowProps } from "@/types/props";
 import React, { useCallback, useTransition } from "react";
 import {
 	Crosshair2Icon,
@@ -15,6 +14,7 @@ import { Avatar, Button, IconButton, Popover, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
+import type { TechTreeRowProps } from "@/types/props";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useOptimize } from "@/hooks/useOptimize/useOptimize";
@@ -53,15 +53,30 @@ interface BonusStatusIconProps {
 function renderIcon(
 	iconType: null | string,
 	className: string,
-	style: React.CSSProperties
+	style: React.CSSProperties,
 ): React.ReactNode {
 	switch (iconType) {
 		case "check":
-			return <Crosshair2Icon className={className} style={style} />;
+			return (
+				<Crosshair2Icon
+					className={className}
+					style={style}
+				/>
+			);
 		case "lightning":
-			return <LightningBoltIcon className={className} style={style} />;
+			return (
+				<LightningBoltIcon
+					className={className}
+					style={style}
+				/>
+			);
 		case "warning":
-			return <ExclamationTriangleIcon className={className} style={style} />;
+			return (
+				<ExclamationTriangleIcon
+					className={className}
+					style={style}
+				/>
+			);
 		default:
 			return null;
 	}
@@ -155,7 +170,11 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 			<Popover.Root>
 				<Popover.Trigger>{trigger}</Popover.Trigger>
 				<Popover.Content size="1">
-					<Text as="p" size="1" trim="both">
+					<Text
+						as="p"
+						size="1"
+						trim="both"
+					>
 						{tooltipContent}
 					</Text>
 				</Popover.Content>
@@ -214,7 +233,7 @@ export const TechTreeRow = React.memo(({ tech, techColor, techImage }: TechTreeR
 			checkedModulesCount: state.checkedModules?.[tech]?.length ?? 0,
 			techGroup: state.techGroups?.[tech],
 			techSolvedBonus: state.solvedBonus?.[tech] ?? 0,
-		}))
+		})),
 	);
 
 	const activeGroup = resolveActiveTechVariant(techGroup, activeGroupType);
@@ -259,11 +278,9 @@ export const TechTreeRow = React.memo(({ tech, techColor, techImage }: TechTreeR
 	const imagePath2x = `${baseImagePath}${resolvedImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1")}${versionParam}`;
 
 	const optimizeTooltipLabel =
-		isGridFull && !hasTechInGrid
-			? t("techTree.tooltips.gridFull")
-			: hasTechInGrid
-				? t("techTree.tooltips.update")
-				: t("techTree.tooltips.solve");
+		isGridFull && !hasTechInGrid ? t("techTree.tooltips.gridFull")
+		: hasTechInGrid ? t("techTree.tooltips.update")
+		: t("techTree.tooltips.solve");
 
 	const OptimizeIconComponent = hasTechInGrid ? UpdateIcon : MagicWandIcon;
 	const isOptimizeButtonDisabled =
@@ -347,15 +364,13 @@ export const TechTreeRow = React.memo(({ tech, techColor, techImage }: TechTreeR
 							techSolvedBonus={techSolvedBonus}
 						/>
 					)}
-					{modules.length > 1 ? (
+					{modules.length > 1 ?
 						<ConditionalTooltip
 							label={t("moduleSelection.tooltip", { techName: translatedTechName })}
 						>
 							{badgeContent}
 						</ConditionalTooltip>
-					) : (
-						badgeContent
-					)}
+					:	badgeContent}
 				</div>
 			</div>
 		</div>

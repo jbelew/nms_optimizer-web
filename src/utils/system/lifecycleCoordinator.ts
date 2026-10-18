@@ -185,7 +185,7 @@ export class LifecycleCoordinator {
 	 */
 	public getDeferredTasks(): DeferredTask[] {
 		return Array.from(this.deferredTasks.values()).sort(
-			(a, b) => (b.priority ?? 0) - (a.priority ?? 0)
+			(a, b) => (b.priority ?? 0) - (a.priority ?? 0),
 		);
 	}
 
@@ -394,17 +394,17 @@ export class LifecycleCoordinator {
 	public registerDeferredTask(
 		name: string,
 		run: DeferredTaskHandler,
-		priority?: number
+		priority?: number,
 	): () => void;
 	public registerDeferredTask(
 		taskOrName: DeferredTask | string,
 		run?: DeferredTaskHandler,
-		priority?: number
+		priority?: number,
 	): () => void {
 		const task: DeferredTask =
-			typeof taskOrName === "string"
-				? { name: taskOrName, priority: priority ?? 0, run: run! }
-				: { ...taskOrName, priority: taskOrName.priority ?? 0 };
+			typeof taskOrName === "string" ?
+				{ name: taskOrName, priority: priority ?? 0, run: run! }
+			:	{ ...taskOrName, priority: taskOrName.priority ?? 0 };
 
 		this.deferredTasks.set(task.name, task);
 
@@ -709,7 +709,7 @@ export class LifecycleCoordinator {
 						this.transitionTo("IDLE");
 					}
 				},
-				{ timeout: idleTimeout }
+				{ timeout: idleTimeout },
 			);
 		}
 	}

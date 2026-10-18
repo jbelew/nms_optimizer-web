@@ -19,7 +19,7 @@ describe("Seo Component", () => {
 				<MemoryRouter initialEntries={[path]}>
 					<Seo />
 				</MemoryRouter>
-			</I18nextProvider>
+			</I18nextProvider>,
 		);
 	};
 
@@ -65,7 +65,7 @@ describe("Seo Component", () => {
 			"en",
 			"translation",
 			"seo.instructionsPageTitle",
-			"How to Optimize Your Tech Layout"
+			"How to Optimize Your Tech Layout",
 		);
 		i18n.addResource("en", "translation", "appName", "NMS Optimizer");
 		renderSeo("/instructions/");
@@ -76,7 +76,7 @@ describe("Seo Component", () => {
 				category: "engagement",
 				page: "/instructions/",
 				page_title: "How to Optimize Your Tech Layout | NMS Optimizer",
-			})
+			}),
 		);
 	});
 
@@ -85,12 +85,12 @@ describe("Seo Component", () => {
 			"en",
 			"translation",
 			"seo.mainPageTitle",
-			"No Man's Sky Tech Layout & Adjacency Calculator"
+			"No Man's Sky Tech Layout & Adjacency Calculator",
 		);
 		i18n.addResource("en", "translation", "appName", "NMS Optimizer");
 		renderSeo("/");
 		expect(document.title).toBe(
-			"No Man's Sky Tech Layout & Adjacency Calculator | NMS Optimizer"
+			"No Man's Sky Tech Layout & Adjacency Calculator | NMS Optimizer",
 		);
 		expect(sendEvent).toHaveBeenCalledWith(
 			expect.objectContaining({
@@ -98,7 +98,7 @@ describe("Seo Component", () => {
 				category: "engagement",
 				page: "/",
 				page_title: "No Man's Sky Tech Layout & Adjacency Calculator | NMS Optimizer",
-			})
+			}),
 		);
 	});
 
@@ -107,7 +107,7 @@ describe("Seo Component", () => {
 			"en",
 			"translation",
 			"seo.translationPageTitle",
-			"Help Translate NMS Optimizer: Join the Team"
+			"Help Translate NMS Optimizer: Join the Team",
 		);
 		i18n.addResource("en", "translation", "appName", "NMS Optimizer");
 		renderSeo("/translation/");
@@ -118,7 +118,7 @@ describe("Seo Component", () => {
 				category: "engagement",
 				page: "/translation/",
 				page_title: "Help Translate NMS Optimizer: Join the Team | NMS Optimizer",
-			})
+			}),
 		);
 	});
 
@@ -133,7 +133,7 @@ describe("Seo Component", () => {
 				category: "engagement",
 				page: "/performance/",
 				page_title: "Performance Metrics | NMS Optimizer",
-			})
+			}),
 		);
 	});
 });

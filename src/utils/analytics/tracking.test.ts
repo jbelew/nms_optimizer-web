@@ -68,7 +68,7 @@ describe("Analytics Tracking", () => {
 					}
 
 					return script;
-				}
+				},
 			),
 		};
 
@@ -182,7 +182,7 @@ describe("Analytics Tracking", () => {
 					testEvent.action,
 					expect.objectContaining({
 						tracking_source: "client",
-					})
+					}),
 				);
 			});
 		});
@@ -242,7 +242,7 @@ describe("Analytics Tracking", () => {
 				expect.objectContaining({
 					keepalive: true,
 					method: "POST",
-				})
+				}),
 			);
 		});
 	});

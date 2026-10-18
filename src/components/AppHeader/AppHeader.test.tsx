@@ -46,7 +46,7 @@ describe("AppHeader", () => {
 						<AppHeader />
 					</Theme>
 				</MemoryRouter>
-			</I18nextProvider>
+			</I18nextProvider>,
 		);
 
 	it("renders the application title", () => {
@@ -65,7 +65,7 @@ describe("AppHeader", () => {
 
 	it("hides left controls and keeps right controls on Desktop (640px and 1024px)", () => {
 		vi.mocked(useBreakpoint).mockImplementation(
-			(bp: string) => bp === "640px" || bp === "1024px"
+			(bp: string) => bp === "640px" || bp === "1024px",
 		);
 		renderComponent();
 

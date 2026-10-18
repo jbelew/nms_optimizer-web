@@ -36,7 +36,10 @@ vi.mock("@/components/AppDialog/Base/AppDialog", () => ({
 		if (!isOpen) return null;
 
 		return (
-			<div data-testid="app-dialog" role="dialog">
+			<div
+				data-testid="app-dialog"
+				role="dialog"
+			>
 				<h2>{titleKey}</h2>
 				<div>{content}</div>
 				<div>{footer}</div>

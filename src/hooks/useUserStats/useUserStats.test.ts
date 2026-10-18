@@ -1,4 +1,3 @@
-import type { UserStat } from "./useUserStats";
 import type { ReactNode } from "react";
 import { createElement, Suspense } from "react";
 import { renderHook, waitFor } from "@testing-library/react";
@@ -7,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import * as apiCallModule from "@/utils/api/network";
 import { resetUserStatsCache } from "@/utils/api/userStatsResource";
 
+import type { UserStat } from "./useUserStats";
 import { useUserStats } from "./useUserStats";
 
 vi.mock("@/utils/api/network", () => ({
@@ -59,7 +59,7 @@ describe("useUserStats", () => {
 			expect(apiCallModule.apiCall).toHaveBeenCalledWith(
 				expect.stringContaining("analytics/popular_data"),
 				{},
-				10000
+				10000,
 			);
 		});
 	});

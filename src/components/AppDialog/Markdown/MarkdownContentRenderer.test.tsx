@@ -81,7 +81,7 @@ describe("MarkdownContentRenderer", () => {
 				expect(screen.queryByTestId("lorem-ipsum-skeleton")).not.toBeInTheDocument();
 				expect(screen.getByTestId("markdown-content")).toBeInTheDocument();
 			},
-			{ timeout: 3000 }
+			{ timeout: 3000 },
 		);
 	});
 
@@ -126,7 +126,12 @@ describe("MarkdownContentRenderer", () => {
 			markdown: mockMarkdownContent,
 		});
 
-		render(<MarkdownContentRenderer markdownFileName="test.md" targetSectionId={targetId} />);
+		render(
+			<MarkdownContentRenderer
+				markdownFileName="test.md"
+				targetSectionId={targetId}
+			/>,
+		);
 
 		expect(mockUseMarkdownContent).toHaveBeenCalledWith("test.md");
 	});

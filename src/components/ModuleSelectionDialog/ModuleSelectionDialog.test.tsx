@@ -1,8 +1,8 @@
-import type { TechTreeItem } from "@/types/tech";
 import React from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import type { TechTreeItem } from "@/types/tech";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useOptimize } from "@/hooks/useOptimize/useOptimize";
 import { usePlatformStore } from "@/store/app/platformStore";
@@ -51,13 +51,13 @@ vi.mock("@/components/AppDialog/Base/AppDialog", () => {
 		title?: React.ReactNode;
 	}
 	const MockAppDialog = ({ content, footer, isOpen, title }: MockAppDialogProps) =>
-		isOpen ? (
+		isOpen ?
 			<div data-testid="app-dialog">
 				<h1>{title}</h1>
 				<div>{content}</div>
 				<div>{footer}</div>
 			</div>
-		) : null;
+		:	null;
 
 	return {
 		default: MockAppDialog,
@@ -262,7 +262,7 @@ describe("ModuleSelectionDialog", () => {
 				action: "page_view",
 				category: "engagement",
 				page_title: "Hyperdrive Selection | appName",
-			})
+			}),
 		);
 	});
 

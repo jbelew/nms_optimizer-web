@@ -145,7 +145,13 @@ class ErrorBoundary extends Component<Props, State> {
 				return fallback;
 			}
 
-			return <ErrorContent error={error} errorInfo={errorInfo} variant="page" />;
+			return (
+				<ErrorContent
+					error={error}
+					errorInfo={errorInfo}
+					variant="page"
+				/>
+			);
 		}
 
 		return children;

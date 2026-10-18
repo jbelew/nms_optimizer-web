@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useEffect } from "react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { usePlatformStore } from "@/store/app/platformStore";
 
@@ -101,7 +101,12 @@ export const Desktop: Story = {
 			},
 		},
 	},
-	render: (args, { loaded }) => <TechTree {...args} {...loaded} />,
+	render: (args, { loaded }) => (
+		<TechTree
+			{...args}
+			{...loaded}
+		/>
+	),
 };
 
 export const Tablet: Story = {

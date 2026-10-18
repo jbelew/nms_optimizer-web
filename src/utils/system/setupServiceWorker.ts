@@ -69,7 +69,7 @@ if (typeof window !== "undefined") {
 export async function activateLatestServiceWorker(
 	updateSW?: (reload?: boolean) => Promise<void>,
 	customRegistration?: ServiceWorkerRegistration,
-	maxTimeoutMs = 3000
+	maxTimeoutMs = 3000,
 ): Promise<void> {
 	let registration = customRegistration;
 
@@ -103,8 +103,8 @@ export async function activateLatestServiceWorker(
 
 					worker.addEventListener("statechange", () => {
 						if (
-							!settled &&
-							(worker.state === "installed" || worker.state === "redundant")
+							!settled
+							&& (worker.state === "installed" || worker.state === "redundant")
 						) {
 							settled = true;
 							clearTimeout(timer);
@@ -155,8 +155,8 @@ export async function activateLatestServiceWorker(
 
 			const onStateChange = () => {
 				if (
-					!finished &&
-					(waitingWorker.state === "activated" || waitingWorker.state === "redundant")
+					!finished
+					&& (waitingWorker.state === "activated" || waitingWorker.state === "redundant")
 				) {
 					finished = true;
 					clearTimeout(timer);
@@ -341,7 +341,7 @@ export function setupServiceWorkerRegistration() {
 
 										return updateServiceWorker(reload);
 									},
-								})
+								}),
 							);
 						}, 0);
 					},
@@ -374,8 +374,8 @@ export function setupServiceWorkerRegistration() {
 							}
 
 							if (
-								document.visibilityState === "visible" &&
-								!registration.installing
+								document.visibilityState === "visible"
+								&& !registration.installing
 							) {
 								void registration.update().catch(() => {});
 							}
@@ -388,7 +388,7 @@ export function setupServiceWorkerRegistration() {
 									void registration.update().catch(() => {});
 								}
 							},
-							60 * 60 * 1000 // every 1 hour
+							60 * 60 * 1000, // every 1 hour
 						);
 					},
 					onRegisterError(error) {

@@ -1,7 +1,7 @@
-import type { ApiResponse } from "@/store/grid/gridStore";
 import { useCallback, useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
+import type { ApiResponse } from "@/store/grid/gridStore";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useLatest } from "@/hooks/useLatest/useLatest";
@@ -109,7 +109,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 			setShowErrorStore: s.setShowError,
 			setSolving: s.setSolving,
 			solving: s.status.type === "solving",
-		}))
+		})),
 	);
 
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
@@ -215,7 +215,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 					performance.measure(
 						"optimize-to-complete",
 						"optimize-start",
-						"optimize-complete"
+						"optimize-complete",
 					);
 					if (mountedCount <= 0) return;
 
@@ -230,9 +230,9 @@ export const useOptimize = (): UseOptimizeReturn => {
 					sessionCoordinator.commitOptimizationResult(data, tech);
 					const currentCheckedModules = useTechStore.getState().checkedModules;
 					const gaTech =
-						tech === "pulse" && currentCheckedModules[tech]?.includes("PC")
-							? "photonix"
-							: tech;
+						tech === "pulse" && currentCheckedModules[tech]?.includes("PC") ?
+							"photonix"
+						:	tech;
 
 					if (data.grid) {
 						sendEventRef.current({
@@ -304,7 +304,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 			patternNoFitTechRef,
 			selectedShipTypeRef,
 			sendEventRef,
-		]
+		],
 	);
 
 	/**
@@ -317,7 +317,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 	 */
 	const clearPatternNoFitTech = useCallback(
 		() => setPatternNoFitTech(null),
-		[setPatternNoFitTech]
+		[setPatternNoFitTech],
 	);
 
 	/**

@@ -91,7 +91,7 @@ describe("DialogContext - Query Parameter Preservation", () => {
 			"/",
 			"?platform=expedition&grid=abc123&other=value",
 			"changelog",
-			"en"
+			"en",
 		);
 
 		expect(result).toContain("platform=expedition");
@@ -122,7 +122,7 @@ describe("DialogContext - Query Parameter Preservation", () => {
 			"/es",
 			"?platform=atlantid&grid=building123&theme=dark",
 			"translation",
-			"es"
+			"es",
 		);
 
 		expect(result).toBe("/es/translation?platform=atlantid&grid=building123&theme=dark");
@@ -162,7 +162,7 @@ describe("DialogProvider Component", () => {
 						<TestComponent />
 					</DialogProvider>
 				</I18nextProvider>
-			</MemoryRouter>
+			</MemoryRouter>,
 		);
 	};
 

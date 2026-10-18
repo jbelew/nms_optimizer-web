@@ -83,7 +83,7 @@ describe("page-metadata.js", () => {
 	describe("extractContentHeading", () => {
 		it("returns naked topic unchanged", () => {
 			expect(extractContentHeading("How to Optimize Your Tech Layout", "NMS Optimizer")).toBe(
-				"How to Optimize Your Tech Layout"
+				"How to Optimize Your Tech Layout",
 			);
 		});
 
@@ -91,14 +91,14 @@ describe("page-metadata.js", () => {
 			expect(
 				extractContentHeading(
 					"How to Optimize Your Tech Layout | NMS Optimizer",
-					"NMS Optimizer"
-				)
+					"NMS Optimizer",
+				),
 			).toBe("How to Optimize Your Tech Layout");
 		});
 
 		it("strips generic pipe suffix if present", () => {
 			expect(extractContentHeading("About the Optimization Algorithms | Other Brand")).toBe(
-				"About the Optimization Algorithms"
+				"About the Optimization Algorithms",
 			);
 		});
 
@@ -110,7 +110,7 @@ describe("page-metadata.js", () => {
 	describe("formatDocumentTitle", () => {
 		it("formats standard topic with brand delimiter", () => {
 			expect(formatDocumentTitle("How to Optimize Your Tech Layout", "NMS Optimizer")).toBe(
-				"How to Optimize Your Tech Layout | NMS Optimizer"
+				"How to Optimize Your Tech Layout | NMS Optimizer",
 			);
 		});
 
@@ -118,17 +118,17 @@ describe("page-metadata.js", () => {
 			expect(
 				formatDocumentTitle(
 					"How to Optimize Your Tech Layout | NMS Optimizer",
-					"NMS Optimizer"
-				)
+					"NMS Optimizer",
+				),
 			).toBe("How to Optimize Your Tech Layout | NMS Optimizer");
 		});
 
 		it("preserves brand-prefixed titles", () => {
 			expect(formatDocumentTitle("NMS Optimizer: Tech Layout", "NMS Optimizer")).toBe(
-				"NMS Optimizer: Tech Layout"
+				"NMS Optimizer: Tech Layout",
 			);
 			expect(formatDocumentTitle("NMS Optimizer - Tech Layout", "NMS Optimizer")).toBe(
-				"NMS Optimizer - Tech Layout"
+				"NMS Optimizer - Tech Layout",
 			);
 		});
 
@@ -139,19 +139,19 @@ describe("page-metadata.js", () => {
 
 		it("formats error routes and status codes according to brand convention", () => {
 			expect(formatDocumentTitle("404: Not Found", "NMS Optimizer")).toBe(
-				"404: Not Found | NMS Optimizer"
+				"404: Not Found | NMS Optimizer",
 			);
 			expect(formatDocumentTitle("500: Application Error", "NMS Optimizer")).toBe(
-				"500: Application Error | NMS Optimizer"
+				"500: Application Error | NMS Optimizer",
 			);
 			expect(formatDocumentTitle("Server Error!", "NMS Optimizer")).toBe(
-				"Server Error! | NMS Optimizer"
+				"Server Error! | NMS Optimizer",
 			);
 			expect(formatDocumentTitle("404: Nicht gefunden", "NMS Optimizer")).toBe(
-				"404: Nicht gefunden | NMS Optimizer"
+				"404: Nicht gefunden | NMS Optimizer",
 			);
 			expect(formatDocumentTitle("¡Error del Servidor!", "NMS Optimizer")).toBe(
-				"¡Error del Servidor! | NMS Optimizer"
+				"¡Error del Servidor! | NMS Optimizer",
 			);
 		});
 	});
@@ -159,25 +159,25 @@ describe("page-metadata.js", () => {
 	describe("formatErrorDocumentTitle", () => {
 		it("formats error routes and status codes according to ${code}: ${message} | ${appName}", () => {
 			expect(formatErrorDocumentTitle(404, "Not Found", "NMS Optimizer")).toBe(
-				"404: Not Found | NMS Optimizer"
+				"404: Not Found | NMS Optimizer",
 			);
 			expect(formatErrorDocumentTitle(500, "Application Error", "NMS Optimizer")).toBe(
-				"500: Application Error | NMS Optimizer"
+				"500: Application Error | NMS Optimizer",
 			);
 			expect(formatErrorDocumentTitle(500, "Server Error!", "NMS Optimizer")).toBe(
-				"500: Server Error! | NMS Optimizer"
+				"500: Server Error! | NMS Optimizer",
 			);
 			expect(formatErrorDocumentTitle(404, "Nicht gefunden", "NMS Optimizer")).toBe(
-				"404: Nicht gefunden | NMS Optimizer"
+				"404: Nicht gefunden | NMS Optimizer",
 			);
 		});
 
 		it("handles legacy prefixed error topics without duplicate codes or brand suffixes", () => {
 			expect(formatErrorDocumentTitle(404, "404: Not Found", "NMS Optimizer")).toBe(
-				"404: Not Found | NMS Optimizer"
+				"404: Not Found | NMS Optimizer",
 			);
 			expect(
-				formatErrorDocumentTitle(404, "404: Not Found | NMS Optimizer", "NMS Optimizer")
+				formatErrorDocumentTitle(404, "404: Not Found | NMS Optimizer", "NMS Optimizer"),
 			).toBe("404: Not Found | NMS Optimizer");
 		});
 
@@ -419,7 +419,7 @@ describe("page-metadata.js", () => {
 							expect(meta.cleanPath).toBe(path);
 							expect(meta.lang).toBe(lang);
 							expect(meta.ogImageUrl).toBe(
-								`${DEFAULT_BASE_URL}${DEFAULT_OG_IMAGE_PATH}`
+								`${DEFAULT_BASE_URL}${DEFAULT_OG_IMAGE_PATH}`,
 							);
 							expect(meta.schemas.length).toBeGreaterThan(0);
 						});
@@ -460,7 +460,7 @@ describe("page-metadata.js", () => {
 				});
 
 				expect(meta.title).toBe(
-					"No Man's Sky Tech Layout & Adjacency Calculator | NMS Optimizer"
+					"No Man's Sky Tech Layout & Adjacency Calculator | NMS Optimizer",
 				);
 				expect(meta.heading).toBe("No Man's Sky Tech Layout & Adjacency Calculator");
 				expect(meta.canonicalUrl).toBe("https://nms-optimizer.app/some-unknown-route/");

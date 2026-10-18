@@ -37,7 +37,10 @@ vi.mock("./UpdatePrompt", () => ({
 		if (!isOpen) return null;
 
 		return (
-			<div data-testid="update-prompt" role="dialog">
+			<div
+				data-testid="update-prompt"
+				role="dialog"
+			>
 				<button onClick={onRefresh}>Refresh</button>
 				<button onClick={onDismiss}>Dismiss</button>
 			</div>
@@ -87,7 +90,7 @@ describe("UpdatePromptWrapper", () => {
 			expect.objectContaining({
 				action: "page_view",
 				category: "engagement",
-			})
+			}),
 		);
 	});
 

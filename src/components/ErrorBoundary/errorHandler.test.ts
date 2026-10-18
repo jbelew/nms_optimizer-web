@@ -42,7 +42,7 @@ describe("errorHandler", () => {
 					category: "error",
 					label: "Test error",
 					nonInteraction: true,
-				})
+				}),
 			);
 		});
 
@@ -57,7 +57,7 @@ describe("errorHandler", () => {
 			expect(sendEventSpy).toHaveBeenCalledWith(
 				expect.objectContaining({
 					componentStack: expect.any(String),
-				})
+				}),
 			);
 		});
 
@@ -70,7 +70,7 @@ describe("errorHandler", () => {
 			expect(sendEventSpy).toHaveBeenCalledWith(
 				expect.objectContaining({
 					stackTrace: expect.any(String),
-				})
+				}),
 			);
 		});
 
@@ -82,7 +82,7 @@ describe("errorHandler", () => {
 			expect(sendEventSpy).toHaveBeenCalledWith(
 				expect.objectContaining({
 					componentStack: "N/A",
-				})
+				}),
 			);
 		});
 
@@ -95,7 +95,7 @@ describe("errorHandler", () => {
 			expect(sendEventSpy).toHaveBeenCalledWith(
 				expect.objectContaining({
 					stackTrace: "N/A",
-				})
+				}),
 			);
 		});
 
@@ -147,7 +147,7 @@ describe("errorHandler", () => {
 			expect(sendEventSpy).toHaveBeenCalledWith(
 				expect.objectContaining({
 					action: "TypeError",
-				})
+				}),
 			);
 		});
 
@@ -159,7 +159,7 @@ describe("errorHandler", () => {
 			expect(sendEventSpy).toHaveBeenCalledWith(
 				expect.objectContaining({
 					label: "Specific error message",
-				})
+				}),
 			);
 		});
 
@@ -171,7 +171,7 @@ describe("errorHandler", () => {
 			expect(sendEventSpy).toHaveBeenCalledWith(
 				expect.objectContaining({
 					label: "",
-				})
+				}),
 			);
 		});
 	});

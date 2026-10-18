@@ -24,8 +24,8 @@ describe("useUpdateCheck", () => {
 					buildDate: "newer-date",
 					version: "newer-version",
 				}),
-				{ status: 200 }
-			)
+				{ status: 200 },
+			),
 		);
 
 		renderHook(() => useUpdateCheck(onUpdateAvailable));
@@ -49,8 +49,8 @@ describe("useUpdateCheck", () => {
 					buildDate: "test-date",
 					version: "test-version",
 				}),
-				{ status: 200 }
-			)
+				{ status: 200 },
+			),
 		);
 
 		renderHook(() => useUpdateCheck(onUpdateAvailable));
@@ -83,7 +83,7 @@ describe("useUpdateCheck", () => {
 	it("should call onUpdateAvailable when version.json is missing version fields as a fallback", async () => {
 		const mockUpdateSW = vi.fn();
 		vi.mocked(globalThis.fetch).mockResolvedValueOnce(
-			new Response(JSON.stringify({}), { status: 200 })
+			new Response(JSON.stringify({}), { status: 200 }),
 		);
 
 		renderHook(() => useUpdateCheck(onUpdateAvailable));
@@ -113,7 +113,7 @@ describe("useUpdateCheck", () => {
 
 		expect(removeEventListenerSpy).toHaveBeenCalledWith(
 			"new-version-available",
-			expect.any(Function)
+			expect.any(Function),
 		);
 	});
 });

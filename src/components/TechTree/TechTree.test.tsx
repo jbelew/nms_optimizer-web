@@ -1,8 +1,8 @@
-import type { TechTree } from "@/hooks/useTechTree/useTechTree";
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
+import type { TechTree } from "@/hooks/useTechTree/useTechTree";
 import * as useBreakpointModule from "@/hooks/useBreakpoint/useBreakpoint";
 import { useFetchTechTreeSuspense } from "@/hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "@/store/app/platformStore";
@@ -43,7 +43,11 @@ vi.mock("@radix-ui/themes", async (importOriginal) => {
 			className?: string;
 			style?: React.CSSProperties;
 		}) => (
-			<div className={className} data-testid="box" style={style}>
+			<div
+				className={className}
+				data-testid="box"
+				style={style}
+			>
 				{children}
 			</div>
 		),
@@ -55,7 +59,12 @@ vi.mock("@radix-ui/themes", async (importOriginal) => {
 				style?: React.CSSProperties;
 			}
 		>(({ children, className, style }, ref) => (
-			<div className={className} data-testid="scroll-area" ref={ref} style={style}>
+			<div
+				className={className}
+				data-testid="scroll-area"
+				ref={ref}
+				style={style}
+			>
 				{children}
 			</div>
 		)),
@@ -117,7 +126,7 @@ describe("TechTree", () => {
 		vi.clearAllMocks();
 		vi.mocked(useBreakpointModule.useBreakpoint).mockReturnValue(true);
 		vi.mocked(usePlatformStore).mockImplementation((selector) =>
-			selector({ selectedPlatform: "standard" } as never)
+			selector({ selectedPlatform: "standard" } as never),
 		);
 		vi.mocked(useFetchTechTreeSuspense).mockReturnValue(mockTechTree as unknown as TechTree);
 	});
@@ -152,7 +161,7 @@ describe("TechTree", () => {
 
 		let currentPlatform = "standard";
 		vi.mocked(usePlatformStore).mockImplementation((selector) =>
-			selector({ selectedPlatform: currentPlatform } as never)
+			selector({ selectedPlatform: currentPlatform } as never),
 		);
 
 		const { rerender } = render(<TechTreeComponent />);
@@ -177,7 +186,7 @@ describe("TechTree", () => {
 
 		let currentPlatform = "standard";
 		vi.mocked(usePlatformStore).mockImplementation((selector) =>
-			selector({ selectedPlatform: currentPlatform } as never)
+			selector({ selectedPlatform: currentPlatform } as never),
 		);
 
 		const { rerender } = render(<TechTreeComponent />);
@@ -197,7 +206,7 @@ describe("TechTree", () => {
 		expect(screen.queryByText("techTree.categories.grid")).not.toBeInTheDocument();
 		expect(screen.queryByText("techTree.categories.grid_definition")).not.toBeInTheDocument();
 		expect(
-			screen.queryByText("techTree.categories.recommended_builds")
+			screen.queryByText("techTree.categories.recommended_builds"),
 		).not.toBeInTheDocument();
 
 		const rows = screen.getAllByTestId(/^tech-tree-row-/);
@@ -250,19 +259,19 @@ describe("TechTree", () => {
 		const { container } = render(<TechTreeComponent techTree={customTree as TechTree} />);
 
 		const weaponryImg = container.querySelector(
-			`img[src="/assets/img/sidebar/weaponry.webp?v=${__APP_VERSION__}"]`
+			`img[src="/assets/img/sidebar/weaponry.webp?v=${__APP_VERSION__}"]`,
 		);
 		expect(weaponryImg).toBeInTheDocument();
 		expect(weaponryImg).toHaveAttribute("alt", "Weaponry");
 		expect(weaponryImg).toHaveAttribute(
 			"srcSet",
-			`/assets/img/sidebar/weaponry@2x.webp?v=${__APP_VERSION__} 2x`
+			`/assets/img/sidebar/weaponry@2x.webp?v=${__APP_VERSION__} 2x`,
 		);
 		expect(weaponryImg).toHaveAttribute("width", "36");
 		expect(weaponryImg).toHaveAttribute("height", "24");
 
 		const hyperdriveImg = container.querySelector(
-			`img[src="/assets/img/sidebar/hyperdrive.webp?v=${__APP_VERSION__}"]`
+			`img[src="/assets/img/sidebar/hyperdrive.webp?v=${__APP_VERSION__}"]`,
 		);
 		expect(hyperdriveImg).toBeInTheDocument();
 

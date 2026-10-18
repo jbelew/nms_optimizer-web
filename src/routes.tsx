@@ -4,6 +4,7 @@
  */
 
 import type { RouteObject } from "react-router-dom";
+
 import { getRoutedDialogs } from "@shared/page-registry.js";
 
 import App from "./App";

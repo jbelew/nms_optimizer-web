@@ -41,7 +41,12 @@ describe("AppDialog", () => {
 	});
 
 	test("should not render dialog content when isOpen is false", () => {
-		const { container } = render(<AppDialog {...defaultProps} isOpen={false} />);
+		const { container } = render(
+			<AppDialog
+				{...defaultProps}
+				isOpen={false}
+			/>,
+		);
 
 		// Dialog portal should exist but content visibility depends on radix implementation
 		// We check that the component doesn't error out
@@ -82,7 +87,11 @@ describe("AppDialog", () => {
 		}));
 
 		render(
-			<AppDialog {...defaultProps} title="Fallback Title" titleKey="dialogs.titles.test" />
+			<AppDialog
+				{...defaultProps}
+				title="Fallback Title"
+				titleKey="dialogs.titles.test"
+			/>,
 		);
 
 		// Should use titleKey for translation (appears in both Title and Description)
@@ -124,7 +133,12 @@ describe("AppDialog", () => {
 			</div>
 		);
 
-		render(<AppDialog {...defaultProps} content={customContent} />);
+		render(
+			<AppDialog
+				{...defaultProps}
+				content={customContent}
+			/>,
+		);
 
 		expect(screen.getByText("Custom Content Line 1")).toBeInTheDocument();
 		expect(screen.getByText("Custom Content Line 2")).toBeInTheDocument();
@@ -136,7 +150,7 @@ describe("AppDialog", () => {
 				{...defaultProps}
 				content={<div>About Content</div>}
 				titleKey="dialogs.titles.about"
-			/>
+			/>,
 		);
 
 		// The scrollable section should have pr-4 class for routed dialogs
@@ -150,7 +164,7 @@ describe("AppDialog", () => {
 				{...defaultProps}
 				content={<div>Error Content</div>}
 				titleKey="dialogs.titles.serverError"
-			/>
+			/>,
 		);
 
 		// The scrollable section should have pr-2 class for non-routed dialogs
@@ -170,7 +184,12 @@ describe("AppDialog", () => {
 	});
 
 	test("should derive titleKey, title, and size from pageId when provided", () => {
-		render(<AppDialog {...defaultProps} pageId="performance" />);
+		render(
+			<AppDialog
+				{...defaultProps}
+				pageId="performance"
+			/>,
+		);
 
 		// Should derive dialogs.titles.performance as titleKey from Page Registry
 		expect(screen.getAllByText("dialogs.titles.performance").length).toBeGreaterThanOrEqual(1);

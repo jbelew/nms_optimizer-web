@@ -12,10 +12,10 @@
  * @category Utilities
  */
 
-import type { GA4Event } from "@/types/analytics";
 import type { INPMetricWithAttribution, Metric } from "web-vitals/attribution";
 import { onCLS, onFCP, onINP, onLCP, onTTFB } from "web-vitals/attribution";
 
+import type { GA4Event } from "@/types/analytics";
 import { Logger } from "@/utils/system/monitoring";
 
 declare const __APP_VERSION__: string;

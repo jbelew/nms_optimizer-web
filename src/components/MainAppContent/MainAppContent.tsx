@@ -20,11 +20,11 @@ import { useOptimizeStore, useUiStore } from "@/store/ui/uiStore";
 import { lazyNamed } from "@/utils/system/lazyNamed";
 
 const OptimizationAlertDialog = lazy(
-	() => import("@/components/AppDialog/OptimizationAlert/OptimizationAlertDialog")
+	() => import("@/components/AppDialog/OptimizationAlert/OptimizationAlertDialog"),
 );
 const InstallPrompt = lazyNamed(
 	() => import("@/components/InstallPrompt/InstallPrompt"),
-	"InstallPrompt"
+	"InstallPrompt",
 );
 const ToastRenderer = lazyNamed(() => import("@/components/Toast/ToastRenderer"), "ToastRenderer");
 
@@ -162,7 +162,10 @@ const MainAppGridSection: React.FC = () => {
 				wrap="wrap"
 			>
 				<span className="main-app__ship-selection">
-					<ShipSelection disabled={isSharedGrid} solving={solving} />
+					<ShipSelection
+						disabled={isSharedGrid}
+						solving={solving}
+					/>
 				</span>
 
 				<Text
@@ -181,7 +184,10 @@ const MainAppGridSection: React.FC = () => {
 				</Text>
 			</Flex>
 
-			<GridTable ref={gridTableRef} solving={solving} />
+			<GridTable
+				ref={gridTableRef}
+				solving={solving}
+			/>
 		</Box>
 	);
 };
@@ -210,7 +216,11 @@ const MainAppSidebarSection: React.FC = () => {
 			width={!isLargeScreen && gridTableTotalWidth ? `${gridTableTotalWidth}px` : "100%"}
 		>
 			<Suspense fallback={<TechTreeSkeleton height={gridHeight} />}>
-				<Flex direction="column" height="100%" minHeight="0">
+				<Flex
+					direction="column"
+					height="100%"
+					minHeight="0"
+				>
 					<TechTree />
 				</Flex>
 			</Suspense>
@@ -251,7 +261,10 @@ export const MainAppContent: React.FC = () => {
 		if (isSharedGrid) {
 			showInfo(
 				t("common.information", "Information"),
-				<Trans components={{ strong: <strong /> }} i18nKey="mainApp.viewingSharedBuild" />
+				<Trans
+					components={{ strong: <strong /> }}
+					i18nKey="mainApp.viewingSharedBuild"
+				/>,
 			);
 		}
 	}, [isSharedGrid, showInfo, t]);
@@ -266,7 +279,10 @@ export const MainAppContent: React.FC = () => {
 			>
 				Skip to main content
 			</a>
-			<main className="main-app__container" id="main-content">
+			<main
+				className="main-app__container"
+				id="main-content"
+			>
 				<div className="main-app__card lg:shadow-lg">
 					<div className="main-app__background-wrapper">
 						<AppHeader />

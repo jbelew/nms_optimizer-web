@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as Toast from "@radix-ui/react-toast";
 
 import { NmsToast } from "./Toast";
@@ -75,7 +75,10 @@ export const Error: Story = {
 		description: (
 			<span>
 				Failed to load data. Please{" "}
-				<button className="cursor-pointer underline" type="button">
+				<button
+					className="cursor-pointer underline"
+					type="button"
+				>
 					try again
 				</button>{" "}
 				or contact support.

@@ -68,19 +68,26 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build, onApply }) => {
 
 	return (
 		<div className="grid grid-cols-[1fr_auto_auto] items-center gap-2">
-			<Flex align="center" gap="2" minWidth="0">
+			<Flex
+				align="center"
+				gap="2"
+				minWidth="0"
+			>
 				<StackIcon
 					className="shrink-0"
 					height="18"
 					style={{ color: "var(--accent-a11)" }}
 					width="18"
 				/>
-				<Text size={isSmallAndUp ? "3" : "2"} weight="medium">
+				<Text
+					size={isSmallAndUp ? "3" : "2"}
+					weight="medium"
+				>
 					{build.title}
 				</Text>
 			</Flex>
 
-			{moduleCount > 0 ? (
+			{moduleCount > 0 ?
 				<Button
 					className="justify-self-end font-mono! tabular-nums"
 					color="gray"
@@ -91,9 +98,7 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build, onApply }) => {
 				>
 					x{moduleCount}
 				</Button>
-			) : (
-				<span />
-			)}
+			:	<span />}
 
 			<Button
 				className="cursor-pointer! font-medium"
@@ -101,7 +106,11 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build, onApply }) => {
 				size="2"
 				variant="soft"
 			>
-				<MagicWandIcon height="15" style={{ color: "var(--accent-a11)" }} width="15" />
+				<MagicWandIcon
+					height="15"
+					style={{ color: "var(--accent-a11)" }}
+					width="15"
+				/>
 				{t("techTree.recommendedBuilds.applyBuild", "Apply Build")}
 			</Button>
 		</div>
@@ -146,7 +155,7 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds, techTre
 				});
 			}, 0);
 		},
-		[isAbove1024, scrollIntoView, sendEvent, selectedPlatform, techTree]
+		[isAbove1024, scrollIntoView, sendEvent, selectedPlatform, techTree],
 	);
 
 	const handleOpenInstructions = useCallback(() => {
@@ -155,9 +164,20 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds, techTre
 
 	return (
 		<div className="mb-4 rounded-(--radius-3) bg-(--accent-a3) p-3 sm:shadow-sm lg:bg-(--accent-surface)">
-			<Flex direction="column" gap="1" width="100%">
-				<Flex align="center" justify="between" width="100%">
-					<Flex align="center" gap="2">
+			<Flex
+				direction="column"
+				gap="1"
+				width="100%"
+			>
+				<Flex
+					align="center"
+					justify="between"
+					width="100%"
+				>
+					<Flex
+						align="center"
+						gap="2"
+					>
 						<LayersIcon
 							className="shrink-0"
 							height="18"
@@ -170,7 +190,10 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds, techTre
 					</Flex>
 				</Flex>
 
-				<Text as="p" className="text-sm sm:text-base">
+				<Text
+					as="p"
+					className="text-sm sm:text-base"
+				>
 					<Trans
 						components={{
 							5: (
@@ -235,7 +258,12 @@ export const TechTreePresetsCard: React.FC<TechTreePresetsCardProps> = ({ techTr
 
 	if (builds.length === 0) return null;
 
-	return <PresetsCardContent builds={builds} techTree={techTree} />;
+	return (
+		<PresetsCardContent
+			builds={builds}
+			techTree={techTree}
+		/>
+	);
 };
 
 TechTreePresetsCard.displayName = "TechTreePresetsCard";

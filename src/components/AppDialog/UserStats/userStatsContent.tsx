@@ -46,14 +46,21 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ isOpen }) => {
 
 	return (
 		<>
-			<Text as="p" className="text-sm! sm:text-base!" mb="4">
+			<Text
+				as="p"
+				className="text-sm! sm:text-base!"
+				mb="4"
+			>
 				{t("dialogs.userStats.description")}
 			</Text>
 
 			<ErrorBoundary fallback={<Text color="red">{t("dialogs.userStats.error")}</Text>}>
 				<Suspense
 					fallback={
-						<Flex direction="column" gap="4">
+						<Flex
+							direction="column"
+							gap="4"
+						>
 							<Heading
 								as="h2"
 								className="text-base! sm:text-lg!"
@@ -63,7 +70,10 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ isOpen }) => {
 							>
 								<Skeleton>{t("dialogs.userStats.starshipChartTitle")}</Skeleton>
 							</Heading>
-							<Skeleton height="248px" width="100%" />
+							<Skeleton
+								height="248px"
+								width="100%"
+							/>
 							<Heading
 								as="h2"
 								className="text-base! sm:text-lg!"
@@ -73,7 +83,10 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ isOpen }) => {
 							>
 								<Skeleton>{t("dialogs.userStats.multitoolChartTitle")}</Skeleton>
 							</Heading>
-							<Skeleton height="248px" width="100%" />
+							<Skeleton
+								height="248px"
+								width="100%"
+							/>
 						</Flex>
 					}
 				>

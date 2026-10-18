@@ -28,7 +28,10 @@ vi.mock("@/components/GridControlButtons/GridControlButtons", () => ({
 
 vi.mock("@/components/GridTableButtons/GridTableButtons", () => ({
 	default: ({ solving }: { solving: boolean }) => (
-		<div data-solving={solving} data-testid="grid-table-buttons">
+		<div
+			data-solving={solving}
+			data-testid="grid-table-buttons"
+		>
 			Grid Table Buttons
 		</div>
 	),
@@ -42,7 +45,10 @@ vi.mock("@/components/GridShake/GridShake", () => ({
 
 vi.mock("@/components/MessageSpinner/MessageSpinner", () => ({
 	MessageSpinner: ({ isVisible }: { isVisible: boolean }) => (
-		<div data-testid="message-spinner" data-visible={isVisible} />
+		<div
+			data-testid="message-spinner"
+			data-visible={isVisible}
+		/>
 	),
 }));
 
@@ -53,7 +59,7 @@ vi.mock("@/store/grid/gridStore", () => ({
 			firstInactiveRowIndex: 0,
 			grid: {
 				cells: Array.from({ length: 5 }, () =>
-					Array.from({ length: 3 }, () => ({ active: false }))
+					Array.from({ length: 3 }, () => ({ active: false })),
 				),
 				height: 5,
 				width: 3,
@@ -169,7 +175,12 @@ describe("GridTable", () => {
 
 	test("should forward ref to grid container", () => {
 		const ref = React.createRef<HTMLDivElement>();
-		render(<GridTable ref={ref} solving={false} />);
+		render(
+			<GridTable
+				ref={ref}
+				solving={false}
+			/>,
+		);
 
 		expect(ref.current).toBeInTheDocument();
 		expect(ref.current).toHaveAttribute("role", "grid");

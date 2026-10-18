@@ -1,10 +1,10 @@
-import type { BonusStatusData } from "@/store/tech/techStore";
 import type { Mock } from "vitest";
 import { Theme } from "@radix-ui/themes";
 import { render } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import type { BonusStatusData } from "@/store/tech/techStore";
 import { useTechStore } from "@/store/tech/techStore";
 import i18n from "@/test/i18n";
 import { isTouchDevice } from "@/utils/browser/environment";
@@ -66,7 +66,7 @@ describe("BonusStatusIcon Component", () => {
 	const renderComponent = (
 		techSolvedBonus: number,
 		status: BonusStatusData | null = null,
-		moduleCount?: number
+		moduleCount?: number,
 	) => {
 		mockGetBonusStatus.mockReturnValue(status);
 
@@ -79,7 +79,7 @@ describe("BonusStatusIcon Component", () => {
 						techSolvedBonus={techSolvedBonus}
 					/>
 				</Theme>
-			</I18nextProvider>
+			</I18nextProvider>,
 		);
 	};
 

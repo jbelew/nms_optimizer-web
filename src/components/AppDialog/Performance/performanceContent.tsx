@@ -89,10 +89,14 @@ export const PerformanceContent: FC<PerformanceContentProps> = ({ isOpen }) => {
 				}
 			>
 				<Suspense fallback={<DashboardSkeleton />}>
-					<Text as="p" mb="3" size={{ initial: "2", sm: "3" }}>
+					<Text
+						as="p"
+						mb="3"
+						size={{ initial: "2", sm: "3" }}
+					>
 						{t(
 							"dialogs.performance.description",
-							"Aggregate Core Web Vitals and performance metrics from real user sessions (field data)."
+							"Aggregate Core Web Vitals and performance metrics from real user sessions (field data).",
 						)}
 					</Text>
 

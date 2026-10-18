@@ -1,9 +1,10 @@
-import type { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
 import React from "react";
 import { Theme } from "@radix-ui/themes";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { beforeEach, describe, expect, test, vi } from "vitest";
+
+import type { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
 
 import { PerformanceChart } from "./performanceChart";
 
@@ -67,14 +68,17 @@ const renderChart = (initialEntry = "/performance") =>
 		<Theme>
 			<MemoryRouter initialEntries={[initialEntry]}>
 				<Routes>
-					<Route element={<PerformanceChart data={mockData} />} path="/performance" />
+					<Route
+						element={<PerformanceChart data={mockData} />}
+						path="/performance"
+					/>
 					<Route
 						element={<PerformanceChart data={mockData} />}
 						path="/performance/:metric"
 					/>
 				</Routes>
 			</MemoryRouter>
-		</Theme>
+		</Theme>,
 	);
 
 describe("PerformanceChart summary cards", () => {
@@ -86,7 +90,7 @@ describe("PerformanceChart summary cards", () => {
 		renderChart();
 
 		expect(
-			screen.getByRole("button", { name: /overall performance summary/i })
+			screen.getByRole("button", { name: /overall performance summary/i }),
 		).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: /detailed LCP chart/i })).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: /detailed FCP chart/i })).toBeInTheDocument();
@@ -96,11 +100,11 @@ describe("PerformanceChart summary cards", () => {
 		renderChart();
 
 		expect(
-			screen.getByRole("button", { name: /overall performance summary/i })
+			screen.getByRole("button", { name: /overall performance summary/i }),
 		).toHaveAttribute("aria-pressed", "true");
 		expect(screen.getByRole("button", { name: /detailed LCP chart/i })).toHaveAttribute(
 			"aria-pressed",
-			"false"
+			"false",
 		);
 	});
 
@@ -109,11 +113,11 @@ describe("PerformanceChart summary cards", () => {
 
 		expect(screen.getByRole("button", { name: /detailed LCP chart/i })).toHaveAttribute(
 			"aria-pressed",
-			"true"
+			"true",
 		);
 		expect(screen.getByRole("button", { name: /detailed FCP chart/i })).toHaveAttribute(
 			"aria-pressed",
-			"false"
+			"false",
 		);
 	});
 
@@ -125,7 +129,7 @@ describe("PerformanceChart summary cards", () => {
 
 		expect(screen.getByRole("button", { name: /detailed LCP chart/i })).toHaveAttribute(
 			"aria-pressed",
-			"true"
+			"true",
 		);
 	});
 
@@ -139,7 +143,7 @@ describe("PerformanceChart summary cards", () => {
 		expect(event).toBe(false);
 		expect(screen.getByRole("button", { name: /detailed LCP chart/i })).toHaveAttribute(
 			"aria-pressed",
-			"true"
+			"true",
 		);
 	});
 
@@ -151,7 +155,7 @@ describe("PerformanceChart summary cards", () => {
 
 		expect(screen.getByRole("button", { name: /detailed FCP chart/i })).toHaveAttribute(
 			"aria-pressed",
-			"true"
+			"true",
 		);
 	});
 
@@ -161,7 +165,7 @@ describe("PerformanceChart summary cards", () => {
 		fireEvent.click(screen.getByRole("button", { name: /overall performance summary/i }));
 
 		expect(
-			screen.getByRole("button", { name: /overall performance summary/i })
+			screen.getByRole("button", { name: /overall performance summary/i }),
 		).toHaveAttribute("aria-pressed", "true");
 	});
 
@@ -182,7 +186,7 @@ describe("PerformanceChart summary cards", () => {
 				p75: 1000 + i * 10,
 				p90: 1200 + i * 10,
 				timestamp: baseTs - i * hourMs,
-			}))
+			})),
 		) as PerformanceMetric[];
 
 		const onRangeChange = vi.fn();
@@ -203,7 +207,7 @@ describe("PerformanceChart summary cards", () => {
 						/>
 					</Routes>
 				</MemoryRouter>
-			</Theme>
+			</Theme>,
 		);
 
 		// Get initial values (3d range)
@@ -227,7 +231,7 @@ describe("PerformanceChart summary cards", () => {
 						/>
 					</Routes>
 				</MemoryRouter>
-			</Theme>
+			</Theme>,
 		);
 
 		// Value should still be 1000ms

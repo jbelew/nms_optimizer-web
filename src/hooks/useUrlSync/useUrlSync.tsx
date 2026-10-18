@@ -144,7 +144,7 @@ export const useUrlSync = () => {
 			try {
 				const sanitizedSearch = sanitizeUrlSearchParams(
 					window.location.pathname,
-					window.location.search
+					window.location.search,
 				);
 				urlParams = new URLSearchParams(sanitizedSearch);
 			} catch (e) {

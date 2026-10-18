@@ -121,12 +121,12 @@ vi.mock("./components/AppDialog/Base/AppDialog", () => ({
 		isOpen: boolean;
 		title: string;
 	}) =>
-		isOpen ? (
+		isOpen ?
 			<div data-testid="app-dialog">
 				<div>{title}</div>
 				{content}
 			</div>
-		) : null,
+		:	null,
 }));
 
 vi.mock("./components/AppDialog/Welcome/WelcomeContent", () => ({
@@ -172,7 +172,7 @@ describe("App", () => {
 						</Suspense>
 					</TooltipProvider>
 				</ToastProvider>
-			</Theme>
+			</Theme>,
 		);
 	};
 
@@ -209,14 +209,14 @@ describe("App", () => {
 					expect.objectContaining({
 						action: "page_view",
 						page_title: "404: Not Found | NMS Optimizer",
-					})
+					}),
 				);
 				expect(sendEvent).toHaveBeenCalledWith(
 					expect.objectContaining({
 						action: "not_found",
 						category: "navigation",
 						nonInteraction: true,
-					})
+					}),
 				);
 			});
 			markReadySpy.mockRestore();
@@ -269,7 +269,7 @@ describe("App", () => {
 						nonInteraction: true,
 						page: "/#error",
 						page_title: "500: dialogs.titles.serverError | NMS Optimizer",
-					})
+					}),
 				);
 				expect(document.title).toBe("500: dialogs.titles.serverError | NMS Optimizer");
 			});
@@ -295,7 +295,7 @@ describe("App", () => {
 			await vi.waitFor(() => {
 				expect(addEventListenerSpy).toHaveBeenCalledWith(
 					"new-version-available",
-					expect.any(Function)
+					expect.any(Function),
 				);
 			});
 
@@ -381,7 +381,7 @@ describe("App", () => {
 			const footers = await rendered.findAllByTestId("app-dialog-footer");
 			const getStartedButton = await vi.waitFor(() => {
 				const btn = Array.from(footers[0].querySelectorAll("button")).find(
-					(b) => b.textContent === "dialogs.welcome.getStarted"
+					(b) => b.textContent === "dialogs.welcome.getStarted",
 				);
 				if (!btn) throw new Error("Button not found");
 

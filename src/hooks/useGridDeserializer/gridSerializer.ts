@@ -1,6 +1,5 @@
 import type { RecommendedBuild, TechTree } from "@/hooks/useTechTree/useTechTree";
 import type { Grid } from "@/store/grid/gridStore";
-
 import { fetchTechTreeAsync } from "@/hooks/useTechTree/useTechTree";
 import { assignModuleToCell, resetCellContent } from "@/store/grid/gridFactories";
 import { createGrid } from "@/store/grid/gridStore";
@@ -149,7 +148,13 @@ export const serialize = (grid: Grid): string => {
 	const allCells = grid.cells.flat();
 
 	const gridString = allCells
-		.map((cell) => (cell.active ? (cell.supercharged ? "2" : "1") : "0"))
+		.map((cell) =>
+			cell.active ?
+				cell.supercharged ?
+					"2"
+				:	"1"
+			:	"0",
+		)
 		.join("");
 
 	const techString = allCells
@@ -168,12 +173,12 @@ export const serialize = (grid: Grid): string => {
 
 	const moduleString = allCells
 		.map((cell) =>
-			cell.module
-				? moduleMap[cell.module] ||
-					(moduleMap[cell.module] = String.fromCharCode(
-						nextModuleCode++ + GRID_SERIALIZATION_CONSTANTS.MODULE_START_CODE
-					))
-				: " "
+			cell.module ?
+				moduleMap[cell.module]
+				|| (moduleMap[cell.module] = String.fromCharCode(
+					nextModuleCode++ + GRID_SERIALIZATION_CONSTANTS.MODULE_START_CODE,
+				))
+			:	" ",
 		)
 		.join("");
 
@@ -229,7 +234,7 @@ export const serialize = (grid: Grid): string => {
 export const deserialize = async (
 	serializedGrid: string,
 	shipType: string,
-	setTechColors: (colors: { [key: string]: string }) => void
+	setTechColors: (colors: { [key: string]: string }) => void,
 ): Promise<Grid | null> => {
 	try {
 		if (!serializedGrid) {
@@ -290,7 +295,7 @@ export const deserialize = async (
 			].some((part) => part === undefined)
 		) {
 			Logger.error(
-				"Invalid serialized grid format. Missing parts. Skipping deserialization."
+				"Invalid serialized grid format. Missing parts. Skipping deserialization.",
 			);
 
 			return null;
@@ -305,13 +310,13 @@ export const deserialize = async (
 		const decompressedAdjBonus = decompressRLE(compressedAdjBonus);
 
 		if (
-			gridString.length !== expectedLength ||
-			decompressedTech.length !== expectedLength ||
-			decompressedModule.length !== expectedLength ||
-			decompressedAdjBonus.length !== expectedLength
+			gridString.length !== expectedLength
+			|| decompressedTech.length !== expectedLength
+			|| decompressedModule.length !== expectedLength
+			|| decompressedAdjBonus.length !== expectedLength
 		) {
 			Logger.error(
-				`Invalid serialized grid format: String length mismatch. Expected ${expectedLength}. Got Grid: ${gridString.length}, Tech: ${decompressedTech.length}, Module: ${decompressedModule.length}, AdjBonus: ${decompressedAdjBonus.length}. Skipping deserialization.`
+				`Invalid serialized grid format: String length mismatch. Expected ${expectedLength}. Got Grid: ${gridString.length}, Tech: ${decompressedTech.length}, Module: ${decompressedModule.length}, AdjBonus: ${decompressedAdjBonus.length}. Skipping deserialization.`,
 			);
 
 			return null;
@@ -363,7 +368,7 @@ export const deserialize = async (
 					}
 
 					return true;
-				}
+				},
 			);
 		}
 
@@ -380,7 +385,7 @@ export const deserialize = async (
 
 		if (missingTechs.size > 0) {
 			Logger.error(
-				`Grid deserialization warning: The following techs no longer exist in the API: ${Array.from(missingTechs).join(", ")}. They will be skipped. This may be due to API changes since the grid was shared.`
+				`Grid deserialization warning: The following techs no longer exist in the API: ${Array.from(missingTechs).join(", ")}. They will be skipped. This may be due to API changes since the grid was shared.`,
 			);
 		}
 
@@ -410,7 +415,7 @@ export const deserialize = async (
 				// Validate tech exists before assigning (handles API changes)
 				if (techName && !validTechKeys.has(techName)) {
 					Logger.warn(
-						`Cell [${r},${c}] references missing tech: ${techName}. Skipping cell content.`
+						`Cell [${r},${c}] references missing tech: ${techName}. Skipping cell content.`,
 					);
 					cell.tech = null;
 					cell.active = false;
@@ -426,7 +431,7 @@ export const deserialize = async (
 						assignModuleToCell(cell, moduleData);
 					} else {
 						Logger.warn(
-							`Module data not found for tech: ${techName}, module ID: ${moduleId}. Cell state might be incomplete.`
+							`Module data not found for tech: ${techName}, module ID: ${moduleId}. Cell state might be incomplete.`,
 						);
 					}
 				}
@@ -437,7 +442,7 @@ export const deserialize = async (
 
 		if (skippedCellsCount > 0) {
 			Logger.warn(
-				`Grid deserialization: Skipped ${skippedCellsCount} cells due to missing techs in API.`
+				`Grid deserialization: Skipped ${skippedCellsCount} cells due to missing techs in API.`,
 			);
 		}
 

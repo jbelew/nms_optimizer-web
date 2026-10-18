@@ -73,8 +73,14 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 
 	const accessibilityToggle = (
 		<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
-			<Flex align="center" gap={{ initial: "2", md: "1" }}>
-				<EyeOpenIcon aria-hidden="true" style={{ color: "var(--accent-a11)" }} />
+			<Flex
+				align="center"
+				gap={{ initial: "2", md: "1" }}
+			>
+				<EyeOpenIcon
+					aria-hidden="true"
+					style={{ color: "var(--accent-a11)" }}
+				/>
 				<Switch
 					aria-label={t("buttons.accessibility") ?? ""}
 					checked={a11yMode}
@@ -86,15 +92,25 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	);
 
 	return (
-		<header className="app-header" key={i18n.language} role="banner">
+		<header
+			className="app-header"
+			key={i18n.language}
+			role="banner"
+		>
 			{!isSharedGrid && !isLg && isSm && (
-				<Flex className="app-header__controls app-header__controls--left" gap="2">
+				<Flex
+					className="app-header__controls app-header__controls--left"
+					gap="2"
+				>
 					{accessibilityToggle}
 				</Flex>
 			)}
 
 			{!isSharedGrid && isSm && (
-				<Flex className="app-header__controls app-header__controls--right" gap="2">
+				<Flex
+					className="app-header__controls app-header__controls--right"
+					gap="2"
+				>
 					<ConditionalTooltip label={t("buttons.changelog") ?? ""}>
 						<IconButton
 							aria-label={t("buttons.changelog") ?? ""}
@@ -143,7 +159,11 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				</Flex>
 			)}
 
-			<div aria-label="No Man's Sky Logo" className="app-header__logo-text" role="img">
+			<div
+				aria-label="No Man's Sky Logo"
+				className="app-header__logo-text"
+				role="img"
+			>
 				NO MAN'S SKY
 			</div>
 
@@ -154,7 +174,12 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				my="1"
 				width="100%"
 			>
-				<Separator className="flex-1" decorative orientation="horizontal" size="1" />
+				<Separator
+					className="flex-1"
+					decorative
+					orientation="horizontal"
+					size="1"
+				/>
 
 				<Popover.Root>
 					<Popover.Trigger>
@@ -188,7 +213,12 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					</Popover.Content>
 				</Popover.Root>
 
-				<Separator className="flex-1" decorative orientation="horizontal" size="1" />
+				<Separator
+					className="flex-1"
+					decorative
+					orientation="horizontal"
+					size="1"
+				/>
 			</Flex>
 
 			<Heading
@@ -205,7 +235,10 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					}}
 					i18nKey="appHeader.subTitle"
 				/>
-				<span className="font-medium" style={{ color: "var(--gray-11)" }}>
+				<span
+					className="font-medium"
+					style={{ color: "var(--gray-11)" }}
+				>
 					{" "}
 					{__APP_VERSION__}
 				</span>

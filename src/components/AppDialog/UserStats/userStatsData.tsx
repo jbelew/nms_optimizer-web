@@ -1,9 +1,9 @@
-import type { UserStat } from "@/hooks/useUserStats/useUserStats";
 import type { FC } from "react";
 import { lazy, Suspense } from "react";
 import { Flex, Heading, Skeleton, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import type { UserStat } from "@/hooks/useUserStats/useUserStats";
 import { useTechTreeColors } from "@/hooks/useTechTreeColors/useTechTreeColors";
 import { useUserStats } from "@/hooks/useUserStats/useUserStats";
 import { fetchTechTreeColors } from "@/utils/api/techTreeColorsResource";
@@ -70,7 +70,10 @@ const LazyRechartsChart = lazy(async () => {
 			};
 
 			return (
-				<ResponsiveContainer height={248} width="100%">
+				<ResponsiveContainer
+					height={248}
+					width="100%"
+				>
 					<PieChart>
 						<Pie
 							cx="50%"
@@ -109,13 +112,20 @@ const LazyRechartsChart = lazy(async () => {
 										x={x}
 										y={y}
 									>
-										<tspan dy="-0.4em" x={x}>
+										<tspan
+											dy="-0.4em"
+											x={x}
+										>
 											{name}
 										</tspan>
-										<tspan className="tabular-nums" dy="1.2em" x={x}>
-											{percent && percent * 100 >= 6
-												? `${(percent * 100).toFixed(0)}%`
-												: ""}
+										<tspan
+											className="tabular-nums"
+											dy="1.2em"
+											x={x}
+										>
+											{percent && percent * 100 >= 6 ?
+												`${(percent * 100).toFixed(0)}%`
+											:	""}
 										</tspan>
 									</text>
 								);
@@ -132,7 +142,7 @@ const LazyRechartsChart = lazy(async () => {
 										stroke="black"
 										strokeWidth={1}
 									/>
-								)
+								),
 							)}
 						</Pie>
 					</PieChart>
@@ -224,7 +234,7 @@ export const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 
 					return acc;
 				},
-				[] as { name: string; value: number }[]
+				[] as { name: string; value: number }[],
 			);
 
 		const totalValue = aggregated.reduce((sum, item) => sum + item.value, 0);
@@ -277,7 +287,14 @@ export const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 				>
 					{t(titleKey)}
 				</Heading>
-				<Suspense fallback={<Skeleton height="248px" width="100%" />}>
+				<Suspense
+					fallback={
+						<Skeleton
+							height="248px"
+							width="100%"
+						/>
+					}
+				>
 					<LazyRechartsChart
 						chartData={chartData}
 						COLORS={COLORS}
@@ -293,7 +310,10 @@ export const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	const corvetteData = aggregateData(data, CORVETTE_TYPES);
 
 	return (
-		<Flex direction="column" gap="4">
+		<Flex
+			direction="column"
+			gap="4"
+		>
 			{renderChart(starshipData, "dialogs.userStats.starshipChartTitle")}
 			{renderChart(multitoolData, "dialogs.userStats.multitoolChartTitle")}
 			{renderChart(corvetteData, "dialogs.userStats.corvetteChartTitle")}

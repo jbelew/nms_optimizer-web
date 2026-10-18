@@ -38,7 +38,7 @@ const ErrorContent: React.FC = () => {
 	const { t } = useTranslation();
 	const { sendEvent } = useAnalytics();
 	const error = useOptimizeStore((state) =>
-		state.status.type === "error" ? state.status.details : null
+		state.status.type === "error" ? state.status.details : null,
 	);
 
 	/**
@@ -67,7 +67,11 @@ const ErrorContent: React.FC = () => {
 			<span className="errorContent__title block pb-2 text-center text-xl font-semibold tracking-widest">
 				{t("errorContent.signalDisruption")}
 			</span>
-			<Text as="p" mb="2" size={{ initial: "2", sm: "3" }}>
+			<Text
+				as="p"
+				mb="2"
+				size={{ initial: "2", sm: "3" }}
+			>
 				<Trans
 					components={{
 						1: (

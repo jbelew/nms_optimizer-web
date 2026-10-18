@@ -1,12 +1,12 @@
 import "./ShipSelection.scss";
 
-import type { PlatformDetail } from "@/store/app/platformStore";
 import React, { Suspense, useCallback, useMemo, useTransition } from "react";
 import { GearIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator, Spinner } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
+import type { PlatformDetail } from "@/store/app/platformStore";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useToast } from "@/hooks/useToast/useToast";
@@ -44,29 +44,31 @@ const ShipSelectionSkeleton: React.FC = () => {
 	const { t } = useTranslation();
 	const isSmallAndUp = useBreakpoint("640px");
 
-	return isSmallAndUp ? (
-		<Button
-			aria-label={t("shipSelection.ariaLabel") ?? ""}
-			className="p-2!"
-			disabled
-			size="2"
-			variant="soft"
-		>
-			<Spinner size="3" />
-			<Separator color="gray" decorative orientation="vertical" />
-			<DropdownMenu.TriggerIcon />
-		</Button>
-	) : (
-		<IconButton
-			aria-label={t("shipSelection.ariaLabel") ?? ""}
-			className="mt-1!"
-			disabled
-			size="2"
-			variant="soft"
-		>
-			<Spinner size="3" />
-		</IconButton>
-	);
+	return isSmallAndUp ?
+			<Button
+				aria-label={t("shipSelection.ariaLabel") ?? ""}
+				className="p-2!"
+				disabled
+				size="2"
+				variant="soft"
+			>
+				<Spinner size="3" />
+				<Separator
+					color="gray"
+					decorative
+					orientation="vertical"
+				/>
+				<DropdownMenu.TriggerIcon />
+			</Button>
+		:	<IconButton
+				aria-label={t("shipSelection.ariaLabel") ?? ""}
+				className="mt-1!"
+				disabled
+				size="2"
+				variant="soft"
+			>
+				<Spinner size="3" />
+			</IconButton>;
 };
 
 /**
@@ -90,7 +92,7 @@ const ShipSelectionMenu: React.FC<ShipSelectionProps> = ({ disabled = false, sol
 
 				return acc;
 			},
-			{}
+			{},
 		);
 	}, [platformCatalog, t]);
 
@@ -102,7 +104,7 @@ const ShipSelectionMenu: React.FC<ShipSelectionProps> = ({ disabled = false, sol
 					if (option === "corvette") {
 						showInfo(
 							t("shipSelection.corvetteWarning.title"),
-							<Trans i18nKey="shipSelection.corvetteWarning.description" />
+							<Trans i18nKey="shipSelection.corvetteWarning.description" />,
 						);
 					}
 
@@ -126,7 +128,7 @@ const ShipSelectionMenu: React.FC<ShipSelectionProps> = ({ disabled = false, sol
 				});
 			}
 		},
-		[selectedPlatform, showInfo, t, navigate, sendDeferredEvent]
+		[selectedPlatform, showInfo, t, navigate, sendDeferredEvent],
 	);
 
 	const isDisabled = disabled || isPending || solving;
@@ -208,7 +210,10 @@ const ShipSelectionMenu: React.FC<ShipSelectionProps> = ({ disabled = false, sol
 export const ShipSelection: React.FC<ShipSelectionProps> = ({ disabled = false, solving }) => {
 	return (
 		<Suspense fallback={<ShipSelectionSkeleton />}>
-			<ShipSelectionMenu disabled={disabled} solving={solving} />
+			<ShipSelectionMenu
+				disabled={disabled}
+				solving={solving}
+			/>
 		</Suspense>
 	);
 };

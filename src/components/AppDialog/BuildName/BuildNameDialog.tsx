@@ -1,4 +1,3 @@
-import type { BuildNameContentRef } from "./BuildNameContent";
 import type { FC } from "react";
 import { useRef } from "react";
 import { Button } from "@radix-ui/themes";
@@ -11,6 +10,7 @@ import {
 	AppDialogTitle,
 } from "@/components/AppDialog/Base/AppDialog";
 
+import type { BuildNameContentRef } from "./BuildNameContent";
 import { BuildNameContent } from "./BuildNameContent";
 
 import "./BuildNameDialog.scss";
@@ -63,14 +63,25 @@ const BuildNameDialog: FC<BuildNameDialogProps> = ({ isOpen, onCancel, onConfirm
 	const contentRef = useRef<BuildNameContentRef>(null);
 
 	return (
-		<AppDialogRoot className="buildNameDialog__content" isOpen={isOpen} onClose={onCancel}>
+		<AppDialogRoot
+			className="buildNameDialog__content"
+			isOpen={isOpen}
+			onClose={onCancel}
+		>
 			<AppDialogTitle titleKey="dialog.buildName.title" />
 			<AppDialogBody>
-				<BuildNameContent onCancel={onCancel} onConfirm={onConfirm} ref={contentRef} />
+				<BuildNameContent
+					onCancel={onCancel}
+					onConfirm={onConfirm}
+					ref={contentRef}
+				/>
 			</AppDialogBody>
 			<AppDialogFooter>
 				<div className="flex justify-end gap-2">
-					<Button onClick={onCancel} variant="soft">
+					<Button
+						onClick={onCancel}
+						variant="soft"
+					>
 						{t("buttons.cancel")}
 					</Button>
 					<Button onClick={() => contentRef.current?.handleConfirm()}>

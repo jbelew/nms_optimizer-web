@@ -1,10 +1,10 @@
+import { fireEvent, render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import type { GridStore } from "@/store/grid/gridStore";
 import type { BonusStatusData, TechStore } from "@/store/tech/techStore";
 import type { ModuleSelectionDialogState } from "@/store/ui/uiStore";
 import type { TechTreeRowProps } from "@/types/props";
-import { fireEvent, render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-
 import { useOptimize } from "@/hooks/useOptimize/useOptimize";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
@@ -135,7 +135,7 @@ const setupMocks = (hasTechInGrid: boolean, solving = false, isGridFull = false)
 			};
 
 			return selector ? selector(state) : state;
-		}
+		},
 	);
 };
 
@@ -187,7 +187,12 @@ describe("TechTreeRow", () => {
 			return selector ? selector(state as TechStore) : (state as TechStore);
 		});
 
-		renderWithProviders(<TechTreeRow {...defaultProps} techImage={null} />);
+		renderWithProviders(
+			<TechTreeRow
+				{...defaultProps}
+				techImage={null}
+			/>,
+		);
 
 		const solveButton = screen.getByRole("button", {
 			name: "Solve technologies.testTech",
@@ -401,7 +406,7 @@ describe("TechTreeRow", () => {
 		renderWithProviders(<TechTreeRow {...defaultProps} />);
 
 		expect(
-			screen.queryByRole("button", { name: "techTree.tooltips.validSolve" })
+			screen.queryByRole("button", { name: "techTree.tooltips.validSolve" }),
 		).not.toBeInTheDocument();
 	});
 
@@ -466,7 +471,7 @@ describe("TechTreeRow", () => {
 		renderWithProviders(<TechTreeRow {...defaultProps} />);
 
 		expect(
-			screen.getByRole("button", { name: "techTree.tooltips.validSolve" })
+			screen.getByRole("button", { name: "techTree.tooltips.validSolve" }),
 		).toBeInTheDocument();
 	});
 });

@@ -118,7 +118,7 @@ describe("setupServiceWorkerRegistration", () => {
 		expect(mockRegisterSW).toHaveBeenCalledWith(
 			expect.objectContaining({
 				immediate: true,
-			})
+			}),
 		);
 	});
 
@@ -155,7 +155,7 @@ describe("setupServiceWorkerRegistration", () => {
 		expect(window.dispatchEvent).toHaveBeenCalledWith(
 			expect.objectContaining({
 				type: "new-version-available",
-			})
+			}),
 		);
 
 		const call = vi
@@ -205,7 +205,7 @@ describe("setupServiceWorkerRegistration", () => {
 		expect(window.dispatchEvent).not.toHaveBeenCalledWith(
 			expect.objectContaining({
 				type: "new-version-available",
-			})
+			}),
 		);
 
 		// Should have silently called mockUpdateSW(true)
@@ -251,7 +251,7 @@ describe("setupServiceWorkerRegistration", () => {
 		expect(window.dispatchEvent).not.toHaveBeenCalledWith(
 			expect.objectContaining({
 				type: "new-version-available",
-			})
+			}),
 		);
 
 		// Should have silently called mockUpdateSW(true)
@@ -409,7 +409,7 @@ describe("setupServiceWorkerRegistration", () => {
 			mockReload: ReturnType<typeof vi.fn>;
 			onNeedRefresh: () => void;
 			onNeedReload: () => void;
-		}) => Promise<void> | void
+		}) => Promise<void> | void,
 	) => {
 		const originalLocation = window.location;
 		const mockReload = vi.fn();
@@ -763,7 +763,7 @@ describe("activateLatestServiceWorker", () => {
 		expect(resolved).toBe(true);
 		expect(mockWaitingWorker.removeEventListener).toHaveBeenCalledWith(
 			"statechange",
-			expect.any(Function)
+			expect.any(Function),
 		);
 	});
 
@@ -790,7 +790,7 @@ describe("activateLatestServiceWorker", () => {
 
 		expect(mockWaitingWorker.removeEventListener).toHaveBeenCalledWith(
 			"statechange",
-			expect.any(Function)
+			expect.any(Function),
 		);
 	});
 

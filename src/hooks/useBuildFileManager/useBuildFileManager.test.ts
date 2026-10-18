@@ -63,7 +63,7 @@ vi.mock("@/store/app/platformStore", async () => {
  */
 const createFileChangeEvent = (
 	files: File[],
-	initialValue = "C:\\fakepath\\test.nms"
+	initialValue = "C:\\fakepath\\test.nms",
 ): ChangeEvent<HTMLInputElement> => {
 	const target = {
 		files,
@@ -159,7 +159,7 @@ describe("useBuildFileManager", () => {
 			expect(clickSpy).toHaveBeenCalledTimes(1);
 
 			const appendedAnchor = appendChildSpy.mock.calls.find(
-				(call) => call[0] instanceof HTMLAnchorElement
+				(call) => call[0] instanceof HTMLAnchorElement,
 			)?.[0] as HTMLAnchorElement | undefined;
 
 			expect(appendedAnchor).toBeDefined();
@@ -171,7 +171,7 @@ describe("useBuildFileManager", () => {
 			expect(mockShowSuccess).toHaveBeenCalledWith(
 				"toast.buildSaved.title",
 				"toast.buildSaved.description",
-				5000
+				5000,
 			);
 			expect(mockSendEvent).toHaveBeenCalledWith({
 				action: "save_build",
@@ -218,7 +218,7 @@ describe("useBuildFileManager", () => {
 			expect(mockShowError).toHaveBeenCalledWith(
 				"toast.buildSaveError.title",
 				"toast.buildSaveError.description",
-				5000
+				5000,
 			);
 		});
 	});
@@ -301,7 +301,7 @@ describe("useBuildFileManager", () => {
 			expect(mockShowSuccess).toHaveBeenCalledWith(
 				"toast.buildLoaded.title",
 				expect.anything(),
-				5000
+				5000,
 			);
 			expect(mockSendEvent).toHaveBeenCalledWith({
 				action: "load_build",
@@ -323,7 +323,7 @@ describe("useBuildFileManager", () => {
 			vi.spyOn(delayedFile, "text").mockReturnValueOnce(
 				new Promise<string>((resolve) => {
 					resolveText = resolve;
-				})
+				}),
 			);
 
 			const { result: desktop } = renderHook(() => useBuildFileManager());
@@ -362,7 +362,7 @@ describe("useBuildFileManager", () => {
 			expect(mockShowError).toHaveBeenCalledWith(
 				"toast.buildLoadError.title",
 				"Invalid file type. Please select a .nms build file.",
-				5000
+				5000,
 			);
 			expect(changeEvent.target.value).toBe("");
 			expect(result.current.isLoadPending).toBe(false);
@@ -383,7 +383,7 @@ describe("useBuildFileManager", () => {
 			expect(mockShowError).toHaveBeenCalledWith(
 				"toast.buildLoadError.title",
 				"File is too large. Build files should be under 10MB.",
-				5000
+				5000,
 			);
 			expect(result.current.isLoadPending).toBe(false);
 		});
@@ -401,7 +401,7 @@ describe("useBuildFileManager", () => {
 			expect(mockShowError).toHaveBeenCalledWith(
 				"toast.buildLoadError.title",
 				"File is empty. Please select a valid build file.",
-				5000
+				5000,
 			);
 			expect(result.current.isLoadPending).toBe(false);
 		});
@@ -410,7 +410,7 @@ describe("useBuildFileManager", () => {
 			const tamperedFile = new File(
 				[JSON.stringify({ checksum: "bad", name: "Tampered", shipType: "fighter" })],
 				"tampered.nms",
-				{ type: "application/octet-stream" }
+				{ type: "application/octet-stream" },
 			);
 			const changeEvent = createFileChangeEvent([tamperedFile]);
 
@@ -423,7 +423,7 @@ describe("useBuildFileManager", () => {
 			expect(mockShowError).toHaveBeenCalledWith(
 				"toast.buildLoadError.title",
 				expect.any(String),
-				5000
+				5000,
 			);
 			expect(result.current.isLoadPending).toBe(false);
 		});
@@ -500,7 +500,7 @@ describe("useBuildFileManager", () => {
 			expect(mockShowSuccess).toHaveBeenCalledWith(
 				"toast.buildLoaded.title",
 				expect.anything(),
-				5000
+				5000,
 			);
 			expect(mockSendEvent).toHaveBeenCalledWith({
 				action: "load_build",
@@ -546,7 +546,7 @@ describe("useBuildFileManager", () => {
 			expect(mockShowError).toHaveBeenCalledWith(
 				"toast.buildLoadError.title",
 				expect.any(String),
-				5000
+				5000,
 			);
 		});
 	});

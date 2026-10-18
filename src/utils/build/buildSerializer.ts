@@ -1,7 +1,6 @@
 import type { ApiResponse, Grid, GridState } from "@/store/grid/gridStore";
 import type { BonusStatusData } from "@/store/tech/techStore";
 import type { BuildFile } from "@/utils/validation/dataValidation";
-
 import { computeSHA256 } from "@/utils/system/hashUtils";
 import { Logger } from "@/utils/system/monitoring";
 import { isValidBuildFile, sanitizeFilename } from "@/utils/validation/dataValidation";
@@ -109,7 +108,7 @@ export function buildChecksumPayload(
 	gridState: unknown,
 	techState: unknown,
 	bonusState: unknown,
-	moduleState: unknown
+	moduleState: unknown,
 ): Record<string, unknown> {
 	// Build using sequential property assignment so insertion order is explicit
 	// and the perfectionist/sort-objects rule is not triggered on an object literal.
@@ -175,7 +174,7 @@ export const buildSerializer = {
 
 			if (!isValidBuildFile(buildData)) {
 				throw new Error(
-					"The build file couldn’t be loaded. Please verify that you selected a valid NMS Optimizer build file. If the file was created before version 6.1, you may need to export it again using the latest version."
+					"The build file couldn’t be loaded. Please verify that you selected a valid NMS Optimizer build file. If the file was created before version 6.1, you may need to export it again using the latest version.",
 				);
 			}
 
@@ -187,7 +186,7 @@ export const buildSerializer = {
 				buildData.gridState,
 				buildData.techState,
 				buildData.bonusState,
-				buildData.moduleState
+				buildData.moduleState,
 			);
 
 			const stateDataJson = JSON.stringify(stateDataToVerify);
@@ -195,13 +194,13 @@ export const buildSerializer = {
 
 			if (computedChecksum !== buildData.checksum) {
 				throw new Error(
-					"Build file integrity check failed. The file may have been corrupted or tampered with."
+					"Build file integrity check failed. The file may have been corrupted or tampered with.",
 				);
 			}
 
 			if (!validShipTypes.includes(buildData.shipType)) {
 				throw new Error(
-					`Unsupported ship type: "${buildData.shipType}". Valid types are: ${validShipTypes.join(", ")}.`
+					`Unsupported ship type: "${buildData.shipType}". Valid types are: ${validShipTypes.join(", ")}.`,
 				);
 			}
 
@@ -278,7 +277,7 @@ export const buildSerializer = {
 				gridStatePayload,
 				techStatePayload,
 				bonusStatePayload,
-				moduleStatePayload
+				moduleStatePayload,
 			);
 
 			const stateDataJson = JSON.stringify(stateData);

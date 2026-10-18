@@ -17,9 +17,9 @@ vi.mock("react-i18next", () => ({
 		// Simple mock that renders with values
 		if (values?.technologyName) {
 			const dimensionsPart =
-				values.width !== undefined && values.height !== undefined
-					? ` (${values.width}×${values.height})`
-					: "";
+				values.width !== undefined && values.height !== undefined ?
+					` (${values.width}×${values.height})`
+				:	"";
 
 			return (
 				<span>
@@ -40,7 +40,7 @@ const renderWithDialog = (component: React.ReactElement) => {
 	return render(
 		<Dialog.Root open={true}>
 			<Dialog.Content>{component}</Dialog.Content>
-		</Dialog.Root>
+		</Dialog.Root>,
 	);
 };
 
@@ -59,34 +59,40 @@ describe("OptimizationAlertContent", () => {
 	test("should render insufficient space message with technology name", () => {
 		renderWithDialog(<OptimizationAlertContent technologyName={testTechName} />);
 		expect(
-			screen.getByText(/dialogs\.optimizationAlert\.insufficientSpace \[TestTech\]/)
+			screen.getByText(/dialogs\.optimizationAlert\.insufficientSpace \[TestTech\]/),
 		).toBeInTheDocument();
 	});
 
 	test("should render insufficientSpaceWithWindow when windowDimensions are provided", () => {
 		renderWithDialog(
-			<OptimizationAlertContent technologyName={testTechName} windowDimensions={[3, 2]} />
+			<OptimizationAlertContent
+				technologyName={testTechName}
+				windowDimensions={[3, 2]}
+			/>,
 		);
 		expect(
 			screen.getByText(
-				/dialogs\.optimizationAlert\.insufficientSpaceWithWindow \[TestTech\] \(3×2\)/
-			)
+				/dialogs\.optimizationAlert\.insufficientSpaceWithWindow \[TestTech\] \(3×2\)/,
+			),
 		).toBeInTheDocument();
 	});
 
 	test("should fall back to insufficientSpace when windowDimensions is null", () => {
 		renderWithDialog(
-			<OptimizationAlertContent technologyName={testTechName} windowDimensions={null} />
+			<OptimizationAlertContent
+				technologyName={testTechName}
+				windowDimensions={null}
+			/>,
 		);
 		expect(
-			screen.getByText(/dialogs\.optimizationAlert\.insufficientSpace \[TestTech\]/)
+			screen.getByText(/dialogs\.optimizationAlert\.insufficientSpace \[TestTech\]/),
 		).toBeInTheDocument();
 	});
 
 	test("should render force optimize suggestion", () => {
 		renderWithDialog(<OptimizationAlertContent technologyName={testTechName} />);
 		expect(
-			screen.getByText("dialogs.optimizationAlert.forceOptimizeSuggestion")
+			screen.getByText("dialogs.optimizationAlert.forceOptimizeSuggestion"),
 		).toBeInTheDocument();
 	});
 
@@ -95,7 +101,7 @@ describe("OptimizationAlertContent", () => {
 
 		techNames.forEach((techName) => {
 			const { unmount } = renderWithDialog(
-				<OptimizationAlertContent technologyName={techName} />
+				<OptimizationAlertContent technologyName={techName} />,
 			);
 
 			expect(screen.getByText(new RegExp(techName))).toBeInTheDocument();
@@ -105,7 +111,7 @@ describe("OptimizationAlertContent", () => {
 
 	test("should render title with correct styling", () => {
 		const { container } = renderWithDialog(
-			<OptimizationAlertContent technologyName={testTechName} />
+			<OptimizationAlertContent technologyName={testTechName} />,
 		);
 
 		// Check for title element with correct classes

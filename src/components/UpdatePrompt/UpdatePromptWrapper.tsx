@@ -1,14 +1,14 @@
+import type { FC } from "react";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+
 import type {
 	activateLatestServiceWorker,
 	evictStaleServiceWorkers,
 } from "@/utils/system/setupServiceWorker";
-import type { FC } from "react";
-import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
-import { formatDocumentTitle } from "@shared/page-metadata.js";
-import { useTranslation } from "react-i18next";
-
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useUpdateCheck } from "@/hooks/useUpdateCheck/useUpdateCheck";
+import { formatDocumentTitle } from "@shared/page-metadata.js";
 
 const UpdatePrompt = lazy(() => import("./UpdatePrompt"));
 
@@ -66,7 +66,7 @@ export const UpdatePromptWrapper: FC = () => {
 		useCallback((updateSW: (reloadPage?: boolean) => Promise<void>) => {
 			updateSWRef.current = updateSW;
 			setShowUpdatePrompt(true);
-		}, [])
+		}, []),
 	);
 
 	/**
@@ -105,7 +105,7 @@ export const UpdatePromptWrapper: FC = () => {
 						void evictStaleServiceWorkers().finally(() => {
 							window.location.reload();
 						});
-					})
+					}),
 			)
 			.catch(() => {
 				window.location.reload();

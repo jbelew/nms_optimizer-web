@@ -1,8 +1,8 @@
-import type { TechTree } from "@/hooks/useTechTree/useTechTree";
 import { act } from "react";
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import type { TechTree } from "@/hooks/useTechTree/useTechTree";
 import { serialize } from "@/hooks/useGridDeserializer/gridSerializer";
 import { useUrlSync } from "@/hooks/useUrlSync/useUrlSync";
 import { usePlatformStore } from "@/store/app/platformStore";
@@ -180,7 +180,7 @@ describe("useUrlSync Integration", () => {
 		window.history.pushState(
 			{},
 			"",
-			`/?platform=standard&grid=${encodeURIComponent(serializedShieldGrid)}`
+			`/?platform=standard&grid=${encodeURIComponent(serializedShieldGrid)}`,
 		);
 		let hookResult: { current: ReturnType<typeof useUrlSync> };
 		await act(async () => {
@@ -203,7 +203,7 @@ describe("useUrlSync Integration", () => {
 				solvedBonus: 120,
 				solveMethod: "optimal",
 			},
-			"shield"
+			"shield",
 		);
 		expect(useTechStore.getState().bonusStatus.shield).toBeDefined();
 
@@ -223,7 +223,7 @@ describe("useUrlSync Integration", () => {
 			window.history.pushState(
 				{},
 				"",
-				`/?platform=standard&grid=${encodeURIComponent(serializedShieldGrid)}`
+				`/?platform=standard&grid=${encodeURIComponent(serializedShieldGrid)}`,
 			);
 			window.dispatchEvent(new PopStateEvent("popstate"));
 		});
@@ -271,7 +271,7 @@ describe("useUrlSync Integration", () => {
 		window.history.pushState(
 			{},
 			"",
-			`/?platform=standard&grid=${encodeURIComponent(serializedShieldGrid)}`
+			`/?platform=standard&grid=${encodeURIComponent(serializedShieldGrid)}`,
 		);
 		await act(async () => {
 			renderHook(() => useUrlSync());
@@ -287,7 +287,7 @@ describe("useUrlSync Integration", () => {
 			window.history.pushState(
 				{},
 				"",
-				`/?platform=standard&grid=${encodeURIComponent(serializedPulseGrid)}`
+				`/?platform=standard&grid=${encodeURIComponent(serializedPulseGrid)}`,
 			);
 			window.dispatchEvent(new PopStateEvent("popstate"));
 		});
@@ -304,7 +304,7 @@ describe("useUrlSync Integration", () => {
 			window.history.pushState(
 				{},
 				"",
-				`/?platform=standard&grid=${encodeURIComponent(serializedShieldGrid)}`
+				`/?platform=standard&grid=${encodeURIComponent(serializedShieldGrid)}`,
 			);
 			window.dispatchEvent(new PopStateEvent("popstate"));
 		});
@@ -321,7 +321,7 @@ describe("useUrlSync Integration", () => {
 			window.history.pushState(
 				{},
 				"",
-				`/?platform=standard&grid=${encodeURIComponent(serializedPulseGrid)}`
+				`/?platform=standard&grid=${encodeURIComponent(serializedPulseGrid)}`,
 			);
 			window.dispatchEvent(new PopStateEvent("popstate"));
 		});
@@ -356,7 +356,7 @@ describe("useUrlSync Integration", () => {
 		window.history.pushState(
 			{},
 			"",
-			`/?platform=standard&grid=${encodeURIComponent(serializedShieldGrid)}`
+			`/?platform=standard&grid=${encodeURIComponent(serializedShieldGrid)}`,
 		);
 		await act(async () => {
 			renderHook(() => useUrlSync());

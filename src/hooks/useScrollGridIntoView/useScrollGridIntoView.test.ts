@@ -288,7 +288,7 @@ describe("useScrollGridIntoView", () => {
 		expect(() => result.current.scrollIntoView()).not.toThrow();
 		expect(loggerSpy).toHaveBeenCalledWith(
 			"Failed to show toolbar during scroll:",
-			expect.any(Error)
+			expect.any(Error),
 		);
 		loggerSpy.mockRestore();
 	});
@@ -316,7 +316,7 @@ describe("useScrollGridIntoView", () => {
 
 		expect(loggerSpy).toHaveBeenCalledWith(
 			"Failed to scroll grid into view:",
-			expect.any(Error)
+			expect.any(Error),
 		);
 		loggerSpy.mockRestore();
 	});

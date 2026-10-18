@@ -1,5 +1,6 @@
-import type { Cell, Grid } from "./gridTypes";
 import type { Module } from "@/types/tech";
+
+import type { Cell, Grid } from "./gridTypes";
 
 /**
  * Factory function to create a default, empty grid cell.
@@ -61,7 +62,7 @@ export const createEmptyCell = (supercharged = false, active = false): Cell => (
  */
 export const createGrid = (width: number, height: number): Grid => ({
 	cells: Array.from({ length: height }, () =>
-		Array.from({ length: width }, () => createEmptyCell())
+		Array.from({ length: width }, () => createEmptyCell()),
 	),
 	height,
 	width,
@@ -96,7 +97,7 @@ export const createGrid = (width: number, height: number): Grid => ({
  */
 export const assignModuleToCell = (
 	cell: Cell,
-	moduleData: Partial<Module> & { id?: null | string }
+	moduleData: Partial<Module> & { id?: null | string },
 ): Cell => {
 	cell.adjacency = moduleData.adjacency ?? "none";
 	cell.bonus = moduleData.bonus !== undefined ? moduleData.bonus : 0.0;

@@ -155,7 +155,7 @@ describe("bootPipeline", () => {
 					onFatalError,
 					skipGlobalErrorHandlers: true,
 					target: null,
-				})
+				}),
 			).rejects.toThrow("Target root element not found for application mount.");
 
 			expect(coordinator.isFatal()).toBe(true);
@@ -178,8 +178,8 @@ describe("bootPipeline", () => {
 
 			expect(replaceMock).toHaveBeenCalledWith(
 				expect.stringContaining(
-					"/500.html?error_type=initialization_error&error_cause=Test%20Error"
-				)
+					"/500.html?error_type=initialization_error&error_cause=Test%20Error",
+				),
 			);
 
 			Object.defineProperty(window, "location", {

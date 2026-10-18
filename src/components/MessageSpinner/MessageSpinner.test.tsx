@@ -46,7 +46,10 @@ describe("MessageSpinner", () => {
 
 	test("should render spinner and message when showProgress is false", () => {
 		const { container } = renderWithTheme(
-			<MessageSpinner initialMessage="LOADING TECH" isVisible={true} />
+			<MessageSpinner
+				initialMessage="LOADING TECH"
+				isVisible={true}
+			/>,
 		);
 
 		expect(screen.getByRole("status")).toBeInTheDocument();
@@ -62,7 +65,7 @@ describe("MessageSpinner", () => {
 				isVisible={true}
 				progressPercent={45}
 				showProgress={true}
-			/>
+			/>,
 		);
 
 		expect(screen.getByRole("status")).toBeInTheDocument();
@@ -72,7 +75,7 @@ describe("MessageSpinner", () => {
 
 		// Flavor message should not be visible before the delay
 		expect(
-			screen.queryByText("-(( Asking the Atlas for guidance! ))-")
+			screen.queryByText("-(( Asking the Atlas for guidance! ))-"),
 		).not.toBeInTheDocument();
 
 		await act(async () => {

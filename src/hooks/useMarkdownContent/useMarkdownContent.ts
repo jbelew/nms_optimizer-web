@@ -89,7 +89,7 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 
 				if (!content) {
 					throw new Error(
-						`Markdown content not found for ${markdownFileName} in language ${langToFetch}`
+						`Markdown content not found for ${markdownFileName} in language ${langToFetch}`,
 					);
 				}
 
