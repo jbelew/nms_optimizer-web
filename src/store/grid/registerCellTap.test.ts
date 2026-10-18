@@ -10,7 +10,6 @@ describe("registerCellTap action in GridStore", () => {
 		vi.useFakeTimers();
 		act(() => {
 			useGridStore.getState().resetGrid();
-			useGridStore.getState().clearInteractionState();
 			useUiStore.getState().resetSession();
 			useUiStore.setState({ shakeCount: 0 });
 

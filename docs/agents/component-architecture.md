@@ -7,7 +7,8 @@ Design patterns for React component composition, prop management, and local/glob
 - **Colocated Hook Pattern**: Use custom hooks to derive state in child components instead of passing calculated props through intermediate layers.
 - **Reference Implementations**:
     - `TechTreeRow` hierarchy (utilizes `useTechTreeRow` hook)
-    - `GridRow` hierarchy (utilizes `useGridRowState` hook)
+    - `GridCell` hierarchy (utilizes `useCell` and `useGridCellInteraction` hooks)
+    - `GridControlButtons` (selects precomputed row indices from `useGridStore` and evaluates `getRowControlEligibility`)
     - `ModuleSelectionDialog` (store-connected via `useModuleSelectionDialogStore` and `useTechStore`)
 
 ## Dialog Directory Layout

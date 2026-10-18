@@ -359,12 +359,11 @@ export const sessionCoordinator = {
 		// 1. Validate and update Platform Type
 		platformStore.setSelectedPlatform(platform, validPlatformTypes);
 
-		// 2. Update Grid and clear its Interaction State
+		// 2. Update Grid and reset its metadata
 		gridStore.setGrid(newGrid);
 		gridStore.setResult(null);
 		gridStore.setIsSharedGrid(false);
 		gridStore.setBuildName(null);
-		gridStore.clearInteractionState();
 
 		// 3. Clear results and groups
 		techStore.clearResult();

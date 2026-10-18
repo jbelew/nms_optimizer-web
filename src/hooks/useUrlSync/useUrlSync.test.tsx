@@ -46,10 +46,8 @@ describe("useUrlSync", () => {
 	const mockSetIsSharedGrid = vi.fn();
 	const mockSetSelectedPlatform = vi.fn();
 	const mockResetGrid = vi.fn();
-	const mockClearInteractionState = vi.fn();
 
 	let gridStoreState = {
-		clearInteractionState: mockClearInteractionState,
 		grid: { cells: [], height: 6, width: 10 },
 		isSharedGrid: false,
 		resetGrid: mockResetGrid,
@@ -73,7 +71,6 @@ describe("useUrlSync", () => {
 		(useDialog as Mock).mockReturnValue({ userVisited: false });
 
 		gridStoreState = {
-			clearInteractionState: mockClearInteractionState,
 			grid: { cells: [], height: 6, width: 10 },
 			isSharedGrid: false,
 			resetGrid: mockResetGrid.mockImplementation(() => {
@@ -233,7 +230,6 @@ describe("useUrlSync", () => {
 
 		// sessionCoordinator.resetSession() should have been called, resetting the grid
 		expect(mockResetGrid).toHaveBeenCalled();
-		expect(mockClearInteractionState).not.toHaveBeenCalled();
 		expect(gridStoreState.isSharedGrid).toBe(false);
 
 		deserializeSpy.mockRestore();

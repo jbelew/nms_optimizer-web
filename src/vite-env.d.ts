@@ -34,9 +34,6 @@ interface Window {
 	/** E2E Expose flag. */
 	__E2E_EXPOSE__?: boolean;
 
-	/** Direct access to specific store actions for E2E testing. */
-	handleCellDoubleTap?: (row: number, col: number) => void;
-
 	/** PWA File Handling API `launchQueue`. */
 	launchQueue?: {
 		setConsumer(callback: (params: { files: FileSystemFileHandle[] }) => void): void;

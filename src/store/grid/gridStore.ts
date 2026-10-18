@@ -20,6 +20,8 @@ export * from "./gridFactories";
 
 export * from "./gridPersistence";
 
+export * from "./gridRules";
+
 export * from "./gridTypes";
 
 /**
@@ -51,12 +53,22 @@ export * from "./gridTypes";
  * @example
  * ```tsx
  * const grid = useGridStore((s) => s.grid);
- * const handleCellTap = useGridStore((s) => s.handleCellTap);
+ * const toggleCellActive = useGridStore((s) => s.toggleCellActive);
  * ```
  */
 export const useGridStore = create<GridStore>()(
 	persist(
 		immer((set, get) => {
+			let initialCellStateForTap: null | Pick<Cell, "active" | "supercharged"> = null;
+			let lastTapCell: [number, number] = [-1, -1];
+			let lastTapTime = 0;
+
+			const resetTapState = (): void => {
+				initialCellStateForTap = null;
+				lastTapCell = [-1, -1];
+				lastTapTime = 0;
+			};
+
 			/**
 			 * Synchronizes `state.grid.cells` with `targetCells` while preserving object
 			 * references for unmodified cells and rows in the Immer draft.
@@ -233,12 +245,12 @@ export const useGridStore = create<GridStore>()(
 			};
 
 			return {
-				_initialCellStateForTap: null,
-				_lastTapCell: [-1, -1],
-				_lastTapTime: 0,
-
 				activateRow: (rowIndex: number) => {
 					set((state) => {
+						if (state.gridFixed || state.hasModulesInGrid) {
+							return;
+						}
+
 						if (state.grid.cells[rowIndex]) {
 							state.grid.cells[rowIndex].forEach((cell: Cell) => {
 								cell.active = true;
@@ -250,52 +262,13 @@ export const useGridStore = create<GridStore>()(
 				},
 				// Precomputed derived state — defaults for empty grid
 				activeTechs: new Set<string>(),
-				applyModulesToGrid: (modules: (Module | null)[]) => {
-					set((state) => {
-						modules.forEach((moduleData, index) => {
-							const rowIndex = Math.floor(index / state.grid.width);
-							const colIndex = index % state.grid.width;
-							const cell = state.grid.cells[rowIndex]?.[colIndex];
-
-							if (cell) {
-								if (moduleData) {
-									const m = moduleData as Module & { group_adjacent?: boolean };
-									Object.assign(cell, {
-										active: m.active ?? cell.active,
-										adjacency: m.adjacency ?? cell.adjacency,
-										adjacency_bonus:
-											m.adjacency_bonus !== undefined
-												? m.adjacency_bonus
-												: cell.adjacency_bonus,
-										bonus: m.bonus !== undefined ? m.bonus : cell.bonus,
-										group_adjacent: m.group_adjacent ?? cell.group_adjacent,
-										image: m.image ?? cell.image,
-										label: m.label ?? cell.label,
-										module: m.id ?? cell.module,
-										sc_eligible: m.sc_eligible ?? cell.sc_eligible,
-										supercharged: m.supercharged ?? cell.supercharged,
-										tech: m.tech ?? cell.tech,
-										type: m.type ?? cell.tech, // Default type to tech if missing
-										value: m.value !== undefined ? m.value : cell.value,
-									});
-								} else {
-									resetCellContent(cell);
-								}
-							}
-						});
-
-						recomputeDerivedState(state);
-					});
-				},
 				buildName: null,
-				clearInteractionState: () =>
-					set((state) => {
-						state._initialCellStateForTap = null;
-						state._lastTapCell = [-1, -1];
-						state._lastTapTime = 0;
-					}),
 				deActivateRow: (rowIndex: number) => {
 					set((state) => {
+						if (state.gridFixed || state.hasModulesInGrid) {
+							return;
+						}
+
 						if (state.grid.cells[rowIndex]) {
 							state.grid.cells[rowIndex].forEach((cell: Cell) => {
 								cell.active = false;
@@ -314,34 +287,6 @@ export const useGridStore = create<GridStore>()(
 				grid: createGrid(10, 6),
 
 				gridFixed: false,
-
-				handleCellDoubleTap: (rowIndex: number, columnIndex: number) => {
-					set((state) => {
-						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
-
-						if (currentCell) {
-							currentCell.supercharged = !currentCell.supercharged;
-							currentCell.active = true;
-						}
-
-						recomputeDerivedState(state);
-					});
-				},
-				handleCellTap: (rowIndex: number, columnIndex: number) => {
-					set((state) => {
-						const cell = state.grid.cells[rowIndex]?.[columnIndex];
-
-						if (cell) {
-							cell.active = !cell.active;
-
-							if (!cell.active && !state.superchargedFixed) {
-								cell.supercharged = false;
-							}
-						}
-
-						recomputeDerivedState(state);
-					});
-				},
 
 				hasModulesInGrid: false,
 				initialGridDefinition: undefined,
@@ -368,10 +313,9 @@ export const useGridStore = create<GridStore>()(
 							return;
 						}
 
-						const timeSinceLastTap = timestamp - state._lastTapTime;
+						const timeSinceLastTap = timestamp - lastTapTime;
 						const isSameCell =
-							state._lastTapCell[0] === rowIndex &&
-							state._lastTapCell[1] === columnIndex;
+							lastTapCell[0] === rowIndex && lastTapCell[1] === columnIndex;
 
 						if (
 							isSameCell &&
@@ -386,47 +330,22 @@ export const useGridStore = create<GridStore>()(
 								totalSupercharged: state.totalSuperchargedCells,
 							});
 
+							if (initialCellStateForTap) {
+								cell.active = initialCellStateForTap.active;
+								cell.supercharged = initialCellStateForTap.supercharged;
+							}
+
 							if (!validation.valid) {
 								applyValidationFeedback(validation);
-
-								if (state._initialCellStateForTap) {
-									const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
-
-									if (currentCell) {
-										currentCell.active = state._initialCellStateForTap.active;
-										currentCell.supercharged =
-											state._initialCellStateForTap.supercharged;
-									}
-								}
-
-								state._initialCellStateForTap = null;
-								state._lastTapCell = [-1, -1];
-								state._lastTapTime = 0;
 							} else {
-								if (state._initialCellStateForTap) {
-									const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
-
-									if (currentCell) {
-										currentCell.active = state._initialCellStateForTap.active;
-										currentCell.supercharged =
-											state._initialCellStateForTap.supercharged;
-									}
-								}
-
-								const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
-
-								if (currentCell) {
-									currentCell.supercharged = !currentCell.supercharged;
-									currentCell.active = true;
-								}
-
-								state._initialCellStateForTap = null;
-								state._lastTapCell = [-1, -1];
-								state._lastTapTime = 0;
+								cell.supercharged = !cell.supercharged;
+								cell.active = true;
 							}
+
+							resetTapState();
 						} else {
-							state._lastTapCell = [rowIndex, columnIndex];
-							state._lastTapTime = timestamp;
+							lastTapCell = [rowIndex, columnIndex];
+							lastTapTime = timestamp;
 
 							const validation = validateToggleActive({
 								cell,
@@ -435,17 +354,16 @@ export const useGridStore = create<GridStore>()(
 
 							if (!validation.valid) {
 								applyValidationFeedback(validation);
-								state._initialCellStateForTap = null;
+								initialCellStateForTap = null;
 							} else {
-								state._initialCellStateForTap = { ...cell };
-								const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
+								initialCellStateForTap = {
+									active: cell.active,
+									supercharged: cell.supercharged,
+								};
+								cell.active = !cell.active;
 
-								if (currentCell) {
-									currentCell.active = !currentCell.active;
-
-									if (!currentCell.active && !state.superchargedFixed) {
-										currentCell.supercharged = false;
-									}
+								if (!cell.active && !state.superchargedFixed) {
+									cell.supercharged = false;
 								}
 							}
 						}
@@ -470,9 +388,7 @@ export const useGridStore = create<GridStore>()(
 						state.result = null;
 						state.isSharedGrid = false;
 						state.buildName = null;
-						state._initialCellStateForTap = null;
-						state._lastTapCell = [-1, -1];
-						state._lastTapTime = 0;
+						resetTapState();
 						recomputeDerivedState(state);
 					});
 				},
@@ -497,6 +413,7 @@ export const useGridStore = create<GridStore>()(
 						// We use Object.assign on the state draft to update fields
 						// Immer will handle the proxy correctly.
 						Object.assign(state, savedState);
+						resetTapState();
 
 						// Ensure derived state is re-calculated based on restored data
 						recomputeDerivedState(state);
@@ -504,94 +421,15 @@ export const useGridStore = create<GridStore>()(
 
 				result: null,
 
-				revertCellTap: (rowIndex: number, columnIndex: number, originalState: Cell) => {
-					set((state) => {
-						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
-
-						if (currentCell) {
-							currentCell.active = originalState.active;
-							currentCell.supercharged = originalState.supercharged;
-						}
-
-						recomputeDerivedState(state);
-					});
-				},
-
 				setBuildName: (name) =>
 					set((state) => {
 						state.buildName = name;
 					}),
 
-				setCellActive: (rowIndex, columnIndex, active) => {
-					let success = false;
-					set((state) => {
-						const cell = state.grid.cells[rowIndex]?.[columnIndex];
-
-						if (cell) {
-							if (cell.active !== active) {
-								const validation = validateToggleActive({
-									cell,
-									gridFixed: state.gridFixed,
-								});
-
-								if (!validation.valid) {
-									applyValidationFeedback(validation);
-
-									return;
-								}
-							}
-
-							cell.active = active;
-
-							if (!active && !state.superchargedFixed) {
-								cell.supercharged = false;
-							}
-
-							success = true;
-						}
-
-						recomputeDerivedState(state);
-					});
-
-					return success;
-				},
-
-				setCellSupercharged: (rowIndex, columnIndex, supercharged) => {
-					let success = false;
-					set((state) => {
-						const cell = state.grid.cells[rowIndex]?.[columnIndex];
-
-						if (cell) {
-							if (cell.supercharged !== supercharged) {
-								if (supercharged && !cell.active) return;
-								const validation = validateToggleSupercharged({
-									cell,
-									gridFixed: state.gridFixed,
-									rowIndex,
-									superchargedFixed: state.superchargedFixed,
-									totalSupercharged: state.totalSuperchargedCells,
-								});
-
-								if (!validation.valid) {
-									applyValidationFeedback(validation);
-
-									return;
-								}
-							}
-
-							cell.supercharged = supercharged;
-							success = true;
-						}
-
-						recomputeDerivedState(state);
-					});
-
-					return success;
-				},
-
 				setGrid: (grid) =>
 					set((state) => {
 						state.grid = grid;
+						resetTapState();
 						recomputeDerivedState(state);
 					}),
 
@@ -603,14 +441,10 @@ export const useGridStore = create<GridStore>()(
 				setGridFromInitialDefinition: (definition) => {
 					set((state) => {
 						applyGridDefinition(state, definition);
+						resetTapState();
 						recomputeDerivedState(state);
 					});
 				},
-
-				setInitialCellStateForTap: (cell) =>
-					set((state) => {
-						state._initialCellStateForTap = cell;
-					}),
 
 				setInitialGridDefinition: (definition) =>
 					set((state) => {
@@ -622,12 +456,6 @@ export const useGridStore = create<GridStore>()(
 					set((state) => {
 						state.isSharedGrid = isShared;
 						recomputeDerivedState(state);
-					}),
-
-				setLastTap: (cell, time) =>
-					set((state) => {
-						state._lastTapCell = cell;
-						state._lastTapTime = time;
 					}),
 
 				setResult: (result) => {
@@ -768,20 +596,5 @@ if (typeof window !== "undefined" && import.meta.env.VITE_E2E_TESTING) {
 	const w = window as Record<string, unknown> & typeof window;
 
 	w["useGridStore"] = useGridStore;
-	w["handleCellDoubleTap"] = useGridStore.getState().handleCellDoubleTap;
 	w["registerCellTap"] = useGridStore.getState().registerCellTap;
-
-	w["useInteractionStore"] = {
-		getState: () => ({
-			_initialCellStateForTap: useGridStore.getState()._initialCellStateForTap,
-			_lastTapCell: useGridStore.getState()._lastTapCell,
-			_lastTapTime: useGridStore.getState()._lastTapTime,
-			clearInteractionState: useGridStore.getState().clearInteractionState,
-			setInitialCellStateForTap: useGridStore.getState().setInitialCellStateForTap,
-			setLastTap: useGridStore.getState().setLastTap,
-		}),
-		setState: (updates: Partial<GridStore>) => {
-			useGridStore.setState(updates);
-		},
-	};
 }

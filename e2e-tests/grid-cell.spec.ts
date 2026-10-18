@@ -68,11 +68,11 @@ test.describe('GridCell Supercharge Interaction', () => {
   test('should trigger shake when attempting to supercharge beyond 4 cells', async ({ page }) => {
     // Manually set 4 cells to supercharged using helper
     await page.evaluate(() => {
-      const { setCellSupercharged } = window.useGridStore.getState();
-      setCellSupercharged(0, 0, true);
-      setCellSupercharged(0, 1, true);
-      setCellSupercharged(0, 2, true);
-      setCellSupercharged(0, 3, true);
+      const { toggleCellSupercharged } = window.useGridStore.getState();
+      toggleCellSupercharged(0, 0);
+      toggleCellSupercharged(0, 1);
+      toggleCellSupercharged(0, 2);
+      toggleCellSupercharged(0, 3);
     });
 
     // Wait for React to re-render after state update

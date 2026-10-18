@@ -36,7 +36,6 @@ const { setGridStoreState, useGridStore } = vi.hoisted(() => {
 	let isDefaultGrid = false;
 
 	const store = {
-		clearInteractionState: vi.fn(),
 		hasModulesInGrid,
 		isDefaultGrid,
 		isSharedGrid,
@@ -57,7 +56,6 @@ const { setGridStoreState, useGridStore } = vi.hoisted(() => {
 	// Attach getState to the mock function itself
 	Object.assign(useGridStoreMock, {
 		getState: () => ({
-			clearInteractionState: store.clearInteractionState,
 			resetGrid: mockResetGrid,
 		}),
 	});

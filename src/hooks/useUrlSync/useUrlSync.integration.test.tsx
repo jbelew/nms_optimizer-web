@@ -361,7 +361,7 @@ describe("useUrlSync Integration", () => {
 
 		// 2. User makes manual edits on the restored layout (activates an extra cell)
 		act(() => {
-			useGridStore.getState().setCellActive(2, 2, true);
+			useGridStore.getState().toggleCellActive(2, 2);
 		});
 		expect(useGridStore.getState().grid.cells[2][2].active).toBe(true);
 

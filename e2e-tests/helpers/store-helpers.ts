@@ -1,17 +1,6 @@
 import type { Page } from '@playwright/test';
 
 /**
- * Simulate a double tap on a cell.
- * This directly calls the store methods used by the touch logic.
- */
-export async function doubleTapCell(page: Page, row: number, col: number) {
-  await page.evaluate(({ col, row }) => {
-    // In useGridCellInteraction.ts, double tap calls handleCellDoubleTap
-    window.useGridStore.getState().handleCellDoubleTap(row, col);
-  }, { col, row });
-}
-
-/**
  * Directly set a cell as supercharged in the store.
  */
 export async function forceSupercharge(page: Page, row: number, col: number) {
@@ -34,15 +23,6 @@ export async function resetGrid(page: Page) {
   await page.evaluate(() => {
     window.useGridStore.getState().resetGrid();
   });
-}
-
-/**
- * Set a specific cell as supercharged.
- */
-export async function setCellSupercharged(page: Page, row: number, col: number, supercharged: boolean) {
-  await page.evaluate(({ col, row, supercharged }) => {
-    window.useGridStore.getState().setCellSupercharged(row, col, supercharged);
-  }, { col, row, supercharged });
 }
 
 /**

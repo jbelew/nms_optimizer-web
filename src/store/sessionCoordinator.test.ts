@@ -11,7 +11,6 @@ vi.mock("@/hooks/useGridDeserializer/gridSerializer", () => ({
 }));
 
 const mockGridStore = {
-	clearInteractionState: vi.fn(),
 	grid: { cells: [], height: 6, width: 10 },
 	gridFixed: true,
 	initialGridDefinition: undefined,
@@ -147,7 +146,6 @@ describe("sessionCoordinator", () => {
 		sessionCoordinator.resetSession();
 
 		expect(mockGridStore.resetGrid).toHaveBeenCalled();
-		expect(mockGridStore.clearInteractionState).not.toHaveBeenCalled();
 		expect(mockTechStore.resetSession).toHaveBeenCalled();
 		expect(mockTechStore.clearAllModuleSelections).not.toHaveBeenCalled();
 		expect(mockUiStore.resetSession).toHaveBeenCalled();

@@ -61,20 +61,6 @@ vi.mock("@/store/grid/gridStore", () => ({
 	}),
 }));
 
-// Mock useGridRowState hook
-vi.mock("./useGridRowState", () => ({
-	useGridRowState: (rowIndex: number) => {
-		// Mock implementation that matches our test scenarios
-		if (rowIndex === 0) {
-			return { isFirstInactiveRow: false, isLastActiveRow: true };
-		} else if (rowIndex === 1) {
-			return { isFirstInactiveRow: true, isLastActiveRow: false };
-		}
-
-		return { isFirstInactiveRow: false, isLastActiveRow: false };
-	},
-}));
-
 describe("GridControlButtons", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();

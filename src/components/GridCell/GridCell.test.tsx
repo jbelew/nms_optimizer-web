@@ -30,12 +30,8 @@ vi.mock("@/hooks/useCell/useCell", () => ({
 // Mock the GridStore and its actions
 vi.mock("@/store/grid/gridStore", () => {
 	const mockState = {
-		clearInitialCellStateForTap: vi.fn(),
 		gridFixed: false,
-		handleCellDoubleTap: vi.fn(),
-		handleCellTap: vi.fn(),
 		isSharedGrid: false,
-		revertCellTap: vi.fn(),
 		selectTotalSuperchargedCells: vi.fn(() => 0),
 		superchargedFixed: false,
 		toggleCellActive: vi.fn(),

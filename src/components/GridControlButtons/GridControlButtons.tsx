@@ -1,5 +1,4 @@
 // RowControlButton.tsx
-import type { GridStore } from "@/store/grid/gridStore";
 import React from "react";
 import { MinusCircledIcon, PlusCircledIcon } from "@radix-ui/react-icons";
 import { IconButton } from "@radix-ui/themes";
@@ -7,26 +6,9 @@ import { useTranslation } from "react-i18next";
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
+import { getRowControlEligibility } from "@/store/grid/gridRules";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechTreeLoadingStore } from "@/store/ui/uiStore";
-
-import { useGridRowState } from "./useGridRowState";
-
-/**
- * Selector function to check if the grid contains any active (highlighted) cells.
- *
- * @remarks
- * Used to determine if the expansion controls should be enabled.
- *
- * @category Selectors
- *
- * @example
- * ```ts
- * const hasAnyActiveCells = selectHasAnyActiveCells(store.getState());
- * ```
- */
-const selectHasAnyActiveCells = (state: GridStore) =>
-	state.grid.cells.some((row) => row.some((cell) => cell.active));
 
 /**
  * Props for the {@link GridControlButtons} component.
@@ -59,7 +41,7 @@ interface RowControlButtonProps {
  * @returns {JSX.Element} The rendered row control buttons.
  *
  * @see {@link RowControlButtonProps}
- * @see {@link useGridRowState}
+ * @see {@link getRowControlEligibility}
  * @see {@link useGridStore}
  * @see {@link ./GridControlButtons.test.tsx Unit Tests}
  *
@@ -73,28 +55,37 @@ interface RowControlButtonProps {
  * ```
  */
 const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex }) => {
-	const { isFirstInactiveRow, isLastActiveRow } = useGridRowState(rowIndex);
 	const { t } = useTranslation();
 	const isMediumOrLarger = useBreakpoint("640px"); // true if screen width >= 640px
 	const activateRow = useGridStore((state) => state.activateRow);
 	const deActivateRow = useGridStore((state) => state.deActivateRow);
+	const firstInactiveRowIndex = useGridStore((state) => state.firstInactiveRowIndex);
+	const lastActiveRowIndex = useGridStore((state) => state.lastActiveRowIndex);
+	const totalRows = useGridStore((state) => state.grid.cells.length);
 	const hasModulesInGrid = useGridStore((state) => state.hasModulesInGrid);
 	const gridFixed = useGridStore((state) => state.gridFixed);
-	const hasAnyActiveCells = useGridStore(selectHasAnyActiveCells);
 	const isLoading = useTechTreeLoadingStore((state) => state.isLoading);
+
+	const { canActivateRow, canDeactivateRow } = getRowControlEligibility({
+		firstInactiveRowIndex,
+		lastActiveRowIndex,
+		rowIndex,
+		totalRows,
+	});
+	const isControlDisabled = hasModulesInGrid || gridFixed || isLoading;
 
 	return (
 		<div
 			className="flex h-full items-center justify-center" // Ensure full height and center content
 			data-is-grid-control-column="true" // Added data attribute for selection
 		>
-			{isFirstInactiveRow && hasAnyActiveCells && (
+			{canActivateRow && (
 				<ConditionalTooltip label={t("gridControls.activateRow")}>
 					<IconButton
 						aria-label={t("gridControls.activateRow")}
-						className={`${hasModulesInGrid || gridFixed || isLoading || !hasAnyActiveCells ? "cursor-not-allowed!" : ""}`}
+						className={`${isControlDisabled ? "cursor-not-allowed!" : ""}`}
 						color="green"
-						disabled={hasModulesInGrid || gridFixed || isLoading || !hasAnyActiveCells}
+						disabled={isControlDisabled}
 						onClick={() => activateRow(rowIndex)}
 						radius="full"
 						size="1"
@@ -109,13 +100,13 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex }) => {
 				</ConditionalTooltip>
 			)}
 
-			{isLastActiveRow && hasAnyActiveCells && (
+			{canDeactivateRow && (
 				<ConditionalTooltip label={t("gridControls.deactivateRow")}>
 					<IconButton
 						aria-label={t("gridControls.deactivateRow")}
 						className={`${!hasModulesInGrid && !isLoading ? "cursor-pointer!" : ""}`}
 						color="red"
-						disabled={hasModulesInGrid || gridFixed || isLoading}
+						disabled={isControlDisabled}
 						onClick={() => deActivateRow(rowIndex)}
 						radius="full"
 						size="1"

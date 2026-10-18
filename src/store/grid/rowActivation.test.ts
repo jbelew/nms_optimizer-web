@@ -2,7 +2,7 @@ import type { Cell } from "./gridStore";
 import { act } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { createEmptyCell, createGrid, useGridStore } from "./gridStore";
+import { createEmptyCell, createGrid, getRowControlEligibility, useGridStore } from "./gridStore";
 
 describe("activateRow and deActivateRow actions in GridStore", () => {
 	const gridWidth = 3;
@@ -44,11 +44,15 @@ describe("activateRow and deActivateRow actions in GridStore", () => {
 					}
 				});
 			});
-			useGridStore.setState({ grid: defaultTestGrid, isSharedGrid: false, result: null });
+			useGridStore.setState({
+				grid: defaultTestGrid,
+				gridFixed: false,
+				hasModulesInGrid: false,
+				isSharedGrid: false,
+				result: null,
+			});
 		});
 	});
-
-	// No need for modifyGridSetup if beforeEach handles the complex initial state well.
 
 	describe("activateRow", () => {
 		const targetRowIndex = 1; // Row 1 will be targeted
@@ -103,6 +107,28 @@ describe("activateRow and deActivateRow actions in GridStore", () => {
 					otherRowIdx++;
 				}
 			}
+		});
+
+		it("should be a no-op when gridFixed is true", () => {
+			act(() => {
+				useGridStore.setState({ gridFixed: true });
+				useGridStore.getState().activateRow(targetRowIndex);
+			});
+
+			const targetRowCells = useGridStore.getState().grid.cells[targetRowIndex];
+			expect(targetRowCells[0].active).toBe(false);
+			expect(targetRowCells[2].active).toBe(false);
+		});
+
+		it("should be a no-op when hasModulesInGrid is true", () => {
+			act(() => {
+				useGridStore.setState({ hasModulesInGrid: true });
+				useGridStore.getState().activateRow(targetRowIndex);
+			});
+
+			const targetRowCells = useGridStore.getState().grid.cells[targetRowIndex];
+			expect(targetRowCells[0].active).toBe(false);
+			expect(targetRowCells[2].active).toBe(false);
 		});
 	});
 
@@ -163,5 +189,104 @@ describe("activateRow and deActivateRow actions in GridStore", () => {
 				}
 			}
 		});
+
+		it("should be a no-op when gridFixed is true", () => {
+			act(() => {
+				useGridStore.setState({ gridFixed: true });
+				useGridStore.getState().deActivateRow(targetRowIndex);
+			});
+
+			const targetRowCells = useGridStore.getState().grid.cells[targetRowIndex];
+			expect(targetRowCells[1].active).toBe(true);
+		});
+
+		it("should be a no-op when hasModulesInGrid is true", () => {
+			act(() => {
+				useGridStore.setState({ hasModulesInGrid: true });
+				useGridStore.getState().deActivateRow(targetRowIndex);
+			});
+
+			const targetRowCells = useGridStore.getState().grid.cells[targetRowIndex];
+			expect(targetRowCells[1].active).toBe(true);
+		});
+	});
+});
+
+describe("getRowControlEligibility", () => {
+	it("returns both flags as false when totalRows is 0 or rowIndex is out of bounds", () => {
+		expect(
+			getRowControlEligibility({
+				firstInactiveRowIndex: 2,
+				lastActiveRowIndex: 5,
+				rowIndex: 0,
+				totalRows: 0,
+			})
+		).toEqual({ canActivateRow: false, canDeactivateRow: false });
+	});
+
+	it("returns canActivateRow true when rowIndex matches firstInactiveRowIndex and grid has active cells", () => {
+		expect(
+			getRowControlEligibility({
+				firstInactiveRowIndex: 2,
+				lastActiveRowIndex: 1,
+				rowIndex: 2,
+				totalRows: 3,
+			})
+		).toEqual({ canActivateRow: true, canDeactivateRow: false });
+	});
+
+	it("returns canActivateRow false when rowIndex does not match firstInactiveRowIndex", () => {
+		expect(
+			getRowControlEligibility({
+				firstInactiveRowIndex: 3,
+				lastActiveRowIndex: 1,
+				rowIndex: 2,
+				totalRows: 4,
+			})
+		).toEqual({ canActivateRow: false, canDeactivateRow: false });
+	});
+
+	it("returns canDeactivateRow true when rowIndex is lastActiveRowIndex within LAST_N_ROWS_THRESHOLD", () => {
+		expect(
+			getRowControlEligibility({
+				firstInactiveRowIndex: 5,
+				lastActiveRowIndex: 7,
+				rowIndex: 7,
+				totalRows: 10,
+			})
+		).toEqual({ canActivateRow: false, canDeactivateRow: true });
+	});
+
+	it("returns canDeactivateRow false when rowIndex is lastActiveRowIndex but outside LAST_N_ROWS_THRESHOLD", () => {
+		expect(
+			getRowControlEligibility({
+				firstInactiveRowIndex: 2,
+				lastActiveRowIndex: 1,
+				rowIndex: 1,
+				totalRows: 8,
+			})
+		).toEqual({ canActivateRow: false, canDeactivateRow: false });
+	});
+
+	it("returns both flags as false when grid has no active cells (lastActiveRowIndex === -1)", () => {
+		expect(
+			getRowControlEligibility({
+				firstInactiveRowIndex: 0,
+				lastActiveRowIndex: -1,
+				rowIndex: 0,
+				totalRows: 6,
+			})
+		).toEqual({ canActivateRow: false, canDeactivateRow: false });
+	});
+
+	it("handles edge case where rowIndex is at the bottom grid boundary", () => {
+		expect(
+			getRowControlEligibility({
+				firstInactiveRowIndex: -1,
+				lastActiveRowIndex: 9,
+				rowIndex: 9,
+				totalRows: 10,
+			})
+		).toEqual({ canActivateRow: false, canDeactivateRow: true });
 	});
 });

@@ -10,27 +10,13 @@ describe("resetGrid in GridStore", () => {
 		});
 	});
 
-	it("atomically resets cells, result, shared flag, build name, and interaction state in a single action", () => {
+	it("atomically resets cells, result, shared flag, build name, and tap gesture state in a single action", () => {
+		const now = 1_000_000;
+
 		act(() => {
+			// Register an initial single tap on [0, 0] before resetting
+			useGridStore.getState().registerCellTap(0, 0, now);
 			useGridStore.setState({
-				_initialCellStateForTap: {
-					active: true,
-					adjacency: "",
-					adjacency_bonus: 0,
-					bonus: 0,
-					group_adjacent: false,
-					image: "",
-					label: "Test",
-					module: "mod-1",
-					sc_eligible: true,
-					supercharged: false,
-					tech: "mining",
-					total: 0,
-					type: "mining",
-					value: 10,
-				},
-				_lastTapCell: [2, 3],
-				_lastTapTime: 123456789,
 				buildName: "Custom Build",
 				hasModulesInGrid: true,
 				isSharedGrid: true,
@@ -45,7 +31,6 @@ describe("resetGrid in GridStore", () => {
 
 		expect(useGridStore.getState().isSharedGrid).toBe(true);
 		expect(useGridStore.getState().buildName).toBe("Custom Build");
-		expect(useGridStore.getState()._lastTapCell).toEqual([2, 3]);
 
 		act(() => {
 			useGridStore.getState().resetGrid();
@@ -55,10 +40,13 @@ describe("resetGrid in GridStore", () => {
 		expect(state.result).toBeNull();
 		expect(state.isSharedGrid).toBe(false);
 		expect(state.buildName).toBeNull();
-		expect(state._initialCellStateForTap).toBeNull();
-		expect(state._lastTapCell).toEqual([-1, -1]);
-		expect(state._lastTapTime).toBe(0);
 		expect(state.hasModulesInGrid).toBe(false);
 		expect(state.activeTechs.size).toBe(0);
+
+		// A tap on [0, 0] within DOUBLE_TAP_THRESHOLD after resetGrid must be treated as a single tap, not a double tap
+		act(() => {
+			useGridStore.getState().registerCellTap(0, 0, now + 50);
+		});
+		expect(useGridStore.getState().grid.cells[0][0].supercharged).toBe(false);
 	});
 });

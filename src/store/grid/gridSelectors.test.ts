@@ -156,7 +156,7 @@ describe("Grid Store Selectors", () => {
 	describe("Reference Stability (INP Optimization)", () => {
 		it("should preserve activeTechs Set reference when active technologies do not change", () => {
 			const initialActiveTechs = useGridStore.getState().activeTechs;
-			useGridStore.getState().handleCellTap(0, 0);
+			useGridStore.getState().toggleCellActive(0, 0);
 			expect(useGridStore.getState().activeTechs).toBe(initialActiveTechs);
 		});
 
@@ -184,11 +184,11 @@ describe("Grid Store Selectors", () => {
 			expect(useGridStore.getState().isDefaultGrid).toBe(true);
 
 			// Toggling a cell active state marks the grid as non-default
-			useGridStore.getState().handleCellTap(0, 0);
+			useGridStore.getState().toggleCellActive(0, 0);
 			expect(useGridStore.getState().isDefaultGrid).toBe(false);
 
 			// Reverting the cell back to inactive restores default state
-			useGridStore.getState().handleCellTap(0, 0);
+			useGridStore.getState().toggleCellActive(0, 0);
 			expect(useGridStore.getState().isDefaultGrid).toBe(true);
 		});
 
@@ -221,7 +221,7 @@ describe("Grid Store Selectors", () => {
 			expect(useGridStore.getState().isDefaultGrid).toBe(true);
 
 			// Toggling supercharged off deviates from initialGridDefinition
-			useGridStore.getState().handleCellDoubleTap(0, 0);
+			useGridStore.getState().toggleCellSupercharged(0, 0);
 			expect(useGridStore.getState().isDefaultGrid).toBe(false);
 
 			// Resetting grid restores initialGridDefinition and isDefaultGrid = true
