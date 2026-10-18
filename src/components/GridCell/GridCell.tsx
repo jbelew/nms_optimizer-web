@@ -312,7 +312,7 @@ const EmptyContent: React.FC<{
 /**
  * Properties for the {@link GridCell} component.
  */
-export interface GridCellProps {
+interface GridCellProps {
 	/** 0-based column coordinate in the inventory grid. */
 	columnIndex: number;
 	/** 0-based row coordinate in the inventory grid. */

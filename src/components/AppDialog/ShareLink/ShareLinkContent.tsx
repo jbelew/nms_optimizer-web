@@ -54,6 +54,7 @@ export const ShareLinkContent: FC<ShareLinkContentProps> = ({ shareUrl }) => {
 				<Trans i18nKey="dialogs.shareLink.tip" />
 			</Text>
 			<TextArea
+				aria-label={t("dialogs.titles.shareLink")}
 				id="share-url-input"
 				name="shareUrl"
 				readOnly

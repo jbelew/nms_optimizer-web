@@ -24,7 +24,7 @@ const EasterEggCoordinates = React.lazy(() => import("./EasterEggCoordinates"));
 /**
  * Props for the {@link AppHeader} component.
  */
-export interface AppHeaderProps {
+interface AppHeaderProps {
 	/**
 	 * Optional override callback when the Changelog button is clicked.
 	 *

@@ -1,8 +1,9 @@
 import path from "node:path";
-import { defineConfig } from "vitest/config";
+
+import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import react from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
-import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
+import { defineConfig } from "vitest/config";
 
 const dirname = import.meta.dirname;
 
@@ -38,7 +39,15 @@ export default defineConfig({
 			},
 			{
 				optimizeDeps: {
-					include: ["aria-query", "axobject-query", "lz-string", "pretty-format"],
+					include: [
+						"aria-query",
+						"lz-string",
+						"pretty-format",
+						"react-markdown",
+						"recharts",
+						"rehype-raw",
+						"remark-gfm",
+					],
 				},
 				plugins: [
 					react(),

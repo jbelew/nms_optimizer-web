@@ -22,7 +22,7 @@ const meta = {
 		},
 		layout: "fullscreen",
 	},
-	title: "components/OfflineBanner",
+	title: "Components/OfflineBanner",
 } satisfies Meta<typeof OfflineBanner>;
 
 export default meta;

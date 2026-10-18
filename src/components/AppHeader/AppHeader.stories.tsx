@@ -1,17 +1,10 @@
-import { useEffect } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-
-import { useGridStore } from "@/store/grid/gridStore";
 
 import AppHeader from "./AppHeader";
 
 const meta = {
 	component: AppHeader,
 	parameters: {
-		backgrounds: {
-			default: "Default",
-			values: [{ name: "Default", value: "var(--color-background)" }],
-		},
 		docs: {
 			description: {
 				component:
@@ -27,43 +20,10 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-// Wrapper component to reset store state before each story
-/**
- *
- * @example
- */
-const StorybookWrapper = ({
-	children,
-	resetStores = true,
-}: {
-	children: React.ReactNode;
-	resetStores?: boolean;
-}) => {
-	useEffect(() => {
-		if (resetStores) {
-			useGridStore.setState({ isSharedGrid: false });
-		}
-	}, [resetStores]);
-
-	return <>{children}</>;
-};
-
-// Decorator that wraps stories with necessary providers
-/**
- *
- * @example
- */
-const withLocalProviders = (Story: React.FC) => (
-	<StorybookWrapper>
-		<Story />
-	</StorybookWrapper>
-);
-
 export const Desktop: Story = {
 	args: {
-		onShowChangelog: () => console.log("Changelog clicked"),
+		onShowChangelog: () => {},
 	},
-	decorators: [(Story) => withLocalProviders(Story)],
 	globals: {
 		viewport: {
 			isRotated: false,
@@ -83,7 +43,6 @@ export const Tablet: Story = {
 	args: {
 		...Desktop.args,
 	},
-	decorators: [(Story) => withLocalProviders(Story)],
 	globals: {
 		viewport: {
 			isRotated: false,
@@ -103,7 +62,6 @@ export const Mobile: Story = {
 	args: {
 		...Desktop.args,
 	},
-	decorators: [(Story) => withLocalProviders(Story)],
 	globals: {
 		viewport: {
 			isRotated: false,

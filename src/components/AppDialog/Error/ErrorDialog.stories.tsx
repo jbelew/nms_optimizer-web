@@ -1,5 +1,5 @@
-import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, screen, within } from "storybook/test";
 
 import { useOptimizeStore } from "@/store/ui/uiStore";
 
@@ -8,16 +8,14 @@ import { ErrorDialog } from "./ErrorDialog";
 const meta = {
 	component: ErrorDialog,
 	decorators: [
-		(Story) => {
-			return (
-				<div
-					className="flex min-h-screen items-center justify-center p-4"
-					style={{ margin: "0 auto", maxWidth: "800px" }}
-				>
-					<Story />
-				</div>
-			);
-		},
+		(Story) => (
+			<div
+				className="flex min-h-screen items-center justify-center p-4"
+				style={{ margin: "0 auto", maxWidth: "800px" }}
+			>
+				<Story />
+			</div>
+		),
 	],
 	title: "Components/AppDialog/Error/ErrorDialog",
 } satisfies Meta<typeof ErrorDialog>;
@@ -29,24 +27,17 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
 	args: {
 		isOpen: true,
-		onClose: () => console.log("Dialog closed"),
+		onClose: () => {},
 	},
 	decorators: [
 		(Story) => {
-			// Seed error state for ErrorContent to display details
-			React.useEffect(() => {
-				useOptimizeStore.setState({
-					status: {
-						details: new Error("Test error message from Storybook"),
-						severity: "recoverable",
-						type: "error",
-					},
-				});
-
-				return () => {
-					useOptimizeStore.setState({ status: { type: "idle" } });
-				};
-			}, []);
+			useOptimizeStore.setState({
+				status: {
+					details: new Error("Test error message from Storybook"),
+					severity: "recoverable",
+					type: "error",
+				},
+			});
 
 			return <Story />;
 		},
@@ -54,9 +45,16 @@ export const Default: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "Error Dialog. Shows a generic server error message with a Close button.",
+				story: "Error Dialog displaying a server error message and error details.",
 			},
 		},
 		layout: "fullscreen",
+	},
+	play: async () => {
+		const dialog = await screen.findByRole("dialog");
+		await expect(dialog).toBeInTheDocument();
+		await expect(
+			within(dialog).getAllByText(/Test error message from Storybook/i).length,
+		).toBeGreaterThan(0);
 	},
 };

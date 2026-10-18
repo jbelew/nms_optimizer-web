@@ -1,85 +1,24 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as Toast from "@radix-ui/react-toast";
-
-import { ToastProvider } from "@/hooks/useToast/useToast";
-import i18n from "@/i18n/i18n";
-import { usePlatformStore } from "@/store/app/platformStore";
+import { expect, screen, userEvent, within } from "storybook/test";
 
 import { ShipSelection } from "./ShipSelection";
-
-// Pre-load essential translation keys for the interaction test
-// This ensures the test passes in headless environments where the HTTP backend might not load
-i18n.addResourceBundle(
-	"en",
-	"translation",
-	{
-		platforms: {
-			corvette: "Corvettes",
-		},
-		shipSelection: {
-			ariaLabel: "Select ship type",
-			selectPlatform: "Select Platform",
-		},
-		ShipSelection: {
-			selectPlatform: "Select Platform",
-		},
-	},
-	true,
-	true,
-);
 
 const meta = {
 	component: ShipSelection,
 	decorators: [
-		(Story) => {
-			// Ensure we have a clean state for the store
-			usePlatformStore.setState({ selectedPlatform: "standard" });
-
-			return (
-				<Toast.Provider swipeDirection="right">
-					<ToastProvider>
-						<div className="flex h-screen w-screen items-center justify-center p-4">
-							<div className="max-h-full max-w-full overflow-auto">
-								<Story />
-							</div>
-						</div>
-					</ToastProvider>
-					<Toast.Viewport className="ToastViewport" />
-				</Toast.Provider>
-			);
-		},
-	],
-	loaders: [
-		async () => {
-			try {
-				const response = await fetch("https://api.nms-optimizer.app/platforms");
-
-				if (!response.ok) {
-					throw new Error(`API responded with status ${response.status}`);
-				}
-
-				const shipTypes = await response.json();
-
-				return { shipTypes };
-			} catch (error) {
-				console.warn("Failed to load ship types from API, using fallback data:", error);
-
-				// Fallback data to ensure tests pass even without network
-				return {
-					shipTypes: {
-						corvette: { type: "Starship" },
-						exosuit: { type: "Exosuit" },
-						standard: { type: "Starship" },
-					},
-				};
-			}
-		},
+		(Story) => (
+			<div className="flex h-screen w-screen items-center justify-center p-4">
+				<div className="max-h-full max-w-full overflow-auto">
+					<Story />
+				</div>
+			</div>
+		),
 	],
 	parameters: {
 		docs: {
 			description: {
 				component:
-					"Dropdown component for selecting ship types (Standard, Hauler, Corvette, etc). Manages platform selection and grid reset on change.",
+					"Dropdown component for selecting Platform Types (Standard, Hauler, Corvette, etc). Manages Platform Type selection and grid reset on change.",
 			},
 		},
 		layout: "fullscreen",
@@ -98,8 +37,22 @@ export const Default: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "Ship selection dropdown ready for user interaction.",
+				story: "Platform Type selection dropdown ready for user interaction.",
 			},
 		},
+	},
+};
+
+export const OpenMenu: Story = {
+	args: {
+		solving: false,
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const trigger = await canvas.findByRole("button");
+		await userEvent.click(trigger);
+
+		const menu = await screen.findByRole("menu");
+		await expect(menu).toBeInTheDocument();
 	},
 };

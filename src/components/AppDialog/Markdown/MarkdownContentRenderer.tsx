@@ -618,15 +618,17 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
 		>
 			{isLoading || !remarkGfm || !rehypeRaw ?
 				<LoremIpsumSkeleton />
-			:	<H2Context.Provider value={contextValue}>
-					<LazyReactMarkdown
-						components={MARKDOWN_COMPONENTS}
-						rehypePlugins={[rehypeRaw]}
-						remarkPlugins={[remarkGfm]}
-					>
-						{markdown}
-					</LazyReactMarkdown>
-				</H2Context.Provider>
+			:	<Suspense fallback={<LoremIpsumSkeleton />}>
+					<H2Context.Provider value={contextValue}>
+						<LazyReactMarkdown
+							components={MARKDOWN_COMPONENTS}
+							rehypePlugins={[rehypeRaw]}
+							remarkPlugins={[remarkGfm]}
+						>
+							{markdown}
+						</LazyReactMarkdown>
+					</H2Context.Provider>
+				</Suspense>
 			}
 		</article>
 	);

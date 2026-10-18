@@ -1,10 +1,6 @@
-import React, { useEffect } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as Toast from "@radix-ui/react-toast";
 
-import { ToastProvider } from "@/hooks/useToast/useToast";
 import { useGridStore } from "@/store/grid/gridStore";
-import { useOptimizeStore } from "@/store/ui/uiStore";
 
 import { MobileToolbar } from "./MobileToolbar";
 
@@ -12,37 +8,31 @@ const meta = {
 	component: MobileToolbar,
 	decorators: [
 		(Story) => {
-			useEffect(() => {
-				useGridStore.setState({
-					hasModulesInGrid: true,
-					isSharedGrid: false,
-				});
-				useOptimizeStore.setState({
-					status: { type: "idle" },
-				});
-			}, []);
+			useGridStore.setState({
+				hasModulesInGrid: true,
+				isSharedGrid: false,
+			});
 
 			return (
-				<Toast.Provider swipeDirection="right">
-					<ToastProvider>
-						<div
-							className="flex min-h-screen items-center justify-center p-4"
-							style={{ margin: "0 auto", maxWidth: "800px" }}
-						>
-							<Story />
-						</div>
-					</ToastProvider>
-					<Toast.Viewport className="ToastViewport" />
-				</Toast.Provider>
+				<div className="min-h-screen w-full pt-14">
+					<Story />
+				</div>
 			);
 		},
 	],
+	globals: {
+		viewport: {
+			isRotated: false,
+			value: "mobile",
+		},
+	},
 	parameters: {
 		docs: {
 			description: {
 				component: "Mobile toolbar for grid operations and utility actions.",
 			},
 		},
+		layout: "fullscreen",
 	},
 	title: "Components/MobileToolbar",
 } satisfies Meta<typeof MobileToolbar>;
@@ -58,6 +48,5 @@ export const Default: Story = {
 				story: "Mobile Toolbar with controls for grid operations.",
 			},
 		},
-		layout: "fullscreen",
 	},
 };

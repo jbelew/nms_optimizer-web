@@ -1,25 +1,18 @@
-import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as Toast from "@radix-ui/react-toast";
 
 import { NmsToast } from "./Toast";
 
 const meta = {
 	component: NmsToast,
 	decorators: [
-		(Story) => {
-			return (
-				<Toast.Provider swipeDirection="right">
-					<div
-						className="flex min-h-screen items-center justify-center p-4"
-						style={{ margin: "0 auto", maxWidth: "800px" }}
-					>
-						<Story />
-					</div>
-					<Toast.Viewport className="ToastViewport" />
-				</Toast.Provider>
-			);
-		},
+		(Story) => (
+			<div
+				className="flex min-h-screen items-center justify-center p-4"
+				style={{ margin: "0 auto", maxWidth: "800px" }}
+			>
+				<Story />
+			</div>
+		),
 	],
 	parameters: {
 		docs: {

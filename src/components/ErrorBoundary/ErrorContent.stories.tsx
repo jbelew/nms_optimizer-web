@@ -13,7 +13,7 @@ const meta = {
 	parameters: {
 		layout: "fullscreen",
 	},
-	title: "components/ErrorBoundary/ErrorContent",
+	title: "Components/ErrorBoundary/ErrorContent",
 } satisfies Meta<typeof ErrorContent>;
 
 export default meta;

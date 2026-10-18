@@ -17,7 +17,7 @@ import { use, useEffect, useMemo } from "react";
 import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "@/types/tech";
 import { API_URL } from "@/constants";
 import { useGridStore } from "@/store/grid/gridStore";
-import { sessionCoordinator } from "@/store/sessionCoordinator";
+import { useTechStore } from "@/store/tech/techStore";
 import { useUiStore } from "@/store/ui/uiStore";
 import { apiCall } from "@/utils/api/network";
 import { Logger } from "@/utils/system/monitoring";
@@ -183,7 +183,31 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 	useEffect(() => {
 		if (data && Object.keys(data).length > 0 && maps) {
 			const { activeGroups, techColors, techGroups } = maps;
-			sessionCoordinator.initializeTechTree(techColors, techGroups, activeGroups);
+			const techStore = useTechStore.getState();
+			const initialCheckedModules = Object.keys(techGroups).reduce(
+				(acc, tech) => {
+					const group = techGroups[tech]?.[0];
+
+					if (group) {
+						const persistedSelection = techStore.getModuleSelection(tech);
+
+						if (persistedSelection && persistedSelection.length > 0) {
+							acc[tech] = persistedSelection;
+						} else {
+							acc[tech] = group.modules.filter((m) => m.checked).map((m) => m.id);
+						}
+					}
+
+					return acc;
+				},
+				{} as { [key: string]: string[] },
+			);
+			techStore.initializeTechTree(
+				techColors,
+				techGroups,
+				activeGroups,
+				initialCheckedModules,
+			);
 
 			const gridStore = useGridStore.getState();
 

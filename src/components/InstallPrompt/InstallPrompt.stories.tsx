@@ -1,19 +1,21 @@
 import React, { useEffect } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as Toast from "@radix-ui/react-toast";
+import { expect, within } from "storybook/test";
 
 import { ToastRenderer } from "@/components/Toast/ToastRenderer";
-import { ToastProvider } from "@/hooks/useToast/useToast";
 
-import { InstallPrompt } from "./InstallPrompt";
+import { INSTALL_PROMPT_DISMISSED_KEY, InstallPrompt, USER_VISIT_KEY } from "./InstallPrompt";
+
+const IOS_SAFARI_UA =
+	"Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1";
 
 const IosSafariDecoratorWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-	useEffect(() => {
-		const originalUserAgent = navigator.userAgent;
-		const originalMaxTouchPoints = navigator.maxTouchPoints;
+	const [{ originalMaxTouchPoints, originalUserAgent }] = React.useState(() => {
+		const savedUserAgent = navigator.userAgent;
+		const savedMaxTouchPoints = navigator.maxTouchPoints;
 
-		localStorage.setItem("userVisited", "true");
-		localStorage.removeItem("installPromptDismissed");
+		localStorage.setItem(USER_VISIT_KEY, "true");
+		localStorage.removeItem(INSTALL_PROMPT_DISMISSED_KEY);
 
 		Object.defineProperty(navigator, "maxTouchPoints", {
 			configurable: true,
@@ -22,10 +24,17 @@ const IosSafariDecoratorWrapper: React.FC<{ children: React.ReactNode }> = ({ ch
 		});
 		Object.defineProperty(navigator, "userAgent", {
 			configurable: true,
-			value: "Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1",
+			value: IOS_SAFARI_UA,
 			writable: true,
 		});
 
+		return {
+			originalMaxTouchPoints: savedMaxTouchPoints,
+			originalUserAgent: savedUserAgent,
+		};
+	});
+
+	useEffect(() => {
 		return () => {
 			Object.defineProperty(navigator, "maxTouchPoints", {
 				configurable: true,
@@ -38,7 +47,7 @@ const IosSafariDecoratorWrapper: React.FC<{ children: React.ReactNode }> = ({ ch
 				writable: true,
 			});
 		};
-	}, []);
+	}, [originalMaxTouchPoints, originalUserAgent]);
 
 	return <>{children}</>;
 };
@@ -48,15 +57,10 @@ const meta = {
 	decorators: [
 		(Story) => (
 			<IosSafariDecoratorWrapper>
-				<Toast.Provider swipeDirection="right">
-					<ToastProvider>
-						<div className="mx-auto flex min-h-screen max-w-[800px] items-center justify-center p-4">
-							<Story />
-							<ToastRenderer />
-						</div>
-					</ToastProvider>
-					<Toast.Viewport className="ToastViewport" />
-				</Toast.Provider>
+				<div className="mx-auto flex min-h-screen max-w-[800px] items-center justify-center p-4">
+					<Story />
+					<ToastRenderer />
+				</div>
 			</IosSafariDecoratorWrapper>
 		),
 	],
@@ -83,5 +87,13 @@ export const Default: Story = {
 			},
 		},
 		layout: "fullscreen",
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const toastDescription = await canvas.findByText(
+			/For the best experience, add this app to your Home Screen/i,
+		);
+		await expect(toastDescription).toBeInTheDocument();
+		await expect(canvas.getAllByText(/Add to Home Screen/i).length).toBeGreaterThan(0);
 	},
 };

@@ -153,7 +153,6 @@ const MetricSummaryCard: FC<MetricSummaryCardProps> = ({
 
 	return (
 		<Card
-			aria-label={ariaLabel}
 			aria-pressed={isSelected}
 			onClick={onActivate}
 			onKeyDown={handleKeyDown}
@@ -172,6 +171,7 @@ const MetricSummaryCard: FC<MetricSummaryCardProps> = ({
 				direction="column"
 			>
 				{children}
+				<span className="sr-only">{ariaLabel}</span>
 			</Flex>
 		</Card>
 	);
@@ -550,7 +550,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 				>
 					{/* Overall Summary Toggle Card */}
 					<MetricSummaryCard
-						ariaLabel="View overall performance summary"
+						ariaLabel={`OVERALL ${overallScore !== undefined ? Math.round(overallScore) : "—"} - View overall performance summary`}
 						borderColor="var(--accent-11)"
 						isSelected={selectedMetric === null}
 						onActivate={() => updateSelectedMetric(null)}
@@ -588,12 +588,13 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 					{activeMetrics.map((metric) => {
 						const metricData = summary?.metrics[metric];
 						const val = metricData?.value ?? null;
+						const formattedVal = val !== null ? formatMetricValue(metric, val) : "—";
 						const isSelected = selectedMetric === metric;
 						const trend = summary?.trends[metric] ?? "neutral";
 
 						return (
 							<MetricSummaryCard
-								ariaLabel={`View detailed ${metric} chart`}
+								ariaLabel={`${metric} ${formattedVal} - View detailed ${metric} chart`}
 								borderColor={getMetricColor(metric, 11)}
 								isSelected={isSelected}
 								key={`stat-${metric}`}
@@ -615,7 +616,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 										style={{ color: getStatusColor(metric, val) }}
 										weight="medium"
 									>
-										{val !== null ? formatMetricValue(metric, val) : "—"}
+										{formattedVal}
 									</Text>
 									{trend === "improvement" && (
 										<Text color="green">

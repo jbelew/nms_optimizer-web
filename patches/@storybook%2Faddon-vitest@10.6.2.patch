@@ -1,0 +1,11 @@
+diff --git a/dist/node/coverage-reporter.js b/dist/node/coverage-reporter.js
+index 1ef5d11a7a26262d2cf658219f96cc37b0e9fa18..70c79f5ca128b8a56e954ed27301efbe3f58bbf4 100644
+--- a/dist/node/coverage-reporter.js
++++ b/dist/node/coverage-reporter.js
+@@ -1351,5 +1351,6 @@ var import_istanbul_lib_report = __toESM(require_istanbul_lib_report(), 1), Stor
+   }
+ };
+ export {
++  StorybookCoverageReporter as default,
+   StorybookCoverageReporter as "module.exports"
+ };

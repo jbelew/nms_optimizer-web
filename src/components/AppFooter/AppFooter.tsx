@@ -12,7 +12,7 @@ import { useDialog } from "@/utils/system/dialogUtils";
 /**
  * Props for the {@link AppFooter} component.
  */
-export interface AppFooterProps {
+interface AppFooterProps {
 	/**
 	 * Optional build date string override.
 	 *

@@ -279,22 +279,22 @@ export const MainAppContent: React.FC = () => {
 			>
 				Skip to main content
 			</a>
-			<main
-				className="main-app__container"
-				id="main-content"
-			>
+			<div className="main-app__container">
 				<div className="main-app__card lg:shadow-lg">
 					<div className="main-app__background-wrapper">
 						<AppHeader />
 
 						<Flex
 							align={{ initial: "center", md: "start" }}
+							asChild
 							className="main-app__content"
 							direction={{ initial: "column", md: "row" }}
 							ref={gridContainerRef}
 						>
-							<MainAppGridSection />
-							<MainAppSidebarSection />
+							<main id="main-content">
+								<MainAppGridSection />
+								<MainAppSidebarSection />
+							</main>
 						</Flex>
 					</div>
 
@@ -304,7 +304,7 @@ export const MainAppContent: React.FC = () => {
 				<MainAppFooter position="bottom-desktop" />
 
 				<MainAppBackgroundServices />
-			</main>
+			</div>
 		</>
 	);
 };

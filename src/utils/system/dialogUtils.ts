@@ -29,7 +29,7 @@ import { getPageByPath, ROUTED_DIALOG_IDS } from "@shared/page-registry.js";
  * // returns ['en', 'es', 'fr', ...]
  * ```
  */
-export const getSupportedLanguages = (i18nInstance: I18nInstance): string[] => {
+const getSupportedLanguages = (i18nInstance: I18nInstance): string[] => {
 	return Object.keys(i18nInstance.services.resourceStore.data || {});
 };
 
@@ -130,7 +130,7 @@ export interface DialogProviderProps {
  *
  * @category Dialog
  */
-export type DialogType = null | PageName;
+type DialogType = null | PageName;
 
 /** Set of valid Routed Dialog identifiers for efficient lookup derived from Unified Page Registry. */
 const VALID_DIALOGS = new Set<string>(ROUTED_DIALOG_IDS);
@@ -169,10 +169,7 @@ export const DialogContext = createContext<DialogContextType | undefined>(undefi
  * // returns "about"
  * ```
  */
-export const getActiveDialogFromPathname = (
-	pathname: string,
-	supportedLangs: string[],
-): DialogType => {
+const getActiveDialogFromPathname = (pathname: string, supportedLangs: string[]): DialogType => {
 	const page = getPageByPath(pathname, supportedLangs);
 
 	return page?.isDialog && VALID_DIALOGS.has(page.id) ?

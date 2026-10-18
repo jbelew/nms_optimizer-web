@@ -87,3 +87,11 @@ _Avoid_: cell error, validation error, session error
 **Routed Dialog**:
 A modal view bound to a canonical, localized URL path (such as `/about/`, `/instructions/`, `/changelog/`, `/userstats/`, or `/performance/`) so it can be bookmarked, shared, and indexed independently of the workspace grid.
 _Avoid_: modal page, route wrapper, dialog route
+
+**Pattern No Fit**:
+The optimization condition where a precomputed adjacency pattern for a Technology Category cannot fit within any contiguous region of available active slots matching its required Solver Window dimensions.
+_Avoid_: pattern error, no-fit warning, PNF state
+
+**Forced Solve**:
+A fallback optimization pass initiated by the user after a Pattern No Fit warning that bypasses precomputed pattern templates in favor of full simulated annealing across available grid slots.
+_Avoid_: force optimize, brute-force solve, fallback solve

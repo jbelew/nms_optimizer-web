@@ -175,5 +175,8 @@
 	},
 	"overrides": {
 		"lighthouse": "^13.5.0"
+	},
+	"patchedDependencies": {
+		"@storybook/addon-vitest@10.6.2": "patches/@storybook%2Faddon-vitest@10.6.2.patch"
 	}
 }

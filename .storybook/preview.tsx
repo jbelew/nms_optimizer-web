@@ -1,11 +1,13 @@
 /// <reference types="vite/client" />
-import type { Decorator, Preview } from "@storybook/react";
 import React from "react";
+import type { Decorator, Preview } from "@storybook/react";
+import * as Toast from "@radix-ui/react-toast";
 import { Theme } from "@radix-ui/themes";
 import { I18nextProvider } from "react-i18next";
 import { BrowserRouter } from "react-router-dom";
 
 import { TooltipProvider } from "@/context/TooltipContext";
+import { ToastProvider } from "@/hooks/useToast/useToast";
 import { DialogProvider } from "@/utils/system/dialogUtils";
 
 import i18n from "../src/i18n/i18n";
@@ -108,15 +110,18 @@ const withBackground: Decorator = (Story, context) => {
 	const theme = context.globals.theme || "dark";
 
 	return (
-		<BackgroundWrapper isVisible={isVisible} theme={theme}>
+		<BackgroundWrapper
+			isVisible={isVisible}
+			theme={theme}
+		>
 			<Story />
 		</BackgroundWrapper>
 	);
 };
 
-const withStoreReset: Decorator = (Story) => {
+const withStoreReset: Decorator = (Story, context) => {
 	return (
-		<StoreResetWrapper>
+		<StoreResetWrapper key={context.id}>
 			<Story />
 		</StoreResetWrapper>
 	);
@@ -134,10 +139,15 @@ const withGlobalProviders: Decorator = (Story, context) => {
 			>
 				<TooltipProvider>
 					<DialogProvider>
-						<SplashHider />
-						<I18nextProvider i18n={i18n}>
-							<Story />
-						</I18nextProvider>
+						<Toast.Provider swipeDirection="right">
+							<ToastProvider>
+								<SplashHider />
+								<I18nextProvider i18n={i18n}>
+									<Story />
+								</I18nextProvider>
+							</ToastProvider>
+							<Toast.Viewport className="ToastViewport" />
+						</Toast.Provider>
 					</DialogProvider>
 				</TooltipProvider>
 			</Theme>
@@ -168,13 +178,15 @@ const preview: Preview = {
 						selector: '[aria-controls^="radix-"]',
 					},
 					{
-						enabled: false,
-						// Disable color-contrast checks
-						// The app uses a custom theme with intentional color choices
+						// Enforce color-contrast across the app while excluding Radix UI's
+						// APCA-calibrated solid button and translucent AvatarFallback tokens
 						id: "color-contrast",
+						selector:
+							":not(.rt-variant-solid, .rt-variant-solid *, .rt-AvatarFallback)",
 					},
 				],
 			},
+			test: "error",
 		},
 		controls: {
 			matchers: {

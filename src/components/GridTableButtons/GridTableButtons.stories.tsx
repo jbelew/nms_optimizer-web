@@ -1,37 +1,20 @@
-import React, { useEffect } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as Toast from "@radix-ui/react-toast";
 
-import { ToastProvider } from "@/hooks/useToast/useToast";
-import { createGrid, useGridStore } from "@/store/grid/gridStore";
+import { useGridStore } from "@/store/grid/gridStore";
 
 import GridTableButtons from "./GridTableButtons";
 
 const meta: Meta<typeof GridTableButtons> = {
 	component: GridTableButtons,
 	decorators: [
-		(Story) => {
-			useEffect(() => {
-				useGridStore.setState({
-					grid: createGrid(10, 6),
-					isSharedGrid: false,
-				});
-			}, []);
-
-			return (
-				<Toast.Provider swipeDirection="right">
-					<ToastProvider>
-						<div
-							className="main-app__grid-section flex min-h-screen items-center justify-center p-4"
-							style={{ margin: "0 auto", maxWidth: "800px" }}
-						>
-							<Story />
-						</div>
-					</ToastProvider>
-					<Toast.Viewport className="ToastViewport" />
-				</Toast.Provider>
-			);
-		},
+		(Story) => (
+			<div
+				className="main-app__grid-section flex min-h-screen items-center justify-center p-4"
+				style={{ margin: "0 auto", maxWidth: "800px" }}
+			>
+				<Story />
+			</div>
+		),
 	],
 	parameters: {
 		docs: {
@@ -40,6 +23,7 @@ const meta: Meta<typeof GridTableButtons> = {
 					"Control buttons for grid operations including load/save builds, share grid, reset, and help/about dialogs.",
 			},
 		},
+		layout: "fullscreen",
 	},
 	title: "Components/GridTableButtons",
 };
@@ -55,9 +39,32 @@ export const Default: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "Grid buttons in default state with all controls available.",
+				story: "Grid buttons in default empty-grid state.",
 			},
 		},
-		layout: "fullscreen",
+	},
+};
+
+export const WithModulesInGrid: Story = {
+	args: {
+		solving: false,
+	},
+	decorators: [
+		(Story) => {
+			useGridStore.setState({
+				hasModulesInGrid: true,
+				isDefaultGrid: false,
+				isSharedGrid: false,
+			});
+
+			return <Story />;
+		},
+	],
+	parameters: {
+		docs: {
+			description: {
+				story: "Grid buttons when the grid is populated with modules (Save, Share, Screenshot, and Reset Build enabled).",
+			},
+		},
 	},
 };

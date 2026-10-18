@@ -1,8 +1,9 @@
 import React from "react";
-import { createGrid, useGridStore } from "../src/store/grid/gridStore";
+
 import { usePlatformStore } from "../src/store/app/platformStore";
-import { useUiStore } from "../src/store/ui/uiStore";
+import { createGrid, useGridStore } from "../src/store/grid/gridStore";
 import { useTechStore } from "../src/store/tech/techStore";
+import { useUiStore } from "../src/store/ui/uiStore";
 
 /**
  * A wrapper component that applies the dark/light theme class to the document root safely.
@@ -17,31 +18,64 @@ import { useTechStore } from "../src/store/tech/techStore";
  * <ThemeWrapper theme="dark"><MyComponent /></ThemeWrapper>
  * ```
  */
-export const ThemeWrapper = ({
-    children,
-    theme,
-}: {
-    children: React.ReactNode;
-    theme: string;
-}) => {
-    React.useEffect(() => {
-        if (theme === "dark") {
-            document.documentElement.classList.add("dark", "dark-theme");
-            document.documentElement.classList.remove("light", "light-theme");
-        } else {
-            document.documentElement.classList.add("light", "light-theme");
-            document.documentElement.classList.remove("dark", "dark-theme");
-        }
-    }, [theme]);
+export const ThemeWrapper = ({ children, theme }: { children: React.ReactNode; theme: string }) => {
+	React.useEffect(() => {
+		if (theme === "dark") {
+			document.documentElement.classList.add("dark", "dark-theme");
+			document.documentElement.classList.remove("light", "light-theme");
+		} else {
+			document.documentElement.classList.add("light", "light-theme");
+			document.documentElement.classList.remove("dark", "dark-theme");
+		}
+	}, [theme]);
 
-    return <>{children}</>;
+	return <>{children}</>;
 };
 
 /**
- * A utility component that resets all global Zustand stores to their initial states.
+ * Resets all global Zustand stores to their clean baseline states.
  *
- * This ensures that Storybook stories start with a clean state and do not bleed
- * data between different components or variations.
+ * @returns Side-effects only.
+ */
+const resetAllStores = (): void => {
+	useGridStore.setState({
+		activeTechs: new Set<string>(),
+		grid: createGrid(10, 6),
+		gridFixed: false,
+		isGridFull: false,
+		isSharedGrid: false,
+		result: null,
+		superchargedFixed: false,
+	});
+
+	usePlatformStore.setState({ selectedPlatform: "standard" });
+
+	useUiStore.setState({
+		isModuleSelectionDialogOpen: false,
+		isTechTreeLoading: false,
+		optimizeStatus: { type: "idle" },
+		selectedTechData: null,
+		shakeCount: 0,
+	});
+
+	useTechStore.setState({
+		activeGroups: {},
+		bonusStatus: {},
+		checkedModules: {},
+		maxBonus: {},
+		solvedBonus: {},
+		solveMethod: {},
+		techColors: {},
+		techGroups: {},
+	});
+};
+
+/**
+ * A utility component that resets all global Zustand stores synchronously before a story mounts.
+ *
+ * Performing the reset in a `useState` lazy initializer on mount (with `key={context.id}` on the
+ * wrapper) ensures that stores are reset during the top-down render pass before any child story
+ * decorators or component effects run.
  *
  * @param {object} props - Component properties.
  * @param {React.ReactNode} props.children - Component subtree.
@@ -49,43 +83,15 @@ export const ThemeWrapper = ({
  *
  * @example Storybook usage
  * ```tsx
- * <StoreResetWrapper><MyComponent /></StoreResetWrapper>
+ * <StoreResetWrapper key={context.id}><MyComponent /></StoreResetWrapper>
  * ```
  */
 export const StoreResetWrapper = ({ children }: { children: React.ReactNode }) => {
-    React.useEffect(() => {
-        // Reset GridStore
-        useGridStore.setState({
-            grid: createGrid(10, 6),
-            gridFixed: false,
-            isSharedGrid: false,
-            result: null,
-            superchargedFixed: false,
-        });
+	React.useState(() => {
+		resetAllStores();
 
-        // Reset PlatformStore
-        usePlatformStore.setState({ selectedPlatform: "standard" });
+		return true;
+	});
 
-        // Reset UI Store (Consolidated)
-        useUiStore.setState({
-            isModuleSelectionDialogOpen: false,
-            isTechTreeLoading: false,
-            optimizeStatus: { type: "idle" },
-            selectedTechData: null,
-            shakeCount: 0,
-        });
-
-        // Reset TechStore (basic reset, full reset might need more data if available)
-        useTechStore.setState({
-            activeGroups: {},
-            checkedModules: {},
-            max_bonus: {},
-            solve_method: {},
-            solved_bonus: {},
-            techColors: {},
-            techGroups: {},
-        });
-    }, []);
-
-    return <>{children}</>;
+	return <>{children}</>;
 };
