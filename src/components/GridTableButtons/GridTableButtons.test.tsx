@@ -105,17 +105,15 @@ vi.mock("@/store/grid/gridStore", () => ({
 }));
 vi.mock("@/hooks/useBuildFileManager/useBuildFileManager", () => ({
 	useBuildFileManager: () => ({
-		loadBuildFromFile: vi.fn(),
-		saveBuildToFile: vi.fn(),
-	}),
-}));
-vi.mock("@/hooks/useToast/useToast", () => ({
-	useToast: () => ({
-		closeToast: vi.fn(),
-		isOpen: false,
-		showError: vi.fn(),
-		showSuccess: vi.fn(),
-		toastConfig: null,
+		fileInputRef: { current: null },
+		handleBuildNameCancel: vi.fn(),
+		handleBuildNameConfirm: vi.fn(),
+		handleFileSelect: vi.fn(),
+		handleLoadBuild: vi.fn(),
+		handleSaveBuild: vi.fn(),
+		isLoadPending: false,
+		isSaveBuildDialogOpen: false,
+		isSavePending: false,
 	}),
 }));
 vi.mock("@/hooks/useScreenshot/useScreenshot", () => ({

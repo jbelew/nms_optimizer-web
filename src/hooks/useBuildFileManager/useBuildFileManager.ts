@@ -1,28 +1,177 @@
-import { startTransition, useState } from "react";
+import type { ChangeEvent, RefObject } from "react";
+import { createElement, Fragment, startTransition, useCallback, useEffect } from "react";
+import { Code } from "@radix-ui/themes";
+import { useTranslation } from "react-i18next";
+import { create } from "zustand";
 
+import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { fetchShipTypes } from "@/hooks/useShipTypes/useShipTypes";
+import { useToast } from "@/hooks/useToast/useToast";
+import { usePlatformStore } from "@/store/app/platformStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { buildSerializer } from "@/utils/build/buildSerializer";
 import { Logger } from "@/utils/system/monitoring";
 
+/** Singleton ref to the hidden `.nms` file input shared across toolbar and grid button callers. */
+const sharedFileInputRef: RefObject<HTMLInputElement | null> = { current: null };
+
 /**
- * Custom hook for managing Build File operations (save/load) in the DOM.
+ * Internal Zustand store sharing Build File dialog visibility and pending states across callers.
+ */
+interface BuildFileStateStore {
+	/** Whether a `.nms` Build File is currently being parsed and restored. */
+	isLoadPending: boolean;
+	/** Whether the build name entry dialog is currently open. */
+	isSaveBuildDialogOpen: boolean;
+	/** Whether a `.nms` Build File is currently being serialized and downloaded. */
+	isSavePending: boolean;
+	/** Updates the reactive load pending state. */
+	setIsLoadPending: (pending: boolean) => void;
+	/** Updates the save dialog visibility state. */
+	setIsSaveBuildDialogOpen: (open: boolean) => void;
+	/** Updates the reactive save pending state. */
+	setIsSavePending: (pending: boolean) => void;
+}
+
+const useBuildFileStateStore = create<BuildFileStateStore>((set) => ({
+	isLoadPending: false,
+	isSaveBuildDialogOpen: false,
+	isSavePending: false,
+	setIsLoadPending: (isLoadPending) => set({ isLoadPending }),
+	setIsSaveBuildDialogOpen: (isSaveBuildDialogOpen) => set({ isSaveBuildDialogOpen }),
+	setIsSavePending: (isSavePending) => set({ isSavePending }),
+}));
+
+/**
+ * Return shape for the {@link useBuildFileManager} hook.
+ *
+ * @category Interfaces
+ */
+export interface UseBuildFileManagerReturn {
+	/** Shared ref to the hidden `<input type="file" accept=".nms">` element. */
+	fileInputRef: RefObject<HTMLInputElement | null>;
+	/** Aborts the save workflow and closes the naming dialog. */
+	handleBuildNameCancel: () => void;
+	/**
+	 * Confirms the build name, serializes the current session snapshot into a `.nms` Build File,
+	 * triggers a browser download, and emits toast and analytics feedback.
+	 *
+	 * @param {string} buildName - The display name to assign to the saved Build File.
+	 *
+	 * @returns {Promise<void>} Resolves when the save workflow completes.
+	 */
+	handleBuildNameConfirm: (buildName: string) => Promise<void>;
+	/**
+	 * Processes a user-selected `.nms` Build File from a file input `change` event.
+	 *
+	 * @param {ChangeEvent<HTMLInputElement>} event - The file input change event.
+	 *
+	 * @returns {Promise<void>} Resolves when the file import workflow completes.
+	 */
+	handleFileSelect: (event: ChangeEvent<HTMLInputElement>) => Promise<void>;
+	/** Programmatically opens the native file picker for `.nms` Build Files. */
+	handleLoadBuild: () => void;
+	/** Initiates the save workflow by opening the shared build-naming dialog. */
+	handleSaveBuild: () => void;
+	/** Whether a `.nms` Build File is currently being parsed and restored across any caller. */
+	isLoadPending: boolean;
+	/** Whether the shared build-naming dialog is currently open. */
+	isSaveBuildDialogOpen: boolean;
+	/** Whether a `.nms` Build File is currently being serialized and saved across any caller. */
+	isSavePending: boolean;
+}
+
+/**
+ * Internal hook providing the unified `.nms` Build File intake pipeline shared by
+ * DOM file inputs and the PWA `window.launchQueue` file handler.
+ *
+ * @returns {(file: File) => Promise<void>} Asynchronous function that validates, restores, and reports on a `.nms` Build File.
+ */
+const useImportBuildFile = () => {
+	const { t } = useTranslation();
+	const { showError, showSuccess } = useToast();
+	const { sendEvent } = useAnalytics();
+
+	return useCallback(
+		async (file: File): Promise<void> => {
+			useBuildFileStateStore.getState().setIsLoadPending(true);
+
+			try {
+				if (!file.name.endsWith(".nms")) {
+					throw new Error("Invalid file type. Please select a .nms build file.");
+				}
+
+				if (file.size > 10 * 1024 * 1024) {
+					throw new Error("File is too large. Build files should be under 10MB.");
+				}
+
+				const text = await file.text();
+
+				if (!text) {
+					throw new Error("File is empty. Please select a valid build file.");
+				}
+
+				const platformTypes = await fetchShipTypes();
+				const validPlatformTypes = Object.keys(platformTypes);
+				const buildData = await buildSerializer.loadBuild(text, validPlatformTypes);
+
+				startTransition(() => {
+					sessionCoordinator.restoreBuildSnapshot(buildData, validPlatformTypes);
+				});
+
+				showSuccess(
+					t("toast.buildLoaded.title"),
+					createElement(
+						Fragment,
+						null,
+						"Build ",
+						createElement(Code, null, file.name),
+						" ",
+						t("toast.buildLoaded.loadedMessage")
+					),
+					5000
+				);
+
+				sendEvent({
+					action: "load_build",
+					category: "ui",
+					file_name: file.name,
+					method: "nms_file",
+					nonInteraction: false,
+					shipType: usePlatformStore.getState().selectedPlatform,
+					value: 1,
+				});
+			} catch (error) {
+				Logger.error("Failed to load build file:", error);
+				const errorMessage =
+					error instanceof Error ? error.message : t("toast.buildLoadError.description");
+				showError(t("toast.buildLoadError.title"), errorMessage, 5000);
+			} finally {
+				useBuildFileStateStore.getState().setIsLoadPending(false);
+			}
+		},
+		[sendEvent, showError, showSuccess, t]
+	);
+};
+
+/**
+ * Custom hook for managing the complete `.nms` Build File import and export lifecycle.
  *
  * @remarks
- * Acts as a DOM file I/O adapter: delegates multi-store snapshot extraction and
- * restoration to {@link sessionCoordinator}, delegates `.nms` JSON serialization
- * and SHA-256 verification to {@link buildSerializer}, and resolves supported
- * Platform Types asynchronously via {@link fetchShipTypes} only when loading a file
- * (avoiding any render-time Suspense dependency).
+ * Consolidates Build File intake (hidden `<input type="file">` picker, validation, SHA-256
+ * checksum verification, multi-store restoration) and Build File export (naming dialog state,
+ * snapshot serialization, browser download trigger) behind a single interface backed by a
+ * shared internal Zustand store. Both desktop (`GridTableButtons`) and mobile (`MobileToolbar`)
+ * callers observe synchronized `isLoadPending`, `isSavePending`, and `isSaveBuildDialogOpen` states.
  *
- * @returns {object} An object containing the load/save functions and the pending state.
- * @returns {Function} returns.saveBuildToFile - Serializes and downloads the current build as a `.nms` Build File.
- * @returns {Function} returns.loadBuildFromFile - Parses, validates, and restores a build from a `.nms` Build File.
- * @returns {boolean} returns.isPending - Reactive pending/loading state for file operations.
+ * @returns {UseBuildFileManagerReturn} Shared state flags, file input ref, and load/save handlers.
  *
  * @see {@link ./useBuildFileManager.test.ts Unit Tests}
+ * @see {@link useFileHandling}
  * @see {@link buildSerializer}
  * @see {@link sessionCoordinator}
+ * @see {@link useToast}
+ * @see {@link useAnalytics}
  *
  * @hook
  *
@@ -30,35 +179,89 @@ import { Logger } from "@/utils/system/monitoring";
  *
  * @example
  * ```tsx
- * const { saveBuildToFile, loadBuildFromFile, isPending } = useBuildFileManager();
- * // returns { isPending: false, loadBuildFromFile: [Function], saveBuildToFile: [Function] }
+ * const {
+ *   fileInputRef,
+ *   handleFileSelect,
+ *   handleLoadBuild,
+ *   handleSaveBuild,
+ *   isLoadPending,
+ *   isSavePending,
+ * } = useBuildFileManager();
+ * // returns shared Build File state and handlers
  * ```
  */
-export const useBuildFileManager = () => {
-	const [isPending, setIsPending] = useState(false);
+export const useBuildFileManager = (): UseBuildFileManagerReturn => {
+	const { t } = useTranslation();
+	const { showError, showSuccess } = useToast();
+	const { sendEvent } = useAnalytics();
+	const importBuildFile = useImportBuildFile();
+
+	const {
+		isLoadPending,
+		isSaveBuildDialogOpen,
+		isSavePending,
+		setIsSaveBuildDialogOpen,
+		setIsSavePending,
+	} = useBuildFileStateStore();
 
 	/**
-	 * Serializes the current application state and triggers a `.nms` Build File download in the DOM.
+	 * Programmatically clicks the shared hidden file input to open the native file picker.
 	 *
-	 * @remarks
-	 * Captures a multi-store snapshot via {@link sessionCoordinator.getBuildSnapshot},
-	 * delegates serialization to {@link buildSerializer.saveBuild}, and triggers a
-	 * browser download of the returned binary blob.
-	 *
-	 * @param {string} buildName - The name to assign to the saved build.
-	 *
-	 * @returns {Promise<void>} Resolves when the file download has been triggered.
-	 *
-	 * @throws {Error} If serialization or file creation fails.
-	 *
-	 * @example
-	 * ```typescript
-	 * await saveBuildToFile("My Fighter Build");
-	 * // triggers browser download of My-Fighter-Build.nms
-	 * ```
+	 * @returns {void} Side-effects only.
 	 */
-	const saveBuildToFile = async (buildName: string): Promise<void> => {
-		setIsPending(true);
+	const handleLoadBuild = () => {
+		if (sharedFileInputRef.current) {
+			sharedFileInputRef.current.click();
+		}
+	};
+
+	/**
+	 * Extracts the selected `.nms` Build File from the input change event, runs the unified
+	 * intake pipeline, and resets the input value so the same file can be re-selected.
+	 *
+	 * @param {ChangeEvent<HTMLInputElement>} event - The browser file input change event.
+	 *
+	 * @returns {Promise<void>} Resolves when the file import finishes.
+	 */
+	const handleFileSelect = async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
+		const file = event.target.files?.[0];
+
+		if (file) {
+			await importBuildFile(file);
+		}
+
+		event.target.value = "";
+	};
+
+	/**
+	 * Opens the build-naming dialog to initiate a Build File export.
+	 *
+	 * @returns {void} Side-effects only.
+	 */
+	const handleSaveBuild = () => {
+		setIsSaveBuildDialogOpen(true);
+	};
+
+	/**
+	 * Closes the build-naming dialog without saving.
+	 *
+	 * @returns {void} Side-effects only.
+	 */
+	const handleBuildNameCancel = () => {
+		setIsSaveBuildDialogOpen(false);
+	};
+
+	/**
+	 * Serializes the active multi-store build snapshot into a `.nms` Build File, triggers
+	 * a browser download, and reports completion or failure via toast and analytics.
+	 *
+	 * @param {string} buildName - The user-supplied name for the saved Build File.
+	 *
+	 * @returns {Promise<void>} Resolves when the save operation completes.
+	 */
+	const handleBuildNameConfirm = async (buildName: string): Promise<void> => {
+		setIsSaveBuildDialogOpen(false);
+		setIsSavePending(true);
 
 		try {
 			const snapshot = sessionCoordinator.getBuildSnapshot(buildName);
@@ -72,68 +275,82 @@ export const useBuildFileManager = () => {
 			link.click();
 			document.body.removeChild(link);
 			URL.revokeObjectURL(url);
-		} catch (error) {
-			Logger.error("Failed to save build file:", error);
-			throw new Error("Failed to save build file", { cause: error });
-		} finally {
-			setIsPending(false);
-		}
-	};
 
-	/**
-	 * Restores a build configuration from an uploaded `.nms` Build File.
-	 *
-	 * @remarks
-	 * Performs DOM File validation (extension and size checks), resolves supported
-	 * Platform Types lazily via {@link fetchShipTypes}, delegates parsing and checksum
-	 * verification to {@link buildSerializer.loadBuild}, and commits the multi-store
-	 * state via {@link sessionCoordinator.restoreBuildSnapshot} inside a React transition.
-	 *
-	 * @param {File} file - The `.nms` Build File to load.
-	 *
-	 * @returns {Promise<void>} Resolves when state is successfully restored.
-	 *
-	 * @throws {Error} If validation fails, file is empty, checksum is invalid, or ship type is unsupported.
-	 *
-	 * @example
-	 * ```typescript
-	 * const file = event.target.files[0];
-	 * await loadBuildFromFile(file);
-	 * // restores platform, grid, and tech store state from file
-	 * ```
-	 */
-	const loadBuildFromFile = async (file: File): Promise<void> => {
-		setIsPending(true);
-
-		try {
-			if (!file.name.endsWith(".nms")) {
-				throw new Error("Invalid file type. Please select a .nms build file.");
-			}
-
-			if (file.size > 10 * 1024 * 1024) {
-				throw new Error("File is too large. Build files should be under 10MB.");
-			}
-
-			const text = await file.text();
-
-			if (!text) {
-				throw new Error("File is empty. Please select a valid build file.");
-			}
-
-			const shipTypes = await fetchShipTypes();
-			const validShipTypes = Object.keys(shipTypes);
-			const buildData = await buildSerializer.loadBuild(text, validShipTypes);
-
-			startTransition(() => {
-				sessionCoordinator.restoreBuildSnapshot(buildData, validShipTypes);
+			showSuccess(t("toast.buildSaved.title"), t("toast.buildSaved.description"), 5000);
+			sendEvent({
+				action: "save_build",
+				build_name: buildName,
+				category: "ui",
+				method: "nms_file",
+				nonInteraction: false,
+				shipType: snapshot.shipType,
+				value: 1,
 			});
 		} catch (error) {
-			Logger.error("Failed to load build file:", error);
-			throw error;
+			Logger.error("Failed to save build file:", error);
+			showError(t("toast.buildSaveError.title"), t("toast.buildSaveError.description"), 5000);
 		} finally {
-			setIsPending(false);
+			setIsSavePending(false);
 		}
 	};
 
-	return { isPending, loadBuildFromFile, saveBuildToFile };
+	return {
+		fileInputRef: sharedFileInputRef,
+		handleBuildNameCancel,
+		handleBuildNameConfirm,
+		handleFileSelect,
+		handleLoadBuild,
+		handleSaveBuild,
+		isLoadPending,
+		isSaveBuildDialogOpen,
+		isSavePending,
+	};
+};
+
+/**
+ * Custom hook that registers a PWA `window.launchQueue` consumer to import `.nms` Build Files
+ * opened directly from the operating system's file manager.
+ *
+ * @remarks
+ * Routes OS-launched files through the same unified Build File intake pipeline used by
+ * {@link useBuildFileManager}, ensuring consistent `isLoadPending` state updates, extension
+ * and SHA-256 checksum validation, localized toast notifications, and `load_build` analytics
+ * events without subscribing the root `App` component to store re-renders.
+ *
+ * @returns {void} Side-effects only.
+ *
+ * @see {@link useBuildFileManager}
+ * @see {@link ./useBuildFileManager.test.ts Unit Tests}
+ *
+ * @hook
+ *
+ * @category Hooks
+ *
+ * @example
+ * ```tsx
+ * useFileHandling();
+ * // registers window.launchQueue consumer for .nms Build Files
+ * ```
+ */
+export const useFileHandling = (): void => {
+	const importBuildFile = useImportBuildFile();
+
+	useEffect(() => {
+		if ("launchQueue" in window && window.launchQueue) {
+			window.launchQueue.setConsumer(
+				async (launchParams: { files: FileSystemFileHandle[] }) => {
+					if (launchParams.files && launchParams.files.length > 0) {
+						for (const fileHandle of launchParams.files) {
+							try {
+								const file = await fileHandle.getFile();
+								await importBuildFile(file);
+							} catch (error) {
+								Logger.error("Failed to load file from launchQueue:", error);
+							}
+						}
+					}
+				}
+			);
+		}
+	}, [importBuildFile]);
 };

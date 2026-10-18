@@ -27,8 +27,7 @@ import { useTranslation } from "react-i18next";
 
 import { LanguageSelector } from "@/components/LanguageSelector/LanguageSelector";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
-import { useLoadBuild } from "@/hooks/useLoadBuild/useLoadBuild";
-import { useSaveBuild } from "@/hooks/useSaveBuild/useSaveBuild";
+import { useBuildFileManager } from "@/hooks/useBuildFileManager/useBuildFileManager";
 import { registerToolbarForceShow } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { useScrollHide } from "@/hooks/useScrollHide/useScrollHide";
 import { useGridStore } from "@/store/grid/gridStore";
@@ -50,6 +49,7 @@ import { useDialog } from "@/utils/system/dialogUtils";
  * @see {@link LanguageSelector}
  * @see {@link useA11yStore}
  * @see {@link useGridStore}
+ * @see {@link useBuildFileManager}
  * @see {@link ./MobileToolbar.test.tsx Unit Tests}
  * @see {@link ./MobileToolbar.stories.tsx Storybook}
  *
@@ -72,8 +72,8 @@ export const MobileToolbar: React.FC = () => {
 	const hasModulesInGrid = useGridStore((state) => state.hasModulesInGrid);
 	const solving = useOptimizeStore((state) => state.status.type === "solving");
 	const { forceShow, isVisible, toolbarRef } = useScrollHide(80);
-	const { handleLoadBuild, isLoadPending } = useLoadBuild();
-	const { handleSaveBuild, isSavePending } = useSaveBuild();
+	const { handleLoadBuild, handleSaveBuild, isLoadPending, isSavePending } =
+		useBuildFileManager();
 	const [isSharePending, startShareTransition] = useTransition();
 
 	useEffect(() => {

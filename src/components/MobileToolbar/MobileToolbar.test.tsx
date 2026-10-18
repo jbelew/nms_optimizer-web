@@ -34,20 +34,15 @@ vi.mock("@/hooks/useScrollHide/useScrollHide", () => ({
 	}),
 }));
 
-vi.mock("@/hooks/useLoadBuild/useLoadBuild", () => ({
-	useLoadBuild: () => ({
+vi.mock("@/hooks/useBuildFileManager/useBuildFileManager", () => ({
+	useBuildFileManager: () => ({
 		fileInputRef: { current: null },
-		handleFileSelect: vi.fn(),
-		handleLoadBuild: mockHandleLoadBuild,
-		isLoadPending: false,
-	}),
-}));
-
-vi.mock("@/hooks/useSaveBuild/useSaveBuild", () => ({
-	useSaveBuild: () => ({
 		handleBuildNameCancel: vi.fn(),
 		handleBuildNameConfirm: vi.fn(),
+		handleFileSelect: vi.fn(),
+		handleLoadBuild: mockHandleLoadBuild,
 		handleSaveBuild: mockHandleSaveBuild,
+		isLoadPending: false,
 		isSaveBuildDialogOpen: false,
 		isSavePending: false,
 	}),

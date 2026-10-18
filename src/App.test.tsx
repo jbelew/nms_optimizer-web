@@ -11,6 +11,7 @@ import { act, fireEvent, render } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { vi } from "vitest";
 
+import { ToastProvider } from "@/hooks/useToast/useToast";
 import { useOptimizeStore } from "@/store/ui/uiStore";
 
 import { routes } from "./routes";
@@ -175,11 +176,13 @@ describe("App", () => {
 
 		return render(
 			<Theme>
-				<TooltipProvider>
-					<Suspense fallback={<div>Loading...</div>}>
-						<RouterProvider router={router} />
-					</Suspense>
-				</TooltipProvider>
+				<ToastProvider>
+					<TooltipProvider>
+						<Suspense fallback={<div>Loading...</div>}>
+							<RouterProvider router={router} />
+						</Suspense>
+					</TooltipProvider>
+				</ToastProvider>
 			</Theme>
 		);
 	};

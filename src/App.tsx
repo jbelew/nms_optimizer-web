@@ -17,7 +17,7 @@ import { useOptimizeStore } from "@/store/ui/uiStore";
 import { Seo } from "./components/Seo/Seo";
 import { UpdatePromptWrapper } from "./components/UpdatePrompt/UpdatePromptWrapper";
 import { useAnalytics } from "./hooks/useAnalytics/useAnalytics";
-import { useFileHandling } from "./hooks/useFileHandling/useFileHandling";
+import { useFileHandling } from "./hooks/useBuildFileManager/useBuildFileManager";
 import { fetchTechTree } from "./hooks/useTechTree/useTechTree";
 import { useUrlSync } from "./hooks/useUrlSync/useUrlSync";
 import { isBot } from "./utils/browser/environment";

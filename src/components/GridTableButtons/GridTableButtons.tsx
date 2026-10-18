@@ -16,8 +16,7 @@ import { useTranslation } from "react-i18next";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
-import { useLoadBuild } from "@/hooks/useLoadBuild/useLoadBuild";
-import { useSaveBuild } from "@/hooks/useSaveBuild/useSaveBuild";
+import { useBuildFileManager } from "@/hooks/useBuildFileManager/useBuildFileManager";
 import { useScreenshot } from "@/hooks/useScreenshot/useScreenshot";
 import { useScrollGridIntoView } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { useGridStore } from "@/store/grid/gridStore";
@@ -46,8 +45,7 @@ const SCROLL_OPTIONS = { skipOnLargeScreens: true };
  *
  * @returns {JSX.Element} The rendered grid action buttons.
  *
- * @see {@link useSaveBuild}
- * @see {@link useLoadBuild}
+ * @see {@link useBuildFileManager}
  * @see {@link ./GridTableButtons.test.tsx Unit Tests}
  * @see {@link ./GridTableButtons.stories.tsx Storybook}
  *
@@ -75,13 +73,16 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const isDefaultModuleSelection = useTechStore((state) => state.isDefaultModuleSelection);
 	const {
+		fileInputRef,
 		handleBuildNameCancel,
 		handleBuildNameConfirm,
+		handleFileSelect,
+		handleLoadBuild,
 		handleSaveBuild,
+		isLoadPending,
 		isSaveBuildDialogOpen,
 		isSavePending,
-	} = useSaveBuild();
-	const { fileInputRef, handleFileSelect, handleLoadBuild, isLoadPending } = useLoadBuild();
+	} = useBuildFileManager();
 	const { handleScreenshot, isCapturing } = useScreenshot();
 	const { scrollIntoView } = useScrollGridIntoView(SCROLL_OPTIONS);
 
