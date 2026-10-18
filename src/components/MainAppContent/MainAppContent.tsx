@@ -1,7 +1,7 @@
 import "./MainAppContent.scss";
 
 import React, { lazy, Suspense, useEffect, useLayoutEffect, useRef } from "react";
-import { Box, Flex, Text } from "@radix-ui/themes";
+import { Box, Button, Flex, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 import AppFooter from "@/components/AppFooter/AppFooter";
@@ -273,12 +273,14 @@ export const MainAppContent: React.FC = () => {
 		<>
 			<MainAppMobileToolbar />
 
-			<a
-				className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-100 focus:rounded focus:bg-(--accent-9) focus:px-4 focus:py-2 focus:text-white"
-				href="#main-content"
+			<Button
+				asChild
+				className="main-app__skip-link pt-3"
+				size="2"
+				variant="soft"
 			>
-				Skip to main content
-			</a>
+				<a href="#main-content">Skip to Main Content</a>
+			</Button>
 			<div className="main-app__container">
 				<div className="main-app__card lg:shadow-lg">
 					<div className="main-app__background-wrapper">

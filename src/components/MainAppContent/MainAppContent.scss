@@ -5,6 +5,18 @@ $panel-border: 1px solid var(--gray-6);
 
 // Block: main-app
 .main-app {
+	&__skip-link {
+		left: var(--space-3);
+		position: fixed;
+		top: -9999px;
+		z-index: 100;
+
+		&:focus,
+		&:focus-visible {
+			top: var(--space-5);
+		}
+	}
+
 	&__container {
 		align-items: center;
 		display: flex;
