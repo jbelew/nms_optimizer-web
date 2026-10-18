@@ -2,7 +2,7 @@
  * Store-connected Module Selection dialog module.
  *
  * @remarks
- * Subscribes to {@link useModuleSelectionDialogStore}, {@link useTechStore}, {@link useGridStore},
+ * Subscribes to {@link useModuleSelectionDialogStore}, {@link useTechStore},
  * and {@link usePlatformStore} to render a single shared dialog instance for configuring a
  * Technology Category's Module Selection. Delegates all Module Group classification, alphabetical
  * sorting, and Module Rank Order prerequisite rules to {@link groupModules},
@@ -35,10 +35,9 @@ import { shallow } from "zustand/shallow";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
-import { useTechTree } from "@/components/TechTree/useTechTreeContext";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useOptimize } from "@/hooks/useOptimize/useOptimize";
 import { usePlatformStore } from "@/store/app/platformStore";
-import { useGridStore } from "@/store/grid/gridStore";
 import {
 	areAllModulesSelected,
 	getModulePrerequisites,
@@ -329,7 +328,7 @@ const SafeParagraph: React.FC<SafeParagraphProps> = ({ style, ...props }) => (
  */
 export const ModuleSelectionDialog: React.FC = memo(() => {
 	const { t } = useTranslation();
-	const { handleOptimize, isGridFull } = useTechTree();
+	const { handleOptimize } = useOptimize();
 	const { sendDeferredEvent } = useAnalytics();
 	const [, startTransition] = useTransition();
 
@@ -356,7 +355,6 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 		}))
 	);
 
-	const hasTechInGrid = useGridStore((state) => state.activeTechs?.has(activeTech) ?? false);
 	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
 	const isCorvette = selectedPlatform === "corvette";
 
@@ -418,16 +416,9 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 
 	const handleOptimizeClick = useCallback(async () => {
 		optimizeClickedRef.current = true;
-
-		if (isGridFull && !hasTechInGrid) {
-			closeDialog();
-
-			return;
-		}
-
 		await handleOptimize(activeTech);
 		closeDialog();
-	}, [activeTech, closeDialog, handleOptimize, hasTechInGrid, isGridFull]);
+	}, [activeTech, closeDialog, handleOptimize]);
 
 	const handleClose = useCallback(() => {
 		startTransition(() => {

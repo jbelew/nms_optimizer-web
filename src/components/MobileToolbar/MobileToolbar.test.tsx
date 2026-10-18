@@ -77,12 +77,6 @@ vi.mock("@/utils/system/dialogUtils", () => ({
 	}),
 }));
 
-vi.mock("@/hooks/useUrlSync/useUrlSync", () => ({
-	useUrlSync: () => ({
-		updateUrlForShare: vi.fn(() => "http://test-share-url"),
-	}),
-}));
-
 describe("MobileToolbar", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();

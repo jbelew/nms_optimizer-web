@@ -138,6 +138,34 @@ describe("OptimizationManager", () => {
 		expect(onComplete).toHaveBeenCalledWith(mockResponse);
 	});
 
+	it("should disconnect the retried socket when cleanup() is called on the original manager", async () => {
+		const manager = new OptimizationManager({
+			...defaultOptions,
+			onComplete: vi.fn(),
+			onError: vi.fn(),
+			onPatternNoFit: vi.fn(),
+			onProgress: vi.fn(),
+			tech: "pulse",
+		});
+
+		await manager.start();
+		const firstSocket = await mockCreateSocket.mock.results[0].value;
+
+		// Trigger transport error to initiate retry on the same manager instance
+		const handleError = (
+			(firstSocket.once as unknown as Mock).mock.calls as unknown as [string, unknown][]
+		).find((call) => call[0] === "connect_error")?.[1] as (err: Error) => void;
+		handleError(new Error("websocket error"));
+
+		expect(mockCreateSocket).toHaveBeenCalledTimes(2);
+		const secondSocket = await mockCreateSocket.mock.results[1].value;
+
+		// Calling cleanup() on the original manager must tear down the active retried socket
+		manager.cleanup();
+		expect(secondSocket.off).toHaveBeenCalled();
+		expect(secondSocket.disconnect).toHaveBeenCalled();
+	});
+
 	it("should handle progress updates", async () => {
 		const onProgress = vi.fn();
 		const manager = new OptimizationManager({

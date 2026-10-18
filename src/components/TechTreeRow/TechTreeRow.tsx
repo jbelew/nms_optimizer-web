@@ -15,7 +15,6 @@ import { Avatar, Button, IconButton, Popover, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
-import { useTechTree } from "@/components/TechTree/useTechTreeContext";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useTechStore } from "@/store/tech/techStore";
 import { useA11yStore, useModuleSelectionDialogStore } from "@/store/ui/uiStore";
@@ -157,14 +156,15 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
  */
 const TechTreeRowActions: React.FC = () => {
 	const { t } = useTranslation();
-	const { isGridFull, solving } = useTechTree();
 	const {
 		checkedModulesCount,
 		handleOptimizeClick,
 		handleReset,
 		hasTechInGrid,
+		isGridFull,
 		isOptimizing,
 		isResetting,
+		solving,
 		tech,
 		translatedTechName,
 	} = useTechTreeRowContext();
@@ -240,14 +240,15 @@ const TechTreeRowLabel: React.FC = () => {
 const TechTreeRowBadges: React.FC = () => {
 	const { t } = useTranslation();
 	const { a11yMode: _a11yMode } = useA11yStore();
-	const { isGridFull, solving } = useTechTree();
 	const openDialog = useModuleSelectionDialogStore((state) => state.openDialog);
 	const [, startTransition] = React.useTransition();
 
 	const {
 		checkedModulesCount,
 		hasTechInGrid,
+		isGridFull,
 		modules,
+		solving,
 		tech,
 		techColor,
 		techImage,

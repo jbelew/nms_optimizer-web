@@ -1,19 +1,21 @@
 import type { TechTreeRowProps } from "@/types/props";
 import type { Mock } from "vitest";
 import { renderHook } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
 
 import { useTechTreeRow } from "./useTechTreeRow";
 
-vi.mock("./useTechOptimization", () => ({
-	useTechOptimization: vi.fn(() => ({
-		handleOptimizeClick: vi.fn(),
-		handleReset: vi.fn(),
-		isOptimizing: false,
-		isResetting: false,
+vi.mock("@/hooks/useOptimize/useOptimize", () => ({
+	useOptimize: vi.fn(() => ({
+		clearPatternNoFitTech: vi.fn(),
+		gridContainerRef: { current: null },
+		handleForceCurrentPnfOptimize: vi.fn(),
+		handleOptimize: vi.fn(),
+		patternNoFitTech: null,
+		solving: false,
 	})),
 }));
 
@@ -27,14 +29,7 @@ vi.mock("react-i18next", () => ({
 	}),
 }));
 
-const mockProps: TechTreeRowProps & {
-	handleOptimize: (tech: string) => Promise<void>;
-	isGridFull: boolean;
-	solving: boolean;
-} = {
-	handleOptimize: vi.fn(),
-	isGridFull: false,
-	solving: false,
+const mockProps: TechTreeRowProps = {
 	tech: "testTech",
 	techColor: "blue",
 	techImage: "test.webp",
@@ -48,6 +43,7 @@ describe("useTechTreeRow", () => {
 				selector({
 					activeTechs: new Set(),
 					hasTechInGrid: vi.fn(() => false),
+					isGridFull: false,
 				})
 		);
 		(useTechStore as unknown as Mock).mockImplementation(
@@ -102,23 +98,15 @@ describe("useTechTreeRow", () => {
 
 	it("should memoize image paths and translation (no recalculation on non-dependency changes)", () => {
 		const { rerender, result } = renderHook(
-			({
-				props,
-			}: {
-				props: TechTreeRowProps & {
-					handleOptimize: (tech: string) => Promise<void>;
-					isGridFull: boolean;
-					solving: boolean;
-				};
-			}) => useTechTreeRow(props),
+			({ props }: { props: TechTreeRowProps }) => useTechTreeRow(props),
 			{ initialProps: { props: mockProps } }
 		);
 
 		const initialImagePath = result.current.imagePath;
 		const initialTranslation = result.current.translatedTechName;
 
-		// Change a non-dependency prop (solving)
-		rerender({ props: { ...mockProps, solving: true } });
+		// Re-render with identical props
+		rerender({ props: { ...mockProps } });
 
 		// Image paths and translation should remain the same (memoized)
 		expect(result.current.imagePath).toBe(initialImagePath);
@@ -127,15 +115,7 @@ describe("useTechTreeRow", () => {
 
 	it("should update image paths when techImage dependency changes", () => {
 		const { rerender, result } = renderHook(
-			({
-				props,
-			}: {
-				props: TechTreeRowProps & {
-					handleOptimize: (tech: string) => Promise<void>;
-					isGridFull: boolean;
-					solving: boolean;
-				};
-			}) => useTechTreeRow(props),
+			({ props }: { props: TechTreeRowProps }) => useTechTreeRow(props),
 			{ initialProps: { props: mockProps } }
 		);
 

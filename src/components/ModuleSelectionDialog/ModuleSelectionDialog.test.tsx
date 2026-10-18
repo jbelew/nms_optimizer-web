@@ -3,8 +3,8 @@ import React from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useTechTree } from "@/components/TechTree/useTechTreeContext";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useOptimize } from "@/hooks/useOptimize/useOptimize";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
@@ -35,7 +35,7 @@ vi.mock("react-i18next", () => ({
 	}),
 }));
 
-vi.mock("@/components/TechTree/useTechTreeContext");
+vi.mock("@/hooks/useOptimize/useOptimize");
 vi.mock("@/hooks/useAnalytics/useAnalytics");
 vi.mock("@/utils/system/dialogUtils", () => ({
 	useDialog: () => ({
@@ -228,9 +228,12 @@ describe("ModuleSelectionDialog", () => {
 			selectedTechData,
 		});
 
-		vi.mocked(useTechTree).mockReturnValue({
+		vi.mocked(useOptimize).mockReturnValue({
+			clearPatternNoFitTech: vi.fn(),
+			gridContainerRef: { current: null },
+			handleForceCurrentPnfOptimize: vi.fn(),
 			handleOptimize: mockHandleOptimize,
-			isGridFull,
+			patternNoFitTech: null,
 			solving: false,
 		});
 

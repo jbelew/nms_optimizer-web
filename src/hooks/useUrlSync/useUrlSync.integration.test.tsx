@@ -92,11 +92,19 @@ const mockNavigate = vi.fn((to: string, options?: { replace?: boolean }) => {
 });
 
 vi.mock("react-router-dom", () => ({
+	useLocation: () => ({
+		pathname: window.location.pathname,
+		search: window.location.search,
+	}),
 	useNavigate: () => mockNavigate,
 }));
 
 vi.mock("@/context/RouteContext", () => ({
 	useRouteContext: () => ({ isKnownRoute: true }),
+}));
+
+vi.mock("@/utils/system/dialogUtils", () => ({
+	useDialog: () => ({ userVisited: false }),
 }));
 
 /**

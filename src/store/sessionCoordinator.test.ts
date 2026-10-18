@@ -1,7 +1,14 @@
 import type { Grid } from "./grid/gridStore";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { serialize } from "@/hooks/useGridDeserializer/gridSerializer";
+
 import { computeBonusStatus, sessionCoordinator } from "./sessionCoordinator";
+
+vi.mock("@/hooks/useGridDeserializer/gridSerializer", () => ({
+	deserialize: vi.fn(),
+	serialize: vi.fn(() => "serialized-grid"),
+}));
 
 const mockGridStore = {
 	clearInteractionState: vi.fn(),
@@ -10,6 +17,7 @@ const mockGridStore = {
 	initialGridDefinition: undefined,
 	isSharedGrid: false,
 	resetGrid: vi.fn(),
+	resetGridTech: vi.fn(),
 	restoreGridState: vi.fn(),
 	result: null,
 	setBuildName: vi.fn(),
@@ -25,11 +33,16 @@ const mockTechStore = {
 	clearAllBonusStatus: vi.fn(),
 	clearAllCheckedModules: vi.fn(),
 	clearAllModuleSelections: vi.fn(),
+	clearBonusStatus: vi.fn(),
 	clearResult: vi.fn(),
 	clearTechGroups: vi.fn(),
+	clearTechMaxBonus: vi.fn(),
+	clearTechSolvedBonus: vi.fn(),
+	clearTechSolveMethod: vi.fn(),
 	maxBonus: { pulse: 100 },
 	resetSession: vi.fn(),
 	restoreTechState: vi.fn(),
+	setTechColors: vi.fn(),
 	solvedBonus: { pulse: 100 },
 	solveMethod: { pulse: "pattern" },
 };
@@ -40,7 +53,7 @@ const mockPlatformStoreState = {
 };
 
 vi.mock("./grid/gridStore", () => ({
-	createGrid: vi.fn(),
+	createGrid: vi.fn(() => ({ cells: [], height: 6, width: 10 })),
 	useGridStore: {
 		getState: vi.fn(() => mockGridStore),
 	},
@@ -70,17 +83,6 @@ vi.mock("./ui/uiStore", () => ({
 
 describe("computeBonusStatus rounding", () => {
 	it("correctly rounds numbers that would fail with the scientific notation hack", () => {
-		// Example: 99.995 should round to 100.00
-		// Old hack: Math.round(Number(99.995 + "e" + 2)) + "e-" + 2
-		// -> Math.round(9999.5) + "e-2" -> 10000 + "e-2" -> 100.00 (correct)
-
-		// Example: 1.005
-		// Old hack: Math.round(Number(1.005 + "e" + 2)) + "e-" + 2
-		// -> Math.round(100.5) + "e-2" -> 101 + "e-2" -> 1.01 (correct)
-
-		// The issue with the old hack is more about string concatenation safety and performance
-		// than basic rounding failure in these specific cases, but let's ensure precision.
-
 		expect(computeBonusStatus(99.995)).toEqual({ icon: "check", percent: 0 });
 		expect(computeBonusStatus(100.004)).toEqual({ icon: "check", percent: 0 });
 		expect(computeBonusStatus(100.005)).toEqual({ icon: "lightning", percent: 0.01 });
@@ -88,7 +90,6 @@ describe("computeBonusStatus rounding", () => {
 	});
 
 	it("handles floating point precision issues", () => {
-		// 100.01 * 100 = 10001.000000000002 sometimes
 		expect(computeBonusStatus(100.01)).toEqual({ icon: "lightning", percent: 0.01 });
 		expect(computeBonusStatus(99.99)).toEqual({ icon: "warning", percent: 0.01 });
 	});
@@ -98,17 +99,48 @@ describe("sessionCoordinator", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		mockGridStore.isSharedGrid = false;
+		mockPlatformStoreState.selectedPlatform = "test-platform";
 	});
 
-	it("switchPlatform resets the optimization result in gridStore", () => {
+	it("switchPlatform atomically updates platform, resets grid, clears tech state, and resets UI session", () => {
 		const newGrid = { cells: [] } as unknown as Grid;
 
-		sessionCoordinator.switchPlatform(newGrid);
+		sessionCoordinator.switchPlatform(
+			"new-platform",
+			["test-platform", "new-platform"],
+			newGrid
+		);
 
+		expect(mockPlatformStoreState.setSelectedPlatform).toHaveBeenCalledWith("new-platform", [
+			"test-platform",
+			"new-platform",
+		]);
 		expect(mockGridStore.setGrid).toHaveBeenCalledWith(newGrid);
 		expect(mockGridStore.setResult).toHaveBeenCalledWith(null);
 		expect(mockGridStore.setIsSharedGrid).toHaveBeenCalledWith(false);
 		expect(mockGridStore.setBuildName).toHaveBeenCalledWith(null);
+		expect(mockUiStore.resetSession).toHaveBeenCalled();
+	});
+
+	it("resetTechnology atomically clears grid placement and bonus metrics for a technology category", () => {
+		sessionCoordinator.resetTechnology("pulse");
+
+		expect(mockGridStore.resetGridTech).toHaveBeenCalledWith("pulse");
+		expect(mockTechStore.clearTechMaxBonus).toHaveBeenCalledWith("pulse");
+		expect(mockTechStore.clearTechSolvedBonus).toHaveBeenCalledWith("pulse");
+		expect(mockTechStore.clearBonusStatus).toHaveBeenCalledWith("pulse");
+		expect(mockTechStore.clearTechSolveMethod).toHaveBeenCalledWith("pulse");
+	});
+
+	it("getShareUrl serializes current grid and platform into a shareable URL", () => {
+		window.history.pushState({}, "", "/");
+		vi.mocked(serialize).mockReturnValue("serialized-grid");
+
+		const shareUrl = sessionCoordinator.getShareUrl();
+		const parsed = new URL(shareUrl);
+
+		expect(parsed.searchParams.get("platform")).toBe("test-platform");
+		expect(parsed.searchParams.get("grid")).toBe("serialized-grid");
 	});
 
 	it("resetSession resets stores and restores default checked modules rather than clearing them completely", () => {
@@ -124,50 +156,47 @@ describe("sessionCoordinator", () => {
 	describe("syncStateFromUrl", () => {
 		it("should synchronize platform and deserialize grid when both are present", () => {
 			mockPlatformStoreState.selectedPlatform = "old-platform";
-			const mockDeserializeGrid = vi.fn();
+			const deserializeSpy = vi
+				.spyOn(sessionCoordinator, "deserializeSharedGrid")
+				.mockResolvedValue();
 
 			sessionCoordinator.syncStateFromUrl({
-				deserializeGrid: mockDeserializeGrid,
 				gridFromUrl: "serialized-grid",
-				isKnownRoute: true,
 				platformFromUrl: "new-platform",
 				validShipTypes: ["old-platform", "new-platform"],
 			});
 
 			expect(mockPlatformStoreState.setSelectedPlatform).toHaveBeenCalledWith(
 				"new-platform",
-				["old-platform", "new-platform"],
-				false,
-				true
+				["old-platform", "new-platform"]
 			);
-			expect(mockDeserializeGrid).toHaveBeenCalledWith("serialized-grid");
+			expect(deserializeSpy).toHaveBeenCalledWith("serialized-grid");
+			deserializeSpy.mockRestore();
 		});
 
 		it("should reset platform and grid when platform is changed without grid", () => {
 			mockPlatformStoreState.selectedPlatform = "old-platform";
-			const mockDeserializeGrid = vi.fn();
+			const deserializeSpy = vi
+				.spyOn(sessionCoordinator, "deserializeSharedGrid")
+				.mockResolvedValue();
 			const switchPlatformSpy = vi
 				.spyOn(sessionCoordinator, "switchPlatform")
 				.mockImplementation(() => {});
 
 			sessionCoordinator.syncStateFromUrl({
-				deserializeGrid: mockDeserializeGrid,
 				gridFromUrl: null,
-				isKnownRoute: true,
 				platformFromUrl: "new-platform",
 				validShipTypes: ["old-platform", "new-platform"],
 			});
 
-			expect(mockPlatformStoreState.setSelectedPlatform).toHaveBeenCalledWith(
+			expect(switchPlatformSpy).toHaveBeenCalledWith("new-platform", [
+				"old-platform",
 				"new-platform",
-				["old-platform", "new-platform"],
-				false,
-				true
-			);
-			expect(switchPlatformSpy).toHaveBeenCalled();
-			expect(mockDeserializeGrid).not.toHaveBeenCalled();
+			]);
+			expect(deserializeSpy).not.toHaveBeenCalled();
 
 			switchPlatformSpy.mockRestore();
+			deserializeSpy.mockRestore();
 		});
 
 		it("should trigger resetSession when transitioning from a shared grid to a URL without grid param", () => {
@@ -177,9 +206,7 @@ describe("sessionCoordinator", () => {
 				.mockImplementation(() => {});
 
 			sessionCoordinator.syncStateFromUrl({
-				deserializeGrid: vi.fn(),
 				gridFromUrl: null,
-				isKnownRoute: true,
 				platformFromUrl: null,
 				validShipTypes: ["test-platform"],
 			});
@@ -195,9 +222,7 @@ describe("sessionCoordinator", () => {
 				.mockImplementation(() => {});
 
 			sessionCoordinator.syncStateFromUrl({
-				deserializeGrid: vi.fn(),
 				gridFromUrl: null,
-				isKnownRoute: true,
 				platformFromUrl: null,
 				validShipTypes: ["test-platform"],
 			});
@@ -214,9 +239,7 @@ describe("sessionCoordinator", () => {
 				.mockImplementation(() => {});
 
 			sessionCoordinator.syncStateFromUrl({
-				deserializeGrid: vi.fn(),
 				gridFromUrl: null,
-				isKnownRoute: true,
 				platformFromUrl: "new-platform",
 				validShipTypes: ["old-platform", "new-platform"],
 			});
@@ -275,12 +298,10 @@ describe("sessionCoordinator", () => {
 
 			sessionCoordinator.restoreBuildSnapshot(buildFile, ["fighter", "shuttle"]);
 
-			expect(mockPlatformStoreState.setSelectedPlatform).toHaveBeenCalledWith(
+			expect(mockPlatformStoreState.setSelectedPlatform).toHaveBeenCalledWith("fighter", [
 				"fighter",
-				["fighter", "shuttle"],
-				true,
-				true
-			);
+				"shuttle",
+			]);
 			expect(mockGridStore.restoreGridState).toHaveBeenCalledWith({
 				...buildFile.gridState,
 				buildName: "Loaded Fighter",

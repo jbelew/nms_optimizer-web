@@ -3,7 +3,6 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useEffect } from "react";
 import { Theme } from "@radix-ui/themes";
 
-import { TechTreeProvider } from "@/components/TechTree/TechTreeProvider";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useTechStore } from "@/store/tech/techStore";
 import { useModuleSelectionDialogStore } from "@/store/ui/uiStore";
@@ -26,13 +25,7 @@ const meta: Meta<typeof ModuleSelectionDialog> = {
 	decorators: [
 		(Story) => (
 			<Theme>
-				<TechTreeProvider
-					handleOptimize={async () => {}}
-					isGridFull={false}
-					solving={false}
-				>
-					<Story />
-				</TechTreeProvider>
+				<Story />
 			</Theme>
 		),
 	],

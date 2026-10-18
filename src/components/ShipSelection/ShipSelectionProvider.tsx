@@ -8,14 +8,10 @@ import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
 import { useToast } from "@/hooks/useToast/useToast";
 import { usePlatformStore } from "@/store/app/platformStore";
-import { createGrid } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { Logger } from "@/utils/system/monitoring";
 
 import { ShipSelectionContext } from "./useShipSelectionContext";
-
-const DEFAULT_GRID_HEIGHT = 10;
-const DEFAULT_GRID_WIDTH = 6;
 
 /**
  * Props for the `ShipSelectionProvider` component.
@@ -45,7 +41,6 @@ export const ShipSelectionProvider: React.FC<ShipSelectionProviderProps> = ({
 	const { showInfo } = useToast();
 	const shipTypes = useFetchShipTypesSuspense();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
-	const setSelectedShipType = usePlatformStore((state) => state.setSelectedPlatform);
 	const { sendDeferredEvent } = useAnalytics();
 	const [isPending, startTransition] = useTransition();
 	const { isKnownRoute } = useRouteContext();
@@ -78,9 +73,7 @@ export const ShipSelectionProvider: React.FC<ShipSelectionProviderProps> = ({
 						);
 					}
 
-					setSelectedShipType(option, shipTypeKeys, true, isKnownRoute);
-					const initialGrid = createGrid(DEFAULT_GRID_HEIGHT, DEFAULT_GRID_WIDTH);
-					sessionCoordinator.switchPlatform(initialGrid);
+					sessionCoordinator.switchPlatform(option, shipTypeKeys);
 				});
 
 				if (isKnownRoute) {
@@ -102,16 +95,7 @@ export const ShipSelectionProvider: React.FC<ShipSelectionProviderProps> = ({
 				});
 			}
 		},
-		[
-			selectedShipType,
-			showInfo,
-			t,
-			setSelectedShipType,
-			shipTypeKeys,
-			isKnownRoute,
-			navigate,
-			sendDeferredEvent,
-		]
+		[selectedShipType, showInfo, t, shipTypeKeys, isKnownRoute, navigate, sendDeferredEvent]
 	);
 
 	const value = useMemo(

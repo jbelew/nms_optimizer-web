@@ -4,6 +4,7 @@ import type { TechTreeItem } from "@/types/tech";
 import type { SaveBuildParams } from "@/utils/build/buildSerializer";
 import type { BuildFile } from "@/utils/validation/dataValidation";
 
+import { deserialize, serialize } from "@/hooks/useGridDeserializer/gridSerializer";
 import { Logger } from "@/utils/system/monitoring";
 
 import { usePlatformStore } from "./app/platformStore";
@@ -73,9 +74,8 @@ function computeInitialCheckedModules(techGroups: { [key: string]: TechTreeItem[
  *
  * @remarks
  * This module centralizes actions that affect multiple stores simultaneously,
- * such as resetting a session, switching platforms, or capturing/restoring a Build File.
- * This prevents stores and DOM hooks from having "shotgun coupling" where they need to
- * know about each other's internals.
+ * such as Session Reset, Technology Reset, switching Platform Type, Shared Grid
+ * URL serialization/deserialization, and capturing/restoring a Build File.
  *
  * @category State
  */
@@ -104,6 +104,39 @@ export const sessionCoordinator = {
 			// 3. Update Bonus Status Store
 			const status = computeBonusStatus(data.maxBonus);
 			techStore.setBonusStatus(tech, status);
+		}
+	},
+
+	/**
+	 * Deserializes a Shared Grid token for the active Platform Type and applies it to the grid store.
+	 *
+	 * @param {string} serializedGrid - The encoded grid string from the `grid` query parameter.
+	 *
+	 * @returns {Promise<void>} Resolves when the Shared Grid is restored in the store.
+	 *
+	 * @see {@link deserialize}
+	 * @see {@link useGridStore}
+	 *
+	 * @example
+	 * ```ts
+	 * await sessionCoordinator.deserializeSharedGrid(encodedGrid);
+	 * // restores Shared Grid layout and marks isSharedGrid = true
+	 * ```
+	 */
+	async deserializeSharedGrid(serializedGrid: string): Promise<void> {
+		const targetPlatform = usePlatformStore.getState().selectedPlatform;
+		const newGrid = await deserialize(
+			serializedGrid,
+			targetPlatform,
+			useTechStore.getState().setTechColors
+		);
+
+		if (newGrid) {
+			const gridStore = useGridStore.getState();
+			gridStore.setGrid(newGrid);
+			gridStore.setIsSharedGrid(true);
+		} else {
+			Logger.error("Deserialization failed, grid not set.");
 		}
 	},
 
@@ -150,6 +183,37 @@ export const sessionCoordinator = {
 	},
 
 	/**
+	 * Generates a shareable URL containing the active Platform Type and serialized Shared Grid state.
+	 *
+	 * @returns {string} The full shareable URL string.
+	 *
+	 * @see {@link serialize}
+	 *
+	 * @example
+	 * ```ts
+	 * const url = sessionCoordinator.getShareUrl();
+	 * // returns "https://nms-optimizer.app/?platform=standard&grid=v1..."
+	 * ```
+	 */
+	getShareUrl(): string {
+		const { grid } = useGridStore.getState();
+		const { selectedPlatform } = usePlatformStore.getState();
+		const serializedGrid = serialize(grid);
+
+		try {
+			const url = new URL(window.location.href);
+			url.searchParams.set("grid", serializedGrid);
+			url.searchParams.set("platform", selectedPlatform);
+
+			return url.toString();
+		} catch (error) {
+			Logger.warn("sessionCoordinator: Failed to create share URL", { error });
+
+			return `/?platform=${selectedPlatform}&grid=${encodeURIComponent(serializedGrid)}`;
+		}
+	},
+
+	/**
 	 * Initializes the technology tree metadata across relevant stores.
 	 *
 	 * Synchronizes initial module selections with persistent user preferences.
@@ -170,7 +234,7 @@ export const sessionCoordinator = {
 	},
 
 	/**
-	 * Resets the entire application state to its default values.
+	 * Resets the entire application state to its default values (Session Reset).
 	 *
 	 * Orchestrates the reset of grid, tech, modules, and interaction stores,
 	 * ensuring all persisted state is also cleared.
@@ -187,6 +251,35 @@ export const sessionCoordinator = {
 
 		// 3. Reset UI session violation counters
 		useUiStore.getState().resetSession();
+	},
+
+	/**
+	 * Performs a Technology Reset for a single Technology Category.
+	 *
+	 * @remarks
+	 * Clears all placed modules for `tech` from `useGridStore` and resets its
+	 * `maxBonus`, `solvedBonus`, `bonusStatus`, and `solveMethod` in `useTechStore`
+	 * while preserving its Module Selection and the rest of the grid layout.
+	 *
+	 * @param {string} tech - The Technology Category identifier to reset.
+	 *
+	 * @returns {void} Side-effects only.
+	 *
+	 * @example
+	 * ```ts
+	 * sessionCoordinator.resetTechnology("pulse");
+	 * // clears pulse cells from grid and resets pulse bonus scores
+	 * ```
+	 */
+	resetTechnology(tech: string): void {
+		const gridStore = useGridStore.getState();
+		const techStore = useTechStore.getState();
+
+		gridStore.resetGridTech?.(tech);
+		techStore.clearTechMaxBonus?.(tech);
+		techStore.clearTechSolvedBonus?.(tech);
+		techStore.clearBonusStatus?.(tech);
+		techStore.clearTechSolveMethod?.(tech);
 	},
 
 	/**
@@ -210,7 +303,7 @@ export const sessionCoordinator = {
 		const platformState = usePlatformStore.getState();
 
 		if (buildData.shipType !== platformState.selectedPlatform) {
-			platformState.setSelectedPlatform(buildData.shipType, validShipTypes, true, true);
+			platformState.setSelectedPlatform(buildData.shipType, validShipTypes);
 		}
 
 		useGridStore.getState().restoreGridState({
@@ -240,55 +333,81 @@ export const sessionCoordinator = {
 	},
 
 	/**
-	 * Switches the active ship platform and resets dependent state.
+	 * Switches the active Platform Type and resets dependent grid, technology, and UI session state.
 	 *
-	 * @param {Grid} newGrid - The new grid layout for the platform.
+	 * @param {string} platform - The target Platform Type identifier.
+	 * @param {string[]} validPlatformTypes - Array of supported Platform Type identifiers.
+	 * @param {Grid} [newGrid=createGrid(10, 6)] - The initial Default Grid Layout for the platform.
+	 *
+	 * @returns {void} Side-effects only.
+	 *
+	 * @example
+	 * ```ts
+	 * sessionCoordinator.switchPlatform("corvette", ["standard", "corvette"]);
+	 * // updates platformStore, resets grid to Default Grid Layout, and clears tech/UI session state
+	 * ```
 	 */
-	switchPlatform(newGrid: Grid) {
+	switchPlatform(
+		platform: string,
+		validPlatformTypes: string[],
+		newGrid: Grid = createGrid(10, 6)
+	): void {
+		const platformStore = usePlatformStore.getState();
 		const gridStore = useGridStore.getState();
 		const techStore = useTechStore.getState();
 
-		// 1. Update Grid and clear its Interaction State
+		// 1. Validate and update Platform Type
+		platformStore.setSelectedPlatform(platform, validPlatformTypes);
+
+		// 2. Update Grid and clear its Interaction State
 		gridStore.setGrid(newGrid);
 		gridStore.setResult(null);
 		gridStore.setIsSharedGrid(false);
 		gridStore.setBuildName(null);
 		gridStore.clearInteractionState();
 
-		// 2. Clear results and groups
+		// 3. Clear results and groups
 		techStore.clearResult();
 		techStore.clearTechGroups();
 		techStore.clearAllBonusStatus();
 		techStore.clearAllModuleSelections();
+
+		// 4. Reset UI session violation counters
+		useUiStore.getState().resetSession();
 	},
 
 	/**
 	 * Synchronizes application state with values retrieved from the browser URL.
 	 *
 	 * @remarks
-	 * Handles conditional ship platform switches and grid layout deserialization.
+	 * Handles conditional Platform Type switches and Shared Grid deserialization.
 	 * When navigating via browser history (`popstate`) from a state that held a
-	 * Shared Grid to a URL without a `grid` parameter, triggers a full session
-	 * reset to return the workspace to an empty grid layout.
+	 * Shared Grid to a URL without a `grid` parameter, triggers a full Session Reset
+	 * to return the workspace to the Default Grid Layout.
 	 *
-	 * @param {object} params - The search parameter values and deserializer.
-	 * @param {string | null} params.platformFromUrl - The platform query parameter.
-	 * @param {string | null} params.gridFromUrl - The grid layout query parameter.
-	 * @param {string[]} params.validShipTypes - Array of supported ship type identifiers.
-	 * @param {boolean} params.isKnownRoute - True if route is standard/known.
-	 * @param {(serialized: string) => void} params.deserializeGrid - Callback to deserialize grid string.
+	 * @param {object} params - The search parameter values and valid platforms.
+	 * @param {string | null} params.platformFromUrl - The `platform` query parameter.
+	 * @param {string | null} params.gridFromUrl - The `grid` layout query parameter.
+	 * @param {string[]} params.validShipTypes - Array of supported Platform Type identifiers.
 	 *
-	 * @returns {void}
+	 * @returns {Promise<void> | void} Resolves when URL synchronization completes.
+	 *
+	 * @example
+	 * ```ts
+	 * await sessionCoordinator.syncStateFromUrl({
+	 *   gridFromUrl: null,
+	 *   platformFromUrl: "solar",
+	 *   validShipTypes: ["standard", "solar"],
+	 * });
+	 * // updates selectedPlatform to "solar" and resets grid/tech session state
+	 * ```
 	 */
 	syncStateFromUrl(params: {
-		deserializeGrid: (serialized: string) => void;
 		gridFromUrl: null | string;
-		isKnownRoute: boolean;
 		platformFromUrl: null | string;
 		validShipTypes: string[];
-	}) {
-		const { deserializeGrid, gridFromUrl, isKnownRoute, platformFromUrl, validShipTypes } =
-			params;
+	}): Promise<void> | void {
+		const { gridFromUrl, platformFromUrl, validShipTypes } = params;
 		const platformStore = usePlatformStore.getState();
 		const currentPlatform = platformStore.selectedPlatform;
 		const wasSharedGrid = useGridStore.getState().isSharedGrid;
@@ -296,15 +415,10 @@ export const sessionCoordinator = {
 		// Sync platform first to avoid grid deserialization conflicts
 		if (platformFromUrl && platformFromUrl !== currentPlatform) {
 			if (validShipTypes.includes(platformFromUrl)) {
-				platformStore.setSelectedPlatform(
-					platformFromUrl,
-					validShipTypes,
-					false, // updateUrl = false (we are ALREADY responding to a URL change)
-					isKnownRoute
-				);
-
-				if (!gridFromUrl) {
-					sessionCoordinator.switchPlatform(createGrid(10, 6));
+				if (gridFromUrl) {
+					platformStore.setSelectedPlatform(platformFromUrl, validShipTypes);
+				} else {
+					sessionCoordinator.switchPlatform(platformFromUrl, validShipTypes);
 				}
 			} else {
 				Logger.warn(
@@ -314,7 +428,7 @@ export const sessionCoordinator = {
 		}
 
 		if (gridFromUrl) {
-			deserializeGrid(gridFromUrl);
+			return sessionCoordinator.deserializeSharedGrid(gridFromUrl);
 		} else {
 			const { isSharedGrid: currentIsSharedGrid } = useGridStore.getState();
 

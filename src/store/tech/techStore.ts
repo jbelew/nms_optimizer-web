@@ -127,6 +127,12 @@ export interface TechStore {
 	 * @param {string} tech - The technology key to clear.
 	 */
 	clearTechSolvedBonus: (tech: string) => void;
+	/**
+	 * Clears the solver method record for a technology.
+	 *
+	 * @param {string} tech - The technology key to clear.
+	 */
+	clearTechSolveMethod: (tech: string) => void;
 	/** Retrieves the current status data for a technology. */
 	getBonusStatus: (tech: string) => BonusStatusData | null;
 	/** Retrieves the currently selected module IDs for a given technology. */
@@ -450,6 +456,11 @@ export const useTechStore = create<TechStore>()(
 			clearTechSolvedBonus: (tech) =>
 				set((state: TechStore) => {
 					state.solvedBonus[tech] = 0;
+					syncAliases(state);
+				}),
+			clearTechSolveMethod: (tech) =>
+				set((state: TechStore) => {
+					delete state.solveMethod[tech];
 					syncAliases(state);
 				}),
 

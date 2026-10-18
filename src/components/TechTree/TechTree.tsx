@@ -4,10 +4,8 @@ import React, { lazy, Suspense } from "react";
 
 import { useFetchTechTreeSuspense } from "@/hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "@/store/app/platformStore";
-import { useGridStore } from "@/store/grid/gridStore";
 
 import { TechTreeContent } from "./TechTreeContent";
-import { TechTreeProvider } from "./TechTreeProvider";
 import { TechTreeRoot } from "./TechTreeRoot";
 
 export { TechTreeSkeleton } from "./TechTreeSkeleton";
@@ -32,10 +30,6 @@ const ModuleSelectionDialog = lazy(() =>
 interface TechTreeProps {
 	/** Optional children to render instead of the default TechTreeContent. */
 	children?: React.ReactNode;
-	/** Function to trigger a solver run for a specific technology. */
-	handleOptimize: (tech: string) => Promise<void>;
-	/** Whether an optimization solve is currently in progress. */
-	solving: boolean;
 	/** Optional pre-fetched technology tree data. */
 	techTree?: TechTreeType;
 }
@@ -45,14 +39,13 @@ interface TechTreeProps {
  *
  * @remarks
  * The `TechTree` component acts as the high-level manager for display and interaction
- * within the technology panel. It leverages {@link TechTreeProvider} to pass core optimization states,
- * renders child rows, and dynamically inserts {@link ModuleSelectionDialog} wrapped in `Suspense`.
+ * within the technology panel. It renders child rows inside {@link TechTreeRoot} and
+ * dynamically inserts {@link ModuleSelectionDialog} wrapped in `Suspense`.
  *
  * @param {TechTreeProps} props - Component properties.
  *
  * @returns {JSX.Element} The rendered technology tree layout.
  *
- * @see {@link TechTreeProvider}
  * @see {@link ModuleSelectionDialog}
  * @see {@link ./TechTree.test.tsx Unit Tests}
  * @see {@link ./TechTree.stories.tsx Storybook}
@@ -63,28 +56,23 @@ interface TechTreeProps {
  *
  * @example
  * ```tsx
- * <TechTree handleOptimize={handleOptimize} solving={false} />
+ * <TechTree />
  * // renders technology tree list and shared module selection dialog
  * ```
  */
-export const TechTree: React.FC<TechTreeProps> = ({
-	handleOptimize,
-	solving,
-	techTree: techTreeProp,
-}) => {
+export const TechTree: React.FC<TechTreeProps> = ({ techTree: techTreeProp }) => {
 	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform) || "standard";
 	const fetchedTechTree = useFetchTechTreeSuspense(selectedPlatform);
 	const techTree = techTreeProp || fetchedTechTree;
-	const isGridFull = useGridStore((state) => state.isGridFull);
 
 	return (
-		<TechTreeProvider handleOptimize={handleOptimize} isGridFull={isGridFull} solving={solving}>
+		<>
 			<TechTreeRoot>
 				<TechTreeContent techTree={techTree} />
 			</TechTreeRoot>
 			<Suspense fallback={null}>
 				<ModuleSelectionDialog />
 			</Suspense>
-		</TechTreeProvider>
+		</>
 	);
 };

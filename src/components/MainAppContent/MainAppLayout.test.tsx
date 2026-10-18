@@ -180,7 +180,7 @@ describe("MainAppLayout Visibility & Lifecycle Logic", () => {
 				<I18nextProvider i18n={i18n}>
 					<Theme>
 						<Suspense fallback={<div>Loading...</div>}>
-							<MainAppSidebarSection handleOptimize={vi.fn()} solving={false} />
+							<MainAppSidebarSection />
 						</Suspense>
 					</Theme>
 				</I18nextProvider>
@@ -196,7 +196,7 @@ describe("MainAppLayout Visibility & Lifecycle Logic", () => {
 			const { container } = render(
 				<I18nextProvider i18n={i18n}>
 					<Theme>
-						<MainAppSidebarSection handleOptimize={vi.fn()} solving={false} />
+						<MainAppSidebarSection />
 					</Theme>
 				</I18nextProvider>
 			);
@@ -206,35 +206,6 @@ describe("MainAppLayout Visibility & Lifecycle Logic", () => {
 	});
 
 	describe("MainAppContent Lifecycle", () => {
-		it("should reset session when platform changes", () => {
-			vi.mocked(useBreakpoint).mockReturnValue(true);
-
-			const { rerender } = render(
-				<MemoryRouter>
-					<I18nextProvider i18n={i18n}>
-						<Theme>
-							<MainAppContent />
-						</Theme>
-					</I18nextProvider>
-				</MemoryRouter>
-			);
-
-			expect(mockResetSession).toHaveBeenCalledTimes(1);
-
-			selectedPlatformState = "corvette";
-			rerender(
-				<MemoryRouter>
-					<I18nextProvider i18n={i18n}>
-						<Theme>
-							<MainAppContent />
-						</Theme>
-					</I18nextProvider>
-				</MemoryRouter>
-			);
-
-			expect(mockResetSession).toHaveBeenCalledTimes(2);
-		});
-
 		it("should show info toast when viewing a shared grid", () => {
 			isSharedGridState = true;
 			vi.mocked(useBreakpoint).mockReturnValue(true);

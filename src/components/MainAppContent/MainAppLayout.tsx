@@ -56,29 +56,11 @@ export const ShipTypesLoader = () => {
 };
 
 /**
- * Props for {@link MainAppBackgroundServices}.
- */
-interface MainAppBackgroundServicesProps {
-	/** Clears the current Pattern No Fit technology warning. */
-	clearPatternNoFitTech: () => void;
-	/** Re-runs optimization with forced solving for the current PNF technology. */
-	handleForceCurrentPnfOptimize: () => Promise<void>;
-	/** Technology key that triggered a Pattern No Fit warning, or null. */
-	patternNoFitTech: null | string;
-}
-
-/**
  * Component that manages deferred background utilities.
- *
- * @param {MainAppBackgroundServicesProps} props - Component properties.
  *
  * @returns {JSX.Element | null} Deferred background services or null before idle mount.
  */
-const MainAppBackgroundServices: React.FC<MainAppBackgroundServicesProps> = ({
-	clearPatternNoFitTech,
-	handleForceCurrentPnfOptimize,
-	patternNoFitTech,
-}) => {
+const MainAppBackgroundServices: React.FC = () => {
 	const mount = useIdleMount();
 
 	if (!mount) return null;
@@ -86,12 +68,7 @@ const MainAppBackgroundServices: React.FC<MainAppBackgroundServicesProps> = ({
 	return (
 		<Suspense fallback={null}>
 			<InstallPrompt />
-			<OptimizationAlertDialog
-				isOpen={!!patternNoFitTech}
-				onClose={clearPatternNoFitTech}
-				onForceOptimize={handleForceCurrentPnfOptimize}
-				technologyName={patternNoFitTech}
-			/>
+			<OptimizationAlertDialog />
 			<ErrorMessageRenderer />
 			<ToastRenderer />
 		</Suspense>
@@ -139,19 +116,7 @@ const MainAppFooter: React.FC<{ position: "bottom-desktop" | "bottom-mobile" }> 
 };
 
 /**
- * Props for {@link MainAppSidebarSection}.
- */
-interface MainAppSidebarSectionProps {
-	/** Callback to trigger optimization for a technology key. */
-	handleOptimize: (tech: string) => Promise<void>;
-	/** Flag indicating whether an optimization solve is in progress. */
-	solving: boolean;
-}
-
-/**
  * Component that renders the technology tree section.
- *
- * @param {MainAppSidebarSectionProps} props - Component properties.
  *
  * @returns {JSX.Element | null} The technology tree sidebar section, or null when viewing a shared grid.
  *
@@ -164,14 +129,11 @@ interface MainAppSidebarSectionProps {
  *
  * @example
  * ```tsx
- * <MainAppSidebarSection handleOptimize={handleOptimize} solving={false} />
+ * <MainAppSidebarSection />
  * // renders technology tree sidebar or null on shared grids
  * ```
  */
-export const MainAppSidebarSection: React.FC<MainAppSidebarSectionProps> = ({
-	handleOptimize,
-	solving,
-}) => {
+export const MainAppSidebarSection: React.FC = () => {
 	const gridHeight = useUiStore((state) => state.gridSectionHeight);
 	const gridTableTotalWidth = useUiStore((state) => state.gridTableWidth);
 	const isLargeScreen = useBreakpoint("1024px");
@@ -193,7 +155,7 @@ export const MainAppSidebarSection: React.FC<MainAppSidebarSectionProps> = ({
 		>
 			<Suspense fallback={<TechTreeSkeleton height={gridHeight} />}>
 				<Flex direction="column" height="100%" minHeight="0">
-					<TechTree handleOptimize={handleOptimize} solving={solving} />
+					<TechTree />
 				</Flex>
 			</Suspense>
 		</Flex>
@@ -221,14 +183,7 @@ export const MainAppSidebarSection: React.FC<MainAppSidebarSectionProps> = ({
  */
 export const MainAppLayoutContent = () => {
 	const { openDialog } = useDialog();
-	const {
-		clearPatternNoFitTech,
-		gridContainerRef,
-		handleForceCurrentPnfOptimize,
-		handleOptimize,
-		patternNoFitTech,
-		solving,
-	} = useOptimize();
+	const { gridContainerRef } = useOptimize();
 
 	return (
 		<>
@@ -252,10 +207,7 @@ export const MainAppLayoutContent = () => {
 							ref={gridContainerRef}
 						>
 							<MainAppGridSection />
-							<MainAppSidebarSection
-								handleOptimize={handleOptimize}
-								solving={solving}
-							/>
+							<MainAppSidebarSection />
 						</Flex>
 					</div>
 
@@ -264,11 +216,7 @@ export const MainAppLayoutContent = () => {
 
 				<MainAppFooter position="bottom-desktop" />
 
-				<MainAppBackgroundServices
-					clearPatternNoFitTech={clearPatternNoFitTech}
-					handleForceCurrentPnfOptimize={handleForceCurrentPnfOptimize}
-					patternNoFitTech={patternNoFitTech}
-				/>
+				<MainAppBackgroundServices />
 			</main>
 		</>
 	);

@@ -41,14 +41,14 @@ describe("PlatformStore", () => {
 	describe("setSelectedPlatform", () => {
 		it("should set a valid platform", () => {
 			const { setSelectedPlatform } = usePlatformStore.getState();
-			setSelectedPlatform("explorer", validShipTypes, false);
+			setSelectedPlatform("explorer", validShipTypes);
 
 			expect(usePlatformStore.getState().selectedPlatform).toBe("explorer");
 		});
 
 		it("should save platform to localStorage", () => {
 			const { setSelectedPlatform } = usePlatformStore.getState();
-			setSelectedPlatform("fighter", validShipTypes, false);
+			setSelectedPlatform("fighter", validShipTypes);
 
 			expect(localStorage.getItem("selectedPlatform")).toBe("fighter");
 		});
@@ -57,22 +57,13 @@ describe("PlatformStore", () => {
 			const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 			const { setSelectedPlatform } = usePlatformStore.getState();
 
-			setSelectedPlatform("invalid", validShipTypes, false);
+			setSelectedPlatform("invalid", validShipTypes);
 
 			expect(usePlatformStore.getState().selectedPlatform).toBe("standard");
 			expect(localStorage.getItem("selectedPlatform")).toBe("standard");
 			expect(warnSpy).toHaveBeenCalled();
 
 			warnSpy.mockRestore();
-		});
-
-		it("should use default values for optional parameters", () => {
-			const { setSelectedPlatform } = usePlatformStore.getState();
-
-			// Call with only required parameters
-			setSelectedPlatform("explorer", validShipTypes);
-
-			expect(usePlatformStore.getState().selectedPlatform).toBe("explorer");
 		});
 	});
 
@@ -146,17 +137,17 @@ describe("PlatformStore", () => {
 			initializePlatform(validShipTypes);
 			expect(usePlatformStore.getState().selectedPlatform).toBe("standard");
 
-			setSelectedPlatform("explorer", validShipTypes, false);
+			setSelectedPlatform("explorer", validShipTypes);
 			expect(usePlatformStore.getState().selectedPlatform).toBe("explorer");
 		});
 
 		it("should maintain state consistency across operations", () => {
 			const { setSelectedPlatform } = usePlatformStore.getState();
 
-			setSelectedPlatform("fighter", validShipTypes, false);
+			setSelectedPlatform("fighter", validShipTypes);
 			expect(usePlatformStore.getState().selectedPlatform).toBe("fighter");
 
-			setSelectedPlatform("hauler", validShipTypes, false);
+			setSelectedPlatform("hauler", validShipTypes);
 			expect(usePlatformStore.getState().selectedPlatform).toBe("hauler");
 
 			expect(localStorage.getItem("selectedPlatform")).toBe("hauler");
@@ -168,12 +159,12 @@ describe("PlatformStore", () => {
 			const { setSelectedPlatform } = usePlatformStore.getState();
 
 			// Lowercase should work
-			setSelectedPlatform("explorer", validShipTypes, false);
+			setSelectedPlatform("explorer", validShipTypes);
 			expect(usePlatformStore.getState().selectedPlatform).toBe("explorer");
 
 			// Invalid case should fallback
 			const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
-			setSelectedPlatform("EXPLORER", validShipTypes, false);
+			setSelectedPlatform("EXPLORER", validShipTypes);
 			expect(usePlatformStore.getState().selectedPlatform).toBe("standard");
 			warnSpy.mockRestore();
 		});
@@ -182,7 +173,7 @@ describe("PlatformStore", () => {
 			const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 			const { setSelectedPlatform } = usePlatformStore.getState();
 
-			setSelectedPlatform("special-platform!", validShipTypes, false);
+			setSelectedPlatform("special-platform!", validShipTypes);
 			expect(usePlatformStore.getState().selectedPlatform).toBe("standard");
 
 			warnSpy.mockRestore();
@@ -192,7 +183,7 @@ describe("PlatformStore", () => {
 			const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 			const { setSelectedPlatform } = usePlatformStore.getState();
 
-			setSelectedPlatform("", validShipTypes, false);
+			setSelectedPlatform("", validShipTypes);
 			expect(usePlatformStore.getState().selectedPlatform).toBe("standard");
 
 			warnSpy.mockRestore();

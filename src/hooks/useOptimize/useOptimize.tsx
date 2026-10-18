@@ -1,5 +1,5 @@
 import type { ApiResponse } from "@/store/grid/gridStore";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
@@ -10,7 +10,7 @@ import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useTechStore } from "@/store/tech/techStore";
-import { useOptimizeStore } from "@/store/ui/uiStore";
+import { useOptimizeStore, useShakeStore } from "@/store/ui/uiStore";
 import { OptimizationManager } from "@/utils/optimization/optimizationManager";
 import { Logger } from "@/utils/system/monitoring";
 
@@ -45,20 +45,36 @@ export interface UseOptimizeReturn {
 
 const SCROLL_OPTIONS = { skipOnLargeScreens: true };
 
+/** Module-scoped active WebSocket manager shared across all mounted `useOptimize` consumers. */
+let activeManager: null | OptimizationManager = null;
+/** Module-scoped lock preventing concurrent optimization requests across callers. */
+let isOptimizingActive = false;
+/** Count of currently mounted `useOptimize` hook consumers. */
+let mountedCount = 0;
+
 /**
  * Custom hook for managing the asynchronous optimization process via WebSockets.
  *
  * @remarks
  * This hook acts as the central interface for:
- * 1. Dispatching optimization requests to the Python backend via {@link OptimizationManager}.
- * 2. Synchronizing WebSocket state (solving, progress, PNF warnings) to the UI.
- * 3. Handling automatic view scrolling on touch devices.
- * 4. Tracking user interaction analytics for starts/cancels/warning states.
+ * 1. Enforcing the full-grid shake guard (`isGridFull && !hasTechInGrid`) via {@link useShakeStore}.
+ * 2. Executing a pre-solve **Technology Reset** via {@link sessionCoordinator.resetTechnology}.
+ * 3. Dispatching optimization requests to the Python backend via a shared {@link OptimizationManager}.
+ * 4. Synchronizing WebSocket state (solving, progress, PNF warnings) to {@link useOptimizeStore}.
+ * 5. Handling automatic view scrolling on touch devices and tracking interaction analytics.
+ *
+ * Because the active {@link OptimizationManager} and in-flight lock are module-scoped,
+ * multiple components (`MainAppLayoutContent`, `TechTreeRow`, `ModuleSelectionDialog`,
+ * `OptimizationAlertDialog`) can call `useOptimize()` directly without prop-drilling or
+ * intermediate context providers.
  *
  * @returns {UseOptimizeReturn} An object containing the optimization state and trigger handlers.
  *
  * @see {@link OptimizationManager} for the underlying socket logic.
+ * @see {@link sessionCoordinator.resetTechnology} for pre-solve Technology Reset.
  * @see {@link useOptimizeStore} for tracking errors and "No Fit" warnings.
+ *
+ * @hook
  *
  * @category Hooks
  *
@@ -105,39 +121,34 @@ export const useOptimize = (): UseOptimizeReturn => {
 	const isLargeRef = useLatest(isLarge);
 	const sendEventRef = useLatest(sendEvent);
 
-	const isOptimizingRef = useRef(false);
-	const managerRef = useRef<null | OptimizationManager>(null);
-	const isMountedRef = useRef(true);
-
 	const { gridContainerRef, scrollIntoView } = useScrollGridIntoView(SCROLL_OPTIONS);
 
 	const resetProgress = useCallback(() => {
-		if (!isMountedRef.current) return;
+		isOptimizingActive = false;
+		activeManager = null;
+		if (mountedCount <= 0) return;
 		setSolving(false);
-		isOptimizingRef.current = false;
 		setProgressPercent(0);
 	}, [setSolving, setProgressPercent]);
 
-	// Reset mount state on unmount
+	// Track mounted consumers and tear down active socket only when the last consumer unmounts
 	useEffect(() => {
-		isMountedRef.current = true;
+		mountedCount += 1;
 
 		return () => {
-			isMountedRef.current = false;
+			mountedCount -= 1;
 
-			if (managerRef.current) {
-				managerRef.current.cleanup();
-				managerRef.current = null;
+			if (mountedCount <= 0) {
+				mountedCount = 0;
+				isOptimizingActive = false;
+
+				if (activeManager) {
+					activeManager.cleanup();
+					activeManager = null;
+				}
 			}
 		};
 	}, []);
-
-	// Scroll into view when solving on smaller screens
-	useEffect(() => {
-		if (solving && isMountedRef.current) {
-			scrollIntoView();
-		}
-	}, [solving, scrollIntoView]);
 
 	/**
 	 * Initiates the optimization solve for the specified technology.
@@ -156,11 +167,24 @@ export const useOptimize = (): UseOptimizeReturn => {
 		async (tech: string, forced: boolean = false) => {
 			performance.mark("optimize-start");
 
-			if (isOptimizingRef.current) {
+			if (isOptimizingActive) {
 				Logger.warn("Optimization already in progress, ignoring request");
 
 				return;
 			}
+
+			const initialGridState = useGridStore.getState();
+			const isGridFull = Boolean(initialGridState.isGridFull);
+			const hasTechInGrid = Boolean(initialGridState.activeTechs?.has?.(tech));
+
+			if (isGridFull && !hasTechInGrid) {
+				useShakeStore.getState().triggerShake();
+
+				return;
+			}
+
+			// Perform atomic Technology Reset before starting the solve
+			sessionCoordinator.resetTechnology(tech);
 
 			const { grid, setGrid } = useGridStore.getState();
 			const { activeGroups, checkedModules, techGroups } = useTechStore.getState();
@@ -168,11 +192,12 @@ export const useOptimize = (): UseOptimizeReturn => {
 			const availableModules = checkedModules[tech] || [];
 			const solveType = techGroups[tech]?.length > 1 ? activeGroups[tech] : undefined;
 
-			isOptimizingRef.current = true;
+			isOptimizingActive = true;
 			setSolving(true);
 			setProgressPercent(0);
 			setShowErrorStore(false);
 			if (forced || patternNoFitTechRef.current === tech) setPatternNoFitTech(null);
+			scrollIntoView();
 
 			Logger.info(`Optimization started for ${tech}`, {
 				forced,
@@ -192,7 +217,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 						"optimize-start",
 						"optimize-complete"
 					);
-					if (!isMountedRef.current) return;
+					if (mountedCount <= 0) return;
 
 					if (patternNoFitTechRef.current === tech) setPatternNoFitTech(null);
 
@@ -226,7 +251,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 					resetProgress();
 				},
 				onError: (err: Error) => {
-					if (!isMountedRef.current) return;
+					if (mountedCount <= 0) return;
 
 					// Handle benign transport close silently
 					if (err.message === "Socket disconnected (transport close)") {
@@ -239,7 +264,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 					resetProgress();
 				},
 				onPatternNoFit: () => {
-					if (!isMountedRef.current) return;
+					if (mountedCount <= 0) return;
 					Logger.info(`Optimization "Pattern No Fit" for ${tech}`, {
 						platform: selectedShipTypeRef.current,
 						tech,
@@ -256,7 +281,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 					resetProgress();
 				},
 				onProgress: (data) => {
-					if (!isMountedRef.current) return;
+					if (mountedCount <= 0) return;
 					setProgressPercent(data.progress_percent);
 					if (data.best_grid) setGrid(data.best_grid);
 				},
@@ -265,14 +290,15 @@ export const useOptimize = (): UseOptimizeReturn => {
 				tech,
 			});
 
-			managerRef.current = manager;
-			manager.start();
+			activeManager = manager;
+			void manager.start();
 		},
 		[
 			setSolving,
 			setProgressPercent,
 			setShowErrorStore,
 			setPatternNoFitTech,
+			scrollIntoView,
 			resetProgress,
 			isLargeRef,
 			patternNoFitTechRef,

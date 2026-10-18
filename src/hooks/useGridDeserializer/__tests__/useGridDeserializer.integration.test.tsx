@@ -3,7 +3,7 @@ import path from "node:path";
 import type { Mock } from "vitest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { deserialize, serialize } from "@/hooks/useGridDeserializer/useGridDeserializer";
+import { deserialize, serialize } from "@/hooks/useGridDeserializer/gridSerializer";
 import * as useTechTree from "@/hooks/useTechTree/useTechTree";
 
 const fixturePath = path.resolve(__dirname, "../../../../scripts/Corvette - Akamai Terror VI.nms");

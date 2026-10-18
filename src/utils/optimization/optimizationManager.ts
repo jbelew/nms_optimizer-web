@@ -105,8 +105,18 @@ export class OptimizationManager {
 		const { forced, isLarge, retryCount = 0, tech } = this.options;
 
 		try {
-			this.socket = await createSocket();
+			const nextSocket = await createSocket();
+
+			if (this.isCleaningUp) {
+				nextSocket?.off();
+				nextSocket?.disconnect();
+
+				return;
+			}
+
+			this.socket = nextSocket;
 		} catch (error) {
+			if (this.isCleaningUp) return;
 			Logger.error("Failed to dynamically import or initialize Socket.IO", { error });
 			this.options.onError(new Error("Failed to initialize WebSocket connection"));
 
@@ -176,12 +186,10 @@ export class OptimizationManager {
 				);
 				this.cleanup();
 
-				// Re-start with incremented retry count
-				const nextRetryOptions = {
-					...this.options,
-					retryCount: retryCount + 1,
-				};
-				new OptimizationManager(nextRetryOptions).start();
+				// Re-start on the same instance with incremented retry count so cleanup() always tears down the active socket
+				this.options.retryCount = retryCount + 1;
+				this.isCleaningUp = false;
+				void this.start();
 
 				return;
 			}

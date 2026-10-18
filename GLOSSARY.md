@@ -40,6 +40,10 @@ _Avoid_: empty grid, blank board, default state
 The action of restoring the workspace to the platform's Default Grid Layout, restoring all technology Module Selections to their defaults, and clearing URL grid parameters.
 _Avoid_: rest grid, wipe grid, clear board
 
+**Technology Reset**:
+The action of clearing all placed modules and solver bonus scores for a single Technology Category while preserving its Module Selection and the rest of the grid layout.
+_Avoid_: tech reset, row reset, clear tech
+
 **Recommended Builds**:
 Curated, preconfigured technology layouts bundled within the application that provide optimal module placements for common setups.
 _Avoid_: Community Builds, default builds, preset setups

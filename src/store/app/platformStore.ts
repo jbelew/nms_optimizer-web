@@ -27,33 +27,24 @@ export interface PlatformState {
 	 * It prioritizes URL parameters over stored values.
 	 *
 	 * @param {string[]} validShipTypes - Array of valid ship type identifiers for validation.
-	 * @param {boolean} [isKnownRoute=true] - Whether to allow URL synchronization.
 	 *
 	 * @returns {void} Side-effects only.
 	 */
-	initializePlatform: (validShipTypes: string[], isKnownRoute?: boolean) => void;
+	initializePlatform: (validShipTypes: string[]) => void;
 	/** The currently selected ship type identifier (e.g., `'solar'`, `'freighter'`). Defaults to `'standard'`. */
 	selectedPlatform: string;
 	/**
-	 * Sets the active ship type and synchronizes it with storage and the URL.
+	 * Sets the active Platform Type and persists it to `localStorage`.
 	 *
 	 * This method performs validation against `validShipTypes`, updates the Zustand state,
-	 * persists the selection to `localStorage`, and optionally pushes a new state to the
-	 * browser's history to update the `?platform=` query parameter.
+	 * and persists the selection to `localStorage`.
 	 *
-	 * @param {string} platform - The new platform identifier to set.
+	 * @param {string} platform - The new Platform Type identifier to set.
 	 * @param {string[]} validShipTypes - Array of valid identifiers for validation.
-	 * @param {boolean} [updateUrl=true] - Whether to push a new state to the browser history.
-	 * @param {boolean} [isKnownRoute=true] - Whether the current route supports platform synchronization.
 	 *
 	 * @returns {void} Side-effects only.
 	 */
-	setSelectedPlatform: (
-		platform: string,
-		validShipTypes: string[],
-		updateUrl?: boolean,
-		isKnownRoute?: boolean
-	) => void;
+	setSelectedPlatform: (platform: string, validShipTypes: string[]) => void;
 }
 
 const LOCAL_STORAGE_KEY = PLATFORM_STORAGE_KEY;
@@ -81,7 +72,7 @@ const LOCAL_STORAGE_KEY = PLATFORM_STORAGE_KEY;
  */
 export const usePlatformStore = create<PlatformState>()(
 	immer((set) => ({
-		initializePlatform: (validShipTypes: string[], _isKnownRoute = true) => {
+		initializePlatform: (validShipTypes: string[]) => {
 			if (typeof window === "undefined") {
 				set((state) => {
 					state.selectedPlatform = "standard";
@@ -120,12 +111,7 @@ export const usePlatformStore = create<PlatformState>()(
 			}
 		},
 		selectedPlatform: resolveInitialPlatform(), // Initialized from URL or storage
-		setSelectedPlatform: (
-			platform,
-			validShipTypes,
-			_updateUrl = true,
-			_isKnownRoute = true
-		) => {
+		setSelectedPlatform: (platform, validShipTypes) => {
 			if (!validShipTypes.includes(platform)) {
 				Logger.warn(
 					`Attempted to set invalid platform: ${platform}. Falling back to standard.`

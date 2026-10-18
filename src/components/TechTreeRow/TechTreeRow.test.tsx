@@ -5,8 +5,9 @@ import type { TechTreeRowProps } from "@/types/props";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useTechTree } from "@/components/TechTree/useTechTreeContext";
+import { useOptimize } from "@/hooks/useOptimize/useOptimize";
 import { useGridStore } from "@/store/grid/gridStore";
+import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useTechStore } from "@/store/tech/techStore";
 import { useA11yStore, useModuleSelectionDialogStore, useShakeStore } from "@/store/ui/uiStore";
 
@@ -20,8 +21,8 @@ vi.mock("@/store/ui/uiStore", () => ({
 	useModuleSelectionDialogStore: vi.fn(),
 	useShakeStore: vi.fn(),
 }));
-vi.mock("@/components/TechTree/useTechTreeContext", () => ({
-	useTechTree: vi.fn(),
+vi.mock("@/hooks/useOptimize/useOptimize", () => ({
+	useOptimize: vi.fn(),
 }));
 
 vi.mock("@/components/ConditionalTooltip/ConditionalTooltip", () => ({
@@ -47,7 +48,7 @@ const mockUseGridStore = vi.mocked(useGridStore);
 const mockUseTechStore = vi.mocked(useTechStore);
 const mockUseShakeStore = vi.mocked(useShakeStore);
 const mockUseModuleSelectionDialogStore = vi.mocked(useModuleSelectionDialogStore);
-const mockUseTechTree = vi.mocked(useTechTree);
+const mockUseOptimize = vi.mocked(useOptimize);
 
 const defaultProps: TechTreeRowProps = {
 	tech: "testTech",
@@ -55,11 +56,6 @@ const defaultProps: TechTreeRowProps = {
 	techImage: "test.webp",
 };
 
-// Helper to render
-/**
- *
- * @example
- */
 const renderWithProviders = (ui: React.ReactElement) => {
 	return render(ui);
 };
@@ -69,34 +65,37 @@ const mockClearTechMaxBonus = vi.fn();
 const mockClearTechSolvedBonus = vi.fn();
 const mockOpenDialog = vi.fn();
 
-// Helper to set up the default store mocks
-/**
- *
- * @example
- */
 const setupMocks = (hasTechInGrid: boolean, solving = false) => {
-	mockUseTechTree.mockReturnValue({
+	mockUseOptimize.mockReturnValue({
+		clearPatternNoFitTech: vi.fn(),
+		gridContainerRef: { current: null },
+		handleForceCurrentPnfOptimize: vi.fn(),
 		handleOptimize: vi.fn(),
-		isGridFull: false,
+		patternNoFitTech: null,
 		solving,
 	});
 
+	const gridState: Partial<GridStore> = {
+		activeTechs: hasTechInGrid ? new Set(["testTech"]) : new Set(),
+		isGridFull: false,
+		resetGridTech: mockResetGridTech,
+	};
 	mockUseGridStore.mockImplementation((selector?: (state: GridStore) => unknown) => {
-		const state: Partial<GridStore> = {
-			activeTechs: hasTechInGrid ? new Set(["testTech"]) : new Set(),
-			resetGridTech: mockResetGridTech,
-		};
-
-		return selector ? selector(state as GridStore) : (state as GridStore);
+		return selector ? selector(gridState as GridStore) : (gridState as GridStore);
 	});
+	Object.assign(mockUseGridStore, { getState: () => gridState });
 
 	mockUseTechStore.mockImplementation((selector?: (state: TechStore) => unknown) => {
 		const state: Partial<TechStore> = {
 			checkedModules: { testTech: ["module1"] },
 
+			clearBonusStatus: vi.fn(),
+
 			clearTechMaxBonus: mockClearTechMaxBonus,
 
 			clearTechSolvedBonus: mockClearTechSolvedBonus,
+
+			clearTechSolveMethod: vi.fn(),
 
 			getBonusStatus: vi.fn(() => null),
 
@@ -213,9 +212,12 @@ describe("TechTreeRow", () => {
 		// Arrange
 		const handleOptimizeMock = vi.fn();
 		setupMocks(false);
-		mockUseTechTree.mockReturnValue({
+		mockUseOptimize.mockReturnValue({
+			clearPatternNoFitTech: vi.fn(),
+			gridContainerRef: { current: null },
+			handleForceCurrentPnfOptimize: vi.fn(),
 			handleOptimize: handleOptimizeMock,
-			isGridFull: false,
+			patternNoFitTech: null,
 			solving: false,
 		});
 
@@ -243,6 +245,9 @@ describe("TechTreeRow", () => {
 
 	it("should call handleReset and initiate reset transition when the reset button is clicked", () => {
 		// Arrange
+		const resetTechSpy = vi
+			.spyOn(sessionCoordinator, "resetTechnology")
+			.mockImplementation(() => {});
 		setupMocks(true);
 		renderWithProviders(<TechTreeRow {...defaultProps} />);
 
@@ -251,18 +256,20 @@ describe("TechTreeRow", () => {
 		fireEvent.click(resetButton);
 
 		// Assert
-		expect(mockResetGridTech).toHaveBeenCalledWith("testTech");
-		expect(mockClearTechMaxBonus).toHaveBeenCalledWith("testTech");
-		expect(mockClearTechSolvedBonus).toHaveBeenCalledWith("testTech");
+		expect(resetTechSpy).toHaveBeenCalledWith("testTech");
+		resetTechSpy.mockRestore();
 	});
 
 	it("should initiate solve transition without executing synchronous layout queries", () => {
 		// Arrange
 		const handleOptimizeMock = vi.fn();
 		setupMocks(false);
-		mockUseTechTree.mockReturnValue({
+		mockUseOptimize.mockReturnValue({
+			clearPatternNoFitTech: vi.fn(),
+			gridContainerRef: { current: null },
+			handleForceCurrentPnfOptimize: vi.fn(),
 			handleOptimize: handleOptimizeMock,
-			isGridFull: false,
+			patternNoFitTech: null,
 			solving: false,
 		});
 

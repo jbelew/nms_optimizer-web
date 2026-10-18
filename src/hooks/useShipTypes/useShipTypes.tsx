@@ -83,8 +83,7 @@ export function fetchShipTypes(): Promise<ShipTypes> {
 					.getState()
 					.setSelectedPlatform(
 						usePlatformStore.getState().selectedPlatform,
-						Object.keys(data),
-						false
+						Object.keys(data)
 					);
 
 				return data;

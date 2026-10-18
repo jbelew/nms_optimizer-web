@@ -82,7 +82,7 @@ describe("useRecommendedBuild Adversarial Tests", () => {
 
 		// Now switch ships - this should clear selections
 		const newGridShipSwitch = createGrid(10, 6);
-		sessionCoordinator.switchPlatform(newGridShipSwitch);
+		sessionCoordinator.switchPlatform("standard", ["standard"], newGridShipSwitch);
 		expect(useTechStore.getState().moduleSelections).toEqual({});
 	});
 
@@ -114,7 +114,7 @@ describe("useRecommendedBuild Adversarial Tests", () => {
 
 		// Switch ships - clears selections
 		let newGrid = createGrid(10, 6);
-		sessionCoordinator.switchPlatform(newGrid);
+		sessionCoordinator.switchPlatform("standard", ["standard"], newGrid);
 
 		expect(useTechStore.getState().moduleSelections).toEqual({});
 
@@ -190,7 +190,7 @@ describe("useRecommendedBuild Adversarial Tests", () => {
 
 		// Switch ships - selections cleared
 		newGrid = createGrid(10, 6);
-		sessionCoordinator.switchPlatform(newGrid);
+		sessionCoordinator.switchPlatform("standard", ["standard"], newGrid);
 
 		// Load build with different selections
 		useTechStore.getState().setModuleSelection("tech2", ["module2", "module3"]);
@@ -213,7 +213,7 @@ describe("useRecommendedBuild Adversarial Tests", () => {
 
 		// Switch ship types
 		const newGrid = createGrid(10, 6);
-		sessionCoordinator.switchPlatform(newGrid);
+		sessionCoordinator.switchPlatform("standard", ["standard"], newGrid);
 
 		// Bonus state should be cleared
 		expect(useTechStore.getState().bonusStatus).toEqual({});

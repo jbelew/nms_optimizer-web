@@ -84,10 +84,6 @@ const withLocalProviders = (Story: React.FC) => (
 
 export const Desktop: Story = {
 	args: {
-		handleOptimize: async (tech: string) => {
-			console.log(`Optimizing ${tech}`);
-		},
-		solving: false,
 		techTree: {},
 	},
 	decorators: [(Story) => withLocalProviders(Story)],

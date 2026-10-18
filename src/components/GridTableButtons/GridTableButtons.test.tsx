@@ -9,6 +9,7 @@ import {
 	__resetScrollGridIntoViewRef,
 	useScrollGridIntoView,
 } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
+import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useTechStore } from "@/store/tech/techStore";
 
 import GridTableButtons from "./GridTableButtons";
@@ -19,8 +20,6 @@ const {
 	mockResetGrid,
 	mockSendEvent,
 	mockSetIsSharedGrid,
-	mockUpdateUrlForReset,
-	mockUpdateUrlForShare,
 	openDialogMock,
 } = vi.hoisted(() => ({
 	markTutorialFinishedMock: vi.fn(),
@@ -28,8 +27,6 @@ const {
 	mockResetGrid: vi.fn(),
 	mockSendEvent: vi.fn(),
 	mockSetIsSharedGrid: vi.fn(),
-	mockUpdateUrlForReset: vi.fn(),
-	mockUpdateUrlForShare: vi.fn(() => "http://share.url"),
 	openDialogMock: vi.fn(),
 }));
 
@@ -103,12 +100,6 @@ vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
 	}),
 }));
 vi.mock("@/hooks/useOptimize/useOptimize");
-vi.mock("@/hooks/useUrlSync/useUrlSync", () => ({
-	useUrlSync: () => ({
-		updateUrlForReset: mockUpdateUrlForReset,
-		updateUrlForShare: mockUpdateUrlForShare,
-	}),
-}));
 vi.mock("@/store/grid/gridStore", () => ({
 	useGridStore: useGridStore,
 }));
@@ -234,10 +225,13 @@ describe("GridTableButtons", () => {
 	});
 
 	it("calls handleShareClick and tracks GA event on share button click", () => {
+		const getShareUrlSpy = vi
+			.spyOn(sessionCoordinator, "getShareUrl")
+			.mockReturnValue("http://share.url");
 		renderComponent(false);
 		fireEvent.click(screen.getByLabelText("buttons.share"));
 
-		expect(mockUpdateUrlForShare).toHaveBeenCalled();
+		expect(getShareUrlSpy).toHaveBeenCalled();
 		expect(openDialogMock).toHaveBeenCalledWith(null, { shareUrl: "http://share.url" });
 		expect(mockSendEvent).toHaveBeenCalledWith({
 			action: "share",
@@ -246,6 +240,7 @@ describe("GridTableButtons", () => {
 			nonInteraction: false,
 			value: 1,
 		});
+		getShareUrlSpy.mockRestore();
 	});
 
 	it("calls reset grid and related functions on reset button click", () => {
@@ -261,7 +256,6 @@ describe("GridTableButtons", () => {
 
 		// Check that the functions inside handleResetGrid are called
 		expect(mockResetGrid).toHaveBeenCalled();
-		expect(mockUpdateUrlForReset).toHaveBeenCalled();
 		expect(mockSetIsSharedGrid).not.toHaveBeenCalled();
 	});
 
@@ -290,7 +284,6 @@ describe("GridTableButtons", () => {
 			value: 1,
 		});
 		expect(mockResetGrid).toHaveBeenCalled();
-		expect(mockUpdateUrlForReset).toHaveBeenCalled();
 		expect(mockSetIsSharedGrid).not.toHaveBeenCalled();
 	});
 
@@ -335,7 +328,6 @@ describe("GridTableButtons", () => {
 
 		// 1. Reset state transitions must be initiated immediately
 		expect(mockResetGrid).toHaveBeenCalled();
-		expect(mockUpdateUrlForReset).toHaveBeenCalled();
 		expect(mockSetIsSharedGrid).not.toHaveBeenCalled();
 
 		// 2. Synchronous layout measurement and scrolling must NOT occur in the click tick

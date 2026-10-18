@@ -5,7 +5,7 @@ import { clearTechTreeCache } from "@/hooks/useTechTree/useTechTree";
 import { createEmptyCell } from "@/store/grid/gridStore"; // Import createEmptyCell
 import { apiCall } from "@/utils/api/network";
 
-import { deserialize } from "./useGridDeserializer";
+import { deserialize } from "./gridSerializer";
 
 // Mock dependencies
 vi.mock("@/store/grid/gridStore", () => ({

@@ -22,7 +22,6 @@ import { useFileHandling } from "./hooks/useFileHandling/useFileHandling";
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
 import { fetchTechTree } from "./hooks/useTechTree/useTechTree";
 import { useUrlSync } from "./hooks/useUrlSync/useUrlSync";
-import { useUrlNormalization, useUrlValidation } from "./hooks/useValidation/useValidation";
 import { isBot } from "./utils/browser/environment";
 import { useDialog } from "./utils/system/dialogUtils";
 import { lazyNamed } from "./utils/system/lazyNamed";
@@ -98,9 +97,7 @@ const AppContent: FC = () => {
 
 	// Use the URL hooks within the DialogProvider context
 	useUrlSync();
-	useUrlNormalization();
 	useSeoAndTitle();
-	useUrlValidation();
 
 	const [isIdle, setIsIdle] = useState(() => lifecycleCoordinator.getPhase() === "IDLE");
 	const [welcomeDismissed, setWelcomeDismissed] = useState(false);

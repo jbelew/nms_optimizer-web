@@ -191,5 +191,76 @@ describe("useOptimize", () => {
 
 			expect(result.current.solving).toBe(false);
 		});
+
+		it("should trigger shake and skip solve when grid is full and tech is not in grid", async () => {
+			const mockTriggerShake = vi.fn();
+
+			mockUseGridStore.getState.mockReturnValue({
+				activeTechs: new Set<string>(),
+				grid: { cells: [], height: 7, valid: true, width: 7 },
+				isGridFull: true,
+				resetGridTech: vi.fn(),
+				setGrid: vi.fn(),
+				setResult: vi.fn(),
+			} as unknown as GridStore);
+
+			const { useUiStore } = await import("@/store/ui/uiStore");
+			const triggerShakeSpy = vi
+				.spyOn(useUiStore.getState(), "triggerShake")
+				.mockImplementation(mockTriggerShake);
+
+			const { result } = renderHook(() => useOptimize());
+
+			await act(async () => {
+				await result.current.handleOptimize("Test Tech");
+			});
+
+			expect(mockTriggerShake).toHaveBeenCalledTimes(1);
+			expect(result.current.solving).toBe(false);
+			expect(mockSocket.emit).not.toHaveBeenCalled();
+
+			triggerShakeSpy.mockRestore();
+		});
+
+		it("should execute pre-solve Technology Reset before emitting optimize", async () => {
+			const mockResetGridTech = vi.fn();
+			const mockClearTechMaxBonus = vi.fn();
+			const mockClearTechSolvedBonus = vi.fn();
+			const mockClearBonusStatus = vi.fn();
+			const mockClearTechSolveMethod = vi.fn();
+
+			mockUseGridStore.getState.mockReturnValue({
+				activeTechs: new Set(["Test Tech"]),
+				grid: { cells: [], height: 7, valid: true, width: 7 },
+				isGridFull: true,
+				resetGridTech: mockResetGridTech,
+				setGrid: vi.fn(),
+				setResult: vi.fn(),
+			} as unknown as GridStore);
+
+			mockUseTechStore.getState.mockReturnValue({
+				activeGroups: {},
+				checkedModules: {},
+				clearBonusStatus: mockClearBonusStatus,
+				clearTechMaxBonus: mockClearTechMaxBonus,
+				clearTechSolvedBonus: mockClearTechSolvedBonus,
+				clearTechSolveMethod: mockClearTechSolveMethod,
+				initializeTechTree: vi.fn(),
+				techGroups: {},
+			} as unknown as TechStore);
+
+			const { result } = renderHook(() => useOptimize());
+
+			await act(async () => {
+				await result.current.handleOptimize("Test Tech");
+			});
+
+			expect(mockResetGridTech).toHaveBeenCalledWith("Test Tech");
+			expect(mockClearTechMaxBonus).toHaveBeenCalledWith("Test Tech");
+			expect(mockClearTechSolvedBonus).toHaveBeenCalledWith("Test Tech");
+			expect(mockClearBonusStatus).toHaveBeenCalledWith("Test Tech");
+			expect(mockClearTechSolveMethod).toHaveBeenCalledWith("Test Tech");
+			expect(mockSocket.emit).toHaveBeenCalledWith("optimize", expect.any(Object));
+		});
 	});
 });

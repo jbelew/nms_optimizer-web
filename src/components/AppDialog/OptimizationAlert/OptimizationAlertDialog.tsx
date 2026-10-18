@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
+import { useOptimize } from "@/hooks/useOptimize/useOptimize";
 import { resolveActiveTechVariant } from "@/store/tech/techRules";
 import { useTechStore } from "@/store/tech/techStore";
 import { determineWindowDimensions } from "@/utils/optimization/windowDimensions";
@@ -13,28 +14,33 @@ import { OptimizationAlertContent } from "./OptimizationAlertContent";
 
 /**
  * Props for the `OptimizationAlertDialog` component.
+ *
+ * @remarks
+ * All props are optional; when omitted, the dialog subscribes directly to
+ * {@link useOptimize} for Pattern No Fit state and actions.
  */
 interface OptimizationAlertDialogProps {
-	/** Whether the alert dialog is currently visible. */
-	isOpen: boolean;
-	/** Callback function to close the dialog. */
-	onClose: () => void;
-	/** Asynchronous callback to trigger a "forced" optimization solve. */
-	onForceOptimize: () => Promise<void>;
-	/** The Technology Category identifier that triggered the alert. `null` to suppress. */
-	technologyName: null | string;
+	/** Optional override for whether the alert dialog is currently visible. */
+	isOpen?: boolean;
+	/** Optional override callback to close the dialog. */
+	onClose?: () => void;
+	/** Optional override callback to trigger a "forced" optimization solve. */
+	onForceOptimize?: () => Promise<void>;
+	/** Optional override for the Technology Category identifier that triggered the alert. */
+	technologyName?: null | string;
 }
 
 /**
  * A specialized dialog component that warns users when a pattern-based optimization fails.
  *
  * @remarks
- * This component derives the required Solver Window dimensions from the failed Technology Category
+ * This component consumes {@link useOptimize} directly (with optional prop overrides for stories/tests),
+ * derives the required Solver Window dimensions from the failed Technology Category
  * and its active Module Selection count in {@link useTechStore}, and provides the user with
  * two choices: dismiss the warning or attempt a "forced" solve using more intensive algorithms.
  * It wraps the {@link OptimizationAlertContent} inside a standard {@link AppDialog}.
  *
- * @param {OptimizationAlertDialogProps} props - Component properties.
+ * @param {OptimizationAlertDialogProps} [props={}] - Optional component property overrides.
  *
  * @returns {JSX.Element | null} The rendered dialog, or `null` if no technology is targeted.
  *
@@ -43,6 +49,7 @@ interface OptimizationAlertDialogProps {
  * @see {@link AppDialog}
  * @see {@link OptimizationAlertContent}
  * @see {@link determineWindowDimensions}
+ * @see {@link useOptimize}
  * @see {@link useTechStore}
  *
  * @component
@@ -51,21 +58,25 @@ interface OptimizationAlertDialogProps {
  *
  * @example
  * ```tsx
- * <OptimizationAlertDialog
- *   isOpen={isWarningVisible}
- *   technologyName="pulse"
- *   onClose={hideFn}
- *   onForceOptimize={forceFn}
- * />
+ * <OptimizationAlertDialog />
+ * // renders pattern-no-fit warning dialog when patternNoFitTech is active
  * ```
  */
 const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
-	isOpen,
-	onClose,
-	onForceOptimize,
-	technologyName,
-}) => {
+	isOpen: isOpenProp,
+	onClose: onCloseProp,
+	onForceOptimize: onForceOptimizeProp,
+	technologyName: technologyNameProp,
+} = {}) => {
 	const { t } = useTranslation();
+	const { clearPatternNoFitTech, handleForceCurrentPnfOptimize, patternNoFitTech } =
+		useOptimize();
+
+	const technologyName = technologyNameProp !== undefined ? technologyNameProp : patternNoFitTech;
+	const isOpen = isOpenProp !== undefined ? isOpenProp : Boolean(technologyName);
+	const onClose = onCloseProp ?? clearPatternNoFitTech;
+	const onForceOptimize = onForceOptimizeProp ?? handleForceCurrentPnfOptimize;
+
 	const categoryKey = technologyName ?? "";
 
 	const { activeVariantType, moduleSelectionCount, technologyCategory } = useTechStore(

@@ -20,7 +20,6 @@ import { useLoadBuild } from "@/hooks/useLoadBuild/useLoadBuild";
 import { useSaveBuild } from "@/hooks/useSaveBuild/useSaveBuild";
 import { useScreenshot } from "@/hooks/useScreenshot/useScreenshot";
 import { useScrollGridIntoView } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
-import { useUrlSync } from "@/hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useTechStore } from "@/store/tech/techStore";
@@ -63,7 +62,6 @@ const SCROLL_OPTIONS = { skipOnLargeScreens: true };
  * ```
  */
 const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
-	const { updateUrlForReset, updateUrlForShare } = useUrlSync();
 	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
 	const { t } = useTranslation();
 	const { sendEvent } = useAnalytics();
@@ -131,7 +129,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	 */
 	const handleShareClick = () => {
 		startShareTransition(() => {
-			const shareUrl = updateUrlForShare();
+			const shareUrl = sessionCoordinator.getShareUrl();
 			openDialog(null, { shareUrl });
 		});
 		sendEvent({
@@ -144,7 +142,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	};
 
 	/**
-	 * Purges the current grid state and resets the URL.
+	 * Purges the current grid state and resets the session.
 	 *
 	 * @remarks
 	 * Programmatic scrolling to the grid container uses deferred post-paint scheduling,
@@ -157,7 +155,6 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 
 		startResetTransition(() => {
 			sessionCoordinator.resetSession();
-			updateUrlForReset();
 		});
 	};
 

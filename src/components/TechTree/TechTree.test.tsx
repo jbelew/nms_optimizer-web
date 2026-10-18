@@ -90,8 +90,6 @@ vi.mock("@/store/app/platformStore", () => ({
 }));
 
 describe("TechTree", () => {
-	const mockHandleOptimize = vi.fn();
-
 	beforeEach(() => {
 		vi.clearAllMocks();
 	});
@@ -101,21 +99,15 @@ describe("TechTree", () => {
 	});
 
 	test("should render TechTreeContent on large screens", () => {
-		render(<TechTreeComponent handleOptimize={mockHandleOptimize} solving={false} />);
+		render(<TechTreeComponent />);
 
 		expect(screen.getByTestId("tech-tree-content")).toBeInTheDocument();
 	});
 
 	test("should render ScrollArea on large screens", () => {
-		render(<TechTreeComponent handleOptimize={mockHandleOptimize} solving={false} />);
+		render(<TechTreeComponent />);
 
 		expect(screen.getByTestId("scroll-area")).toBeInTheDocument();
-	});
-
-	test("should pass handleOptimize to TechTreeContent", () => {
-		render(<TechTreeComponent handleOptimize={mockHandleOptimize} solving={false} />);
-
-		expect(screen.getByTestId("tech-tree-content")).toBeInTheDocument();
 	});
 
 	test("should render TechTreeContent when tech tree has recommended builds", () => {
@@ -124,13 +116,7 @@ describe("TechTree", () => {
 			Weaponry: [],
 		} as unknown as TechTree);
 
-		render(<TechTreeComponent handleOptimize={mockHandleOptimize} solving={false} />);
-
-		expect(screen.getByTestId("tech-tree-content")).toBeInTheDocument();
-	});
-
-	test("should handle solving prop", () => {
-		render(<TechTreeComponent handleOptimize={mockHandleOptimize} solving={true} />);
+		render(<TechTreeComponent />);
 
 		expect(screen.getByTestId("tech-tree-content")).toBeInTheDocument();
 	});
@@ -149,19 +135,13 @@ describe("TechTree", () => {
 			],
 		};
 
-		render(
-			<TechTreeComponent
-				handleOptimize={mockHandleOptimize}
-				solving={false}
-				techTree={customTechTree as TechTree}
-			/>
-		);
+		render(<TechTreeComponent techTree={customTechTree as TechTree} />);
 
 		expect(screen.getByTestId("tech-tree-content")).toBeInTheDocument();
 	});
 
 	test("should adjust scroll area height based on recommended builds", () => {
-		render(<TechTreeComponent handleOptimize={mockHandleOptimize} solving={false} />);
+		render(<TechTreeComponent />);
 
 		const scrollArea = screen.getByTestId("scroll-area");
 		expect(scrollArea).toBeInTheDocument();
@@ -173,7 +153,7 @@ describe("TechTree", () => {
 		const mockUseBreakpoint = vi.spyOn(useBreakpointModule, "useBreakpoint");
 		mockUseBreakpoint.mockReturnValueOnce(false); // Small screen
 
-		render(<TechTreeComponent handleOptimize={mockHandleOptimize} solving={false} />);
+		render(<TechTreeComponent />);
 
 		expect(screen.getByTestId("tech-tree-content")).toBeInTheDocument();
 		mockUseBreakpoint.mockRestore();

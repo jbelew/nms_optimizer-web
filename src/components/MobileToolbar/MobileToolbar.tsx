@@ -31,8 +31,8 @@ import { useLoadBuild } from "@/hooks/useLoadBuild/useLoadBuild";
 import { useSaveBuild } from "@/hooks/useSaveBuild/useSaveBuild";
 import { registerToolbarForceShow } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { useScrollHide } from "@/hooks/useScrollHide/useScrollHide";
-import { useUrlSync } from "@/hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "@/store/grid/gridStore";
+import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useA11yStore, useOptimizeStore } from "@/store/ui/uiStore";
 import { useDialog } from "@/utils/system/dialogUtils";
 
@@ -68,7 +68,6 @@ export const MobileToolbar: React.FC = () => {
 	const { openDialog } = useDialog();
 	const { sendDeferredEvent } = useAnalytics();
 	const { a11yMode, toggleA11yMode } = useA11yStore();
-	const { updateUrlForShare } = useUrlSync();
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const hasModulesInGrid = useGridStore((state) => state.hasModulesInGrid);
 	const solving = useOptimizeStore((state) => state.status.type === "solving");
@@ -88,7 +87,7 @@ export const MobileToolbar: React.FC = () => {
 	 */
 	const handleShareClick = () => {
 		startShareTransition(() => {
-			const shareUrl = updateUrlForShare();
+			const shareUrl = sessionCoordinator.getShareUrl();
 			openDialog(null, { shareUrl });
 		});
 		sendDeferredEvent({

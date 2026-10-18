@@ -1,35 +1,74 @@
-// src/hooks/useUrlSync.tsx
-import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+// src/hooks/useUrlSync/useUrlSync.tsx
+import { useCallback, useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { useRouteContext } from "@/context/RouteContext";
-import { useGridDeserializer } from "@/hooks/useGridDeserializer/useGridDeserializer";
 import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
 import { usePlatformStore } from "@/store/app/platformStore";
+import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
+import { useDialog } from "@/utils/system/dialogUtils";
 import { Logger } from "@/utils/system/monitoring";
 
+const ALLOWED_URL_QUERY_KEYS = ["platform", "grid"];
+
 /**
- * Custom hook for synchronizing application state with the browser's URL.
+ * Sanitizes URL query parameters by stripping non-whitelisted keys and removing
+ * orphaned `grid` parameters when `platform` is missing.
+ *
+ * @param {string} pathname - The URL pathname to preserve.
+ * @param {string} search - The raw query string to validate.
+ *
+ * @returns {string} The sanitized search string (including leading `?` if non-empty).
+ */
+const sanitizeUrlSearchParams = (pathname: string, search: string): string => {
+	const currentParams = new URLSearchParams(search);
+	let changed = false;
+
+	Array.from(currentParams.keys()).forEach((key) => {
+		if (!ALLOWED_URL_QUERY_KEYS.includes(key)) {
+			currentParams.delete(key);
+			changed = true;
+		}
+	});
+
+	if (currentParams.has("grid") && !currentParams.has("platform")) {
+		currentParams.delete("grid");
+		changed = true;
+	}
+
+	if (changed) {
+		const normalizedSearch = currentParams.toString();
+		const searchSuffix = normalizedSearch ? `?${normalizedSearch}` : "";
+		const newUrl = `${pathname}${searchSuffix}`;
+		window.history.replaceState({}, "", newUrl);
+
+		return searchSuffix;
+	}
+
+	return search;
+};
+
+/**
+ * Root lifecycle hook for validating, normalizing, and synchronizing browser URL state
+ * with application stores.
  *
  * @remarks
- * This hook manages the bi-directional mapping between the global state
- * (selected ship type, grid layout) and URL query parameters (`platform`, `grid`).
+ * Consolidates URL query sanitization, initial state restoration, `popstate` history
+ * navigation, trailing-slash/`?platform=` normalization, and **Shared Grid** reset
+ * URL cleanup into a single deterministic pipeline mounted once at the application root.
  *
- * It handles:
- * 1. Initial state restoration from URL on mount.
- * 2. Response to `popstate` events (Back/Forward navigation) to ensure store consistency.
- * 3. Generation of shareable URLs with serialized grid data.
- * 4. Cleaning up URL state during resets.
+ * Responsibilities:
+ * 1. **Query Validation**: Strips unknown query parameters and removes `grid` if `platform` is absent.
+ * 2. **State Restoration & History Sync**: Restores `platform` and `grid` via {@link sessionCoordinator.syncStateFromUrl} on mount and `popstate`.
+ * 3. **URL Normalization**: Enforces trailing slashes on non-file paths and keeps `?platform=` synchronized for returning users or deep links.
+ * 4. **Shared Grid Reset**: Pushes a clean URL (`replace: false`) removing `?grid=` when a **Shared Grid** is reset.
  *
- * It utilizes a singleton-like syncing ref to prevent infinite loops between
- * store persistence and URL updates.
+ * @returns {{ updateUrlForShare: () => string, updateUrlForReset: () => void }} Imperative helpers for share URL generation and reset URL cleanup.
  *
- * @returns {{ updateUrlForShare: () => string, updateUrlForReset: () => void }} Functions to generate share links and reset URL state.
- *
- * @see {@link usePlatformStore} for ship type state.
- * @see useGridStore for the underlying grid data.
- * @see {@link useGridDeserializer} for serialization logic.
+ * @see {@link sessionCoordinator}
+ * @see {@link usePlatformStore}
+ * @see {@link useGridStore}
  * @see {@link ./useUrlSync.test.tsx Unit Tests}
  *
  * @hook
@@ -38,40 +77,68 @@ import { Logger } from "@/utils/system/monitoring";
  *
  * @example
  * ```tsx
- * const ShareButton = () => {
- *   const { updateUrlForShare } = useUrlSync();
- *
- *   const onShare = () => {
- *     const link = updateUrlForShare();
- *     navigator.clipboard.writeText(link);
- *   };
- *
- *   return <button onClick={onShare}>Copy Link</button>;
+ * const AppContent = () => {
+ *   useUrlSync();
+ *   return <Outlet />;
  * };
+ * // mounts root URL sync lifecycle and returns { updateUrlForReset, updateUrlForShare }
  * ```
  */
 export const useUrlSync = () => {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const { isKnownRoute } = useRouteContext();
-	const selectedShipTypeFromStore = usePlatformStore((state) => state.selectedPlatform);
-	const { deserializeGrid, serializeGrid } = useGridDeserializer();
+	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
+	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const shipTypes = useFetchShipTypesSuspense();
 
-	// Use a ref to prevent multiple simultaneous sync operations
-	// and to store the latest values without triggering re-effects
+	const { userVisited } = useDialog();
+
+	const pathname = location?.pathname ?? window.location.pathname;
+	const search = location?.search ?? window.location.search;
+
 	const isSyncingRef = useRef(false);
 	const shipTypesRef = useRef(shipTypes);
-	const isKnownRouteRef = useRef(isKnownRoute);
-	const deserializeGridRef = useRef(deserializeGrid);
+	const prevIsSharedGridRef = useRef(isSharedGrid);
 
-	// Keep refs up to date
 	useEffect(() => {
 		shipTypesRef.current = shipTypes;
-		isKnownRouteRef.current = isKnownRoute;
-		deserializeGridRef.current = deserializeGrid;
-	}, [shipTypes, isKnownRoute, deserializeGrid]);
+	}, [shipTypes]);
 
-	// Effect to handle initial URL state and popstate events
+	/**
+	 * Removes the `grid` query parameter from the URL when resetting a Shared Grid.
+	 *
+	 * @remarks
+	 * Pushes a new history entry (`replace: false`) so the user can navigate Back
+	 * to recover the shared layout. If the URL does not contain a `grid` parameter,
+	 * skips router navigation completely.
+	 *
+	 * @returns {void}
+	 *
+	 * @example
+	 * ```ts
+	 * updateUrlForReset();
+	 * // navigates to pathname + search without ?grid=
+	 * ```
+	 */
+	const updateUrlForReset = useCallback(() => {
+		try {
+			const url = new URL(window.location.href);
+			if (!url.searchParams.has("grid")) return;
+
+			url.searchParams.delete("grid");
+			navigate(url.pathname + url.search, { replace: false });
+		} catch (error) {
+			Logger.warn("useUrlSync: Failed to update URL for reset", { error });
+		}
+	}, [navigate]);
+
+	// 1. Validate and sanitize query parameters on route/search changes
+	useEffect(() => {
+		sanitizeUrlSearchParams(pathname, search);
+	}, [pathname, search]);
+
+	// 2. Restore state from URL on mount and handle browser Back/Forward (popstate)
 	useEffect(() => {
 		if (!isKnownRoute) return;
 
@@ -81,7 +148,11 @@ export const useUrlSync = () => {
 			let urlParams: URLSearchParams;
 
 			try {
-				urlParams = new URLSearchParams(window.location.search);
+				const sanitizedSearch = sanitizeUrlSearchParams(
+					window.location.pathname,
+					window.location.search
+				);
+				urlParams = new URLSearchParams(sanitizedSearch);
 			} catch (e) {
 				Logger.warn("useUrlSync: Failed to parse URL search params", { error: e });
 
@@ -103,83 +174,90 @@ export const useUrlSync = () => {
 			isSyncingRef.current = true;
 
 			try {
-				sessionCoordinator.syncStateFromUrl({
-					deserializeGrid: deserializeGridRef.current,
+				const syncResult = sessionCoordinator.syncStateFromUrl({
 					gridFromUrl,
-					isKnownRoute: isKnownRouteRef.current,
 					platformFromUrl,
 					validShipTypes,
 				});
+
+				if (syncResult instanceof Promise) {
+					await syncResult;
+				}
+			} catch (error) {
+				Logger.warn("useUrlSync: Failed to sync state from URL", { error });
 			} finally {
 				isSyncingRef.current = false;
 			}
 		};
 
-		// Initial check on mount - wrap in isSyncingRef to prevent collision with popstate
 		if (!isSyncingRef.current) {
 			void handlePopState();
 		}
 
-		window.addEventListener("popstate", handlePopState, { passive: true });
+		const onPopState = () => {
+			void handlePopState();
+		};
+
+		window.addEventListener("popstate", onPopState, { passive: true });
 
 		return () => {
-			window.removeEventListener("popstate", handlePopState);
+			window.removeEventListener("popstate", onPopState);
 		};
 	}, [isKnownRoute]);
 
+	// 3. Automatically clean up ?grid= parameter when a Shared Grid is reset
+	useEffect(() => {
+		if (prevIsSharedGridRef.current && !isSharedGrid && !isSyncingRef.current) {
+			updateUrlForReset();
+		}
+
+		prevIsSharedGridRef.current = isSharedGrid;
+	}, [isSharedGrid, updateUrlForReset]);
+
+	// 4. Normalize URL trailing slashes and ?platform= parameter
+	useEffect(() => {
+		if (!pathname) return;
+		const url = new URL(window.location.href);
+		let changed = false;
+
+		const pathParts = url.pathname.split("/");
+		const lastSegment = pathParts[pathParts.length - 1];
+
+		if (!url.pathname.endsWith("/") && !lastSegment.includes(".")) {
+			url.pathname += "/";
+			changed = true;
+		}
+
+		const currentPlatformParam = url.searchParams.get("platform");
+		const effectivePlatform =
+			usePlatformStore.getState?.()?.selectedPlatform ?? selectedPlatform;
+
+		if (currentPlatformParam !== effectivePlatform) {
+			if (userVisited || currentPlatformParam !== null) {
+				url.searchParams.set("platform", effectivePlatform);
+				changed = true;
+			}
+		}
+
+		if (changed) {
+			navigate(url.pathname + url.search, { replace: true });
+		}
+	}, [pathname, selectedPlatform, navigate, userVisited]);
+
 	/**
-	 * Generates a full URL including the current ship type and serialized grid state.
+	 * Generates a full URL including the current Platform Type and serialized Shared Grid state.
 	 *
 	 * @returns {string} The shareable URL.
 	 *
-	 * @example Share URL generation
+	 * @example
 	 * ```ts
 	 * const url = updateUrlForShare();
+	 * // => "https://nms-optimizer.app/?platform=standard&grid=..."
 	 * ```
 	 */
-	const updateUrlForShare = () => {
-		const serializedGrid = serializeGrid();
-
-		try {
-			const url = new URL(window.location.href);
-			url.searchParams.set("grid", serializedGrid);
-			url.searchParams.set("platform", selectedShipTypeFromStore);
-
-			return url.toString();
-		} catch (error) {
-			Logger.warn("useUrlSync: Failed to create share URL", { error });
-
-			return `/?platform=${selectedShipTypeFromStore}&grid=${encodeURIComponent(serializedGrid)}`;
-		}
-	};
-
-	/**
-	 * Removes grid-related parameters from the URL.
-	 *
-	 * @remarks
-	 * When resetting a Shared Grid (where the URL contains a `grid` parameter),
-	 * pushes a new history entry (`replace: false`) so the user can navigate
-	 * Back to recover the shared layout. If the URL does not contain a `grid`
-	 * parameter, skips router navigation completely to avoid redundant route
-	 * re-renders during grid resets.
-	 *
-	 * @example URL state reset
-	 * ```ts
-	 * updateUrlForReset();
-	 * ```
-	 */
-	const updateUrlForReset = () => {
-		try {
-			const url = new URL(window.location.href);
-			if (!url.searchParams.has("grid")) return;
-
-			url.searchParams.delete("grid");
-			// Use navigate to ensure React Router is aware of the URL change
-			navigate(url.pathname + url.search, { replace: false });
-		} catch (error) {
-			Logger.warn("useUrlSync: Failed to update URL for reset", { error });
-		}
-	};
+	const updateUrlForShare = useCallback(() => {
+		return sessionCoordinator.getShareUrl();
+	}, []);
 
 	return { updateUrlForReset, updateUrlForShare };
 };

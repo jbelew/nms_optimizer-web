@@ -18,12 +18,6 @@ import { usePlatformStore } from "./store/app/platformStore";
 import { sendEvent } from "./utils/analytics/tracking";
 import { lifecycleCoordinator } from "./utils/system/lifecycleCoordinator";
 
-/** Mock URL normalization and validation to prevent remounts */
-vi.mock("./hooks/useValidation/useValidation", () => ({
-	useUrlNormalization: vi.fn(),
-	useUrlValidation: vi.fn(),
-}));
-
 vi.mock("react-i18next", async () => {
 	const original = await vi.importActual("react-i18next");
 

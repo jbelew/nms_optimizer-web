@@ -6,9 +6,7 @@ import { Trans, useTranslation } from "react-i18next";
 
 import { useErrorDispatcher } from "@/hooks/useErrorDispatcher";
 import { useToast } from "@/hooks/useToast/useToast";
-import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
-import { useSessionStore } from "@/store/ui/uiStore";
 
 import { MainAppLayoutContent, ShipTypesLoader } from "./MainAppLayout";
 
@@ -16,9 +14,9 @@ import { MainAppLayoutContent, ShipTypesLoader } from "./MainAppLayout";
  * The primary layout component for the application's main functional area.
  *
  * @remarks
- * Coordinates workspace-level lifecycle effects (shared-build notifications,
- * session violation resets on platform switch, and toast error dispatching),
- * triggers initial data loading via Suspense, and renders the core layout.
+ * Coordinates workspace-level lifecycle effects (Shared Grid notifications
+ * and toast error dispatching), triggers initial data loading via Suspense,
+ * and renders the core layout.
  *
  * @returns {JSX.Element} The orchestrated main application content.
  *
@@ -39,8 +37,6 @@ import { MainAppLayoutContent, ShipTypesLoader } from "./MainAppLayout";
 export const MainAppContent = () => {
 	const { t } = useTranslation();
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
-	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
-	const { resetSession } = useSessionStore();
 	const { showInfo } = useToast();
 
 	// Show information toast when viewing a read-only shared grid
@@ -52,13 +48,6 @@ export const MainAppContent = () => {
 			);
 		}
 	}, [isSharedGrid, showInfo, t]);
-
-	// Reset error counts when platform changes
-	useEffect(() => {
-		if (selectedPlatform) {
-			resetSession();
-		}
-	}, [selectedPlatform, resetSession]);
 
 	// Monitor session errors and dispatch messages to toast
 	useErrorDispatcher();
