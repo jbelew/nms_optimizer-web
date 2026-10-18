@@ -71,6 +71,8 @@ const baseImagePath = "/assets/img/grid/";
  * @category Components
  */
 interface ModuleCheckboxProps {
+	/** Whether the module is an immutable Core Module rendered outside the interactive checkbox group. */
+	isCore?: boolean;
 	/** Whether the checkbox is disabled due to missing Module Rank Order prerequisites. */
 	isDisabled: boolean;
 	/** The module data to display. */
@@ -108,6 +110,20 @@ interface SafeParagraphProps extends Omit<React.ComponentPropsWithoutRef<"p">, "
 	/** Optional style prop stripped from i18n `<Trans>` interpolation. */
 	style?: unknown;
 }
+
+/**
+ * Resolves the versioned asset path for a module's icon, falling back to the default grid icon.
+ *
+ * @param {string | null | undefined} image - Relative module image path within `/assets/img/grid/`.
+ *
+ * @returns {string} The resolved versioned image path or fallback icon path.
+ *
+ * @category Utilities
+ */
+const resolveModuleImagePath = (image?: null | string): string =>
+	image
+		? `${baseImagePath}${image}?v=${typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "1.0"}`
+		: fallbackImage;
 
 /**
  * Parses and styles parenthetical text fragments within a string.
@@ -169,6 +185,7 @@ const formatLabel = (label: string): React.ReactNode => {
  * Individual module selection checkbox with icon and label.
  *
  * @param {ModuleCheckboxProps} props - Component properties.
+ * @param {boolean} [props.isCore] - Whether the module is an immutable Core Module rendered outside the interactive checkbox group.
  * @param {boolean} props.isDisabled - Whether the checkbox is disabled due to missing Module Rank Order prerequisites.
  * @param {SelectionModule} props.module - The module data to display.
  * @param {React.ComponentProps<typeof Avatar>["color"]} props.techColor - Accent color for the module avatar.
@@ -179,30 +196,38 @@ const formatLabel = (label: string): React.ReactNode => {
  *
  * @category Components
  */
-const ModuleCheckbox: React.FC<ModuleCheckboxProps> = memo(({ isDisabled, module, techColor }) => {
-	const imagePath = module.image
-		? `${baseImagePath}${module.image}?v=${typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "1.0"}`
-		: fallbackImage;
+const ModuleCheckbox: React.FC<ModuleCheckboxProps> = memo(
+	({ isCore = false, isDisabled, module, techColor }) => {
+		const imagePath = resolveModuleImagePath(module.image);
 
-	return (
-		<label
-			className="mb-2 flex items-center gap-2 text-sm font-medium transition-colors duration-200 hover:text-(--accent-a12) sm:text-base"
-			key={module.id}
-			style={{ cursor: "pointer" }}
-		>
-			<CheckboxGroup.Item disabled={isDisabled} value={module.id} />
-			<Avatar
-				alt={module.label}
-				color={techColor}
-				fallback={module.id}
-				radius="full"
-				size="1"
-				src={imagePath}
-			/>
-			<span className="flex-1">{formatLabel(module.label ?? module.id)}</span>
-		</label>
-	);
-});
+		return (
+			<label
+				className={`mb-2 flex items-center gap-2 text-sm font-medium sm:text-base ${
+					isCore
+						? ""
+						: "cursor-pointer transition-colors duration-200 hover:text-(--accent-a12)"
+				}`}
+				key={module.id}
+				style={isCore ? undefined : { cursor: "pointer" }}
+			>
+				{isCore ? (
+					<Checkbox checked={true} disabled={true} />
+				) : (
+					<CheckboxGroup.Item disabled={isDisabled} value={module.id} />
+				)}
+				<Avatar
+					alt={module.label}
+					color={techColor}
+					fallback={isCore ? "IK" : module.id}
+					radius="full"
+					size="1"
+					src={imagePath}
+				/>
+				<span className="flex-1">{formatLabel(module.label ?? module.id)}</span>
+			</label>
+		);
+	}
+);
 
 ModuleCheckbox.displayName = "ModuleCheckbox";
 
@@ -496,29 +521,15 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 						>
 							{t(`moduleSelection.core`)}
 						</div>
-						{groupedModules["core"].map((module) => {
-							const imagePath = module.image
-								? `${baseImagePath}${module.image}`
-								: fallbackImage;
-
-							return (
-								<label
-									className="mb-2 flex items-center gap-2 text-sm font-medium sm:text-base"
-									key={module.id}
-								>
-									<Checkbox checked={true} disabled={true} />
-									<Avatar
-										alt={module.label}
-										color={techColor}
-										fallback="IK"
-										radius="full"
-										size="1"
-										src={imagePath}
-									/>
-									{module.label}
-								</label>
-							);
-						})}
+						{groupedModules["core"].map((module) => (
+							<ModuleCheckbox
+								isCore={true}
+								isDisabled={true}
+								key={module.id}
+								module={module}
+								techColor={techColor}
+							/>
+						))}
 					</div>
 				)}
 				<CheckboxGroup.Root onValueChange={handleValueChange} value={currentCheckedModules}>

@@ -52,7 +52,7 @@ export const MODULE_RANK_ORDER = ["Theta", "Tau", "Sigma"] as const;
  *
  * @type {readonly ["atlantid", "cosmetic", "reactor", "upgrade"]}
  */
-export const VALIDATION_GROUPS = ["atlantid", "cosmetic", "reactor", "upgrade"] as const;
+export const RANKED_MODULE_GROUPS = ["atlantid", "cosmetic", "reactor", "upgrade"] as const;
 
 /**
  * Module Groups whose entries are sorted alphabetically by display label.
@@ -110,7 +110,7 @@ export function areAllModulesSelected(
  * @returns {Map<string, string>} Map from dependent module ID to prerequisite module ID.
  *
  * @see {@link MODULE_RANK_ORDER}
- * @see {@link VALIDATION_GROUPS}
+ * @see {@link RANKED_MODULE_GROUPS}
  * @see {@link ./techRules.test.ts Unit Tests}
  *
  * @category Rules
@@ -130,7 +130,7 @@ export function getModulePrerequisites(
 ): Map<string, string> {
 	const dependencyMap = new Map<string, string>();
 
-	if (!VALIDATION_GROUPS.includes(groupName as (typeof VALIDATION_GROUPS)[number])) {
+	if (!RANKED_MODULE_GROUPS.includes(groupName as (typeof RANKED_MODULE_GROUPS)[number])) {
 		return dependencyMap;
 	}
 
@@ -356,7 +356,7 @@ export function resolveActiveTechVariant<T extends { type?: string }>(
  * @returns {string[]} The validated and adjusted list of checked module IDs.
  *
  * @see {@link MODULE_RANK_ORDER}
- * @see {@link VALIDATION_GROUPS}
+ * @see {@link RANKED_MODULE_GROUPS}
  * @see {@link ./techRules.test.ts Unit Tests}
  *
  * @category Rules
@@ -394,7 +394,7 @@ export function validateModuleSelections(
 
 		const groupName = module.type || "upgrade";
 
-		if (!VALIDATION_GROUPS.includes(groupName as (typeof VALIDATION_GROUPS)[number])) {
+		if (!RANKED_MODULE_GROUPS.includes(groupName as (typeof RANKED_MODULE_GROUPS)[number])) {
 			continue;
 		}
 

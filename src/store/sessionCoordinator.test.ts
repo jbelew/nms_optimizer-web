@@ -189,7 +189,7 @@ describe("sessionCoordinator", () => {
 			sessionCoordinator.syncStateFromUrl({
 				gridFromUrl: "serialized-grid",
 				platformFromUrl: "new-platform",
-				validShipTypes: ["old-platform", "new-platform"],
+				validPlatformTypes: ["old-platform", "new-platform"],
 			});
 
 			expect(mockPlatformStoreState.setSelectedPlatform).toHaveBeenCalledWith(
@@ -212,7 +212,7 @@ describe("sessionCoordinator", () => {
 			sessionCoordinator.syncStateFromUrl({
 				gridFromUrl: null,
 				platformFromUrl: "new-platform",
-				validShipTypes: ["old-platform", "new-platform"],
+				validPlatformTypes: ["old-platform", "new-platform"],
 			});
 
 			expect(switchPlatformSpy).toHaveBeenCalledWith("new-platform", [
@@ -234,7 +234,7 @@ describe("sessionCoordinator", () => {
 			sessionCoordinator.syncStateFromUrl({
 				gridFromUrl: null,
 				platformFromUrl: null,
-				validShipTypes: ["test-platform"],
+				validPlatformTypes: ["test-platform"],
 			});
 
 			expect(resetSessionSpy).toHaveBeenCalled();
@@ -250,7 +250,7 @@ describe("sessionCoordinator", () => {
 			sessionCoordinator.syncStateFromUrl({
 				gridFromUrl: null,
 				platformFromUrl: null,
-				validShipTypes: ["test-platform"],
+				validPlatformTypes: ["test-platform"],
 			});
 
 			expect(resetSessionSpy).not.toHaveBeenCalled();
@@ -267,7 +267,7 @@ describe("sessionCoordinator", () => {
 			sessionCoordinator.syncStateFromUrl({
 				gridFromUrl: null,
 				platformFromUrl: "new-platform",
-				validShipTypes: ["old-platform", "new-platform"],
+				validPlatformTypes: ["old-platform", "new-platform"],
 			});
 
 			expect(resetSessionSpy).toHaveBeenCalled();

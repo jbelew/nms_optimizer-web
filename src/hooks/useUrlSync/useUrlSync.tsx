@@ -163,9 +163,9 @@ export const useUrlSync = () => {
 			const gridFromUrl = urlParams.get("grid");
 
 			const currentShipTypes = shipTypesRef.current;
-			const validShipTypes = Object.keys(currentShipTypes);
+			const validPlatformTypes = Object.keys(currentShipTypes);
 
-			if (validShipTypes.length === 0) {
+			if (validPlatformTypes.length === 0) {
 				Logger.warn("useUrlSync: Ship types not loaded yet, deferring URL sync");
 
 				return;
@@ -177,7 +177,7 @@ export const useUrlSync = () => {
 				const syncResult = sessionCoordinator.syncStateFromUrl({
 					gridFromUrl,
 					platformFromUrl,
-					validShipTypes,
+					validPlatformTypes,
 				});
 
 				if (syncResult instanceof Promise) {

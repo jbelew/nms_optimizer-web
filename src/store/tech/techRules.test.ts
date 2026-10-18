@@ -9,9 +9,9 @@ import {
 	groupModules,
 	MODULE_GROUP_ORDER,
 	MODULE_RANK_ORDER,
+	RANKED_MODULE_GROUPS,
 	resolveActiveTechVariant,
 	validateModuleSelections,
-	VALIDATION_GROUPS,
 } from "./techRules";
 
 const mockModules = [
@@ -29,7 +29,7 @@ describe("techRules", () => {
 	describe("constants", () => {
 		it("exports canonical Module Rank Order and Module Group constants", () => {
 			expect(MODULE_RANK_ORDER).toEqual(["Theta", "Tau", "Sigma"]);
-			expect(VALIDATION_GROUPS).toEqual(["atlantid", "cosmetic", "reactor", "upgrade"]);
+			expect(RANKED_MODULE_GROUPS).toEqual(["atlantid", "cosmetic", "reactor", "upgrade"]);
 			expect(ALPHABETICAL_MODULE_GROUPS).toEqual(["bonus", "figurines", "trails"]);
 			expect(MODULE_GROUP_ORDER).toEqual([
 				"core",

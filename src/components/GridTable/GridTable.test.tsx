@@ -41,7 +41,7 @@ vi.mock("@/components/GridShake/GridShake", () => ({
 }));
 
 vi.mock("@/components/MessageSpinner/MessageSpinner", () => ({
-	default: ({ isVisible }: { isVisible: boolean }) => (
+	MessageSpinner: ({ isVisible }: { isVisible: boolean }) => (
 		<div data-testid="message-spinner" data-visible={isVisible} />
 	),
 }));
@@ -58,6 +58,7 @@ vi.mock("@/store/grid/gridStore", () => ({
 				height: 5,
 				width: 3,
 			},
+			isSharedGrid: false,
 			lastActiveRowIndex: -1,
 			superchargedFixed: false,
 		};
@@ -67,6 +68,13 @@ vi.mock("@/store/grid/gridStore", () => ({
 }));
 
 vi.mock("@/store/ui/uiStore", () => ({
+	useOptimizeStore: vi.fn((selector) => {
+		const mockState = {
+			status: { type: "idle" as const },
+		};
+
+		return selector(mockState);
+	}),
 	useTechTreeLoadingStore: vi.fn((selector) => {
 		const mockState = {
 			isLoading: false,

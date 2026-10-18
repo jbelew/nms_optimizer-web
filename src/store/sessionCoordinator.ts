@@ -237,6 +237,7 @@ export const sessionCoordinator = {
 	 * @example
 	 * ```ts
 	 * const snapshot = sessionCoordinator.getBuildSnapshot("My Build");
+	 * // returns { buildName: "My Build", gridState: {...}, shipType: "standard", techState: {...} }
 	 * ```
 	 */
 	getBuildSnapshot(buildName: string): SaveBuildParams {
@@ -304,6 +305,8 @@ export const sessionCoordinator = {
 	 * @param {Record<string, string>} colors - Tech-to-color mapping.
 	 * @param {Record<string, TechTreeItem[]>} techGroups - Tech-to-groups mapping.
 	 * @param {Record<string, string>} activeGroups - Tech-to-active-group-ID mapping.
+	 *
+	 * @returns {void} Side-effects only.
 	 */
 	initializeTechTree(
 		colors: { [key: string]: string },
@@ -321,6 +324,8 @@ export const sessionCoordinator = {
 	 *
 	 * Orchestrates the reset of grid, tech, modules, and interaction stores,
 	 * ensuring all persisted state is also cleared.
+	 *
+	 * @returns {void} Side-effects only.
 	 */
 	resetSession() {
 		const gridStore = useGridStore.getState();
@@ -369,9 +374,9 @@ export const sessionCoordinator = {
 	 * Restores a validated Build File snapshot across the platform, grid, and tech stores.
 	 *
 	 * @param {BuildFile} buildData - The parsed and checksum-verified Build File payload.
-	 * @param {string[]} validShipTypes - Supported Platform Type identifiers.
+	 * @param {string[]} validPlatformTypes - Supported Platform Type identifiers.
 	 *
-	 * @returns {void} No return value.
+	 * @returns {void} Side-effects only.
 	 *
 	 * @see {@link useGridStore}
 	 * @see {@link useTechStore}
@@ -380,13 +385,14 @@ export const sessionCoordinator = {
 	 * @example
 	 * ```ts
 	 * sessionCoordinator.restoreBuildSnapshot(buildData, ["standard", "corvette"]);
+	 * // updates platformStore, gridStore, and techStore from buildData
 	 * ```
 	 */
-	restoreBuildSnapshot(buildData: BuildFile, validShipTypes: string[]): void {
+	restoreBuildSnapshot(buildData: BuildFile, validPlatformTypes: string[]): void {
 		const platformState = usePlatformStore.getState();
 
 		if (buildData.shipType !== platformState.selectedPlatform) {
-			platformState.setSelectedPlatform(buildData.shipType, validShipTypes);
+			platformState.setSelectedPlatform(buildData.shipType, validPlatformTypes);
 		}
 
 		useGridStore.getState().restoreGridState({
@@ -407,6 +413,8 @@ export const sessionCoordinator = {
 	 * Re-initializes checked modules based on the new groups and existing module selections.
 	 *
 	 * @param {Record<string, TechTreeItem[]>} techGroups - The new technology groups mapping.
+	 *
+	 * @returns {void} Side-effects only.
 	 */
 	setTechGroups(techGroups: { [key: string]: TechTreeItem[] }) {
 		const techStore = useTechStore.getState();
@@ -470,7 +478,7 @@ export const sessionCoordinator = {
 	 * @param {object} params - The search parameter values and valid platforms.
 	 * @param {string | null} params.platformFromUrl - The `platform` query parameter.
 	 * @param {string | null} params.gridFromUrl - The `grid` layout query parameter.
-	 * @param {string[]} params.validShipTypes - Array of supported Platform Type identifiers.
+	 * @param {string[]} params.validPlatformTypes - Array of supported Platform Type identifiers.
 	 *
 	 * @returns {Promise<void> | void} Resolves when URL synchronization completes.
 	 *
@@ -479,7 +487,7 @@ export const sessionCoordinator = {
 	 * await sessionCoordinator.syncStateFromUrl({
 	 *   gridFromUrl: null,
 	 *   platformFromUrl: "solar",
-	 *   validShipTypes: ["standard", "solar"],
+	 *   validPlatformTypes: ["standard", "solar"],
 	 * });
 	 * // updates selectedPlatform to "solar" and resets grid/tech session state
 	 * ```
@@ -487,24 +495,24 @@ export const sessionCoordinator = {
 	syncStateFromUrl(params: {
 		gridFromUrl: null | string;
 		platformFromUrl: null | string;
-		validShipTypes: string[];
+		validPlatformTypes: string[];
 	}): Promise<void> | void {
-		const { gridFromUrl, platformFromUrl, validShipTypes } = params;
+		const { gridFromUrl, platformFromUrl, validPlatformTypes } = params;
 		const platformStore = usePlatformStore.getState();
 		const currentPlatform = platformStore.selectedPlatform;
 		const wasSharedGrid = useGridStore.getState().isSharedGrid;
 
 		// Sync platform first to avoid grid deserialization conflicts
 		if (platformFromUrl && platformFromUrl !== currentPlatform) {
-			if (validShipTypes.includes(platformFromUrl)) {
+			if (validPlatformTypes.includes(platformFromUrl)) {
 				if (gridFromUrl) {
-					platformStore.setSelectedPlatform(platformFromUrl, validShipTypes);
+					platformStore.setSelectedPlatform(platformFromUrl, validPlatformTypes);
 				} else {
-					sessionCoordinator.switchPlatform(platformFromUrl, validShipTypes);
+					sessionCoordinator.switchPlatform(platformFromUrl, validPlatformTypes);
 				}
 			} else {
 				Logger.warn(
-					`sessionCoordinator: Invalid platform from URL: ${platformFromUrl}. Expected one of: ${validShipTypes.join(", ")}`
+					`sessionCoordinator: Invalid platform from URL: ${platformFromUrl}. Expected one of: ${validPlatformTypes.join(", ")}`
 				);
 			}
 		}

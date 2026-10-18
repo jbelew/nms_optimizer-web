@@ -16,13 +16,28 @@ export type ValidationResult =
 	| { valid: true };
 
 /**
- * Validates whether a cell's active state can be toggled.
+ * Validates whether a cell's active state can be toggled under Slot Restriction rules.
+ *
+ * @remarks
+ * Rejects toggling when a module is currently placed in the cell (`"moduleLocked"`) or when
+ * the platform locks the entire grid layout (`"gridFixed"`).
  *
  * @param {object} params - Input parameters.
- * @param {Cell} params.cell - The cell target.
+ * @param {Cell} params.cell - The target grid cell.
  * @param {boolean} params.gridFixed - Whether the entire grid layout is locked.
  *
- * @returns {ValidationResult} Result containing validation status and optional reason.
+ * @returns {ValidationResult} Discriminated union indicating validity or the violated Slot Restriction reason.
+ *
+ * @see {@link ValidationResult}
+ * @see {@link ./gridRules.test.ts Unit Tests}
+ *
+ * @category Rules
+ *
+ * @example
+ * ```ts
+ * const res = validateToggleActive({ cell: emptyCell, gridFixed: false });
+ * // returns { valid: true }
+ * ```
  */
 export function validateToggleActive(params: { cell: Cell; gridFixed: boolean }): ValidationResult {
 	if (params.cell.module) {
@@ -37,16 +52,38 @@ export function validateToggleActive(params: { cell: Cell; gridFixed: boolean })
 }
 
 /**
- * Validates whether a cell's supercharged status can be toggled.
+ * Validates whether a cell's supercharged status can be toggled under Slot Restriction rules.
+ *
+ * @remarks
+ * Enforces occupied module locks (`"moduleLocked"`), locked grid layouts (`"gridFixed"`),
+ * fixed supercharged layouts (`"superchargedFixed"`), top-4 row limits (`"rowLimit"`),
+ * and the maximum of 4 supercharged slots (`"superchargedLimit"`).
  *
  * @param {object} params - Input parameters.
- * @param {Cell} params.cell - The cell target.
- * @param {number} params.rowIndex - The row index of the cell.
+ * @param {Cell} params.cell - The target grid cell.
+ * @param {number} params.rowIndex - Zero-based row index of the cell.
  * @param {boolean} params.gridFixed - Whether the entire grid layout is locked.
  * @param {boolean} params.superchargedFixed - Whether the supercharged slots are locked.
- * @param {number} params.totalSupercharged - Current total number of supercharged cells.
+ * @param {number} params.totalSupercharged - Current total number of supercharged cells in the grid.
  *
- * @returns {ValidationResult} Result containing validation status and optional reason.
+ * @returns {ValidationResult} Discriminated union indicating validity or the violated Slot Restriction reason.
+ *
+ * @see {@link ValidationResult}
+ * @see {@link ./gridRules.test.ts Unit Tests}
+ *
+ * @category Rules
+ *
+ * @example
+ * ```ts
+ * const res = validateToggleSupercharged({
+ *   cell: emptyCell,
+ *   gridFixed: false,
+ *   rowIndex: 0,
+ *   superchargedFixed: false,
+ *   totalSupercharged: 2,
+ * });
+ * // returns { valid: true }
+ * ```
  */
 export function validateToggleSupercharged(params: {
 	cell: Cell;
