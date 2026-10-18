@@ -38,6 +38,9 @@ import "../src/assets/css/fonts.css";
 
 import { BackgroundWrapper } from "./BackgroundWrapper";
 import { StoreResetWrapper, ThemeWrapper } from "./decorators";
+import { installStorybookFetchMock } from "./mockFetch";
+
+installStorybookFetchMock();
 
 // Custom viewports matching Tailwind breakpoints
 const customViewports = {

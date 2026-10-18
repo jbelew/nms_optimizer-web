@@ -41,6 +41,11 @@ export const Default: Story = {
 			},
 		},
 	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const trigger = await canvas.findByRole("button", { expanded: false }, { timeout: 5000 });
+		await expect(trigger).toBeEnabled();
+	},
 };
 
 export const OpenMenu: Story = {
@@ -49,7 +54,8 @@ export const OpenMenu: Story = {
 	},
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		const trigger = await canvas.findByRole("button");
+		const trigger = await canvas.findByRole("button", { expanded: false }, { timeout: 5000 });
+		await expect(trigger).toBeEnabled();
 		await userEvent.click(trigger);
 
 		const menu = await screen.findByRole("menu");
