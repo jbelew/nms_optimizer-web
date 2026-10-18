@@ -1,5 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
+import type { PreRenderedAsset, PreRenderedChunk } from "rolldown";
+import type { PreviewServer, UserConfig, ViteDevServer } from "vite";
 import babel from "@rolldown/plugin-babel";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
@@ -10,9 +12,6 @@ import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig, loadEnv } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { splashScreen } from "vite-plugin-splash-screen";
-
-import type { PreRenderedAsset, PreRenderedChunk } from "rolldown";
-import type { PreviewServer, UserConfig, ViteDevServer } from "vite";
 
 import packageJson from "./package.json" with { type: "json" };
 import { markdownBundlePlugin } from "./scripts/vite-plugin-markdown-bundle.mjs";
@@ -129,6 +128,13 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 				},
 			},
 			rolldownOptions: {
+				onLog(level, log, defaultHandler) {
+					if (log.code === "INEFFECTIVE_DYNAMIC_IMPORT") {
+						defaultHandler("error", log);
+					} else {
+						defaultHandler(level, log);
+					}
+				},
 				output: {
 					assetFileNames: (assetInfo: PreRenderedAsset) =>
 						assetInfo.name?.endsWith(".css")
@@ -541,7 +547,8 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 												},
 											],
 										},
-										urlPattern: ({ request }) => request.destination === "image",
+										urlPattern: ({ request }) =>
+											request.destination === "image",
 									},
 									{
 										handler: "CacheFirst",
@@ -675,7 +682,8 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 			alias: {
 				"@": path.resolve(dirname, "./src"),
 				"@shared": path.resolve(dirname, "./shared"),
-				react: path.resolve(dirname, "node_modules/react"),				"react-dom": path.resolve(dirname, "node_modules/react-dom"),
+				react: path.resolve(dirname, "node_modules/react"),
+				"react-dom": path.resolve(dirname, "node_modules/react-dom"),
 				...(!sentryEnabled
 					? {
 							"@sentry/react": path.resolve(

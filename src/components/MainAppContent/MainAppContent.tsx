@@ -1,6 +1,6 @@
 import "./MainAppContent.scss";
 
-import React, { lazy, Suspense, useEffect, useRef } from "react";
+import React, { lazy, Suspense, useEffect, useLayoutEffect, useRef } from "react";
 import { Box, Flex, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -86,7 +86,8 @@ const MainAppFooter: React.FC<{ position: "bottom-desktop" | "bottom-mobile" }> 
 
 /**
  * Renders the Platform Type selector heading and the technology grid table,
- * synchronizing container and table dimensions to {@link useUiStore} via `ResizeObserver`.
+ * synchronizing container and table dimensions to {@link useUiStore} synchronously
+ * before first paint and via `ResizeObserver` on subsequent resize events.
  */
 const MainAppGridSection: React.FC = () => {
 	const { t } = useTranslation();
@@ -102,9 +103,29 @@ const MainAppGridSection: React.FC = () => {
 	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
 	const solving = useOptimizeStore((state) => state.status.type === "solving");
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		const containerElement = containerRef.current;
 		const gridTableElement = gridTableRef.current;
+
+		if (containerElement) {
+			if (isLarge) {
+				const initialHeight = Math.round(containerElement.getBoundingClientRect().height);
+
+				if (initialHeight > 0) {
+					setGridHeight(initialHeight);
+				}
+			} else {
+				setGridHeight(null);
+			}
+		}
+
+		if (gridTableElement) {
+			const initialWidth = Math.round(gridTableElement.getBoundingClientRect().width);
+
+			if (initialWidth > 0) {
+				setGridTableWidth(initialWidth);
+			}
+		}
 
 		const observer = new ResizeObserver((entries) => {
 			window.requestAnimationFrame(() => {

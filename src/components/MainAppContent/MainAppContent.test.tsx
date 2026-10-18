@@ -142,4 +142,70 @@ describe("MainAppContent", () => {
 			})
 		);
 	});
+
+	it("synchronously applies grid section height and table width on initial desktop mount to prevent CLS", () => {
+		isSharedGridState = false;
+		vi.mocked(useBreakpoint).mockReturnValue(true);
+
+		const rectSpy = vi
+			.spyOn(HTMLElement.prototype, "getBoundingClientRect")
+			.mockImplementation(function (this: HTMLElement) {
+				if (this.classList.contains("main-app__grid-section")) {
+					return {
+						bottom: 520,
+						height: 520,
+						left: 0,
+						right: 744,
+						toJSON: () => ({}),
+						top: 0,
+						width: 744,
+						x: 0,
+						y: 0,
+					};
+				}
+
+				if (
+					this.classList.contains("gridTable") ||
+					this.classList.contains("gridTable-empty")
+				) {
+					return {
+						bottom: 424,
+						height: 424,
+						left: 0,
+						right: 744,
+						toJSON: () => ({}),
+						top: 0,
+						width: 744,
+						x: 0,
+						y: 0,
+					};
+				}
+
+				return {
+					bottom: 0,
+					height: 0,
+					left: 0,
+					right: 0,
+					toJSON: () => ({}),
+					top: 0,
+					width: 0,
+					x: 0,
+					y: 0,
+				};
+			});
+
+		try {
+			const { container } = renderWorkspace();
+
+			const techTreeSection = container.querySelector<HTMLElement>(
+				".main-app__tech-tree-section"
+			);
+			const shipSelector = container.querySelector<HTMLElement>(".main-app__ship-selector");
+
+			expect(techTreeSection?.style.height).toBe("520px");
+			expect(shipSelector?.style.maxWidth).toBe("744px");
+		} finally {
+			rectSpy.mockRestore();
+		}
+	});
 });

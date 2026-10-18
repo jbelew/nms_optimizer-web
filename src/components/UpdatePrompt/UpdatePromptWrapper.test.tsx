@@ -119,6 +119,8 @@ describe("UpdatePromptWrapper", () => {
 			refreshButton.click();
 		});
 
-		expect(mockUpdateSW).toHaveBeenCalledWith(true);
+		await vi.waitFor(() => {
+			expect(mockUpdateSW).toHaveBeenCalledWith(true);
+		});
 	});
 });

@@ -16,6 +16,7 @@ Before marking any code task complete, execute this sequence (also enforced auto
 1. `bun run typecheck` — Must report 0 TypeScript diagnostics (`tsgo`).
 2. `bun run test -- <path>` or `bun run test:related` — Ensure targeted unit/component tests pass.
 3. `bun run lint` — Must report 0 oxlint/ESLint errors.
+4. **Significant Refactors (Lighthouse Baseline & Validation)**: Before starting a significant UI, layout, routing, or bundle refactor, run a baseline Lighthouse / Web Vitals audit against the production preview build (`bun run build && bun run preview`), and run a validation audit upon completion to confirm zero regressions in Performance score, CLS, LCP, and TBT (see [`docs/agents/testing.md`](docs/agents/testing.md)).
 
 ## Key Commands & Gotchas
 
@@ -33,8 +34,8 @@ Read these specialized guides when working on matching branches:
 - **When naming props, variables, JSDoc, or test cases**: Read [`GLOSSARY.md`](GLOSSARY.md) for canonical domain terms (even when destructuring legacy store keys like `state.techGroups` or `state.checkedModules`).
 - **When writing CSS, SEO metadata, or commit messages**: Read [`docs/agents/project-rules.md`](docs/agents/project-rules.md) for critical iOS Safari GPU rendering workarounds, `<meta>` description preservation, and Angular commit conventions.
 - **When creating or refactoring UI components**: Read [`docs/agents/component-architecture.md`](docs/agents/component-architecture.md) for dialog directory layout, prop drilling prevention, and the Colocated Hook Pattern.
-- **When writing Zustand stores, React hooks, or Tailwind styling**: Read [`docs/agents/code-style.md`](docs/agents/code-style.md) for Immer deep mutation rules, Tailwind v4 CSS-first config, and hook error handling.
-- **When writing or fixing tests or Storybook stories**: Read [`docs/agents/testing.md`](docs/agents/testing.md) for module mocking, console log bans, and Storybook bundle cache safeguards.
+- **When writing Zustand stores, React hooks, or Tailwind styling**: Read [`docs/agents/code-style.md`](docs/agents/code-style.md) for Immer deep mutation rules, Tailwind v4 CSS-first config, and pre-paint `useLayoutEffect` measurement rules.
+- **When writing or fixing tests, Storybook stories, or running Chrome/Lighthouse audits**: Read [`docs/agents/testing.md`](docs/agents/testing.md) for module mocking, console log bans, Storybook bundle cache safeguards, and WSL2 Chrome DevTools / Lighthouse workflows.
 - **When modifying Vite build config, SSG scripts, or server routing**: Read [`docs/agents/architecture.md`](docs/agents/architecture.md) for hybrid rendering flow and Rolldown chunking groups.
 
 ## Agent skills
