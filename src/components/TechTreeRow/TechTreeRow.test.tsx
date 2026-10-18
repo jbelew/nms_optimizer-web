@@ -1,6 +1,6 @@
 import type { GridStore } from "@/store/grid/gridStore";
 import type { BonusStatusData, TechStore } from "@/store/tech/techStore";
-import type { ModuleSelectionDialogState, ShakeState } from "@/store/ui/uiStore";
+import type { ModuleSelectionDialogState } from "@/store/ui/uiStore";
 import type { TechTreeRowProps } from "@/types/props";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -9,7 +9,7 @@ import { useOptimize } from "@/hooks/useOptimize/useOptimize";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useTechStore } from "@/store/tech/techStore";
-import { useA11yStore, useModuleSelectionDialogStore, useShakeStore } from "@/store/ui/uiStore";
+import { useModuleSelectionDialogStore } from "@/store/ui/uiStore";
 
 import { TechTreeRow } from "./TechTreeRow";
 
@@ -17,9 +17,7 @@ import { TechTreeRow } from "./TechTreeRow";
 vi.mock("@/store/grid/gridStore", () => ({ useGridStore: vi.fn() }));
 vi.mock("@/store/tech/techStore", () => ({ useTechStore: vi.fn() }));
 vi.mock("@/store/ui/uiStore", () => ({
-	useA11yStore: vi.fn(),
 	useModuleSelectionDialogStore: vi.fn(),
-	useShakeStore: vi.fn(),
 }));
 vi.mock("@/hooks/useOptimize/useOptimize", () => ({
 	useOptimize: vi.fn(),
@@ -36,6 +34,7 @@ vi.mock("react-i18next", () => ({
 			if (key === "techTree.tooltips.solve") return "Solve";
 			if (key === "techTree.tooltips.reset") return "Reset";
 			if (key === "techTree.tooltips.update") return "Update";
+			if (key === "techTree.tooltips.gridFull") return "Grid Full";
 			if (key === "moduleSelection.tooltip")
 				return `${options?.techName ?? "Technology"} Module Selection`;
 
@@ -46,7 +45,6 @@ vi.mock("react-i18next", () => ({
 
 const mockUseGridStore = vi.mocked(useGridStore);
 const mockUseTechStore = vi.mocked(useTechStore);
-const mockUseShakeStore = vi.mocked(useShakeStore);
 const mockUseModuleSelectionDialogStore = vi.mocked(useModuleSelectionDialogStore);
 const mockUseOptimize = vi.mocked(useOptimize);
 
@@ -65,7 +63,7 @@ const mockClearTechMaxBonus = vi.fn();
 const mockClearTechSolvedBonus = vi.fn();
 const mockOpenDialog = vi.fn();
 
-const setupMocks = (hasTechInGrid: boolean, solving = false) => {
+const setupMocks = (hasTechInGrid: boolean, solving = false, isGridFull = false) => {
 	mockUseOptimize.mockReturnValue({
 		clearPatternNoFitTech: vi.fn(),
 		gridContainerRef: { current: null },
@@ -77,7 +75,7 @@ const setupMocks = (hasTechInGrid: boolean, solving = false) => {
 
 	const gridState: Partial<GridStore> = {
 		activeTechs: hasTechInGrid ? new Set(["testTech"]) : new Set(),
-		isGridFull: false,
+		isGridFull,
 		resetGridTech: mockResetGridTech,
 	};
 	mockUseGridStore.mockImplementation((selector?: (state: GridStore) => unknown) => {
@@ -88,58 +86,34 @@ const setupMocks = (hasTechInGrid: boolean, solving = false) => {
 	mockUseTechStore.mockImplementation((selector?: (state: TechStore) => unknown) => {
 		const state: Partial<TechStore> = {
 			checkedModules: { testTech: ["module1"] },
-
 			clearBonusStatus: vi.fn(),
-
 			clearTechMaxBonus: mockClearTechMaxBonus,
-
 			clearTechSolvedBonus: mockClearTechSolvedBonus,
-
 			clearTechSolveMethod: vi.fn(),
-
 			getBonusStatus: vi.fn(() => null),
-
 			maxBonus: {},
-
 			solvedBonus: {},
-
 			techGroups: {
 				testTech: [
 					{
 						color: "blue",
-
 						image: null,
-
 						key: "testTech",
-
 						label: "Test Tech Group",
-
 						module_count: 1,
-
 						modules: [
 							{
 								active: false,
-
 								adjacency: "",
-
 								adjacency_bonus: 0,
-
 								bonus: 0,
-
 								id: "module1",
-
 								image: "",
-
 								label: "Module 1",
-
 								sc_eligible: false,
-
 								supercharged: false,
-
 								tech: "testTech",
-
 								type: "",
-
 								value: 0,
 							},
 						],
@@ -149,12 +123,6 @@ const setupMocks = (hasTechInGrid: boolean, solving = false) => {
 		};
 
 		return selector ? selector(state as TechStore) : (state as TechStore);
-	});
-
-	mockUseShakeStore.mockImplementation((selector?: (state: ShakeState) => unknown) => {
-		const state: Partial<ShakeState> = { triggerShake: vi.fn() };
-
-		return selector ? selector(state as ShakeState) : (state as ShakeState);
 	});
 
 	mockUseModuleSelectionDialogStore.mockImplementation(
@@ -169,12 +137,6 @@ const setupMocks = (hasTechInGrid: boolean, solving = false) => {
 			return selector ? selector(state) : state;
 		}
 	);
-
-	vi.mocked(useA11yStore).mockReturnValue({
-		a11yMode: false,
-		setA11yMode: vi.fn(),
-		toggleA11yMode: vi.fn(),
-	});
 };
 
 describe("TechTreeRow", () => {
@@ -183,11 +145,9 @@ describe("TechTreeRow", () => {
 	});
 
 	it("should have Solve enabled and Reset disabled when tech is not in grid", () => {
-		// Arrange
 		setupMocks(false);
 		renderWithProviders(<TechTreeRow {...defaultProps} />);
 
-		// Assert
 		expect(screen.getByText("Test Tech Name")).toBeInTheDocument();
 		const solveButton = screen.getByRole("button", { name: "Solve Test Tech Name" });
 		const resetButton = screen.getByRole("button", { name: "Reset Test Tech Name" });
@@ -196,11 +156,9 @@ describe("TechTreeRow", () => {
 	});
 
 	it("should have Update enabled and Reset enabled when tech is in grid", () => {
-		// Arrange
 		setupMocks(true);
 		renderWithProviders(<TechTreeRow {...defaultProps} />);
 
-		// Assert
 		expect(screen.getByText("Test Tech Name")).toBeInTheDocument();
 		const updateButton = screen.getByRole("button", { name: "Update Test Tech Name" });
 		const resetButton = screen.getByRole("button", { name: "Reset Test Tech Name" });
@@ -208,8 +166,40 @@ describe("TechTreeRow", () => {
 		expect(resetButton).not.toBeDisabled();
 	});
 
+	it("should disable optimize button with Grid Full label when grid is full and tech is not in grid", () => {
+		setupMocks(false, false, true);
+		renderWithProviders(<TechTreeRow {...defaultProps} />);
+
+		const gridFullButton = screen.getByRole("button", { name: "Grid Full Test Tech Name" });
+		expect(gridFullButton).toBeDisabled();
+	});
+
+	it("should gracefully handle missing tech in techStore and disable solve when 0 modules are checked", () => {
+		setupMocks(false);
+		mockUseTechStore.mockImplementation((selector?: (state: TechStore) => unknown) => {
+			const state: Partial<TechStore> = {
+				checkedModules: {},
+				getBonusStatus: vi.fn(() => null),
+				solvedBonus: {},
+				techGroups: {},
+			};
+
+			return selector ? selector(state as TechStore) : (state as TechStore);
+		});
+
+		renderWithProviders(<TechTreeRow {...defaultProps} techImage={null} />);
+
+		const solveButton = screen.getByRole("button", {
+			name: "Solve technologies.testTech",
+		});
+		expect(solveButton).toBeDisabled();
+		const moduleButton = screen.getByRole("button", {
+			name: "x0 - technologies.testTech Module Selection",
+		});
+		expect(moduleButton).toHaveTextContent("x0");
+	});
+
 	it("should call handleOptimize when the solve button is clicked", () => {
-		// Arrange
 		const handleOptimizeMock = vi.fn();
 		setupMocks(false);
 		mockUseOptimize.mockReturnValue({
@@ -223,20 +213,16 @@ describe("TechTreeRow", () => {
 
 		renderWithProviders(<TechTreeRow {...defaultProps} />);
 
-		// Act
 		const solveButton = screen.getByRole("button", { name: "Solve Test Tech Name" });
 		fireEvent.click(solveButton);
 
-		// Assert
 		expect(handleOptimizeMock).toHaveBeenCalledWith("testTech");
 	});
 
 	it("should disable buttons when solving", () => {
-		// Arrange
 		setupMocks(true, true);
 		renderWithProviders(<TechTreeRow {...defaultProps} />);
 
-		// Assert
 		const updateButton = screen.getByRole("button", { name: "Update Test Tech Name" });
 		const resetButton = screen.getByRole("button", { name: "Reset Test Tech Name" });
 		expect(updateButton).toBeDisabled();
@@ -244,24 +230,20 @@ describe("TechTreeRow", () => {
 	});
 
 	it("should call handleReset and initiate reset transition when the reset button is clicked", () => {
-		// Arrange
 		const resetTechSpy = vi
 			.spyOn(sessionCoordinator, "resetTechnology")
 			.mockImplementation(() => {});
 		setupMocks(true);
 		renderWithProviders(<TechTreeRow {...defaultProps} />);
 
-		// Act
 		const resetButton = screen.getByRole("button", { name: "Reset Test Tech Name" });
 		fireEvent.click(resetButton);
 
-		// Assert
 		expect(resetTechSpy).toHaveBeenCalledWith("testTech");
 		resetTechSpy.mockRestore();
 	});
 
 	it("should initiate solve transition without executing synchronous layout queries", () => {
-		// Arrange
 		const handleOptimizeMock = vi.fn();
 		setupMocks(false);
 		mockUseOptimize.mockReturnValue({
@@ -282,11 +264,9 @@ describe("TechTreeRow", () => {
 
 		renderWithProviders(<TechTreeRow {...defaultProps} />);
 
-		// Act
 		const solveButton = screen.getByRole("button", { name: "Solve Test Tech Name" });
 		fireEvent.click(solveButton);
 
-		// Assert
 		expect(handleOptimizeMock).toHaveBeenCalledWith("testTech");
 		expect(scrollToMock).not.toHaveBeenCalled();
 	});

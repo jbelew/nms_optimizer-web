@@ -51,12 +51,40 @@ const mockPlatformStoreState = {
 	setSelectedPlatform: vi.fn(),
 };
 
-vi.mock("./grid/gridStore", () => ({
-	createGrid: vi.fn(() => ({ cells: [], height: 6, width: 10 })),
-	useGridStore: {
-		getState: vi.fn(() => mockGridStore),
-	},
-}));
+vi.mock("./grid/gridStore", () => {
+	const createEmptyCell = vi.fn((supercharged = false, active = false) => ({
+		active,
+		adjacency: "none",
+		adjacency_bonus: 0.0,
+		bonus: 0,
+		image: null,
+		label: "",
+		module: null,
+		sc_eligible: false,
+		supercharged,
+		tech: null,
+		total: 0,
+		type: "",
+		value: 0,
+	}));
+
+	return {
+		createEmptyCell,
+		createGrid: vi.fn((width = 10, height = 6) => ({
+			cells: Array.from({ length: height }, () =>
+				Array.from({ length: width }, () => createEmptyCell(false, false))
+			),
+			height,
+			width,
+		})),
+		resetCellContent: vi.fn((cell: Record<string, unknown>) => {
+			Object.assign(cell, createEmptyCell(Boolean(cell.supercharged), Boolean(cell.active)));
+		}),
+		useGridStore: {
+			getState: vi.fn(() => mockGridStore),
+		},
+	};
+});
 
 vi.mock("./tech/techStore", () => ({
 	useTechStore: {
@@ -309,6 +337,183 @@ describe("sessionCoordinator", () => {
 				moduleState: buildFile.moduleState,
 				techState: buildFile.techState,
 			});
+		});
+	});
+
+	describe("applyRecommendedBuild", () => {
+		const mockTechTree = {
+			Shield: [
+				{
+					color: "blue" as const,
+					image: null,
+					key: "shield",
+					label: "Shield",
+					module_count: 1,
+					modules: [
+						{
+							active: true,
+							adjacency: "none",
+							adjacency_bonus: 0,
+							bonus: 20,
+							id: "X1",
+							image: "img2.png",
+							label: "X-Class",
+							sc_eligible: false,
+							supercharged: false,
+							tech: "Shield",
+							type: "shield",
+							value: 2,
+						},
+					],
+				},
+			],
+			Weapon: [
+				{
+					color: "red" as const,
+					image: null,
+					key: "weapon",
+					label: "Boltcaster",
+					module_count: 1,
+					modules: [
+						{
+							active: true,
+							adjacency: "none",
+							adjacency_bonus: 0,
+							bonus: 10,
+							id: "S1",
+							image: "img.png",
+							label: "S-Class",
+							sc_eligible: true,
+							supercharged: false,
+							tech: "Weapon",
+							type: "weapon",
+							value: 1,
+						},
+					],
+				},
+			],
+		};
+
+		it("applies a valid Recommended Build to the grid and preserves techStore selections/bonuses", () => {
+			const applied = sessionCoordinator.applyRecommendedBuild(
+				{
+					layout: [
+						[
+							{
+								active: true,
+								adjacency_bonus: 1.0,
+								module: "S1",
+								supercharged: true,
+								tech: "weapon",
+							},
+							null,
+						],
+						[
+							{
+								active: true,
+								adjacency_bonus: 0.0,
+								module: null,
+								supercharged: false,
+								tech: null,
+							},
+							{
+								active: true,
+								adjacency_bonus: 0.0,
+								module: "X1",
+								supercharged: false,
+								tech: "shield",
+							},
+						],
+					],
+					title: "Test Build",
+				},
+				mockTechTree
+			);
+
+			expect(applied).toBe(true);
+			expect(mockGridStore.setGrid).toHaveBeenCalledTimes(1);
+			const newGrid = mockGridStore.setGrid.mock.calls[0][0];
+			expect(newGrid.cells[0][0]).toEqual(
+				expect.objectContaining({
+					active: true,
+					adjacency_bonus: 1.0,
+					bonus: 10,
+					image: "img.png",
+					label: "S-Class",
+					module: "S1",
+					sc_eligible: true,
+					supercharged: true,
+					tech: "weapon",
+					type: "weapon",
+					value: 1,
+				})
+			);
+			expect(newGrid.cells[0][1]).toEqual(
+				expect.objectContaining({
+					active: false,
+					module: null,
+					tech: null,
+				})
+			);
+			expect(newGrid.cells[1][0]).toEqual(
+				expect.objectContaining({
+					active: true,
+					module: null,
+					tech: null,
+				})
+			);
+			expect(newGrid.cells[1][1]).toEqual(
+				expect.objectContaining({
+					active: true,
+					bonus: 20,
+					image: "img2.png",
+					label: "X-Class",
+					module: "X1",
+					tech: "shield",
+				})
+			);
+			expect(mockTechStore.clearAllModuleSelections).not.toHaveBeenCalled();
+			expect(mockTechStore.clearAllBonusStatus).not.toHaveBeenCalled();
+		});
+
+		it("resets cell content when a module in layout is not found in techTree", () => {
+			const applied = sessionCoordinator.applyRecommendedBuild(
+				{
+					layout: [
+						[{ active: true, module: "missing", supercharged: false, tech: "unknown" }],
+					],
+					title: "Missing Module Build",
+				},
+				mockTechTree
+			);
+
+			expect(applied).toBe(true);
+			const newGrid = mockGridStore.setGrid.mock.calls[0][0];
+			expect(newGrid.cells[0][0]).toEqual(
+				expect.objectContaining({
+					active: true,
+					module: null,
+					tech: null,
+				})
+			);
+		});
+
+		it("returns false and does not update grid when layout is empty or build is invalid", () => {
+			expect(
+				sessionCoordinator.applyRecommendedBuild(
+					{ layout: [], title: "Empty" },
+					mockTechTree
+				)
+			).toBe(false);
+			expect(
+				sessionCoordinator.applyRecommendedBuild(
+					null as unknown as Parameters<
+						typeof sessionCoordinator.applyRecommendedBuild
+					>[0],
+					mockTechTree
+				)
+			).toBe(false);
+			expect(mockGridStore.setGrid).not.toHaveBeenCalled();
 		});
 	});
 });

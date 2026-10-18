@@ -3,6 +3,8 @@ import React from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
+import { sessionCoordinator } from "@/store/sessionCoordinator";
+
 import { TechTreePresetsCard } from "./TechTreePresetsCard";
 
 // Mock react-i18next
@@ -34,11 +36,16 @@ vi.mock("react-i18next", () => ({
 	}),
 }));
 
-const mockApplyRecommendedBuild = vi.fn();
-vi.mock("@/hooks/useRecommendedBuild/useRecommendedBuild", () => ({
-	useRecommendedBuild: () => ({
-		applyRecommendedBuild: mockApplyRecommendedBuild,
+const mockScrollIntoView = vi.fn();
+vi.mock("@/hooks/useScrollGridIntoView/useScrollGridIntoView", () => ({
+	useScrollGridIntoView: () => ({
+		gridContainerRef: { current: null },
+		scrollIntoView: mockScrollIntoView,
 	}),
+}));
+
+vi.mock("@/hooks/useBreakpoint/useBreakpoint", () => ({
+	useBreakpoint: vi.fn(() => false),
 }));
 
 const mockSendEvent = vi.fn();
@@ -109,14 +116,19 @@ describe("TechTreePresetsCard", () => {
 		expect(screen.getByRole("button", { name: /Apply Build/i })).toBeInTheDocument();
 	});
 
-	test("should apply recommended build and send analytics event when Apply Build button is clicked", async () => {
+	test("should apply recommended build via sessionCoordinator, scroll on mobile, and send analytics event when Apply Build button is clicked", async () => {
+		const applySpy = vi
+			.spyOn(sessionCoordinator, "applyRecommendedBuild")
+			.mockReturnValue(true);
+
 		render(<TechTreePresetsCard techTree={mockTechTree} />);
 
 		const applyButton = screen.getByRole("button", { name: /Apply Build/i });
 		fireEvent.click(applyButton);
 
 		await waitFor(() => {
-			expect(mockApplyRecommendedBuild).toHaveBeenCalledWith(mockBuilds[0]);
+			expect(mockScrollIntoView).toHaveBeenCalledTimes(1);
+			expect(applySpy).toHaveBeenCalledWith(mockBuilds[0], mockTechTree);
 			expect(mockSendEvent).toHaveBeenCalledWith({
 				action: "apply_build",
 				build: "Alpha Preset",
@@ -126,6 +138,8 @@ describe("TechTreePresetsCard", () => {
 				value: 1,
 			});
 		});
+
+		applySpy.mockRestore();
 	});
 
 	test("should open instructions dialog when recommended builds link is clicked", () => {

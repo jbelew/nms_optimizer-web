@@ -1,9 +1,9 @@
 /**
- * Pinned Recommended Presets Card component for the Tech Tree.
+ * Pinned Recommended Builds card module for the TechTree sidebar.
  *
  * @remarks
- * Displays community-sourced recommended technology builds optimized for maximum
- * adjacency bonuses on platforms with fixed supercharged slots across all viewports.
+ * Displays curated Recommended Builds optimized for maximum adjacency bonuses
+ * on platforms with fixed supercharged slots across all viewports.
  *
  * @see {@link TechTreePresetsCard}
  * @see {@link ./TechTreePresetsCard.test.tsx Unit Tests}
@@ -11,16 +11,17 @@
  * @category Components
  */
 
-import React, { useCallback } from "react";
+import React, { startTransition, useCallback } from "react";
 import { LayersIcon, MagicWandIcon, StackIcon } from "@radix-ui/react-icons";
 import { Button, Flex, Link, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
-import { useRecommendedBuild } from "@/hooks/useRecommendedBuild/useRecommendedBuild";
+import { useScrollGridIntoView } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { type TechTree } from "@/hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "@/store/app/platformStore";
+import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { type RecommendedBuild } from "@/types/tech";
 import { useDialog } from "@/utils/system/dialogUtils";
 import { countBuildModules } from "@/utils/tech/techTreeUtils";
@@ -29,9 +30,9 @@ import { countBuildModules } from "@/utils/tech/techTreeUtils";
  * Props for the {@link PresetCardItem} component.
  */
 interface PresetCardItemProps {
-	/** The recommended build data item. */
+	/** The Recommended Build item. */
 	build: RecommendedBuild;
-	/** Callback invoked when the user applies the recommended build. */
+	/** Callback invoked when the user applies the Recommended Build. */
 	onApply: (build: RecommendedBuild) => void;
 }
 
@@ -39,9 +40,9 @@ interface PresetCardItemProps {
  * Props for the {@link PresetsCardContent} component.
  */
 interface PresetsCardContentProps {
-	/** List of recommended builds to display. */
+	/** List of Recommended Builds to display. */
 	builds: RecommendedBuild[];
-	/** The technology tree data containing recommended builds. */
+	/** The technology tree data containing Recommended Builds. */
 	techTree: TechTree;
 }
 
@@ -49,7 +50,7 @@ interface PresetsCardContentProps {
  * Props for the {@link TechTreePresetsCard} component.
  */
 interface TechTreePresetsCardProps {
-	/** The technology tree data containing recommended builds. */
+	/** The technology tree data containing Recommended Builds. */
 	techTree: TechTree;
 }
 
@@ -117,25 +118,35 @@ const PresetCardItem: React.FC<PresetCardItemProps> = ({ build, onApply }) => {
 const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds, techTree }) => {
 	const { t } = useTranslation();
 	const { openDialog } = useDialog();
-	const { applyRecommendedBuild } = useRecommendedBuild(techTree);
+	const isAbove1024 = useBreakpoint("1024px");
+	const { scrollIntoView } = useScrollGridIntoView({ skipOnLargeScreens: false });
 	const { sendEvent } = useAnalytics();
 	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
 
 	const handleApply = useCallback(
 		(build: RecommendedBuild) => {
-			setTimeout(async () => {
-				await applyRecommendedBuild(build);
-				sendEvent({
-					action: "apply_build",
-					build: build.title,
-					category: "build",
-					nonInteraction: false,
-					platform: selectedPlatform,
-					value: 1,
+			setTimeout(() => {
+				if (!isAbove1024 && build?.layout?.length) {
+					scrollIntoView();
+				}
+
+				startTransition(() => {
+					const applied = sessionCoordinator.applyRecommendedBuild(build, techTree);
+
+					if (applied) {
+						sendEvent({
+							action: "apply_build",
+							build: build.title,
+							category: "build",
+							nonInteraction: false,
+							platform: selectedPlatform,
+							value: 1,
+						});
+					}
 				});
 			}, 0);
 		},
-		[applyRecommendedBuild, sendEvent, selectedPlatform]
+		[isAbove1024, scrollIntoView, sendEvent, selectedPlatform, techTree]
 	);
 
 	const handleOpenInstructions = useCallback(() => {
@@ -194,17 +205,19 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds, techTre
 };
 
 /**
- * Pinned card component for recommended technology builds across viewports.
+ * Pinned card component for Recommended Builds across viewports.
  *
  * @remarks
- * Renders a stylized card at the top of the Tech Tree list showcasing
- * preconfigured layouts for ships with fixed supercharged slots.
+ * Renders a stylized card at the top of the TechTree list showcasing
+ * preconfigured layouts for platforms with fixed supercharged slots, delegating
+ * grid materialization to `sessionCoordinator.applyRecommendedBuild`.
  *
  * @param {TechTreePresetsCardProps} props - Component properties.
+ * @param {TechTree} props.techTree - The technology tree payload containing `recommended_builds`.
  *
- * @returns {JSX.Element | null} The rendered presets card, or null if no recommended builds exist.
+ * @returns {JSX.Element | null} The rendered presets card, or `null` if no Recommended Builds exist.
  *
- * @see {@link useRecommendedBuild}
+ * @see {@link sessionCoordinator}
  * @see {@link ./TechTreePresetsCard.test.tsx Unit Tests}
  *
  * @component

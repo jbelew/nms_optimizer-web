@@ -8,6 +8,10 @@ This document outlines the core business domain language for the No Man's Sky te
 The hierarchical relationship (Theta &rarr; Tau &rarr; Sigma) between procedural upgrade modules where higher tiers depend on lower tiers.
 _Avoid_: upgrade level, module level, module rank
 
+**Technology Section**:
+A top-level sidebar grouping (e.g., Propulsion, Weaponry, Defensive Systems) that organizes related Technology Categories under a shared header.
+_Avoid_: technology category, tech section, category group
+
 **Technology Category**:
 A functional system type (e.g., Pulse Engine, Deflector Shield) containing one or more Technology Variants.
 _Avoid_: tech group, ship component, system type

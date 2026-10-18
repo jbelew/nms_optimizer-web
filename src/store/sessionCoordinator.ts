@@ -1,14 +1,17 @@
 import type { ApiResponse, Grid } from "./grid/gridStore";
 import type { BonusStatusData } from "./tech/techStore";
-import type { TechTreeItem } from "@/types/tech";
+import type { RecommendedBuild, TechTree, TechTreeItem } from "@/types/tech";
 import type { SaveBuildParams } from "@/utils/build/buildSerializer";
 import type { BuildFile } from "@/utils/validation/dataValidation";
 
 import { deserialize, serialize } from "@/hooks/useGridDeserializer/gridSerializer";
 import { Logger } from "@/utils/system/monitoring";
+import { getTechTreeMaps } from "@/utils/tech/techTreeUtils";
+import { isValidRecommendedBuild } from "@/utils/validation/dataValidation";
 
 import { usePlatformStore } from "./app/platformStore";
-import { createGrid, useGridStore } from "./grid/gridStore";
+import { assignModuleToCell } from "./grid/gridFactories";
+import { createEmptyCell, createGrid, resetCellContent, useGridStore } from "./grid/gridStore";
 import { useTechStore } from "./tech/techStore";
 import { useUiStore } from "./ui/uiStore";
 
@@ -74,12 +77,92 @@ function computeInitialCheckedModules(techGroups: { [key: string]: TechTreeItem[
  *
  * @remarks
  * This module centralizes actions that affect multiple stores simultaneously,
- * such as Session Reset, Technology Reset, switching Platform Type, Shared Grid
- * URL serialization/deserialization, and capturing/restoring a Build File.
+ * such as Session Reset, Technology Reset, applying Recommended Builds, switching
+ * Platform Type, Shared Grid URL serialization/deserialization, and capturing/restoring a Build File.
  *
  * @category State
  */
 export const sessionCoordinator = {
+	/**
+	 * Validates and applies one of the Recommended Builds to the workspace grid.
+	 *
+	 * @remarks
+	 * Maps module identifiers from `build.layout` against `techTree` metadata via
+	 * `getTechTreeMaps`, populates a 10×6 grid layout, and updates `useGridStore` while
+	 * preserving existing Module Selections and technology bonus statuses.
+	 *
+	 * @param {RecommendedBuild} build - The Recommended Build configuration to apply.
+	 * @param {TechTree} techTree - The complete technology tree payload for module lookup.
+	 *
+	 * @returns {boolean} `true` if the build was valid and applied to `useGridStore`, otherwise `false`.
+	 *
+	 * @see {@link isValidRecommendedBuild}
+	 * @see {@link getTechTreeMaps}
+	 * @see {@link useGridStore}
+	 *
+	 * @example
+	 * ```ts
+	 * const applied = sessionCoordinator.applyRecommendedBuild(build, techTree);
+	 * // returns true and updates useGridStore.getState().grid
+	 * ```
+	 */
+	applyRecommendedBuild(build: RecommendedBuild, techTree: TechTree): boolean {
+		if (!isValidRecommendedBuild(build)) {
+			Logger.error("Invalid RecommendedBuild object received:", undefined, { build });
+
+			return false;
+		}
+
+		if (!build.layout || build.layout.length === 0) {
+			return false;
+		}
+
+		const { modulesMap } = getTechTreeMaps(techTree);
+		const newGrid = createGrid(10, 6);
+		const layout = build.layout as (null | {
+			active?: boolean;
+			adjacency_bonus?: number;
+			module?: null | string;
+			supercharged?: boolean;
+			tech?: null | string;
+		})[][];
+
+		for (let r = 0; r < layout.length; r++) {
+			for (let c = 0; c < layout[r].length; c++) {
+				const cellData = layout[r][c];
+
+				if (cellData) {
+					const cell = createEmptyCell(
+						cellData.supercharged ?? false,
+						cellData.active ?? true
+					);
+
+					cell.tech = cellData.tech ?? null;
+					cell.module = cellData.module ?? null;
+
+					if (cellData.tech && cellData.module) {
+						const module = modulesMap.get(`${cellData.tech}/${cellData.module}`);
+
+						if (module) {
+							assignModuleToCell(cell, module);
+						} else {
+							resetCellContent(cell);
+						}
+					}
+
+					cell.adjacency_bonus = cellData.adjacency_bonus ?? 0.0;
+					newGrid.cells[r][c] = cell;
+				} else {
+					newGrid.cells[r][c] = createEmptyCell();
+				}
+			}
+		}
+
+		useGridStore.getState().setGrid(newGrid);
+
+		return true;
+	},
+
 	/**
 	 * Commits the results of an optimization solve to the relevant stores.
 	 *
