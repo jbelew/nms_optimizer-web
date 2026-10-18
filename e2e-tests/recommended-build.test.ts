@@ -4,6 +4,13 @@ import { waitForStore, waitForTechTree } from "./helpers/store-helpers";
 
 test.describe("Recommended Builds Presets Card", () => {
 	test.beforeEach(async ({ page }) => {
+		await page.route(
+			/(googletagmanager|google-analytics|cloudflareinsights)/,
+			async (route) => {
+				await route.abort("blockedbyclient");
+			},
+		);
+
 		// Suppress welcome dialog
 		await page.addInitScript(() => {
 			localStorage.setItem("user-visited", "true");
