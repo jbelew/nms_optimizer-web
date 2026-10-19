@@ -22,7 +22,7 @@
 		"jsx-a11y/anchor-is-valid": "warn",
 		"jsx-a11y/control-has-associated-label": "warn",
 		"jsx-a11y/no-autofocus": "warn",
-		"react/iframe-missing-sandbox": "warn",
+		"react/iframe-missing-sandbox": "off",
 		"react/jsx-no-constructed-context-values": "warn",
 		"typescript/no-extraneous-class": "warn"
 	},

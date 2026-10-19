@@ -264,7 +264,8 @@ const IframeRenderer: React.FC<{ src?: string; title?: string }> = ({ src, title
 				allowFullScreen
 				frameBorder="0"
 				height="400"
-				sandbox="allow-scripts allow-popups allow-presentation"
+				loading="lazy"
+				sandbox="allow-scripts allow-same-origin allow-popups allow-presentation"
 				src={src}
 				style={{ borderRadius: "6px" }}
 				title={iframeTitle}

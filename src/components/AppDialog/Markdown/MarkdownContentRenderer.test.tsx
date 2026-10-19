@@ -1,10 +1,12 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { vi } from "vitest";
 
 import { useMarkdownContent } from "@/hooks/useMarkdownContent/useMarkdownContent";
 
 import { MarkdownContentRenderer } from "./MarkdownContentRenderer";
+import { YouTubeEmbed } from "./youTubeEmbed";
 
 // Mock useMarkdownContent hook
 vi.mock("@/hooks/useMarkdownContent/useMarkdownContent", () => ({
@@ -180,5 +182,23 @@ describe("MarkdownContentRenderer", () => {
 			expect(article).toBeInTheDocument();
 			expect(article).toHaveClass("text-sm", "sm:text-base");
 		});
+	});
+});
+
+describe("YouTubeEmbed", () => {
+	test("should render iframe with allow-same-origin sandbox and lazy loading", () => {
+		const html = renderToStaticMarkup(
+			<YouTubeEmbed
+				title="NMS Visual History"
+				videoId="nGbHf9fQmds"
+			/>,
+		);
+
+		expect(html).toContain('src="https://www.youtube.com/embed/nGbHf9fQmds"');
+		expect(html).toContain(
+			'sandbox="allow-scripts allow-same-origin allow-popups allow-presentation"',
+		);
+		expect(html).toContain('loading="lazy"');
+		expect(html).toContain('title="NMS Visual History"');
 	});
 });
