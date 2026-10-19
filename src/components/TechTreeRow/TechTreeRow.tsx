@@ -336,6 +336,7 @@ export const TechTreeRow = React.memo(({ tech, techColor, techImage }: TechTreeR
 				alt={translatedTechName}
 				color={techColor}
 				fallback="IK"
+				ml="1"
 				radius="full"
 				size="2"
 				src={imagePath}
