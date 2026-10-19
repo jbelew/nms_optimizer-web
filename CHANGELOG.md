@@ -1,3 +1,10 @@
+## [8.4.2](https://github.com/jbelew/nms_optimizer-web/compare/v8.4.1...v8.4.2) (2026-10-19)
+
+
+### Bug Fixes
+
+* **docker:** copy patches directory before running bun install ([38712e4](https://github.com/jbelew/nms_optimizer-web/commit/38712e42dc2275209aaa9718ad168e7bf701fc23))
+
 ## [8.4.1](https://github.com/jbelew/nms_optimizer-web/compare/v8.4.0...v8.4.1) (2026-10-19)
 
 
