@@ -35,6 +35,7 @@ import type { GroupedModules, SelectionModule } from "@/types/props";
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useOptimize } from "@/hooks/useOptimize/useOptimize";
 import { usePlatformStore } from "@/store/app/platformStore";
 import {
@@ -372,6 +373,7 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 	const { t } = useTranslation();
 	const { handleOptimize } = useOptimize();
 	const { sendDeferredEvent } = useAnalytics();
+	const isSmall = !useBreakpoint("640px");
 	const [, startTransition] = useTransition();
 
 	const { closeDialog, isOpen, selectedTechData } = useModuleSelectionDialogStore(
@@ -485,7 +487,10 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 		activeVariant?.window_rules,
 	);
 	const windowBadgeText =
-		windowDimensions ?
+		isSmall ?
+			windowDimensions ? `${windowDimensions[0]}×${windowDimensions[1]}`
+			:	"—"
+		: windowDimensions ?
 			t("moduleSelection.solverWindow", {
 				height: windowDimensions[1],
 				width: windowDimensions[0],

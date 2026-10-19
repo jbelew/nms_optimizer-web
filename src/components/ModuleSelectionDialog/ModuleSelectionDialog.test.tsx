@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { TechTreeItem } from "@/types/tech";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useOptimize } from "@/hooks/useOptimize/useOptimize";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
@@ -35,6 +36,7 @@ vi.mock("react-i18next", () => ({
 	}),
 }));
 
+vi.mock("@/hooks/useBreakpoint/useBreakpoint");
 vi.mock("@/hooks/useOptimize/useOptimize");
 vi.mock("@/hooks/useAnalytics/useAnalytics");
 vi.mock("@/utils/system/dialogUtils", () => ({
@@ -247,6 +249,7 @@ describe("ModuleSelectionDialog", () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+		vi.mocked(useBreakpoint).mockReturnValue(true);
 	});
 
 	it("renders null when selectedTechData is null", () => {
@@ -375,6 +378,13 @@ describe("ModuleSelectionDialog", () => {
 
 		expect(await screen.findByText("Window: — (x0)")).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "Optimize" })).toBeDisabled();
+	});
+
+	it("hides the 'Window:' prefix on small screens (< 640px)", async () => {
+		vi.mocked(useBreakpoint).mockReturnValue(false);
+		seedAndRender({ checkedModules: ["core1", "bonus1"] });
+
+		expect(await screen.findByText("2×1 (x2)")).toBeInTheDocument();
 	});
 
 	it("reverts uncommitted Module Selection changes to the initial snapshot when Cancel is clicked", async () => {
