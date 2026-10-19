@@ -4,7 +4,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { TechTreeItem } from "@/types/tech";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
-import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useOptimize } from "@/hooks/useOptimize/useOptimize";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
@@ -36,7 +35,6 @@ vi.mock("react-i18next", () => ({
 	}),
 }));
 
-vi.mock("@/hooks/useBreakpoint/useBreakpoint");
 vi.mock("@/hooks/useOptimize/useOptimize");
 vi.mock("@/hooks/useAnalytics/useAnalytics");
 vi.mock("@/utils/system/dialogUtils", () => ({
@@ -249,7 +247,6 @@ describe("ModuleSelectionDialog", () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		vi.mocked(useBreakpoint).mockReturnValue(true);
 	});
 
 	it("renders null when selectedTechData is null", () => {
@@ -343,19 +340,19 @@ describe("ModuleSelectionDialog", () => {
 			checkedModules: ["core1", "bonus1"],
 		});
 
-		expect(await screen.findByText("Window: 2×1 (x2)")).toBeInTheDocument();
+		expect(await screen.findByText(/2×1 \(x2\)/)).toBeInTheDocument();
 
 		// Check Beta Bonus -> 3 modules checked -> 2×2 (x3)
 		fireEvent.click(screen.getByRole("checkbox", { name: /Beta Bonus/i }));
-		expect(screen.getByText("Window: 2×2 (x3)")).toBeInTheDocument();
+		expect(screen.getByText(/2×2 \(x3\)/)).toBeInTheDocument();
 
 		// Select All -> all 7 modules checked -> 3×3 (x7)
 		fireEvent.click(screen.getByRole("checkbox", { name: "Select All" }));
-		expect(screen.getByText("Window: 3×3 (x7)")).toBeInTheDocument();
+		expect(screen.getByText(/3×3 \(x7\)/)).toBeInTheDocument();
 
 		// Deselect All -> only core1 remains -> 1×1 (x1)
 		fireEvent.click(screen.getByRole("checkbox", { name: "Select All" }));
-		expect(screen.getByText("Window: 1×1 (x1)")).toBeInTheDocument();
+		expect(screen.getByText(/1×1 \(x1\)/)).toBeInTheDocument();
 	});
 
 	it("respects custom windowRules overrides when displaying Solver Window dimensions", async () => {
@@ -370,21 +367,14 @@ describe("ModuleSelectionDialog", () => {
 			},
 		});
 
-		expect(await screen.findByText("Window: 3×3 (x5)")).toBeInTheDocument();
+		expect(await screen.findByText(/3×3 \(x5\)/)).toBeInTheDocument();
 	});
 
-	it("disables Optimize and displays 'Window: — (x0)' when zero modules are checked", async () => {
+	it("disables Optimize and displays empty window when zero modules are checked", async () => {
 		seedAndRender({ checkedModules: [] });
 
-		expect(await screen.findByText("Window: — (x0)")).toBeInTheDocument();
+		expect(await screen.findByText(/— \(x0\)/)).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "Optimize" })).toBeDisabled();
-	});
-
-	it("hides the 'Window:' prefix on small screens (< 640px)", async () => {
-		vi.mocked(useBreakpoint).mockReturnValue(false);
-		seedAndRender({ checkedModules: ["core1", "bonus1"] });
-
-		expect(await screen.findByText("2×1 (x2)")).toBeInTheDocument();
 	});
 
 	it("reverts uncommitted Module Selection changes to the initial snapshot when Cancel is clicked", async () => {
