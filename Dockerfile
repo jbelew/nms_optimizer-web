@@ -8,6 +8,7 @@ FROM frontend-builder_${TARGETARCH} AS frontend-builder
 
 WORKDIR /app
 COPY package.json bun.lock tsconfig.json vite.config.ts ./
+COPY patches ./patches
 RUN bun install --frozen-lockfile --ignore-scripts
 COPY . .
 RUN bun run build:docker
