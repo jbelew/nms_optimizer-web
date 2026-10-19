@@ -55,12 +55,14 @@ export const ShareLinkContent: FC<ShareLinkContentProps> = ({ shareUrl }) => {
 			</Text>
 			<TextArea
 				aria-label={t("dialogs.titles.shareLink")}
+				className="font-mono! font-light! [&_textarea]:text-(--accent-a11)! [&_textarea]:[-webkit-text-fill-color:var(--accent-a11)]!"
 				id="share-url-input"
 				name="shareUrl"
 				readOnly
 				rows={8}
 				size={{ initial: "2", sm: "3" }}
 				value={shareUrl}
+				variant="soft"
 			/>
 			<Text
 				align="right"
