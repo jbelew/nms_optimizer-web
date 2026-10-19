@@ -1,3 +1,10 @@
+## [8.4.1](https://github.com/jbelew/nms_optimizer-web/compare/v8.4.0...v8.4.1) (2026-10-19)
+
+
+### Bug Fixes
+
+* **markdown:** allow-same-origin and lazy loading on embedded iframes ([065d958](https://github.com/jbelew/nms_optimizer-web/commit/065d9580f576893d1e0ae50af7f4442fa8e67d3c))
+
 # [8.4.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.3.0...v8.4.0) (2026-10-18)
 
 
