@@ -92,7 +92,7 @@ export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({
 			>
 				<Trans
 					components={{
-						1: <strong />,
+						1: <strong className="font-bold" />,
 					}}
 					i18nKey="dialogs.optimizationAlert.forceOptimizeSuggestion"
 				/>

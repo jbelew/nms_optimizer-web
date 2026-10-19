@@ -223,7 +223,7 @@ const H3Renderer: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
 		className="text-sm! sm:text-base!"
 		mb="1"
 		style={{ color: "var(--accent-a11)" }}
-		weight="medium"
+		weight="bold"
 	>
 		{children}
 	</Heading>

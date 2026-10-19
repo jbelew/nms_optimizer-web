@@ -533,7 +533,10 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 					className="mb-3! block text-sm sm:text-base"
 					mb="3"
 				>
-					<Trans i18nKey="moduleSelection.description" />
+					<Trans
+						components={{ strong: <strong className="font-bold" /> }}
+						i18nKey="moduleSelection.description"
+					/>
 				</Text>
 			)}
 			<label className="flex cursor-pointer items-center text-sm font-medium transition-colors duration-200 hover:text-(--accent-a12) sm:text-base">
