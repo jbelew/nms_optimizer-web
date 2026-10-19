@@ -228,7 +228,7 @@ const ModuleCheckbox: React.FC<ModuleCheckboxProps> = memo(
 					alt={module.label}
 					color={techColor}
 					fallback={isCore ? "IK" : module.id}
-					radius="full"
+					radius="medium"
 					size="1"
 					src={imagePath}
 				/>
@@ -275,9 +275,9 @@ const ModuleGroup: React.FC<ModuleGroupProps> = ({
 	const dependencyMap = getModulePrerequisites(groupName, modules);
 
 	return (
-		<div>
+		<div className="mb-1">
 			<div
-				className={`flex items-center gap-2 font-bold capitalize ${
+				className={`heading-styled flex items-center gap-1 ${
 					groupName !== "cosmetic" ? "mb-2" : "mb-0"
 				}`}
 				style={{ color: "var(--accent-a11)" }}
@@ -488,7 +488,7 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 	);
 	const windowBadgeText =
 		isSmall ?
-			windowDimensions ? `${windowDimensions[0]}×${windowDimensions[1]}`
+			windowDimensions ? `W: ${windowDimensions[0]}×${windowDimensions[1]}`
 			:	"—"
 		: windowDimensions ?
 			t("moduleSelection.solverWindow", {
@@ -554,11 +554,14 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 				mb="3"
 				size="4"
 			/>
-			<div className="flex flex-col gap-2">
+			<div className="flex flex-col">
 				{groupedModules["core"]?.length > 0 && (
-					<div key="core">
+					<div
+						className="mb-2"
+						key="core"
+					>
 						<div
-							className="mb-2 font-bold capitalize"
+							className="heading-styled mb-2"
 							style={{ color: "var(--accent-a11)" }}
 						>
 							{t(`moduleSelection.core`)}
@@ -610,7 +613,7 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 				className="font-mono! text-xs! tabular-nums sm:text-sm!"
 				color={isOptimizeDisabled ? "gray" : techColor}
 				radius="medium"
-				size="1"
+				size="2"
 				variant="surface"
 			>
 				{windowBadgeText} (x{currentCheckedModules.length})

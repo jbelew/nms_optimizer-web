@@ -190,7 +190,7 @@ const H2Renderer: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
 		<>
 			<Heading
 				as="h2"
-				className="text-base! font-bold! sm:text-lg!"
+				className="heading-styled text-base! sm:text-lg!"
 				id={id}
 				mb="3"
 				mt={id !== "section-1" ? "3" : "0"}
@@ -204,7 +204,7 @@ const H2Renderer: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
 				mb="2"
 				mt="2"
 				orientation="horizontal"
-				size="3"
+				size="4"
 			/>
 		</>
 	);
@@ -223,6 +223,7 @@ const H3Renderer: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
 		className="text-sm! sm:text-base!"
 		mb="1"
 		style={{ color: "var(--accent-a11)" }}
+		weight="medium"
 	>
 		{children}
 	</Heading>

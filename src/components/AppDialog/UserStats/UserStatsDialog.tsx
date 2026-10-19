@@ -371,7 +371,7 @@ const UserStatsData: FC<UserStatsDataProps> = ({ isOpen }) => {
 			<>
 				<Heading
 					as="h2"
-					className="text-base! sm:text-lg!"
+					className="heading-styled text-base! sm:text-lg!"
 					mb="3"
 					style={{ color: "var(--accent-a11)" }}
 					trim="end"
