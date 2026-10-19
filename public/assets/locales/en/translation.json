@@ -128,7 +128,7 @@
 		},
 		"userStats": {
 			"noDataForChart": "No data available for this chart.",
-			"description": "This dialog displays aggregated user statistics based on interactions with the optimizer, highlighting the most commonly supercharged technologies for Starships, Multi-Tools, and Corvettes.",
+			"description": "Aggregated community statistics showing the most commonly supercharged technologies for Starships, Multi-Tools, and Corvettes.",
 			"error": "Failed to load user statistics. Please try again later.",
 			"starshipChartTitle": "Starship Technologies",
 			"multitoolChartTitle": "Multi-tool Technologies",
@@ -708,9 +708,9 @@
 		"warning": "<p>The default Corvette <strong>Module Selection</strong> is a starting suggestion. Prioritize procedural upgrade modules over <strong>Cosmetic Modules</strong> and <strong>Reactor Modules</strong> for higher stat bonuses.</p><p style=\"margin-top: .5rem\">Use <strong>Select All</strong> to include every module in this <strong>Technology Category</strong>. Most Corvette grids can fit only <strong>3 to 4</strong> categories with all modules enabled.</p>",
 		"selectAll": "Select All",
 		"closeDialogLabel": "Close",
-		"cosmeticInfo": "<p>Cosmetic modules provide a minor stat bonus. Select the same number of cosmetic modules installed on your Corvette so the layout matches your build.</p>",
+		"cosmeticInfo": "<p>Suggested cosmetic modules name the parts with the highest stat bonus, but they should not limit your ship design. Select the same number of cosmetic modules that appear on your Corvette's grid.</p>",
 		"trailsInfo": "<strong>Starship Trails changed in v7.0 Cosmos!</strong> In most cases, select no more than <strong>3 Starship Trails</strong>. <strong>For the maximum bonus</strong>, select <strong>5 Starship Trails</strong> if you have the Expedition 23 Astronaut figurine. Starship Trails apply in priority order, with <strong>[P1] Chromatic</strong> having the highest priority.",
-		"description": "The default <strong>Module Selection</strong> includes recommended modules. Enable or disable modules to customize this <strong>Technology Category</strong>.",
+		"description": "The default <strong>Module Selection</strong> is a starting suggestion. Enable or disable modules to customize this <strong>Technology Category</strong>.",
 		"optimizeButton": "Optimize",
 		"cancelButton": "Cancel",
 		"solverWindow": "Window: {{width}}×{{height}}",
@@ -759,8 +759,8 @@
 		}
 	},
 	"installPrompt": {
-		"title": "Add to Home Screen",
-		"iosInstructions": "For the best experience, add this app to your Home Screen. Open the <strong>Share</strong> menu in your browser and select <strong>Add to Home Screen</strong>."
+		"title": "Add to Home Screen?",
+		"iosInstructions": "Tap <strong>Share</strong> in Safari or Chrome, then select <strong>Add to Home Screen</strong> to install this app."
 	},
 	"notFound": {
 		"title": "–kzzkt– 404 –kzzkt–",
