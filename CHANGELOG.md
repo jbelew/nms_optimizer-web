@@ -1,3 +1,10 @@
+## [8.4.3](https://github.com/jbelew/nms_optimizer-web/compare/v8.4.2...v8.4.3) (2026-10-20)
+
+
+### Performance Improvements
+
+* **ui:** gate closed dialog keydown listener and align INP telemetry ([afa1246](https://github.com/jbelew/nms_optimizer-web/commit/afa1246f57fbdcaf360acb3f86b27a0751d5944d))
+
 ## [8.4.2](https://github.com/jbelew/nms_optimizer-web/compare/v8.4.1...v8.4.2) (2026-10-19)
 
 
