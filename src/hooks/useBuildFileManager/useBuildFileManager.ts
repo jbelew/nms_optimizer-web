@@ -55,17 +55,17 @@ export interface UseBuildFileManagerReturn {
 	 * Confirms the build name, serializes the current session snapshot into a `.nms` Build File,
 	 * triggers a browser download, and emits toast and analytics feedback.
 	 *
-	 * @param {string} buildName - The display name to assign to the saved Build File.
+	 * @param buildName - The display name to assign to the saved Build File.
 	 *
-	 * @returns {Promise<void>} Resolves when the save workflow completes.
+	 * @returns Resolves when the save workflow completes.
 	 */
 	handleBuildNameConfirm: (buildName: string) => Promise<void>;
 	/**
 	 * Processes a user-selected `.nms` Build File from a file input `change` event.
 	 *
-	 * @param {ChangeEvent<HTMLInputElement>} event - The file input change event.
+	 * @param event - The file input change event.
 	 *
-	 * @returns {Promise<void>} Resolves when the file import workflow completes.
+	 * @returns Resolves when the file import workflow completes.
 	 */
 	handleFileSelect: (event: ChangeEvent<HTMLInputElement>) => Promise<void>;
 	/** Programmatically opens the native file picker for `.nms` Build Files. */
@@ -208,11 +208,11 @@ export const useBuildFileManager = (): UseBuildFileManagerReturn => {
 	 *
 	 * @returns Side-effects only.
 	 */
-	const handleLoadBuild = () => {
+	const handleLoadBuild = useCallback(() => {
 		if (sharedFileInputRef.current) {
 			sharedFileInputRef.current.click();
 		}
-	};
+	}, []);
 
 	/**
 	 * Extracts the selected `.nms` Build File from the input change event, runs the unified
@@ -222,33 +222,36 @@ export const useBuildFileManager = (): UseBuildFileManagerReturn => {
 	 *
 	 * @returns Resolves when the file import finishes.
 	 */
-	const handleFileSelect = async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
-		const file = event.target.files?.[0];
+	const handleFileSelect = useCallback(
+		async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
+			const file = event.target.files?.[0];
 
-		if (file) {
-			await importBuildFile(file);
-		}
+			if (file) {
+				await importBuildFile(file);
+			}
 
-		event.target.value = "";
-	};
+			event.target.value = "";
+		},
+		[importBuildFile],
+	);
 
 	/**
 	 * Opens the build-naming dialog to initiate a Build File export.
 	 *
 	 * @returns Side-effects only.
 	 */
-	const handleSaveBuild = () => {
+	const handleSaveBuild = useCallback(() => {
 		setIsSaveBuildDialogOpen(true);
-	};
+	}, [setIsSaveBuildDialogOpen]);
 
 	/**
 	 * Closes the build-naming dialog without saving.
 	 *
 	 * @returns Side-effects only.
 	 */
-	const handleBuildNameCancel = () => {
+	const handleBuildNameCancel = useCallback(() => {
 		setIsSaveBuildDialogOpen(false);
-	};
+	}, [setIsSaveBuildDialogOpen]);
 
 	/**
 	 * Serializes the active multi-store build snapshot into a `.nms` Build File, triggers
@@ -258,40 +261,47 @@ export const useBuildFileManager = (): UseBuildFileManagerReturn => {
 	 *
 	 * @returns Resolves when the save operation completes.
 	 */
-	const handleBuildNameConfirm = async (buildName: string): Promise<void> => {
-		setIsSaveBuildDialogOpen(false);
-		setIsSavePending(true);
+	const handleBuildNameConfirm = useCallback(
+		async (buildName: string): Promise<void> => {
+			setIsSaveBuildDialogOpen(false);
+			setIsSavePending(true);
 
-		try {
-			const snapshot = sessionCoordinator.getBuildSnapshot(buildName);
-			const { blob, filename } = await buildSerializer.saveBuild(snapshot);
+			try {
+				const snapshot = sessionCoordinator.getBuildSnapshot(buildName);
+				const { blob, filename } = await buildSerializer.saveBuild(snapshot);
 
-			const url = URL.createObjectURL(blob);
-			const link = document.createElement("a");
-			link.href = url;
-			link.download = filename;
-			document.body.appendChild(link);
-			link.click();
-			document.body.removeChild(link);
-			URL.revokeObjectURL(url);
+				const url = URL.createObjectURL(blob);
+				const link = document.createElement("a");
+				link.href = url;
+				link.download = filename;
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+				URL.revokeObjectURL(url);
 
-			showSuccess(t("toast.buildSaved.title"), t("toast.buildSaved.description"), 5000);
-			sendEvent({
-				action: "save_build",
-				build_name: buildName,
-				category: "ui",
-				method: "nms_file",
-				nonInteraction: false,
-				shipType: snapshot.shipType,
-				value: 1,
-			});
-		} catch (error) {
-			Logger.error("Failed to save build file:", error);
-			showError(t("toast.buildSaveError.title"), t("toast.buildSaveError.description"), 5000);
-		} finally {
-			setIsSavePending(false);
-		}
-	};
+				showSuccess(t("toast.buildSaved.title"), t("toast.buildSaved.description"), 5000);
+				sendEvent({
+					action: "save_build",
+					build_name: buildName,
+					category: "ui",
+					method: "nms_file",
+					nonInteraction: false,
+					shipType: snapshot.shipType,
+					value: 1,
+				});
+			} catch (error) {
+				Logger.error("Failed to save build file:", error);
+				showError(
+					t("toast.buildSaveError.title"),
+					t("toast.buildSaveError.description"),
+					5000,
+				);
+			} finally {
+				setIsSavePending(false);
+			}
+		},
+		[sendEvent, setIsSaveBuildDialogOpen, setIsSavePending, showError, showSuccess, t],
+	);
 
 	return {
 		fileInputRef: sharedFileInputRef,

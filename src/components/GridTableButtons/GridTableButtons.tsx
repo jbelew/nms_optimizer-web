@@ -203,13 +203,15 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 		<>
 			{!isSharedGrid && (
 				<>
-					<React.Suspense fallback={null}>
-						<BuildNameDialog
-							isOpen={isSaveBuildDialogOpen}
-							onCancel={handleBuildNameCancel}
-							onConfirm={handleBuildNameConfirm}
-						/>
-					</React.Suspense>
+					{isSaveBuildDialogOpen && (
+						<React.Suspense fallback={null}>
+							<BuildNameDialog
+								isOpen={isSaveBuildDialogOpen}
+								onCancel={handleBuildNameCancel}
+								onConfirm={handleBuildNameConfirm}
+							/>
+						</React.Suspense>
+					)}
 					<input
 						accept=".nms"
 						aria-label={t("buttons.loadBuild")}

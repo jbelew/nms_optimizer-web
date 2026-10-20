@@ -46,6 +46,11 @@ type SendEventFunction = (event: GA4Event) => void;
  * ```
  */
 const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
+	const rawValue =
+		metric.name === "CLS" ? metric.delta * 1000
+		: metric.name === "INP" ? (metric.value ?? metric.delta)
+		: metric.delta;
+
 	const event: GA4Event = {
 		action: "performance_metric",
 		app_version: __APP_VERSION__,
@@ -53,7 +58,7 @@ const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
 		label: metric.id,
 		metric_name: metric.name,
 		nonInteraction: true,
-		value: Math.round(metric.name === "CLS" ? metric.delta * 1000 : metric.delta),
+		value: Math.round(rawValue),
 	};
 
 	if (metric.name === "INP" && "attribution" in metric) {

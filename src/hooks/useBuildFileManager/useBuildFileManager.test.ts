@@ -17,9 +17,11 @@ const { mockSendEvent, mockShowError, mockShowSuccess } = vi.hoisted(() => ({
 	mockShowSuccess: vi.fn(),
 }));
 
+const mockT = (key: string) => key;
+
 vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
-		t: (key: string) => key,
+		t: mockT,
 	}),
 }));
 
@@ -56,10 +58,10 @@ vi.mock("@/store/app/platformStore", async () => {
 /**
  * Creates a synthetic file input ChangeEvent for testing `handleFileSelect`.
  *
- * @param {File[]} files - The files to attach to `event.target.files`.
- * @param {string} [initialValue="C:\\fakepath\\test.nms"] - Initial value of `event.target.value`.
+ * @param files - The files to attach to `event.target.files`.
+ * @param [initialValue="C:\\fakepath\\test.nms"] - Initial value of `event.target.value`.
  *
- * @returns {ChangeEvent<HTMLInputElement>} The synthetic change event.
+ * @returns The synthetic change event.
  */
 const createFileChangeEvent = (
 	files: File[],
@@ -120,6 +122,23 @@ describe("useBuildFileManager", () => {
 
 			expect(desktop.current.isSaveBuildDialogOpen).toBe(false);
 			expect(mobile.current.isSaveBuildDialogOpen).toBe(false);
+		});
+
+		it("maintains stable callback references across re-renders", () => {
+			const { rerender, result } = renderHook(() => useBuildFileManager());
+			const initialCancel = result.current.handleBuildNameCancel;
+			const initialConfirm = result.current.handleBuildNameConfirm;
+			const initialFileSelect = result.current.handleFileSelect;
+			const initialLoad = result.current.handleLoadBuild;
+			const initialSave = result.current.handleSaveBuild;
+
+			rerender();
+
+			expect(result.current.handleBuildNameCancel).toBe(initialCancel);
+			expect(result.current.handleBuildNameConfirm).toBe(initialConfirm);
+			expect(result.current.handleFileSelect).toBe(initialFileSelect);
+			expect(result.current.handleLoadBuild).toBe(initialLoad);
+			expect(result.current.handleSaveBuild).toBe(initialSave);
 		});
 
 		it("serializes the active session snapshot, triggers a DOM download, and emits toast and analytics feedback", async () => {

@@ -104,6 +104,25 @@ describe("AppDialog", () => {
 		expect(screen.getAllByText("Test Dialog").length).toBeGreaterThanOrEqual(1);
 	});
 
+	test("should not register keydown listener or call onClose on Escape when isOpen is false", () => {
+		const addEventListenerSpy = vi.spyOn(window, "addEventListener");
+
+		render(
+			<AppDialog
+				{...defaultProps}
+				isOpen={false}
+			/>,
+		);
+
+		const keydownCalls = addEventListenerSpy.mock.calls.filter((call) => call[0] === "keydown");
+		expect(keydownCalls).toHaveLength(0);
+
+		fireEvent.keyDown(window, { code: "Escape", key: "Escape" });
+		expect(mockOnClose).not.toHaveBeenCalled();
+
+		addEventListenerSpy.mockRestore();
+	});
+
 	test("should cleanup event listener on unmount", () => {
 		const removeEventListenerSpy = vi.spyOn(window, "removeEventListener");
 

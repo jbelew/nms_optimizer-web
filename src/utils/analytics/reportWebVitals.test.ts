@@ -162,6 +162,46 @@ describe("reportWebVitals", () => {
 		});
 	});
 
+	test("should send INP metric.value instead of negative or incremental metric.delta on subsequent reports", () => {
+		reportWebVitals(mockSendEvent);
+
+		const inpCallback = (onINP as ReturnType<typeof vi.fn>).mock.calls[0][0];
+
+		const subsequentMetricWithAttribution = {
+			attribution: {
+				inputDelay: 2.1,
+				interactionTarget: "html.background-visible.dark.dark-theme.js-enabled>body",
+				interactionType: "keyboard",
+				loadState: "complete",
+				presentationDelay: 36.2,
+				processingDuration: 42.8,
+			},
+			delta: -24,
+			id: "v3-subsequent-inp",
+			name: "INP",
+			rating: "good" as const,
+			value: 81.1,
+		};
+
+		inpCallback(subsequentMetricWithAttribution);
+
+		expect(mockSendEvent).toHaveBeenCalledWith({
+			action: "performance_metric",
+			app_version: expect.any(String),
+			category: "performance",
+			input_delay: 2,
+			interaction_target: "html.background-visible.dark.dark-theme.js-enabled>body",
+			interaction_type: "keyboard",
+			label: "v3-subsequent-inp",
+			load_state: "complete",
+			metric_name: "INP",
+			nonInteraction: true,
+			presentation_delay: 36,
+			processing_duration: 43,
+			value: 81,
+		});
+	});
+
 	test("should fallback to '(unmounted element)' when interactionTarget is empty", () => {
 		reportWebVitals(mockSendEvent);
 

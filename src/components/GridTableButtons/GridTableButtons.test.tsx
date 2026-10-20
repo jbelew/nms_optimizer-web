@@ -138,6 +138,17 @@ describe("GridTableButtons", () => {
 		useTechStore.setState({ isDefaultModuleSelection: true });
 	});
 
+	it("does not mount BuildNameDialog or attach a window keydown listener while isSaveBuildDialogOpen is false", () => {
+		const addEventListenerSpy = vi.spyOn(window, "addEventListener");
+		renderComponent(false);
+
+		const keydownCalls = addEventListenerSpy.mock.calls.filter((call) => call[0] === "keydown");
+		expect(keydownCalls).toHaveLength(0);
+		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+
+		addEventListenerSpy.mockRestore();
+	});
+
 	it("renders all buttons when not shared grid and has modules", () => {
 		renderComponent(false);
 		expect(screen.getByLabelText("buttons.instructions")).toBeInTheDocument();

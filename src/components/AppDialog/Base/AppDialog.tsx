@@ -63,11 +63,13 @@ export const AppDialogRoot: React.FC<AppDialogProps> = ({
 }) => {
 	const { t } = useTranslation();
 	useEffect(() => {
+		if (!isOpen) return;
+
 		const handleEscapeKey = (event: KeyboardEvent) => event.key === "Escape" && onClose();
 		window.addEventListener("keydown", handleEscapeKey);
 
 		return () => window.removeEventListener("keydown", handleEscapeKey);
-	}, [onClose]);
+	}, [isOpen, onClose]);
 
 	const contextValue = useMemo(() => ({ isOpen, onClose, size }), [isOpen, onClose, size]);
 
