@@ -90,10 +90,11 @@ export const Default: Story = {
 	},
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		const toastDescription = await canvas.findByText(
-			/For the best experience, add this app to your Home Screen/i,
-		);
+		const toastDescription = await canvas.findByText(/in Safari or Chrome, then select/i);
 		await expect(toastDescription).toBeInTheDocument();
+		await expect(toastDescription).toHaveTextContent(
+			/Tap Share in Safari or Chrome, then select Add to Home Screen to install this app\./i,
+		);
 		await expect(canvas.getAllByText(/Add to Home Screen/i).length).toBeGreaterThan(0);
 	},
 };
