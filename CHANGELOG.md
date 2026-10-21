@@ -1,3 +1,10 @@
+## [8.4.4](https://github.com/jbelew/nms_optimizer-web/compare/v8.4.3...v8.4.4) (2026-10-21)
+
+
+### Performance Improvements
+
+* convert CI screenshots and SEO/PWA image metadata to WebP ([5ab901e](https://github.com/jbelew/nms_optimizer-web/commit/5ab901e395b996feeab338e946bb807782bac5a2))
+
 ## [8.4.3](https://github.com/jbelew/nms_optimizer-web/compare/v8.4.2...v8.4.3) (2026-10-20)
 
 
