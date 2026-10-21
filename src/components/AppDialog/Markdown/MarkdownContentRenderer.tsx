@@ -100,7 +100,7 @@ const LinkRenderer: React.FC<{ children?: React.ReactNode; href?: string }> = ({
 			rel={isInternal ? undefined : "noopener noreferrer"}
 			target={isInternal ? undefined : "_blank"}
 			underline="always"
-			weight="bold"
+			weight="medium"
 		>
 			{children}
 		</Link>

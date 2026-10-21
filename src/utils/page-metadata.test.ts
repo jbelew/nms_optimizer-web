@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import {
 	DEFAULT_BASE_URL,
+	DEFAULT_OG_IMAGE_PATH,
 	extractContentHeading,
 	formatDocumentTitle,
 	formatErrorDocumentTitle,
@@ -417,8 +418,11 @@ describe("page-metadata.js", () => {
 							expect(meta.canonicalUrl).toBe(expectedUrl);
 							expect(meta.cleanPath).toBe(path);
 							expect(meta.lang).toBe(lang);
+							expect(DEFAULT_OG_IMAGE_PATH).toBe(
+								"/assets/img/screenshots/screenshot.webp",
+							);
 							expect(meta.ogImageUrl).toBe(
-								"https://nms-optimizer.app/assets/img/screenshots/screenshot.webp",
+								`${DEFAULT_BASE_URL}${DEFAULT_OG_IMAGE_PATH}`,
 							);
 							expect(meta.schemas.length).toBeGreaterThan(0);
 						});
