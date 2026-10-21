@@ -48,20 +48,20 @@ const CHANGE_FREQUENCIES = {
 export const PAGE_IMAGE_CONFIG = {
 	about: {
 		caption: "No Man's Sky technology layout optimization algorithms and architecture.",
-		loc: `${baseUrl}/assets/img/screenshots/screenshot_desktop.png`,
+		loc: `${baseUrl}/assets/img/screenshots/screenshot_desktop.webp`,
 	},
 	instructions: {
 		caption: "How to use the grid, manage supercharged slots, and place technology modules.",
-		loc: `${baseUrl}/assets/img/screenshots/screenshot_desktop.png`,
+		loc: `${baseUrl}/assets/img/screenshots/screenshot_desktop.webp`,
 	},
 	root: {
 		caption:
 			"A detailed screenshot of the NMS Optimizer application showing an optimized technology grid with high adjacency bonuses.",
-		loc: `${baseUrl}/assets/img/screenshots/screenshot.png`,
+		loc: `${baseUrl}/assets/img/screenshots/screenshot.webp`,
 	},
 	userstats: {
 		caption: "Community statistics and supercharged slot tech meta for No Man's Sky.",
-		loc: `${baseUrl}/assets/img/screenshots/screenshot_desktop.png`,
+		loc: `${baseUrl}/assets/img/screenshots/screenshot_desktop.webp`,
 	},
 };
 

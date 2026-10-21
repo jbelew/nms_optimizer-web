@@ -72,5 +72,5 @@ Este proyecto no sería posible sin la increíble comunidad de _No Man's Sky_. U
 
 ## Mirando Atrás: Primeras Versiones
 
-![Early prototype of No Man's Sky layout optimizer user interface](/assets/img/screenshots/screenshot_v03.png)
+![Early prototype of No Man's Sky layout optimizer user interface](/assets/img/screenshots/screenshot_v03.webp)
 Si estuviste con nosotros desde el principio, podrías recordar cómo lucía la interfaz de usuario en sus primeras fases alfa. Funcionaba, pero el diseño era mínimo. La versión actual representa una mejora importante y continua en diseño, usabilidad móvil y claridad general.

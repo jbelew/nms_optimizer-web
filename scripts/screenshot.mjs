@@ -1,8 +1,37 @@
-import { chromium } from "playwright";
+import fs from "node:fs/promises";
 import path from "path";
+import { chromium } from "playwright";
+import sharp from "sharp";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+/**
+ * Sharp WebP encoding options balancing compression ratio (`effort: 6`), visual fidelity (`quality: 85`),
+ * and edge-aware chroma subsampling (`smartSubsample: true`) for crisp colored UI typography.
+ */
+const WEBP_OPTIONS = { effort: 6, quality: 85, smartSubsample: true };
+
+/**
+ * Captures a 2x HiDPI Playwright page screenshot, downsamples it to `targetWidth` via Lanczos3,
+ * encodes it once as WebP, and writes it to one or more output paths.
+ *
+ * @param {import("playwright").Page} page - The active Playwright page instance.
+ * @param {string | string[]} outputPaths - Destination file path(s) for the encoded WebP output.
+ * @param {import("playwright").PageScreenshotOptions} options - Playwright screenshot capture options.
+ * @param {number} targetWidth - Output CSS pixel width to downsample the 2x HiDPI capture to.
+ * @returns {Promise<void>} Resolves when all output files have been written.
+ */
+const captureWebpScreenshot = async (page, outputPaths, options, targetWidth) => {
+	const rawBuffer = await page.screenshot(options);
+	const webpBuffer = await sharp(rawBuffer)
+		.resize({ kernel: sharp.kernel.lanczos3, width: targetWidth })
+		.sharpen({ sigma: 0.5 })
+		.webp(WEBP_OPTIONS)
+		.toBuffer();
+	const targets = Array.isArray(outputPaths) ? outputPaths : [outputPaths];
+	await Promise.all(targets.map((targetPath) => fs.writeFile(targetPath, webpBuffer)));
+};
 
 const baseUrl = process.env.BASE_URL;
 
@@ -25,6 +54,7 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 		headless: true,
 	});
 	const context = await browser.newContext({
+		deviceScaleFactor: 2,
 		userAgent:
 			"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
 		viewport: { height: 880, width: 1280 },
@@ -35,6 +65,8 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 	});
 
 	const page = await context.newPage();
+
+	await page.route("**/*cloudflareinsights.com/**", (route) => route.abort());
 
 	page.on("console", (msg) => {
 		console.log(`BROWSER LOG [${msg.type()}]: ${msg.text()}`);
@@ -54,7 +86,7 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 
 	try {
 		await page.goto(baseUrl, {
-			waitUntil: "networkidle",
+			waitUntil: "domcontentloaded",
 		});
 
 		// Wait for the tech tree to fully load and animations to settle
@@ -90,12 +122,13 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 		await page.waitForSelector(".tech-tree-content", { state: "visible", timeout: 15000 });
 		await page.waitForSelector(".tech-tree-content .optimizationButton", { state: "visible", timeout: 15000 });
 
-		// Wait for tech tree avatar images to load
+		// Wait for tech tree avatar images and web fonts to load
 		await page.waitForFunction(() => {
 			const images = Array.from(document.querySelectorAll(".tech-tree-content img"));
 
 			return images.length > 0 && images.every((img) => img.complete && img.naturalHeight !== 0);
 		}, { timeout: 15000 }).catch(() => {});
+		await page.evaluate(() => document.fonts.ready);
 
 		// Dismiss the build loaded toast so it does not obstruct the screenshot
 		const toastClose = page.locator(".Toast__close");
@@ -105,19 +138,7 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 			await page.locator(".Toast").waitFor({ state: "detached", timeout: 5000 }).catch(() => {});
 		}
 
-		await page.waitForTimeout(1000);
-
-		console.log("Taking standard screenshot ...");
-		await page.screenshot({
-			fullPage: true,
-			path: "public/assets/img/screenshots/screenshot.png",
-		});
-		await page.screenshot({
-			fullPage: true,
-			path: "public/assets/img/screenshots/screenshot_desktop.png",
-		});
-
-		// Inject CSS to hide scrollbars for viewport screenshots
+		// Inject CSS to hide scrollbars and scrollbar gutter across all screenshots
 		await page.addStyleTag({
 			content: `
 			body::-webkit-scrollbar, html::-webkit-scrollbar {
@@ -125,27 +146,45 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 			}
 			body, html {
 				scrollbar-width: none;
+				scrollbar-gutter: auto !important;
 			}
 		`,
 		});
+
+		await page.waitForTimeout(1000);
+
+		console.log("Taking standard screenshot ...");
+		await captureWebpScreenshot(
+			page,
+			[
+				"public/assets/img/screenshots/screenshot.webp",
+				"public/assets/img/screenshots/screenshot_desktop.webp",
+			],
+			{ fullPage: true },
+			1280
+		);
 
 		console.log("Taking tablet screenshot ...");
 		await page.setViewportSize({ height: 1280, width: 800 });
 		await page.evaluate(() => window.scrollTo(0, 0));
 		await page.waitForTimeout(1000);
-		await page.screenshot({
-			fullPage: false,
-			path: "public/assets/img/screenshots/screenshot_tablet.png",
-		});
+		await captureWebpScreenshot(
+			page,
+			"public/assets/img/screenshots/screenshot_tablet.webp",
+			{ fullPage: false },
+			800
+		);
 
 		console.log("Taking mobile screenshot ...");
 		await page.setViewportSize({ height: 600, width: 375 });
 		await page.evaluate(() => window.scrollTo(0, 0));
 		await page.waitForTimeout(1000);
-		await page.screenshot({
-			fullPage: false,
-			path: "public/assets/img/screenshots/screenshot_mobile.png",
-		});
+		await captureWebpScreenshot(
+			page,
+			"public/assets/img/screenshots/screenshot_mobile.webp",
+			{ fullPage: false },
+			375
+		);
 	} catch (error) {
 		console.error("Screenshot script failed:", error);
 	} finally {

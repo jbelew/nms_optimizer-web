@@ -72,5 +72,5 @@ Questo progetto non sarebbe possibile senza l'incredibile community di _No Man's
 
 ## Uno Sguardo al Passato: Versioni Iniziali
 
-![Prototipo iniziale dell'interfaccia utente dell'ottimizzatore di layout di No Man's Sky](/assets/img/screenshots/screenshot_v03.png)
+![Prototipo iniziale dell'interfaccia utente dell'ottimizzatore di layout di No Man's Sky](/assets/img/screenshots/screenshot_v03.webp)
 Se eri con noi all'inizio, potresti ricordare come appariva l'interfaccia utente nelle sue prime fasi alpha. Funzionava, ma il design era minimale. La versione attuale rappresenta un miglioramento significativo e continuo nel design, nell'usabilità mobile e nella chiarezza generale.

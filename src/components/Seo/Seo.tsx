@@ -173,7 +173,7 @@ export const Seo: React.FC = () => {
 				property="og:image"
 			/>
 			<meta
-				content="image/png"
+				content="image/webp"
 				property="og:image:type"
 			/>
 			<meta

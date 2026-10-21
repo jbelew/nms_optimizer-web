@@ -43,10 +43,16 @@ describe("generate-sitemap.mjs", () => {
 		it("preserves image location and caption metadata", () => {
 			const images = getPageImages(mockT);
 
-			expect(images.root.loc).toContain("/assets/img/screenshots/screenshot.png");
+			expect(images.root.loc).toContain("/assets/img/screenshots/screenshot.webp");
 			expect(images.root.caption).toContain("optimized technology grid");
-			expect(images.about.loc).toContain("/assets/img/screenshots/screenshot_desktop.png");
+			expect(images.about.loc).toContain("/assets/img/screenshots/screenshot_desktop.webp");
 			expect(images.about.caption).toContain("optimization algorithms");
+			expect(images.instructions.loc).toContain(
+				"/assets/img/screenshots/screenshot_desktop.webp"
+			);
+			expect(images.userstats.loc).toContain(
+				"/assets/img/screenshots/screenshot_desktop.webp"
+			);
 		});
 	});
 

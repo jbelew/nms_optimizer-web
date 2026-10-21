@@ -30,7 +30,7 @@ describe("seo-schema.js", () => {
 		expect(softwareApp["@id"]).toBe(`${url}#software`);
 		expect(softwareApp.inLanguage).toBe(lang);
 		expect(softwareApp.screenshot).toBe(
-			"https://nms-optimizer.app/assets/img/screenshots/screenshot.png",
+			"https://nms-optimizer.app/assets/img/screenshots/screenshot.webp",
 		);
 		expect(softwareApp.softwareVersion).toBe("test-version");
 		expect(Array.isArray(softwareApp.featureList)).toBe(true);

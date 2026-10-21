@@ -116,6 +116,7 @@ export async function generatePage(
 	const pageDescription = pageMetadata.description;
 	const pageKeywords = pageMetadata.keywords;
 	const ogImageAlt = pageMetadata.ogImageAlt;
+	const ogImageUrl = pageMetadata.ogImageUrl;
 
 	const seoTags = generateSeoTags(pathname, lang, baseUrl, t);
 
@@ -224,7 +225,7 @@ export async function generatePage(
 		})
 		.on('meta[property="og:image"]', {
 			element(el) {
-				el.setAttribute("content", `${baseUrl}/assets/img/screenshots/screenshot.png`);
+				el.setAttribute("content", ogImageUrl);
 			},
 		})
 		.on('meta[name="twitter:title"]', {
@@ -239,7 +240,7 @@ export async function generatePage(
 		})
 		.on('meta[name="twitter:image"]', {
 			element(el) {
-				el.setAttribute("content", `${baseUrl}/assets/img/screenshots/screenshot.png`);
+				el.setAttribute("content", ogImageUrl);
 			},
 		})
 		.on('meta[name="twitter:image:alt"]', {

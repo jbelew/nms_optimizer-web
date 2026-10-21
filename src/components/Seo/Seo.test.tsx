@@ -46,6 +46,21 @@ describe("Seo Component", () => {
 		expect(meta?.getAttribute("content")).toBeTruthy();
 	});
 
+	it("should render Open Graph and Twitter screenshot metadata as WebP", () => {
+		renderSeo();
+		const ogImage = document.querySelector('meta[property="og:image"]');
+		const ogImageType = document.querySelector('meta[property="og:image:type"]');
+		const twitterImage = document.querySelector('meta[name="twitter:image"]');
+
+		expect(ogImage?.getAttribute("content")).toBe(
+			"https://nms-optimizer.app/assets/img/screenshots/screenshot.webp",
+		);
+		expect(ogImageType?.getAttribute("content")).toBe("image/webp");
+		expect(twitterImage?.getAttribute("content")).toBe(
+			"https://nms-optimizer.app/assets/img/screenshots/screenshot.webp",
+		);
+	});
+
 	it("should render canonical link", () => {
 		renderSeo("/instructions/");
 		const link = document.querySelector('link[rel="canonical"]');

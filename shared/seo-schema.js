@@ -95,7 +95,7 @@ export const getLocalizedSchema = (t, lang, url, version) => {
 			priceCurrency: "USD",
 		},
 		operatingSystem: "All modern web browsers",
-		screenshot: `${baseUrl}/assets/img/screenshots/screenshot.png`,
+		screenshot: `${baseUrl}/assets/img/screenshots/screenshot.webp`,
 		...(resolveAppVersion(version) ? { softwareVersion: resolveAppVersion(version) } : {}),
 		url: url,
 	};

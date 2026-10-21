@@ -72,5 +72,5 @@ This project wouldn't be possible without the incredible _No Man's Sky_ communit
 
 ## A Look Back: Early Versions
 
-![Early prototype of No Man's Sky layout optimizer user interface](/assets/img/screenshots/screenshot_v03.png)
+![Early prototype of No Man's Sky layout optimizer user interface](/assets/img/screenshots/screenshot_v03.webp)
 If you were with us in the beginning, you might remember what the UI looked like in its early alpha stages. It worked, but the design was minimal. The current version represents a major, ongoing improvement in design, mobile usability, and overall clarity.

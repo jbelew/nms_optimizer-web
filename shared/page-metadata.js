@@ -25,7 +25,7 @@ export const DEFAULT_BASE_URL = `https://${TARGET_HOST}`;
  *
  * @type {string}
  */
-export const DEFAULT_OG_IMAGE_PATH = "/assets/img/screenshots/screenshot.png";
+export const DEFAULT_OG_IMAGE_PATH = "/assets/img/screenshots/screenshot.webp";
 
 /**
  * @typedef {Object} PageMetadataOptions

@@ -64,6 +64,30 @@ describe("PWA Configuration & Manifest", () => {
 		expect(manifest.prefer_related_applications).toBe(false);
 	});
 
+	itWhenBuilt("manifest configures WebP screenshots for desktop, tablet, and mobile", () => {
+		expect(manifest).not.toBeNull();
+		expect(manifest.screenshots).toEqual([
+			expect.objectContaining({
+				form_factor: "wide",
+				sizes: "1280x880",
+				src: "/assets/img/screenshots/screenshot_desktop.webp",
+				type: "image/webp",
+			}),
+			expect.objectContaining({
+				form_factor: "narrow",
+				sizes: "800x1280",
+				src: "/assets/img/screenshots/screenshot_tablet.webp",
+				type: "image/webp",
+			}),
+			expect.objectContaining({
+				form_factor: "narrow",
+				sizes: "375x600",
+				src: "/assets/img/screenshots/screenshot_mobile.webp",
+				type: "image/webp",
+			}),
+		]);
+	});
+
 	itWhenBuilt("sw.js excludes index.html from precache list to prevent redundant downloads", () => {
 		expect(swContent).toBeTruthy();
 		// Should NOT have {url:"index.html" in precacheAndRoute
