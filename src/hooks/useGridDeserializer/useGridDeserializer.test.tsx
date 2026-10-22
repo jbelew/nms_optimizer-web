@@ -333,9 +333,7 @@ describe("deserialize", () => {
 
 		vi.mocked(apiCall).mockResolvedValueOnce(mockTechTree);
 
-		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation((...args) => {
-			console.log("CONSOLE ERROR DIALED IN:", ...args);
-		});
+		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
 		// Act
 		const result = await deserialize(serializedGrid, mockShipType, mockSetTechColors);
@@ -350,5 +348,52 @@ describe("deserialize", () => {
 			expect(targetCell.module).toBe("RM");
 			expect(targetCell.active).toBe(true);
 		}
+	});
+
+	it("should safely ignore unmapped or prototype property keys in techMap and moduleMap", async () => {
+		// Arrange
+		const gridString = "1" + "0".repeat(59);
+		const compressedTech = "X" + " ".repeat(59);
+		const compressedModule = "Y" + " ".repeat(59);
+		const compressedAdjBonus = "F" + " ".repeat(59);
+		const techMapString = "shield:__proto__";
+		const moduleMapString = "Cb:constructor";
+
+		const serializedGrid = `${gridString}|${compressedTech}|${compressedModule}|${compressedAdjBonus}|${techMapString}|${moduleMapString}`;
+
+		const mockTechTree = {
+			"Tech Category": [
+				{
+					color: "blue",
+					key: "shield",
+					modules: [
+						{
+							active: true,
+							adjacency: "none",
+							adjacency_bonus: 0,
+							bonus: 0,
+							id: "Cb",
+							image: "cb.webp",
+							label: "Combat Booster",
+							sc_eligible: false,
+							supercharged: false,
+							tech: "shield",
+							type: "module",
+							value: 0,
+						},
+					],
+				},
+			],
+		};
+
+		vi.mocked(apiCall).mockResolvedValueOnce(mockTechTree);
+
+		// Act
+		const result = await deserialize(serializedGrid, mockShipType, mockSetTechColors);
+
+		// Assert
+		expect(result).not.toBeNull();
+		expect(result?.cells[0][0].tech).toBeNull();
+		expect(result?.cells[0][0].module).toBeNull();
 	});
 });

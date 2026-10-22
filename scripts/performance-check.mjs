@@ -549,7 +549,10 @@ async function main() {
 
 	if (isBaseline) {
 		const snapshot = await captureSnapshot({ bundleOnly, skipBuild });
-		fs.writeFileSync(DEFAULT_BASELINE_PATH, JSON.stringify(snapshot, null, 2), "utf8");
+		fs.writeFileSync(DEFAULT_BASELINE_PATH, JSON.stringify(snapshot, null, 2), {
+			encoding: "utf8",
+			mode: 0o600,
+		});
 		console.log(
 			`✅ Saved performance baseline (${snapshot.commitSha}) to ${DEFAULT_BASELINE_PATH}`,
 		);

@@ -323,30 +323,30 @@ export const deserialize = async (
 		}
 
 		// --- Maps ---
-		const techMap = (techMapString || "")
-			.split(",")
-			.reduce((acc: { [key: string]: string }, entry) => {
-				if (!entry) return acc;
-				const [key, value] = entry.split(":");
+		const techMap = new Map<string, string>();
 
-				if (key && value) {
-					// Map legacy tech keys (remembrance, starseed) to the new consolidated core_health key
-					const migratedKey =
-						key === "remembrance" || key === "starseed" ? "core_health" : key;
-					acc[value] = migratedKey;
-				}
+		for (const entry of (techMapString || "").split(",")) {
+			if (!entry) continue;
+			const [key, value] = entry.split(":");
 
-				return acc;
-			}, {});
-		const moduleMap = (moduleMapString || "")
-			.split(",")
-			.reduce((acc: { [key: string]: string }, entry) => {
-				if (!entry) return acc;
-				const [key, value] = entry.split(":");
-				if (key && value) acc[value] = key;
+			if (key && value) {
+				// Map legacy tech keys (remembrance, starseed) to the new consolidated core_health key
+				const migratedKey =
+					key === "remembrance" || key === "starseed" ? "core_health" : key;
+				techMap.set(value, migratedKey);
+			}
+		}
 
-				return acc;
-			}, {});
+		const moduleMap = new Map<string, string>();
+
+		for (const entry of (moduleMapString || "").split(",")) {
+			if (!entry) continue;
+			const [key, value] = entry.split(":");
+
+			if (key && value) {
+				moduleMap.set(value, key);
+			}
+		}
 
 		// --- Fetch Tech Tree Data (using cached promise) ---
 		const techTreeData: TechTree = await fetchTechTreeAsync(shipType);
@@ -377,7 +377,7 @@ export const deserialize = async (
 		// Validate that all techs in serialized grid exist in current API data
 		const missingTechs = new Set<string>();
 
-		for (const techChar of Object.values(techMap)) {
+		for (const techChar of techMap.values()) {
 			if (techChar !== " " && !validTechKeys.has(techChar)) {
 				missingTechs.add(techChar);
 			}
@@ -403,9 +403,9 @@ export const deserialize = async (
 				cell.supercharged = gridChar === "2";
 
 				const techChar = decompressedTech[index];
-				const techName = techChar === " " ? null : techMap[techChar];
+				const techName = techChar === " " ? null : (techMap.get(techChar) ?? null);
 				const moduleChar = decompressedModule[index];
-				const moduleId = moduleChar === " " ? null : moduleMap[moduleChar];
+				const moduleId = moduleChar === " " ? null : (moduleMap.get(moduleChar) ?? null);
 				const adjBonusChar = decompressedAdjBonus[index];
 
 				// Reset cell module properties while preserving active & supercharged

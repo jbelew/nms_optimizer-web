@@ -153,7 +153,7 @@ const AppContent: FC = () => {
 					<ShareLinkDialog
 						isOpen={!!shareUrl}
 						onClose={closeDialog}
-						shareUrl={shareUrl || ""}
+						shareUrl={shareUrl}
 					/>
 				</Suspense>
 			:	null}

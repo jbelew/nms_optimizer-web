@@ -277,7 +277,7 @@ const ModuleGroup: React.FC<ModuleGroupProps> = ({
 	return (
 		<div className="mb-1">
 			<div
-				className={`heading-styled flex items-center gap-1 ${
+				className={`heading-styled flex items-center gap-1 text-base! sm:text-lg! ${
 					groupName !== "cosmetic" ? "mb-2" : "mb-0"
 				}`}
 				style={{ color: "var(--accent-a11)" }}
@@ -564,7 +564,7 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 						key="core"
 					>
 						<div
-							className="heading-styled mb-2"
+							className="heading-styled mb-2 text-base! sm:text-lg!"
 							style={{ color: "var(--accent-a11)" }}
 						>
 							{t(`moduleSelection.core`)}

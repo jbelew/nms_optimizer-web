@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+
 import type { PreRenderedAsset, PreRenderedChunk } from "rolldown";
 import type { PreviewServer, UserConfig, ViteDevServer } from "vite";
 import babel from "@rolldown/plugin-babel";
@@ -54,8 +55,8 @@ function attachStaticAsset404Guard(server: PreviewServer | ViteDevServer): () =>
 				lastSegment.includes(".") && !lastSegment.endsWith(".html");
 
 			if (
-				req.url === "/index.html" &&
-				(pathname.startsWith("/.well-known/") || isNonHtmlFileRequest)
+				req.url === "/index.html"
+				&& (pathname.startsWith("/.well-known/") || isNonHtmlFileRequest)
 			) {
 				req.url = originalUrl;
 			}
@@ -118,12 +119,12 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 					// injects them separately into the HTML.
 					return deps.filter(
 						(dep: string) =>
-							!dep.endsWith(".css") &&
-							!dep.includes("vendor-telemetry") &&
-							!dep.includes("vendor-charts") &&
-							!dep.includes("vendor-markdown") &&
-							!dep.includes("vendor-markdown-lib") &&
-							!dep.includes("vendor-html-to-image")
+							!dep.endsWith(".css")
+							&& !dep.includes("vendor-telemetry")
+							&& !dep.includes("vendor-charts")
+							&& !dep.includes("vendor-markdown")
+							&& !dep.includes("vendor-markdown-lib")
+							&& !dep.includes("vendor-html-to-image"),
 					);
 				},
 			},
@@ -137,18 +138,18 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 				},
 				output: {
 					assetFileNames: (assetInfo: PreRenderedAsset) =>
-						assetInfo.name?.endsWith(".css")
-							? "build/[name]-[hash].css"
-							: "build/[name]-[hash].[ext]",
+						assetInfo.name?.endsWith(".css") ?
+							"build/[name]-[hash].css"
+						:	"build/[name]-[hash].[ext]",
 					chunkFileNames: (chunkInfo: PreRenderedChunk) => {
 						// Preserve manual chunk names starting with 'vendor-', or containing 'index'/'entry'
 						// for better preloading/debugging. Use generic 'chunk-' for all others
 						// to avoid triggering ad-blockers (e.g. 'analytics' in filename).
 						if (
-							chunkInfo.name &&
-							(chunkInfo.name.startsWith("vendor-") ||
-								chunkInfo.name.includes("index") ||
-								chunkInfo.name.includes("entry"))
+							chunkInfo.name
+							&& (chunkInfo.name.startsWith("vendor-")
+								|| chunkInfo.name.includes("index")
+								|| chunkInfo.name.includes("entry"))
 						) {
 							return "build/[name]-[hash].js";
 						}
@@ -178,15 +179,15 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 								test: /[\\/]node_modules[\\/](react-markdown|remark-gfm|rehype-raw|micromark|vfile|unified|unist|mdast|hast|decode-named-character-reference|character-entities|property-information|space-separated-tokens|comma-separated-tokens|web-namespaces|zwitch|html-void-elements)[\\/]/,
 							},
 							// Group all Sentry monitoring code into a chunk only if enabled.
-							...(sentryEnabled
-								? [
-										{
-											name: "vendor-monitoring",
-											priority: 110,
-											test: /[\\/]node_modules[\\/]@sentry[\\/]/,
-										},
-									]
-								: []),
+							...(sentryEnabled ?
+								[
+									{
+										name: "vendor-monitoring",
+										priority: 110,
+										test: /[\\/]node_modules[\\/]@sentry[\\/]/,
+									},
+								]
+							:	[]),
 							{
 								// Group GA4 and related tracking packages into a neutrally named chunk.
 								// Anchored to node_modules so app-level analytics.ts / analyticsClient.ts
@@ -297,23 +298,23 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 				name: "static-asset-404-guard",
 			},
 			markdownBundlePlugin(),
-			...(!process.env.STORYBOOK_BUILD
-				? [
-						{
-							name: "generate-version-json",
-							writeBundle() {
-								const versionInfo = {
-									buildDate: buildDate,
-									version: appVersion,
-								};
-								fs.writeFileSync(
-									path.resolve(dirname, "dist/version.json"),
-									JSON.stringify(versionInfo, null, 2)
-								);
-							},
+			...(!process.env.STORYBOOK_BUILD ?
+				[
+					{
+						name: "generate-version-json",
+						writeBundle() {
+							const versionInfo = {
+								buildDate: buildDate,
+								version: appVersion,
+							};
+							fs.writeFileSync(
+								path.resolve(dirname, "dist/version.json"),
+								JSON.stringify(versionInfo, null, 2),
+							);
 						},
-					]
-				: []),
+					},
+				]
+			:	[]),
 			react(),
 			// React Compiler support via Babel (Rolldown native plugin)
 			babel({
@@ -323,22 +324,20 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 			}),
 			tailwindcss(),
 			// Sentry is positioned after transforms to ensure it captures all generated sourcemaps.
-			...(!process.env.STORYBOOK_BUILD && sentryEnabled
-				? [
-						sentryVitePlugin({
-							authToken: sentryAuthToken,
-							org: process.env.SENTRY_ORG || env.SENTRY_ORG || "personal-4gm",
-							project:
-								process.env.SENTRY_PROJECT ||
-								env.SENTRY_PROJECT ||
-								"nms-optimizer-web",
-							release: {
-								name: appVersion,
-							},
-							telemetry: false,
-						}),
-					]
-				: []),
+			...(!process.env.STORYBOOK_BUILD && sentryEnabled ?
+				[
+					sentryVitePlugin({
+						authToken: sentryAuthToken,
+						org: process.env.SENTRY_ORG || env.SENTRY_ORG || "personal-4gm",
+						project:
+							process.env.SENTRY_PROJECT || env.SENTRY_PROJECT || "nms-optimizer-web",
+						release: {
+							name: appVersion,
+						},
+						telemetry: false,
+					}),
+				]
+			:	[]),
 			splashScreen({
 				loaderBg: "#00A2C7",
 				loaderType: "dots",
@@ -348,334 +347,352 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 			// Purge unused Radix Themes component CSS to reduce TBT from style recalculation.
 			// Must run in production builds only (the plugin uses generateBundle hook).
 			purgeRadixCss(),
-			...(!process.env.STORYBOOK_BUILD &&
-			(process.env.ANALYZE === "true" || process.env.VITE_ANALYZE === "true")
-				? [
-						visualizer({
-							brotliSize: true,
-							filename: "bundle/stats.html",
-							gzipSize: true,
-							open: false,
-						}),
-						visualizer({
-							brotliSize: true,
-							filename: "bundle/stats.json",
-							gzipSize: true,
-							open: false,
-							template: "raw-data",
-						}),
-					]
-				: []),
-			...(!process.env.STORYBOOK_BUILD
-				? [
-						VitePWA({
-							includeAssets: ["robots.txt"],
-							includeManifestIcons: false,
-							integration: {
-								closeBundleOrder: "pre",
-							},
-							manifest: {
-								background_color: "#274860",
-								categories: ["utilities", "games", "entertainment"],
-								description:
-									"Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots for peak performance.",
-								dir: "ltr",
-								display: "standalone",
-								display_override: [
-									"window-controls-overlay",
-									"standalone",
-									"minimal-ui",
-								],
-								file_handlers: [
-									{
-										accept: {
-											"application/x-nms": [".nms"],
-										},
-										action: "/",
-									},
-								],
-								icons: [
-									{
-										sizes: "192x192",
-										src: "/assets/img/favicons/pwa-192x192.png",
-										type: "image/png",
-									},
-									{
-										sizes: "512x512",
-										src: "/assets/img/favicons/pwa-512x512.png",
-										type: "image/png",
-									},
-									{
-										purpose: "maskable",
-										sizes: "512x512",
-										src: "/assets/img/favicons/pwa-maskable-512x512.png",
-										type: "image/png",
-									},
-								],
-								id: "/",
-								lang: "en",
-								name: "No Man's Sky Technology Layout Optimizer",
-								orientation: "any",
-								prefer_related_applications: false,
-								scope: "/",
-								screenshots: [
-									{
-										form_factor: "wide",
-										label: "Main application view showing the technology grid on desktop.",
-										sizes: "1280x880",
-										src: "/assets/img/screenshots/screenshot_desktop.webp",
-										type: "image/webp",
-									},
-									{
-										form_factor: "narrow",
-										label: "Main application view on tablet.",
-										sizes: "800x1280",
-										src: "/assets/img/screenshots/screenshot_tablet.webp",
-										type: "image/webp",
-									},
-									{
-										form_factor: "narrow",
-										label: "Main application view on mobile.",
-										sizes: "375x600",
-										src: "/assets/img/screenshots/screenshot_mobile.webp",
-										type: "image/webp",
-									},
-								],
-								short_name: "NMS Optimizer",
-								shortcuts: [
-									{
-										description:
-											"Learn how to use the grid, manage supercharged slots, and understand module ranking",
-										icons: DEFAULT_SHORTCUT_ICONS,
-										name: "How to Optimize Your Tech Layout",
-										short_name: "Instructions",
-										url: "/instructions/",
-									},
-									{
-										description:
-											"Stay updated with the latest NMS Optimizer features and updates",
-										icons: DEFAULT_SHORTCUT_ICONS,
-										name: "Latest Features and Updates",
-										short_name: "Changelog",
-										url: "/changelog/",
-									},
-									{
-										description:
-											"Explore the current No Man's Sky build meta and community stats",
-										icons: DEFAULT_SHORTCUT_ICONS,
-										name: "Community Meta & Tech Stats",
-										short_name: "Stats",
-										url: "/userstats/",
-									},
-									{
-										description:
-											"Discover how NMS Optimizer calculates the absolute best module placements",
-										icons: DEFAULT_SHORTCUT_ICONS,
-										name: "About the Optimization Algorithms",
-										short_name: "About",
-										url: "/about/",
-									},
-								],
-								start_url: "/",
-								theme_color: "#003848",
-							},
-							manifestFilename: "manifest.json",
-							registerType: "prompt",
-							workbox: {
-								cleanupOutdatedCaches: true,
-								clientsClaim: true,
-								dontCacheBustURLsMatching: /\/build\/.*\.(js|css|woff2?)$/,
-								globIgnores: [
-									"build/**",
-									"**/*.js",
-									"**/*.css",
-									"maintenance.html",
-									"404.html",
-									"500.html",
-									"index.html",
-									"assets/img/screenshots/**",
-									"assets/img/manifest/**",
-								],
-								globPatterns: ["**/*.{ico,png,svg,woff2}"],
-								maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-								navigateFallback: undefined,
-								navigationPreload: true,
-								runtimeCaching: [
-									{
-										handler: "NetworkOnly",
-										options: {
-											fetchOptions: { cache: "reload" },
-										},
-										// TTFB optimization: match navigation requests immediately
-										// with NetworkOnly so Workbox skips evaluating all other
-										// rules. Combined with navigationPreload, the browser starts
-										// the network fetch in parallel with SW boot, eliminating
-										// the SW startup penalty from TTFB entirely.
-										//
-										// `cache: "reload"` forces the underlying fetch to bypass the
-										// browser HTTP cache. Without this, a stale `/performance/` (or
-										// any SPA-fallback shell) cached during a prior `no-cache`-only
-										// header era can be served via 304 revalidation and ship users
-										// HTML that references chunks that no longer exist.
-										urlPattern: ({ request }) => request.mode === "navigate",
-									},
-									{
-										handler: "NetworkOnly",
-										urlPattern: /\/version\.json$/,
-									},
-									{
-										handler: "CacheFirst",
-										options: {
-											cacheableResponse: {
-												statuses: [0, 200],
-											},
-											cacheName: "images-cache",
-											expiration: {
-												maxAgeSeconds: 31536000,
-												maxEntries: 1000,
-											},
-											plugins: [
-												{
-													cacheKeyWillBeUsed: async ({ request }) => {
-														const url = new URL(request.url);
-														url.search = "";
-
-														return new Request(url.toString(), {
-															method: request.method,
-														});
-													},
-												},
-											],
-										},
-										urlPattern: ({ request }) =>
-											request.destination === "image",
-									},
-									{
-										handler: "CacheFirst",
-										options: {
-											cacheName: "fonts-cache",
-											expiration: {
-												maxAgeSeconds: 31536000,
-												maxEntries: 30,
-											},
-											plugins: [
-												{
-													cacheKeyWillBeUsed: async ({ request }) => {
-														const url = new URL(request.url);
-														url.search = "";
-
-														return new Request(url.toString(), {
-															method: request.method,
-														});
-													},
-												},
-											],
-										},
-										urlPattern: ({ request }) => request.destination === "font",
-									},
-									{
-										handler: "StaleWhileRevalidate",
-										options: {
-											cacheName: "translations-cache",
-											expiration: {
-												maxAgeSeconds: 86400,
-												maxEntries: 20,
-											},
-										},
-										urlPattern: /\/assets\/locales\/.*\/translation\.json$/,
-									},
-									{
-										handler: "NetworkFirst",
-										method: "GET",
-										options: {
-											cacheableResponse: {
-												statuses: [0, 200],
-											},
-											cacheName: "api-cache",
-											expiration: {
-												maxAgeSeconds: 60 * 60 * 24, // 1 day
-												maxEntries: 50,
-											},
-											networkTimeoutSeconds: 3,
-										},
-										urlPattern: /^https:\/\/api\.nms-optimizer\.app\/.*$/,
-									},
-									{
-										handler: "NetworkOnly",
-										method: "POST",
-										options: {
-											plugins: [
-												{
-													handlerDidError: async () =>
-														new Response(null, {
-															status: 204,
-															statusText: "No Content",
-														}),
-												},
-											],
-										},
-										urlPattern:
-											/^https:\/\/api\.nms-optimizer\.app\/api\/events$/,
-									},
-									{
-										handler: "NetworkFirst",
-										options: {
-											cacheName: "google-analytics-cache",
-											expiration: {
-												maxAgeSeconds: 86400,
-												maxEntries: 50,
-											},
-											networkTimeoutSeconds: 3,
-											plugins: [
-												{
-													handlerDidError: async () =>
-														new Response(null, {
-															status: 204,
-															statusText: "No Content",
-														}),
-												},
-											],
-										},
-										urlPattern: /^https:\/\/www\.googletagmanager\.com\//,
-									},
-									{
-										handler: "NetworkOnly",
-										options: {
-											plugins: [
-												{
-													handlerDidError: async () =>
-														new Response(null, {
-															status: 204,
-															statusText: "No Content",
-														}),
-												},
-											],
-										},
-										urlPattern: /^https:\/\/www\.google-analytics\.com\//,
-									},
-								],
-								skipWaiting: false,
-							},
-						}),
-						{
-							closeBundle: {
-								handler() {
-									const swPath = path.resolve(dirname, "dist/sw.js");
-
-									if (fs.existsSync(swPath)) {
-										fs.appendFileSync(
-											swPath,
-											`\n// Release: ${appVersion} (${buildDate})\n`
-										);
-									}
-								},
-								order: "post",
-								sequential: true,
-							},
-							name: "stamp-sw-release",
+			...((
+				!process.env.STORYBOOK_BUILD
+				&& (process.env.ANALYZE === "true" || process.env.VITE_ANALYZE === "true")
+			) ?
+				[
+					visualizer({
+						brotliSize: true,
+						filename: "bundle/stats.html",
+						gzipSize: true,
+						open: false,
+					}),
+					visualizer({
+						brotliSize: true,
+						filename: "bundle/stats.json",
+						gzipSize: true,
+						open: false,
+						template: "raw-data",
+					}),
+				]
+			:	[]),
+			...(!process.env.STORYBOOK_BUILD ?
+				[
+					VitePWA({
+						includeAssets: ["robots.txt"],
+						includeManifestIcons: false,
+						integration: {
+							closeBundleOrder: "pre",
 						},
-					]
-				: []),
+						manifest: {
+							background_color: "#274860",
+							categories: ["utilities", "games", "entertainment"],
+							description:
+								"Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots for peak performance.",
+							dir: "ltr",
+							display: "standalone",
+							display_override: [
+								"window-controls-overlay",
+								"standalone",
+								"minimal-ui",
+							],
+							file_handlers: [
+								{
+									accept: {
+										"application/x-nms": [".nms"],
+									},
+									action: "/",
+								},
+							],
+							icons: [
+								{
+									sizes: "192x192",
+									src: "/assets/img/favicons/pwa-192x192.png",
+									type: "image/png",
+								},
+								{
+									sizes: "512x512",
+									src: "/assets/img/favicons/pwa-512x512.png",
+									type: "image/png",
+								},
+								{
+									purpose: "maskable",
+									sizes: "512x512",
+									src: "/assets/img/favicons/pwa-maskable-512x512.png",
+									type: "image/png",
+								},
+							],
+							id: "/",
+							lang: "en",
+							name: "No Man's Sky Technology Layout Optimizer",
+							orientation: "any",
+							prefer_related_applications: false,
+							scope: "/",
+							screenshots: [
+								{
+									form_factor: "wide",
+									label: "Main application view showing the technology grid on desktop.",
+									sizes: "1280x880",
+									src: "/assets/img/screenshots/screenshot_desktop.webp",
+									type: "image/webp",
+								},
+								{
+									form_factor: "narrow",
+									label: "Main application view on tablet.",
+									sizes: "800x1280",
+									src: "/assets/img/screenshots/screenshot_tablet.webp",
+									type: "image/webp",
+								},
+								{
+									form_factor: "narrow",
+									label: "Main application view on mobile.",
+									sizes: "375x600",
+									src: "/assets/img/screenshots/screenshot_mobile.webp",
+									type: "image/webp",
+								},
+							],
+							short_name: "NMS Optimizer",
+							shortcuts: [
+								{
+									description:
+										"Learn how to use the grid, manage supercharged slots, and understand module ranking",
+									icons: DEFAULT_SHORTCUT_ICONS,
+									name: "How to Optimize Your Tech Layout",
+									short_name: "Instructions",
+									url: "/instructions/",
+								},
+								{
+									description:
+										"Stay updated with the latest NMS Optimizer features and updates",
+									icons: DEFAULT_SHORTCUT_ICONS,
+									name: "Latest Features and Updates",
+									short_name: "Changelog",
+									url: "/changelog/",
+								},
+								{
+									description:
+										"Explore the current No Man's Sky build meta and community stats",
+									icons: DEFAULT_SHORTCUT_ICONS,
+									name: "Community Meta & Tech Stats",
+									short_name: "Stats",
+									url: "/userstats/",
+								},
+								{
+									description:
+										"Discover how NMS Optimizer calculates the absolute best module placements",
+									icons: DEFAULT_SHORTCUT_ICONS,
+									name: "About the Optimization Algorithms",
+									short_name: "About",
+									url: "/about/",
+								},
+							],
+							start_url: "/",
+							theme_color: "#003848",
+						},
+						manifestFilename: "manifest.json",
+						registerType: "prompt",
+						workbox: {
+							cleanupOutdatedCaches: true,
+							clientsClaim: true,
+							dontCacheBustURLsMatching: /\/build\/.*\.(js|css|woff2?)$/,
+							globIgnores: [
+								"build/**",
+								"**/*.js",
+								"**/*.css",
+								"maintenance.html",
+								"404.html",
+								"500.html",
+								"index.html",
+								"assets/img/screenshots/**",
+								"assets/img/manifest/**",
+							],
+							globPatterns: ["**/*.{ico,png,svg,woff2}"],
+							maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+							navigateFallback: undefined,
+							navigationPreload: true,
+							runtimeCaching: [
+								{
+									handler: "NetworkOnly",
+									options: {
+										fetchOptions: { cache: "reload" },
+									},
+									// TTFB optimization: match navigation requests immediately
+									// with NetworkOnly so Workbox skips evaluating all other
+									// rules. Combined with navigationPreload, the browser starts
+									// the network fetch in parallel with SW boot, eliminating
+									// the SW startup penalty from TTFB entirely.
+									//
+									// `cache: "reload"` forces the underlying fetch to bypass the
+									// browser HTTP cache. Without this, a stale `/performance/` (or
+									// any SPA-fallback shell) cached during a prior `no-cache`-only
+									// header era can be served via 304 revalidation and ship users
+									// HTML that references chunks that no longer exist.
+									urlPattern: ({ request }) => request.mode === "navigate",
+								},
+								{
+									handler: "NetworkOnly",
+									urlPattern: /\/version\.json$/,
+								},
+								{
+									handler: "CacheFirst",
+									options: {
+										cacheableResponse: {
+											statuses: [0, 200],
+										},
+										cacheName: "images-cache",
+										expiration: {
+											maxAgeSeconds: 31536000,
+											maxEntries: 1000,
+										},
+										plugins: [
+											{
+												cacheKeyWillBeUsed: async ({ request }) => {
+													const url = new URL(request.url);
+													url.search = "";
+
+													return new Request(url.toString(), {
+														method: request.method,
+													});
+												},
+											},
+										],
+									},
+									urlPattern: ({ request }) => request.destination === "image",
+								},
+								{
+									handler: "CacheFirst",
+									options: {
+										cacheName: "fonts-cache",
+										expiration: {
+											maxAgeSeconds: 31536000,
+											maxEntries: 30,
+										},
+										plugins: [
+											{
+												cacheKeyWillBeUsed: async ({ request }) => {
+													const url = new URL(request.url);
+													url.search = "";
+
+													return new Request(url.toString(), {
+														method: request.method,
+													});
+												},
+											},
+										],
+									},
+									urlPattern: ({ request }) => request.destination === "font",
+								},
+								{
+									handler: "StaleWhileRevalidate",
+									options: {
+										cacheName: "translations-cache",
+										expiration: {
+											maxAgeSeconds: 86400,
+											maxEntries: 20,
+										},
+									},
+									urlPattern: /\/assets\/locales\/.*\/translation\.json$/,
+								},
+								{
+									handler: "NetworkFirst",
+									method: "GET",
+									options: {
+										cacheableResponse: {
+											statuses: [0, 200],
+										},
+										cacheName: "api-cache",
+										expiration: {
+											maxAgeSeconds: 60 * 60 * 24, // 1 day
+											maxEntries: 50,
+										},
+										networkTimeoutSeconds: 3,
+									},
+									urlPattern: /^https:\/\/api\.nms-optimizer\.app\/.*$/,
+								},
+								{
+									handler: "NetworkOnly",
+									method: "POST",
+									options: {
+										plugins: [
+											{
+												handlerDidError: async () =>
+													new Response(null, {
+														status: 204,
+														statusText: "No Content",
+													}),
+											},
+										],
+									},
+									urlPattern: /^https:\/\/api\.nms-optimizer\.app\/api\/events$/,
+								},
+								{
+									handler: "NetworkFirst",
+									options: {
+										cacheName: "google-analytics-cache",
+										expiration: {
+											maxAgeSeconds: 86400,
+											maxEntries: 50,
+										},
+										networkTimeoutSeconds: 3,
+										plugins: [
+											{
+												handlerDidError: async () =>
+													new Response(null, {
+														status: 204,
+														statusText: "No Content",
+													}),
+											},
+										],
+									},
+									urlPattern: /^https:\/\/www\.googletagmanager\.com\//,
+								},
+								{
+									handler: "NetworkOnly",
+									options: {
+										plugins: [
+											{
+												handlerDidError: async () =>
+													new Response(null, {
+														status: 204,
+														statusText: "No Content",
+													}),
+											},
+										],
+									},
+									urlPattern: /^https:\/\/www\.google-analytics\.com\//,
+								},
+							],
+							skipWaiting: false,
+						},
+					}),
+					{
+						closeBundle: {
+							handler() {
+								const swPath = path.resolve(dirname, "dist/sw.js");
+
+								try {
+									const fd = fs.openSync(
+										swPath,
+										fs.constants.O_WRONLY | fs.constants.O_APPEND,
+									);
+
+									try {
+										fs.writeFileSync(
+											fd,
+											`\n// Release: ${appVersion} (${buildDate})\n`,
+											"utf8",
+										);
+									} finally {
+										fs.closeSync(fd);
+									}
+								} catch (error) {
+									if (
+										!(error instanceof Error)
+										|| !("code" in error)
+										|| error.code !== "ENOENT"
+									) {
+										throw error;
+									}
+								}
+							},
+							order: "post",
+							sequential: true,
+						},
+						name: "stamp-sw-release",
+					},
+				]
+			:	[]),
 		],
 		preview: { host: "0.0.0.0", port: 4173 },
 		resolve: {
@@ -684,14 +701,11 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 				"@shared": path.resolve(dirname, "./shared"),
 				react: path.resolve(dirname, "node_modules/react"),
 				"react-dom": path.resolve(dirname, "node_modules/react-dom"),
-				...(!sentryEnabled
-					? {
-							"@sentry/react": path.resolve(
-								dirname,
-								"src/utils/system/sentryMock.ts"
-							),
-						}
-					: {}),
+				...(!sentryEnabled ?
+					{
+						"@sentry/react": path.resolve(dirname, "src/utils/system/sentryMock.ts"),
+					}
+				:	{}),
 			},
 			dedupe: ["react", "react-dom"],
 			tsconfigPaths: true,
