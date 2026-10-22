@@ -112,8 +112,6 @@ export interface BootResult {
 	root: ReactRoot;
 	/**
 	 * Unmounts the React root and cleans up error listeners.
-	 *
-	 * @returns {void}
 	 */
 	unmount: () => void;
 }
@@ -242,22 +240,15 @@ export const bootApp = async (options: BootOptions = {}): Promise<BootResult> =>
 		// 4. Attach early error interceptors unless skipped
 		if (typeof window !== "undefined" && !options.skipGlobalErrorHandlers) {
 			const errorHandler = (event: ErrorEvent) => {
+				if (event.defaultPrevented) {
+					return true;
+				}
+
 				const errorMessage = event.error?.message || event.message || "";
 				const errorName = event.error?.name || "";
 
 				if (errorName === "SecurityError" && errorMessage.includes("cross-origin")) {
 					event.preventDefault();
-
-					return true;
-				}
-
-				if (errorMessage.includes("Importing a module script failed")) {
-					event.preventDefault();
-					Logger.warn(
-						"Caught and suppressed module import failure (Safari flake):",
-						{ errorMessage },
-						true,
-					);
 
 					return true;
 				}

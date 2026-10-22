@@ -48,20 +48,15 @@
 				}
 
 				function buildCacheBustUrl() {
-					const search = window.location.search || "";
-					const sep = search ? "&" : "?";
-					return (
-						window.location.pathname
-						+ search
-						+ sep
-						+ "_cb="
-						+ Date.now()
-						+ (window.location.hash || "")
-					);
+					const url = new URL(window.location.href);
+					url.searchParams.set("_cb", String(Date.now()));
+					return url.pathname + url.search + url.hash;
 				}
 
 				function initPreloadErrorRecovery() {
 					const MARKER = "__preload_recovery__";
+					const MODULE_ERROR_RE =
+						/importing a module script failed|error resolving module specifier|failed to fetch dynamically imported module|error loading dynamically imported module|unable to preload css/i;
 					let recoveryInProgress = false;
 
 					function handleStaleChunkError(payloadMessage) {
@@ -73,7 +68,7 @@
 								10,
 							);
 							sessionStorage.setItem("__recovery_attempts__", String(prev + 1));
-						} catch (e) {}
+						} catch {}
 
 						let firstAttempt = false;
 						try {
@@ -81,7 +76,14 @@
 								sessionStorage.setItem(MARKER, "1");
 								firstAttempt = true;
 							}
-						} catch (e) {}
+						} catch {
+							if (window.name !== MARKER) {
+								window.name = MARKER;
+								firstAttempt = true;
+							} else {
+								window.name = "";
+							}
+						}
 
 						if (firstAttempt) {
 							const reloadUrl = buildCacheBustUrl();
@@ -99,7 +101,10 @@
 
 						try {
 							sessionStorage.removeItem(MARKER);
-						} catch (e) {}
+						} catch {}
+						if (window.name === MARKER) {
+							window.name = "";
+						}
 						let errorUrl = "/500.html?error_type=stale_chunk";
 						if (payloadMessage)
 							errorUrl += "&error_cause=" + encodeURIComponent(payloadMessage);
@@ -108,7 +113,7 @@
 
 					window.addEventListener("vite:preloadError", (e) => {
 						e.preventDefault();
-						handleStaleChunkError(e.payload && e.payload.message);
+						handleStaleChunkError(e.payload?.message);
 					});
 
 					// E2E Test hook for deterministic error triggering.
@@ -119,23 +124,22 @@
 							sessionStorage.removeItem("__TEST_TRIGGER_ERROR__");
 							handleStaleChunkError("TEST_TRIGGERED_ERROR");
 						}
-					} catch (e) {}
+					} catch {}
 
 					window.addEventListener(
 						"error",
 						(e) => {
-							const msg = (e.message || "").toLowerCase();
-							const isModuleError = /importing|resolving|dynamically imported/i.test(
-								msg,
-							);
-							const src = e.target && e.target.src ? e.target.src : "";
-							if (
-								isModuleError
-								|| (e.target
-									&& e.target.nodeName === "SCRIPT"
-									&& src.includes("/build/"))
-							) {
+							const isModuleError = MODULE_ERROR_RE.test(e.message || "");
+							const target = e.target;
+							const isBuildScriptError =
+								target
+								&& target.nodeName === "SCRIPT"
+								&& typeof target.src === "string"
+								&& target.src.includes("/build/");
+
+							if (isModuleError || isBuildScriptError) {
 								e.preventDefault();
+								e.stopImmediatePropagation();
 								handleStaleChunkError(e.message || "Script load error");
 							}
 						},

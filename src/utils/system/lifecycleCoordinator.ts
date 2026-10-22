@@ -17,6 +17,12 @@ import { runWhenIdle } from "@/utils/system/idle";
 import { captureException, Logger } from "@/utils/system/monitoring";
 
 /**
+ * Marker key used by the inline preload error recovery script in `index.html`
+ * to track first-attempt cache-busted reloads across `sessionStorage` and `window.name`.
+ */
+const PRELOAD_RECOVERY_MARKER = "__preload_recovery__";
+
+/**
  * Discrete lifecycle phases of the application.
  *
  * @remarks
@@ -672,7 +678,7 @@ export class LifecycleCoordinator {
 	 * Executes side-effects for the `READY` phase transition:
 	 * 1. Dismiss splash screen
 	 * 2. Cleanup pre-rendered SSG fallback elements
-	 * 3. Clear recovery marker from session storage
+	 * 3. Clear preload recovery marker from `sessionStorage` and `window.name`
 	 * 4. Schedule transition to `IDLE`
 	 *
 	 * @private
@@ -695,9 +701,13 @@ export class LifecycleCoordinator {
 		// 3. Clear preload recovery attempt marker
 		if (typeof window !== "undefined") {
 			try {
-				sessionStorage.removeItem("__preload_recovery__");
+				sessionStorage.removeItem(PRELOAD_RECOVERY_MARKER);
 			} catch (_e) {
 				// ignore
+			}
+
+			if (window.name === PRELOAD_RECOVERY_MARKER) {
+				window.name = "";
 			}
 		}
 
