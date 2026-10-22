@@ -187,7 +187,7 @@ export const TechTree: React.FC<TechTreeProps> = ({ techTree: techTreeProp }) =>
 
 				{sections.map((section) => (
 					<div
-						className="sidebar__section mb-6 last:mb-0 lg:mb-6"
+						className="sidebar__section mb-6 last:mb-0 lg:mb-5"
 						key={section}
 					>
 						<TechTreeSectionHeader section={section} />

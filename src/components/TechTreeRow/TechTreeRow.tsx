@@ -308,7 +308,7 @@ export const TechTreeRow = React.memo(({ tech, techColor, techImage }: TechTreeR
 	);
 
 	return (
-		<div className="optimizationButton mb-3 flex items-center gap-2 last:mb-0">
+		<div className="optimizationButton mb-3 flex items-center gap-2 last:mb-1">
 			<ConditionalTooltip label={optimizeTooltipLabel}>
 				<IconButton
 					aria-label={`${optimizeTooltipLabel} ${translatedTechName}`}
@@ -347,7 +347,7 @@ export const TechTreeRow = React.memo(({ tech, techColor, techImage }: TechTreeR
 				<div className="flex items-center justify-start">
 					<Text
 						as="div"
-						className="techRow__label block flex-1 leading-snug! sm:[transform:scaleY(0.95)]"
+						className="techRow__label block flex-1 leading-snug! sm:leading-tight!"
 						size={isSmallAndUp ? "3" : "2"}
 						trim="both"
 						weight="medium"
