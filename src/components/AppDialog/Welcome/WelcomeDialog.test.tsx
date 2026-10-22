@@ -167,7 +167,8 @@ describe("WelcomeDialog", () => {
 			</DialogContext.Provider>,
 		);
 
-		const link = screen.getByRole("button", { name: "see the complete instructions" });
+		const link = screen.getByRole("link", { name: "see the complete instructions" });
+		expect(link).toHaveAttribute("href", "/instructions");
 		expect(link).not.toHaveAttribute("aria-label");
 		await userEvent.click(link);
 

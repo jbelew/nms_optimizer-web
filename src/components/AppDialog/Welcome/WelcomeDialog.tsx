@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Flex, Text } from "@radix-ui/themes";
+import { Button, Flex, Link, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
@@ -172,21 +172,22 @@ const WelcomeDialog: React.FC<WelcomeDialogProps> = ({ isOpen, onClose }) => {
 			</ul>
 
 			<Flex
-				align="start"
 				gap="2"
 				mt="2"
 			>
-				<Text>
+				<Text mb="2">
 					<Trans
 						components={{
 							1: (
-								<button
+								<Link
 									className="welcomeContent__link"
+									href="/instructions"
 									onClick={handleViewInstructions}
-									type="button"
+									underline="always"
+									weight="medium"
 								>
 									{t("dialogs.titles.instructions")}
-								</button>
+								</Link>
 							),
 						}}
 						i18nKey="dialogs.welcome.viewInstructions"
