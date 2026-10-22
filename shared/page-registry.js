@@ -188,26 +188,6 @@ export const SSG_DIALOG_IDS = Object.values(PAGE_REGISTRY)
 export const getPageById = (id) => PAGE_REGISTRY[id];
 
 /**
- * Resolves a page definition from a dialog title translation key.
- *
- * @param {string} [titleKey=""] - The dialog title translation key (e.g. "dialogs.titles.about").
- * @returns {PageDefinition | undefined} The matching page definition or undefined if not found.
- *
- * @category Utilities
- *
- * @example
- * ```ts
- * const page = getPageByDialogTitleKey("dialogs.titles.about");
- * // returns PageDefinition for "about"
- * ```
- */
-export const getPageByDialogTitleKey = (titleKey = "") => {
-	if (!titleKey) return undefined;
-
-	return Object.values(PAGE_REGISTRY).find((page) => page.dialogTitleKey === titleKey);
-};
-
-/**
  * @typedef {Object} ParsedRoutePath
  * @property {string} cleanPath - Normalized route path without language prefix, e.g. "/instructions/" or "/".
  * @property {string} lang - Detected language code from path prefix or default "en".

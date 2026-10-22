@@ -502,8 +502,7 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 			{isCorvette && activeTech !== "trails" && (
 				<Text
 					as="div"
-					className="mb-3! block text-sm sm:text-base"
-					mb="3"
+					className="block text-sm sm:text-base"
 				>
 					<Trans
 						components={{
@@ -518,8 +517,7 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 			{activeTech === "trails" && (
 				<Text
 					as="p"
-					className="mb-3! block text-sm sm:text-base"
-					mb="3"
+					className="block text-sm sm:text-base"
 				>
 					<Trans
 						components={{ strong: <strong className="font-bold" /> }}
@@ -530,8 +528,7 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 			{!isCorvette && activeTech !== "trails" && (
 				<Text
 					as="p"
-					className="mb-3! block text-sm sm:text-base"
-					mb="3"
+					className="block text-sm sm:text-base"
 				>
 					<Trans
 						components={{ strong: <strong className="font-bold" /> }}
@@ -553,8 +550,8 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 				</Text>
 			</label>
 			<Separator
-				className="mt-2"
-				mb="3"
+				decorative
+				orientation="horizontal"
 				size="4"
 			/>
 			<div className="flex flex-col">

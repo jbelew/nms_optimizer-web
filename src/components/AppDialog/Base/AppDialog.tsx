@@ -1,7 +1,7 @@
 import "./AppDialog.scss";
 
 import type { ReactNode } from "react";
-import React, { createContext, useEffect, useMemo } from "react";
+import React, { createContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
 	Close as DialogClose,
 	Content as DialogContent,
@@ -16,7 +16,7 @@ import { IconButton, Separator, Theme } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { getDialogIconAndStyle } from "@/utils/icons/iconRegistry";
-import { getPageByDialogTitleKey, getPageById } from "@shared/page-registry.js";
+import { getPageById } from "@shared/page-registry.js";
 
 interface AppDialogContextValue {
 	isOpen: boolean;
@@ -54,7 +54,7 @@ interface AppDialogProps {
  * // renders modal dialog root
  * ```
  */
-export const AppDialogRoot: React.FC<AppDialogProps> = ({
+const AppDialogRoot: React.FC<AppDialogProps> = ({
 	children,
 	className = "",
 	isOpen,
@@ -110,7 +110,7 @@ export const AppDialogRoot: React.FC<AppDialogProps> = ({
 /**
  * Props for the {@link AppDialogTitle} component.
  */
-export interface AppDialogTitleProps {
+interface AppDialogTitleProps {
 	children?: ReactNode;
 	headerIcon?: ReactNode;
 	pageId?: string;
@@ -136,7 +136,7 @@ export interface AppDialogTitleProps {
  * // renders styled dialog header and separator
  * ```
  */
-export const AppDialogTitle: React.FC<AppDialogTitleProps> = ({
+const AppDialogTitle: React.FC<AppDialogTitleProps> = ({
 	children,
 	headerIcon,
 	pageId,
@@ -185,10 +185,9 @@ export const AppDialogTitle: React.FC<AppDialogTitleProps> = ({
 /**
  * Props for the {@link AppDialogBody} component.
  */
-export interface AppDialogBodyProps {
+interface AppDialogBodyProps {
+	/** Child elements rendered inside the scrollable dialog body. */
 	children: ReactNode;
-	pageId?: string;
-	titleKey?: string;
 }
 
 /**
@@ -197,7 +196,8 @@ export interface AppDialogBodyProps {
  * @remarks
  * Encapsulates the scrollable body content of the modal dialog, establishing default
  * responsive body typography (`text-sm sm:text-base`), vertical flex spacing (`gap-3`),
- * and scrollbar clearance padding (`pr-2` for routed dialogs).
+ * and dynamic scrollbar clearance padding (`pr-3` when content overflows vertically,
+ * `pr-1` otherwise).
  *
  * @see {@link AppDialogBodyProps}
  * @see {@link ./AppDialog.test.tsx Unit Tests}
@@ -208,19 +208,50 @@ export interface AppDialogBodyProps {
  *
  * @example
  * ```tsx
- * <AppDialogBody pageId="about">
+ * <AppDialogBody>
  *   <p>Content</p>
  * </AppDialogBody>
- * // renders scrollable modal content section
+ * // mounts AppDialogBody
  * ```
  */
-export const AppDialogBody: React.FC<AppDialogBodyProps> = ({ children, pageId, titleKey }) => {
-	const page = pageId ? getPageById(pageId) : getPageByDialogTitleKey(titleKey);
-	const isRouted = page?.isDialog ?? false;
+const AppDialogBody: React.FC<AppDialogBodyProps> = ({ children }) => {
+	const sectionRef = useRef<HTMLElement>(null);
+	const [isOverflowing, setIsOverflowing] = useState(false);
+
+	useLayoutEffect(() => {
+		const element = sectionRef.current;
+		if (!element) return;
+
+		const updateOverflow = () => {
+			setIsOverflowing(element.scrollHeight > element.clientHeight);
+		};
+
+		updateOverflow();
+
+		const resizeObserver =
+			typeof ResizeObserver !== "undefined" ? new ResizeObserver(updateOverflow) : null;
+
+		resizeObserver?.observe(element);
+
+		const mutationObserver =
+			typeof MutationObserver !== "undefined" ? new MutationObserver(updateOverflow) : null;
+
+		mutationObserver?.observe(element, {
+			characterData: true,
+			childList: true,
+			subtree: true,
+		});
+
+		return () => {
+			resizeObserver?.disconnect();
+			mutationObserver?.disconnect();
+		};
+	}, []);
 
 	return (
 		<section
-			className={`appDialog__scrollable-content flex flex-1 flex-col gap-3 overflow-y-auto text-sm sm:text-base ${isRouted ? "pr-2" : "-mr-1 pr-1"}`}
+			className={`appDialog__scrollable-content flex flex-1 flex-col gap-3 overflow-y-auto text-sm *:shrink-0 sm:text-base ${isOverflowing ? "pr-3" : "pr-1"}`}
+			ref={sectionRef}
 		>
 			{children}
 		</section>
@@ -230,7 +261,7 @@ export const AppDialogBody: React.FC<AppDialogBodyProps> = ({ children, pageId, 
 /**
  * Props for the {@link AppDialogFooter} component.
  */
-export interface AppDialogFooterProps {
+interface AppDialogFooterProps {
 	children: ReactNode;
 }
 
@@ -254,7 +285,7 @@ export interface AppDialogFooterProps {
  * // renders dialog footer container
  * ```
  */
-export const AppDialogFooter: React.FC<AppDialogFooterProps> = ({ children }) => {
+const AppDialogFooter: React.FC<AppDialogFooterProps> = ({ children }) => {
 	return <div className="appDialog__footer">{children}</div>;
 };
 
@@ -303,12 +334,7 @@ const LegacyAppDialog: React.FC<LegacyAppDialogProps> = ({
 				title={title}
 				titleKey={resolvedTitleKey}
 			/>
-			<AppDialogBody
-				pageId={pageId}
-				titleKey={resolvedTitleKey}
-			>
-				{content}
-			</AppDialogBody>
+			<AppDialogBody>{content}</AppDialogBody>
 			{footer && <AppDialogFooter>{footer}</AppDialogFooter>}
 		</AppDialogRoot>
 	);
