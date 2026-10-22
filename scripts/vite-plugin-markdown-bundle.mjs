@@ -11,8 +11,25 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LOCALES_DIR = path.join(__dirname, "../public/assets/locales");
 
 /**
- * Vite plugin that creates a virtual markdown bundle module
- * Usage: Import from 'virtual:markdown-bundle' in your code
+ * Creates a Vite plugin that bundles Routed Dialog markdown files into a virtual module.
+ *
+ * @remarks
+ * Exposes `virtual:markdown-bundle` with `markdownBundle` and `getMarkdown(lang, fileName)`
+ * while excluding `home.md` (which is only pre-rendered into the root Static SEO Fallback)
+ * and stripping redundant raw `.md` files copied from `public/assets/locales` into `dist`.
+ *
+ * @returns {import("vite").Plugin} The configured Vite plugin object.
+ *
+ * @see {@link generateModuleCode}
+ * @see {@link loadMarkdownContent}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```js
+ * const plugin = markdownBundlePlugin();
+ * // returns { name: "markdown-bundle", resolveId, load, handleHotUpdate, writeBundle }
+ * ```
  */
 export function markdownBundlePlugin() {
 	const virtualModuleId = "virtual:markdown-bundle";
@@ -48,6 +65,29 @@ export function markdownBundlePlugin() {
 		resolveId(id) {
 			if (id === virtualModuleId) {
 				return resolvedId;
+			}
+		},
+		// Strip raw .md files copied from public/assets/locales into dist/assets/locales
+		writeBundle(options) {
+			const outDir = options.dir || path.join(__dirname, "../dist");
+			const distLocalesDir = path.join(outDir, "assets/locales");
+
+			if (!fs.existsSync(distLocalesDir)) {
+				return;
+			}
+
+			for (const lang of fs.readdirSync(distLocalesDir)) {
+				const langDir = path.join(distLocalesDir, lang);
+
+				if (!fs.statSync(langDir).isDirectory()) {
+					continue;
+				}
+
+				for (const file of fs.readdirSync(langDir)) {
+					if (file.endsWith(".md")) {
+						fs.rmSync(path.join(langDir, file), { force: true });
+					}
+				}
 			}
 		},
 	};
@@ -96,8 +136,9 @@ export function getMarkdown(lang, fileName) {
 }
 
 /**
- * Recursively reads markdown files from the locales directory
- * @returns {Object} Object mapping language to markdown file content
+ * Recursively reads Routed Dialog markdown files from the locales directory.
+ *
+ * @returns {Record<string, Record<string, string>>} Dictionary mapping language code to markdown filename and content.
  */
 function loadMarkdownContent() {
 	const content = {};
@@ -113,8 +154,11 @@ function loadMarkdownContent() {
 		content[lang] = {};
 		const langDir = path.join(LOCALES_DIR, lang);
 
-		// Read all markdown files in this language directory
-		const mdFiles = fs.readdirSync(langDir).filter((file) => file.endsWith(".md"));
+		// Read Routed Dialog markdown files in this language directory (excluding home.md,
+		// which is only pre-rendered into the root Static SEO Fallback at build time).
+		const mdFiles = fs
+			.readdirSync(langDir)
+			.filter((file) => file.endsWith(".md") && file !== "home.md");
 
 		mdFiles.forEach((file) => {
 			const fileName = file.replace(/\.md$/, "");

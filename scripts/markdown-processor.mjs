@@ -1,13 +1,32 @@
 /**
- * @file Markdown processor for SSG
- * Converts markdown to HTML with proper inline formatting
+ * @file Markdown processor for SSG.
+ * Converts markdown to HTML with semantic inline formatting for Static SEO Fallback blocks.
+ *
+ * @category Utilities
  */
 
 import { marked } from "marked";
 
 /**
- * Creates a markdown processor function
- * @returns {Function} Function that converts markdown string to HTML string
+ * Creates a configured `marked` compiler function for Static SEO Fallback markdown rendering.
+ *
+ * @remarks
+ * Configures custom `marked` block and inline renderers that emit clean semantic HTML
+ * (`<h1>`–`<h3>` with `section-*` IDs, lists, blockquotes, tables, and `<noscript>`-wrapped
+ * lazy images so the browser preload scanner does not fetch fallback images when JS is enabled).
+ *
+ * @returns {(markdownContent: string) => string} Compiler function that converts a markdown string to an HTML string.
+ *
+ * @see {@link ./generate-ssg.test.mjs Unit Tests}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```js
+ * const compileMarkdown = createMarkdownProcessor();
+ * const html = compileMarkdown("## Overview");
+ * // returns '<h2 id="section-overview">Overview</h2>\n'
+ * ```
  */
 export function createMarkdownProcessor() {
 	// Custom renderer
@@ -25,16 +44,10 @@ export function createMarkdownProcessor() {
 	renderer.heading = (token) => {
 		const slug = getSlug(token.text);
 		const id = `section-${slug}`;
-		const className =
-			token.depth === 2
-				? "text-base sm:text-lg mb-3"
-				: token.depth === 3
-					? "text-sm sm:text-base"
-					: "";
 		// Use marked.parseInline to process inline markdown like **bold**
 		const html = marked.parseInline(token.text);
 
-		return `<h${token.depth} id="${id}" class="${className}">${html}</h${token.depth}>\n`;
+		return `<h${token.depth} id="${id}">${html}</h${token.depth}>\n`;
 	};
 
 	// Override paragraph
@@ -42,54 +55,53 @@ export function createMarkdownProcessor() {
 		// Use marked.parseInline to process inline markdown like **bold**, *italic*, etc.
 		const html = marked.parseInline(token.text);
 
-		return `<p class="text-sm sm:text-base mb-2">${html}</p>\n`;
+		return `<p>${html}</p>\n`;
 	};
 
 	// Override list
 	renderer.list = (token) => {
 		const tag = token.ordered ? "ol" : "ul";
-		const listClass = token.ordered ? "list-decimal" : "list-disc";
 
-		return `<${tag} class="${listClass} pl-6 mb-2">\n${token.items
+		return `<${tag}>\n${token.items
 			.map((item) => {
 				// Process inline markdown in list items
 				const html = marked.parseInline(item.text);
 
-				return `<li class="mb-1">${html}</li>`;
+				return `<li>${html}</li>`;
 			})
 			.join("\n")}\n</${tag}>\n`;
 	};
 
 	// Override blockquote
 	renderer.blockquote = (token) => {
-		return `<blockquote style="margin-top: 0.5rem; margin-bottom: 0.5rem; border-left: 4px solid; padding-left: 1rem;">\n${token.text}</blockquote>\n`;
+		return `<blockquote>\n${token.text}</blockquote>\n`;
 	};
 
 	// Override code block
 	renderer.codeblock = (token) => {
-		return `<pre style="background-color: #1e293b; padding: 1rem; border-radius: 0.25rem; overflow-x: auto;"><code class="language-${token.lang || ""}">${token.text}</code></pre>\n`;
+		return `<pre><code class="language-${token.lang || ""}">${token.text}</code></pre>\n`;
 	};
 
 	// Override link
 	renderer.link = (token) => {
 		const isInternal =
-			(token.href.startsWith("/") && !token.href.startsWith("//")) ||
-			token.href.startsWith("#") ||
-			token.href === "https://nms-optimizer.app" ||
-			token.href.startsWith("https://nms-optimizer.app/");
+			(token.href.startsWith("/") && !token.href.startsWith("//"))
+			|| token.href.startsWith("#")
+			|| token.href === "https://nms-optimizer.app"
+			|| token.href.startsWith("https://nms-optimizer.app/");
 		const targetAttr = isInternal ? "" : ' target="_blank" rel="noopener noreferrer"';
 
-		return `<a href="${token.href}"${targetAttr} style="color: #4CCCE6; text-decoration: underline;">${token.text}</a>`;
+		return `<a href="${token.href}"${targetAttr}>${token.text}</a>`;
 	};
 
 	// Override image
 	renderer.image = (token) => {
-		return `<img src="${token.href}" alt="${token.text}" title="${token.title || ""}" style="max-width: 100%; height: auto;" loading="lazy" decoding="async" />`;
+		return `<noscript><img src="${token.href}" alt="${token.text}" title="${token.title || ""}" loading="lazy" decoding="async" /></noscript>`;
 	};
 
 	// Override hr
 	renderer.hr = () => {
-		return '<hr style="border: none; border-top: 1px solid #444; margin: 1rem 0;" />\n';
+		return "<hr />\n";
 	};
 
 	// Override table
@@ -112,7 +124,7 @@ export function createMarkdownProcessor() {
 		});
 		body += "</tbody>";
 
-		return `<table style="width: 100%; border-collapse: collapse; border: 1px solid #444;">${header}${body}</table>\n`;
+		return `<table>${header}${body}</table>\n`;
 	};
 
 	// Set options

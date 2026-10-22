@@ -88,6 +88,10 @@ _Avoid_: cell error, validation error, session error
 A modal view bound to a canonical, localized URL path (such as `/about/`, `/instructions/`, `/changelog/`, `/userstats/`, or `/performance/`) so it can be bookmarked, shared, and indexed independently of the workspace grid.
 _Avoid_: modal page, route wrapper, dialog route
 
+**Static SEO Fallback**:
+Pre-rendered HTML content and navigation embedded into static route entry points to provide indexable document structure for web crawlers and readable fallback content when JavaScript is disabled.
+_Avoid_: client fallback, prerendered markdown, noscript shell
+
 **Pattern No Fit**:
 The optimization condition where a precomputed adjacency pattern for a Technology Category cannot fit within any contiguous region of available active slots matching its required Solver Window dimensions.
 _Avoid_: pattern error, no-fit warning, PNF state

@@ -52,10 +52,18 @@ describe("generate-ssg.mjs", () => {
 			const tags = generateSsgModule.generateSeoTags("/", "en", baseUrl, t);
 
 			expect(tags).toContain('<link rel="canonical" href="https://nms-optimizer.app/" />');
-			expect(tags).toContain('<meta property="og:url" content="https://nms-optimizer.app/" />');
-			expect(tags).toContain('<link rel="alternate" hreflang="en" href="https://nms-optimizer.app/" />');
-			expect(tags).toContain('<link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/" />');
-			expect(tags).toContain('<link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/" />');
+			expect(tags).toContain(
+				'<meta property="og:url" content="https://nms-optimizer.app/" />',
+			);
+			expect(tags).toContain(
+				'<link rel="alternate" hreflang="en" href="https://nms-optimizer.app/" />',
+			);
+			expect(tags).toContain(
+				'<link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/" />',
+			);
+			expect(tags).toContain(
+				'<link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/" />',
+			);
 		});
 	});
 
@@ -122,7 +130,7 @@ describe("generate-ssg.mjs", () => {
 				"",
 				baseUrl,
 				mdProcessor,
-				t
+				t,
 			);
 			expect(result).toContain('<html lang="es"');
 		});
@@ -134,7 +142,7 @@ describe("generate-ssg.mjs", () => {
 				"",
 				baseUrl,
 				mdProcessor,
-				t
+				t,
 			);
 			expect(result).toContain("<title>Home Title | NMS Optimizer</title>");
 			expect(result).toContain("<h1>Home Title</h1>");
@@ -148,7 +156,7 @@ describe("generate-ssg.mjs", () => {
 				"",
 				baseUrl,
 				mdProcessor,
-				t
+				t,
 			);
 			expect(result).toContain('<link rel="canonical" href="https://nms-optimizer.app/"');
 		});
@@ -160,26 +168,29 @@ describe("generate-ssg.mjs", () => {
 				"",
 				baseUrl,
 				mdProcessor,
-				t
+				t,
 			);
 			expect(result).toContain('class="ssg-fallback"');
 			expect(result).not.toContain("<noscript>");
 		});
 
-		it("strips existing noscript blocks", async () => {
-			const indexWithNoscript = indexHtml.replace(
-				"</body>",
-				"<noscript>Old content</noscript></body>"
-			);
+		it("strips existing body noscript blocks while preserving data-vpss-background-noscript in head", async () => {
+			const indexWithNoscript = indexHtml
+				.replace(
+					"</head>",
+					'<noscript data-vpss-background-noscript=""><style>body{}</style></noscript></head>',
+				)
+				.replace("</body>", "<noscript>Old content</noscript></body>");
 			const result = await generateSsgModule.generatePage(
 				indexWithNoscript,
 				"en",
 				"",
 				baseUrl,
 				mdProcessor,
-				t
+				t,
 			);
 			expect(result).not.toContain("Old content");
+			expect(result).toContain('data-vpss-background-noscript=""');
 		});
 
 		it("injects content after root div", async () => {
@@ -191,9 +202,8 @@ describe("generate-ssg.mjs", () => {
 				mdProcessor,
 				t,
 				"",
-				""
 			);
-			expect(result).toContain('<div id="root"></div>\n\t\t<div class="ssg-fallback" data-prerendered-markdown="true">');
+			expect(result).toContain('<div id="root"></div>\n\t\t<div class="ssg-fallback">');
 		});
 
 		it("renders formatted title in head and clean topic in H1 heading for instructions", async () => {
@@ -214,11 +224,15 @@ describe("generate-ssg.mjs", () => {
 				"instructions",
 				baseUrl,
 				mdProcessor,
-				tClean
+				tClean,
 			);
-			expect(result).toContain("<title>How to Optimize Your Tech Layout | NMS Optimizer</title>");
+			expect(result).toContain(
+				"<title>How to Optimize Your Tech Layout | NMS Optimizer</title>",
+			);
 			expect(result).toContain("<h1>How to Optimize Your Tech Layout</h1>");
-			expect(result).not.toContain("<h1>How to Optimize Your Tech Layout | NMS Optimizer</h1>");
+			expect(result).not.toContain(
+				"<h1>How to Optimize Your Tech Layout | NMS Optimizer</h1>",
+			);
 		});
 
 		it("handles legacy un-migrated titles by extracting clean heading", async () => {
@@ -239,10 +253,24 @@ describe("generate-ssg.mjs", () => {
 				"instructions",
 				baseUrl,
 				mdProcessor,
-				tLegacy
+				tLegacy,
 			);
-			expect(result).toContain("<title>How to Optimize Your Tech Layout | NMS Optimizer</title>");
+			expect(result).toContain(
+				"<title>How to Optimize Your Tech Layout | NMS Optimizer</title>",
+			);
 			expect(result).toContain("<h1>How to Optimize Your Tech Layout</h1>");
+		});
+	});
+
+	describe("createMarkdownProcessor", () => {
+		it("wraps markdown images in <noscript> to prevent preload scanner fetches when JS is enabled", async () => {
+			const { createMarkdownProcessor } = await import("./markdown-processor.mjs");
+			const processMarkdown = createMarkdownProcessor();
+			const html = processMarkdown("![Alt text](/assets/img/screenshots/screenshot.webp)");
+
+			expect(html).toContain(
+				'<noscript><img src="/assets/img/screenshots/screenshot.webp" alt="Alt text" title="" loading="lazy" decoding="async" /></noscript>',
+			);
 		});
 	});
 });

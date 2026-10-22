@@ -18,11 +18,6 @@ vi.mock("@/components/AppDialog/Common/LoremIpsumSkeleton", () => ({
 	default: () => <div data-testid="lorem-ipsum-skeleton">Loading...</div>,
 }));
 
-// Mock PrerenderedMarkdownRenderer
-vi.mock("./PrerenderedMarkdownRenderer", () => ({
-	default: () => <div data-testid="prerendered-markdown">Prerendered</div>,
-}));
-
 // Mock react-markdown and remark-gfm
 vi.mock("react-markdown", () => ({
 	default: ({ children }: { children: React.ReactNode }) => (

@@ -2,10 +2,13 @@
  * @file Static Site Generation script (Bun Optimized)
  * Pre-renders all markdown pages as static HTML for better SEO.
  * Uses Bun's native HTMLRewriter for maximum performance.
+ *
+ * @category Utilities
  */
 
-import path from "node:path";
 import fs from "node:fs/promises";
+import path from "node:path";
+
 import i18next from "i18next";
 import i18nextFsBackend from "i18next-fs-backend";
 
@@ -13,29 +16,54 @@ import packageJson from "../package.json" with { type: "json" };
 import { KNOWN_DIALOGS, SUPPORTED_LANGUAGES, TARGET_HOST } from "../shared/config.js";
 import { getPageMetadata } from "../shared/page-metadata.js";
 import { PAGE_REGISTRY } from "../shared/page-registry.js";
-import { getOgLocale, OG_LOCALE_MAP } from "../shared/seo-schema.js";
+import { getOgLocale, getSchemaDomId, OG_LOCALE_MAP } from "../shared/seo-schema.js";
 import { createMarkdownProcessor } from "./markdown-processor.mjs";
 
 const DIST_DIR = path.resolve("dist");
 const LOCALES_DIR = path.resolve("public/assets/locales");
-const FONTS_CSS_PATH = path.resolve("src/assets/css/fonts.css");
 
-// Map route names to markdown filenames derived from Unified Page Registry
+/**
+ * Mapping of route slugs (`""` for home, or dialog IDs) to localized markdown filenames,
+ * derived from {@link PAGE_REGISTRY}.
+ *
+ * @type {Record<string, string>}
+ *
+ * @see {@link PAGE_REGISTRY}
+ *
+ * @category Utilities
+ */
 export const PAGE_TO_MARKDOWN_MAPPING = Object.fromEntries(
 	Object.values(PAGE_REGISTRY)
 		.filter((p) => p.markdownFileName)
-		.map((p) => [p.id === "home" ? "" : p.id, p.markdownFileName])
+		.map((p) => [p.id === "home" ? "" : p.id, p.markdownFileName]),
 );
 
 /**
- * Extract SSG template blocks from source index.html
+ * Extracts the Static SEO Fallback header template (`<header class="app-header-static">`)
+ * from the source `index.html` document.
+ *
+ * @remarks
+ * Ensures build-time SSG uses the single static header markup defined in `index.html`.
+ *
+ * @param {string} sourceIndexHtml - Raw contents of the source `index.html` file.
+ * @returns {Promise<{ ssgHeader: string }>} Object containing the extracted `ssgHeader` HTML string.
+ *
+ * @see {@link ./generate-ssg.test.mjs Unit Tests}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```js
+ * const { ssgHeader } = await extractSsgTemplate(sourceHtml);
+ * // returns { ssgHeader: '<header class="app-header-static">...</header>' }
+ * ```
  */
 export async function extractSsgTemplate(sourceIndexHtml) {
 	const hasTemplate = /<(?:main|div)\s+[^>]*?data-ssg-template/i.test(sourceIndexHtml);
 	if (!hasTemplate) return { ssgHeader: "" };
 
 	const ssgHeaderMatch = sourceIndexHtml.match(
-		/(<header[^>]*?class="app-header-static"[^>]*?>[\s\S]*?<\/header>)/
+		/(<header[^>]*?class="app-header-static"[^>]*?>[\s\S]*?<\/header>)/,
 	);
 	const ssgHeader = ssgHeaderMatch ? ssgHeaderMatch[1].trim() : "";
 
@@ -43,7 +71,26 @@ export async function extractSsgTemplate(sourceIndexHtml) {
 }
 
 /**
- * Generate navigation links for the SSG page.
+ * Generates the localized `<nav>` HTML block for a Static SEO Fallback page.
+ *
+ * @remarks
+ * Renders crawlable site navigation links with localized labels, descriptions,
+ * and `aria-current="page"` on the active route, omitting `userstats` in Docker builds.
+ *
+ * @param {string} lang - Active locale code (e.g., `"en"`, `"es"`).
+ * @param {string} currentPage - Current route slug (`""` for home, or a dialog identifier).
+ * @param {import("i18next").TFunction} t - Fixed-language i18next translation function.
+ * @returns {string} Rendered `<nav aria-label="Site navigation">` HTML string.
+ *
+ * @see {@link ./generate-ssg.test.mjs Unit Tests}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```js
+ * const navHtml = generateNavigationLinks("en", "about", t);
+ * // returns '<nav aria-label="Site navigation">...</nav>'
+ * ```
  */
 export function generateNavigationLinks(lang, currentPage, t) {
 	const isDocker = process.env.VITE_DOCKER === "true" || process.env.DOCKER === "true";
@@ -57,9 +104,15 @@ export function generateNavigationLinks(lang, currentPage, t) {
 		},
 		{ descKey: "seo.navDescriptions.about", key: "seo.nav.about", path: "/about" },
 		{ descKey: "seo.navDescriptions.changelog", key: "seo.nav.changelog", path: "/changelog" },
-		...(!isDocker
-			? [{ descKey: "seo.navDescriptions.userstats", key: "seo.nav.userstats", path: "/userstats" }]
-			: []),
+		...(!isDocker ?
+			[
+				{
+					descKey: "seo.navDescriptions.userstats",
+					key: "seo.nav.userstats",
+					path: "/userstats",
+				},
+			]
+		:	[]),
 		{
 			descKey: "seo.navDescriptions.translation",
 			key: "seo.nav.translation",
@@ -70,7 +123,11 @@ export function generateNavigationLinks(lang, currentPage, t) {
 
 	const links = pages
 		.map(({ descKey, key, path }) => {
-			const href = path === "/" ? (langPrefix ? `${langPrefix}/` : "/") : `${langPrefix}${path}/`;
+			const href =
+				path === "/" ?
+					langPrefix ? `${langPrefix}/`
+					:	"/"
+				:	`${langPrefix}${path}/`;
 			const label = t(key, { defaultValue: path.slice(1) || "Home" });
 			const desc = t(descKey, { defaultValue: "" });
 			const currentPath = currentPage === "" ? "/" : `/${currentPage}`;
@@ -90,7 +147,32 @@ export function generateNavigationLinks(lang, currentPage, t) {
 }
 
 /**
- * Generate a complete HTML page using HTMLRewriter.
+ * Generates a complete localized HTML page using Bun's `HTMLRewriter`.
+ *
+ * @remarks
+ * Injects localized SEO metadata, canonical/hreflang links, JSON-LD structured
+ * data schemas, and the Static SEO Fallback (`.ssg-fallback`) into the base HTML shell.
+ *
+ * @param {string} indexHtml - The built base `index.html` document string.
+ * @param {string} lang - The target locale code (e.g., `"en"`, `"es"`).
+ * @param {string} pageName - The route slug (`""` for home, or a dialog identifier like `"about"`).
+ * @param {string} baseUrl - The canonical origin URL (e.g., `"https://nms-optimizer.app"`).
+ * @param {(markdown: string) => string} mdProcessor - Markdown-to-HTML compiler function.
+ * @param {import("i18next").TFunction} t - Fixed-language i18next translation function.
+ * @param {string} [ssgHeader=""] - Extracted static header HTML template block.
+ * @returns {Promise<string>} The transformed HTML document string for the route.
+ *
+ * @see {@link getPageMetadata}
+ * @see {@link getSchemaDomId}
+ * @see {@link ./generate-ssg.test.mjs Unit Tests}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```js
+ * const html = await generatePage(baseHtml, "en", "about", "https://nms-optimizer.app", mdProcessor, t, ssgHeader);
+ * // returns "<!doctype html><html lang=\"en\">..."
+ * ```
  */
 export async function generatePage(
 	indexHtml,
@@ -99,8 +181,7 @@ export async function generatePage(
 	baseUrl,
 	mdProcessor,
 	t,
-	fontStyles = "",
-	ssgHeader = ""
+	ssgHeader = "",
 ) {
 	const pathname = pageName === "" ? "/" : `/${pageName}/`;
 	const pageMetadata = getPageMetadata({
@@ -119,20 +200,12 @@ export async function generatePage(
 	const ogImageUrl = pageMetadata.ogImageUrl;
 
 	const seoTags = generateSeoTags(pathname, lang, baseUrl, t);
-
-	// Prepare JSON-LD Schemas
 	const schemas = pageMetadata.schemas;
-	const softwareSchema = schemas.find((s) => s["@type"] === "SoftwareApplication");
-	const websiteSchema = schemas.find((s) => s["@type"] === "WebSite");
-	const webPageSchema = schemas.find((s) => s["@type"] === "WebPage");
-	const orgSchema = schemas.find((s) => s["@type"] === "Organization");
-	const breadcrumbSchema = schemas.find((s) => s["@type"] === "BreadcrumbList");
-	const navSchema = schemas.find((s) => s["@type"] === "ItemList");
 
-	// Prepare noscript content
+	// Prepare Static SEO Fallback content
 	const markdownFileName = PAGE_TO_MARKDOWN_MAPPING[pageName] || pageName;
 	const markdownContent = await readMarkdownFile(lang, markdownFileName);
-	let noscriptBlock = "";
+	let ssgFallbackBlock = "";
 
 	if (markdownContent) {
 		let renderedHtml = mdProcessor(markdownContent);
@@ -148,27 +221,23 @@ export async function generatePage(
 		}
 
 		const subTitleRaw = t("appHeader.subTitle", {
-			defaultValue: 'Technology Layout Optimizer <span style="color: #4ccce6">ML/RUST</span>',
+			defaultValue: "Technology Layout Optimizer <span>ML/RUST</span>",
 		});
-		const subTitle = subTitleRaw.replace(
-			/<(\d+)>([\s\S]*?)<\/\1>/g,
-			'<span style="color: #4ccce6">$2</span>'
-		);
+		const subTitle = subTitleRaw.replace(/<(\d+)>([\s\S]*?)<\/\1>/g, "<span>$2</span>");
 
 		// Single Source of Truth: Localize the subtitle in the header extracted from the template
 		const localizedHeader = ssgHeader.replace(
 			/<(h2|div) class="app-header-static__title">[\s\S]*?<\/\1>/,
-			`<div class="app-header-static__title">${subTitle}</div>`
+			`<div class="app-header-static__title">${subTitle}</div>`,
 		);
 
-		noscriptBlock = `
-		<div class="ssg-fallback" data-prerendered-markdown="true">
+		ssgFallbackBlock = `
+		<div class="ssg-fallback">
 			${localizedHeader}
 			<main>
 				${renderedHtml}
 				${navigationHtml}
 			</main>
-			${fontStyles ? `<style>${fontStyles}</style>` : ""}
 		</div>`;
 	}
 
@@ -190,7 +259,7 @@ export async function generatePage(
 				element(el) {
 					el.remove();
 				},
-			}
+			},
 		)
 		// Meta tag updates
 		.on('meta[name="description"]', {
@@ -255,36 +324,12 @@ export async function generatePage(
 				el.append(seoTags, { html: true });
 
 				// Schemas
-				if (softwareSchema)
+				for (const schema of schemas) {
 					el.append(
-						`<script type="application/ld+json" id="softwareapplication-schema">${JSON.stringify(softwareSchema)}</script>`,
-						{ html: true }
+						`<script type="application/ld+json" id="${getSchemaDomId(schema)}">${JSON.stringify(schema)}</script>`,
+						{ html: true },
 					);
-				if (websiteSchema)
-					el.append(
-						`<script type="application/ld+json" id="website-schema">${JSON.stringify(websiteSchema)}</script>`,
-						{ html: true }
-					);
-				if (webPageSchema)
-					el.append(
-						`<script type="application/ld+json" id="webpage-schema">${JSON.stringify(webPageSchema)}</script>`,
-						{ html: true }
-					);
-				if (orgSchema)
-					el.append(
-						`<script type="application/ld+json" id="organization-schema">${JSON.stringify(orgSchema)}</script>`,
-						{ html: true }
-					);
-				if (breadcrumbSchema)
-					el.append(
-						`<script type="application/ld+json" id="breadcrumblist-schema">${JSON.stringify(breadcrumbSchema)}</script>`,
-						{ html: true }
-					);
-				if (navSchema)
-					el.append(
-						`<script type="application/ld+json" id="itemlist-schema">${JSON.stringify(navSchema)}</script>`,
-						{ html: true }
-					);
+				}
 			},
 		})
 		// Body content
@@ -300,17 +345,19 @@ export async function generatePage(
 		})
 		.on("noscript", {
 			element(el) {
-				// In the original script, noscripts in head are preserved.
-				// We'll only remove noscripts that are NOT data-ssg-template (which is in head)
-				if (el.getAttribute("data-ssg-template") === null) {
+				// Preserve head noscript blocks (e.g. data-vpss-background-noscript or data-ssg-template)
+				if (
+					el.getAttribute("data-ssg-template") === null
+					&& el.getAttribute("data-vpss-background-noscript") === null
+				) {
 					el.remove();
 				}
 			},
 		})
 		.on("div#root", {
 			element(el) {
-				if (noscriptBlock) {
-					el.after(noscriptBlock, { html: true });
+				if (ssgFallbackBlock) {
+					el.after(ssgFallbackBlock, { html: true });
 				}
 			},
 		});
@@ -319,14 +366,44 @@ export async function generatePage(
 }
 
 /**
- * Generate SEO tags for a page.
+ * Generates canonical, Open Graph locale, and `hreflang` alternate tags for a page.
+ *
+ * @remarks
+ * Produces the canonical URL, `og:url`, primary and alternate `og:locale` tags,
+ * localized `hreflang` links for all {@link SUPPORTED_LANGUAGES}, and `x-default`.
+ *
+ * @param {string} pathname - Route pathname without locale prefix (e.g., `"/"` or `"/about/"`).
+ * @param {string} lang - Active locale code (e.g., `"en"`, `"es"`).
+ * @param {string} baseUrl - Canonical origin URL (e.g., `"https://nms-optimizer.app"`).
+ * @param {import("i18next").TFunction} [_t] - Unused translation function parameter preserved for signature parity.
+ * @returns {string} HTML string of `<link>` and `<meta>` tags to append to `<head>`.
+ *
+ * @see {@link getOgLocale}
+ * @see {@link OG_LOCALE_MAP}
+ * @see {@link SUPPORTED_LANGUAGES}
+ * @see {@link ./generate-ssg.test.mjs Unit Tests}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```js
+ * const tags = generateSeoTags("/about/", "en", "https://nms-optimizer.app");
+ * // returns '\n    <link rel="canonical" href="https://nms-optimizer.app/about/" />...'
+ * ```
  */
 export function generateSeoTags(pathname, lang, baseUrl, _t) {
 	const cleanPath = pathname === "/" ? "" : pathname;
 	const normalizePath = (p) => (p.endsWith("/") ? p : `${p}/`);
-	const canonicalPath =
-		lang === "en" ? normalizePath(cleanPath || "/") : `/${lang}${normalizePath(cleanPath || "/")}`;
-	const canonicalUrl = new URL(canonicalPath, baseUrl).href;
+	const normalizedCleanPath = normalizePath(cleanPath || "/");
+
+	const buildLocaleUrl = (locale) => {
+		const localePath =
+			locale === "en" ? normalizedCleanPath : `/${locale}${normalizedCleanPath}`;
+
+		return new URL(localePath, baseUrl).href;
+	};
+
+	const canonicalUrl = buildLocaleUrl(lang);
 
 	let tags = `
     <link rel="canonical" href="${canonicalUrl}" />
@@ -339,20 +416,34 @@ export function generateSeoTags(pathname, lang, baseUrl, _t) {
 	}
 
 	for (const l of SUPPORTED_LANGUAGES) {
-		const lPath =
-			l === "en" ? normalizePath(cleanPath || "/") : `/${l}${normalizePath(cleanPath || "/")}`;
-		const lUrl = new URL(lPath, baseUrl).href;
-		tags += `\n    <link rel="alternate" hreflang="${l}" href="${lUrl}" />`;
+		tags += `\n    <link rel="alternate" hreflang="${l}" href="${buildLocaleUrl(l)}" />`;
 	}
 
-	const xDefaultUrl = new URL(normalizePath(cleanPath || "/"), baseUrl).href;
+	const xDefaultUrl = buildLocaleUrl("en");
 	tags += `\n    <link rel="alternate" hreflang="x-default" href="${xDefaultUrl}" />`;
 
 	return tags;
 }
 
 /**
- * Generate all static pages
+ * Pre-renders all localized static HTML pages into `dist/` after the Vite production build.
+ *
+ * @remarks
+ * Iterates over {@link SUPPORTED_LANGUAGES} and {@link KNOWN_DIALOGS} to write localized
+ * `index.html` files containing pre-rendered Static SEO Fallback blocks and metadata.
+ *
+ * @returns {Promise<void>} Resolves when all static pages have been written to `dist/`.
+ *
+ * @see {@link generatePage}
+ * @see {@link initI18n}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```js
+ * await generateSsg();
+ * // writes 42 localized index.html files under dist/
+ * ```
  */
 export async function generateSsg() {
 	const mdProcessor = createMarkdownProcessor();
@@ -369,16 +460,6 @@ export async function generateSsg() {
 		// Extract template blocks from source index.html
 		const template = await extractSsgTemplate(sourceIndexHtml);
 		const ssgHeader = template.ssgHeader;
-		let fontStyles = "";
-
-		// --- FONT FIX: Extract from source fonts.css ---
-		try {
-			const fontsCss = await fs.readFile(FONTS_CSS_PATH, "utf-8");
-			fontStyles = fontsCss;
-			console.log("✓ Included fonts from src/assets/css/fonts.css");
-		} catch (_err) {
-			console.warn("Warning: fonts.css not found, skipping font extraction.");
-		}
 
 		// Diagnostic: Verify translations are loaded
 		console.log("\n--- i18n Initialization Check ---");
@@ -405,8 +486,7 @@ export async function generateSsg() {
 				baseUrl,
 				mdProcessor,
 				t,
-				fontStyles,
-				ssgHeader
+				ssgHeader,
 			);
 			const rootDir = path.join(DIST_DIR, rootPath);
 			const rootFile = path.join(rootDir, "index.html");
@@ -430,8 +510,7 @@ export async function generateSsg() {
 					baseUrl,
 					mdProcessor,
 					t,
-					fontStyles,
-					ssgHeader
+					ssgHeader,
 				);
 				const pageFile = path.join(pageDir, "index.html");
 				await fs.mkdir(pageDir, { recursive: true });
@@ -447,7 +526,9 @@ export async function generateSsg() {
 		console.error(`Error during SSG generation: ${err.message}`);
 
 		if (err.code === "ENOENT") {
-			console.error("Hint: Make sure to run 'bun run build' first to generate dist/index.html");
+			console.error(
+				"Hint: Make sure to run 'bun run build' first to generate dist/index.html",
+			);
 		}
 
 		process.exit(1);
@@ -455,7 +536,22 @@ export async function generateSsg() {
 }
 
 /**
- * Initialize i18next instance for SSG
+ * Initializes an `i18next` filesystem instance preloaded with all supported locales for SSG.
+ *
+ * @remarks
+ * Uses `i18next-fs-backend` to load `translation.json` files from `public/assets/locales`.
+ *
+ * @returns {Promise<import("i18next").i18n>} Initialized `i18next` instance.
+ *
+ * @see {@link SUPPORTED_LANGUAGES}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```js
+ * const i18n = await initI18n();
+ * // returns initialized i18next instance
+ * ```
  */
 export async function initI18n() {
 	const i18nInstance = i18next.createInstance();
@@ -474,7 +570,25 @@ export async function initI18n() {
 }
 
 /**
- * Read markdown file from the locales directory.
+ * Reads a localized markdown file from `public/assets/locales/<lang>/<fileName>.md`.
+ *
+ * @remarks
+ * Falls back to the English (`en`) markdown file if the requested locale file does not exist,
+ * or returns `null` if neither exists.
+ *
+ * @param {string} lang - Target locale code (e.g., `"en"`, `"es"`).
+ * @param {string} fileName - Markdown filename without `.md` extension (e.g., `"about"`).
+ * @returns {Promise<string | null>} Raw markdown string, or `null` if not found.
+ *
+ * @see {@link ./generate-ssg.test.mjs Unit Tests}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```js
+ * const md = await readMarkdownFile("en", "about");
+ * // returns "# About..." or null
+ * ```
  */
 export async function readMarkdownFile(lang, fileName) {
 	const filePath = path.join(LOCALES_DIR, lang, `${fileName}.md`);

@@ -554,7 +554,7 @@ export class LifecycleCoordinator {
 	}
 
 	/**
-	 * Default implementation for removing pre-rendered SSG fallback elements from the DOM.
+	 * Default implementation for removing pre-rendered SSG fallback elements and styles from the DOM.
 	 *
 	 * @private
 	 */
@@ -567,6 +567,7 @@ export class LifecycleCoordinator {
 		fallbacks.forEach((el) => {
 			el.remove();
 		});
+		document.getElementById("ssg-fallback-styles")?.remove();
 	}
 
 	/**

@@ -1,6 +1,8 @@
 /**
  * @file Structured data (JSON-LD) templates for NMS Optimizer.
  * Consolidates SEO schema for both React (CSR) and SSG layers to ensure parity.
+ *
+ * @category Utilities
  */
 
 /**
@@ -8,6 +10,8 @@
  * (BCP-47 with underscore, e.g. `en_US`).
  *
  * @type {Record<string, string>}
+ *
+ * @category Utilities
  */
 export const OG_LOCALE_MAP = {
 	de: "de_DE",
@@ -19,20 +23,93 @@ export const OG_LOCALE_MAP = {
 };
 
 /**
+ * Canonical Schema.org `@type` identifiers managed by the application's SEO layer.
+ *
+ * @type {readonly string[]}
+ *
+ * @category Utilities
+ */
+export const MANAGED_SCHEMA_TYPES = [
+	"SoftwareApplication",
+	"Organization",
+	"WebSite",
+	"WebPage",
+	"ItemList",
+	"BreadcrumbList",
+];
+
+/**
+ * Derives the deterministic DOM `id` attribute for a JSON-LD schema object
+ * from its `@type` property.
+ *
+ * @remarks
+ * Shared between build-time SSG (`scripts/generate-ssg.mjs`) and client-side
+ * route synchronization (`src/components/Seo/Seo.tsx`) so pre-rendered schemas
+ * can be updated in-place without DOM teardown.
+ *
+ * @param {Record<string, unknown>} schema - A Schema.org JSON-LD object containing an `@type` string.
+ * @returns {string} The lowercase `<type>-schema` DOM identifier.
+ *
+ * @see {@link MANAGED_SCHEMA_IDS}
+ * @see {@link MANAGED_SCHEMA_TYPES}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```js
+ * getSchemaDomId({ "@type": "SoftwareApplication" });
+ * // returns "softwareapplication-schema"
+ * ```
+ */
+export const getSchemaDomId = (schema) => {
+	const type = typeof schema?.["@type"] === "string" ? schema["@type"] : "unknown";
+
+	return `${type.toLowerCase()}-schema`;
+};
+
+/**
+ * Canonical list of DOM `id` attributes used for managed JSON-LD `<script>` tags,
+ * derived directly from {@link MANAGED_SCHEMA_TYPES}.
+ *
+ * @type {readonly string[]}
+ *
+ * @see {@link getSchemaDomId}
+ * @see {@link MANAGED_SCHEMA_TYPES}
+ *
+ * @category Utilities
+ */
+export const MANAGED_SCHEMA_IDS = MANAGED_SCHEMA_TYPES.map((type) =>
+	getSchemaDomId({ "@type": type }),
+);
+
+/**
  * Returns the Open Graph locale for a given language code, falling back to
  * `en_US` when the language is not in the mapping.
  *
- * @param {string} lang - i18n language code (e.g. `de`)
- * @returns {string} OG locale tag (e.g. `de_DE`)
+ * @remarks
+ * Normalizes ISO 639-1 language codes into Open Graph `language_TERRITORY` tags.
+ *
+ * @param {string} lang - i18n language code (e.g. `"de"`).
+ * @returns {string} OG locale tag (e.g. `"de_DE"`).
+ *
+ * @see {@link OG_LOCALE_MAP}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```js
+ * getOgLocale("es");
+ * // returns "es_ES"
+ * ```
  */
 export const getOgLocale = (lang) => OG_LOCALE_MAP[lang] || "en_US";
 
 /**
  * Resolves the application version dynamically from the environment
- * or explicit parameter, normalizing any leading 'v' character.
+ * or explicit parameter, normalizing any leading `v` character.
  *
- * @param {string} [version] - Optional explicit version string
- * @returns {string | undefined} Normalized version string
+ * @param {string} [version] - Optional explicit version string.
+ * @returns {string | undefined} Normalized semantic version string without a leading `v`.
  */
 const resolveAppVersion = (version) => {
 	if (version) return String(version).replace(/^v/, "");
@@ -45,17 +122,27 @@ const resolveAppVersion = (version) => {
 };
 
 /**
- * Generates the full set of localized structured data for a given page.
+ * Generates the full set of localized structured data schemas for a given page.
  *
- * @param {import('i18next').TFunction} t - Translation function (i18next-compatible)
- * @param {string} lang - Current language code (e.g., 'en', 'fr')
- * @param {string} url - Current page canonical URL
- * @param {string} [version] - Optional explicit application version
- * @returns {Array<Record<string, unknown>>} Array of schema.org objects
+ * @remarks
+ * Produces `SoftwareApplication`, `Organization`, `WebSite`, and `ItemList` schemas
+ * for all routes, plus `WebPage` and `BreadcrumbList` schemas for secondary routes.
+ *
+ * @param {import('i18next').TFunction} t - Translation function (i18next-compatible).
+ * @param {string} lang - Current language code (e.g., `'en'`, `'fr'`).
+ * @param {string} url - Current page canonical URL.
+ * @param {string} [version] - Optional explicit application version.
+ * @returns {Array<Record<string, unknown>>} Array of Schema.org JSON-LD objects.
+ *
+ * @see {@link getSchemaDomId}
+ * @see {@link resolveAppVersion}
+ *
+ * @category Utilities
  *
  * @example
- * ```ts
+ * ```js
  * const schemas = getLocalizedSchema(t, "en", "https://nms-optimizer.app/");
+ * // returns [{ "@type": "SoftwareApplication", ... }, ...]
  * ```
  */
 export const getLocalizedSchema = (t, lang, url, version) => {

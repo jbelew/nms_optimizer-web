@@ -14,48 +14,33 @@ export interface MarkdownContentState {
 	error: null | string;
 	/** Whether the content is currently being retrieved. */
 	isLoading: boolean;
-	/** The raw or pre-rendered markdown string. */
+	/** The resolved markdown string from the virtual bundle. */
 	markdown: string;
-}
-
-/** Global override for the browser Window object. */
-declare global {
-	/** Standard browser Window with custom properties. */
-	interface Window {
-		/**
-		 * Global bundle used for Static Site Generation (SSG).
-		 * Contains pre-rendered markdown strings indexed by language and filename.
-		 */
-		__MARKDOWN_BUNDLE__?: Record<string, Record<string, string>>;
-	}
 }
 
 /**
  * Custom hook for retrieving markdown content from a virtual bundle.
  *
  * @remarks
- * This hook prioritizes pre-rendered markdown from the window's global bundle
- * (used for SSG) and falls back to a build-time virtual markdown bundle.
- * It automatically handles language-specific content based on the current `i18n` language.
+ * Dynamically imports the build-time `virtual:markdown-bundle` chunk on demand
+ * and resolves language-specific content based on the current `i18n` language.
  *
  * @param markdownFileName - The name of the markdown file to retrieve (without extension).
  *
  * @returns State containing the markdown content, loading status, and any errors.
  *
+ * @see {@link MarkdownContentState}
  * @see {@link import("virtual:markdown-bundle").getMarkdown} for the virtual bundle retrieval logic.
+ * @see {@link ./useMarkdownContent.test.tsx Unit Tests}
  *
  * @hook
  *
  * @category Hooks
  *
- * @example Example usage in a component
+ * @example
  * ```tsx
  * const { markdown, isLoading, error } = useMarkdownContent("about");
- *
- * if (isLoading) return <Spinner />;
- * if (error) return <ErrorMessage message={error} />;
- *
- * return <MarkdownRenderer content={markdown} />;
+ * // returns { error: null, isLoading: false, markdown: "# About..." }
  * ```
  */
 export const useMarkdownContent = (markdownFileName: string): MarkdownContentState => {
@@ -73,17 +58,7 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 				const lang = i18n.language.split("-")[0]; // Get base language e.g., 'en'
 				const langToFetch = markdownFileName === "changelog" ? "en" : lang;
 
-				// First, try to use pre-rendered markdown from SSG
-				const preRendered = window.__MARKDOWN_BUNDLE__?.[langToFetch]?.[markdownFileName];
-
-				if (preRendered) {
-					setMarkdown(preRendered);
-					setIsLoading(false);
-
-					return;
-				}
-
-				// Fallback to bundled markdown - dynamic import to avoid blocking entry
+				// Load bundled markdown via dynamic import to avoid blocking entry
 				const { getMarkdown } = await import("virtual:markdown-bundle");
 				const content = getMarkdown(langToFetch, markdownFileName);
 

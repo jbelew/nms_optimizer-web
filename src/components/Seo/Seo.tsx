@@ -5,19 +5,20 @@ import { useLocation } from "react-router-dom";
 import { sendEvent } from "@/utils/analytics/tracking";
 import { buildLocalizedPath, useSupportedLanguages } from "@/utils/system/dialogUtils";
 import { DEFAULT_BASE_URL, getPageMetadata } from "@shared/page-metadata.js";
-import { OG_LOCALE_MAP } from "@shared/seo-schema.js";
+import { getSchemaDomId, MANAGED_SCHEMA_IDS, OG_LOCALE_MAP } from "@shared/seo-schema.js";
 
 /**
  * Declarative SEO and route metadata module for React 19.
  *
  * @remarks
  * Computes unified route metadata once per navigation, hoists `<title>`, `<meta>`,
- * and `<link>` tags into `<head>`, injects JSON-LD structured data schemas,
- * synchronizes `document.documentElement.lang`, and dispatches the GA4 `page_view` event.
- *
- * @returns Hoisted document head metadata elements.
+ * and `<link>` tags into `<head>`, synchronizes JSON-LD structured data schemas in-place,
+ * updates `document.documentElement.lang`, and dispatches the GA4 `page_view` event.
  *
  * @see {@link getPageMetadata}
+ * @see {@link getSchemaDomId}
+ * @see {@link MANAGED_SCHEMA_IDS}
+ * @see {@link OG_LOCALE_MAP}
  * @see {@link buildLocalizedPath}
  * @see {@link sendEvent}
  * @see {@link ./Seo.test.tsx Unit Tests}
@@ -74,50 +75,40 @@ export const Seo: React.FC = () => {
 	}, [location.pathname, location.search, i18n.language, pageTitle]);
 
 	useEffect(() => {
-		// Clean up any existing JSON-LD schema scripts (from SSG or previous client-side routes)
-		// to prevent duplication, as React 19 handles inline scripts by appending them without deduplication.
-		const schemaIds = [
-			"software-schema",
-			"softwareapplication-schema",
-			"website-schema",
-			"webpage-schema",
-			"org-schema",
-			"organization-schema",
-			"breadcrumb-schema",
-			"breadcrumblist-schema",
-			"itemlist-schema",
-			"faqpage-schema",
-		];
-		schemaIds.forEach((id) => {
-			const el = document.getElementById(id);
+		const activeSchemaIds = new Set<string>();
 
-			if (el) {
-				el.remove();
+		// Update pre-rendered or existing JSON-LD scripts in-place when serialized content
+		// differs, or append missing ones, avoiding unnecessary DOM churn on initial boot.
+		schemas.forEach((schema) => {
+			const id = getSchemaDomId(schema);
+			const serialized = JSON.stringify(schema);
+			activeSchemaIds.add(id);
+
+			const existing = document.getElementById(id);
+
+			if (existing instanceof HTMLScriptElement) {
+				if (existing.textContent !== serialized) {
+					existing.textContent = serialized;
+				}
+			} else {
+				if (existing) {
+					existing.remove();
+				}
+
+				const script = document.createElement("script");
+				script.id = id;
+				script.type = "application/ld+json";
+				script.textContent = serialized;
+				document.head.appendChild(script);
 			}
 		});
 
-		// Inject current schemas dynamically into the document head.
-		const activeScripts: HTMLScriptElement[] = [];
-		schemas.forEach((schema) => {
-			const type = (schema as { "@type": string })["@type"];
-
-			const id = `${type?.toLowerCase()}-schema`;
-			const script = document.createElement("script");
-			script.id = id;
-			script.type = "application/ld+json";
-			script.textContent = JSON.stringify(schema);
-			document.head.appendChild(script);
-			activeScripts.push(script);
+		// Remove stale schema scripts that are not part of the active route's schemas.
+		MANAGED_SCHEMA_IDS.forEach((id) => {
+			if (!activeSchemaIds.has(id)) {
+				document.getElementById(id)?.remove();
+			}
 		});
-
-		// Cleanup inserted scripts on unmount or when schemas update
-		return () => {
-			activeScripts.forEach((script) => {
-				if (script.parentNode) {
-					script.parentNode.removeChild(script);
-				}
-			});
-		};
 	}, [schemas]);
 
 	return (

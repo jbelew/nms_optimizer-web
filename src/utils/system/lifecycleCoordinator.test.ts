@@ -160,7 +160,7 @@ describe("LifecycleCoordinator", () => {
 			expect(coordinator.isReady()).toBe(true);
 		});
 
-		it("should clean up .ssg-fallback elements from DOM on READY", () => {
+		it("should clean up .ssg-fallback elements and #ssg-fallback-styles from DOM on READY", () => {
 			const fallback1 = document.createElement("main");
 			fallback1.className = "ssg-fallback";
 			document.body.appendChild(fallback1);
@@ -169,12 +169,18 @@ describe("LifecycleCoordinator", () => {
 			fallback2.className = "ssg-fallback";
 			document.body.appendChild(fallback2);
 
+			const fallbackStyles = document.createElement("style");
+			fallbackStyles.id = "ssg-fallback-styles";
+			document.head.appendChild(fallbackStyles);
+
 			expect(document.querySelectorAll(".ssg-fallback").length).toBe(2);
+			expect(document.getElementById("ssg-fallback-styles")).not.toBeNull();
 
 			const coordinator = new LifecycleCoordinator();
 			coordinator.markReady();
 
 			expect(document.querySelectorAll(".ssg-fallback").length).toBe(0);
+			expect(document.getElementById("ssg-fallback-styles")).toBeNull();
 		});
 
 		it("should clear preload recovery marker from sessionStorage on READY and not dispatch app-ready event", () => {

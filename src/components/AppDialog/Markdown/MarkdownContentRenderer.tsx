@@ -40,14 +40,6 @@ interface MarkdownContentRendererProps {
 const LazyReactMarkdown = lazy(() => import("react-markdown"));
 
 /**
- * Lazily loaded `PrerenderedMarkdownRenderer` component.
- *
- * @remarks
- * Specifically used to render static HTML that was pre-generated during build.
- */
-const PrerenderedMarkdownRenderer = lazy(() => import("./PrerenderedMarkdownRenderer"));
-
-/**
  * Context to share the ID generation logic for h2 headings.
  *
  * @remarks
@@ -464,19 +456,15 @@ const MARKDOWN_COMPONENTS = {
  *
  * @remarks
  * This component acts as a high-level manager for markdown content. It supports:
- * - **Hybrid Rendering:** Prioritizes SSR/SSG pre-rendered content but can fall back to client-side parsing.
+ * - **Lazy Client Rendering:** Parses bundled markdown content on-demand via `react-markdown`.
  * - **Theming:** Maps standard markdown elements (h2, p, a, etc.) to themed Radix UI components for design consistency.
  * - **Custom Extensions:** Supports shortcodes like `[youtube:id]` and `<radix-icon />`.
  * - **Deep Linking:** Automatically scrolls to the heading specified by `targetSectionId`.
  *
- * @param props - Component properties.
- *
- * @returns The rendered article containing the markdown.
- *
+ * @see {@link MarkdownContentRendererProps}
  * @see {@link useMarkdownContent}
  * @see {@link DynamicRadixIcon}
  * @see {@link LoremIpsumSkeleton}
- * @see {@link PrerenderedMarkdownRenderer}
  * @see {@link ./MarkdownContentRenderer.test.tsx Unit Tests}
  *
  * @component
@@ -489,15 +477,13 @@ const MARKDOWN_COMPONENTS = {
  *   markdownFileName="about"
  *   targetSectionId="section-2"
  * />
+ * // mounts MarkdownContentRenderer
  * ```
  */
 export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 	markdownFileName,
 	targetSectionId,
 }) => {
-	// Check if pre-rendered content is available in the page
-	const [hasPrerendered, setHasPrerendered] = useState(false);
-
 	// Always call hooks at the top level
 	const { error, isLoading, markdown } = useMarkdownContent(markdownFileName);
 	const [remarkGfm, setRemarkGfm] = useState<(() => void) | undefined>(undefined);
@@ -506,16 +492,6 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
 	const h2IdMapRef = useRef(new Map<React.ReactNode, string>());
 
 	const articleRef = useRef<HTMLElement>(null);
-
-	useEffect(() => {
-		const prerenderedElement = document.querySelector('[data-prerendered-markdown="true"]');
-
-		if (prerenderedElement) {
-			setTimeout(() => {
-				setHasPrerendered(true);
-			}, 0);
-		}
-	}, []);
 
 	useEffect(() => {
 		import("remark-gfm").then((module) => {
@@ -602,15 +578,6 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
 
 	if (error) {
 		return <div>Error: {error}</div>;
-	}
-
-	// If pre-rendered content exists, use it
-	if (hasPrerendered) {
-		return (
-			<Suspense fallback={<LoremIpsumSkeleton />}>
-				<PrerenderedMarkdownRenderer targetSectionId={targetSectionId} />
-			</Suspense>
-		);
 	}
 
 	return (

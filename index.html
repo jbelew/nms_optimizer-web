@@ -1,9 +1,19 @@
 <!doctype html>
-<html lang="en" class="dark" style="color-scheme: dark">
+<html
+	lang="en"
+	class="dark"
+	style="color-scheme: dark"
+>
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-		<meta name="theme-color" content="#003848" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+		/>
+		<meta
+			name="theme-color"
+			content="#003848"
+		/>
 		<!--
 ███╗   ██╗███╗   ███╗███████╗     ██████╗ ██████╗ ████████╗██╗███╗   ███╗██╗███████╗███████╗██████╗
 ████╗  ██║████╗ ████║██╔════╝    ██╔═══██╗██╔══██╗╚══██╔══╝██║████╗ ████║██║╚══███╔╝██╔════╝██╔══██╗
@@ -20,193 +30,197 @@
 		<script>
 			(function () {
 				function purgeWorkersAndCaches() {
-					const unregisterWorkers = ("serviceWorker" in navigator)
-						? navigator.serviceWorker.getRegistrations().then(function (regs) {
-								if (regs && regs.length > 0) {
-									return Promise.all(regs.map(function (r) { return r.unregister(); }));
-								}
-								return Promise.resolve();
-						  }).catch(function () {})
-						: Promise.resolve();
-					const clearCaches = ("caches" in window)
-						? caches.keys().then(function (names) {
-								return Promise.all(names.map(function (n) { return caches.delete(n); }));
-						  }).catch(function () {})
-						: Promise.resolve();
+					const unregisterWorkers =
+						"serviceWorker" in navigator ?
+							navigator.serviceWorker
+								.getRegistrations()
+								.then(function (regs) {
+									if (regs && regs.length > 0) {
+										return Promise.all(
+											regs.map(function (r) {
+												return r.unregister();
+											}),
+										);
+									}
+									return Promise.resolve();
+								})
+								.catch(function () {})
+						:	Promise.resolve();
+					const clearCaches =
+						"caches" in window ?
+							caches
+								.keys()
+								.then(function (names) {
+									return Promise.all(
+										names.map(function (n) {
+											return caches.delete(n);
+										}),
+									);
+								})
+								.catch(function () {})
+						:	Promise.resolve();
 					return Promise.all([unregisterWorkers, clearCaches]);
 				}
-
-				const MARKER = "__preload_recovery__";
-				let recoveryInProgress = false;
 
 				function buildCacheBustUrl() {
 					const search = window.location.search || "";
 					const sep = search ? "&" : "?";
 					return (
-						window.location.pathname +
-						search +
-						sep +
-						"_cb=" +
-						Date.now() +
-						(window.location.hash || "")
+						window.location.pathname
+						+ search
+						+ sep
+						+ "_cb="
+						+ Date.now()
+						+ (window.location.hash || "")
 					);
 				}
 
-				function handleStaleChunkError(payloadMessage) {
-					if (recoveryInProgress) return;
-					recoveryInProgress = true;
-					try {
-						const prev = parseInt(
-							sessionStorage.getItem("__recovery_attempts__") || "0",
-							10
-						);
-						sessionStorage.setItem("__recovery_attempts__", String(prev + 1));
-					} catch (e) {}
+				function initPreloadErrorRecovery() {
+					const MARKER = "__preload_recovery__";
+					let recoveryInProgress = false;
 
-					let firstAttempt = false;
-					try {
-						if (!sessionStorage.getItem(MARKER)) {
-							sessionStorage.setItem(MARKER, "1");
-							firstAttempt = true;
-						}
-					} catch (e) {}
+					function handleStaleChunkError(payloadMessage) {
+						if (recoveryInProgress) return;
+						recoveryInProgress = true;
+						try {
+							const prev = parseInt(
+								sessionStorage.getItem("__recovery_attempts__") || "0",
+								10,
+							);
+							sessionStorage.setItem("__recovery_attempts__", String(prev + 1));
+						} catch (e) {}
 
-					if (firstAttempt) {
-						const reloadUrl = buildCacheBustUrl();
-						let reloaded = false;
-						const doReload = () => {
-							if (!reloaded) {
-								reloaded = true;
-								window.location.replace(reloadUrl);
+						let firstAttempt = false;
+						try {
+							if (!sessionStorage.getItem(MARKER)) {
+								sessionStorage.setItem(MARKER, "1");
+								firstAttempt = true;
 							}
-						};
-						setTimeout(doReload, 500);
-						purgeWorkersAndCaches().then(doReload);
-						return;
-					}
+						} catch (e) {}
 
-					try {
-						sessionStorage.removeItem(MARKER);
-					} catch (e) {}
-					let errorUrl = "/500.html?error_type=stale_chunk";
-					if (payloadMessage)
-						errorUrl += "&error_cause=" + encodeURIComponent(payloadMessage);
-					window.location.replace(errorUrl);
-				}
-
-				window.addEventListener("vite:preloadError", (e) => {
-					e.preventDefault();
-					handleStaleChunkError(e.payload && e.payload.message);
-				});
-
-				// E2E Test hook for deterministic error triggering.
-				// Fire synchronously so the recovery wins the race against
-				// readiness initialization (which clears the recovery marker on boot).
-				try {
-					if (sessionStorage.getItem("__TEST_TRIGGER_ERROR__")) {
-						sessionStorage.removeItem("__TEST_TRIGGER_ERROR__");
-						handleStaleChunkError("TEST_TRIGGERED_ERROR");
-					}
-				} catch (e) {}
-
-				window.addEventListener(
-					"error",
-					(e) => {
-						const msg = (e.message || "").toLowerCase();
-						const isModuleError = /importing|resolving|dynamically imported/i.test(msg);
-						const src = e.target && e.target.src ? e.target.src : "";
-						if (
-							isModuleError ||
-							(e.target && e.target.nodeName === "SCRIPT" && src.includes("/build/"))
-						) {
-							e.preventDefault();
-							handleStaleChunkError(e.message || "Script load error");
+						if (firstAttempt) {
+							const reloadUrl = buildCacheBustUrl();
+							let reloaded = false;
+							const doReload = () => {
+								if (!reloaded) {
+									reloaded = true;
+									window.location.replace(reloadUrl);
+								}
+							};
+							setTimeout(doReload, 500);
+							purgeWorkersAndCaches().then(doReload);
+							return;
 						}
-					},
-					true
-				);
 
-				// Resource Preloading
-				const supportedLngs = ["en", "es", "fr", "de", "pt", "it"];
-				const detectedLng = supportedLngs.includes(window.location.pathname.split("/")[1])
-					? window.location.pathname.split("/")[1]
-					: "en";
-				const apiUrl = "https://api.nms-optimizer.app";
+						try {
+							sessionStorage.removeItem(MARKER);
+						} catch (e) {}
+						let errorUrl = "/500.html?error_type=stale_chunk";
+						if (payloadMessage)
+							errorUrl += "&error_cause=" + encodeURIComponent(payloadMessage);
+						window.location.replace(errorUrl);
+					}
 
-				const preload = (href, as, type) => {
-					const link = document.createElement("link");
-					link.rel = "preload";
-					link.as = as;
-					link.href = href;
-					link.crossOrigin = "anonymous";
-					link.setAttribute("fetchpriority", "high");
-					if (type) link.type = type;
-					document.head.appendChild(link);
-				};
+					window.addEventListener("vite:preloadError", (e) => {
+						e.preventDefault();
+						handleStaleChunkError(e.payload && e.payload.message);
+					});
 
-				preload(
-					"/assets/locales/" + detectedLng + "/translation.json",
-					"fetch",
-					"application/json"
-				);
-				preload(apiUrl + "/platforms", "fetch");
+					// E2E Test hook for deterministic error triggering.
+					// Fire synchronously so the recovery wins the race against
+					// readiness initialization (which clears the recovery marker on boot).
+					try {
+						if (sessionStorage.getItem("__TEST_TRIGGER_ERROR__")) {
+							sessionStorage.removeItem("__TEST_TRIGGER_ERROR__");
+							handleStaleChunkError("TEST_TRIGGERED_ERROR");
+						}
+					} catch (e) {}
 
-				let platform = "standard";
-				try {
-					platform =
-						new URLSearchParams(window.location.search).get("platform") ||
-						localStorage.getItem("selectedPlatform") ||
-						"standard";
-				} catch (e) {}
-				preload(apiUrl + "/tech_tree/" + encodeURIComponent(platform), "fetch");
-
-				// Environment Detection
-				const botPattern =
-					/bot|crawler|spider|headless|phantom|webdriver|googlebot|google-inspectiontool|lighthouse|chrome-lighthouse/i;
-				const botBrandPattern = /headless|lighthouse|phantom|webdriver/i;
-				const hasBotBrand =
-					navigator.userAgentData &&
-					Array.isArray(navigator.userAgentData.brands) &&
-					navigator.userAgentData.brands.some(
-						(b) => b && botBrandPattern.test(b.brand || "")
+					window.addEventListener(
+						"error",
+						(e) => {
+							const msg = (e.message || "").toLowerCase();
+							const isModuleError = /importing|resolving|dynamically imported/i.test(
+								msg,
+							);
+							const src = e.target && e.target.src ? e.target.src : "";
+							if (
+								isModuleError
+								|| (e.target
+									&& e.target.nodeName === "SCRIPT"
+									&& src.includes("/build/"))
+							) {
+								e.preventDefault();
+								handleStaleChunkError(e.message || "Script load error");
+							}
+						},
+						true,
 					);
-				if (
-					botPattern.test(navigator.userAgent) ||
-					navigator.webdriver === true ||
-					hasBotBrand
-				) {
-					document.documentElement.classList.add("is-bot", "background-visible");
 				}
-				document.documentElement.classList.add("js-enabled");
+
+				function preloadCriticalResources() {
+					const supportedLngs = ["en", "es", "fr", "de", "pt", "it"];
+					const pathSegment = window.location.pathname.split("/")[1];
+					const detectedLng = supportedLngs.includes(pathSegment) ? pathSegment : "en";
+					const rawApiUrl = "%VITE_API_URL%";
+					const apiUrl = (
+						rawApiUrl && !rawApiUrl.startsWith("%") ?
+							rawApiUrl
+						:	"https://api.nms-optimizer.app").replace(/\/+$/, "");
+
+					const preload = (href, as, type) => {
+						const link = document.createElement("link");
+						link.rel = "preload";
+						link.as = as;
+						link.href = href;
+						link.crossOrigin = "anonymous";
+						link.setAttribute("fetchpriority", "high");
+						if (type) link.type = type;
+						document.head.appendChild(link);
+					};
+
+					preload(
+						"/assets/locales/" + detectedLng + "/translation.json",
+						"fetch",
+						"application/json",
+					);
+					preload(apiUrl + "/platforms", "fetch");
+
+					let platform = "standard";
+					try {
+						platform =
+							new URLSearchParams(window.location.search).get("platform")
+							|| localStorage.getItem("selectedPlatform")
+							|| "standard";
+					} catch (e) {}
+					preload(apiUrl + "/tech_tree/" + encodeURIComponent(platform), "fetch");
+				}
+
+				function applyEnvironmentClasses() {
+					const botPattern =
+						/bot|crawl|spider|slurp|mediapartners|facebookexternalhit|ia_archiver|googlebot|google-inspectiontool|adsbot-google|apis-google|lighthouse|chrome-lighthouse|pingdom|uptime|speedcurve|headless|phantom|webdriver|pinterest|whatsapp|twitterbot|linkedinbot|embedly|quora|outbrain|rogerbot|bufferbot|duckduckbot|semrushbot|ahrefsbot|mj12bot|dotbot|archive\.org|baidu/i;
+					const botBrandPattern = /headless|lighthouse|phantom|webdriver/i;
+					const hasBotBrand =
+						navigator.userAgentData
+						&& Array.isArray(navigator.userAgentData.brands)
+						&& navigator.userAgentData.brands.some(
+							(b) => b && botBrandPattern.test(b.brand || ""),
+						);
+					if (
+						botPattern.test(navigator.userAgent)
+						|| navigator.webdriver === true
+						|| hasBotBrand
+					) {
+						document.documentElement.classList.add("is-bot", "background-visible");
+					}
+					document.documentElement.classList.add("js-enabled");
+				}
+
+				initPreloadErrorRecovery();
+				preloadCriticalResources();
+				applyEnvironmentClasses();
 			})();
 		</script>
-
-		<noscript data-vpss-background-noscript="">
-			<style>
-				body::before {
-					content: "";
-					position: fixed;
-					top: 0;
-					left: 0;
-					width: 100%;
-					height: 100%;
-					background-color: #082c36;
-					background-position: center;
-					background-repeat: no-repeat;
-					background-size: cover;
-					z-index: -1;
-				}
-				@media (min-width: 640px) {
-					body::before {
-						background-color: #000;
-						background-image: image-set(
-							url("/assets/img/background.webp") 1x,
-							url("/assets/img/background@2x.webp") 2x
-						);
-					}
-				}
-			</style>
-		</noscript>
 
 		<title>No Man's Sky Tech Layout &amp; Adjacency Calculator | NMS Optimizer</title>
 		<meta
@@ -219,10 +233,22 @@
 		/>
 
 		<!-- Canonical & Social Metadata -->
-		<link rel="canonical" href="https://nms-optimizer.app/" />
-		<meta property="og:url" content="https://nms-optimizer.app/" />
-		<meta property="og:type" content="website" />
-		<meta property="og:site_name" content="NMS Optimizer" />
+		<link
+			rel="canonical"
+			href="https://nms-optimizer.app/"
+		/>
+		<meta
+			property="og:url"
+			content="https://nms-optimizer.app/"
+		/>
+		<meta
+			property="og:type"
+			content="website"
+		/>
+		<meta
+			property="og:site_name"
+			content="NMS Optimizer"
+		/>
 		<meta
 			property="og:title"
 			content="No Man's Sky Tech Layout &amp; Adjacency Calculator | NMS Optimizer"
@@ -235,14 +261,26 @@
 			property="og:image"
 			content="https://nms-optimizer.app/assets/img/screenshots/screenshot.webp"
 		/>
-		<meta property="og:image:type" content="image/webp" />
+		<meta
+			property="og:image:type"
+			content="image/webp"
+		/>
 		<meta
 			property="og:image:alt"
-			content="A detailed screenshot of the NMS Optimizer application, showing an optimized technology grid with high adjacency bonuses."
+			content="A detailed screenshot of the NMS Optimizer application showing an optimized technology grid with high adjacency bonuses."
 		/>
-		<meta property="og:image:width" content="1280" />
-		<meta property="og:image:height" content="880" />
-		<meta name="twitter:card" content="summary_large_image" />
+		<meta
+			property="og:image:width"
+			content="1280"
+		/>
+		<meta
+			property="og:image:height"
+			content="880"
+		/>
+		<meta
+			name="twitter:card"
+			content="summary_large_image"
+		/>
 		<meta
 			name="twitter:title"
 			content="No Man's Sky Tech Layout &amp; Adjacency Calculator | NMS Optimizer"
@@ -257,14 +295,28 @@
 		/>
 		<meta
 			name="twitter:image:alt"
-			content="A detailed screenshot of the NMS Optimizer application, showing an optimized technology grid with high adjacency bonuses."
+			content="A detailed screenshot of the NMS Optimizer application showing an optimized technology grid with high adjacency bonuses."
 		/>
 
 		<!-- Resource Hints -->
-		<link rel="dns-prefetch" href="https://api.nms-optimizer.app" />
-		<link rel="dns-prefetch" href="https://static.cloudflareinsights.com" />
-		<link rel="preconnect" href="https://api.nms-optimizer.app" crossorigin="" />
-		<link rel="preconnect" href="https://www.google-analytics.com" crossorigin="" />
+		<link
+			rel="dns-prefetch"
+			href="https://api.nms-optimizer.app"
+		/>
+		<link
+			rel="dns-prefetch"
+			href="https://static.cloudflareinsights.com"
+		/>
+		<link
+			rel="preconnect"
+			href="https://api.nms-optimizer.app"
+			crossorigin=""
+		/>
+		<link
+			rel="preconnect"
+			href="https://www.google-analytics.com"
+			crossorigin=""
+		/>
 
 		<!-- Favicons -->
 		<link
@@ -330,7 +382,10 @@
 			fetchpriority="low"
 		/>
 
-		<link rel="stylesheet" href="/src/assets/css/fonts.css" />
+		<link
+			rel="stylesheet"
+			href="/src/assets/css/fonts.css"
+		/>
 
 		<style>
 			/* App Base & Reset */
@@ -341,24 +396,17 @@
 			}
 			body {
 				background-color: transparent;
+				display: flow-root;
 				margin: 0;
 			}
-			body.vpss-active {
-				overflow: hidden;
-			}
-
-			/* Theme & Visibility */
 			html.background-visible:is(.dark, .dark-theme) {
 				background: transparent !important;
 			}
-			html:is(.light, .light-theme) body::before {
-				background-image: none !important;
-				background-color: #fff !important;
-			}
 
-			/* Fallback Management */
+			/* Fallback & Splash Management */
 			html.js-enabled:not(.is-bot) .ssg-fallback,
-			html.is-bot .ssg-fallback main {
+			html.is-bot .ssg-fallback main,
+			.is-bot #vpss {
 				display: none !important;
 			}
 			.vpss-logo img,
@@ -368,10 +416,31 @@
 				display: block;
 				margin-bottom: 4px;
 			}
-			.is-bot #vpss {
-				display: none !important;
-			}
 		</style>
+
+		<noscript data-vpss-background-noscript="">
+			<style>
+				html {
+					background: transparent;
+				}
+				body {
+					background-color: #082c36;
+					background-position: center;
+					background-repeat: no-repeat;
+					background-size: cover;
+				}
+				@media (width >= 640px) {
+					body {
+						background-color: #000;
+						background-image: image-set(
+							url("/assets/img/background.webp") 1x,
+							url("/assets/img/background@2x.webp") 2x
+						);
+						background-attachment: fixed;
+					}
+				}
+			</style>
+		</noscript>
 
 		<style id="ssg-fallback-styles">
 			/* Static Header (SEO Only) */
@@ -390,6 +459,7 @@
 				font-weight: 400;
 				letter-spacing: 0.35em;
 				line-height: 2rem;
+				margin-bottom: 4px;
 				margin-right: -0.35em;
 				text-align: center;
 				-webkit-text-stroke: 2.5px;
@@ -425,6 +495,9 @@
 				line-height: 22px;
 				text-align: center;
 				margin: 4px 0 0;
+			}
+			.app-header-static__title span {
+				color: #4ccce6;
 			}
 
 			/* SSG Fallback Layout */
@@ -492,6 +565,26 @@
 				font-style: italic;
 				color: #cbd5e1;
 			}
+			.ssg-fallback pre {
+				background-color: #1e293b;
+				padding: 1rem;
+				border-radius: 0.25rem;
+				overflow-x: auto;
+			}
+			.ssg-fallback hr {
+				border: none;
+				border-top: 1px solid #444;
+				margin: 1rem 0;
+			}
+			.ssg-fallback table {
+				width: 100%;
+				border-collapse: collapse;
+				border: 1px solid #444;
+			}
+			.ssg-fallback img {
+				max-width: 100%;
+				height: auto;
+			}
 			.ssg-fallback nav {
 				margin-top: 2rem;
 				padding-top: 1rem;
@@ -500,29 +593,113 @@
 		</style>
 
 		<!-- Application Boot (Critical Path) -->
-		<script type="module" src="/src/main.tsx" fetchpriority="high"></script>
+		<script
+			type="module"
+			src="/src/main.tsx"
+			fetchpriority="high"
+		></script>
 	</head>
 
 	<body>
 		<div id="root"></div>
 
-		<div class="ssg-fallback" data-ssg-template="">
-			<header class="app-header-static" role="banner">
+		<div
+			class="ssg-fallback"
+			data-ssg-template=""
+		>
+			<header
+				class="app-header-static"
+				role="banner"
+			>
 				<div
 					class="app-header-static__logo-text"
 					role="img"
 					aria-label="No Man's Sky Logo"
-					style="margin-bottom: 4px"
 				>
 					NO MAN'S SKY
 				</div>
-				<div class="app-header-static__separator-container" aria-hidden="true">
+				<div
+					class="app-header-static__separator-container"
+					aria-hidden="true"
+				>
 					<span class="app-header-static__separator"></span>
-					<img alt="" width="16" height="20" src="/assets/img/nms-icon.webp" />
+					<svg
+						width="16"
+						height="20"
+						viewBox="10 20 180 280"
+						xmlns="http://www.w3.org/2000/svg"
+						aria-hidden="true"
+					>
+						<defs>
+							<linearGradient
+								id="ssg-atlas"
+								x1="0%"
+								y1="0%"
+								x2="100%"
+								y2="0%"
+							>
+								<stop
+									offset="0%"
+									stop-color="#ff0000"
+								/>
+								<stop
+									offset="100%"
+									stop-color="#9b0000"
+								/>
+							</linearGradient>
+						</defs>
+						<polygon
+							points="100,20 190,130 100,300"
+							fill="#000"
+							stroke="#000"
+							stroke-width="1"
+							stroke-linecap="round"
+						/>
+						<circle
+							cx="100"
+							cy="130"
+							r="45"
+							fill="url(#ssg-atlas)"
+							stroke-width="6"
+							stroke-miterlimit="10"
+						/>
+						<polygon
+							points="100,32 180,130 100,110"
+							fill="#fff"
+							stroke="#fff"
+							stroke-width="1"
+							stroke-linecap="round"
+						/>
+						<line
+							x1="185"
+							y1="132"
+							x2="100"
+							y2="110"
+							fill="#000"
+							stroke="#000"
+							stroke-width="6"
+							stroke-miterlimit="10"
+							stroke-linecap="round"
+						/>
+						<polygon
+							points="100,20 10,130 100,300"
+							fill="#000"
+							stroke="#000"
+							stroke-width="1"
+							stroke-linecap="round"
+						/>
+						<path
+							d="M100,20 L190,130 L100,300 L10,130 Z"
+							fill="none"
+							stroke="#fff"
+							stroke-width="4"
+							stroke-linecap="round"
+						/>
+					</svg>
 					<span class="app-header-static__separator"></span>
 				</div>
 				<div class="app-header-static__title">
-					Technology Layout Optimizer <span style="color: #4ccce6">ML/RUST</span>
+					Technology Layout Optimizer <span>ML/RUST</span>
 				</div>
 			</header>
 			<!-- SSG content and navigation are injected here during the build process -->
