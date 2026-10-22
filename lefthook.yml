@@ -81,29 +81,27 @@ pre-push:
 
           - name: format
             tags: [format]
-            glob: "{src/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},src/**/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},AGENTS.md,GEMINI.md,GLOSSARY.md,README.md,docs/agents/**/*.md,public/assets/**/*.md,public/assets/locales/**/*.json}"
-            run: bunx prettier --cache --cache-location node_modules/.cache/prettier/.prettier-cache --check {push_files}
+            run: bun run format:check
 
           - name: typecheck
             tags: [types]
-            glob: "{src/*.{ts,tsx},src/**/*.{ts,tsx},shared/**/*.{ts,tsx},tsconfig*.json,package.json,vite.config.ts}"
             run: bun run typecheck
 
           - name: knip
             tags: [lint]
-            glob: "{src/*.{ts,tsx,js,mjs,cjs},src/**/*.{ts,tsx,js,mjs,cjs},shared/**/*.{ts,tsx,js,mjs,cjs},scripts/**/*.{ts,tsx,js,mjs,cjs},package.json,knip*}"
             run: bun run lint:knip
 
           - name: circular
             tags: [lint]
-            glob: "{src/*.{ts,tsx},src/**/*.{ts,tsx},tsconfig*.json}"
             run: bun run lint:circular
 
           - name: lint
             tags: [lint]
-            glob: "*.{js,jsx,ts,tsx,cjs,mjs}"
-            exclude: "*.d.ts"
-            run: bunx oxlint {push_files} && bunx eslint --cache --cache-location node_modules/.cache/eslint/.eslintcache {push_files}
+            run: bun run lint
+
+          - name: lint-css
+            tags: [lint]
+            run: bun run lint:css
 
           - name: test
             tags: [test]
