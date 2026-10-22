@@ -11,7 +11,7 @@ NMS Optimizer Web is a React-based frontend application for optimizing technolog
 
 ## Pre-Refactor Baseline Gate (Before Editing Code)
 
-Before modifying any source files in a multi-file refactor (including `/improve-codebase-architecture` deepenings, store/hook consolidations, UI, layout, routing, bootstrap, or bundle changes), capture a baseline performance & bundle check (`bun run build && bun run perf:check`, plus a Lighthouse / Web Vitals baseline audit against `bun run preview` when touching UI, layout, routing, bootstrap, or bundle chunks; see [`docs/agents/testing.md`](docs/agents/testing.md)).
+Before modifying any source files in a multi-file refactor, run `bun run perf:baseline` to record the pre-refactor bundle sizes and Desktop/Mobile Lighthouse Web Vitals to `/tmp/nms-perf-baseline.json`.
 
 ## Verification Gate (Definition of Done)
 
@@ -20,7 +20,7 @@ Before marking any code task complete, execute this sequence (also enforced auto
 1. `bun run typecheck` — Must report 0 TypeScript diagnostics (`tsgo`).
 2. `bun run test -- <path>` or `bun run test:related` — Ensure targeted unit/component tests pass.
 3. `bun run lint` — Must report 0 oxlint/ESLint errors (use `bunx eslint --fix <touched-files>` to auto-fix `perfectionist` sorting).
-4. **Post-Refactor Validation**: Re-run `bun run build && bun run perf:check` (and the validation Lighthouse / Web Vitals audit against `bun run preview` after purging Service Worker / Cache Storage) to confirm zero regressions in bundle size, Performance score, CLS, LCP, and TBT (see [`docs/agents/testing.md`](docs/agents/testing.md)).
+4. **Post-Refactor Validation**: Run `bun run perf:compare` (or `bun run perf:compare <base-git-ref>` if `/tmp/nms-perf-baseline.json` was not captured beforehand) and **include the generated Before vs. After Bundle Size and Desktop/Mobile Lighthouse Markdown tables in your response to the user**.
 
 ## Key Commands & Gotchas
 

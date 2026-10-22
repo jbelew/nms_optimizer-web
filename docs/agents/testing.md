@@ -4,7 +4,8 @@ Best practices for unit, component, and integration tests in the NMS Optimizer W
 
 ## Test Environment
 
-- **Framework**: Vitest + React Testing Library (configured in [`vitest.config.ts`](file:///home/jbelew/projects/nms_optimizer-web/vitest.config.ts)).
+- **Application Tests (`src/`)**: Vitest + React Testing Library (configured in [`vitest.config.ts`](file:///home/jbelew/projects/nms_optimizer-web/vitest.config.ts)).
+- **Build & Utility Script Tests (`scripts/*.test.mjs`)**: Bun test runner (`bun run test:scripts` using `bun:test`).
 
 ## Testing Conventions
 
@@ -30,14 +31,10 @@ Best practices for unit, component, and integration tests in the NMS Optimizer W
 
 ## Live Chrome Debugging & Lighthouse Audits (WSL2)
 
-- **Refactor Baseline & Validation Gate**:
-    - Before editing source files in any multi-file refactor (including `/improve-codebase-architecture` deepenings, store/hook consolidations, UI, layout, routing, bootstrap, or bundle changes), build the production bundle (`bun run build`), run `bun run perf:check`, start the preview server (`bun run preview -- --host 127.0.0.1 --port 4173`), and capture a baseline Lighthouse / Web Vitals audit (desktop and mobile) in Chrome.
-    - Upon completing the refactor, rebuild (`bun run build`), run `bun run perf:check`, purge the preview Service Worker and Cache Storage, and run a validation Lighthouse audit to confirm zero regressions in bundle size, Performance score, CLS (`0`), LCP, and TBT before committing. Only stop the preview server after validation completes.
+- **Direct Lighthouse CLI in WSL2**: Prefer `bun run perf:baseline` and `bun run perf:compare` ([`scripts/performance-check.mjs`](file:///home/jbelew/projects/nms_optimizer-web/scripts/performance-check.mjs)). When invoking `lighthouse` directly, always run `unset LOCALAPPDATA APPDATA` and pass an isolated `--user-data-dir=/tmp/lh-profile` so `chrome-launcher` does not create Windows-path folders in the repo root or reuse a cached Workbox Service Worker.
 - **Connecting `chrome-devtools-mcp` (`browser` subagent) to Windows Chrome in WSL2**:
     - `chrome-devtools-mcp` (`--autoConnect`) reads `/home/jbelew/.config/google-chrome/DevToolsActivePort` on Linux, whereas Windows Chrome writes `/mnt/c/Users/John Belew/AppData/Local/Google/Chrome/User Data/DevToolsActivePort`.
     - Copy the file as a regular file before invoking the `browser` subagent (a symlink is rejected by `chrome-devtools-mcp`):
         ```bash
         mkdir -p ~/.config/google-chrome && cp "/mnt/c/Users/John Belew/AppData/Local/Google/Chrome/User Data/DevToolsActivePort" ~/.config/google-chrome/DevToolsActivePort
         ```
-- **Purging Service Worker & Cache Storage Between Rebuilds**:
-    - `http://127.0.0.1:4173/` registers a Workbox Service Worker (`workbox-precache-v2`). After any `bun run build`, unregister all Service Workers (`navigator.serviceWorker.getRegistrations()`) and delete all `caches.keys()` in the preview tab before reloading so Chrome audits the fresh bundle rather than precached assets.
