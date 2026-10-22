@@ -343,19 +343,17 @@ export const TechTreeRow = React.memo(({ tech, techColor, techImage }: TechTreeR
 				srcSet={`${imagePath} 1x, ${imagePath2x} 2x`}
 			/>
 
-			<div className="grid flex-1 grid-cols-[1fr_auto] items-center gap-2">
-				<div className="flex items-center justify-start">
-					<Text
-						as="div"
-						className="techRow__label block flex-1 leading-snug! sm:leading-tight!"
-						size={isSmallAndUp ? "3" : "2"}
-						trim="both"
-						weight="medium"
-						wrap="balance"
-					>
-						{translatedTechName}
-					</Text>
-				</div>
+			<div className="grid min-w-0 flex-1 grid-cols-[1fr_auto] items-center gap-2">
+				<Text
+					as="div"
+					className="techRow__label min-w-0 leading-snug! wrap-break-word hyphens-auto sm:leading-tight!"
+					size={isSmallAndUp ? "3" : "2"}
+					trim="both"
+					weight="medium"
+					wrap="pretty"
+				>
+					{translatedTechName}
+				</Text>
 
 				<div className="flex items-center justify-end gap-1">
 					{hasTechInGrid && modules.length > 1 && (
