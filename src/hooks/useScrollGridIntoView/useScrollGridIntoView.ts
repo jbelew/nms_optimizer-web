@@ -25,7 +25,7 @@ let sharedForceShow: (() => void) | null = null;
  *
  * @returns Side-effects only.
  *
- * @see {@link import('@/hooks/useScrollHide/useScrollHide').useScrollHide} for the source of the `forceShow` callback.
+ * @see {@link useScrollHide} for the source of the `forceShow` callback.
  *
  * @example Callback registration
  * ```ts

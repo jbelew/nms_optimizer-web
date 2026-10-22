@@ -1,7 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import type { Mock } from "vitest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { deserialize, serialize } from "@/hooks/useGridDeserializer/gridSerializer";
@@ -26,7 +25,7 @@ describe("useGridDeserializer Integration", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		// Setup the mock to return data that matches the expected ship type in the fixture
-		(useTechTree.fetchTechTreeAsync as Mock).mockResolvedValue({
+		vi.mocked(useTechTree.fetchTechTreeAsync).mockResolvedValue({
 			aqua: [{ color: "#777777", key: "aqua", modules: [{ id: "AJ" }] }],
 			cargo_scanner: [{ color: "#333333", key: "cargo_scanner", modules: [{ id: "CD" }] }],
 			ceto: [{ color: "#222222", key: "ceto", modules: [{ id: "Cb" }, { id: "Ca" }] }],
@@ -138,7 +137,7 @@ describe("useGridDeserializer Integration", () => {
 					],
 				},
 			],
-		});
+		} as unknown as Awaited<ReturnType<typeof useTechTree.fetchTechTreeAsync>>);
 	});
 
 	it("should correctly serialize and deserialize a grid state from the .nms fixture", async () => {
@@ -179,9 +178,9 @@ describe("useGridDeserializer Integration", () => {
 
 	it("should handle partial or missing tech tree data gracefully during deserialization", async () => {
 		// Mocking a scenario where some tech categories are missing
-		(useTechTree.fetchTechTreeAsync as Mock).mockResolvedValue({
+		vi.mocked(useTechTree.fetchTechTreeAsync).mockResolvedValue({
 			cockpit: [{ color: "#FF0000", key: "cockpit", modules: [{ id: "CP" }] }],
-		});
+		} as unknown as Awaited<ReturnType<typeof useTechTree.fetchTechTreeAsync>>);
 
 		const originalGrid = nmsFixture.gridState.grid;
 		const serialized = serialize(originalGrid);

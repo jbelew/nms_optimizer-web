@@ -8,7 +8,7 @@ Best practices for unit, component, and integration tests in the NMS Optimizer W
 
 ## Testing Conventions
 
-- **Mocking**: Mock external dependencies (such as `i18next` and API calls). Use `vi.mock()` for module-level mocks.
+- **Mocking**: Mock external dependencies (such as `i18next` and API calls). Use `vi.mock()` for module-level mocks and `vi.mocked(fn)` for typed mock access (never cast mocked functions with `as Mock` or `as unknown as ...`). For partial test fixtures, read [`.agents/skills/migrate-to-shoehorn/SKILL.md`](../../.agents/skills/migrate-to-shoehorn/SKILL.md).
 - **Console Logs**: Avoid using console logs in test files to prevent RPC teardown errors during parallel runs.
 
 ## Storybook Testing & Builds

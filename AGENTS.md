@@ -7,7 +7,7 @@ NMS Optimizer Web is a React-based frontend application for optimizing technolog
 - **Package Manager**: Exclusively use **Bun** (version 1.2.0+). Always invoke scripts with `bun`.
 - **Strict TypeScript**: Write explicit types, interfaces, and discriminated unions. The `any` type is strictly prohibited.
 - **Zero Linter Suppressions**: Resolve underlying type or logic issues; inline `eslint-disable` comments are disallowed.
-- **Documentation**: Document all exported and top-level declarations, public APIs, functions, and complex utilities with JSDoc (conforming to the `agentic-jsdoc` skill; omit redundant `{type}` annotations on `@param` and `@returns` in `.ts`/`.tsx` files).
+- **Documentation**: Document all exported and top-level declarations, public APIs, functions, hooks, stores, and React components with JSDoc; read [`.agents/skills/agentic-jsdoc/SKILL.md`](.agents/skills/agentic-jsdoc/SKILL.md) and [`.agents/skills/agentic-jsdoc/reference/react.md`](.agents/skills/agentic-jsdoc/reference/react.md) when writing or updating JSDoc.
 
 ## Pre-Refactor Baseline Gate (Before Editing Code)
 

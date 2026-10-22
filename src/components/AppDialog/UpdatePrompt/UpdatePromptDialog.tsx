@@ -112,10 +112,10 @@ export const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onDismiss, onRefre
  *
  * @remarks
  * Listens for the `"new-version-available"` custom event on `window`, dynamically
- * imports {@link import('@/utils/system/setupServiceWorker').verifyStagedUpdateFreshness}
+ * imports {@link verifyStagedUpdateFreshness}
  * to keep `setupServiceWorker` out of the initial entry bundle, emits analytics
  * telemetry when an update prompt is displayed, and delegates confirmation to
- * {@link import('@/utils/system/setupServiceWorker').applyStagedServiceWorkerUpdate}.
+ * {@link applyStagedServiceWorkerUpdate}.
  *
  * @returns The rendered {@link UpdatePrompt} dialog, or `null` when no verified update is pending.
  *

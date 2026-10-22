@@ -23,7 +23,7 @@ describe("UpdatePrompt & UpdatePromptDialog", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		vi.stubGlobal("fetch", vi.fn());
-		(useAnalytics as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+		vi.mocked(useAnalytics).mockReturnValue({
 			sendDeferredEvent: vi.fn(),
 			sendEvent: mockSendEvent,
 		});

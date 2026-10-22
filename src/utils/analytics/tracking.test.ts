@@ -132,7 +132,7 @@ describe("Analytics Tracking", () => {
 		});
 
 		it("should initialize GA4 if not blocked", async () => {
-			(fetch as Mock).mockResolvedValue({ status: 200 });
+			vi.mocked(fetch).mockResolvedValue({ status: 200 } as Response);
 			await tracking.initializeAnalytics();
 			expect(ReactGA.initialize).toHaveBeenCalled();
 		});
@@ -141,7 +141,7 @@ describe("Analytics Tracking", () => {
 			vi.useFakeTimers();
 
 			try {
-				(fetch as Mock).mockReturnValue(new Promise(() => {}));
+				vi.mocked(fetch).mockReturnValue(new Promise(() => {}));
 
 				const initPromise = tracking.initializeAnalytics();
 
@@ -158,13 +158,13 @@ describe("Analytics Tracking", () => {
 			{ probe: "google-analytics.com", reason: "e.g. Pi-hole DNS sinkhole" },
 			{ probe: "googletagmanager.com", reason: "e.g. script blocker" },
 		])("should fall back to blocked when $probe fails ($reason)", async ({ probe }) => {
-			(fetch as Mock).mockImplementation((url: string) => {
+			vi.mocked(fetch).mockImplementation(((url: string) => {
 				if (typeof url === "string" && url.includes(probe)) {
 					return Promise.reject(new Error("net::ERR_NAME_NOT_RESOLVED"));
 				}
 
-				return Promise.resolve({ status: 200 });
-			});
+				return Promise.resolve({ status: 200 } as Response);
+			}) as typeof fetch);
 
 			await tracking.initializeAnalytics();
 			expect(ReactGA.initialize).not.toHaveBeenCalled();
@@ -173,7 +173,7 @@ describe("Analytics Tracking", () => {
 
 	describe("Event Dispatching", () => {
 		it("should call client-side analytics when tracking is not blocked", async () => {
-			(fetch as Mock).mockResolvedValue({ status: 200 });
+			vi.mocked(fetch).mockResolvedValue({ status: 200 } as Response);
 			await tracking.initializeAnalytics();
 			tracking.sendEvent(testEvent);
 
@@ -194,13 +194,13 @@ describe("Analytics Tracking", () => {
 				filter: (url: string) => url.includes("google-analytics.com/g/collect"),
 			},
 		])("should route events to server-side when $description", async ({ filter }) => {
-			(fetch as Mock).mockImplementation((url: string) => {
+			vi.mocked(fetch).mockImplementation(((url: string) => {
 				if (typeof url === "string" && filter(url)) {
 					return Promise.reject(new Error("net::ERR_NAME_NOT_RESOLVED"));
 				}
 
-				return Promise.resolve({ status: 200 });
-			});
+				return Promise.resolve({ status: 200 } as Response);
+			}) as typeof fetch);
 
 			await tracking.initializeAnalytics();
 			tracking.sendEvent(testEvent);
@@ -233,7 +233,7 @@ describe("Analytics Tracking", () => {
 		it("should use sendServerEvent to dispatch events", async () => {
 			const fetchMock = vi.fn().mockResolvedValue({ ok: true });
 			global.fetch = fetchMock;
-			(navigator.sendBeacon as Mock).mockReturnValue(false); // Force fetch fallback
+			vi.mocked(navigator.sendBeacon).mockReturnValue(false); // Force fetch fallback
 
 			tracking.sendServerEvent("test_event", { foo: "bar" });
 

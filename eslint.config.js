@@ -64,6 +64,30 @@ const shared = {
 		perfectionist,
 		"react-hooks": reactHooks,
 		"react-refresh": reactRefresh,
+		repo: {
+			rules: {
+				"no-jsdoc-import-links": {
+					create(context) {
+						return {
+							Program() {
+								for (const comment of context.sourceCode.getAllComments()) {
+									if (
+										comment.type === "Block"
+										&& comment.value.includes("{@link import(")
+									) {
+										context.report({
+											loc: comment.loc,
+											message:
+												"Use `{@link SymbolName}` (with `import type { SymbolName }` if needed) instead of inline `{@link import(...)}` paths in JSDoc comments.",
+										});
+									}
+								}
+							},
+						};
+					},
+				},
+			},
+		},
 	},
 	rules: {
 		...reactHooks.configs.recommended.rules,
@@ -247,6 +271,7 @@ export default tseslint.config(
 			...jsdocRules,
 			// Disallow stray console.log in production source
 			"no-console": ["warn", { allow: ["warn", "error"] }],
+			"repo/no-jsdoc-import-links": "warn",
 		},
 	},
 
@@ -269,6 +294,15 @@ export default tseslint.config(
 			"jsdoc/require-description": "off",
 			"jsdoc/require-example": "off",
 			"jsdoc/require-jsdoc": "off",
+			"no-restricted-syntax": [
+				"warn",
+				{
+					message:
+						"Use `vi.mocked(fn)` instead of casting mocked functions with `as` before calling `.mock*`.",
+					selector:
+						"CallExpression[callee.property.name=/^(mockImplementation|mockImplementationOnce|mockReturnValue|mockReturnValueOnce|mockResolvedValue|mockResolvedValueOnce|mockRejectedValue|mockRejectedValueOnce)$/] > MemberExpression.callee > TSAsExpression.object",
+				},
+			],
 			"react-refresh/only-export-components": "off",
 		},
 	},
@@ -295,5 +329,5 @@ export default tseslint.config(
 	// --- OXLINT OVERLAP DE-DUPLICATION ---
 	// Automatically turns off ESLint rules that Oxlint already validates
 	//
-	...oxlint.buildFromOxlintConfigFile("./.oxlintrc.json")
+	...oxlint.buildFromOxlintConfigFile("./.oxlintrc.json"),
 );

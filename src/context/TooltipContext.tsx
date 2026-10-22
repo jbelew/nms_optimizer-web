@@ -19,8 +19,8 @@ const WARM_THRESHOLD = 500;
  *
  * @returns The state and actions context providers.
  *
- * @see {@link import('@/utils/system/tooltipUtils').useTooltipState}
- * @see {@link import('@/utils/system/tooltipUtils').useTooltipActions}
+ * @see {@link useTooltipState}
+ * @see {@link useTooltipActions}
  * @see {@link TooltipState}
  * @see {@link TooltipActions}
  *

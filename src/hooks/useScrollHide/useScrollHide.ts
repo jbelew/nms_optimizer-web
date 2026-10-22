@@ -30,8 +30,8 @@ export type UseScrollHideReturn = {
  *
  * @returns State and functions for visibility control.
  *
- * @see {@link import('@/hooks/useScrollGridIntoView/useScrollGridIntoView').useScrollGridIntoView} for coordination with programmatic scrolling.
- * @see {@link import('@/hooks/useScrollGridIntoView/useScrollGridIntoView').registerToolbarForceShow} for the global callback registration.
+ * @see {@link useScrollGridIntoView} for coordination with programmatic scrolling.
+ * @see {@link registerToolbarForceShow} for the global callback registration.
  *
  * @hook
  *

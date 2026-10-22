@@ -1,4 +1,3 @@
-import type { Mock } from "vitest";
 import { Theme } from "@radix-ui/themes";
 import { render } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
@@ -55,12 +54,12 @@ describe("BonusStatusIcon Component", () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		(isTouchDevice as Mock).mockReturnValue(false);
-		(useTechStore as unknown as Mock).mockImplementation((selector) => {
+		vi.mocked(isTouchDevice).mockReturnValue(false);
+		vi.mocked(useTechStore).mockImplementation(((selector?: (state: unknown) => unknown) => {
 			const state = { getBonusStatus: mockGetBonusStatus };
 
 			return selector ? selector(state) : state;
-		});
+		}) as typeof useTechStore);
 	});
 
 	const renderComponent = (
@@ -92,7 +91,7 @@ describe("BonusStatusIcon Component", () => {
 		});
 
 		it("should render with Popover on touch devices", () => {
-			(isTouchDevice as Mock).mockReturnValue(true);
+			vi.mocked(isTouchDevice).mockReturnValue(true);
 			const status: BonusStatusData = { icon: "check", percent: 0 };
 
 			const { getByTestId, queryByTestId } = renderComponent(10, status);

@@ -30,7 +30,7 @@ export interface MarkdownContentState {
  * @returns State containing the markdown content, loading status, and any errors.
  *
  * @see {@link MarkdownContentState}
- * @see {@link import("virtual:markdown-bundle").getMarkdown} for the virtual bundle retrieval logic.
+ * @see {@link getMarkdown} for the virtual bundle retrieval logic.
  * @see {@link ./useMarkdownContent.test.tsx Unit Tests}
  *
  * @hook

@@ -1,5 +1,4 @@
 import React from "react";
-import type { Mock } from "vitest";
 import { Theme } from "@radix-ui/themes";
 import { render } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
@@ -81,25 +80,21 @@ describe("MainAppContent", () => {
 		isSharedGridState = false;
 		selectedPlatformState = "standard";
 
-		(useGridStore as unknown as Mock).mockImplementation(
-			(selector: (state: unknown) => unknown) =>
-				selector({
-					_isGridFull: false,
-					firstInactiveRowIndex: 0,
-					grid: { cells: [], height: 0, width: 0 },
-					hasModulesInGrid: false,
-					isDefaultGrid: true,
-					isGridFull: () => false,
-					isSharedGrid: isSharedGridState,
-					lastActiveRowIndex: -1,
-					superchargedFixed: false,
-				}),
-		);
+		vi.mocked(useGridStore).mockImplementation(((selector: (state: unknown) => unknown) =>
+			selector({
+				_isGridFull: false,
+				firstInactiveRowIndex: 0,
+				grid: { cells: [], height: 0, width: 0 },
+				hasModulesInGrid: false,
+				isDefaultGrid: true,
+				isGridFull: () => false,
+				isSharedGrid: isSharedGridState,
+				lastActiveRowIndex: -1,
+				superchargedFixed: false,
+			})) as typeof useGridStore);
 
-		(usePlatformStore as unknown as Mock).mockImplementation(
-			(selector: (state: unknown) => unknown) =>
-				selector({ selectedPlatform: selectedPlatformState }),
-		);
+		vi.mocked(usePlatformStore).mockImplementation(((selector: (state: unknown) => unknown) =>
+			selector({ selectedPlatform: selectedPlatformState })) as typeof usePlatformStore);
 	});
 
 	const renderWorkspace = () =>

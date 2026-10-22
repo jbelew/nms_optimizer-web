@@ -156,7 +156,7 @@ export interface TechStore {
 	 * @param {Record<string, string>} activeGroups - Tech-to-active-group-ID mapping.
 	 * @param {Record<string, string[]>} initialCheckedModules - Initial module selections.
 	 *
-	 * @see {@link import('@/store/tech/moduleSelectionStore').useModuleSelectionStore}
+	 * @see {@link useModuleSelectionStore}
 	 */
 	initializeTechTree: (
 		colors: { [key: string]: string },

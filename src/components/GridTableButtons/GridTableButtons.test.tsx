@@ -1,6 +1,5 @@
 /// <reference types="@testing-library/jest-dom" />
 import React from "react";
-import type { Mock } from "vitest";
 import { act, fireEvent, render, renderHook, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -133,7 +132,7 @@ describe("GridTableButtons", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		__resetScrollGridIntoViewRef();
-		(useBreakpoint as Mock).mockReturnValue(true); // Default to smallAndUp
+		vi.mocked(useBreakpoint).mockReturnValue(true); // Default to smallAndUp
 		setGridStoreState(false, true); // Default to not shared, has modules
 		useTechStore.setState({ isDefaultModuleSelection: true });
 	});
@@ -296,7 +295,7 @@ describe("GridTableButtons", () => {
 
 	it("initiates reset transition immediately and delegates scrolling asynchronously on mobile", () => {
 		// Mock mobile breakpoint (< 1024px and < 640px)
-		(useBreakpoint as Mock).mockImplementation((_bp: string) => false);
+		vi.mocked(useBreakpoint).mockImplementation((_bp: string) => false);
 
 		const rafCallbacks: Array<FrameRequestCallback> = [];
 		vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb: FrameRequestCallback) => {

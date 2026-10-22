@@ -74,11 +74,16 @@ describe("useUrlSync", () => {
 		vi.clearAllMocks();
 		window.history.pushState({}, "", "/");
 
-		(useLocation as Mock).mockImplementation(() => ({
-			pathname: window.location.pathname,
-			search: window.location.search,
-		}));
-		(useDialog as Mock).mockReturnValue({ userVisited: false });
+		vi.mocked(useLocation).mockImplementation(
+			() =>
+				({
+					pathname: window.location.pathname,
+					search: window.location.search,
+				}) as Location,
+		);
+		vi.mocked(useDialog).mockReturnValue({ userVisited: false } as ReturnType<
+			typeof useDialog
+		>);
 
 		gridStoreState = {
 			grid: { cells: [], height: 6, width: 10 },
@@ -91,9 +96,10 @@ describe("useUrlSync", () => {
 			}),
 		};
 
-		(useGridStore as unknown as Mock).mockImplementation((selector) =>
-			typeof selector === "function" ? selector(gridStoreState) : gridStoreState,
-		);
+		vi.mocked(useGridStore).mockImplementation(((selector?: (s: unknown) => unknown) =>
+			typeof selector === "function" ?
+				selector(gridStoreState)
+			:	gridStoreState) as typeof useGridStore);
 		(useGridStore as unknown as { getState: Mock }).getState = vi.fn(() => gridStoreState);
 
 		const defaultCatalog: PlatformCatalog = {
@@ -118,18 +124,18 @@ describe("useUrlSync", () => {
 			}),
 		};
 
-		(usePlatformStore as unknown as Mock).mockImplementation(
-			(selector: (state: PlatformState) => unknown) => {
-				return typeof selector === "function" ?
-						selector(platformStoreState)
-					:	platformStoreState;
-			},
-		);
+		vi.mocked(usePlatformStore).mockImplementation(((
+			selector?: (state: PlatformState) => unknown,
+		) => {
+			return typeof selector === "function" ?
+					selector(platformStoreState)
+				:	platformStoreState;
+		}) as typeof usePlatformStore);
 		(usePlatformStore as unknown as { getState: Mock }).getState = vi.fn(
 			() => platformStoreState,
 		);
 
-		(usePlatformsSuspense as unknown as Mock).mockReturnValue(defaultCatalog);
+		vi.mocked(usePlatformsSuspense).mockReturnValue(defaultCatalog);
 	});
 
 	it("should update URL for sharing via sessionCoordinator.getShareUrl", () => {
@@ -183,7 +189,7 @@ describe("useUrlSync", () => {
 			"new-platform": { label: "New Platform", type: "Starship" },
 		};
 		platformStoreState.platforms = catalog;
-		(usePlatformsSuspense as unknown as Mock).mockReturnValue(catalog);
+		vi.mocked(usePlatformsSuspense).mockReturnValue(catalog);
 		renderHook(() => useUrlSync());
 		expect(mockSetSelectedPlatform).toHaveBeenCalledWith("new-platform");
 		deserializeSpy.mockRestore();
@@ -198,7 +204,7 @@ describe("useUrlSync", () => {
 			"test-platform": { label: "Test Platform", type: "Starship" },
 		};
 		platformStoreState.platforms = catalog;
-		(usePlatformsSuspense as unknown as Mock).mockReturnValue(catalog);
+		vi.mocked(usePlatformsSuspense).mockReturnValue(catalog);
 
 		renderHook(() => useUrlSync());
 
@@ -298,13 +304,17 @@ describe("useUrlSync", () => {
 
 	describe("URL Normalization", () => {
 		it("should NOT add platform parameter for a new user on root path", () => {
-			(useDialog as Mock).mockReturnValue({ userVisited: false });
+			vi.mocked(useDialog).mockReturnValue({ userVisited: false } as ReturnType<
+				typeof useDialog
+			>);
 			renderHook(() => useUrlSync());
 			expect(mockNavigate).not.toHaveBeenCalled();
 		});
 
 		it("should add platform parameter for a returning user on root path", () => {
-			(useDialog as Mock).mockReturnValue({ userVisited: true });
+			vi.mocked(useDialog).mockReturnValue({ userVisited: true } as ReturnType<
+				typeof useDialog
+			>);
 			renderHook(() => useUrlSync());
 			expect(mockNavigate).toHaveBeenCalledWith("/?platform=test-platform", {
 				replace: true,
@@ -312,9 +322,11 @@ describe("useUrlSync", () => {
 		});
 
 		it("should always ensure a trailing slash for non-file paths", () => {
-			(useDialog as Mock).mockReturnValue({ userVisited: false });
+			vi.mocked(useDialog).mockReturnValue({ userVisited: false } as ReturnType<
+				typeof useDialog
+			>);
 			window.history.replaceState({}, "", "/about");
-			(useLocation as Mock).mockReturnValue({ pathname: "/about", search: "" });
+			vi.mocked(useLocation).mockReturnValue({ pathname: "/about", search: "" } as Location);
 
 			renderHook(() => useUrlSync());
 
@@ -322,9 +334,14 @@ describe("useUrlSync", () => {
 		});
 
 		it("should NOT add trailing slash for files with extensions", () => {
-			(useDialog as Mock).mockReturnValue({ userVisited: false });
+			vi.mocked(useDialog).mockReturnValue({ userVisited: false } as ReturnType<
+				typeof useDialog
+			>);
 			window.history.replaceState({}, "", "/sitemap.xml");
-			(useLocation as Mock).mockReturnValue({ pathname: "/sitemap.xml", search: "" });
+			vi.mocked(useLocation).mockReturnValue({
+				pathname: "/sitemap.xml",
+				search: "",
+			} as Location);
 
 			renderHook(() => useUrlSync());
 

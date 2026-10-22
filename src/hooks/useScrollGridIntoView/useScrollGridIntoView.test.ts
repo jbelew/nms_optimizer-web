@@ -57,7 +57,7 @@ describe("useScrollGridIntoView", () => {
 		mockElement.getBoundingClientRect = getBoundingClientRectMock;
 
 		// Default to mobile breakpoint (< 640px)
-		(useBreakpoint as Mock).mockImplementation((_bp: string) => false);
+		vi.mocked(useBreakpoint).mockImplementation((_bp: string) => false);
 	});
 
 	it("defers DOM layout measurement and scrolling across two animation frames", () => {
@@ -99,7 +99,7 @@ describe("useScrollGridIntoView", () => {
 	});
 
 	it("calculates small screen (< 640px) responsive scroll offset", () => {
-		(useBreakpoint as Mock).mockImplementation((bp: string) => {
+		vi.mocked(useBreakpoint).mockImplementation((bp: string) => {
 			if (bp === "640px") return false;
 			if (bp === "768px") return false;
 			if (bp === "1024px") return false;
@@ -123,7 +123,7 @@ describe("useScrollGridIntoView", () => {
 	});
 
 	it("calculates medium screen (640px - 768px) responsive scroll offset", () => {
-		(useBreakpoint as Mock).mockImplementation((bp: string) => {
+		vi.mocked(useBreakpoint).mockImplementation((bp: string) => {
 			if (bp === "640px") return true;
 			if (bp === "768px") return false;
 			if (bp === "1024px") return false;
@@ -147,7 +147,7 @@ describe("useScrollGridIntoView", () => {
 	});
 
 	it("calculates large screen (>= 768px) responsive scroll offset", () => {
-		(useBreakpoint as Mock).mockImplementation((bp: string) => {
+		vi.mocked(useBreakpoint).mockImplementation((bp: string) => {
 			if (bp === "640px") return true;
 			if (bp === "768px") return true;
 			if (bp === "1024px") return false;
@@ -171,7 +171,7 @@ describe("useScrollGridIntoView", () => {
 	});
 
 	it("skips scrolling on large screens when skipOnLargeScreens is true and viewport >= 1024px", () => {
-		(useBreakpoint as Mock).mockImplementation((bp: string) => {
+		vi.mocked(useBreakpoint).mockImplementation((bp: string) => {
 			if (bp === "640px") return true;
 			if (bp === "768px") return true;
 			if (bp === "1024px") return true;
@@ -190,7 +190,7 @@ describe("useScrollGridIntoView", () => {
 	});
 
 	it("does not skip scrolling on large screens when skipOnLargeScreens is false and viewport >= 1024px", () => {
-		(useBreakpoint as Mock).mockImplementation((bp: string) => {
+		vi.mocked(useBreakpoint).mockImplementation((bp: string) => {
 			if (bp === "640px") return true;
 			if (bp === "768px") return true;
 			if (bp === "1024px") return true;
