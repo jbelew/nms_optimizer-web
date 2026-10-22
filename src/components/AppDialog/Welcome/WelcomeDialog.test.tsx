@@ -8,7 +8,7 @@ import { vi } from "vitest";
 import type { DialogContextType } from "@/utils/system/dialogUtils";
 import { DialogContext } from "@/utils/system/dialogUtils";
 
-import WelcomeContent from "./WelcomeContent";
+import WelcomeDialog from "./WelcomeDialog";
 
 const mockSendEvent = vi.fn();
 vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
@@ -16,6 +16,30 @@ vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
 		sendDeferredEvent: vi.fn(),
 		sendEvent: mockSendEvent,
 	}),
+}));
+
+vi.mock("@/components/AppDialog/Base/AppDialog", () => ({
+	default: ({
+		content,
+		footer,
+		isOpen,
+		titleKey,
+	}: {
+		content?: ReactNode;
+		footer?: ReactNode;
+		isOpen?: boolean;
+		titleKey?: string;
+	}) =>
+		isOpen ?
+			<div
+				data-testid="app-dialog"
+				role="dialog"
+			>
+				<h2>{titleKey}</h2>
+				<div>{content}</div>
+				<div>{footer}</div>
+			</div>
+		:	null,
 }));
 
 interface TransProps {
@@ -61,17 +85,37 @@ const mockDialogContext: DialogContextType = {
 	userVisited: false,
 };
 
-describe("WelcomeContent", () => {
+describe("WelcomeDialog", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 	});
 
-	it("dispatches page view analytics with standardized title on mount", () => {
+	it("does not render or dispatch analytics when closed", () => {
 		const onClose = vi.fn();
 		render(
 			<DialogContext.Provider value={mockDialogContext}>
 				<Theme>
-					<WelcomeContent onClose={onClose} />
+					<WelcomeDialog
+						isOpen={false}
+						onClose={onClose}
+					/>
+				</Theme>
+			</DialogContext.Provider>,
+		);
+
+		expect(screen.queryByTestId("app-dialog")).not.toBeInTheDocument();
+		expect(mockSendEvent).not.toHaveBeenCalled();
+	});
+
+	it("dispatches page view analytics with standardized title when open", () => {
+		const onClose = vi.fn();
+		render(
+			<DialogContext.Provider value={mockDialogContext}>
+				<Theme>
+					<WelcomeDialog
+						isOpen={true}
+						onClose={onClose}
+					/>
 				</Theme>
 			</DialogContext.Provider>,
 		);
@@ -85,12 +129,15 @@ describe("WelcomeContent", () => {
 		);
 	});
 
-	it("renders correctly with BEM classes", () => {
+	it("renders correctly with BEM classes and footer button", async () => {
 		const onClose = vi.fn();
 		const { container } = render(
 			<DialogContext.Provider value={mockDialogContext}>
 				<Theme>
-					<WelcomeContent onClose={onClose} />
+					<WelcomeDialog
+						isOpen={true}
+						onClose={onClose}
+					/>
 				</Theme>
 			</DialogContext.Provider>,
 		);
@@ -99,6 +146,12 @@ describe("WelcomeContent", () => {
 		expect(container.querySelector(".welcomeContent__list")).toBeInTheDocument();
 		expect(container.querySelectorAll(".welcomeContent__item")).toHaveLength(6);
 		expect(screen.getByTestId("dialogs.welcome.viewInstructions")).toBeInTheDocument();
+
+		const getStartedButton = screen.getByRole("button", {
+			name: "dialogs.welcome.getStarted",
+		});
+		await userEvent.click(getStartedButton);
+		expect(onClose).toHaveBeenCalledTimes(1);
 	});
 
 	it("calls onClose and openDialog when instructions link is clicked", async () => {
@@ -106,7 +159,10 @@ describe("WelcomeContent", () => {
 		render(
 			<DialogContext.Provider value={mockDialogContext}>
 				<Theme>
-					<WelcomeContent onClose={onClose} />
+					<WelcomeDialog
+						isOpen={true}
+						onClose={onClose}
+					/>
 				</Theme>
 			</DialogContext.Provider>,
 		);

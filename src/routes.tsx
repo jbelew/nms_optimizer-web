@@ -8,7 +8,7 @@ import type { RouteObject } from "react-router-dom";
 import { getRoutedDialogs } from "@shared/page-registry.js";
 
 import App from "./App";
-import { RouteError } from "./components/ErrorBoundary/RouteError";
+import { RouteError } from "./components/ErrorBoundary/ErrorBoundary";
 import { MainAppContent } from "./components/MainAppContent/MainAppContent";
 import { languages } from "./routeConfig";
 

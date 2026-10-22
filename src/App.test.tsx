@@ -24,6 +24,7 @@ vi.mock("react-i18next", async () => {
 
 	return {
 		...original,
+		Trans: ({ i18nKey }: { i18nKey?: string }) => <span>{i18nKey}</span>,
 		useTranslation: () => ({
 			i18n: {
 				changeLanguage: vi.fn(),
@@ -129,13 +130,17 @@ vi.mock("./components/AppDialog/Base/AppDialog", () => ({
 		:	null,
 }));
 
-vi.mock("./components/AppDialog/Welcome/WelcomeContent", () => ({
-	default: ({ onClose }: { onClose: () => void }) => (
-		<div data-testid="welcome-content">
-			<div>dialogs.welcome.description</div>
-			<button onClick={onClose}>dialogs.welcome.getStarted</button>
-		</div>
-	),
+vi.mock("./components/AppDialog/Welcome/WelcomeDialog", () => ({
+	default: ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) =>
+		isOpen ?
+			<div data-testid="welcome-content">
+				<div>dialogs.titles.welcome</div>
+				<div>dialogs.welcome.description</div>
+				<div data-testid="app-dialog-footer">
+					<button onClick={onClose}>dialogs.welcome.getStarted</button>
+				</div>
+			</div>
+		:	null,
 }));
 
 vi.mock("./components/OfflineBanner/OfflineBanner", () => ({

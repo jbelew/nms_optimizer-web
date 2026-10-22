@@ -19,6 +19,8 @@ import {
 	Title as ToastTitle,
 } from "@radix-ui/react-toast";
 
+import type { ErrorDisplay } from "@/components/ErrorBoundary/ErrorBoundary";
+
 import "./Toast.scss";
 
 import { Button, Separator, Text } from "@radix-ui/themes";
@@ -54,7 +56,7 @@ type ToastProps = {
  *
  * @returns The rendered toast notification.
  *
- * @see {@link import('@/components/ErrorBoundary/ErrorDisplay').ErrorDisplay}
+ * @see {@link ErrorDisplay}
  * @see {@link ./Toast.stories.tsx Storybook}
  *
  * @component

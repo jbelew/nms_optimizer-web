@@ -1,13 +1,11 @@
 import type { FC } from "react";
 import { Suspense, useEffect, useRef, useState } from "react";
-import { CheckIcon, CopyIcon } from "@radix-ui/react-icons";
-import { Button } from "@radix-ui/themes";
-import { useTranslation } from "react-i18next";
+import { CheckIcon, CopyIcon, ExternalLinkIcon } from "@radix-ui/react-icons";
+import { Button, Link, Text, TextArea } from "@radix-ui/themes";
+import { Trans, useTranslation } from "react-i18next";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { Logger } from "@/utils/system/monitoring";
-
-import { ShareLinkContent } from "./ShareLinkContent";
 
 /**
  * Props for the `ShareLinkDialog` component.
@@ -17,24 +15,21 @@ interface ShareLinkDialogProps {
 	isOpen: boolean;
 	/** Callback function to close the dialog. */
 	onClose: () => void;
-	/** The full URL generated for sharing the current grid state. **Must be a valid URL.** */
+	/** The full URL generated for sharing the current Shared Grid state. **Must be a valid URL.** */
 	shareUrl: string;
 }
 
 /**
- * A modal dialog that provides a shareable URL to the user.
+ * A modal dialog that presents a shareable Shared Grid URL and copy-to-clipboard action.
  *
  * @remarks
- * This component wraps the {@link ShareLinkContent} within a standard {@link AppDialog},
- * handling the display of the generated link and offering copy-to-clipboard functionality.
+ * Renders a read-only `TextArea` containing the serialized Shared Grid URL, an external
+ * link to open the URL in a new tab, and a copy button with temporary checkmark feedback.
  *
- * @param props - Component properties.
- *
- * @returns The rendered share dialog.
- *
- * @see {@link ./ShareLinkDialog.test.tsx Unit Tests}
+ * @see {@link ShareLinkDialogProps}
  * @see {@link AppDialog}
- * @see {@link ShareLinkContent}
+ * @see {@link ./ShareLinkDialog.test.tsx Unit Tests}
+ * @see {@link ./ShareLinkDialog.stories.tsx Storybook}
  *
  * @component
  *
@@ -43,7 +38,7 @@ interface ShareLinkDialogProps {
  * @example
  * ```tsx
  * <ShareLinkDialog isOpen={true} shareUrl="https://nms-optimizer.app/?grid=..." onClose={hideFn} />
- * // mounts ShareLinkDialog with a shareable URL
+ * // mounts ShareLinkDialog
  * ```
  */
 const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, onClose, shareUrl }) => {
@@ -78,6 +73,52 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, onClose, shareUrl }
 		}
 	};
 
+	const content = (
+		<>
+			<Text
+				as="p"
+				mb="3"
+				size={{ initial: "2", sm: "3" }}
+			>
+				{t("dialogs.shareLink.description")}
+			</Text>
+			<Text
+				as="p"
+				mb="3"
+				size={{ initial: "2", sm: "3" }}
+			>
+				<Trans i18nKey="dialogs.shareLink.tip" />
+			</Text>
+			<TextArea
+				aria-label={t("dialogs.titles.shareLink")}
+				className="font-mono! font-light! [&_textarea]:text-(--accent-a11)! [&_textarea]:[-webkit-text-fill-color:var(--accent-a11)]!"
+				id="share-url-input"
+				name="shareUrl"
+				readOnly
+				rows={8}
+				size={{ initial: "2", sm: "3" }}
+				value={shareUrl}
+				variant="soft"
+			/>
+			<Text
+				align="right"
+				as="p"
+				mb="2"
+				mt="2"
+				size={{ initial: "2", sm: "3" }}
+			>
+				<Link
+					href={shareUrl}
+					rel="noopener noreferrer"
+					target="_blank"
+				>
+					{t("dialogs.shareLink.openLink")}
+					<ExternalLinkIcon className="ml-1 inline-block" />
+				</Link>
+			</Text>
+		</>
+	);
+
 	const footer = (
 		<div className="flex justify-end gap-2">
 			<Button
@@ -98,7 +139,7 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, onClose, shareUrl }
 	return (
 		<Suspense fallback={null}>
 			<AppDialog
-				content={<ShareLinkContent shareUrl={shareUrl} />}
+				content={content}
 				footer={footer}
 				isOpen={isOpen}
 				onClose={onClose}

@@ -31,9 +31,13 @@ export const Default: Story = {
 	},
 	decorators: [
 		(Story) => {
+			const error = Object.assign(new Error("Test error message from Storybook"), {
+				stack: "Error: Test error message from Storybook\n    at ErrorDialog.stories.tsx:36:13",
+			});
+
 			useOptimizeStore.setState({
 				status: {
-					details: new Error("Test error message from Storybook"),
+					details: error,
 					severity: "recoverable",
 					type: "error",
 				},

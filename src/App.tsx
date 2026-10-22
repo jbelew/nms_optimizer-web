@@ -1,15 +1,8 @@
 import type { FC } from "react";
 import { lazy, Suspense, useEffect, useState } from "react";
-import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { Outlet, useLocation } from "react-router-dom";
 
-import {
-	AppDialogBody,
-	AppDialogFooter,
-	AppDialogRoot,
-	AppDialogTitle,
-} from "@/components/AppDialog/Base/AppDialog";
 import { ErrorDialog } from "@/components/AppDialog/Error/ErrorDialog";
 import { UpdatePromptDialog } from "@/components/AppDialog/UpdatePrompt/UpdatePromptDialog";
 import { useOptimizeStore } from "@/store/ui/uiStore";
@@ -39,9 +32,9 @@ const OfflineBanner = lazy(() => import("./components/OfflineBanner/OfflineBanne
 const ShareLinkDialog = lazy(() => import("./components/AppDialog/ShareLink/ShareLinkDialog"));
 
 /**
- * Lazy-loaded content for the initial application welcome and introduction.
+ * Lazy-loaded dialog for the initial application welcome and introduction.
  */
-const WelcomeContent = lazy(() => import("./components/AppDialog/Welcome/WelcomeContent"));
+const WelcomeDialog = lazy(() => import("./components/AppDialog/Welcome/WelcomeDialog"));
 
 /**
  * Lazy-loaded orchestrator for route-based modal dialogs.
@@ -172,26 +165,10 @@ const AppContent: FC = () => {
 
 			{showWelcome ?
 				<Suspense fallback={null}>
-					<AppDialogRoot
+					<WelcomeDialog
 						isOpen={showWelcome}
 						onClose={handleCloseWelcome}
-					>
-						<AppDialogTitle titleKey="dialogs.titles.welcome" />
-						<AppDialogBody>
-							<WelcomeContent onClose={handleCloseWelcome} />
-						</AppDialogBody>
-						<AppDialogFooter>
-							<div className="flex justify-end gap-2">
-								<Button
-									className="cursor-pointer"
-									mb="1"
-									onClick={handleCloseWelcome}
-								>
-									{t("dialogs.welcome.getStarted")}
-								</Button>
-							</div>
-						</AppDialogFooter>
-					</AppDialogRoot>
+					/>
 				</Suspense>
 			:	null}
 		</>

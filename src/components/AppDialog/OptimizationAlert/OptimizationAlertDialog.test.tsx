@@ -141,7 +141,7 @@ describe("OptimizationAlertDialog", () => {
 		expect(await screen.findByText("dialogs.titles.optimizationAlert")).toBeInTheDocument();
 	});
 
-	test("should pass technologyName to OptimizationAlertContent", async () => {
+	test("should render technologyName inside dialog body", async () => {
 		render(
 			<OptimizationAlertDialog
 				isOpen={true}
@@ -170,7 +170,7 @@ describe("OptimizationAlertDialog", () => {
 		expect(mockOnClose).toHaveBeenCalledTimes(1);
 	});
 
-	test("should pass onForceOptimize callback to OptimizationAlertContent", async () => {
+	test("should invoke onForceOptimize when force optimize button is clicked", async () => {
 		render(
 			<OptimizationAlertDialog
 				isOpen={true}
@@ -370,5 +370,21 @@ describe("OptimizationAlertDialog", () => {
 		).toBeInTheDocument();
 		expect(screen.queryByText(/requires/i)).not.toBeInTheDocument();
 		expect(screen.getByText("unknown-tech")).toBeInTheDocument();
+	});
+
+	test("should render warning header and force optimize suggestion", async () => {
+		render(
+			<OptimizationAlertDialog
+				isOpen={true}
+				onClose={mockOnClose}
+				onForceOptimize={mockOnForceOptimize}
+				technologyName={testTechName}
+			/>,
+		);
+
+		expect(await screen.findByText("dialogs.optimizationAlert.warning")).toBeInTheDocument();
+		expect(
+			await screen.findByText("dialogs.optimizationAlert.forceOptimizeSuggestion"),
+		).toBeInTheDocument();
 	});
 });

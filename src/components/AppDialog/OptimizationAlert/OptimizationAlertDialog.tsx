@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { Suspense } from "react";
-import { Button } from "@radix-ui/themes";
-import { useTranslation } from "react-i18next";
+import { Button, Text } from "@radix-ui/themes";
+import { Trans, useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
@@ -9,8 +9,6 @@ import { useOptimize } from "@/hooks/useOptimize/useOptimize";
 import { resolveActiveTechVariant } from "@/store/tech/techRules";
 import { useTechStore } from "@/store/tech/techStore";
 import { determineWindowDimensions } from "@/utils/optimization/windowDimensions";
-
-import { OptimizationAlertContent } from "./OptimizationAlertContent";
 
 /**
  * Props for the `OptimizationAlertDialog` component.
@@ -24,30 +22,27 @@ interface OptimizationAlertDialogProps {
 	isOpen?: boolean;
 	/** Optional override callback to close the dialog. */
 	onClose?: () => void;
-	/** Optional override callback to trigger a "forced" optimization solve. */
+	/** Optional override callback to trigger a Forced Solve. */
 	onForceOptimize?: () => Promise<void>;
 	/** Optional override for the Technology Category identifier that triggered the alert. */
 	technologyName?: null | string;
 }
 
 /**
- * A specialized dialog component that warns users when a pattern-based optimization fails.
+ * A modal dialog that warns users on a Pattern No Fit optimization result and offers a Forced Solve.
  *
  * @remarks
- * This component consumes {@link useOptimize} directly (with optional prop overrides for stories/tests),
+ * Consumes {@link useOptimize} directly (with optional prop overrides for stories/tests),
  * derives the required Solver Window dimensions from the failed Technology Category
  * and its active Module Selection count in {@link useTechStore}, and provides the user with
- * two choices: dismiss the warning or attempt a "forced" solve using more intensive algorithms.
- * It wraps the {@link OptimizationAlertContent} inside a standard {@link AppDialog}.
+ * two choices: dismiss the warning or attempt a Forced Solve using simulated annealing.
  *
- * @param [props={}] - Optional component property overrides.
+ * @returns The rendered dialog, or `null` if no Technology Category is targeted.
  *
- * @returns The rendered dialog, or `null` if no technology is targeted.
- *
+ * @see {@link OptimizationAlertDialogProps}
  * @see {@link ./OptimizationAlertDialog.test.tsx Unit Tests}
  * @see {@link ./OptimizationAlertDialog.stories.tsx Storybook}
  * @see {@link AppDialog}
- * @see {@link OptimizationAlertContent}
  * @see {@link determineWindowDimensions}
  * @see {@link useOptimize}
  * @see {@link useTechStore}
@@ -59,7 +54,7 @@ interface OptimizationAlertDialogProps {
  * @example
  * ```tsx
  * <OptimizationAlertDialog />
- * // renders pattern-no-fit warning dialog when patternNoFitTech is active
+ * // mounts OptimizationAlertDialog
  * ```
  */
 const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
@@ -95,6 +90,56 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 		activeVariant?.window_rules,
 	);
 
+	const content = (
+		<>
+			<span className="errorContent__title block pb-2 text-center text-xl font-semibold tracking-widest">
+				{t("dialogs.optimizationAlert.warning")}
+			</span>
+			<Text
+				as="p"
+				mb="2"
+				size={{ initial: "2", sm: "3" }}
+			>
+				<Trans
+					components={{
+						1: (
+							<span
+								className="font-bold uppercase"
+								style={{ color: "var(--accent-11)" }}
+							/>
+						),
+					}}
+					i18nKey={
+						windowDimensions ?
+							"dialogs.optimizationAlert.insufficientSpaceWithWindow"
+						:	"dialogs.optimizationAlert.insufficientSpace"
+					}
+					values={
+						windowDimensions ?
+							{
+								height: windowDimensions[1],
+								technologyName,
+								width: windowDimensions[0],
+							}
+						:	{ technologyName }
+					}
+				/>
+			</Text>
+			<Text
+				as="p"
+				mb="4"
+				size={{ initial: "2", sm: "3" }}
+			>
+				<Trans
+					components={{
+						1: <strong className="font-bold" />,
+					}}
+					i18nKey="dialogs.optimizationAlert.forceOptimizeSuggestion"
+				/>
+			</Text>
+		</>
+	);
+
 	const footer = (
 		<div className="flex justify-end gap-2">
 			<Button
@@ -118,12 +163,7 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 	return (
 		<Suspense fallback={null}>
 			<AppDialog
-				content={
-					<OptimizationAlertContent
-						technologyName={technologyName}
-						windowDimensions={windowDimensions}
-					/>
-				}
+				content={content}
 				footer={footer}
 				isOpen={isOpen}
 				onClose={onClose}

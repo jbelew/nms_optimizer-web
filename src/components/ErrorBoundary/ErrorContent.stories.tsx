@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, within } from "storybook/test";
 
-import { ErrorContent } from "./ErrorContent";
+import { ErrorContent } from "./ErrorBoundary";
 
 const meta = {
 	argTypes: {
@@ -31,6 +32,14 @@ export const PageVariant: Story = {
 			},
 		},
 	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await expect(await canvas.findByRole("heading", { level: 2 })).toBeInTheDocument();
+		await expect(canvas.getByRole("link")).toHaveAttribute(
+			"href",
+			"https://github.com/jbelew/nms_optimizer-web/issues",
+		);
+	},
 };
 
 export const WithErrorMessage: Story = {
@@ -47,6 +56,12 @@ export const WithErrorMessage: Story = {
 				story: "Error content with error message.",
 			},
 		},
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await expect(
+			await canvas.findByText(/This is a sample error message\./i),
+		).toBeInTheDocument();
 	},
 };
 
@@ -68,6 +83,13 @@ export const WithStackTrace: Story = {
 				story: "Error content with stack trace.",
 			},
 		},
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await expect((await canvas.findAllByText(/Something went wrong/i)).length).toBeGreaterThan(
+			0,
+		);
+		await expect(canvas.getByText(/mountIndeterminateComponent/i)).toBeInTheDocument();
 	},
 };
 
@@ -91,5 +113,10 @@ export const WithComponentStack: Story = {
 				story: "Error content with component stack.",
 			},
 		},
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await expect(await canvas.findByText(/Error with component stack/i)).toBeInTheDocument();
+		await expect(canvas.getByText(/in ThemeProvider/i)).toBeInTheDocument();
 	},
 };
