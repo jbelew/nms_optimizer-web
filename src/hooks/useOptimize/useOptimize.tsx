@@ -1,7 +1,9 @@
 import { useCallback, useEffect } from "react";
+import type { ManagerOptions, Socket, SocketOptions } from "socket.io-client";
 import { useShallow } from "zustand/react/shallow";
 
-import type { ApiResponse } from "@/store/grid/gridStore";
+import type { ApiResponse, Grid } from "@/store/grid/gridStore";
+import { WS_URL } from "@/constants";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useLatest } from "@/hooks/useLatest/useLatest";
@@ -11,7 +13,6 @@ import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useTechStore } from "@/store/tech/techStore";
 import { useOptimizeStore, useShakeStore } from "@/store/ui/uiStore";
-import { OptimizationManager } from "@/utils/optimization/optimizationManager";
 import { Logger } from "@/utils/system/monitoring";
 
 /**
@@ -22,57 +23,162 @@ import { Logger } from "@/utils/system/monitoring";
  * @category Hooks
  */
 export interface UseOptimizeReturn {
-	/** Function to clear the "No Fit" warning state. */
+	/** Function to clear the "Pattern No Fit" warning state. */
 	clearPatternNoFitTech: () => void;
 	/** Ref to the grid container for automated scrolling. */
 	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
-	/** Function to re-run optimization with forced solving for the current PNF tech. */
+	/** Function to re-run optimization with a Forced Solve for the current Pattern No Fit technology. */
 	handleForceCurrentPnfOptimize: () => Promise<void>;
 	/**
-	 * Initiates optimization for a specific technology.
+	 * Initiates optimization for a specific Technology Category.
 	 *
-	 * @param {string} tech - The unique identifier for the technology (e.g., `'pulse'`).
-	 * @param {boolean} [forced] - If `true`, bypasses pattern matching and uses advanced solvers immediately.
+	 * @param tech - The unique identifier for the Technology Category (e.g., `'pulse'`).
+	 * @param forced - If `true`, executes a Forced Solve bypassing pattern templates.
 	 *
-	 * @returns {Promise<void>} Resolves when the optimization request is handled.
+	 * @returns Resolves when the optimization request is dispatched.
 	 */
 	handleOptimize: (tech: string, forced?: boolean) => Promise<void>;
-	/** The technology identifier that failed to fit using pattern solving, if any. */
+	/** The Technology Category identifier that encountered a Pattern No Fit warning, if any. */
 	patternNoFitTech: null | string;
-	/** Whether an optimization is currently in progress. */
+	/** Whether an optimization solve is currently in progress. */
 	solving: boolean;
 }
 
+/** Maximum number of silent transport-error retries before surfacing the error modal. */
+const MAX_TRANSPORT_RETRIES = 2;
+
 const SCROLL_OPTIONS = { skipOnLargeScreens: true };
 
-/** Module-scoped active WebSocket manager shared across all mounted `useOptimize` consumers. */
-let activeManager: null | OptimizationManager = null;
+/**
+ * Standard configuration options for the Socket.IO connection.
+ *
+ * @remarks
+ * - `reconnection: false` — retry strategy is owned by `useOptimize`.
+ * - `forceNew: true` — each optimization solve gets a fresh connection manager.
+ * - `transports: ["websocket", "polling"]` — allows fallback to HTTP long-polling.
+ *
+ * @category Hooks
+ */
+export const SOCKET_OPTIONS: Partial<ManagerOptions & SocketOptions> = {
+	forceNew: true,
+	reconnection: false,
+	timeout: 20000,
+	transports: ["websocket", "polling"],
+};
+
+/**
+ * Canonical set of transient transport-level error messages from `engine.io-client`
+ * that should be retried silently before surfacing an error dialog.
+ */
+const TRANSPORT_ERROR_MESSAGES = new Set(["timeout", "websocket error"]);
+
+/** Module-scoped teardown callback for the active solve session across all mounted consumers. */
+let activeCleanup: (() => void) | null = null;
 /** Module-scoped lock preventing concurrent optimization requests across callers. */
 let isOptimizingActive = false;
 /** Count of currently mounted `useOptimize` hook consumers. */
 let mountedCount = 0;
 
 /**
- * Custom hook for managing the asynchronous optimization process via WebSockets.
+ * Dynamically imports `socket.io-client` and opens a new WebSocket connection for a solve.
+ *
+ * @returns A connected or connecting `Socket` instance, or `null` if initialization fails.
+ */
+async function createSocket(): Promise<null | Socket> {
+	try {
+		Logger.info("Creating new WebSocket connection", { url: WS_URL });
+
+		const { io } = await import("socket.io-client");
+
+		return io(WS_URL, SOCKET_OPTIONS);
+	} catch (error) {
+		Logger.error("Failed to create WebSocket instance", { error });
+
+		return null;
+	}
+}
+
+/**
+ * Validates that a wire payload conforms to the internal `ApiResponse` structure.
+ *
+ * @param value - The translated response object to validate.
+ *
+ * @returns `true` when `value` is a structurally valid `ApiResponse`.
+ */
+function isApiResponse(value: unknown): value is ApiResponse {
+	if (value === null || typeof value !== "object") return false;
+	const obj = value as Record<string, unknown>;
+	if (typeof obj.solveMethod !== "string") return false;
+
+	if (obj.grid !== null) {
+		if (typeof obj.grid !== "object" || !obj.grid) return false;
+		const gridCandidate = obj.grid as Record<string, unknown>;
+		if (!Array.isArray(gridCandidate.cells) || typeof gridCandidate.width !== "number")
+			return false;
+	}
+
+	if (obj.maxBonus !== undefined && typeof obj.maxBonus !== "number") return false;
+	if (obj.solvedBonus !== undefined && typeof obj.solvedBonus !== "number") return false;
+
+	return true;
+}
+
+/**
+ * Normalizes a raw Socket.IO `optimization_result` payload from snake_case or camelCase
+ * into a validated `ApiResponse`.
+ *
+ * @param data - Raw wire payload emitted by the Python backend.
+ *
+ * @returns The validated `ApiResponse`, or `null` if the payload is malformed.
+ */
+function parseOptimizationResult(data: Record<string, unknown>): ApiResponse | null {
+	const translatedData: ApiResponse = {
+		grid: data.grid as ApiResponse["grid"],
+		maxBonus: (data.maxBonus ?? data.max_bonus) as number,
+		solvedBonus: (data.solvedBonus ?? data.solved_bonus) as number,
+		solveMethod: (data.solveMethod ?? data.solve_method) as string,
+	};
+
+	return isApiResponse(translatedData) ? translatedData : null;
+}
+
+/**
+ * Resolves the analytics identifier for a Technology Category based on its active Module Selection.
+ *
+ * @param tech - The Technology Category identifier.
+ * @param checkedModules - Map of Technology Category identifiers to checked module IDs.
+ *
+ * @returns `"photonix"` when `"pulse"` includes the `"PC"` module, otherwise `tech`.
+ */
+function resolveAnalyticsTechName(
+	tech: string,
+	checkedModules: Record<string, string[] | undefined>,
+): string {
+	return tech === "pulse" && checkedModules[tech]?.includes("PC") ? "photonix" : tech;
+}
+
+/**
+ * Custom hook for orchestrating technology layout optimization over WebSockets.
  *
  * @remarks
- * This hook acts as the central interface for:
- * 1. Enforcing the full-grid shake guard (`isGridFull && !hasTechInGrid`) via {@link useShakeStore}.
+ * This hook acts as the deep interface for:
+ * 1. Enforcing the full-grid Slot Restriction shake guard (`isGridFull && !hasTechInGrid`) via {@link useShakeStore}.
  * 2. Executing a pre-solve **Technology Reset** via {@link sessionCoordinator.resetTechnology}.
- * 3. Dispatching optimization requests to the Python backend via a shared {@link OptimizationManager}.
- * 4. Synchronizing WebSocket state (solving, progress, PNF warnings) to {@link useOptimizeStore}.
- * 5. Handling automatic view scrolling on touch devices and tracking interaction analytics.
+ * 3. Managing the Socket.IO connection lifecycle, up to {@link MAX_TRANSPORT_RETRIES} silent transport retries, and wire-format translation.
+ * 4. Synchronizing solve progress, **Pattern No Fit** warnings, **Forced Solve** retries, and atomic result commits via {@link sessionCoordinator.commitOptimizationResult} and {@link useOptimizeStore}.
+ * 5. Handling automatic viewport scrolling on compact viewports and dispatching analytics events.
  *
- * Because the active {@link OptimizationManager} and in-flight lock are module-scoped,
- * multiple components (`MainAppLayoutContent`, `TechTreeRow`, `ModuleSelectionDialog`,
- * `OptimizationAlertDialog`) can call `useOptimize()` directly without prop-drilling or
- * intermediate context providers.
+ * Because the active socket session and in-flight lock are module-scoped, multiple callers
+ * (`MainAppLayoutContent`, `TechTreeRow`, `ModuleSelectionDialog`, `OptimizationAlertDialog`)
+ * invoke `useOptimize()` directly without prop-drilling or intermediate context providers.
  *
- * @returns An object containing the optimization state and trigger handlers.
+ * @returns Optimization state and trigger callbacks.
  *
- * @see {@link OptimizationManager} for the underlying socket logic.
- * @see {@link sessionCoordinator.resetTechnology} for pre-solve Technology Reset.
- * @see {@link useOptimizeStore} for tracking errors and "No Fit" warnings.
+ * @see {@link UseOptimizeReturn}
+ * @see {@link sessionCoordinator.resetTechnology}
+ * @see {@link sessionCoordinator.commitOptimizationResult}
+ * @see {@link useOptimizeStore}
+ * @see {@link ./useOptimize.test.tsx Unit Tests}
  *
  * @hook
  *
@@ -82,15 +188,12 @@ let mountedCount = 0;
  * ```tsx
  * const { solving, handleOptimize } = useOptimize();
  *
- * const onOptimize = () => {
- *   void handleOptimize("pulse");
- * };
- *
  * return (
- *   <button onClick={onOptimize} disabled={solving}>
+ *   <button onClick={() => void handleOptimize("pulse")} disabled={solving}>
  *     {solving ? "Solving..." : "Optimize Pulse"}
  *   </button>
  * );
+ * // dispatches pulse optimization and commits solved layout to stores
  * ```
  */
 export const useOptimize = (): UseOptimizeReturn => {
@@ -125,7 +228,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 
 	const resetProgress = useCallback(() => {
 		isOptimizingActive = false;
-		activeManager = null;
+		activeCleanup = null;
 		if (mountedCount <= 0) return;
 		setSolving(false);
 		setProgressPercent(0);
@@ -142,27 +245,14 @@ export const useOptimize = (): UseOptimizeReturn => {
 				mountedCount = 0;
 				isOptimizingActive = false;
 
-				if (activeManager) {
-					activeManager.cleanup();
-					activeManager = null;
+				if (activeCleanup) {
+					activeCleanup();
+					activeCleanup = null;
 				}
 			}
 		};
 	}, []);
 
-	/**
-	 * Initiates the optimization solve for the specified technology.
-	 *
-	 * @param {string} tech - Identifier for the technology.
-	 * @param {boolean} [forced=false] - Whether to bypass pattern matching.
-	 *
-	 * @returns {Promise<void>}
-	 *
-	 * @example
-	 * ```ts
-	 * await handleOptimize("pulse");
-	 * ```
-	 */
 	const handleOptimize = useCallback(
 		async (tech: string, forced: boolean = false) => {
 			performance.mark("optimize-start");
@@ -183,7 +273,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 				return;
 			}
 
-			// Perform atomic Technology Reset before starting the solve
+			// Perform atomic pre-solve Technology Reset before reading the grid
 			sessionCoordinator.resetTechnology(tech);
 
 			const { grid, setGrid } = useGridStore.getState();
@@ -205,93 +295,217 @@ export const useOptimize = (): UseOptimizeReturn => {
 				tech,
 			});
 
-			const manager = new OptimizationManager({
-				availableModules,
-				forced,
-				grid,
-				isLarge: isLargeRef.current,
-				onComplete: (data: ApiResponse) => {
-					performance.mark("optimize-complete");
-					performance.measure(
-						"optimize-to-complete",
-						"optimize-start",
-						"optimize-complete",
-					);
-					if (mountedCount <= 0) return;
+			let isCleaningUp = false;
+			let currentSocket: null | Socket = null;
 
-					if (patternNoFitTechRef.current === tech) setPatternNoFitTech(null);
+			const cleanupSocket = () => {
+				if (currentSocket) {
+					currentSocket.off();
+					currentSocket.disconnect();
+					currentSocket = null;
+				}
+			};
 
-					Logger.info(`Optimization complete for ${tech}`, {
-						bonus: data.maxBonus,
-						method: data.solveMethod,
-						tech,
-					});
+			const cancelSolve = () => {
+				isCleaningUp = true;
+				cleanupSocket();
+			};
 
-					sessionCoordinator.commitOptimizationResult(data, tech);
-					const currentCheckedModules = useTechStore.getState().checkedModules;
-					const gaTech =
-						tech === "pulse" && currentCheckedModules[tech]?.includes("PC") ?
-							"photonix"
-						:	tech;
+			const finishSolve = () => {
+				cancelSolve();
+				resetProgress();
+			};
 
-					if (data.grid) {
-						sendEventRef.current({
-							action: "optimize_tech",
-							category: "ui",
-							nonInteraction: false,
-							platform: selectedShipTypeRef.current,
-							solveMethod: data.solveMethod,
-							supercharged: typeof data.maxBonus === "number" && data.maxBonus > 100,
-							tech: gaTech,
-							value: 1,
-						});
-						setGrid(data.grid);
+			activeCleanup = cancelSolve;
+
+			const connectAndSolve = async (retryCount: number): Promise<void> => {
+				const nextSocket = await createSocket();
+
+				if (isCleaningUp) {
+					nextSocket?.off();
+					nextSocket?.disconnect();
+
+					return;
+				}
+
+				if (!nextSocket) {
+					if (mountedCount > 0) {
+						setShowErrorStore(
+							true,
+							"recoverable",
+							new Error("Failed to initialize WebSocket connection"),
+						);
 					}
 
-					resetProgress();
-				},
-				onError: (err: Error) => {
-					if (mountedCount <= 0) return;
+					finishSolve();
 
-					// Handle benign transport close silently
-					if (err.message === "Socket disconnected (transport close)") {
-						resetProgress();
+					return;
+				}
+
+				currentSocket = nextSocket;
+
+				currentSocket.on(
+					"progress",
+					(data: {
+						best_grid?: Grid;
+						bestGrid?: Grid;
+						progress_percent?: number;
+						progressPercent?: number;
+					}) => {
+						if (isCleaningUp || mountedCount <= 0) return;
+						const bestGrid = data.best_grid ?? data.bestGrid;
+						const progressPercent = data.progress_percent ?? data.progressPercent ?? 0;
+						setProgressPercent(progressPercent);
+						if (bestGrid) setGrid(bestGrid);
+					},
+				);
+
+				currentSocket.once("optimization_result", (data: Record<string, unknown>) => {
+					if (isCleaningUp) return;
+
+					const translatedData = parseOptimizationResult(data);
+
+					if (translatedData) {
+						if (translatedData.solveMethod === "Pattern No Fit" && !forced) {
+							if (mountedCount > 0) {
+								Logger.info(`Optimization "Pattern No Fit" for ${tech}`, {
+									platform: selectedShipTypeRef.current,
+									tech,
+								});
+								setPatternNoFitTech(tech);
+								sendEventRef.current({
+									action: "no_fit_warning",
+									category: "ui",
+									nonInteraction: false,
+									platform: selectedShipTypeRef.current,
+									tech,
+									value: 1,
+								});
+							}
+						} else {
+							performance.mark("optimize-complete");
+							performance.measure(
+								"optimize-to-complete",
+								"optimize-start",
+								"optimize-complete",
+							);
+
+							if (mountedCount > 0) {
+								if (patternNoFitTechRef.current === tech) setPatternNoFitTech(null);
+
+								Logger.info(`Optimization complete for ${tech}`, {
+									bonus: translatedData.maxBonus,
+									method: translatedData.solveMethod,
+									tech,
+								});
+
+								sessionCoordinator.commitOptimizationResult(translatedData, tech);
+								const gaTech = resolveAnalyticsTechName(
+									tech,
+									useTechStore.getState().checkedModules,
+								);
+
+								if (translatedData.grid) {
+									sendEventRef.current({
+										action: "optimize_tech",
+										category: "ui",
+										nonInteraction: false,
+										platform: selectedShipTypeRef.current,
+										solveMethod: translatedData.solveMethod,
+										supercharged:
+											typeof translatedData.maxBonus === "number"
+											&& translatedData.maxBonus > 100,
+										tech: gaTech,
+										value: 1,
+									});
+								}
+							}
+						}
+					} else {
+						Logger.error("Invalid API response format", { data });
+
+						if (mountedCount > 0) {
+							setShowErrorStore(
+								true,
+								"recoverable",
+								new Error("Invalid API response format"),
+							);
+						}
+					}
+
+					finishSolve();
+				});
+
+				const handleError = (err: Error | unknown) => {
+					if (isCleaningUp) return;
+
+					const errMessage = err instanceof Error ? err.message : String(err);
+					const isTransportError = TRANSPORT_ERROR_MESSAGES.has(errMessage);
+
+					if (isTransportError && retryCount < MAX_TRANSPORT_RETRIES) {
+						Logger.warn(
+							`Optimization transport failure for ${tech} — retrying (${retryCount + 1}/${MAX_TRANSPORT_RETRIES})`,
+							{ error: errMessage },
+						);
+						cleanupSocket();
+						void connectAndSolve(retryCount + 1);
 
 						return;
 					}
 
-					setShowErrorStore(true, "recoverable", err);
-					resetProgress();
-				},
-				onPatternNoFit: () => {
-					if (mountedCount <= 0) return;
-					Logger.info(`Optimization "Pattern No Fit" for ${tech}`, {
-						platform: selectedShipTypeRef.current,
-						tech,
-					});
-					setPatternNoFitTech(tech);
-					sendEventRef.current({
-						action: "no_fit_warning",
-						category: "ui",
-						nonInteraction: false,
-						platform: selectedShipTypeRef.current,
-						tech,
-						value: 1,
-					});
-					resetProgress();
-				},
-				onProgress: (data) => {
-					if (mountedCount <= 0) return;
-					setProgressPercent(data.progress_percent);
-					if (data.best_grid) setGrid(data.best_grid);
-				},
-				ship,
-				solveType,
-				tech,
-			});
+					Logger.error(`Optimization WebSocket error for ${tech}`, err);
+					const normalizedError = err instanceof Error ? err : new Error(String(err));
 
-			activeManager = manager;
-			void manager.start();
+					if (mountedCount > 0) {
+						setShowErrorStore(true, "recoverable", normalizedError);
+					}
+
+					finishSolve();
+				};
+
+				currentSocket.once("connect_error", handleError);
+				currentSocket.once("error", handleError);
+
+				currentSocket.on("disconnect", (reason: string) => {
+					if (reason === "io client disconnect" || isCleaningUp) {
+						return;
+					}
+
+					if (reason === "transport close") {
+						Logger.info("Socket disconnected during optimization (transport close)", {
+							reason,
+						});
+						finishSolve();
+
+						return;
+					}
+
+					Logger.warn("Socket disconnected during optimization", { reason });
+					handleError(new Error(`Disconnected: ${reason}`));
+				});
+
+				const emitOptimize = () => {
+					if (!currentSocket || isCleaningUp) return;
+
+					currentSocket.emit("optimize", {
+						available_modules: availableModules,
+						forced,
+						grid,
+						send_grid_updates: isLargeRef.current,
+						ship,
+						solve_type: solveType,
+						tech,
+					});
+				};
+
+				if (currentSocket.connected) {
+					emitOptimize();
+				} else {
+					currentSocket.once("connect", emitOptimize);
+				}
+			};
+
+			await connectAndSolve(0);
 		},
 		[
 			setSolving,
@@ -307,27 +521,11 @@ export const useOptimize = (): UseOptimizeReturn => {
 		],
 	);
 
-	/**
-	 * Clears the technology stored in the "Pattern No Fit" state.
-	 *
-	 * @example
-	 * ```ts
-	 * clearPatternNoFitTech();
-	 * ```
-	 */
 	const clearPatternNoFitTech = useCallback(
 		() => setPatternNoFitTech(null),
 		[setPatternNoFitTech],
 	);
 
-	/**
-	 * Forces a solve for the technology that failed pattern matching.
-	 *
-	 * @example
-	 * ```ts
-	 * await handleForceCurrentPnfOptimize();
-	 * ```
-	 */
 	const handleForceCurrentPnfOptimize = useCallback(async () => {
 		if (patternNoFitTechRef.current) await handleOptimize(patternNoFitTechRef.current, true);
 	}, [handleOptimize, patternNoFitTechRef]);

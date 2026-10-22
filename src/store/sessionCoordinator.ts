@@ -171,17 +171,35 @@ export const sessionCoordinator = {
 	/**
 	 * Commits the results of an optimization solve to the relevant stores.
 	 *
-	 * Updates both the grid layout and the tech-specific bonus/method metadata.
+	 * @remarks
+	 * Updates the grid result blob, replaces the active grid layout when `data.grid`
+	 * is present, and synchronizes Technology Category bonus scores and solve method metadata.
 	 *
 	 * @param data - The optimization result from the engine.
-	 * @param tech - The unique technology identifier (e.g., 'pulse').
+	 * @param tech - The unique Technology Category identifier (e.g., `'pulse'`).
+	 *
+	 * @returns Side-effects only.
+	 *
+	 * @see {@link computeBonusStatus}
+	 * @see {@link useGridStore}
+	 * @see {@link useTechStore}
+	 *
+	 * @example
+	 * ```ts
+	 * sessionCoordinator.commitOptimizationResult(result, "pulse");
+	 * // updates gridStore result/layout and techStore bonus metadata for "pulse"
+	 * ```
 	 */
-	commitOptimizationResult(data: ApiResponse, tech: string) {
+	commitOptimizationResult(data: ApiResponse, tech: string): void {
 		const gridStore = useGridStore.getState();
 		const techStore = useTechStore.getState();
 
-		// 1. Update Grid Store with the result blob
+		// 1. Update Grid Store with the result blob and solved layout
 		gridStore.setResult(data);
+
+		if (data?.grid) {
+			gridStore.setGrid(data.grid);
+		}
 
 		// 2. Synchronize tech-specific stats in Tech Store
 		if (data) {
