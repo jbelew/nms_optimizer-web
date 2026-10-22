@@ -12,6 +12,12 @@ import { Blockquote, Box, Code, Heading, Kbd, Link, Separator, Text } from "@rad
 import DynamicRadixIcon from "@/components/AppDialog/Common/DynamicRadixIcon";
 import LoremIpsumSkeleton from "@/components/AppDialog/Common/LoremIpsumSkeleton";
 import { useMarkdownContent } from "@/hooks/useMarkdownContent/useMarkdownContent";
+import {
+	extractYouTubeVideoId,
+	isInternalMarkdownUrl,
+	MARKDOWN_IFRAME_ALLOW,
+	MARKDOWN_IFRAME_SANDBOX,
+} from "@shared/markdown-utils.js";
 
 import { YouTubeEmbed } from "./youTubeEmbed";
 
@@ -64,27 +70,9 @@ const LinkRenderer: React.FC<{ children?: React.ReactNode; href?: string }> = ({
 	children,
 	href,
 }) => {
-	const isInternal = (() => {
-		if (typeof href !== "string") return false;
-		if (href.startsWith("#")) return true;
-		if (href.startsWith("/") && !href.startsWith("//")) return true;
-
-		try {
-			const baseOrigin =
-				typeof window !== "undefined" ?
-					window.location.origin
-				:	"https://nms-optimizer.app";
-			const parsed = new URL(href, baseOrigin);
-
-			return (
-				parsed.origin === baseOrigin
-				|| parsed.hostname === "nms-optimizer.app"
-				|| parsed.hostname.endsWith(".nms-optimizer.app")
-			);
-		} catch {
-			return false;
-		}
-	})();
+	const baseOrigin =
+		typeof window !== "undefined" ? window.location.origin : "https://nms-optimizer.app";
+	const isInternal = isInternalMarkdownUrl(href, baseOrigin);
 
 	return (
 		<Link
@@ -253,12 +241,12 @@ const IframeRenderer: React.FC<{ src?: string; title?: string }> = ({ src, title
 			mb="2"
 		>
 			<iframe
-				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+				allow={MARKDOWN_IFRAME_ALLOW}
 				allowFullScreen
 				frameBorder="0"
 				height="400"
 				loading="lazy"
-				sandbox="allow-scripts allow-same-origin allow-popups allow-presentation"
+				sandbox={MARKDOWN_IFRAME_SANDBOX}
 				src={src}
 				style={{ borderRadius: "6px" }}
 				title={iframeTitle}
@@ -348,10 +336,10 @@ const ParagraphRenderer: React.FC<{ children?: React.ReactNode }> = ({ children 
 	const text =
 		typeof children === "string" ? children : React.Children.toArray(children).toString();
 
-	const youtubeMatch = text.match(/\[youtube:([^\]]+)\]/);
+	const videoId = extractYouTubeVideoId(text);
 
-	if (youtubeMatch) {
-		return <YouTubeEmbed videoId={youtubeMatch[1]} />;
+	if (videoId) {
+		return <YouTubeEmbed videoId={videoId} />;
 	}
 
 	return (

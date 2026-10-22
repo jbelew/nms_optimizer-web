@@ -29,7 +29,7 @@ export const OG_LOCALE_MAP = {
  *
  * @category Utilities
  */
-export const MANAGED_SCHEMA_TYPES = [
+const MANAGED_SCHEMA_TYPES = [
 	"SoftwareApplication",
 	"Organization",
 	"WebSite",

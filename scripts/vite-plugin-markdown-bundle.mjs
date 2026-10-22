@@ -7,19 +7,33 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
+import { PAGE_REGISTRY } from "../shared/page-registry.js";
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LOCALES_DIR = path.join(__dirname, "../public/assets/locales");
+
+/**
+ * Set of markdown filenames (with `.md` extension) rendered by client-side Routed Dialogs.
+ * Excludes SSG-only markdown files (`home.md`, `userstats.md`) whose routes use custom UI components.
+ */
+const CLIENT_DIALOG_MARKDOWN_FILES = new Set(
+	Object.values(PAGE_REGISTRY)
+		.filter((page) => page.componentType === "markdown" && page.markdownFileName)
+		.map((page) => `${page.markdownFileName}.md`),
+);
 
 /**
  * Creates a Vite plugin that bundles Routed Dialog markdown files into a virtual module.
  *
  * @remarks
  * Exposes `virtual:markdown-bundle` with `markdownBundle` and `getMarkdown(lang, fileName)`
- * while excluding `home.md` (which is only pre-rendered into the root Static SEO Fallback)
+ * while excluding SSG-only markdown files (`home.md` and `userstats.md`)
  * and stripping redundant raw `.md` files copied from `public/assets/locales` into `dist`.
  *
  * @returns {import("vite").Plugin} The configured Vite plugin object.
  *
+ * @see {@link CLIENT_DIALOG_MARKDOWN_FILES}
+ * @see {@link PAGE_REGISTRY}
  * @see {@link generateModuleCode}
  * @see {@link loadMarkdownContent}
  *
@@ -154,11 +168,10 @@ function loadMarkdownContent() {
 		content[lang] = {};
 		const langDir = path.join(LOCALES_DIR, lang);
 
-		// Read Routed Dialog markdown files in this language directory (excluding home.md,
-		// which is only pre-rendered into the root Static SEO Fallback at build time).
+		// Read client-rendered Routed Dialog markdown files (excluding SSG-only files like home.md and userstats.md).
 		const mdFiles = fs
 			.readdirSync(langDir)
-			.filter((file) => file.endsWith(".md") && file !== "home.md");
+			.filter((file) => CLIENT_DIALOG_MARKDOWN_FILES.has(file));
 
 		mdFiles.forEach((file) => {
 			const fileName = file.replace(/\.md$/, "");

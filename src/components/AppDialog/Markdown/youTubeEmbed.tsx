@@ -1,6 +1,8 @@
 import React from "react";
 import { Box } from "@radix-ui/themes";
 
+import { MARKDOWN_IFRAME_ALLOW, MARKDOWN_IFRAME_SANDBOX } from "@shared/markdown-utils.js";
+
 /**
  * Properties for the `YouTubeEmbed` component.
  */
@@ -40,12 +42,12 @@ export const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({ title, videoId }) =>
 			mb="2"
 		>
 			<iframe
-				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+				allow={MARKDOWN_IFRAME_ALLOW}
 				allowFullScreen
 				frameBorder="0"
 				height="400"
 				loading="lazy"
-				sandbox="allow-scripts allow-same-origin allow-popups allow-presentation"
+				sandbox={MARKDOWN_IFRAME_SANDBOX}
 				src={`https://www.youtube.com/embed/${videoId}`}
 				style={{ borderRadius: "6px" }}
 				title={iframeTitle}

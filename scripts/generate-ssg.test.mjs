@@ -272,5 +272,32 @@ describe("generate-ssg.mjs", () => {
 				'<noscript><img src="/assets/img/screenshots/screenshot.webp" alt="Alt text" title="" loading="lazy" decoding="async" /></noscript>',
 			);
 		});
+
+		it("parses inline markdown inside blockquotes and nested lists", async () => {
+			const { createMarkdownProcessor } = await import("./markdown-processor.mjs");
+			const processMarkdown = createMarkdownProcessor();
+			const html = processMarkdown(
+				"> 💡 **Note:**\n> **Slot Restrictions** apply.\n\n1. **Find**:\n    - `translation.json`\n    - `*.md`",
+			);
+
+			expect(html).toContain(
+				"<blockquote>\n<p>💡 <strong>Note:</strong><br><strong>Slot Restrictions</strong> apply.</p>\n</blockquote>",
+			);
+			expect(html).toContain(
+				"<ul>\n<li><code>translation.json</code></li>\n<li><code>*.md</code></li>\n</ul>",
+			);
+		});
+
+		it("strips <radix-icon> tags and renders [youtube:id] embeds", async () => {
+			const { createMarkdownProcessor } = await import("./markdown-processor.mjs");
+			const processMarkdown = createMarkdownProcessor();
+			const html = processMarkdown(
+				'Select with the <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> button.\n\n[youtube:dQw4w9WgXcQ]',
+			);
+
+			expect(html).not.toContain("radix-icon");
+			expect(html).toContain("<p>Select with the button.</p>");
+			expect(html).toContain('src="https://www.youtube.com/embed/dQw4w9WgXcQ"');
+		});
 	});
 });

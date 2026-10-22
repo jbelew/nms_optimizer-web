@@ -34,30 +34,15 @@
 						"serviceWorker" in navigator ?
 							navigator.serviceWorker
 								.getRegistrations()
-								.then(function (regs) {
-									if (regs && regs.length > 0) {
-										return Promise.all(
-											regs.map(function (r) {
-												return r.unregister();
-											}),
-										);
-									}
-									return Promise.resolve();
-								})
-								.catch(function () {})
+								.then((regs) => Promise.all(regs.map((r) => r.unregister())))
+								.catch(() => {})
 						:	Promise.resolve();
 					const clearCaches =
 						"caches" in window ?
 							caches
 								.keys()
-								.then(function (names) {
-									return Promise.all(
-										names.map(function (n) {
-											return caches.delete(n);
-										}),
-									);
-								})
-								.catch(function () {})
+								.then((names) => Promise.all(names.map((n) => caches.delete(n))))
+								.catch(() => {})
 						:	Promise.resolve();
 					return Promise.all([unregisterWorkers, clearCaches]);
 				}
@@ -232,15 +217,7 @@
 			content="NMS Optimizer, No Man's Sky, adjacency bonus, supercharged slots, NMS layout tool, starship tech layout, multitool build, supercharged slot calculator"
 		/>
 
-		<!-- Canonical & Social Metadata -->
-		<link
-			rel="canonical"
-			href="https://nms-optimizer.app/"
-		/>
-		<meta
-			property="og:url"
-			content="https://nms-optimizer.app/"
-		/>
+		<!-- Social Metadata -->
 		<meta
 			property="og:type"
 			content="website"
@@ -300,22 +277,17 @@
 
 		<!-- Resource Hints -->
 		<link
-			rel="dns-prefetch"
+			rel="preconnect"
 			href="https://api.nms-optimizer.app"
+			crossorigin=""
 		/>
 		<link
 			rel="dns-prefetch"
 			href="https://static.cloudflareinsights.com"
 		/>
 		<link
-			rel="preconnect"
-			href="https://api.nms-optimizer.app"
-			crossorigin=""
-		/>
-		<link
-			rel="preconnect"
+			rel="dns-prefetch"
 			href="https://www.google-analytics.com"
-			crossorigin=""
 		/>
 
 		<!-- Favicons -->
@@ -404,8 +376,7 @@
 			}
 
 			/* Fallback & Splash Management */
-			html.js-enabled:not(.is-bot) .ssg-fallback,
-			html.is-bot .ssg-fallback main,
+			html.js-enabled .ssg-fallback,
 			.is-bot #vpss {
 				display: none !important;
 			}
@@ -580,6 +551,18 @@
 				width: 100%;
 				border-collapse: collapse;
 				border: 1px solid #444;
+			}
+			.ssg-fallback th,
+			.ssg-fallback td {
+				border: 1px solid #444;
+				padding: 0.5rem;
+			}
+			.ssg-fallback kbd {
+				background-color: #1e293b;
+				border: 1px solid #444;
+				border-radius: 0.25rem;
+				padding: 0.125rem 0.375rem;
+				font-size: 0.875em;
 			}
 			.ssg-fallback img {
 				max-width: 100%;

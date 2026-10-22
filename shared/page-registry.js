@@ -127,6 +127,7 @@ export const PAGE_REGISTRY = {
 		iconName: "PieChartIcon",
 		id: "userstats",
 		isDialog: true,
+		markdownFileName: "userstats",
 		routePath: "/userstats/",
 		seoDescriptionKey: "seo.userstatsDescription",
 		seoTitleKey: "seo.userstatsPageTitle",
@@ -233,7 +234,7 @@ export const getPageByDialogTitleKey = (titleKey = "") => {
  */
 export const parseRoutePath = (
 	pathname = "",
-	supportedLanguages = ["en", "es", "fr", "de", "pt", "it"]
+	supportedLanguages = ["en", "es", "fr", "de", "pt", "it"],
 ) => {
 	const raw = String(pathname).trim().split("?")[0].split("#")[0];
 	const parts = raw.split("/").filter(Boolean);
@@ -275,7 +276,7 @@ export const parseRoutePath = (
  */
 export const getPageByPath = (
 	pathname = "",
-	supportedLanguages = ["en", "es", "fr", "de", "pt", "it"]
+	supportedLanguages = ["en", "es", "fr", "de", "pt", "it"],
 ) => {
 	const { cleanPath } = parseRoutePath(pathname, supportedLanguages);
 
@@ -287,9 +288,9 @@ export const getPageByPath = (
 	const normalizedPath = `/${routeSegment}/`;
 
 	const directMatch =
-		PAGE_REGISTRY[routeSegment] ||
-		Object.values(PAGE_REGISTRY).find(
-			(page) => page.routePath === normalizedPath || page.id === routeSegment
+		PAGE_REGISTRY[routeSegment]
+		|| Object.values(PAGE_REGISTRY).find(
+			(page) => page.routePath === normalizedPath || page.id === routeSegment,
 		);
 
 	if (directMatch) return directMatch;
@@ -301,7 +302,7 @@ export const getPageByPath = (
 			const regexStr = cleanPattern.replace(/:[a-zA-Z0-9_]+/g, "[^/]+");
 
 			return new RegExp(`^${regexStr}$`).test(cleanLookup);
-		})
+		}),
 	);
 
 	if (patternMatch) return patternMatch;
@@ -337,5 +338,4 @@ export const getAllPages = () => Object.values(PAGE_REGISTRY);
  * // returns array of PageDefinition where isDialog === true
  * ```
  */
-export const getRoutedDialogs = () =>
-	Object.values(PAGE_REGISTRY).filter((page) => page.isDialog);
+export const getRoutedDialogs = () => Object.values(PAGE_REGISTRY).filter((page) => page.isDialog);

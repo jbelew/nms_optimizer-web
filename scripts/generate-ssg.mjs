@@ -333,11 +333,6 @@ export async function generatePage(
 			},
 		})
 		// Body content
-		.on("body", {
-			element(_el) {
-				// Strip old fallback blocks in body
-			},
-		})
 		.on(".ssg-fallback", {
 			element(el) {
 				el.remove();
