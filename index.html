@@ -13,9 +13,9 @@
         }
 
         @font-face {
-            font-family: 'Raleway';
-            src: url('assets/fonts/raleway.woff2') format('woff2');
-            font-weight: 100 900;
+            font-family: 'Roboto Flex';
+            src: url('assets/fonts/roboto-flex.woff2') format('woff2');
+            font-weight: 100 1000;
             font-style: normal;
             font-display: swap;
         }
@@ -33,7 +33,7 @@
         }
 
         body {
-            font-family: 'Raleway', sans-serif;
+            font-family: 'Roboto Flex', sans-serif;
             background: var(--bg);
             color: var(--text);
             margin: 0;
@@ -248,7 +248,7 @@
                 const plotData = history.slice(-20);
                 const labels = plotData.map(d => new Date(d.date).toLocaleDateString());
 
-                Chart.defaults.font.family = "'Raleway', sans-serif";
+                Chart.defaults.font.family = "'Roboto Flex', sans-serif";
                 Chart.defaults.color = 'rgba(255, 255, 255, 0.4)';
 
                 const commonOptions = {
@@ -270,7 +270,7 @@
                         tooltip: {
                             backgroundColor: 'rgba(12, 13, 14, 0.9)',
                             titleFont: { family: 'Syncopate', size: 10 },
-                            bodyFont: { family: 'Raleway', size: 12 },
+                            bodyFont: { family: 'Roboto Flex', size: 12 },
                             padding: 12,
                             borderColor: 'rgba(255,255,255,0.1)',
                             borderWidth: 1
