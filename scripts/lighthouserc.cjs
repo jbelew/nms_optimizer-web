@@ -6,7 +6,7 @@ module.exports = {
       // Use the Linux Chrome binary, NOT the Windows one (which LHCI might default to in WSL)
       chromePath: '/usr/bin/google-chrome',
       settings: {
-        chromeFlags: '--headless --no-sandbox --disable-gpu --user-data-dir=/tmp/lighthouse-chrome',
+        chromeFlags: '--headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage',
         emulatedUserAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1 Chrome-Lighthouse',
         formFactor: 'mobile',
         screenEmulation: {

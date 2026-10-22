@@ -11,8 +11,6 @@ import { useModuleSelectionDialogStore } from "@/store/ui/uiStore";
 
 import { ModuleSelectionDialog } from "./ModuleSelectionDialog";
 
-import "./ModuleSelectionDialog.scss";
-
 const createTechTreeLoader =
 	(platform: "corvette" | "standard", section: "Hyperdrive" | "Utilities", techKey: string) =>
 	async () => {

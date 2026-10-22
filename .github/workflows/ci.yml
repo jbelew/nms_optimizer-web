@@ -164,6 +164,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      statuses: write
     continue-on-error: true
     steps:
       - name: Checkout repository
@@ -184,6 +185,7 @@ jobs:
           bunx lhci upload --config=./scripts/lighthouserc.cjs --target=temporary-public-storage
           bunx lhci upload --config=./scripts/lighthouserc.cjs --target=filesystem --outputDir=.lighthouseci
         env:
+          DBUS_SESSION_BUS_ADDRESS: /dev/null
           LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Lighthouse Results Artifact
@@ -192,6 +194,7 @@ jobs:
         with:
           name: lighthouse-results
           path: .lighthouseci/
+          include-hidden-files: true
           retention-days: 7
 
       - name: Checkout Lighthouse History Branch
