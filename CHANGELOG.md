@@ -1,3 +1,11 @@
+## [8.4.5](https://github.com/jbelew/nms_optimizer-web/compare/v8.4.4...v8.4.5) (2026-10-22)
+
+
+### Bug Fixes
+
+* **ci:** remove deleted scss import in Storybook and fix Lighthouse CI upload ([9547b91](https://github.com/jbelew/nms_optimizer-web/commit/9547b9136639c4843528ca8ec7d047dcad908b26))
+* **welcome:** render instructions trigger as a link instead of a button ([f979957](https://github.com/jbelew/nms_optimizer-web/commit/f9799579129077cca027fdba588f79ebd519a2ae))
+
 ## [8.4.4](https://github.com/jbelew/nms_optimizer-web/compare/v8.4.3...v8.4.4) (2026-10-21)
 
 
