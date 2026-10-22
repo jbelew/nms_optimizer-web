@@ -1,3 +1,10 @@
+## [8.4.6](https://github.com/jbelew/nms_optimizer-web/compare/v8.4.5...v8.4.6) (2026-10-22)
+
+
+### Bug Fixes
+
+* resolve CodeQL security alerts and refine module dialog headings ([bd80282](https://github.com/jbelew/nms_optimizer-web/commit/bd80282f6c7eda619451fb3f0058f3574d6a82e8)), closes [#45](https://github.com/jbelew/nms_optimizer-web/issues/45) [#44](https://github.com/jbelew/nms_optimizer-web/issues/44) [#42](https://github.com/jbelew/nms_optimizer-web/issues/42) [#43](https://github.com/jbelew/nms_optimizer-web/issues/43) [#41](https://github.com/jbelew/nms_optimizer-web/issues/41)
+
 ## [8.4.5](https://github.com/jbelew/nms_optimizer-web/compare/v8.4.4...v8.4.5) (2026-10-22)
 
 
