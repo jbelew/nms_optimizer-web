@@ -709,7 +709,7 @@
 		"selectAll": "Select All",
 		"closeDialogLabel": "Close",
 		"cosmeticInfo": "<p>Suggested cosmetic modules name the parts with the highest stat bonus, but they should not limit your ship design. Select the same number of cosmetic modules that appear on your Corvette's grid.</p>",
-		"trailsInfo": "<strong>Starship Trails changed in v7.0 Cosmos!</strong> In most cases, select no more than <strong>3 Starship Trails</strong>. <strong>For the maximum bonus</strong>, select <strong>5 Starship Trails</strong> if you have the Expedition 23 Astronaut figurine. Starship Trails apply in priority order, with <strong>[P1] Chromatic</strong> having the highest priority.",
+		"trailsInfo": "<p><strong>Starship Trails changed in v7.0 Cosmos!</strong> Select a maximum of <strong>3 Starship Trails</strong> with the default figurine selection. If you have the <strong>Expedition 23 Astronaut figurine</strong>, select <strong>5 Starship Trails</strong> for the maximum bonus.</p><p style=\"margin-top: .5rem\">Starship Trails apply in priority order. <strong>[P1] Chromatic</strong> has the highest priority.</p>",
 		"description": "The default <strong>Module Selection</strong> is a starting suggestion. Enable or disable modules to customize this <strong>Technology Category</strong>.",
 		"optimizeButton": "Optimize",
 		"cancelButton": "Cancel",

@@ -516,11 +516,14 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 			)}
 			{activeTech === "trails" && (
 				<Text
-					as="p"
+					as="div"
 					className="block text-sm sm:text-base"
 				>
 					<Trans
-						components={{ strong: <strong className="font-bold" /> }}
+						components={{
+							p: <SafeParagraph />,
+							strong: <strong className="font-bold" />,
+						}}
 						i18nKey="moduleSelection.trailsInfo"
 					/>
 				</Text>
