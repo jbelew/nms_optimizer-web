@@ -20,7 +20,7 @@
 import type { CSSProperties, ErrorInfo, ReactNode } from "react";
 import { Component, useCallback, useEffect, useState } from "react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { Button, Code, Link, ScrollArea, Separator } from "@radix-ui/themes";
+import { Button, Code, Link, ScrollArea, Separator, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 import { useRouteError } from "react-router-dom";
 
@@ -212,12 +212,12 @@ export const ErrorDisplay = ({
 
 	return (
 		<div
-			className={`flex flex-col items-center gap-4 ${className}`}
+			className={`flex flex-col items-center gap-3 text-sm sm:text-base ${className}`}
 			style={containerStyle}
 		>
-			{children && <p className="text-sm sm:text-base">{children}</p>}
+			{children && <Text as="p">{children}</Text>}
 			<div
-				className="mt-2 mb-2 w-full text-left font-mono text-sm sm:text-base"
+				className="w-full text-left font-mono"
 				style={{
 					overflowWrap: "break-word",
 					whiteSpace: "pre-wrap",
@@ -314,48 +314,46 @@ export const ErrorContent = ({ children, error, errorInfo, variant }: ErrorConte
 	const content = (
 		<div className="error-content">
 			<section className="error-content__header">
-				<h2 className="heading-styled flex items-center gap-2 text-xl sm:text-2xl">
-					<ExclamationTriangleIcon className="error-content__icon h-5 w-5" />
+				<h2 className="heading-styled flex items-start gap-2 text-xl sm:text-2xl">
+					<div className="mt-px shrink-0 sm:mt-[4px]">
+						<ExclamationTriangleIcon className="error-content__icon h-6 w-6" />
+					</div>
 					<span>{t("errorContent.boundaryError")}</span>
 				</h2>
 				<Separator
+					color="cyan"
 					decorative
-					mb="4"
 					mt="2"
 					orientation="horizontal"
 					size="4"
 				/>
 			</section>
 
-			<div className="error-content__body">
-				<div className="mb-2 text-sm sm:text-base">
+			<div className="error-content__body gap-3 text-sm sm:text-base">
+				<Text as="p">
 					{children || (variant === "page" ? <DefaultMessage /> : <InsetMessage />)}
-				</div>
+				</Text>
 
 				<ErrorDisplay
 					error={error}
 					errorInfo={errorInfo}
 				/>
+			</div>
 
-				<div className="mt-4 mr-1 mb-1 flex justify-end gap-2">
-					<Button
-						disabled={isResetting}
-						onClick={() => void handleClearAndReload()}
-						size="2"
-						variant="soft"
-					>
-						{isResetting ?
-							t("errorContent.resetting")
-						:	t("errorContent.clearAndReload")}
-					</Button>
-					<Button
-						onClick={handleReload}
-						size="2"
-						variant="solid"
-					>
-						{t("common.reload")}
-					</Button>
-				</div>
+			<div className="flex justify-end gap-2">
+				<Button
+					disabled={isResetting}
+					onClick={() => void handleClearAndReload()}
+					variant="soft"
+				>
+					{isResetting ? t("errorContent.resetting") : t("errorContent.clearAndReload")}
+				</Button>
+				<Button
+					onClick={handleReload}
+					variant="solid"
+				>
+					{t("common.reload")}
+				</Button>
 			</div>
 		</div>
 	);

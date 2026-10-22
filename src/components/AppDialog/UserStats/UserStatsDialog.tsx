@@ -443,13 +443,7 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ isOpen }) => {
 
 	return (
 		<>
-			<Text
-				as="p"
-				className="text-sm! sm:text-base!"
-				mb="4"
-			>
-				{t("dialogs.userStats.description")}
-			</Text>
+			<Text as="p">{t("dialogs.userStats.description")}</Text>
 
 			<ErrorBoundary fallback={<Text color="red">{t("dialogs.userStats.error")}</Text>}>
 				<Suspense
@@ -524,14 +518,12 @@ const UserStatsDialogComponent: FC<UserStatsDialogProps> = ({ isOpen, onClose })
 	const { t } = useTranslation();
 
 	const footer = (
-		<div className="flex justify-end gap-2">
-			<Button
-				onClick={onClose}
-				variant="soft"
-			>
-				{t("dialogs.userStats.closeButton")}
-			</Button>
-		</div>
+		<Button
+			onClick={onClose}
+			variant="soft"
+		>
+			{t("dialogs.userStats.closeButton")}
+		</Button>
 	);
 
 	return (

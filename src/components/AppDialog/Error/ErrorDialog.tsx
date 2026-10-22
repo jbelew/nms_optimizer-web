@@ -8,8 +8,6 @@ import { ErrorDisplay } from "@/components/ErrorBoundary/ErrorBoundary";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useOptimizeStore } from "@/store/ui/uiStore";
 
-import "./ErrorDialog.scss";
-
 /**
  * Props for the {@link ErrorDialog} component.
  *
@@ -95,15 +93,11 @@ export const ErrorDialog: FC<ErrorDialogProps> = ({ isOpen: propIsOpen, onClose:
 	}
 
 	const content = (
-		<div className="errorContent">
-			<span className="errorContent__title block pb-2 text-center text-xl font-semibold tracking-widest">
+		<>
+			<span className="errorContent__title block text-center text-xl font-semibold tracking-widest">
 				{t("errorContent.signalDisruption")}
 			</span>
-			<Text
-				as="p"
-				mb="2"
-				size={{ initial: "2", sm: "3" }}
-			>
+			<Text as="p">
 				<Trans
 					components={{
 						1: (
@@ -120,23 +114,17 @@ export const ErrorDialog: FC<ErrorDialogProps> = ({ isOpen: propIsOpen, onClose:
 				/>
 			</Text>
 
-			{error && (
-				<div className="mt-4">
-					<ErrorDisplay error={error} />
-				</div>
-			)}
-		</div>
+			{error && <ErrorDisplay error={error} />}
+		</>
 	);
 
 	const footer = (
-		<div className="flex justify-end gap-2">
-			<Button
-				onClick={handleClose}
-				variant="soft"
-			>
-				{t("common.closeDialog")}
-			</Button>
-		</div>
+		<Button
+			onClick={handleClose}
+			variant="soft"
+		>
+			{t("common.closeDialog")}
+		</Button>
 	);
 
 	return (

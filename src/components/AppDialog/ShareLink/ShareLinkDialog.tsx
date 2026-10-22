@@ -75,18 +75,8 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, onClose, shareUrl }
 
 	const content = (
 		<>
-			<Text
-				as="p"
-				mb="3"
-				size={{ initial: "2", sm: "3" }}
-			>
-				{t("dialogs.shareLink.description")}
-			</Text>
-			<Text
-				as="p"
-				mb="3"
-				size={{ initial: "2", sm: "3" }}
-			>
+			<Text as="p">{t("dialogs.shareLink.description")}</Text>
+			<Text as="p">
 				<Trans i18nKey="dialogs.shareLink.tip" />
 			</Text>
 			<TextArea
@@ -103,14 +93,13 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, onClose, shareUrl }
 			<Text
 				align="right"
 				as="p"
-				mb="2"
-				mt="2"
-				size={{ initial: "2", sm: "3" }}
 			>
 				<Link
 					href={shareUrl}
 					rel="noopener noreferrer"
 					target="_blank"
+					underline="always"
+					weight="medium"
 				>
 					{t("dialogs.shareLink.openLink")}
 					<ExternalLinkIcon className="ml-1 inline-block" />
@@ -120,7 +109,7 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, onClose, shareUrl }
 	);
 
 	const footer = (
-		<div className="flex justify-end gap-2">
+		<>
 			<Button
 				onClick={onClose}
 				variant="soft"
@@ -133,7 +122,7 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, onClose, shareUrl }
 				:	<CopyIcon />}
 				{copied ? t("dialogs.shareLink.copiedButton") : t("dialogs.shareLink.copyButton")}
 			</Button>
-		</div>
+		</>
 	);
 
 	return (

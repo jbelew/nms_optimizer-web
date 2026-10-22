@@ -182,7 +182,6 @@ export const PerformanceContent: FC = () => {
 					<Text
 						as="p"
 						mb="3"
-						size={{ initial: "2", sm: "3" }}
 					>
 						{t(
 							"dialogs.performance.description",
@@ -227,14 +226,12 @@ const PerformanceDialogComponent: FC<PerformanceDialogProps> = ({ isOpen, onClos
 	const { t } = useTranslation();
 
 	const footer = (
-		<div className="flex justify-end gap-2">
-			<Button
-				onClick={onClose}
-				variant="soft"
-			>
-				{t("dialogs.performance.closeButton", "Close")}
-			</Button>
-		</div>
+		<Button
+			onClick={onClose}
+			variant="soft"
+		>
+			{t("dialogs.performance.closeButton", "Close")}
+		</Button>
 	);
 
 	return (

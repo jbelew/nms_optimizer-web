@@ -382,7 +382,9 @@ describe("OptimizationAlertDialog", () => {
 			/>,
 		);
 
-		expect(await screen.findByText("dialogs.optimizationAlert.warning")).toBeInTheDocument();
+		const warningBanner = await screen.findByText("dialogs.optimizationAlert.warning");
+		expect(warningBanner).toBeInTheDocument();
+		expect(warningBanner).toHaveClass("errorContent__title");
 		expect(
 			await screen.findByText("dialogs.optimizationAlert.forceOptimizeSuggestion"),
 		).toBeInTheDocument();

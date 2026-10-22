@@ -87,7 +87,9 @@ describe("ErrorDialog", () => {
 		render(<ErrorDialog />);
 
 		expect(await screen.findByTestId("app-dialog")).toBeInTheDocument();
-		expect(screen.getByText("errorContent.signalDisruption")).toBeInTheDocument();
+		const banner = screen.getByText("errorContent.signalDisruption");
+		expect(banner).toBeInTheDocument();
+		expect(banner).toHaveClass("errorContent__title");
 	});
 
 	test("should render error details text and link to GitHub issues", async () => {

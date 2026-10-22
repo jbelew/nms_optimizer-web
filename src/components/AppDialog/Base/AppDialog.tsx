@@ -151,7 +151,7 @@ export const AppDialogTitle: React.FC<AppDialogTitleProps> = ({
 	const displayTitle = children || (resolvedTitleKey ? t(resolvedTitleKey) : title);
 
 	return (
-		<div className="mr-2">
+		<div>
 			<DialogTitle asChild>
 				<h1 className="heading-styled flex items-start gap-2 text-xl sm:text-2xl">
 					{(headerIcon || IconComponent) && (
@@ -195,9 +195,12 @@ export interface AppDialogBodyProps {
  * Content component for AppDialog.
  *
  * @remarks
- * Encapsulates the scrollable body content of the modal dialog and applies routed dialog padding.
+ * Encapsulates the scrollable body content of the modal dialog, establishing default
+ * responsive body typography (`text-sm sm:text-base`), vertical flex spacing (`gap-3`),
+ * and scrollbar clearance padding (`pr-2` for routed dialogs).
  *
  * @see {@link AppDialogBodyProps}
+ * @see {@link ./AppDialog.test.tsx Unit Tests}
  *
  * @component
  *
@@ -217,7 +220,7 @@ export const AppDialogBody: React.FC<AppDialogBodyProps> = ({ children, pageId, 
 
 	return (
 		<section
-			className={`appDialog__scrollable-content flex-1 overflow-y-auto ${isRouted ? "pr-4" : "pr-2"}`}
+			className={`appDialog__scrollable-content flex flex-1 flex-col gap-3 overflow-y-auto text-sm sm:text-base ${isRouted ? "pr-2" : "-mr-1 pr-1"}`}
 		>
 			{children}
 		</section>

@@ -69,11 +69,7 @@ export const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onDismiss, onRefre
 	const { t } = useTranslation();
 
 	const content = (
-		<Text
-			as="p"
-			mb="2"
-			size={{ initial: "2", sm: "3" }}
-		>
+		<Text as="p">
 			{t("dialogs.updatePrompt.description", {
 				defaultValue:
 					"A new version of the application is available. Refresh now to get the latest features and bug fixes.",
@@ -82,7 +78,7 @@ export const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onDismiss, onRefre
 	);
 
 	const footer = (
-		<div className="flex justify-end gap-2">
+		<>
 			<Button
 				onClick={onDismiss}
 				variant="soft"
@@ -92,7 +88,7 @@ export const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onDismiss, onRefre
 			<Button onClick={onRefresh}>
 				{t("dialogs.updatePrompt.refreshNow", { defaultValue: "Refresh Now" })}
 			</Button>
-		</div>
+		</>
 	);
 
 	return (

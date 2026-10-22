@@ -129,9 +129,9 @@ describe("WelcomeDialog", () => {
 		);
 	});
 
-	it("renders correctly with BEM classes and footer button", async () => {
+	it("renders correctly with feature list and footer button", async () => {
 		const onClose = vi.fn();
-		const { container } = render(
+		render(
 			<DialogContext.Provider value={mockDialogContext}>
 				<Theme>
 					<WelcomeDialog
@@ -143,8 +143,10 @@ describe("WelcomeDialog", () => {
 		);
 
 		expect(screen.getByText("dialogs.welcome.description")).toBeInTheDocument();
-		expect(container.querySelector(".welcomeContent__list")).toBeInTheDocument();
-		expect(container.querySelectorAll(".welcomeContent__item")).toHaveLength(6);
+		const list = screen.getByRole("list");
+		expect(list).toBeInTheDocument();
+		expect(list).toHaveClass("list-disc", "pl-6");
+		expect(screen.getAllByRole("listitem")).toHaveLength(6);
 		expect(screen.getByTestId("dialogs.welcome.viewInstructions")).toBeInTheDocument();
 
 		const getStartedButton = screen.getByRole("button", {

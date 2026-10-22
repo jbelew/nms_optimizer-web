@@ -172,12 +172,12 @@ describe("AppDialog", () => {
 			/>,
 		);
 
-		// The scrollable section should have pr-4 class for routed dialogs
+		// The scrollable section should have pr-2 class for routed dialogs
 		const scrollableSection = screen.getByText("About Content").closest("section");
-		expect(scrollableSection?.className).toContain("pr-4");
+		expect(scrollableSection?.className).toContain("pr-2");
 	});
 
-	test("should add padding to scrollable content for non-routed dialogs", () => {
+	test("should apply standard body typography and spacing classes for non-routed dialogs", () => {
 		render(
 			<AppDialog
 				{...defaultProps}
@@ -186,9 +186,13 @@ describe("AppDialog", () => {
 			/>,
 		);
 
-		// The scrollable section should have pr-2 class for non-routed dialogs
 		const scrollableSection = screen.getByText("Error Content").closest("section");
-		expect(scrollableSection?.className).toContain("pr-2");
+		expect(scrollableSection?.className).toContain("-mr-1");
+		expect(scrollableSection?.className).toContain("pr-1");
+		expect(scrollableSection?.className).toContain("flex-col");
+		expect(scrollableSection?.className).toContain("gap-3");
+		expect(scrollableSection?.className).toContain("text-sm");
+		expect(scrollableSection?.className).toContain("sm:text-base");
 	});
 
 	test("should handle dialog close via onOpenChange", async () => {
@@ -213,9 +217,9 @@ describe("AppDialog", () => {
 		// Should derive dialogs.titles.performance as titleKey from Page Registry
 		expect(screen.getAllByText("dialogs.titles.performance").length).toBeGreaterThanOrEqual(1);
 
-		// The scrollable section should have pr-4 padding class for routed dialogs
+		// The scrollable section should have pr-2 padding class for routed dialogs
 		const scrollableSection = screen.getByText("Test Content").closest("section");
-		expect(scrollableSection?.className).toContain("pr-4");
+		expect(scrollableSection?.className).toContain("pr-2");
 	});
 
 	test("should render Separator element", () => {

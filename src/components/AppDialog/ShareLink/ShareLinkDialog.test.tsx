@@ -86,6 +86,7 @@ describe("ShareLinkDialog", () => {
 		expect(openLink).toHaveAttribute("href", testUrl);
 		expect(openLink).toHaveAttribute("target", "_blank");
 		expect(openLink).toHaveAttribute("rel", "noopener noreferrer");
+		expect(openLink).toHaveClass("rt-underline-always");
 	});
 
 	test("should update textarea value when shareUrl prop changes", async () => {

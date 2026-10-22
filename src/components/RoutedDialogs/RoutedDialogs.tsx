@@ -90,14 +90,12 @@ export const RoutedDialogs: FC = () => {
 	}
 
 	const footer = (
-		<div className="flex justify-end gap-2">
-			<Button
-				onClick={closeDialog}
-				variant="soft"
-			>
-				{t("common.closeDialog")}
-			</Button>
-		</div>
+		<Button
+			onClick={closeDialog}
+			variant="soft"
+		>
+			{t("common.closeDialog")}
+		</Button>
 	);
 
 	return (

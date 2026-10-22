@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Flex, Link, Text } from "@radix-ui/themes";
+import { Button, Link, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
@@ -7,8 +7,6 @@ import DynamicRadixIcon from "@/components/AppDialog/Common/DynamicRadixIcon";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useDialog } from "@/utils/system/dialogUtils";
 import { formatDocumentTitle } from "@shared/page-metadata.js";
-
-import "./WelcomeDialog.scss";
 
 /**
  * Props for the {@link WelcomeDialog} component.
@@ -95,18 +93,15 @@ const WelcomeDialog: React.FC<WelcomeDialogProps> = ({ isOpen, onClose }) => {
 	};
 
 	const content = (
-		<Flex
-			className="welcomeContent text-sm sm:text-base"
-			direction="column"
-		>
+		<>
 			<Text
-				mb="2"
+				as="p"
 				weight="medium"
 			>
 				{t("dialogs.welcome.description")}
 			</Text>
-			<ul className="welcomeContent__list pr-2">
-				<li className="welcomeContent__item">
+			<ul className="flex list-disc flex-col gap-1 pl-6 marker:text-(--accent-11)">
+				<li>
 					<Trans
 						components={{
 							icon: (
@@ -116,30 +111,30 @@ const WelcomeDialog: React.FC<WelcomeDialogProps> = ({ isOpen, onClose }) => {
 									size={iconSize}
 								/>
 							),
-							strong: <strong />,
+							strong: <strong className="font-bold" />,
 						}}
 						i18nKey="dialogs.welcome.item1"
 					/>
 				</li>
-				<li className="welcomeContent__item">
+				<li>
 					<Trans
-						components={{ strong: <strong /> }}
+						components={{ strong: <strong className="font-bold" /> }}
 						i18nKey="dialogs.welcome.item2"
 					/>
 				</li>
-				<li className="welcomeContent__item">
+				<li>
 					<Trans
-						components={{ strong: <strong /> }}
+						components={{ strong: <strong className="font-bold" /> }}
 						i18nKey="dialogs.welcome.item3"
 					/>
 				</li>
-				<li className="welcomeContent__item">
+				<li>
 					<Trans
-						components={{ strong: <strong /> }}
+						components={{ strong: <strong className="font-bold" /> }}
 						i18nKey="dialogs.welcome.item4"
 					/>
 				</li>
-				<li className="welcomeContent__item">
+				<li>
 					<Trans
 						components={{
 							icon: (
@@ -149,12 +144,12 @@ const WelcomeDialog: React.FC<WelcomeDialogProps> = ({ isOpen, onClose }) => {
 									size={iconSize}
 								/>
 							),
-							strong: <strong />,
+							strong: <strong className="font-bold" />,
 						}}
 						i18nKey="dialogs.welcome.item5"
 					/>
 				</li>
-				<li className="welcomeContent__item">
+				<li>
 					<Trans
 						components={{
 							icon: (
@@ -164,50 +159,34 @@ const WelcomeDialog: React.FC<WelcomeDialogProps> = ({ isOpen, onClose }) => {
 									size={iconSize}
 								/>
 							),
-							strong: <strong />,
+							strong: <strong className="font-bold" />,
 						}}
 						i18nKey="dialogs.welcome.item6"
 					/>
 				</li>
 			</ul>
 
-			<Flex
-				gap="2"
-				mt="2"
-			>
-				<Text mb="2">
-					<Trans
-						components={{
-							1: (
-								<Link
-									className="welcomeContent__link"
-									href="/instructions"
-									onClick={handleViewInstructions}
-									underline="always"
-									weight="medium"
-								>
-									{t("dialogs.titles.instructions")}
-								</Link>
-							),
-						}}
-						i18nKey="dialogs.welcome.viewInstructions"
-					/>
-				</Text>
-			</Flex>
-		</Flex>
+			<Text as="p">
+				<Trans
+					components={{
+						1: (
+							<Link
+								href="/instructions"
+								onClick={handleViewInstructions}
+								underline="always"
+								weight="medium"
+							>
+								{t("dialogs.titles.instructions")}
+							</Link>
+						),
+					}}
+					i18nKey="dialogs.welcome.viewInstructions"
+				/>
+			</Text>
+		</>
 	);
 
-	const footer = (
-		<div className="flex justify-end gap-2">
-			<Button
-				className="cursor-pointer"
-				mb="1"
-				onClick={onClose}
-			>
-				{t("dialogs.welcome.getStarted")}
-			</Button>
-		</div>
-	);
+	const footer = <Button onClick={onClose}>{t("dialogs.welcome.getStarted")}</Button>;
 
 	return (
 		<AppDialog

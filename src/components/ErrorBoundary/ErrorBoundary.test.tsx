@@ -428,7 +428,7 @@ describe("ErrorContent", () => {
 	});
 
 	it("should render page variant correctly", () => {
-		render(
+		const { container } = render(
 			<ErrorContent
 				error={mockError}
 				errorInfo={mockErrorInfo}
@@ -441,6 +441,12 @@ describe("ErrorContent", () => {
 		expect(
 			screen.getByText((content) => content.includes("errorContent.defaultMessage")),
 		).toBeInTheDocument();
+		expect(container.querySelector(".error-content__icon")).toHaveClass("h-6", "w-6");
+		expect(container.querySelector(".error-content__body")).toHaveClass(
+			"gap-3",
+			"text-sm",
+			"sm:text-base",
+		);
 	});
 
 	it("should render inset variant correctly", () => {

@@ -92,14 +92,10 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 
 	const content = (
 		<>
-			<span className="errorContent__title block pb-2 text-center text-xl font-semibold tracking-widest">
+			<span className="errorContent__title block text-center text-xl font-semibold tracking-widest">
 				{t("dialogs.optimizationAlert.warning")}
 			</span>
-			<Text
-				as="p"
-				mb="2"
-				size={{ initial: "2", sm: "3" }}
-			>
+			<Text as="p">
 				<Trans
 					components={{
 						1: (
@@ -125,11 +121,7 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 					}
 				/>
 			</Text>
-			<Text
-				as="p"
-				mb="4"
-				size={{ initial: "2", sm: "3" }}
-			>
+			<Text as="p">
 				<Trans
 					components={{
 						1: <strong className="font-bold" />,
@@ -141,7 +133,7 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 	);
 
 	const footer = (
-		<div className="flex justify-end gap-2">
+		<>
 			<Button
 				aria-label={t("dialogs.optimizationAlert.cancelButton")}
 				onClick={onClose}
@@ -157,7 +149,7 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 			>
 				{t("dialogs.optimizationAlert.forceOptimizeButton")}
 			</Button>
-		</div>
+		</>
 	);
 
 	return (
