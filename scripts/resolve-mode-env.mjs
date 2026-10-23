@@ -9,6 +9,10 @@
 import fs from "node:fs";
 import path from "node:path";
 
+/**
+ * Environment variable keys that GitHub Actions may pass as empty strings (`""`)
+ * when repository secrets or workflow inputs are unset.
+ */
 const CI_EMPTY_ENV_KEYS = [
 	"SENTRY_AUTH_TOKEN",
 	"SENTRY_ORG",
@@ -22,8 +26,24 @@ const CI_EMPTY_ENV_KEYS = [
 /**
  * Parses a simple `KEY=VALUE` dotenv file from disk if it exists.
  *
+ * @remarks
+ * Ignores blank lines and `#` comment lines, trims surrounding whitespace, and
+ * strips matching single or double quotes around values. Returns an empty object
+ * when the target file does not exist.
+ *
  * @param {string} filePath - Absolute path to the dotenv file.
  * @returns {Record<string, string>} Parsed key-value pairs.
+ *
+ * @see {@link resolveModeEnv}
+ * @see {@link ./resolve-mode-env.test.mjs Tests}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```js
+ * const env = parseDotEnvFile("/path/to/.env.production");
+ * // returns { VITE_SENTRY_ENABLED: "true", ... }
+ * ```
  */
 export function parseDotEnvFile(filePath) {
 	if (!fs.existsSync(filePath)) {
@@ -71,6 +91,19 @@ export function parseDotEnvFile(filePath) {
  * @param {string} mode - The active Vite mode (`"production"`, `"docker"`, `"e2e"`, `"development"`).
  * @param {string} [cwd] - Working directory containing `.env.*` files.
  * @returns {Record<string, string>} Resolved environment map for the given mode.
+ *
+ * @default cwd process.cwd()
+ *
+ * @see {@link parseDotEnvFile}
+ * @see {@link ./resolve-mode-env.test.mjs Tests}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```js
+ * const env = resolveModeEnv("production");
+ * // returns { VITE_SENTRY_ENABLED: "true", VITE_SENTRY_ENV: "production", ... }
+ * ```
  */
 export function resolveModeEnv(mode, cwd = process.cwd()) {
 	for (const key of CI_EMPTY_ENV_KEYS) {

@@ -102,20 +102,12 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 	const sentryDsn = process.env.VITE_SENTRY_DSN || env.VITE_SENTRY_DSN || "";
 	const sentryEnv = process.env.VITE_SENTRY_ENV || env.VITE_SENTRY_ENV || "production";
 	const sentryAuthToken = process.env.SENTRY_AUTH_TOKEN || env.SENTRY_AUTH_TOKEN;
-	const sentryUploadEnabled =
-		mode === "production"
-		&& sentryEnabled
-		&& sentryEnv === "production"
-		&& Boolean(sentryAuthToken);
+	const isProductionSentryTarget =
+		mode === "production" && sentryEnabled && sentryEnv === "production";
+	const sentryUploadEnabled = isProductionSentryTarget && Boolean(sentryAuthToken);
 
 	// Warn if Sentry token is missing in production to avoid silent missing sourcemaps
-	if (
-		mode === "production"
-		&& sentryEnabled
-		&& sentryEnv === "production"
-		&& !sentryAuthToken
-		&& !process.env.CI
-	) {
+	if (isProductionSentryTarget && !sentryAuthToken && !process.env.CI) {
 		console.warn("⚠️  SENTRY_AUTH_TOKEN is missing. Source maps will not be uploaded.");
 	}
 

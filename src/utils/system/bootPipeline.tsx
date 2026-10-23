@@ -287,50 +287,52 @@ export const bootApp = async (options: BootOptions = {}): Promise<BootResult> =>
 				}
 
 				const filename = event.filename || "";
-				const isOurScript =
-					!filename
-					|| filename.startsWith(window.location.origin)
-					|| filename.startsWith("/")
-					|| filename.includes("/src/")
-					|| filename.includes("/build/");
 
-				if (!isOurScript) {
+				if (!isFirstPartySource(filename, true)) {
 					return;
 				}
 
+				reportBootstrapOrRuntimeError(
+					"Uncaught runtime error:",
+					event.error || event.message,
+					event.error || new Error(errorMessage || "Uncaught initialization error"),
+				);
+			};
+
+			const isFirstPartySource = (source: string, allowRelativeRoot: boolean) =>
+				!source
+				|| source.includes(window.location.origin)
+				|| (allowRelativeRoot && source.startsWith("/"))
+				|| source.includes("/src/")
+				|| source.includes("/build/");
+
+			const reportBootstrapOrRuntimeError = (
+				logMessage: string,
+				runtimePayload: unknown,
+				bootstrapFallback: unknown,
+			) => {
 				if (!coordinator.isReady()) {
-					handleFatal(
-						event.error || new Error(errorMessage || "Uncaught initialization error"),
-					);
+					handleFatal(bootstrapFallback);
 
 					return;
 				}
 
-				Logger.error("Uncaught runtime error:", event.error || event.message);
+				Logger.error(logMessage, runtimePayload);
 			};
 
 			const unhandledRejectionHandler = (event: PromiseRejectionEvent) => {
 				const reason = event.reason;
 				const stack = reason?.stack || "";
-				const isOurScript =
-					!stack
-					|| stack.includes(window.location.origin)
-					|| stack.includes("/src/")
-					|| stack.includes("/build/");
 
-				if (!isOurScript) {
+				if (!isFirstPartySource(stack, false)) {
 					return;
 				}
 
-				if (!coordinator.isReady()) {
-					handleFatal(
-						reason || new Error("Unhandled promise rejection during bootstrap"),
-					);
-
-					return;
-				}
-
-				Logger.error("Unhandled promise rejection:", reason);
+				reportBootstrapOrRuntimeError(
+					"Unhandled promise rejection:",
+					reason,
+					reason || new Error("Unhandled promise rejection during bootstrap"),
+				);
 			};
 
 			window.addEventListener("error", errorHandler);

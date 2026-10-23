@@ -55,6 +55,13 @@ export interface LogEntry {
 /**
  * Optional metadata and Sentry capture options accepted by {@link Logger.error}.
  *
+ * @remarks
+ * When `level` or `tags` are present on the `data` object passed to {@link Logger.error},
+ * they are promoted to top-level Sentry capture options while remaining properties
+ * are attached under `extra`.
+ *
+ * @see {@link Logger.error}
+ *
  * @category Utilities
  */
 export interface LoggerErrorData extends Record<string, unknown> {
@@ -591,6 +598,8 @@ export const flushSentry = async (timeoutMs = 1500): Promise<boolean> => {
  * @param instance - The mock object to use as Sentry SDK.
  *
  * @returns Side-effects only.
+ *
+ * @category Utilities
  *
  * @example
  * ```ts
