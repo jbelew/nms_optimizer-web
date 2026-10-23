@@ -1,7 +1,9 @@
+import * as actualFsPromises from "node:fs/promises";
 import { beforeEach, describe, expect, it, mock, vi } from "bun:test";
 
-// Mock node:fs/promises globally with implementations
+// Mock node:fs/promises globally while preserving unmocked exports (lstat, constants, stat, etc.)
 const fsMock = {
+	...actualFsPromises,
 	mkdir: vi.fn().mockResolvedValue(undefined),
 	readFile: vi.fn().mockResolvedValue("# Content"),
 	writeFile: vi.fn().mockResolvedValue(undefined),

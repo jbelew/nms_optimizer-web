@@ -19,7 +19,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "bun:test";
 import { ROUTED_DIALOG_IDS } from "../shared/page-registry.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

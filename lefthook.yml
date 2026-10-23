@@ -53,12 +53,12 @@ pre-commit:
 
           - name: test
             tags: [test]
-            glob: "{src,shared}/**/*.{ts,tsx,js,mjs,cjs}"
+            glob: "{src/*.{ts,tsx,js,mjs,cjs},src/**/*.{ts,tsx,js,mjs,cjs},shared/*.{ts,tsx,js,mjs,cjs},shared/**/*.{ts,tsx,js,mjs,cjs}}"
             run: bun run test:related {staged_files}
 
           - name: test-scripts
             tags: [test]
-            glob: "scripts/**/*.{ts,js,mjs,cjs}"
+            glob: "{scripts/*.{ts,js,mjs,cjs},scripts/**/*.{ts,js,mjs,cjs}}"
             run: bun run test:scripts
 
 pre-push:
@@ -105,7 +105,7 @@ pre-push:
 
           - name: test
             tags: [test]
-            glob: "{src,shared}/**/*.{ts,tsx,js,mjs,cjs}"
+            glob: "{src/*.{ts,tsx,js,mjs,cjs},src/**/*.{ts,tsx,js,mjs,cjs},shared/*.{ts,tsx,js,mjs,cjs},shared/**/*.{ts,tsx,js,mjs,cjs}}"
             run: bun run test:related {push_files}
 
 commit-msg:

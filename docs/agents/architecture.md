@@ -21,6 +21,7 @@ Guidelines and technical decisions regarding the system architecture of the NMS 
 ## Bundle Strategy
 
 - **Code Splitting**: `vite.config.ts` uses Rolldown's `codeSplitting.groups` to group tracking-related libraries (`vendor-telemetry` for GA4, and a generic `build/chunk-[hash].js` group for Sentry that avoids `monitoring` or `sentry` in the filename) to improve resilience against strict ad-blockers and iOS content filters. **Do not rename or break this chunking logic.**
+- **Mode Environment Resolution under Bun**: Bun automatically preloads `.env.development` into `process.env` whenever `NODE_ENV` is not `"production"` or `"test"` (affecting custom Vite modes like `--mode docker` and `--mode e2e`). `vite.config.ts` calls `resolveModeEnv(mode, process.cwd())` from [`scripts/resolve-mode-env.mjs`](file:///home/jbelew/projects/nms_optimizer-web/scripts/resolve-mode-env.mjs) so `.env.development` and empty CI secret strings never shadow `.env.<mode>`.
 
 ## Directory Structure
 

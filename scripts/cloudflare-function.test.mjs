@@ -11,7 +11,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "bun:test";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FN_URL = `file://${path.join(__dirname, "../functions/[[path]].js")}`;

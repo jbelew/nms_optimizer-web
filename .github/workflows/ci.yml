@@ -133,8 +133,8 @@ jobs:
           SENTRY_ORG: ${{ (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && secrets.SENTRY_ORG || '' }}
           SENTRY_PROJECT: ${{ (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && secrets.SENTRY_PROJECT || '' }}
 
-      - name: Verify SSG and route integrity
-        run: bun run verify:routes && bun run verify:ssg
+      - name: Verify SSG, route integrity, and post-build script assertions
+        run: bun run verify:routes && bun run verify:ssg && bun run test:scripts
 
       - name: Upload dist artifact
         uses: actions/upload-artifact@v7
@@ -398,8 +398,8 @@ jobs:
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
 
-      - name: Verify SSG, route integrity, and bundle size budgets (Production)
-        run: bun run verify:routes && bun run verify:ssg && bun run size
+      - name: Verify SSG, route integrity, post-build script assertions, and bundle size budgets (Production)
+        run: bun run verify:routes && bun run verify:ssg && bun run test:scripts && bun run size
 
       - name: Upload production artifact
         uses: actions/upload-artifact@v7

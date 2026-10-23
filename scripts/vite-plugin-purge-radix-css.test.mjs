@@ -71,6 +71,20 @@ describe("Production Bundle CSS & Radix Chunking", () => {
 	const distIndexHtml = path.join(ROOT, "dist", "index.html");
 	const itWhenBuilt = fs.existsSync(distBuildDir) ? it : it.skip;
 
+	it("never configures ad-blocker-targeted chunk group names in vite.config.ts", () => {
+		const viteConfigSource = fs.readFileSync(path.join(ROOT, "vite.config.ts"), "utf-8");
+		const groupSection = viteConfigSource.slice(
+			viteConfigSource.indexOf("codeSplitting:"),
+			viteConfigSource.indexOf("entryFileNames:"),
+		);
+		const groupNames = [...groupSection.matchAll(/name:\s*["']([^"']+)["']/g)].map((m) => m[1]);
+		expect(groupNames.length).toBeGreaterThan(0);
+
+		for (const groupName of groupNames) {
+			expect(groupName.toLowerCase()).not.toMatch(/monitoring|sentry|analytics|events/);
+		}
+	});
+
 	itWhenBuilt("consolidates CSS into exactly two bundles (vendor-ui-themes and index)", () => {
 		const cssFiles = fs
 			.readdirSync(distBuildDir)

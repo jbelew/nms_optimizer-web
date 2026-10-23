@@ -6,7 +6,7 @@ license: AGPL-3.0-only
 
 # Agentic JSDoc
 
-Apply this standard to all **exported and top-level declarations**: functions, classes, methods, React components, custom hooks, contexts, validation schemas, and interfaces/types. Skip local variables inside functions unless non-obvious.
+Apply this standard to all **exported and top-level declarations** in application source (`src/`): functions, classes, methods, React components, custom hooks, contexts, validation schemas, and interfaces/types. Skip local variables inside functions unless non-obvious. Internal build and CI scripts (`scripts/`) require summary, `@param`, and `@returns` comments on exported functions, and may omit TypeDoc `@category` and `@example` tags (matching `eslint.config.js`).
 
 When writing or reviewing **React components, route components, context hooks, data-fetching hooks (React Query/SWR), Zustand stores, or Zod/Yup schemas**, also read [`reference/react.md`](reference/react.md).
 

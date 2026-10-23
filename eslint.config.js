@@ -258,6 +258,22 @@ export default tseslint.config(
 			"jsdoc/require-jsdoc": "off", // Optional for internal scripts
 		},
 	},
+	{
+		files: ["scripts/**/*.{js,mjs,cjs,ts}"],
+		rules: {
+			"no-restricted-imports": [
+				"error",
+				{
+					paths: [
+						{
+							message: "Use 'bun:test' in scripts/*.test.mjs.",
+							name: "vitest",
+						},
+					],
+				},
+			],
+		},
+	},
 
 	//
 	// --- MAIN SOURCE FILES (Business Logic & UI) ---
