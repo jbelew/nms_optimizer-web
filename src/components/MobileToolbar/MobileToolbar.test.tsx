@@ -13,12 +13,13 @@ const mockForceShow = vi.fn();
 const mockHandleLoadBuild = vi.fn();
 const mockHandleSaveBuild = vi.fn();
 const mockOpenDialog = vi.fn();
+const mockSendDeferredEvent = vi.fn();
 let solvingState = false;
 
 // Mock hooks used in MobileToolbar
 vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
 	useAnalytics: () => ({
-		sendDeferredEvent: vi.fn(),
+		sendDeferredEvent: mockSendDeferredEvent,
 	}),
 }));
 
@@ -49,7 +50,12 @@ vi.mock("@/hooks/useBuildFileManager/useBuildFileManager", () => ({
 }));
 
 vi.mock("@/store/grid/gridStore", () => ({
-	useGridStore: vi.fn((selector) => selector({ hasModulesInGrid: true, isSharedGrid: false })),
+	useGridStore: Object.assign(
+		vi.fn((selector) => selector({ hasModulesInGrid: true, isSharedGrid: false })),
+		{
+			getState: () => ({ grid: { cells: [], height: 6, width: 10 } }),
+		},
+	),
 }));
 
 vi.mock("@/components/LanguageSelector/LanguageSelector", () => ({
@@ -171,5 +177,27 @@ describe("MobileToolbar", () => {
 		fireEvent.click(svg!);
 
 		expect(mockHandleLoadBuild).toHaveBeenCalledTimes(1);
+	});
+
+	it("should emit unified share event when share button is clicked", () => {
+		render(
+			<I18nextProvider i18n={i18n}>
+				<Theme>
+					<MobileToolbar />
+				</Theme>
+			</I18nextProvider>,
+		);
+
+		const shareButton = screen.getByLabelText("buttons.share");
+		fireEvent.click(shareButton);
+
+		expect(mockSendDeferredEvent).toHaveBeenCalledWith({
+			action: "share",
+			category: "ui",
+			method: "url",
+			nonInteraction: false,
+			platform: "standard",
+			value: 1,
+		});
 	});
 });

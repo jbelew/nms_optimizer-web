@@ -6,6 +6,8 @@
 
 /**
  * Key-value pairs for generic analytics parameters.
+ *
+ * @category Types
  */
 export interface AnalyticsEventParams {
 	[key: string]: boolean | number | string | undefined;
@@ -15,93 +17,103 @@ export interface AnalyticsEventParams {
  * Interface for Google Analytics 4 event tracking.
  *
  * @remarks
- * This interface is designed to support both custom events and GA4 recommended events.
- * It uses `snake_case` for all parameters to align with GA4 best practices.
+ * This interface supports both custom events and GA4 recommended events.
+ * It uses canonical `snake_case` parameters aligned with [`GLOSSARY.md`](../../GLOSSARY.md)
+ * and the cross-repo GA4/BigQuery telemetry contract ([ADR-0003](../../docs/adr/0003-ga4-bigquery-telemetry-contract.md)).
+ *
+ * @category Types
  */
 export interface GA4Event {
-	/** Event action/name (e.g., 'optimize_tech', 'select_content', 'share'). */
+	/** Event action/name (e.g., `'optimize_tech'`, `'select_content'`, `'share'`, `'exception'`). */
 	action: string;
-	/** Application version. Maps to customEvent:app_version. */
+	/** Count of Technology Categories currently placed on the workspace grid. */
+	active_tech_count?: number;
+	/** Application version. Maps to `customEvent:app_version`. */
 	app_version?: string;
-	/** Build ID. */
+	/** Solve Quality tier (`'boosted'`, `'standard'`, or `'insufficient_space'`). Maps to `customEvent:bonus_status`. */
+	bonus_status?: "boosted" | "insufficient_space" | "standard";
+	/** Recommended Build title for `apply_build` events. */
 	build?: string;
-	/** Name of the build (snake_case). */
+	/** Name of the saved Build File for `save_build` events. */
 	build_name?: string;
-	/** Name of the build. */
-	buildName?: string;
-
-	/** Event category (e.g., 'ui', 'performance', 'error'). */
+	/** Event category (e.g., `'ui'`, `'performance'`, `'error'`, `'engagement'`). */
 	category: string;
-	/** React component stack trace. */
-	componentStack?: string;
-	// --- GA4 Recommended Parameters ---
-	/** The type of content selected (e.g., 'platform', 'language'). */
+	/** The type of content selected (e.g., `'platform'`, `'language'`). */
 	content_type?: string;
-	/** Filename involved (snake_case). */
+	/** Diagnostic description for standard GA4 `exception` events. */
+	description?: string;
+	/** Whether an `exception` event represents a fatal crash. */
+	fatal?: boolean | string;
+	/** Filename involved in a Build File import (`load_build`). */
 	file_name?: string;
-	/** Filename involved. */
-	fileName?: string;
-	/** Screen name for screen_view events. */
+	/** Screen name for `screen_view` events. */
 	firebase_screen?: string;
-
-	// --- INP Attribution Parameters ---
-	/** Input delay duration in milliseconds for INP. */
+	/** Whether the optimization was a Forced Solve after a Pattern No Fit warning. */
+	forced?: boolean | string;
+	/** Input delay duration in milliseconds for INP attribution. */
 	input_delay?: number;
-	/** Target element CSS selector or descriptor for INP. */
+	/** Target DOM element selector for Web Vitals attribution (`INP`, `LCP`, `CLS`). Maps to `customEvent:interaction_target`. */
 	interaction_target?: string;
-	/** Interaction type for INP (e.g. 'pointer', 'keyboard'). */
+	/** Interaction type for INP attribution (e.g., `'pointer'`, `'keyboard'`). Maps to `customEvent:interaction_type`. */
 	interaction_type?: string;
-	/** Target identifier for selected item. */
+	/** Whether the workspace grid differs from the platform's Default Grid Layout. */
+	is_custom_grid?: boolean | string;
+	/** Whether the active Module Selection differs from the Technology Variant defaults. */
+	is_custom_modules?: boolean | string;
+	/** Target identifier for a selected item (`select_content`). */
 	item_id?: string;
-	/** Optional event label (legacy/custom or web-vitals metric ID). */
+	/** Optional event label or `web-vitals` metric ID (`^v\d+-\d+-\d+$`). */
 	label?: string;
-	/** Document load state during the interaction (e.g. 'loading', 'dom-interactive', 'complete'). */
+	/** Document load state during a Web Vitals measurement. Maps to `customEvent:load_state`. */
 	load_state?: string;
-	/** The method used for the action (e.g., 'nms_file', 'url', 'png'). */
+	/** Rounded maximum bonus percentage achieved by an optimization solve. */
+	max_bonus?: number;
+	/** The method used for the action (e.g., `'nms_file'`, `'shared_url'`, `'url'`, `'png'`). Maps to `customEvent:method`. */
 	method?: string;
-	/** Unique metric ID from web-vitals for delta deduplication. */
+	/** Unique metric ID from `web-vitals` for BigQuery delta deduplication. */
 	metric_id?: string;
-	/** Metric name for web vitals. */
+	/** Metric name for Web Vitals (`'LCP'`, `'CLS'`, `'INP'`, `'FCP'`, `'TTFB'`). Maps to `customEvent:metric_name`. */
 	metric_name?: string;
+	/** Web Vitals rating classification (`'good'`, `'needs-improvement'`, `'poor'`). */
+	metric_rating?: string;
+	/** Number of checked modules included in an optimization solve. */
+	module_count?: number;
 	/** Whether the event is non-interactive. */
 	nonInteraction?: boolean;
-	/** Page identifier. */
+	/** Page identifier path and query string. */
 	page?: string;
-	/** Page location URL. */
+	/** Full page location URL. */
 	page_location?: string;
-
 	/** Referrer URL. */
 	page_referrer?: string;
-	/** SEO page title. */
+	/** SEO document title. */
 	page_title?: string;
-	// --- Custom Dimensions (Mapped in GA4) ---
-	/** Platform identifier (e.g., 'starship', 'multitool'). Maps to customEvent:platform. */
+	/** Canonical Platform Type identifier (e.g., `'standard'`, `'corvette'`). Maps to `customEvent:platform`. */
 	platform?: string;
-	/** Presentation delay duration in milliseconds for INP. */
+	/** Presentation delay duration in milliseconds for INP attribution. */
 	presentation_delay?: number;
-	/** Processing duration in milliseconds for INP. */
+	/** Processing duration in milliseconds for INP attribution. */
 	processing_duration?: number;
-	/** Screen class for screen_view events. */
+	/** Slot Restriction violation reason (`'gridFixed'`, `'moduleLocked'`, `'rowLimit'`, `'superchargedFixed'`, `'superchargedLimit'`). */
+	reason?: string;
+	/** Screen class for `screen_view` events. */
 	screen_class?: string;
-	/** Ship type category. */
-	shipType?: string;
-	// --- Legacy/Other Parameters ---
-	/** Method used for legacy solve tracking. */
-	solveMethod?: string;
-	/** Error stack trace. */
-	stackTrace?: string;
-	/** Storage status. */
-	storageCleared?: string;
-	/** Whether the build is supercharged. Maps to customEvent:supercharged. */
-	supercharged?: boolean;
-	/** Tech identifier (e.g., 'pulse', 'hyperdrive'). Maps to customEvent:tech. */
+	/** Optimization solve duration in milliseconds. Maps to `customEvent:solve_duration_ms`. */
+	solve_duration_ms?: number;
+	/** Optimization solver method returned by the backend. Maps to `customEvent:solve_method`. */
+	solve_method?: string;
+	/** Active Technology Variant identifier when a Technology Category has multiple variants. */
+	solve_type?: string;
+	/** Whether the solve achieved a boosted (`> 100%`) supercharged score. Maps to `customEvent:supercharged`. */
+	supercharged?: boolean | string;
+	/** Technology Category identifier (e.g., `'pulse'`, `'photonix'`, `'hyper'`). Maps to `customEvent:tech`. */
 	tech?: string;
 	/** Page title. */
 	title?: string;
-	/** Tracking source (client/server). Maps to customEvent:tracking_source. */
+	/** Tracking source (`'client'` or `'server'`). Maps to `customEvent:tracking_source`. */
 	tracking_source?: string;
-	/** Optional numeric value (legacy/custom). */
+	/** Numeric event value. Maps to `customEvent:value`. */
 	value?: number;
-	/** Virtual currency name for earn_virtual_currency events. */
+	/** Virtual currency name for `earn_virtual_currency` events. */
 	virtual_currency_name?: string;
 }

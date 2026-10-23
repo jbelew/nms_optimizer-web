@@ -290,7 +290,15 @@ describe("useOptimize", () => {
 			expect(mockSendEvent).toHaveBeenCalledWith(
 				expect.objectContaining({
 					action: "optimize_tech",
-					solveMethod: "Simulated Annealing",
+					active_tech_count: 1,
+					bonus_status: "boosted",
+					forced: false,
+					is_custom_grid: false,
+					is_custom_modules: false,
+					max_bonus: 112,
+					module_count: 1,
+					solve_duration_ms: expect.any(Number),
+					solve_method: "Simulated Annealing",
 					supercharged: true,
 					tech: "photonix",
 				}),
@@ -328,6 +336,8 @@ describe("useOptimize", () => {
 			expect(mockSendEvent).toHaveBeenCalledWith(
 				expect.objectContaining({
 					action: "no_fit_warning",
+					module_count: 0,
+					platform: "standard",
 					tech: "Test Tech",
 				}),
 			);

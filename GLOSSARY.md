@@ -49,7 +49,7 @@ The action of clearing all placed modules and solver bonus scores for a single T
 _Avoid_: tech reset, row reset, clear tech
 
 **Recommended Builds**:
-Curated, preconfigured technology layouts bundled within the application that provide optimal module placements for common setups.
+Curated, preconfigured technology layouts bundled for Platform Types with fixed supercharged slot layouts (such as Exosuit and Exocraft) that provide optimal module placements for common setups.
 _Avoid_: Community Builds, default builds, preset setups
 
 **Platform Type**:
@@ -99,3 +99,7 @@ _Avoid_: pattern error, no-fit warning, PNF state
 **Forced Solve**:
 A fallback optimization pass initiated by the user after a Pattern No Fit warning that bypasses precomputed pattern templates in favor of full simulated annealing across available grid slots.
 _Avoid_: force optimize, brute-force solve, fallback solve
+
+**Solve Quality**:
+The optimization outcome tier for a placed Technology Category relative to its baseline theoretical adjacency score: boosted (`> 100%` via supercharged slots), standard (`100%` optimal adjacency), or insufficient space (`< 100%` due to constrained grid space).
+_Avoid_: bonus status icon, supercharged flag, solve score status

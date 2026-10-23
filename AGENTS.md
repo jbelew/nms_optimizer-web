@@ -20,7 +20,8 @@ Before marking any code task complete, execute this sequence (also enforced auto
 1. `bun run typecheck` — Must report 0 TypeScript diagnostics (`tsgo`).
 2. `bun run test -- <path>` or `bun run test:related` — Ensure targeted unit/component tests pass.
 3. `bun run lint` — Must report 0 oxlint/ESLint errors (use `bunx eslint --fix <touched-files>` to auto-fix `perfectionist` sorting).
-4. **Post-Refactor Validation**: Run `bun run perf:compare` (or `bun run perf:compare <base-git-ref>` if `/tmp/nms-perf-baseline.json` was not captured beforehand) and **include the generated Before vs. After Bundle Size and Desktop/Mobile Lighthouse Markdown tables in your response to the user**.
+4. **Code Review (when running `/implement`)**: After committing, run [`.agents/skills/code-review/SKILL.md`](.agents/skills/code-review/SKILL.md) against `HEAD~1` and amend any fixes (`git commit --amend --no-edit`) before running `perf:compare` or closing the ticket.
+5. **Post-Refactor Validation**: Run `bun run perf:compare` (or `bun run perf:compare <base-git-ref>` if `/tmp/nms-perf-baseline.json` was not captured beforehand) on the final commit and **include the generated Before vs. After Bundle Size and Desktop/Mobile Lighthouse Markdown tables in your response to the user**.
 
 ## Key Commands & Gotchas
 

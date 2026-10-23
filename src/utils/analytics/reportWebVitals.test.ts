@@ -95,6 +95,74 @@ describe("reportWebVitals", () => {
 		});
 	});
 
+	test("should send CLS metric with attribution target and loadState when present", () => {
+		reportWebVitals(mockSendEvent);
+
+		const clsCallback = vi.mocked(onCLS).mock.calls[0][0];
+
+		clsCallback({
+			attribution: {
+				largestShiftTarget: "div.grid-container",
+				loadState: "dom-interactive",
+			},
+			delta: 0.08,
+			entries: [],
+			id: "v3-cls-attr",
+			name: "CLS",
+			navigationId: 1,
+			navigationType: "navigate",
+			rating: "good",
+			value: 0.08,
+		});
+
+		expect(mockSendEvent).toHaveBeenCalledWith({
+			action: "performance_metric",
+			app_version: expect.any(String),
+			category: "performance",
+			interaction_target: "div.grid-container",
+			label: "v3-cls-attr",
+			load_state: "dom-interactive",
+			metric_name: "CLS",
+			nonInteraction: true,
+			value: 80,
+		});
+	});
+
+	test("should send LCP metric with attribution target when present", () => {
+		reportWebVitals(mockSendEvent);
+
+		const lcpCallback = vi.mocked(onLCP).mock.calls[0][0];
+
+		lcpCallback({
+			attribution: {
+				elementRenderDelay: 0,
+				resourceLoadDelay: 0,
+				resourceLoadDuration: 0,
+				target: "main.app-shell>h1",
+				timeToFirstByte: 0,
+			},
+			delta: 1850.2,
+			entries: [],
+			id: "v3-lcp-attr",
+			name: "LCP",
+			navigationId: 1,
+			navigationType: "navigate",
+			rating: "good",
+			value: 1850.2,
+		});
+
+		expect(mockSendEvent).toHaveBeenCalledWith({
+			action: "performance_metric",
+			app_version: expect.any(String),
+			category: "performance",
+			interaction_target: "main.app-shell>h1",
+			label: "v3-lcp-attr",
+			metric_name: "LCP",
+			nonInteraction: true,
+			value: 1850,
+		});
+	});
+
 	test("should send INP metric with delta in milliseconds", () => {
 		reportWebVitals(mockSendEvent);
 

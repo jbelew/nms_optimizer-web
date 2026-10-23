@@ -244,6 +244,7 @@ describe("GridTableButtons", () => {
 			category: "ui",
 			method: "url",
 			nonInteraction: false,
+			platform: "standard",
 			value: 1,
 		});
 		getShareUrlSpy.mockRestore();
@@ -257,6 +258,7 @@ describe("GridTableButtons", () => {
 			action: "reset_grid",
 			category: "ui",
 			nonInteraction: false,
+			platform: "standard",
 			value: 1,
 		});
 
@@ -287,6 +289,7 @@ describe("GridTableButtons", () => {
 			action: "reset_grid",
 			category: "ui",
 			nonInteraction: false,
+			platform: "standard",
 			value: 1,
 		});
 		expect(mockResetGrid).toHaveBeenCalled();

@@ -2,9 +2,10 @@
  * Performance monitoring utility for Core Web Vitals.
  *
  * @remarks
- * This module uses the `web-vitals` library to capture and report performance
- * metrics like LCP, CLS, and INP. It facilitates data-driven performance
- * optimizations.
+ * This module uses the `web-vitals/attribution` library to capture and report
+ * performance metrics (`LCP`, `CLS`, `INP`, `FCP`, `TTFB`) with DOM target
+ * attribution routed through the registered `interaction_target` and `load_state`
+ * GA4 dimensions ([ADR-0003](../../../docs/adr/0003-ga4-bigquery-telemetry-contract.md)).
  *
  * @see {@link reportWebVitals}
  * @see {@link ./reportWebVitals.test.ts Unit Tests}
@@ -12,7 +13,12 @@
  * @category Utilities
  */
 
-import type { INPMetricWithAttribution, Metric } from "web-vitals/attribution";
+import type {
+	CLSMetricWithAttribution,
+	INPMetricWithAttribution,
+	LCPMetricWithAttribution,
+	Metric,
+} from "web-vitals/attribution";
 import { onCLS, onFCP, onINP, onLCP, onTTFB } from "web-vitals/attribution";
 
 import type { GA4Event } from "@/types/analytics";
@@ -24,15 +30,16 @@ declare const __APP_VERSION__: string;
 type SendEventFunction = (event: GA4Event) => void;
 
 /**
- * Sends a web vitals metric to Google Analytics.
+ * Sends a Web Vitals metric to Google Analytics.
  *
  * @remarks
- * Converts the metric value to numerical event parameters suitable for GA4 custom metrics.
- * Ensures metrics are tracked as non-interactive events. For INP metrics with attribution,
- * detailed subpart breakdowns (input delay, processing duration, presentation delay) and
- * target element selectors are captured.
+ * Converts the metric value to numerical event parameters suitable for GA4 custom metrics
+ * while preserving `label: metric.id` (`^v\d+-\d+-\d+$`) for BigQuery delta deduplication.
+ * Ensures metrics are tracked as non-interactive events. For `INP`, `LCP`, and `CLS` metrics
+ * with attribution, target element selectors and load states are captured via the existing
+ * `interaction_target` and `load_state` dimensions.
  *
- * @param metric - The web vitals metric to send.
+ * @param metric - The Web Vitals metric to send.
  * @param sendEvent - The function to send the event.
  *
  * @returns Side-effects only.
@@ -98,68 +105,42 @@ const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
 				type: attribution.interactionType,
 			});
 		}
+	} else if (metric.name === "LCP" && "attribution" in metric) {
+		const lcpMetric = metric as LCPMetricWithAttribution;
+		const attribution = lcpMetric.attribution;
+
+		if (attribution) {
+			const target = attribution.target || attribution.url;
+
+			if (target) {
+				event.interaction_target = target;
+			}
+		}
+	} else if (metric.name === "CLS" && "attribution" in metric) {
+		const clsMetric = metric as CLSMetricWithAttribution;
+		const attribution = clsMetric.attribution;
+
+		if (attribution) {
+			if (attribution.largestShiftTarget) {
+				event.interaction_target = attribution.largestShiftTarget;
+			}
+
+			if (attribution.loadState) {
+				event.load_state = attribution.loadState;
+			}
+		}
 	}
 
 	sendEvent(event);
 };
 
 /**
- * Captures Total Blocking Time (TBT) and reports it to analytics.
- *
- * @param sendEvent - The function to send the event.
- *
- * @example
- * ```ts
- * reportTBT(sendEvent);
- * ```
- */
-const reportTBT = (sendEvent: SendEventFunction) => {
-	if (typeof window === "undefined" || !("PerformanceObserver" in window)) return;
-
-	let tbt = 0;
-	const fcpEntry = performance.getEntriesByName("first-contentful-paint")[0];
-	const fcpTime = fcpEntry ? fcpEntry.startTime : 0;
-
-	try {
-		const observer = new PerformanceObserver((list) => {
-			list.getEntries().forEach((entry) => {
-				// Only track long tasks after FCP
-				if (entry.startTime >= fcpTime) {
-					tbt += entry.duration - 50;
-				}
-			});
-		});
-
-		observer.observe({ buffered: true, type: "longtask" });
-
-		// Report TBT after a delay to capture initial load tasks
-		// In a production app, you might want to report this on page visibility change or at a fixed interval
-		setTimeout(() => {
-			if (tbt > 0) {
-				sendEvent({
-					action: "performance_metric",
-					app_version: __APP_VERSION__,
-					category: "performance",
-					label: `tbt-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
-					metric_name: "TBT",
-					nonInteraction: true,
-					value: Math.round(tbt),
-				});
-			}
-
-			observer.disconnect();
-		}, 10000);
-	} catch (_e) {
-		// Silent catch for browsers that don't support longtask type
-	}
-};
-
-/**
  * Registers listeners for Core Web Vitals and reports them to analytics.
  *
  * @remarks
- * This function tracks CLS, INP, FCP, LCP, and TTFB using the `web-vitals` library.
- * It is typically called during application initialization.
+ * This function tracks `CLS`, `INP`, `FCP`, `LCP`, and `TTFB` using the `web-vitals/attribution`
+ * library. Listeners are registered synchronously so the underlying `PerformanceObserver`
+ * instances attach as early as possible and flush final values on `pagehide` / `visibilitychange`.
  *
  * @param sendEvent - The function to call for each metric. **Must be a valid function.**
  *
@@ -176,22 +157,9 @@ const reportTBT = (sendEvent: SendEventFunction) => {
  * ```
  */
 export function reportWebVitals(sendEvent: SendEventFunction) {
-	// Register CWV listeners synchronously so the underlying PerformanceObservers
-	// attach as early as possible. This minimizes the chance of missing the first
-	// LCP/FCP/CLS entries on slow devices and ensures the web-vitals library can
-	// flush its final values on `pagehide` / `visibilitychange`.
 	onCLS((metric) => sendVitalsMetric(metric, sendEvent));
 	onINP((metric) => sendVitalsMetric(metric, sendEvent));
 	onFCP((metric) => sendVitalsMetric(metric, sendEvent));
 	onLCP((metric) => sendVitalsMetric(metric, sendEvent));
 	onTTFB((metric) => sendVitalsMetric(metric, sendEvent));
-
-	// Defer only the longer-running TBT longtask observer to idle time.
-	const startTBT = () => reportTBT(sendEvent);
-
-	if (typeof window !== "undefined" && "requestIdleCallback" in window) {
-		window.requestIdleCallback(startTBT);
-	} else {
-		setTimeout(startTBT, 2000);
-	}
 }

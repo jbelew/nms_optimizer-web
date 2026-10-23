@@ -10,7 +10,7 @@ import { useLatest } from "@/hooks/useLatest/useLatest";
 import { useScrollGridIntoView } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
-import { sessionCoordinator } from "@/store/sessionCoordinator";
+import { resolveSolveQuality, sessionCoordinator } from "@/store/sessionCoordinator";
 import { useTechStore } from "@/store/tech/techStore";
 import { useOptimizeStore, useShakeStore } from "@/store/ui/uiStore";
 import { Logger } from "@/utils/system/monitoring";
@@ -256,6 +256,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 	const handleOptimize = useCallback(
 		async (tech: string, forced: boolean = false) => {
 			performance.mark("optimize-start");
+			const solveStartMs = performance.now();
 
 			if (isOptimizingActive) {
 				Logger.warn("Optimization already in progress, ignoring request");
@@ -266,6 +267,10 @@ export const useOptimize = (): UseOptimizeReturn => {
 			const initialGridState = useGridStore.getState();
 			const isGridFull = Boolean(initialGridState.isGridFull);
 			const hasTechInGrid = Boolean(initialGridState.activeTechs?.has?.(tech));
+			const isCustomGrid =
+				initialGridState.isDefaultGrid !== undefined ?
+					!initialGridState.isDefaultGrid
+				:	false;
 
 			if (isGridFull && !hasTechInGrid) {
 				useShakeStore.getState().triggerShake();
@@ -376,6 +381,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 								sendEventRef.current({
 									action: "no_fit_warning",
 									category: "ui",
+									module_count: availableModules.length,
 									nonInteraction: false,
 									platform: selectedShipTypeRef.current,
 									tech,
@@ -384,10 +390,16 @@ export const useOptimize = (): UseOptimizeReturn => {
 							}
 						} else {
 							performance.mark("optimize-complete");
-							performance.measure(
+							const measureEntry = performance.measure(
 								"optimize-to-complete",
 								"optimize-start",
 								"optimize-complete",
+							) as PerformanceMeasure | undefined;
+							const solveDurationMs = Math.max(
+								0,
+								Math.round(
+									measureEntry?.duration ?? performance.now() - solveStartMs,
+								),
 							);
 
 							if (mountedCount > 0) {
@@ -400,18 +412,35 @@ export const useOptimize = (): UseOptimizeReturn => {
 								});
 
 								sessionCoordinator.commitOptimizationResult(translatedData, tech);
+								const techState = useTechStore.getState();
+								const gridAfterCommit = useGridStore.getState();
 								const gaTech = resolveAnalyticsTechName(
 									tech,
-									useTechStore.getState().checkedModules,
+									techState.checkedModules,
 								);
 
 								if (translatedData.grid) {
 									sendEventRef.current({
 										action: "optimize_tech",
+										active_tech_count: gridAfterCommit.activeTechs?.size ?? 1,
+										bonus_status: resolveSolveQuality(translatedData.maxBonus),
 										category: "ui",
+										forced,
+										is_custom_grid: isCustomGrid,
+										is_custom_modules:
+											techState.isDefaultModuleSelection !== undefined ?
+												!techState.isDefaultModuleSelection
+											:	false,
+										max_bonus:
+											typeof translatedData.maxBonus === "number" ?
+												Math.round(translatedData.maxBonus)
+											:	undefined,
+										module_count: availableModules.length,
 										nonInteraction: false,
 										platform: selectedShipTypeRef.current,
-										solveMethod: translatedData.solveMethod,
+										solve_duration_ms: solveDurationMs,
+										solve_method: translatedData.solveMethod,
+										...(solveType ? { solve_type: solveType } : {}),
 										supercharged:
 											typeof translatedData.maxBonus === "number"
 											&& translatedData.maxBonus > 100,

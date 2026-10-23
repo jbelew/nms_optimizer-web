@@ -6,6 +6,17 @@ import { useOptimizeStore } from "@/store/ui/uiStore";
 
 import { ErrorDialog } from "./ErrorDialog";
 
+const { mockSendEvent } = vi.hoisted(() => ({
+	mockSendEvent: vi.fn(),
+}));
+
+vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
+	useAnalytics: () => ({
+		sendDeferredEvent: vi.fn(),
+		sendEvent: mockSendEvent,
+	}),
+}));
+
 // Mock react-i18next
 vi.mock("react-i18next", () => ({
 	Trans: ({
@@ -112,6 +123,13 @@ describe("ErrorDialog", () => {
 		expect(githubLink).toHaveAttribute("target", "_blank");
 		expect(githubLink).toHaveAttribute("rel", "noopener noreferrer");
 		expect(screen.getAllByText(/Detailed server failure/i).length).toBeGreaterThan(0);
+		expect(mockSendEvent).toHaveBeenCalledWith({
+			action: "exception",
+			category: "error",
+			description: "Error: Detailed server failure",
+			fatal: false,
+			nonInteraction: true,
+		});
 	});
 
 	test("should clear error state when dialog is closed", async () => {

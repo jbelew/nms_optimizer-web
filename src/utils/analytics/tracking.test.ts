@@ -187,6 +187,32 @@ describe("Analytics Tracking", () => {
 			});
 		});
 
+		it("should normalize boolean parameters to strings while preserving nonInteraction", async () => {
+			vi.mocked(fetch).mockResolvedValue(new Response(null, { status: 200 }));
+			await tracking.initializeAnalytics();
+			tracking.sendEvent({
+				action: "optimize_tech",
+				category: "engagement",
+				forced: false,
+				is_custom_grid: true,
+				nonInteraction: true,
+				supercharged: true,
+			});
+
+			await vi.waitFor(() => {
+				expect(ReactGA.event).toHaveBeenCalledWith(
+					"optimize_tech",
+					expect.objectContaining({
+						forced: "false",
+						is_custom_grid: "true",
+						nonInteraction: true,
+						supercharged: "true",
+						tracking_source: "client",
+					}),
+				);
+			});
+		});
+
 		it.each([
 			{ description: "all probes fail", filter: () => true },
 			{

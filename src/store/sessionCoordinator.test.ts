@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { serialize } from "@/hooks/useGridDeserializer/gridSerializer";
+import { deserialize, serialize } from "@/hooks/useGridDeserializer/gridSerializer";
+import { sendEvent } from "@/utils/analytics/tracking";
 
 import type { Grid } from "./grid/gridStore";
 import { computeBonusStatus, sessionCoordinator } from "./sessionCoordinator";
@@ -8,6 +9,10 @@ import { computeBonusStatus, sessionCoordinator } from "./sessionCoordinator";
 vi.mock("@/hooks/useGridDeserializer/gridSerializer", () => ({
 	deserialize: vi.fn(),
 	serialize: vi.fn(() => "serialized-grid"),
+}));
+
+vi.mock("@/utils/analytics/tracking", () => ({
+	sendEvent: vi.fn(),
 }));
 
 const mockGridStore = {
@@ -178,6 +183,24 @@ describe("sessionCoordinator", () => {
 
 		expect(parsed.searchParams.get("platform")).toBe("test-platform");
 		expect(parsed.searchParams.get("grid")).toBe("serialized-grid");
+	});
+
+	it("deserializeSharedGrid restores grid, sets isSharedGrid, and emits load_build shared_url event", async () => {
+		const fakeGrid: Grid = { cells: [], height: 6, valid: true, width: 10 };
+		vi.mocked(deserialize).mockResolvedValueOnce(fakeGrid);
+
+		await sessionCoordinator.deserializeSharedGrid("encoded-token");
+
+		expect(mockGridStore.setGrid).toHaveBeenCalledWith(fakeGrid);
+		expect(mockGridStore.setIsSharedGrid).toHaveBeenCalledWith(true);
+		expect(sendEvent).toHaveBeenCalledWith({
+			action: "load_build",
+			category: "engagement",
+			method: "shared_url",
+			nonInteraction: true,
+			platform: "test-platform",
+			value: 1,
+		});
 	});
 
 	it("resetSession resets stores and restores default checked modules rather than clearing them completely", () => {

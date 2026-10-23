@@ -9,6 +9,7 @@ presentation delay).
 """
 
 import argparse
+import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -66,12 +67,13 @@ class SubpartStats:
 
 @dataclass(frozen=True)
 class ReportContext:
-    """Shared GA4 query context for INP reporting sections."""
+    """Shared GA4 query context for Web Vitals reporting sections."""
 
     client: BetaAnalyticsDataClient
     property_id: str
     days: int
     device_filter: str
+    metric_name: str = "INP"
     version_filter: Optional[str] = None
 
     @property
@@ -84,31 +86,38 @@ class ReportContext:
 
     @property
     def base_filter(self) -> FilterExpression:
-        return get_base_inp_filter(self.device_filter, self.version_filter)
+        return get_base_inp_filter(self.device_filter, self.version_filter, self.metric_name)
 
 
-def format_status(val_ms: float) -> str:
-    """Format millisecond latency with Core Web Vitals rating colors."""
+METRIC_THRESHOLDS: dict[str, tuple[float, float]] = {
+    "INP": (200.0, 500.0),
+    "LCP": (2500.0, 4000.0),
+    "CLS": (100.0, 250.0),
+    "FCP": (1800.0, 3000.0),
+    "TTFB": (800.0, 1800.0),
+}
+
+
+def format_status(val_ms: float, metric_name: str = "INP") -> str:
+    """Format metric value with Core Web Vitals rating colors."""
+    good_max, needs_imp_max = METRIC_THRESHOLDS.get(metric_name, (200.0, 500.0))
+    unit = "" if metric_name == "CLS" else "ms"
     if val_ms <= 0:
-        return f"{val_ms:.0f}ms"
-    if val_ms <= 200:
-        return f"{GREEN}{val_ms:.0f}ms (Good){RESET}"
-    if val_ms <= 500:
-        return f"{YELLOW}{val_ms:.0f}ms (Needs Imp){RESET}"
-    return f"{RED}{val_ms:.0f}ms (Poor){RESET}"
+        return f"{val_ms:.0f}{unit}"
+    if val_ms <= good_max:
+        return f"{GREEN}{val_ms:.0f}{unit} (Good){RESET}"
+    if val_ms <= needs_imp_max:
+        return f"{YELLOW}{val_ms:.0f}{unit} (Needs Imp){RESET}"
+    return f"{RED}{val_ms:.0f}{unit} (Poor){RESET}"
 
 
-def format_padded_status(val_ms: float, width: int = 22) -> str:
+ANSI_ESCAPE_RE = re.compile(r"\x1b\[[0-9;]*m")
+
+
+def format_padded_status(val_ms: float, metric_name: str = "INP", width: int = 22) -> str:
     """Format status string padded to a fixed visible column width."""
-    status_str = format_status(val_ms)
-    if val_ms <= 0:
-        plain_len = len(f"{val_ms:.0f}ms")
-    elif val_ms <= 200:
-        plain_len = len(f"{val_ms:.0f}ms (Good)")
-    elif val_ms <= 500:
-        plain_len = len(f"{val_ms:.0f}ms (Needs Imp)")
-    else:
-        plain_len = len(f"{val_ms:.0f}ms (Poor)")
+    status_str = format_status(val_ms, metric_name)
+    plain_len = len(ANSI_ESCAPE_RE.sub("", status_str))
     extra_padding = " " * max(0, width - plain_len)
     return f"{status_str}{extra_padding}"
 
@@ -175,6 +184,12 @@ def parse_arguments() -> argparse.Namespace:
         default=25,
         help="Maximum interaction targets to display (default: 25)",
     )
+    parser.add_argument(
+        "--metric",
+        choices=["INP", "LCP", "CLS", "FCP", "TTFB"],
+        default="INP",
+        help="Core Web Vital metric to query (default: INP)",
+    )
     return parser.parse_args()
 
 
@@ -216,14 +231,16 @@ def parse_semver_key(version_str: str) -> tuple:
 
 
 def get_base_inp_filter(
-    device_filter: str, version_filter: Optional[str] = None
+    device_filter: str,
+    version_filter: Optional[str] = None,
+    metric_name: str = "INP",
 ) -> FilterExpression:
-    """Constructs the base dimension filter for INP events."""
+    """Constructs the base dimension filter for Web Vitals events."""
     expressions = [
         FilterExpression(
             filter=Filter(
                 field_name="customEvent:metric_name",
-                string_filter=Filter.StringFilter(value="INP"),
+                string_filter=Filter.StringFilter(value=metric_name),
             )
         )
     ]
@@ -288,8 +305,8 @@ def fetch_subpart_map(
 
 
 def report_device_summary(ctx: ReportContext) -> None:
-    """Queries and prints high-level INP summary grouped by device category."""
-    print(f"\n{BOLD}{CYAN}📊 INP Overview by Device Category (Last {ctx.days} days){RESET}\n")
+    """Queries and prints high-level metric summary grouped by device category."""
+    print(f"\n{BOLD}{CYAN}📊 {ctx.metric_name} Overview by Device Category (Last {ctx.days} days){RESET}\n")
 
     overview_req = RunReportRequest(
         property=ctx.property_path,
@@ -305,13 +322,13 @@ def report_device_summary(ctx: ReportContext) -> None:
     overview_resp = ctx.client.run_report(overview_req)
 
     if not overview_resp.rows:
-        print("  No INP data recorded in this period.")
+        print(f"  No {ctx.metric_name} data recorded in this period.")
         return
 
-    subpart_data = fetch_subpart_map(ctx, ["deviceCategory"])
+    subpart_data = fetch_subpart_map(ctx, ["deviceCategory"]) if ctx.metric_name == "INP" else {}
 
     header = (
-        f"{'Device':<10} | {'Interactions':<12} | {'Avg INP':<22} | "
+        f"{'Device':<10} | {'Events':<12} | {f'Avg {ctx.metric_name}':<22} | "
         f"{'Input Delay':<12} | {'Processing':<12} | {'Presentation':<12}"
     )
     print(header)
@@ -325,7 +342,7 @@ def report_device_summary(ctx: ReportContext) -> None:
         avg_val, input_str, proc_str, pres_str = resolve_effective_inp(
             raw_avg, subpart_data.get(device)
         )
-        padded_status = format_padded_status(avg_val)
+        padded_status = format_padded_status(avg_val, ctx.metric_name)
 
         print(
             f"{device:<10} | {count:<12} | {padded_status} | "
@@ -334,8 +351,8 @@ def report_device_summary(ctx: ReportContext) -> None:
 
 
 def report_version_summary(ctx: ReportContext) -> None:
-    """Queries and prints INP summary grouped by app_version and device category."""
-    print(f"\n{BOLD}{CYAN}📦 INP Breakdown by App Version (Last {ctx.days} days){RESET}\n")
+    """Queries and prints metric summary grouped by app_version and device category."""
+    print(f"\n{BOLD}{CYAN}📦 {ctx.metric_name} Breakdown by App Version (Last {ctx.days} days){RESET}\n")
 
     dimensions = ["customEvent:app_version", "deviceCategory"]
     req = RunReportRequest(
@@ -351,13 +368,13 @@ def report_version_summary(ctx: ReportContext) -> None:
     resp = ctx.client.run_report(req)
 
     if not resp.rows:
-        print("  No versioned INP data recorded in this period.")
+        print(f"  No versioned {ctx.metric_name} data recorded in this period.")
         return
 
-    subpart_data = fetch_subpart_map(ctx, dimensions)
+    subpart_data = fetch_subpart_map(ctx, dimensions) if ctx.metric_name == "INP" else {}
 
     header = (
-        f"{'Version':<10} | {'Device':<10} | {'Interactions':<12} | {'Avg INP':<22} | "
+        f"{'Version':<10} | {'Device':<10} | {'Events':<12} | {f'Avg {ctx.metric_name}':<22} | "
         f"{'Input Delay':<12} | {'Processing':<12} | {'Presentation':<12}"
     )
     print(header)
@@ -382,7 +399,7 @@ def report_version_summary(ctx: ReportContext) -> None:
         avg_val, input_str, proc_str, pres_str = resolve_effective_inp(
             raw_avg, subpart_data.get(f"{raw_ver}:{device}")
         )
-        padded_status = format_padded_status(avg_val)
+        padded_status = format_padded_status(avg_val, ctx.metric_name)
 
         print(
             f"{ver:<10} | {device:<10} | {count:<12} | {padded_status} | "
@@ -391,13 +408,19 @@ def report_version_summary(ctx: ReportContext) -> None:
 
 
 def report_target_breakdown(ctx: ReportContext, limit: int) -> None:
-    """Queries and prints detailed breakdown by interaction target selector."""
-    print(f"\n{BOLD}{CYAN}🎯 INP Attribution by Interaction Target (Top {limit}){RESET}\n")
+    """Queries and prints detailed breakdown by target selector."""
+    secondary_dim = (
+        "customEvent:interaction_type"
+        if ctx.metric_name == "INP"
+        else "customEvent:load_state"
+    )
+    secondary_label = "Type" if ctx.metric_name == "INP" else "LoadState"
+    print(f"\n{BOLD}{CYAN}🎯 {ctx.metric_name} Attribution by Target (Top {limit}){RESET}\n")
 
     dimensions = [
         "deviceCategory",
         "customEvent:interaction_target",
-        "customEvent:interaction_type",
+        secondary_dim,
     ]
     request = RunReportRequest(
         property=ctx.property_path,
@@ -418,10 +441,10 @@ def report_target_breakdown(ctx: ReportContext, limit: int) -> None:
         print("  No target element data available yet.")
         return
 
-    target_subparts = fetch_subpart_map(ctx, dimensions)
+    target_subparts = fetch_subpart_map(ctx, dimensions) if ctx.metric_name == "INP" else {}
 
     header = (
-        f"{'Device':<8} | {'Type':<8} | {'Interactions':<12} | {'Avg INP':<22} | "
+        f"{'Device':<8} | {secondary_label:<10} | {'Events':<12} | {f'Avg {ctx.metric_name}':<22} | "
         f"{'Input':<8} | {'Proc':<8} | {'Pres':<8} | {'Target Element Selector'}"
     )
     print(header)
@@ -444,10 +467,10 @@ def report_target_breakdown(ctx: ReportContext, limit: int) -> None:
         if raw_target:
             has_attributed_rows = True
 
-        padded_status = format_padded_status(avg_val)
+        padded_status = format_padded_status(avg_val, ctx.metric_name)
 
         print(
-            f"{device:<8} | {itype:<8} | {count:<12} | {padded_status} | "
+            f"{device:<8} | {itype:<10} | {count:<12} | {padded_status} | "
             f"{input_str:<8} | {proc_str:<8} | {pres_str:<8} | {target}"
         )
 
@@ -467,13 +490,14 @@ def main() -> None:
         property_id=args.property,
         days=args.days,
         device_filter=args.device,
+        metric_name=args.metric,
         version_filter=args.version,
     )
     ver_label = normalize_version(args.version) or "all"
 
-    print(f"{BOLD}Google Analytics 4 — Real User INP Telemetry{RESET}")
+    print(f"{BOLD}Google Analytics 4 — Real User {ctx.metric_name} Telemetry{RESET}")
     print(
-        f"Property: {ctx.property_path} | Range: Last {ctx.days} days | "
+        f"Property: {ctx.property_path} | Metric: {ctx.metric_name} | Range: Last {ctx.days} days | "
         f"Device: {ctx.device_filter} | Version: {ver_label}"
     )
 

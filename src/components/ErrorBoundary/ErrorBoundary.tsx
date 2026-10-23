@@ -25,7 +25,7 @@ import { Trans, useTranslation } from "react-i18next";
 import { useRouteError } from "react-router-dom";
 
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
-import { sendEvent } from "@/utils/analytics/tracking";
+import { buildExceptionEvent, sendEvent } from "@/utils/analytics/tracking";
 import { lifecycleCoordinator } from "@/utils/system/lifecycleCoordinator";
 import { Logger } from "@/utils/system/monitoring";
 
@@ -117,14 +117,7 @@ interface State {
 const handleError = (error: Error, errorInfo?: ErrorInfo) => {
 	Logger.error("Uncaught error:", error, { errorInfo });
 
-	sendEvent({
-		action: error.name,
-		category: "error",
-		componentStack: errorInfo?.componentStack?.replace(/\n/g, " ").substring(0, 100) || "N/A",
-		label: error.message,
-		nonInteraction: true,
-		stackTrace: error.stack?.replace(/\n/g, " ").substring(0, 500) || "N/A",
-	});
+	sendEvent(buildExceptionEvent(error, true));
 };
 
 /**

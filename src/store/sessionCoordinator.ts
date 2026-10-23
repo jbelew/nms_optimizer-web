@@ -2,6 +2,7 @@ import type { RecommendedBuild, TechTree, TechTreeItem } from "@/types/tech";
 import type { SaveBuildParams } from "@/utils/build/buildSerializer";
 import type { BuildFile } from "@/utils/validation/dataValidation";
 import { deserialize, serialize } from "@/hooks/useGridDeserializer/gridSerializer";
+import { sendEvent } from "@/utils/analytics/tracking";
 import { Logger } from "@/utils/system/monitoring";
 import { getTechTreeMaps } from "@/utils/tech/techTreeUtils";
 import { isValidRecommendedBuild } from "@/utils/validation/dataValidation";
@@ -17,6 +18,10 @@ import { useUiStore } from "./ui/uiStore";
 /**
  * Orchestrates the calculation of bonus status data based on max bonus.
  *
+ * @remarks
+ * Delegates Solve Quality classification to {@link resolveSolveQuality} and computes
+ * the rounded percentage delta from `100%`.
+ *
  * @param maxBonus - The maximum bonus value to evaluate.
  *
  * @returns The calculated icon and percentage.
@@ -31,20 +36,51 @@ import { useUiStore } from "./ui/uiStore";
  */
 export function computeBonusStatus(maxBonus: number): BonusStatusData {
 	const roundedMaxBonus = Math.round(maxBonus * 100) / 100;
+	const quality = resolveSolveQuality(roundedMaxBonus);
 
-	if (roundedMaxBonus < 100) {
+	if (quality === "insufficient_space") {
 		const percent = Math.round((100 - roundedMaxBonus) * 100) / 100;
 
 		return { icon: "warning", percent };
 	}
 
-	if (roundedMaxBonus === 100) {
+	if (quality === "standard") {
 		return { icon: "check", percent: 0 };
 	}
 
 	const percent = Math.round((roundedMaxBonus - 100) * 100) / 100;
 
 	return { icon: "lightning", percent };
+}
+
+/**
+ * Resolves the canonical Solve Quality tier from a solve's maximum bonus score.
+ *
+ * @remarks
+ * Rounds `maxBonus` to two decimal places before classifying into `"boosted"` (`> 100`),
+ * `"insufficient_space"` (`< 100`), or `"standard"` (`100`).
+ *
+ * @param maxBonus - The maximum bonus percentage returned by the solver.
+ *
+ * @returns `"boosted"` (`> 100`), `"insufficient_space"` (`< 100`), or `"standard"` (`100`).
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * const quality = resolveSolveQuality(105);
+ * // returns "boosted"
+ * ```
+ */
+export function resolveSolveQuality(
+	maxBonus: number | undefined,
+): "boosted" | "insufficient_space" | "standard" {
+	const roundedMaxBonus = Math.round((maxBonus ?? 100) * 100) / 100;
+
+	if (roundedMaxBonus > 100) return "boosted";
+	if (roundedMaxBonus < 100) return "insufficient_space";
+
+	return "standard";
 }
 
 /**
@@ -241,6 +277,14 @@ export const sessionCoordinator = {
 			const gridStore = useGridStore.getState();
 			gridStore.setGrid(newGrid);
 			gridStore.setIsSharedGrid(true);
+			sendEvent({
+				action: "load_build",
+				category: "engagement",
+				method: "shared_url",
+				nonInteraction: true,
+				platform: targetPlatform,
+				value: 1,
+			});
 		} else {
 			Logger.warn("Deserialization failed, grid not set.");
 		}

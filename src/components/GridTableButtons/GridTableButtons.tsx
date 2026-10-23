@@ -19,6 +19,7 @@ import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useBuildFileManager } from "@/hooks/useBuildFileManager/useBuildFileManager";
 import { useScreenshot } from "@/hooks/useScreenshot/useScreenshot";
 import { useScrollGridIntoView } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
+import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useTechStore } from "@/store/tech/techStore";
@@ -140,6 +141,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 			category: "ui",
 			method: "url",
 			nonInteraction: false,
+			platform: usePlatformStore.getState().selectedPlatform,
 			value: 1,
 		});
 	};
@@ -154,7 +156,13 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	const handleResetGrid = () => {
 		scrollIntoView();
 
-		sendEvent({ action: "reset_grid", category: "ui", nonInteraction: false, value: 1 });
+		sendEvent({
+			action: "reset_grid",
+			category: "ui",
+			nonInteraction: false,
+			platform: usePlatformStore.getState().selectedPlatform,
+			value: 1,
+		});
 
 		startResetTransition(() => {
 			sessionCoordinator.resetSession();

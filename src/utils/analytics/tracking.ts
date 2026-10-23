@@ -10,6 +10,7 @@
  * It handles:
  * - GA4 initialization with anonymization.
  * - Ad blocker detection for fallback routing.
+ * - Boolean parameter normalization (`"true"` / `"false"`) for BigQuery parity ([ADR-0003](../../../docs/adr/0003-ga4-bigquery-telemetry-contract.md)).
  * - Event validation and dispatching.
  * - Web Vitals reporting.
  *
@@ -19,15 +20,6 @@
  * @category Utilities
  */
 
-/**
- * Interface for Google Analytics 4 event tracking.
- *
- * @remarks
- * This interface is designed to support both custom events and GA4 recommended events.
- * It uses `snake_case` for all parameters to align with GA4 best practices.
- *
- * @category Utilities
- */
 import type ReactGA from "react-ga4";
 
 import type { AnalyticsEventParams, GA4Event } from "@/types/analytics";
@@ -40,17 +32,15 @@ import { Logger } from "@/utils/system/monitoring";
  *
  * @category Utilities
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let ReactGAInstance: any = null;
+let ReactGAInstance: null | typeof ReactGA = null;
 
-/** Event queue for events sent before the ReactGA module loads */
+/** Event queue for events sent before the ReactGA module loads. */
 let queuedEvents: GA4Event[] = [];
 
 export type { AnalyticsEventParams, GA4Event };
 
 /**
- * Payload sent to the backend for server-side analytics. *
- * @category Utilities
+ * Payload sent to the backend for server-side analytics.
  */
 interface AnalyticsEventPayload {
 	/** Unique client session ID. */
@@ -65,6 +55,8 @@ interface AnalyticsEventPayload {
 
 /** Flag indicating if GA has been initialized. */
 let gaInitialized = false;
+/** Flag indicating if pagehide/visibilitychange flush listeners have been attached. */
+let hideListenersRegistered = false;
 /** Cached promise for ad blocker detection. */
 let adBlockerDetectionPromise: null | Promise<boolean> = null;
 /** Cached result of ad blocker detection. */
@@ -103,6 +95,35 @@ export const env = {
 /** Whether the app is installed as a PWA. */
 const globalIsInstalled =
 	typeof window !== "undefined" && window.matchMedia("(display-mode: standalone)").matches;
+
+/**
+ * Normalizes boolean event parameters (except `nonInteraction`) into `"true"` / `"false"` strings.
+ *
+ * @remarks
+ * Client-side `gtag` serializes boolean parameters as strings (`"true"` / `"false"`), whereas
+ * the GA4 Measurement Protocol JSON API converts JSON booleans into `int_value` (`1` / `0`) in BigQuery.
+ * Normalizing booleans to strings prior to dispatch guarantees identical `string_value` columns
+ * across both transports ([ADR-0003](../../../docs/adr/0003-ga4-bigquery-telemetry-contract.md)).
+ *
+ * @param params - Raw event parameter dictionary.
+ *
+ * @returns Normalized parameter dictionary with boolean dimensions converted to strings.
+ */
+const normalizeEventParams = (params: AnalyticsEventParams): AnalyticsEventParams => {
+	const normalized: AnalyticsEventParams = {};
+
+	for (const [key, value] of Object.entries(params)) {
+		if (value === undefined) continue;
+
+		if (key !== "nonInteraction" && typeof value === "boolean") {
+			normalized[key] = value ? "true" : "false";
+		} else {
+			normalized[key] = value;
+		}
+	}
+
+	return normalized;
+};
 
 /**
  * Detects if an ad blocker or tracking protection is active.
@@ -316,40 +337,11 @@ const getGaClientIdFromCookie = (): null | string => {
 };
 
 /**
- * Initialize the analytics client with a unique client ID.
- *
- * @returns The initialized client ID.
- *
- * @category Utilities
- *
- * @example
- * ```ts
- * const id = initializeAnalyticsClient();
- * // returns string
- * ```
- */
-export const initializeAnalyticsClient = (): string => {
-	const gaId = getGaClientIdFromCookie();
-	const stored = safeGetItem("analytics_client_id");
-
-	if (gaId) {
-		clientId = gaId;
-
-		if (stored !== gaId) {
-			safeSetItem("analytics_client_id", gaId);
-		}
-	} else if (stored) {
-		clientId = stored;
-	} else {
-		clientId = `web_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
-		safeSetItem("analytics_client_id", clientId);
-	}
-
-	return clientId;
-};
-
-/**
  * Gets the current client ID, initializing it if necessary.
+ *
+ * @remarks
+ * Lazily invokes {@link initializeAnalyticsClient} when no in-memory client ID
+ * has been resolved yet for the current session.
  *
  * @returns The active client ID.
  *
@@ -370,7 +362,44 @@ const getClientId = (): string => {
 };
 
 /**
+ * Builds a standardized GA4 `exception` event payload without stack traces.
+ *
+ * @remarks
+ * Formats `error.name` and `error.message` into a 150-character `description`
+ * and omits stack traces in accordance with ADR-0002 and ADR-0003.
+ *
+ * @param error - The caught or handled error instance.
+ * @param fatal - Whether the exception crashed a boundary (`true`) or was handled (`false`).
+ * @param [fallbackName="Error"] - Default error name when `error.name` is empty.
+ *
+ * @returns The standardized `GA4Event` payload for an exception.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * const event = buildExceptionEvent(new Error("Boom"), true);
+ * // returns { action: "exception", category: "error", description: "Error: Boom", fatal: true, nonInteraction: true }
+ * ```
+ */
+export const buildExceptionEvent = (
+	error: Error,
+	fatal: boolean,
+	fallbackName = "Error",
+): GA4Event => ({
+	action: "exception",
+	category: "error",
+	description: `${error.name || fallbackName}: ${error.message}`.slice(0, 150),
+	fatal,
+	nonInteraction: true,
+});
+
+/**
  * Sends an analytics event to the backend for server-side relay.
+ *
+ * @remarks
+ * Normalizes boolean event parameters to `"true"` / `"false"` strings before
+ * transmitting over `navigator.sendBeacon` or `fetch(..., { keepalive: true })`.
  *
  * @param eventName - Name of the event.
  * @param [params={}] - Event parameters.
@@ -382,7 +411,7 @@ const getClientId = (): string => {
  *
  * @example
  * ```ts
- * sendServerEvent("optimization_complete", { method: "SA" });
+ * sendServerEvent("optimize_tech", { solve_method: "SA" });
  * // returns void
  * ```
  */
@@ -392,11 +421,12 @@ export const sendServerEvent = (
 	userId?: string,
 ): void => {
 	try {
+		const normalizedParams = normalizeEventParams(params);
 		const payload: AnalyticsEventPayload = {
 			clientId: getClientId(),
 			eventName,
 			params: {
-				...params,
+				...normalizedParams,
 				app_version: __APP_VERSION__,
 				is_installed: globalIsInstalled ? "yes" : "no",
 				tracking_source: "server",
@@ -449,7 +479,87 @@ export const sendServerEvent = (
 };
 
 /**
+ * Attaches `visibilitychange` and `pagehide` listeners once per session so queued
+ * pre-initialization events survive early tab close.
+ *
+ * @returns Side-effects only.
+ */
+const ensureFlushOnHideListeners = (): void => {
+	if (
+		hideListenersRegistered
+		|| typeof window === "undefined"
+		|| typeof document === "undefined"
+	) {
+		return;
+	}
+
+	hideListenersRegistered = true;
+
+	const flushOnHide = () => {
+		if (document.visibilityState !== "hidden" || queuedEvents.length === 0) return;
+		const eventsToFlush = queuedEvents;
+		queuedEvents = [];
+		eventsToFlush.forEach((event) => {
+			const { action, category, ...params } = event;
+			sendServerEvent(action, {
+				...params,
+				action,
+				category,
+				tracking_source: "server",
+			});
+		});
+	};
+
+	document.addEventListener("visibilitychange", flushOnHide);
+	window.addEventListener("pagehide", flushOnHide);
+};
+
+/**
+ * Initialize the analytics client with a unique client ID.
+ *
+ * @remarks
+ * Reads the `_ga` cookie if available, falls back to `localStorage`, or generates
+ * a new session-scoped `web_<timestamp>_<random>` identifier and attaches early
+ * page-hide flush listeners.
+ *
+ * @returns The initialized client ID.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * const id = initializeAnalyticsClient();
+ * // returns string
+ * ```
+ */
+export const initializeAnalyticsClient = (): string => {
+	ensureFlushOnHideListeners();
+
+	const gaId = getGaClientIdFromCookie();
+	const stored = safeGetItem("analytics_client_id");
+
+	if (gaId) {
+		clientId = gaId;
+
+		if (stored !== gaId) {
+			safeSetItem("analytics_client_id", gaId);
+		}
+	} else if (stored) {
+		clientId = stored;
+	} else {
+		clientId = `web_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+		safeSetItem("analytics_client_id", clientId);
+	}
+
+	return clientId;
+};
+
+/**
  * Initializes Google Analytics tracking.
+ *
+ * @remarks
+ * Runs ad-blocker detection, initializes `react-ga4` when unblocked, flushes
+ * buffered events, and registers Core Web Vitals listeners via {@link reportWebVitals}.
  *
  * @returns Resolves when initialization is complete or skipped.
  *
@@ -465,6 +575,8 @@ export const initializeAnalytics = async () => {
 	if (import.meta.env.VITE_ANALYTICS_ENABLED === "false" || gaInitialized || isBot()) {
 		return;
 	}
+
+	ensureFlushOnHideListeners();
 
 	const isBlocked = await getAdBlockerDetectionResult();
 
@@ -487,7 +599,7 @@ export const initializeAnalytics = async () => {
 				user_properties: {
 					app_version: __APP_VERSION__,
 					is_installed: globalIsInstalled ? "yes" : "no",
-					platform_type: safeGetItem("selectedPlatform") || "starship",
+					platform_type: safeGetItem("selectedPlatform") || "standard",
 				},
 			},
 		});
@@ -502,28 +614,6 @@ export const initializeAnalytics = async () => {
 	}
 
 	gaInitialized = true;
-
-	// Flush remaining queued events synchronously when the page is hidden so
-	// late-firing Web Vitals (CLS/INP/LCP) survive tab close.
-	if (typeof window !== "undefined" && typeof document !== "undefined") {
-		const flushOnHide = () => {
-			if (document.visibilityState !== "hidden" || queuedEvents.length === 0) return;
-			const eventsToFlush = queuedEvents;
-			queuedEvents = [];
-			eventsToFlush.forEach((event) => {
-				const { action, category, ...params } = event;
-				sendServerEvent(action, {
-					...params,
-					action,
-					category,
-					tracking_source: "server",
-				});
-			});
-		};
-
-		document.addEventListener("visibilitychange", flushOnHide);
-		window.addEventListener("pagehide", flushOnHide);
-	}
 
 	const { reportWebVitals } = await import("./reportWebVitals");
 	reportWebVitals(sendEvent);
@@ -558,6 +648,7 @@ const validateEvent = (event: GA4Event): void => {
  * Sends an event to Google Analytics, automatically choosing the transport method.
  *
  * @param event - Event to send.
+ * @param isBlocked - Whether client-side tracking is blocked.
  *
  * @returns Side-effects only.
  *
@@ -565,7 +656,7 @@ const validateEvent = (event: GA4Event): void => {
  *
  * @example
  * ```ts
- * sendEvent({ category: "UI", action: "click" });
+ * dispatchEvent({ category: "UI", action: "click" }, false);
  * // returns void
  * ```
  */
@@ -585,14 +676,16 @@ const dispatchEvent = (event: GA4Event, isBlocked: boolean): void => {
 	}
 
 	if (!ReactGAInstance) {
+		ensureFlushOnHideListeners();
 		queuedEvents.push(event);
 
 		return;
 	}
 
 	const { action, category, ...params } = event;
+	const normalizedParams = normalizeEventParams(params);
 	ReactGAInstance.event(action, {
-		...params,
+		...normalizedParams,
 		category,
 		tracking_source: "client",
 		transport: "gtag",
@@ -611,9 +704,14 @@ const dispatchEvent = (event: GA4Event, isBlocked: boolean): void => {
  *
  * @param event - The structured event payload to transmit.
  *
+ * @returns Side-effects only.
+ *
+ * @category Utilities
+ *
  * @example
  * ```ts
- * sendEvent({ action: "page_view", page_title: "Home" });
+ * sendEvent({ action: "page_view", category: "engagement", page_title: "Home" });
+ * // returns void
  * ```
  */
 export const sendEvent = (event: GA4Event): void => {
@@ -634,16 +732,22 @@ export const sendEvent = (event: GA4Event): void => {
 /**
  * Defer a GA4 event so it does not block UI interactions (good for INP).
  *
- * Wraps `sendEvent` in `requestIdleCallback` (or `setTimeout` fallback). Use
+ * @remarks
+ * Wraps {@link sendEvent} in `requestIdleCallback` (or `setTimeout` fallback). Use
  * this from click/tap handlers where the analytics call is incidental to the
  * interaction. Do NOT use this for late-firing events (Web Vitals,
- * `visibilitychange`, unload) — those must call `sendEvent` synchronously.
+ * `visibilitychange`, unload) — those must call {@link sendEvent} synchronously.
  *
  * @param event - The structured event payload to transmit.
+ *
+ * @returns Side-effects only.
+ *
+ * @category Utilities
  *
  * @example
  * ```ts
  * onClick={() => sendDeferredEvent({ category: "ui", action: "click_logo" })}
+ * // returns void
  * ```
  */
 export const sendDeferredEvent = (event: GA4Event): void => {
@@ -659,6 +763,9 @@ export const sendDeferredEvent = (event: GA4Event): void => {
 /**
  * Reset analytics initialization state for testing.
  *
+ * @remarks
+ * Clears cached ad-blocker detection promises, queued events, and initialization flags.
+ *
  * @returns Side-effects only.
  *
  * @category Utilities
@@ -671,6 +778,9 @@ export const sendDeferredEvent = (event: GA4Event): void => {
  */
 export const resetAnalyticsForTesting = () => {
 	gaInitialized = false;
+	hideListenersRegistered = false;
 	adBlockerDetectionPromise = null;
 	adBlockerResult = null;
+	queuedEvents = [];
+	ReactGAInstance = null;
 };

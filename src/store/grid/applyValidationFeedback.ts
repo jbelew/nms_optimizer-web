@@ -2,7 +2,9 @@ import i18n from "i18next";
 
 import type { UiActions, UiStore } from "@/store/ui/uiStore";
 import { showGlobalError } from "@/hooks/useToast/useToast";
+import { usePlatformStore } from "@/store/app/platformStore";
 import { useUiStore } from "@/store/ui/uiStore";
+import { sendEvent } from "@/utils/analytics/tracking";
 
 import type {
 	validateToggleActive,
@@ -99,6 +101,14 @@ export function applyValidationFeedback(result: ValidationResult): void {
 				i18n.t(messageKey, { count: nextCount, defaultValue: messageKey }) || messageKey;
 
 			showGlobalError(title, description, RESTRICTION_TOAST_DURATION_MS);
+			sendEvent({
+				action: "slot_restriction_warning",
+				category: "ui",
+				nonInteraction: false,
+				platform: usePlatformStore.getState().selectedPlatform,
+				reason: result.reason,
+				value: 1,
+			});
 		}
 	}
 }

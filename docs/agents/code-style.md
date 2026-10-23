@@ -5,7 +5,7 @@ Coding standards and patterns for TypeScript, React, state management, and styli
 ## Tooling & Configuration
 
 - **ESLint**: Version 10.x with Flat Config ([`eslint.config.js`](file:///home/jbelew/projects/nms_optimizer-web/eslint.config.js)). You are never allowed to disable eslint rules with "eslint-disable"!
-- **Alphabetical Sorting (`eslint-plugin-perfectionist`)**: `perfectionist/recommended-natural` enforces natural alphabetical order on interface properties, object keys, and module declarations (`perfectionist/sort-modules`, `perfectionist/sort-interfaces`, `perfectionist/sort-objects`). Run `bunx eslint --fix <touched-files>` (or `bun run lint:fix`) to auto-fix sorting errors instead of reordering blocks manually.
+- **Alphabetical Sorting (`eslint-plugin-perfectionist`)**: `perfectionist/recommended-natural` enforces natural alphabetical order on interface properties, object keys, and module declarations (`perfectionist/sort-modules`, `perfectionist/sort-interfaces`, `perfectionist/sort-objects`). Run `bunx eslint --fix <touched-files>` (or `bun run lint:fix`) to auto-fix sorting errors instead of reordering blocks manually. For TypeScript function overloads, declare overload signatures without `export` and export the symbol once via `export { fn };` at the bottom of the module to satisfy both `perfectionist/sort-modules` (no blank lines between overloads) and `padding-line-between-statements` (blank line before `export`).
 - **TypeScript**: Strict TypeScript mode. The use of `any` is never permitted. Use interfaces for React component props; use discriminated unions for variants.
 - **Naming Conventions**: `camelCase` for files/variables, `PascalCase` for React components/types, `UPPER_SNAKE_CASE` for constants.
 

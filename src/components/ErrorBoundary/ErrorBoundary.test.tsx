@@ -116,9 +116,10 @@ describe("ErrorBoundary", () => {
 
 			expect(sendEventSpy).toHaveBeenCalledWith(
 				expect.objectContaining({
-					action: "Error",
+					action: "exception",
 					category: "error",
-					label: "Test error from child component",
+					description: "Error: Test error from child component",
+					fatal: true,
 					nonInteraction: true,
 				}),
 			);
@@ -248,106 +249,43 @@ describe("ErrorBoundary", () => {
 			boundary.componentDidCatch(error, errorInfo);
 		};
 
-		it("should include componentStack in analytics event", () => {
+		it("should emit standardized GA4 exception event without stack traces", () => {
 			const error = new Error("Test error");
+			error.stack = "Error: Test error\n  at test.ts:10:15\n  at Object.<anonymous>";
 			const errorInfo: ErrorInfo = {
 				componentStack: "Component > ErrorBoundary > Parent",
 			};
 
 			triggerCatch(error, errorInfo);
 
-			expect(sendEventSpy).toHaveBeenCalledWith(
-				expect.objectContaining({
-					componentStack: expect.any(String),
-				}),
-			);
+			expect(sendEventSpy).toHaveBeenCalledWith({
+				action: "exception",
+				category: "error",
+				description: "Error: Test error",
+				fatal: true,
+				nonInteraction: true,
+			});
 		});
 
-		it("should include stack trace in analytics event", () => {
-			const error = new Error("Test error");
-			error.stack = "Error: Test error\n  at test.ts:10:15\n  at Object.<anonymous>";
-
-			triggerCatch(error);
-
-			expect(sendEventSpy).toHaveBeenCalledWith(
-				expect.objectContaining({
-					stackTrace: expect.any(String),
-				}),
-			);
-		});
-
-		it("should handle missing componentStack", () => {
-			const error = new Error("Test error");
-
-			triggerCatch(error, {});
-
-			expect(sendEventSpy).toHaveBeenCalledWith(
-				expect.objectContaining({
-					componentStack: "N/A",
-				}),
-			);
-		});
-
-		it("should handle missing stack trace", () => {
-			const error = new Error("Test error");
-			error.stack = undefined;
-
-			triggerCatch(error);
-
-			expect(sendEventSpy).toHaveBeenCalledWith(
-				expect.objectContaining({
-					stackTrace: "N/A",
-				}),
-			);
-		});
-
-		it("should truncate componentStack to 100 characters", () => {
-			const error = new Error("Test error");
-			const longComponentStack =
-				"Component > " + "ParentComponent > ".repeat(20) + "ErrorBoundary";
-			const errorInfo: ErrorInfo = {
-				componentStack: longComponentStack,
-			};
-
-			triggerCatch(error, errorInfo);
-
-			const call = sendEventSpy.mock.calls[0][0];
-			expect(call.componentStack).toHaveLength(100);
-		});
-
-		it("should truncate stack trace to 500 characters", () => {
-			const error = new Error("Test error");
-			error.stack = "a".repeat(600);
+		it("should truncate description to 150 characters", () => {
+			const error = new Error("a".repeat(200));
 
 			triggerCatch(error);
 
 			const call = sendEventSpy.mock.calls[0][0];
-			expect(call.stackTrace).toHaveLength(500);
+			expect(call.description).toHaveLength(150);
 		});
 
-		it("should replace newlines with spaces in error data", () => {
-			const error = new Error("Test error\nwith newlines");
-			error.stack = "Error:\n  at test.ts:10:15\n  at Object.<anonymous>";
-			const errorInfo: ErrorInfo = {
-				componentStack: "Component\n> ErrorBoundary",
-			};
-
-			triggerCatch(error, errorInfo);
-
-			const call = sendEventSpy.mock.calls[0][0];
-			expect(call.stackTrace).not.toContain("\n");
-			expect(call.componentStack).not.toContain("\n");
-		});
-
-		it("should use error name as action and error message as label", () => {
+		it("should format error name and message in description", () => {
 			const error = new TypeError("Cannot read properties");
 
 			triggerCatch(error);
 
 			expect(sendEventSpy).toHaveBeenCalledWith(
 				expect.objectContaining({
-					action: "TypeError",
-					label: "Cannot read properties",
+					action: "exception",
+					description: "TypeError: Cannot read properties",
+					fatal: true,
 				}),
 			);
 		});
@@ -359,7 +297,9 @@ describe("ErrorBoundary", () => {
 
 			expect(sendEventSpy).toHaveBeenCalledWith(
 				expect.objectContaining({
-					label: "",
+					action: "exception",
+					description: "Error: ",
+					fatal: true,
 				}),
 			);
 		});
@@ -399,7 +339,9 @@ describe("RouteError", () => {
 
 		expect(sendEventSpy).toHaveBeenCalledWith(
 			expect.objectContaining({
-				label: "Route loading failed",
+				action: "exception",
+				description: "Error: Route loading failed",
+				fatal: true,
 			}),
 		);
 		expect(markReadySpy).toHaveBeenCalledTimes(1);

@@ -199,7 +199,7 @@ describe("useBuildFileManager", () => {
 				category: "ui",
 				method: "nms_file",
 				nonInteraction: false,
-				shipType: "freighter",
+				platform: "freighter",
 				value: 1,
 			});
 		});
@@ -329,7 +329,7 @@ describe("useBuildFileManager", () => {
 				file_name: "Roundtrip Fighter.nms",
 				method: "nms_file",
 				nonInteraction: false,
-				shipType: "fighter",
+				platform: "fighter",
 				value: 1,
 			});
 		});
@@ -528,7 +528,7 @@ describe("useBuildFileManager", () => {
 				file_name: "OS Launched Explorer.nms",
 				method: "nms_file",
 				nonInteraction: false,
-				shipType: "explorer",
+				platform: "explorer",
 				value: 1,
 			});
 		});

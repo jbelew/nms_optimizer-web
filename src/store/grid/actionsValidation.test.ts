@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import * as toastModule from "@/hooks/useToast/useToast";
 import { useUiStore } from "@/store/ui/uiStore";
+import * as trackingModule from "@/utils/analytics/tracking";
 
 import { createGrid, useGridStore } from "./gridStore";
 
@@ -152,6 +153,9 @@ describe("GridStore actions with validation", () => {
 	describe("Slot Restriction threshold warning toast", () => {
 		it("dispatches showGlobalError once on the 3rd violation of a reason and resets after resetSession", () => {
 			const errorToastSpy = vi.spyOn(toastModule, "showGlobalError");
+			const sendEventSpy = vi
+				.spyOn(trackingModule, "sendEvent")
+				.mockImplementation(async () => {});
 			act(() => {
 				useGridStore.setState({ gridFixed: true });
 			});
@@ -162,6 +166,7 @@ describe("GridStore actions with validation", () => {
 				useGridStore.getState().toggleCellActive(0, 0);
 			});
 			expect(errorToastSpy).not.toHaveBeenCalled();
+			expect(sendEventSpy).not.toHaveBeenCalled();
 
 			// 3rd attempt dispatches the restriction warning toast once
 			act(() => {
@@ -173,12 +178,22 @@ describe("GridStore actions with validation", () => {
 				"restrictions.gridFixed",
 				5000,
 			);
+			expect(sendEventSpy).toHaveBeenCalledTimes(1);
+			expect(sendEventSpy).toHaveBeenCalledWith({
+				action: "slot_restriction_warning",
+				category: "ui",
+				nonInteraction: false,
+				platform: "standard",
+				reason: "gridFixed",
+				value: 1,
+			});
 
 			// 4th attempt does not re-dispatch in the same session
 			act(() => {
 				useGridStore.getState().toggleCellActive(0, 0);
 			});
 			expect(errorToastSpy).toHaveBeenCalledTimes(1);
+			expect(sendEventSpy).toHaveBeenCalledTimes(1);
 
 			// Resetting the session allows the 3rd subsequent violation to dispatch again
 			act(() => {
@@ -188,8 +203,10 @@ describe("GridStore actions with validation", () => {
 				useGridStore.getState().toggleCellActive(0, 0);
 			});
 			expect(errorToastSpy).toHaveBeenCalledTimes(2);
+			expect(sendEventSpy).toHaveBeenCalledTimes(2);
 
 			errorToastSpy.mockRestore();
+			sendEventSpy.mockRestore();
 		});
 	});
 });

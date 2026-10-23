@@ -287,7 +287,25 @@ export default tseslint.config(
 			...jsdocRules,
 			// Disallow stray console.log in production source
 			"no-console": ["warn", { allow: ["warn", "error"] }],
+			"no-restricted-syntax": [
+				"error",
+				{
+					message:
+						"Use `lazyNamed(() => import(...))` from `@/utils/system/lazyNamed` instead of raw `lazy()` so `vite:preloadError` recovery does not throw on `undefined` module resolution.",
+					selector:
+						"CallExpression[callee.name='lazy'], CallExpression[callee.object.name='React'][callee.property.name='lazy']",
+				},
+			],
 			"repo/no-jsdoc-import-links": "warn",
+		},
+	},
+	{
+		files: [
+			"src/utils/system/lazyNamed.ts",
+			"src/components/AppDialog/UserStats/UserStatsDialog.tsx",
+		],
+		rules: {
+			"no-restricted-syntax": "off",
 		},
 	},
 

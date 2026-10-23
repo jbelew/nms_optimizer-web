@@ -137,7 +137,7 @@ const useImportBuildFile = () => {
 					file_name: file.name,
 					method: "nms_file",
 					nonInteraction: false,
-					shipType: usePlatformStore.getState().selectedPlatform,
+					platform: usePlatformStore.getState().selectedPlatform,
 					value: 1,
 				});
 			} catch (error) {
@@ -286,7 +286,7 @@ export const useBuildFileManager = (): UseBuildFileManagerReturn => {
 					category: "ui",
 					method: "nms_file",
 					nonInteraction: false,
-					shipType: snapshot.shipType,
+					platform: snapshot.shipType,
 					value: 1,
 				});
 			} catch (error) {

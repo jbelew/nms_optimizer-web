@@ -30,6 +30,7 @@ import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBuildFileManager } from "@/hooks/useBuildFileManager/useBuildFileManager";
 import { registerToolbarForceShow } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { useScrollHide } from "@/hooks/useScrollHide/useScrollHide";
+import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useA11yStore, useOptimizeStore } from "@/store/ui/uiStore";
@@ -91,9 +92,11 @@ export const MobileToolbar: React.FC = () => {
 			openDialog(null, { shareUrl });
 		});
 		sendDeferredEvent({
-			action: "share_link",
+			action: "share",
 			category: "ui",
+			method: "url",
 			nonInteraction: false,
+			platform: usePlatformStore.getState().selectedPlatform,
 			value: 1,
 		});
 	};
@@ -154,12 +157,6 @@ export const MobileToolbar: React.FC = () => {
 					aria-label={t("buttons.changelog") ?? ""}
 					onClick={() => {
 						openDialog("changelog");
-						sendDeferredEvent({
-							action: "show_changelog",
-							category: "ui",
-							nonInteraction: false,
-							value: 1,
-						});
 					}}
 					size="2"
 					variant="soft"
@@ -171,12 +168,6 @@ export const MobileToolbar: React.FC = () => {
 					aria-label={t("buttons.userStats") ?? ""}
 					onClick={() => {
 						openDialog("userstats");
-						sendDeferredEvent({
-							action: "show_user_stats",
-							category: "ui",
-							nonInteraction: false,
-							value: 1,
-						});
 					}}
 					size="2"
 					variant="soft"

@@ -7,6 +7,7 @@ import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { ErrorDisplay } from "@/components/ErrorBoundary/ErrorBoundary";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useOptimizeStore } from "@/store/ui/uiStore";
+import { buildExceptionEvent } from "@/utils/analytics/tracking";
 
 /**
  * Props for the {@link ErrorDialog} component.
@@ -74,13 +75,7 @@ export const ErrorDialog: FC<ErrorDialogProps> = ({ isOpen: propIsOpen, onClose:
 		document.body.classList.add("error-boundary-visible");
 
 		if (error) {
-			sendEvent({
-				action: error.name || "HandledError",
-				category: "error",
-				label: error.message,
-				nonInteraction: true,
-				stackTrace: error.stack?.replace(/\n/g, " ").substring(0, 500) || "N/A",
-			});
+			sendEvent(buildExceptionEvent(error, false, "HandledError"));
 		}
 
 		return () => {
