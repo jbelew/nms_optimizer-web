@@ -1,3 +1,15 @@
+# [8.5.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.4.6...v8.5.0) (2026-10-23)
+
+
+### Bug Fixes
+
+* **build:** emit Sentry as generic chunk-[hash].js and ensure Bun loads .env.production ([3b9a2b2](https://github.com/jbelew/nms_optimizer-web/commit/3b9a2b2e61c8488ac1f761076fb4a650a4a98da9))
+
+
+### Features
+
+* **monitoring:** defer Sentry initialization to IDLE and deduplicate error reporting ([2076ce2](https://github.com/jbelew/nms_optimizer-web/commit/2076ce2158d2e62c4ddda677f35d2a7cbc940f49))
+
 ## [8.4.6](https://github.com/jbelew/nms_optimizer-web/compare/v8.4.5...v8.4.6) (2026-10-22)
 
 
