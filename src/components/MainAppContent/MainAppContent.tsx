@@ -182,14 +182,14 @@ const MainAppGridSection: React.FC = () => {
 				<Text
 					className="main-app__ship-label"
 					style={{ opacity: solving ? 0.365 : 1 }}
-					trim="end"
+					trim={{ initial: "end", md: "normal" }}
 				>
 					{t("platformLabel")}
 				</Text>
 				<Text
 					className="main-app__ship-name trim-text"
 					style={{ opacity: solving ? 0.365 : 1 }}
-					trim="end"
+					trim={{ initial: "end", md: "normal" }}
 				>
 					{t(`platforms.${selectedPlatform}`)}
 				</Text>
