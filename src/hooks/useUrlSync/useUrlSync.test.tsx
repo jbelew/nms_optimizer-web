@@ -312,13 +312,30 @@ describe("useUrlSync", () => {
 		});
 
 		it("should add platform parameter for a returning user on root path", () => {
-			vi.mocked(useDialog).mockReturnValue({ userVisited: true } as ReturnType<
-				typeof useDialog
-			>);
+			vi.mocked(useDialog).mockReturnValue({
+				activeDialog: null,
+				userVisited: true,
+			} as ReturnType<typeof useDialog>);
 			renderHook(() => useUrlSync());
 			expect(mockNavigate).toHaveBeenCalledWith("/?platform=test-platform", {
 				replace: true,
 			});
+		});
+
+		it("should NOT add platform parameter when a Routed Dialog is active and no platform param is in the URL", () => {
+			vi.mocked(useDialog).mockReturnValue({
+				activeDialog: "about",
+				userVisited: true,
+			} as ReturnType<typeof useDialog>);
+			window.history.replaceState({}, "", "/about/");
+			vi.mocked(useLocation).mockReturnValue({
+				pathname: "/about/",
+				search: "",
+			} as Location);
+
+			renderHook(() => useUrlSync());
+
+			expect(mockNavigate).not.toHaveBeenCalled();
 		});
 
 		it("should always ensure a trailing slash for non-file paths", () => {

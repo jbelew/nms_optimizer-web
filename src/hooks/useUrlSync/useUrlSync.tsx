@@ -91,7 +91,7 @@ export const useUrlSync = () => {
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const platforms = usePlatformsSuspense();
 
-	const { userVisited } = useDialog();
+	const { activeDialog, userVisited } = useDialog();
 
 	const pathname = location?.pathname ?? window.location.pathname;
 	const search = location?.search ?? window.location.search;
@@ -228,7 +228,7 @@ export const useUrlSync = () => {
 			usePlatformStore.getState?.()?.selectedPlatform ?? selectedPlatform;
 
 		if (currentPlatformParam !== effectivePlatform) {
-			if (userVisited || currentPlatformParam !== null) {
+			if ((userVisited && !activeDialog) || currentPlatformParam !== null) {
 				url.searchParams.set("platform", effectivePlatform);
 				changed = true;
 			}
@@ -237,7 +237,7 @@ export const useUrlSync = () => {
 		if (changed) {
 			navigate(url.pathname + url.search, { replace: true });
 		}
-	}, [pathname, selectedPlatform, navigate, userVisited]);
+	}, [activeDialog, pathname, selectedPlatform, navigate, userVisited]);
 
 	/**
 	 * Generates a full URL including the current Platform Type and serialized Shared Grid state.

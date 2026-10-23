@@ -12,12 +12,13 @@ import { getPageByPath, ROUTED_DIALOG_IDS } from "@shared/page-registry.js";
  * Returns the list of language codes supported by the application.
  *
  * @remarks
- * Inspects the active `i18next` resource store data keys to determine which
- * language bundles are registered.
+ * Combines the canonical {@link languages} list with any additional locale keys
+ * registered in the active `i18next` resource store so lazy-loaded locales are
+ * always included prior to on-demand bundle fetches.
  *
  * @param i18nInstance - The `i18next` instance.
  *
- * @returns An array of supported language codes (e.g., `['en', 'es', 'fr']`).
+ * @returns An array of supported language codes (e.g., `['en', 'es', 'fr', 'de', 'pt', 'it']`).
  *
  * @see {@link useSupportedLanguages}
  *
@@ -26,11 +27,13 @@ import { getPageByPath, ROUTED_DIALOG_IDS } from "@shared/page-registry.js";
  * @example
  * ```ts
  * getSupportedLanguages(i18n);
- * // returns ['en', 'es', 'fr', ...]
+ * // returns ['en', 'es', 'fr', 'de', 'pt', 'it']
  * ```
  */
 const getSupportedLanguages = (i18nInstance: I18nInstance): string[] => {
-	return Object.keys(i18nInstance.services.resourceStore.data || {});
+	const loadedLangs = Object.keys(i18nInstance.services?.resourceStore?.data || {});
+
+	return Array.from(new Set([...languages, ...loadedLangs]));
 };
 
 /**

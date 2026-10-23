@@ -80,13 +80,17 @@ const AppContent: FC = () => {
 	const [welcomeDismissed, setWelcomeDismissed] = useState(false);
 
 	useEffect(() => {
+		if (isBot()) {
+			return;
+		}
+
 		if (!userVisited && activeDialog) {
 			markUserVisited();
 
 			return;
 		}
 
-		if (userVisited || activeDialog || isBot()) {
+		if (userVisited || activeDialog) {
 			return;
 		}
 

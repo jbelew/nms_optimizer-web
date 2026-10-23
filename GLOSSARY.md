@@ -89,7 +89,7 @@ A modal view bound to a canonical, localized URL path (such as `/about/`, `/inst
 _Avoid_: modal page, route wrapper, dialog route
 
 **Static SEO Fallback**:
-Pre-rendered HTML content and navigation embedded into static route entry points to provide indexable document structure for web crawlers and readable fallback content when JavaScript is disabled.
+Pre-rendered semantic copy and route navigation embedded into static entry points for non-JavaScript clients and initial crawler responses before interactive workspace hydration.
 _Avoid_: client fallback, prerendered markdown, noscript shell
 
 **Pattern No Fit**:

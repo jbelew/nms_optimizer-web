@@ -48,7 +48,7 @@ let ReactGAInstance: null | typeof ReactGA = null;
 /** Event queue for events sent before the ReactGA module loads. */
 let queuedEvents: GA4Event[] = [];
 
-export type { AnalyticsEventParams, GA4Event };
+export type { GA4Event };
 
 /**
  * Payload sent to the backend for server-side analytics.

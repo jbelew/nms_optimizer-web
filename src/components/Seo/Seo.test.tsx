@@ -79,6 +79,47 @@ describe("Seo Component", () => {
 		expect(link?.getAttribute("href")).toContain("/instructions/");
 	});
 
+	it("should render reciprocal hreflang alternate links for all supported languages and update them on navigation", () => {
+		let navigateFn!: ReturnType<typeof useNavigate>;
+
+		render(
+			<I18nextProvider i18n={i18n}>
+				<MemoryRouter initialEntries={["/"]}>
+					<Seo />
+					<NavHelper
+						onReady={(nav) => {
+							navigateFn = nav;
+						}}
+					/>
+				</MemoryRouter>
+			</I18nextProvider>,
+		);
+
+		const expectedLangs = ["en", "es", "fr", "de", "pt", "it", "x-default"];
+		expectedLangs.forEach((lang) => {
+			const link = document.querySelector(`link[rel="alternate"][hreflang="${lang}"]`);
+			expect(link).not.toBeNull();
+			const expectedHref =
+				lang === "en" || lang === "x-default" ?
+					"https://nms-optimizer.app/"
+				:	`https://nms-optimizer.app/${lang}/`;
+			expect(link?.getAttribute("href")).toBe(expectedHref);
+		});
+
+		act(() => {
+			navigateFn("/instructions/");
+		});
+
+		expectedLangs.forEach((lang) => {
+			const link = document.querySelector(`link[rel="alternate"][hreflang="${lang}"]`);
+			const expectedHref =
+				lang === "en" || lang === "x-default" ?
+					"https://nms-optimizer.app/instructions/"
+				:	`https://nms-optimizer.app/${lang}/instructions/`;
+			expect(link?.getAttribute("href")).toBe(expectedHref);
+		});
+	});
+
 	it("should render structured data", () => {
 		renderSeo();
 		const script = document.getElementById("website-schema");
@@ -111,19 +152,19 @@ describe("Seo Component", () => {
 			"en",
 			"translation",
 			"seo.mainPageTitle",
-			"No Man's Sky Tech Layout & Adjacency Calculator",
+			"No Man's Sky Tech Layout & Adjacency Bonus Calculator",
 		);
 		i18n.addResource("en", "translation", "appName", "NMS Optimizer");
 		renderSeo("/");
 		expect(document.title).toBe(
-			"No Man's Sky Tech Layout & Adjacency Calculator | NMS Optimizer",
+			"No Man's Sky Tech Layout & Adjacency Bonus Calculator | NMS Optimizer",
 		);
 		expect(sendEvent).toHaveBeenCalledWith(
 			expect.objectContaining({
 				action: "page_view",
 				category: "engagement",
 				page: "/",
-				page_title: "No Man's Sky Tech Layout & Adjacency Calculator | NMS Optimizer",
+				page_title: "No Man's Sky Tech Layout & Adjacency Bonus Calculator | NMS Optimizer",
 			}),
 		);
 	});

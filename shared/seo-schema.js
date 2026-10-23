@@ -5,6 +5,8 @@
  * @category Utilities
  */
 
+import { getPageById } from "./page-registry.js";
+
 /**
  * Maps a supported i18next language code to a Facebook/Open Graph locale tag
  * (BCP-47 with underscore, e.g. `en_US`).
@@ -245,14 +247,22 @@ export const getLocalizedSchema = (t, lang, url, version) => {
 	let webPage = null;
 
 	if (!isHomePage) {
+		const pageEntry = pageName ? getPageById(pageName) : undefined;
+		const descriptionKey =
+			pageEntry?.seoDescriptionKey || (pageName ? `seo.${pageName}Description` : "");
+		const titleKey = pageEntry?.seoTitleKey || (pageName ? `seo.${pageName}PageTitle` : "");
+
 		webPage = {
 			"@context": "https://schema.org",
 			"@id": `${url}#webpage`,
 			"@type": "WebPage",
-			description: appDescription,
+			description:
+				descriptionKey ?
+					t(descriptionKey, { defaultValue: appDescription })
+				:	appDescription,
 			inLanguage: lang,
 			isPartOf: { "@id": `${baseUrl}/#website` },
-			name: pageName ? t(`seo.${pageName}PageTitle`, { defaultValue: appName }) : appName,
+			name: titleKey ? t(titleKey, { defaultValue: appName }) : appName,
 			url: url,
 		};
 	}

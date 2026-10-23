@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 
 import { KNOWN_DIALOGS, SUPPORTED_LANGUAGES, TARGET_HOST } from "../shared/config.js";
 import { getPageMetadata } from "../shared/page-metadata.js";
+import { PAGE_REGISTRY } from "../shared/page-registry.js";
 import { initI18n } from "./generate-ssg.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -91,7 +92,7 @@ export const getPageImages = (t, customBaseUrl = baseUrl) =>
 					title,
 				},
 			];
-		})
+		}),
 	);
 
 /**
@@ -112,22 +113,30 @@ const escapeXml = (str) =>
  * Resolves the last modification date using git log if available,
  * falling back to filesystem stat mtime or today's date.
  *
- * @param {string} relPath - Relative file path to check.
+ * @param {string | string[]} relPaths - Relative file path or array of relative file paths to check.
  * @returns {string} ISO date string (YYYY-MM-DD).
  */
-const getFileLastMod = (relPath) => {
-	if (!relPath) return today;
+export const getFileLastMod = (relPaths) => {
+	const paths = (Array.isArray(relPaths) ? relPaths : [relPaths]).filter(Boolean);
+	if (paths.length === 0) return today;
 
-	const fullPath = path.join(__dirname, "..", relPath);
+	const existingFullPaths = paths
+		.map((relPath) => path.join(__dirname, "..", relPath))
+		.filter((fullPath) => fs.existsSync(fullPath));
+
+	const targetFullPaths =
+		existingFullPaths.length > 0 ?
+			existingFullPaths
+		:	paths.map((relPath) => path.join(__dirname, "..", relPath));
 
 	try {
 		const gitDate = execFileSync(
 			"git",
-			["log", "-1", '--format=%cs', "--", fullPath],
+			["log", "-1", "--format=%cs", "--", ...targetFullPaths],
 			{
 				encoding: "utf8",
 				stdio: ["pipe", "pipe", "ignore"],
-			}
+			},
 		).trim();
 
 		if (gitDate && /^\d{4}-\d{2}-\d{2}$/.test(gitDate)) {
@@ -138,12 +147,43 @@ const getFileLastMod = (relPath) => {
 	}
 
 	try {
-		return fs.statSync(fullPath).mtime.toISOString().split("T")[0];
+		const latestMtime = Math.max(
+			...targetFullPaths.map((fullPath) => fs.statSync(fullPath).mtime.getTime()),
+		);
+
+		return new Date(latestMtime).toISOString().split("T")[0];
 	} catch (error) {
-		console.warn(`Warning: Could not get lastmod for ${relPath}: ${error.message}`);
+		console.warn(`Warning: Could not get lastmod for ${paths.join(", ")}: ${error.message}`);
 
 		return today;
 	}
+};
+
+/**
+ * Builds the list of localized source files that contribute to a given route and language.
+ *
+ * @param {string} pageKey - Route key (e.g., `"root"`, `"about"`, `"userstats"`).
+ * @param {string} lang - ISO language code (e.g., `"en"`, `"es"`).
+ * @param {string} [defaultPath] - Default fallback source path.
+ * @returns {string[]} Array of relative file paths for git lastmod lookup.
+ */
+export const getLocalizedSourceFiles = (pageKey, lang, defaultPath) => {
+	const files = [`public/assets/locales/${lang}/translation.json`];
+	const pageEntry = PAGE_REGISTRY[pageKey === "root" ? "home" : pageKey];
+	const mdFile = pageEntry?.markdownFileName ? `${pageEntry.markdownFileName}.md` : undefined;
+
+	if (mdFile) {
+		const localizedMd = `public/assets/locales/${lang}/${mdFile}`;
+		const enMd = `public/assets/locales/en/${mdFile}`;
+		const localizedMdExists = fs.existsSync(path.join(__dirname, "..", localizedMd));
+		files.push(localizedMdExists ? localizedMd : enMd);
+	}
+
+	if (defaultPath && !defaultPath.startsWith("public/assets/locales/")) {
+		files.push(defaultPath);
+	}
+
+	return Array.from(new Set(files));
 };
 
 // Routes excluded from the sitemap. These are either disallowed in robots.txt
@@ -182,8 +222,6 @@ export async function generateSitemap({ write = true } = {}) {
 	const languages = SUPPORTED_LANGUAGES;
 
 	const urlEntries = pages.flatMap((page) => {
-		const lastmod = page.lastmod || getFileLastMod(page.path);
-
 		// 1. Generate all alternate URLs for this page
 		const alternateUrls = languages.map((lang) => {
 			const url = new URL(page.url);
@@ -199,17 +237,20 @@ export async function generateSitemap({ write = true } = {}) {
 		});
 
 		const image = pageImages[page.key];
-		const imageXml = image
-			? `    <image:image>\n      <image:loc>${image.loc}</image:loc>\n      <image:title>${escapeXml(image.title)}</image:title>\n      <image:caption>${escapeXml(image.caption)}</image:caption>\n    </image:image>\n`
-			: "";
+		const imageXml =
+			image ?
+				`    <image:image>\n      <image:loc>${image.loc}</image:loc>\n      <image:title>${escapeXml(image.title)}</image:title>\n      <image:caption>${escapeXml(image.caption)}</image:caption>\n    </image:image>\n`
+			:	"";
 
 		// 2. For each alternate URL, create a <url> entry
-		return alternateUrls.map(({ href }) => {
+		return alternateUrls.map(({ href, lang }) => {
+			const lastmod =
+				page.lastmod || getFileLastMod(getLocalizedSourceFiles(page.key, lang, page.path));
 			// 3. Inside each <url> entry, list all other alternates
 			const hreflangLinks = alternateUrls
 				.map(
 					(alt) =>
-						`    <xhtml:link rel="alternate" hreflang="${alt.lang}" href="${alt.href}" />`
+						`    <xhtml:link rel="alternate" hreflang="${alt.lang}" href="${alt.href}" />`,
 				)
 				.join("\n");
 

@@ -7,6 +7,8 @@ describe("seo-schema.js", () => {
 	const mockT = vi.fn((key: string, options?: { defaultValue?: string }) => {
 		const translations: Record<string, string> = {
 			appName: "NMS Optimizer",
+			"seo.aboutDescription": "Discover how NMS Optimizer uses advanced algorithms.",
+			"seo.aboutPageTitle": "About the Optimization Algorithms",
 			"seo.appDescription": "Optimize technology layouts.",
 			"seo.genre": "Game Tool",
 			"seo.nav.about": "About",
@@ -120,7 +122,7 @@ describe("seo-schema.js", () => {
 		expect(doubleSlashMatches).toBeNull();
 	});
 
-	it("generates WebPage schema for subpages linking to root WebSite", () => {
+	it("generates WebPage schema for subpages linking to root WebSite with page-specific description", () => {
 		const lang = "en";
 		const url = "https://nms-optimizer.app/about/";
 		const schemas = getLocalizedSchema(mockT, lang, url);
@@ -129,6 +131,8 @@ describe("seo-schema.js", () => {
 		expect(webPage).toBeDefined();
 		expect(webPage.url).toBe(url);
 		expect(webPage["@id"]).toBe(`${url}#webpage`);
+		expect(webPage.name).toBe("About the Optimization Algorithms");
+		expect(webPage.description).toBe("Discover how NMS Optimizer uses advanced algorithms.");
 		expect(webPage.isPartOf).toEqual({ "@id": "https://nms-optimizer.app/#website" });
 	});
 });

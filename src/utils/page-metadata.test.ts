@@ -226,7 +226,7 @@ describe("page-metadata.js", () => {
 				"seo.instructionsDescription":
 					"Learn how to use the grid and manage supercharged slots.",
 				"seo.instructionsPageTitle": "How to Optimize Your Tech Layout",
-				"seo.mainPageTitle": "No Man's Sky Tech Layout & Adjacency Calculator",
+				"seo.mainPageTitle": "No Man's Sky Tech Layout & Adjacency Bonus Calculator",
 				"seo.ogImageAlt": "A detailed screenshot of the NMS Optimizer application.",
 				"seo.performanceDescription":
 					"Real-time performance metrics and Core Web Vitals for the NMS Optimizer application.",
@@ -463,9 +463,9 @@ describe("page-metadata.js", () => {
 				});
 
 				expect(meta.title).toBe(
-					"No Man's Sky Tech Layout & Adjacency Calculator | NMS Optimizer",
+					"No Man's Sky Tech Layout & Adjacency Bonus Calculator | NMS Optimizer",
 				);
-				expect(meta.heading).toBe("No Man's Sky Tech Layout & Adjacency Calculator");
+				expect(meta.heading).toBe("No Man's Sky Tech Layout & Adjacency Bonus Calculator");
 				expect(meta.canonicalUrl).toBe("https://nms-optimizer.app/some-unknown-route/");
 			});
 		});

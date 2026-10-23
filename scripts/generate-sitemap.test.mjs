@@ -1,18 +1,24 @@
 import { describe, expect, it, vi } from "bun:test";
 
-import { generateSitemap, getPageImages, PAGE_IMAGE_CONFIG } from "./generate-sitemap.mjs";
+import {
+	generateSitemap,
+	getFileLastMod,
+	getLocalizedSourceFiles,
+	getPageImages,
+	PAGE_IMAGE_CONFIG,
+} from "./generate-sitemap.mjs";
 
 describe("generate-sitemap.mjs", () => {
 	const mockTranslations = {
 		appName: "NMS Optimizer",
 		"seo.aboutPageTitle": "About the Optimization Algorithms",
 		"seo.instructionsPageTitle": "How to Optimize Your Tech Layout",
-		"seo.mainPageTitle": "No Man's Sky Tech Layout & Adjacency Calculator",
+		"seo.mainPageTitle": "No Man's Sky Tech Layout & Adjacency Bonus Calculator",
 		"seo.userstatsPageTitle": "Community Meta & Tech Stats",
 	};
 
 	const mockT = vi.fn(
-		(key, options = {}) => mockTranslations[key] || options.defaultValue || key
+		(key, options = {}) => mockTranslations[key] || options.defaultValue || key,
 	);
 
 	describe("PAGE_IMAGE_CONFIG", () => {
@@ -31,11 +37,11 @@ describe("generate-sitemap.mjs", () => {
 			const images = getPageImages(mockT);
 
 			expect(images.root.title).toBe(
-				"No Man's Sky Tech Layout & Adjacency Calculator | NMS Optimizer"
+				"No Man's Sky Tech Layout & Adjacency Bonus Calculator | NMS Optimizer",
 			);
 			expect(images.about.title).toBe("About the Optimization Algorithms | NMS Optimizer");
 			expect(images.instructions.title).toBe(
-				"How to Optimize Your Tech Layout | NMS Optimizer"
+				"How to Optimize Your Tech Layout | NMS Optimizer",
 			);
 			expect(images.userstats.title).toBe("Community Meta & Tech Stats | NMS Optimizer");
 		});
@@ -48,11 +54,48 @@ describe("generate-sitemap.mjs", () => {
 			expect(images.about.loc).toContain("/assets/img/screenshots/screenshot_desktop.webp");
 			expect(images.about.caption).toContain("optimization algorithms");
 			expect(images.instructions.loc).toContain(
-				"/assets/img/screenshots/screenshot_desktop.webp"
+				"/assets/img/screenshots/screenshot_desktop.webp",
 			);
 			expect(images.userstats.loc).toContain(
-				"/assets/img/screenshots/screenshot_desktop.webp"
+				"/assets/img/screenshots/screenshot_desktop.webp",
 			);
+		});
+	});
+
+	describe("getFileLastMod", () => {
+		it("resolves the latest git modification date across an array of files", () => {
+			const mdOnlyDate = getFileLastMod("public/assets/locales/en/translation-request.md");
+			const combinedDate = getFileLastMod([
+				"public/assets/locales/en/translation-request.md",
+				"public/assets/locales/en/translation.json",
+			]);
+
+			expect(mdOnlyDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+			expect(combinedDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+			expect(combinedDate >= mdOnlyDate).toBe(true);
+			expect(combinedDate > "2026-04-21").toBe(true);
+		});
+
+		it("uses localized markdown when present and falls back to English markdown only when missing", () => {
+			const esInstructionsFiles = getLocalizedSourceFiles(
+				"instructions",
+				"es",
+				"public/assets/locales/en/instructions.md",
+			);
+			expect(esInstructionsFiles).toEqual([
+				"public/assets/locales/es/translation.json",
+				"public/assets/locales/es/instructions.md",
+			]);
+
+			const esChangelogFiles = getLocalizedSourceFiles(
+				"changelog",
+				"es",
+				"public/assets/locales/en/changelog.md",
+			);
+			expect(esChangelogFiles).toEqual([
+				"public/assets/locales/es/translation.json",
+				"public/assets/locales/en/changelog.md",
+			]);
 		});
 	});
 
@@ -63,16 +106,16 @@ describe("generate-sitemap.mjs", () => {
 			expect(xml).toContain('<?xml version="1.0" encoding="UTF-8"?>');
 			expect(xml).toContain('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"');
 			expect(xml).toContain(
-				"<image:title>No Man&apos;s Sky Tech Layout &amp; Adjacency Calculator | NMS Optimizer</image:title>"
+				"<image:title>No Man&apos;s Sky Tech Layout &amp; Adjacency Bonus Calculator | NMS Optimizer</image:title>",
 			);
 			expect(xml).toContain(
-				"<image:title>About the Optimization Algorithms | NMS Optimizer</image:title>"
+				"<image:title>About the Optimization Algorithms | NMS Optimizer</image:title>",
 			);
 			expect(xml).toContain(
-				"<image:title>How to Optimize Your Tech Layout | NMS Optimizer</image:title>"
+				"<image:title>How to Optimize Your Tech Layout | NMS Optimizer</image:title>",
 			);
 			expect(xml).toContain(
-				"<image:title>Community Meta &amp; Tech Stats | NMS Optimizer</image:title>"
+				"<image:title>Community Meta &amp; Tech Stats | NMS Optimizer</image:title>",
 			);
 		});
 
