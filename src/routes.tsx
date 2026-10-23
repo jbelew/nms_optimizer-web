@@ -13,12 +13,23 @@ import { MainAppContent } from "./components/MainAppContent/MainAppContent";
 import { languages } from "./routeConfig";
 
 /**
- * Lazily loads the 404 Not Found component.
+ * Lazily loads the 404 Not Found route component.
  *
- * @returns A promise resolving to the component for lazy loading.
+ * @remarks
+ * Guards against `undefined` module resolution when `vite:preloadError` calls
+ * `event.preventDefault()` during **PWA Self-Healing** preload recovery, returning
+ * a never-resolving `Promise` so the router remains suspended while the page reloads.
+ *
+ * @returns A promise resolving to the route `Component` object, or a never-resolving promise during preload recovery.
  */
 const NotFound = async () => {
-	const { default: Component } = await import("./components/NotFound/NotFound");
+	const notFoundModule = await import("./components/NotFound/NotFound");
+
+	if (!notFoundModule?.default) {
+		return new Promise<never>(() => {});
+	}
+
+	const { default: Component } = notFoundModule;
 
 	return { Component };
 };

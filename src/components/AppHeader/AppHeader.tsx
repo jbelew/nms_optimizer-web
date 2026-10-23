@@ -18,8 +18,12 @@ import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useA11yStore } from "@/store/ui/uiStore";
 import { useDialog } from "@/utils/system/dialogUtils";
+import { lazyNamed } from "@/utils/system/lazyNamed";
 
-const EasterEggCoordinates = React.lazy(() => import("./EasterEggCoordinates"));
+/**
+ * Lazy-loaded popover content displaying Easter egg portal coordinates.
+ */
+const EasterEggCoordinates = lazyNamed(() => import("./EasterEggCoordinates"));
 
 /**
  * Props for the {@link AppHeader} component.

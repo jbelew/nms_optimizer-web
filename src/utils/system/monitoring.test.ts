@@ -269,5 +269,23 @@ describe("monitoring utilities", () => {
 				tags: { area: "boot" },
 			});
 		});
+
+		it("should configure ignoreErrors with Safari, Chromium, and Firefox dynamic module and CSS preload failure patterns", async () => {
+			vi.stubEnv("VITE_SENTRY_ENABLED", "true");
+			vi.stubEnv("VITE_SENTRY_DSN", "https://examplePublicKey@o0.ingest.sentry.io/0");
+
+			await initializeSentry();
+
+			expect(SentryReact.init).toHaveBeenCalledWith(
+				expect.objectContaining({
+					ignoreErrors: expect.arrayContaining([
+						/Importing a module script failed/i,
+						/Failed to fetch dynamically imported module/i,
+						/error loading dynamically imported module/i,
+						/Unable to preload CSS/i,
+					]),
+				}),
+			);
+		});
 	});
 });

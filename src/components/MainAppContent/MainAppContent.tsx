@@ -1,6 +1,6 @@
 import "./MainAppContent.scss";
 
-import React, { lazy, Suspense, useEffect, useLayoutEffect, useRef } from "react";
+import React, { Suspense, useEffect, useLayoutEffect, useRef } from "react";
 import { Box, Button, Flex, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -19,13 +19,24 @@ import { useGridStore } from "@/store/grid/gridStore";
 import { useOptimizeStore, useUiStore } from "@/store/ui/uiStore";
 import { lazyNamed } from "@/utils/system/lazyNamed";
 
-const OptimizationAlertDialog = lazy(
+/**
+ * Lazy-loaded dialog warning when a technology layout hits a Pattern No Fit state.
+ */
+const OptimizationAlertDialog = lazyNamed(
 	() => import("@/components/AppDialog/OptimizationAlert/OptimizationAlertDialog"),
 );
+
+/**
+ * Lazy-loaded prompt encouraging PWA installation on supported browsers.
+ */
 const InstallPrompt = lazyNamed(
 	() => import("@/components/InstallPrompt/InstallPrompt"),
 	"InstallPrompt",
 );
+
+/**
+ * Lazy-loaded renderer for active toast notifications.
+ */
 const ToastRenderer = lazyNamed(() => import("@/components/Toast/ToastRenderer"), "ToastRenderer");
 
 /**

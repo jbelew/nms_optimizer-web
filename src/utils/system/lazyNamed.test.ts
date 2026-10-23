@@ -1,41 +1,90 @@
+import type { FC } from "react";
+import { createElement, Suspense } from "react";
+import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { lazyNamed } from "./lazyNamed";
 
 describe("lazyNamed", () => {
-	it("should return a lazy component that resolves the named export", async () => {
-		const mockModule = {
-			MyComponent: () => "RenderedComponent",
-		};
-		const importFn = vi.fn().mockResolvedValue(mockModule);
+	it("should return a lazy component that resolves a named export and preserves its props", async () => {
+		const MyComponent: FC<{ label: string }> = ({ label }) =>
+			createElement("span", null, label);
+		const importFn = vi.fn(() => Promise.resolve({ MyComponent }));
 
 		const LazyComp = lazyNamed(importFn, "MyComponent");
 
-		expect(LazyComp).toBeDefined();
+		render(
+			createElement(
+				Suspense,
+				{ fallback: createElement("div", null, "Loading...") },
+				createElement(LazyComp, { label: "NamedExportContent" }),
+			),
+		);
 
-		interface ReactLazyInternal {
-			_init?: () => Promise<{ default: unknown }>;
-			_payload?: {
-				_ctor: () => Promise<{ default: unknown }>;
-				_result: unknown;
-			};
-		}
+		expect(await screen.findByText("NamedExportContent")).toBeInTheDocument();
+		expect(importFn).toHaveBeenCalledTimes(1);
+	});
 
-		// Act: call the load function on the internal _init property if available,
-		// or simulate component loading
-		const lazyInternal = LazyComp as unknown as ReactLazyInternal;
-		const initPromise = lazyInternal._payload?._result || lazyInternal._init;
+	it("should default to the 'default' export when export name is omitted or passed 'default'", async () => {
+		const DefaultComponent: FC<{ title: string }> = ({ title }) =>
+			createElement("div", null, title);
+		const importFn = vi.fn(() => Promise.resolve({ default: DefaultComponent }));
 
-		if (typeof initPromise === "function") {
-			const res = await initPromise();
-			expect(res.default).toBe(mockModule.MyComponent);
-		} else {
-			const payload = lazyInternal._payload;
+		const LazyImplicit = lazyNamed(importFn);
+		const LazyExplicit = lazyNamed(importFn, "default");
 
-			if (payload) {
-				const result = await payload._ctor();
-				expect(result.default).toBe(mockModule.MyComponent);
-			}
-		}
+		render(
+			createElement(
+				Suspense,
+				{ fallback: createElement("div", null, "Loading...") },
+				createElement(LazyImplicit, { title: "ImplicitDefaultExport" }),
+				createElement(LazyExplicit, { title: "ExplicitDefaultExport" }),
+			),
+		);
+
+		expect(await screen.findByText("ImplicitDefaultExport")).toBeInTheDocument();
+		expect(await screen.findByText("ExplicitDefaultExport")).toBeInTheDocument();
+	});
+
+	it("should return a never-resolving promise when importFn resolves to undefined during preload error recovery", async () => {
+		const emptyModules: Array<{ default: FC }> = [];
+		const importFn = vi.fn(() => Promise.resolve(emptyModules[0]));
+
+		const LazyComp = lazyNamed(importFn);
+
+		render(
+			createElement(
+				Suspense,
+				{ fallback: createElement("div", null, "Loading fallback") },
+				createElement(LazyComp),
+			),
+		);
+
+		await Promise.resolve();
+		await Promise.resolve();
+
+		expect(importFn).toHaveBeenCalledTimes(1);
+		expect(screen.getByText("Loading fallback")).toBeInTheDocument();
+	});
+
+	it("should return a never-resolving promise when the resolved module is missing the requested export", async () => {
+		const emptyModule: Record<string, FC> = {};
+		const importFn = vi.fn(() => Promise.resolve(emptyModule));
+
+		const LazyComp = lazyNamed(importFn, "MissingComponent");
+
+		render(
+			createElement(
+				Suspense,
+				{ fallback: createElement("div", null, "Missing export fallback") },
+				createElement(LazyComp),
+			),
+		);
+
+		await Promise.resolve();
+		await Promise.resolve();
+
+		expect(importFn).toHaveBeenCalledTimes(1);
+		expect(screen.getByText("Missing export fallback")).toBeInTheDocument();
 	});
 });

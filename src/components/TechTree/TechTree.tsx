@@ -1,6 +1,6 @@
 import "./TechTreeSection.scss";
 
-import React, { lazy, Suspense, useEffect, useMemo, useRef } from "react";
+import React, { Suspense, useEffect, useMemo, useRef } from "react";
 import { Box, ScrollArea, Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
@@ -10,6 +10,7 @@ import { TechTreeRow } from "@/components/TechTreeRow/TechTreeRow";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useFetchTechTreeSuspense } from "@/hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "@/store/app/platformStore";
+import { lazyNamed } from "@/utils/system/lazyNamed";
 import { Logger } from "@/utils/system/monitoring";
 
 import { TechTreePresetsCard } from "./TechTreePresetsCard";
@@ -23,10 +24,9 @@ export { TechTreeSkeleton } from "./TechTreeSkeleton";
  * This dynamic import extracts the Module Selection dialog and its Radix UI primitives
  * from the critical startup bundle, reducing initial JS payload and Total Blocking Time (TBT).
  */
-const ModuleSelectionDialog = lazy(() =>
-	import("@/components/ModuleSelectionDialog/ModuleSelectionDialog").then((m) => ({
-		default: m.ModuleSelectionDialog,
-	})),
+const ModuleSelectionDialog = lazyNamed(
+	() => import("@/components/ModuleSelectionDialog/ModuleSelectionDialog"),
+	"ModuleSelectionDialog",
 );
 
 /**

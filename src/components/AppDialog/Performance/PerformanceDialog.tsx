@@ -14,7 +14,7 @@
  */
 
 import type { FC } from "react";
-import { lazy, Suspense, use, useState, useTransition } from "react";
+import { Suspense, use, useState, useTransition } from "react";
 import { Button, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
@@ -24,6 +24,7 @@ import { MessageSpinner } from "@/components/MessageSpinner/MessageSpinner";
 import { API_URL } from "@/constants";
 import { apiCall } from "@/utils/api/network";
 import { safeGetItem, safeSetItem } from "@/utils/browser/environment";
+import { lazyNamed } from "@/utils/system/lazyNamed";
 
 import type { PerformanceMetric, PerformanceRange } from "./PerformanceUtils";
 import { FULL_DASHBOARD_HEIGHT, PERFORMANCE_LAYOUT } from "./PerformanceUtils";
@@ -31,9 +32,7 @@ import { FULL_DASHBOARD_HEIGHT, PERFORMANCE_LAYOUT } from "./PerformanceUtils";
 /**
  * Lazily loaded chart component to keep `recharts` out of the dialog container chunk.
  */
-const PerformanceChart = lazy(() =>
-	import("./performanceChart").then((m) => ({ default: m.PerformanceChart })),
-);
+const PerformanceChart = lazyNamed(() => import("./performanceChart"), "PerformanceChart");
 
 /**
  * Session-scoped cache of performance metric promises keyed by date range.

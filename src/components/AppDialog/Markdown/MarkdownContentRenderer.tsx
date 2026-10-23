@@ -1,17 +1,10 @@
-import React, {
-	createContext,
-	lazy,
-	Suspense,
-	useContext,
-	useEffect,
-	useRef,
-	useState,
-} from "react";
+import React, { createContext, Suspense, useContext, useEffect, useRef, useState } from "react";
 import { Blockquote, Box, Code, Heading, Kbd, Link, Separator, Text } from "@radix-ui/themes";
 
 import DynamicRadixIcon from "@/components/AppDialog/Common/DynamicRadixIcon";
 import LoremIpsumSkeleton from "@/components/AppDialog/Common/LoremIpsumSkeleton";
 import { useMarkdownContent } from "@/hooks/useMarkdownContent/useMarkdownContent";
+import { lazyNamed } from "@/utils/system/lazyNamed";
 import {
 	extractYouTubeVideoId,
 	isInternalMarkdownUrl,
@@ -43,7 +36,7 @@ interface MarkdownContentRendererProps {
  * @remarks
  * Used to avoid loading the heavy markdown parser during the initial application boot.
  */
-const LazyReactMarkdown = lazy(() => import("react-markdown"));
+const LazyReactMarkdown = lazyNamed(() => import("react-markdown"));
 
 /**
  * Context to share the ID generation logic for h2 headings.

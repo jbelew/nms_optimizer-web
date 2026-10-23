@@ -23,10 +23,12 @@ import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useTechStore } from "@/store/tech/techStore";
 import { useDialog } from "@/utils/system/dialogUtils";
+import { lazyNamed } from "@/utils/system/lazyNamed";
 
-const BuildNameDialog = React.lazy(
-	() => import("@/components/AppDialog/BuildName/BuildNameDialog"),
-);
+/**
+ * Lazy-loaded dialog for entering a Build File name prior to saving.
+ */
+const BuildNameDialog = lazyNamed(() => import("@/components/AppDialog/BuildName/BuildNameDialog"));
 
 /**
  * Props for the `GridTableButtons` component.

@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Outlet, useLocation } from "react-router-dom";
 
@@ -24,17 +24,17 @@ import { Logger } from "./utils/system/monitoring";
  *
  * @category Components
  */
-const OfflineBanner = lazy(() => import("./components/OfflineBanner/OfflineBanner"));
+const OfflineBanner = lazyNamed(() => import("./components/OfflineBanner/OfflineBanner"));
 
 /**
  * Lazy-loaded dialog for generating and displaying shareable build URLs.
  */
-const ShareLinkDialog = lazy(() => import("./components/AppDialog/ShareLink/ShareLinkDialog"));
+const ShareLinkDialog = lazyNamed(() => import("./components/AppDialog/ShareLink/ShareLinkDialog"));
 
 /**
  * Lazy-loaded dialog for the initial application welcome and introduction.
  */
-const WelcomeDialog = lazy(() => import("./components/AppDialog/Welcome/WelcomeDialog"));
+const WelcomeDialog = lazyNamed(() => import("./components/AppDialog/Welcome/WelcomeDialog"));
 
 /**
  * Lazy-loaded orchestrator for route-based modal dialogs.

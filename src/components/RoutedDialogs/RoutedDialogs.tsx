@@ -13,26 +13,35 @@
  */
 
 import type { FC } from "react";
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
 import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import LoremIpsumSkeleton from "@/components/AppDialog/Common/LoremIpsumSkeleton";
 import { useDialog } from "@/utils/system/dialogUtils";
+import { lazyNamed } from "@/utils/system/lazyNamed";
 import { getRoutedDialogs } from "@shared/page-registry.js";
 
 const IS_DOCKER_BUILD = import.meta.env.VITE_DOCKER === "true";
 
-const MarkdownContentRenderer = lazy(() =>
-	import("@/components/AppDialog/Markdown/MarkdownContentRenderer").then((m) => ({
-		default: m.MarkdownContentRenderer,
-	})),
+/**
+ * Lazy-loaded renderer for bundled markdown dialog content.
+ */
+const MarkdownContentRenderer = lazyNamed(
+	() => import("@/components/AppDialog/Markdown/MarkdownContentRenderer"),
+	"MarkdownContentRenderer",
 );
 
-const UserStatsDialog = lazy(() => import("@/components/AppDialog/UserStats/UserStatsDialog"));
+/**
+ * Lazy-loaded Routed Dialog displaying aggregate user optimization statistics.
+ */
+const UserStatsDialog = lazyNamed(() => import("@/components/AppDialog/UserStats/UserStatsDialog"));
 
-const PerformanceDialog = lazy(
+/**
+ * Lazy-loaded Routed Dialog displaying Core Web Vitals and performance metrics.
+ */
+const PerformanceDialog = lazyNamed(
 	() => import("@/components/AppDialog/Performance/PerformanceDialog"),
 );
 

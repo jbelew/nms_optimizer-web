@@ -166,117 +166,141 @@ const fetchTechTreeColors = (): Promise<Record<string, string>> => {
 
 /**
  * Lazily loaded chart component to keep `recharts` out of the initial bundle.
+ *
+ * @remarks
+ * Rolldown's static AST scanner requires direct `ObjectPattern` destructuring on
+ * `await import("recharts")` to tree-shake unused Recharts chart modules (~146 KB).
+ * When `vite:preloadError` calls `event.preventDefault()` during **PWA Self-Healing**
+ * preload recovery, `await import("recharts")` resolves to `undefined` and destructuring
+ * throws a `TypeError`; only that nullish-destructuring `TypeError` (or missing exports)
+ * returns a never-resolving `Promise`, while genuine import rejections are rethrown.
  */
 const LazyRechartsChart = lazy(async () => {
-	const { Cell, Pie, PieChart, ResponsiveContainer } = await import("recharts");
+	try {
+		const { Cell, Pie, PieChart, ResponsiveContainer } = await import("recharts");
 
-	return {
-		default: ({
-			chartData,
-			COLORS: palette,
-			techColors,
-		}: {
-			chartData: { name: string; value: number }[];
-			COLORS: string[];
-			techColors: Record<string, string>;
-		}) => {
-			const getCellFill = (entry: { name: string; value: number }, index: number) => {
-				if (entry.name.toLowerCase() === "photonix") {
-					return "#FF8042";
-				}
+		if (!Cell || !Pie || !PieChart || !ResponsiveContainer) {
+			return new Promise<never>(() => {});
+		}
 
-				if (entry.name.toLowerCase() === "other") {
-					return "gray";
-				}
+		return {
+			default: ({
+				chartData,
+				COLORS: palette,
+				techColors,
+			}: {
+				chartData: { name: string; value: number }[];
+				COLORS: string[];
+				techColors: Record<string, string>;
+			}) => {
+				const getCellFill = (entry: { name: string; value: number }, index: number) => {
+					if (entry.name.toLowerCase() === "photonix") {
+						return "#FF8042";
+					}
 
-				if (techColors[entry.name]) {
-					return `var(--${techColors[entry.name]}-track)`;
-				}
+					if (entry.name.toLowerCase() === "other") {
+						return "gray";
+					}
 
-				return palette[index % palette.length];
-			};
+					if (techColors[entry.name]) {
+						return `var(--${techColors[entry.name]}-track)`;
+					}
 
-			return (
-				<ResponsiveContainer
-					height={248}
-					width="100%"
-				>
-					<PieChart>
-						<Pie
-							cx="50%"
-							cy="50%"
-							data={chartData}
-							dataKey="value"
-							innerRadius="50%"
-							label={(props: unknown) => {
-								const {
-									cx: cx_,
-									cy: cy_,
-									innerRadius: innerRadius_,
-									midAngle,
-									name,
-									outerRadius: outerRadius_,
-									percent,
-								} = props as PieLabelRenderProps;
+					return palette[index % palette.length];
+				};
 
-								const RADIAN = Math.PI / 180;
-								const innerRadius = parseFloat(innerRadius_ as unknown as string);
-								const outerRadius = parseFloat(outerRadius_ as unknown as string);
-								const cx = parseFloat(cx_ as unknown as string);
-								const cy = parseFloat(cy_ as unknown as string);
+				return (
+					<ResponsiveContainer
+						height={248}
+						width="100%"
+					>
+						<PieChart>
+							<Pie
+								cx="50%"
+								cy="50%"
+								data={chartData}
+								dataKey="value"
+								innerRadius="50%"
+								label={(props: unknown) => {
+									const {
+										cx: cx_,
+										cy: cy_,
+										innerRadius: innerRadius_,
+										midAngle,
+										name,
+										outerRadius: outerRadius_,
+										percent,
+									} = props as PieLabelRenderProps;
 
-								const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-								const x = cx + radius * Math.cos(-(midAngle ?? 0) * RADIAN);
-								const y = cy + radius * Math.sin(-(midAngle ?? 0) * RADIAN);
+									const RADIAN = Math.PI / 180;
+									const innerRadius = parseFloat(
+										innerRadius_ as unknown as string,
+									);
+									const outerRadius = parseFloat(
+										outerRadius_ as unknown as string,
+									);
+									const cx = parseFloat(cx_ as unknown as string);
+									const cy = parseFloat(cy_ as unknown as string);
 
-								return (
-									<text
-										dominantBaseline="middle"
-										fill="white"
-										fontSize={14}
-										fontWeight="medium"
-										textAnchor="middle"
-										x={x}
-										y={y}
-									>
-										<tspan
-											dy="-0.4em"
+									const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+									const x = cx + radius * Math.cos(-(midAngle ?? 0) * RADIAN);
+									const y = cy + radius * Math.sin(-(midAngle ?? 0) * RADIAN);
+
+									return (
+										<text
+											dominantBaseline="middle"
+											fill="white"
+											fontSize={14}
+											fontWeight="medium"
+											textAnchor="middle"
 											x={x}
+											y={y}
 										>
-											{name}
-										</tspan>
-										<tspan
-											className="tabular-nums"
-											dy="1.2em"
-											x={x}
-										>
-											{percent && percent * 100 >= 6 ?
-												`${(percent * 100).toFixed(0)}%`
-											:	""}
-										</tspan>
-									</text>
-								);
-							}}
-							labelLine={false}
-							outerRadius="100%"
-							paddingAngle={0}
-						>
-							{chartData.map(
-								(entry: { name: string; value: number }, index: number) => (
-									<Cell
-										fill={getCellFill(entry, index)}
-										key={`cell-${index}`}
-										stroke="black"
-										strokeWidth={1}
-									/>
-								),
-							)}
-						</Pie>
-					</PieChart>
-				</ResponsiveContainer>
-			);
-		},
-	};
+											<tspan
+												dy="-0.4em"
+												x={x}
+											>
+												{name}
+											</tspan>
+											<tspan
+												className="tabular-nums"
+												dy="1.2em"
+												x={x}
+											>
+												{percent && percent * 100 >= 6 ?
+													`${(percent * 100).toFixed(0)}%`
+												:	""}
+											</tspan>
+										</text>
+									);
+								}}
+								labelLine={false}
+								outerRadius="100%"
+								paddingAngle={0}
+							>
+								{chartData.map(
+									(entry: { name: string; value: number }, index: number) => (
+										<Cell
+											fill={getCellFill(entry, index)}
+											key={`cell-${index}`}
+											stroke="black"
+											strokeWidth={1}
+										/>
+									),
+								)}
+							</Pie>
+						</PieChart>
+					</ResponsiveContainer>
+				);
+			},
+		};
+	} catch (error) {
+		if (error instanceof TypeError && /destructure|undefined|null/i.test(error.message)) {
+			return new Promise<never>(() => {});
+		}
+
+		throw error;
+	}
 });
 
 /**
