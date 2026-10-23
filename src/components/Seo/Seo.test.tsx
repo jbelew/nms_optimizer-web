@@ -343,4 +343,81 @@ describe("Seo Component", () => {
 		expect(secondCallPayload).not.toHaveProperty("utm_source");
 		expect(secondCallPayload).not.toHaveProperty("ref");
 	});
+
+	it("should update pre-rendered SSG head tags in-place without creating duplicate title, canonical, meta, or hreflang tags across navigations", () => {
+		// Simulate pre-rendered SSG head tags from /instructions/ index.html
+		document.head.innerHTML = `
+			<title>How to Optimize Your Tech Layout | NMS Optimizer</title>
+			<meta name="description" content="Initial SSG description" />
+			<meta name="keywords" content="Initial SSG keywords" />
+			<meta property="og:site_name" content="NMS Optimizer" />
+			<meta property="og:title" content="How to Optimize Your Tech Layout | NMS Optimizer" />
+			<meta property="og:description" content="Initial SSG description" />
+			<meta property="og:image" content="https://nms-optimizer.app/assets/img/screenshots/screenshot.webp" />
+			<meta property="og:image:type" content="image/webp" />
+			<meta property="og:image:width" content="1280" />
+			<meta property="og:image:height" content="880" />
+			<meta property="og:image:alt" content="Initial SSG alt" />
+			<meta property="og:url" content="https://nms-optimizer.app/instructions/" />
+			<meta property="og:locale" content="en_US" />
+			<meta property="og:locale:alternate" content="es_ES" />
+			<meta property="og:locale:alternate" content="fr_FR" />
+			<meta property="og:locale:alternate" content="de_DE" />
+			<meta property="og:locale:alternate" content="pt_BR" />
+			<meta property="og:locale:alternate" content="it_IT" />
+			<meta name="twitter:card" content="summary_large_image" />
+			<meta name="twitter:title" content="How to Optimize Your Tech Layout | NMS Optimizer" />
+			<meta name="twitter:description" content="Initial SSG description" />
+			<meta name="twitter:image" content="https://nms-optimizer.app/assets/img/screenshots/screenshot.webp" />
+			<meta name="twitter:image:alt" content="Initial SSG alt" />
+			<link rel="canonical" href="https://nms-optimizer.app/instructions/" />
+			<link rel="alternate" hreflang="en" href="https://nms-optimizer.app/instructions/" />
+			<link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/instructions/" />
+			<link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/instructions/" />
+			<link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/instructions/" />
+			<link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/instructions/" />
+			<link rel="alternate" hreflang="it" href="https://nms-optimizer.app/it/instructions/" />
+			<link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/instructions/" />
+		`;
+
+		let navigateFn!: ReturnType<typeof useNavigate>;
+
+		render(
+			<I18nextProvider i18n={i18n}>
+				<MemoryRouter initialEntries={["/instructions/"]}>
+					<Seo />
+					<NavHelper
+						onReady={(nav) => {
+							navigateFn = nav;
+						}}
+					/>
+				</MemoryRouter>
+			</I18nextProvider>,
+		);
+
+		expect(document.head.querySelectorAll("title")).toHaveLength(1);
+		expect(document.head.querySelectorAll('link[rel="canonical"]')).toHaveLength(1);
+		expect(document.head.querySelectorAll('meta[name="description"]')).toHaveLength(1);
+		expect(document.head.querySelectorAll('link[rel="alternate"][hreflang]')).toHaveLength(7);
+		expect(document.head.querySelectorAll('meta[property="og:locale:alternate"]')).toHaveLength(
+			5,
+		);
+
+		act(() => {
+			navigateFn("/");
+		});
+
+		expect(document.head.querySelectorAll("title")).toHaveLength(1);
+		const canonicalLinks = document.head.querySelectorAll('link[rel="canonical"]');
+		expect(canonicalLinks).toHaveLength(1);
+		expect(canonicalLinks[0]?.getAttribute("href")).toBe("https://nms-optimizer.app/");
+
+		const hreflangLinks = document.head.querySelectorAll('link[rel="alternate"][hreflang]');
+		expect(hreflangLinks).toHaveLength(7);
+		expect(
+			document.head
+				.querySelector('link[rel="alternate"][hreflang="es"]')
+				?.getAttribute("href"),
+		).toBe("https://nms-optimizer.app/es/");
+	});
 });
