@@ -79,6 +79,12 @@ function attachStaticAsset404Guard(server: PreviewServer | ViteDevServer): () =>
  * 5. CSS Optimization: LightningCSS handles transforms and minification, synced with .browserslistrc.
  */
 export default defineConfig(async ({ command: _command, mode }): Promise<UserConfig> => {
+	// If CI passes an empty VITE_SENTRY_DSN string (e.g., on fork PRs), remove the empty
+	// key from process.env so loadEnv falls back to the value in .env.production.
+	if (process.env.VITE_SENTRY_DSN === "") {
+		delete process.env.VITE_SENTRY_DSN;
+	}
+
 	// Load env file based on `mode` in the current working directory.
 	const env = loadEnv(mode, process.cwd(), "");
 
@@ -125,13 +131,12 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 			modulePreload: {
 				resolveDependencies: (filename: string, deps: string[]) => {
 					// Restore aggressive preloading for all critical-path dependencies.
-					// We only exclude truly heavy, asynchronous chunks like charts, monitoring, and markdown.
+					// We only exclude truly heavy, asynchronous chunks like charts and markdown.
 					// We also exclude CSS files to prevent double-loading issues when Vite
 					// injects them separately into the HTML.
 					return deps.filter(
 						(dep: string) =>
 							!dep.endsWith(".css")
-							&& !dep.includes("vendor-monitoring")
 							&& !dep.includes("vendor-telemetry")
 							&& !dep.includes("vendor-charts")
 							&& !dep.includes("vendor-markdown")
@@ -190,11 +195,14 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 								priority: 115,
 								test: /[\\/]node_modules[\\/](react-markdown|remark-gfm|rehype-raw|micromark|vfile|unified|unist|mdast|hast|decode-named-character-reference|character-entities|property-information|space-separated-tokens|comma-separated-tokens|web-namespaces|zwitch|html-void-elements)[\\/]/,
 							},
-							// Group all Sentry monitoring code into a chunk only if enabled.
+							// Group all Sentry code into a single lazy chunk when enabled.
+							// Name intentionally omits 'vendor-' so chunkFileNames emits a generic
+							// 'build/chunk-[hash].js' filename that cannot be blocked by ad-blockers
+							// or iOS content filters.
 							...(sentryEnabled ?
 								[
 									{
-										name: "vendor-monitoring",
+										name: "error-boundary-lib",
 										priority: 110,
 										test: /[\\/]node_modules[\\/]@sentry[\\/]/,
 									},

@@ -123,5 +123,16 @@ describe("Production Bundle CSS & Radix Chunking", () => {
 			expect(vendorJs).not.toContain(`displayName="${displayName}"`);
 		}
 	});
+
+	itWhenBuilt("never emits ad-blocker-targeted chunk filenames (monitoring, sentry, analytics, events)", () => {
+		const jsFiles = fs
+			.readdirSync(distBuildDir)
+			.filter((file) => file.endsWith(".js"));
+		expect(jsFiles.length).toBeGreaterThan(0);
+
+		for (const file of jsFiles) {
+			expect(file.toLowerCase()).not.toMatch(/monitoring|sentry|analytics|events/);
+		}
+	});
 });
 

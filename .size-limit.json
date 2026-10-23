@@ -40,11 +40,6 @@
 		"limit": "10 KB"
 	},
 	{
-		"name": "Monitoring vendor (lazy)",
-		"path": "dist/build/vendor-monitoring-*.js",
-		"limit": "35 KB"
-	},
-	{
 		"name": "Total app JS (gzipped)",
 		"path": "dist/build/*.js",
 		"limit": "700 KB"

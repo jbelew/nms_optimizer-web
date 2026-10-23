@@ -128,10 +128,10 @@ jobs:
           VITE_SENTRY_ENV: staging
           VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}
           # Conditionally pass Sentry secrets to avoid failures on fork PRs
-          VITE_SENTRY_DSN: ${{ github.event.pull_request.head.repo.full_name == github.repository && secrets.VITE_SENTRY_DSN || '' }}
-          SENTRY_AUTH_TOKEN: ${{ github.event.pull_request.head.repo.full_name == github.repository && secrets.SENTRY_AUTH_TOKEN || '' }}
-          SENTRY_ORG: ${{ github.event.pull_request.head.repo.full_name == github.repository && secrets.SENTRY_ORG || '' }}
-          SENTRY_PROJECT: ${{ github.event.pull_request.head.repo.full_name == github.repository && secrets.SENTRY_PROJECT || '' }}
+          VITE_SENTRY_DSN: ${{ (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && secrets.VITE_SENTRY_DSN || '' }}
+          SENTRY_AUTH_TOKEN: ${{ (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && secrets.SENTRY_AUTH_TOKEN || '' }}
+          SENTRY_ORG: ${{ (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && secrets.SENTRY_ORG || '' }}
+          SENTRY_PROJECT: ${{ (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && secrets.SENTRY_PROJECT || '' }}
 
       - name: Verify SSG and route integrity
         run: bun run verify:routes && bun run verify:ssg

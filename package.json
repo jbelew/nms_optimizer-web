@@ -16,7 +16,7 @@
 		"dev": "bunx vite",
 		"docs:generate": "bunx typedoc",
 		"prebuild": "bun scripts/generate-radix-colors.mjs",
-		"build": "bunx tsgo -b && bunx vite build --mode production && bun scripts/generate-ssg.mjs && bun run sitemap",
+		"build": "NODE_ENV=production bunx tsgo -b && NODE_ENV=production bunx vite build --mode production && NODE_ENV=production bun scripts/generate-ssg.mjs && NODE_ENV=production bun run sitemap",
 		"build:analyze": "ANALYZE=true bun run build",
 		"build:docker": "VITE_DOCKER=true bunx vite build --mode docker && VITE_DOCKER=true bun scripts/generate-ssg.mjs && VITE_DOCKER=true bun run sitemap",
 		"build:e2e": "bunx vite build --mode e2e",

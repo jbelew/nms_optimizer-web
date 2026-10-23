@@ -20,7 +20,7 @@ Guidelines and technical decisions regarding the system architecture of the NMS 
 
 ## Bundle Strategy
 
-- **Code Splitting**: `vite.config.ts` uses Rolldown's `codeSplitting.groups` to group tracking-related libraries (`vendor-telemetry` for GA4, `vendor-monitoring` for Sentry) to improve resilience against strict ad-blockers. **Do not rename or break this chunking logic.**
+- **Code Splitting**: `vite.config.ts` uses Rolldown's `codeSplitting.groups` to group tracking-related libraries (`vendor-telemetry` for GA4, and a generic `build/chunk-[hash].js` group for Sentry that avoids `monitoring` or `sentry` in the filename) to improve resilience against strict ad-blockers and iOS content filters. **Do not rename or break this chunking logic.**
 
 ## Directory Structure
 
