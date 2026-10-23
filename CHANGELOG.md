@@ -1,3 +1,10 @@
+# [8.6.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.5.3...v8.6.0) (2026-10-23)
+
+
+### Features
+
+* **analytics:** preserve inbound referrer and campaign telemetry ([23422a7](https://github.com/jbelew/nms_optimizer-web/commit/23422a765e6dbc58bc066bc2dbe474665922006e))
+
 ## [8.5.3](https://github.com/jbelew/nms_optimizer-web/compare/v8.5.2...v8.5.3) (2026-10-23)
 
 
