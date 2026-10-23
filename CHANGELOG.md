@@ -1,3 +1,11 @@
+## [8.6.2](https://github.com/jbelew/nms_optimizer-web/compare/v8.6.1...v8.6.2) (2026-10-23)
+
+
+### Bug Fixes
+
+* **seo:** update head metadata in-place to prevent duplicate SSG tags ([d5c5edb](https://github.com/jbelew/nms_optimizer-web/commit/d5c5edbb88d6e1bf60a20d7d76276b2ae6978023))
+* **styles:** adjust margin-top for mobile view and update text trimming behavior ([f6fda4a](https://github.com/jbelew/nms_optimizer-web/commit/f6fda4aef78c27bc8a162423949fe4b26aff3aed))
+
 ## [8.6.1](https://github.com/jbelew/nms_optimizer-web/compare/v8.6.0...v8.6.1) (2026-10-23)
 
 
