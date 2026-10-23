@@ -1,3 +1,10 @@
+## [8.5.3](https://github.com/jbelew/nms_optimizer-web/compare/v8.5.2...v8.5.3) (2026-10-23)
+
+
+### Bug Fixes
+
+* **analytics:** standardize GA4 telemetry contract and enrich solve events ([e1be1b4](https://github.com/jbelew/nms_optimizer-web/commit/e1be1b49b1d72cd67eae5af7c4a8bbafd07f2301))
+
 ## [8.5.2](https://github.com/jbelew/nms_optimizer-web/compare/v8.5.1...v8.5.2) (2026-10-23)
 
 
