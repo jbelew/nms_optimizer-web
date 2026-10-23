@@ -76,7 +76,7 @@ pre-push:
         jobs:
           - name: test-scripts
             tags: [test]
-            glob: "{scripts/**,functions/**,shared/**,public/_*,vite.config.ts,package.json}"
+            glob: "{scripts/**,functions/**,shared/**,public/_*,vite.config.ts,package.json,.size-limit.json,.env*}"
             run: bun run test:scripts
 
           - name: format

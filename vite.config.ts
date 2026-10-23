@@ -15,6 +15,7 @@ import { VitePWA } from "vite-plugin-pwa";
 import { splashScreen } from "vite-plugin-splash-screen";
 
 import packageJson from "./package.json" with { type: "json" };
+import { resolveModeEnv } from "./scripts/resolve-mode-env.mjs";
 import { markdownBundlePlugin } from "./scripts/vite-plugin-markdown-bundle.mjs";
 import { purgeRadixCss } from "./scripts/vite-plugin-purge-radix-css.mjs";
 
@@ -79,13 +80,9 @@ function attachStaticAsset404Guard(server: PreviewServer | ViteDevServer): () =>
  * 5. CSS Optimization: LightningCSS handles transforms and minification, synced with .browserslistrc.
  */
 export default defineConfig(async ({ command: _command, mode }): Promise<UserConfig> => {
-	// If CI passes an empty VITE_SENTRY_DSN string (e.g., on fork PRs), remove the empty
-	// key from process.env so loadEnv falls back to the value in .env.production.
-	if (process.env.VITE_SENTRY_DSN === "") {
-		delete process.env.VITE_SENTRY_DSN;
-	}
-
-	// Load env file based on `mode` in the current working directory.
+	// Sanitize process.env against Bun's .env.development auto-load and empty CI secrets,
+	// then load the mode-specific env map via Vite's loadEnv.
+	resolveModeEnv(mode, process.cwd());
 	const env = loadEnv(mode, process.cwd(), "");
 
 	// Load browserslist for LightningCSS targets to ensure CSS polyfilling matches JS support.

@@ -398,6 +398,9 @@ jobs:
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
 
+      - name: Verify SSG, route integrity, and bundle size budgets (Production)
+        run: bun run verify:routes && bun run verify:ssg && bun run size
+
       - name: Upload production artifact
         uses: actions/upload-artifact@v7
         with:
