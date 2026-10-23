@@ -13,8 +13,8 @@
 import { useRef } from "react";
 import { Button } from "@radix-ui/themes";
 
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
+import { sendEvent } from "@/utils/analytics/tracking";
 
 /**
  * Stylized donation button linking to "Buy Me A Coffee".
@@ -26,7 +26,7 @@ import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
  *
  * @returns The rendered donation button.
  *
- * @see {@link useAnalytics} - Used for tracking click events.
+ * @see {@link sendEvent} - Used for tracking click events.
  * @see {@link useBreakpoint} - Used for responsive sizing.
  *
  * @component
@@ -41,7 +41,6 @@ import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
  */
 export default function BuyMeACoffee() {
 	const isLargeScreen = useBreakpoint("1024px"); // Tailwind's 'lg' breakpoint
-	const { sendEvent } = useAnalytics();
 	const openTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
 	/**

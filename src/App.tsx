@@ -9,10 +9,10 @@ import { useOptimizeStore } from "@/store/ui/uiStore";
 import { formatErrorDocumentTitle } from "@shared/page-metadata.js";
 
 import { Seo } from "./components/Seo/Seo";
-import { useAnalytics } from "./hooks/useAnalytics/useAnalytics";
 import { useFileHandling } from "./hooks/useBuildFileManager/useBuildFileManager";
 import { fetchTechTree } from "./hooks/useTechTree/useTechTree";
 import { useUrlSync } from "./hooks/useUrlSync/useUrlSync";
+import { trackVirtualPageView } from "./utils/analytics/pageView";
 import { isBot } from "./utils/browser/environment";
 import { DialogProvider, useDialog } from "./utils/system/dialogUtils";
 import { lazyNamed } from "./utils/system/lazyNamed";
@@ -67,7 +67,6 @@ const RoutedDialogs = lazyNamed(
  * ```
  */
 const AppContent: FC = () => {
-	const { sendEvent } = useAnalytics();
 	const status = useOptimizeStore((s) => s.status);
 	const isFatal = status.type === "error" && status.severity === "fatal";
 	const { activeDialog, closeDialog, markUserVisited, shareUrl, userVisited } = useDialog();
@@ -112,20 +111,14 @@ const AppContent: FC = () => {
 	// Track error screen if shown
 	useEffect(() => {
 		if (status.type === "error" && status.severity === "fatal") {
-			const appName = t("appName", { defaultValue: "NMS Optimizer" });
-			const errorTopic = t("dialogs.titles.serverError");
-			const pageTitle = formatErrorDocumentTitle(500, errorTopic, appName);
-
-			sendEvent({
-				action: "page_view",
-				category: "engagement",
-				nonInteraction: true,
+			trackVirtualPageView({
+				appName: t("appName", { defaultValue: "NMS Optimizer" }),
+				errorCode: 500,
 				page: `${location.pathname}${location.search}#error`,
-				page_location: window.location.href,
-				page_title: pageTitle,
+				topic: t("dialogs.titles.serverError"),
 			});
 		}
-	}, [status, sendEvent, t, location.pathname, location.search]);
+	}, [status, t, location.pathname, location.search]);
 
 	// If an API error occurred during loading, don't render the main app
 	if (isFatal) {

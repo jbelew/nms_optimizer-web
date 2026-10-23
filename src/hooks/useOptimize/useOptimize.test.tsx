@@ -8,12 +8,12 @@ import type * as GridStoreModule from "@/store/grid/gridStore";
 import type { ApiResponse, GridStore } from "@/store/grid/gridStore";
 import type { TechStore } from "@/store/tech/techStore";
 import { WS_URL } from "@/constants";
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
 import { useOptimizeStore } from "@/store/ui/uiStore";
+import { sendEvent } from "@/utils/analytics/tracking";
 
 import { SOCKET_OPTIONS, useOptimize } from "./useOptimize";
 
@@ -29,7 +29,10 @@ vi.mock("@/utils/system/monitoring", () => ({
 	},
 }));
 
-vi.mock("@/hooks/useAnalytics/useAnalytics");
+vi.mock("@/utils/analytics/tracking", () => ({
+	sendDeferredEvent: vi.fn(),
+	sendEvent: vi.fn(),
+}));
 vi.mock("@/store/grid/gridStore", async (importOriginal) => {
 	const mod = (await importOriginal()) as typeof GridStoreModule;
 
@@ -57,7 +60,7 @@ vi.mock("@/hooks/useBreakpoint/useBreakpoint");
 
 const mockIo = vi.mocked(io);
 const mockUseBreakpoint = vi.mocked(useBreakpoint);
-const mockUseAnalytics = vi.mocked(useAnalytics);
+const mockSendEvent = vi.mocked(sendEvent);
 const mockUseGridStore = vi.mocked(useGridStore);
 const mockUseTechStore = vi.mocked(useTechStore);
 const mockUsePlatformStore = vi.mocked(usePlatformStore);
@@ -88,7 +91,6 @@ describe("useOptimize", () => {
 	let mockSocket: ReturnType<typeof createMockSocket>;
 	let mockSetGrid: ReturnType<typeof vi.fn<GridStore["setGrid"]>>;
 	let mockSetResult: ReturnType<typeof vi.fn<GridStore["setResult"]>>;
-	let mockSendEvent: ReturnType<typeof vi.fn<ReturnType<typeof useAnalytics>["sendEvent"]>>;
 
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -101,7 +103,6 @@ describe("useOptimize", () => {
 
 		mockSetGrid = vi.fn<GridStore["setGrid"]>();
 		mockSetResult = vi.fn<GridStore["setResult"]>();
-		mockSendEvent = vi.fn<ReturnType<typeof useAnalytics>["sendEvent"]>();
 
 		mockUseGridStore.getState.mockReturnValue({
 			grid: {
@@ -134,10 +135,6 @@ describe("useOptimize", () => {
 
 		mockUsePlatformStore.mockReturnValue("standard");
 		mockUseBreakpoint.mockReturnValue(true);
-		mockUseAnalytics.mockReturnValue({
-			sendDeferredEvent: vi.fn(),
-			sendEvent: mockSendEvent,
-		});
 	});
 
 	afterEach(() => {

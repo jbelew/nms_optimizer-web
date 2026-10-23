@@ -2,6 +2,7 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 
+import type * as TrackingModule from "@/utils/analytics/tracking";
 import { useOptimizeStore } from "@/store/ui/uiStore";
 
 import { ErrorDialog } from "./ErrorDialog";
@@ -10,12 +11,15 @@ const { mockSendEvent } = vi.hoisted(() => ({
 	mockSendEvent: vi.fn(),
 }));
 
-vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
-	useAnalytics: () => ({
+vi.mock("@/utils/analytics/tracking", async (importOriginal) => {
+	const actual = await importOriginal<typeof TrackingModule>();
+
+	return {
+		...actual,
 		sendDeferredEvent: vi.fn(),
 		sendEvent: mockSendEvent,
-	}),
-}));
+	};
+});
 
 // Mock react-i18next
 vi.mock("react-i18next", () => ({

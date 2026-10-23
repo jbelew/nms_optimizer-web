@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { fetchTechTreeAsync } from "@/hooks/useTechTree/useTechTree";
 import { fetchPlatforms, resolveInitialPlatform } from "@/store/app/platformStore";
-import { initializeAnalytics, initializeAnalyticsClient } from "@/utils/analytics/tracking";
+import { initializeAnalytics } from "@/utils/analytics/tracking";
 import { setupServiceWorkerRegistration } from "@/utils/system/setupServiceWorker";
 
 import {
@@ -23,7 +23,6 @@ vi.mock("./bootstrap", () => ({
 
 vi.mock("@/utils/analytics/tracking", () => ({
 	initializeAnalytics: vi.fn(),
-	initializeAnalyticsClient: vi.fn(),
 }));
 
 vi.mock("@/store/app/platformStore", () => ({
@@ -349,7 +348,6 @@ describe("bootPipeline", () => {
 
 			expect(fetchPlatforms).not.toHaveBeenCalled();
 			expect(fetchTechTreeAsync).not.toHaveBeenCalled();
-			expect(initializeAnalyticsClient).not.toHaveBeenCalled();
 			expect(initializeAnalytics).not.toHaveBeenCalled();
 			expect(setupServiceWorkerRegistration).not.toHaveBeenCalled();
 
@@ -358,7 +356,6 @@ describe("bootPipeline", () => {
 			expect(fetchPlatforms).toHaveBeenCalledTimes(1);
 			expect(resolveInitialPlatform).toHaveBeenCalledTimes(1);
 			expect(fetchTechTreeAsync).toHaveBeenCalledWith("solar");
-			expect(initializeAnalyticsClient).toHaveBeenCalledTimes(1);
 			expect(initializeAnalytics).toHaveBeenCalledTimes(1);
 			expect(setupServiceWorkerRegistration).toHaveBeenCalledTimes(1);
 		});

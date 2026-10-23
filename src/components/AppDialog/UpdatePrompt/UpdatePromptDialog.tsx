@@ -21,8 +21,7 @@ import { Button, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
-import { formatDocumentTitle } from "@shared/page-metadata.js";
+import { trackVirtualPageView } from "@/utils/analytics/pageView";
 
 /**
  * Props for the {@link UpdatePrompt} presentation component.
@@ -116,7 +115,7 @@ export const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onDismiss, onRefre
  * @returns The rendered {@link UpdatePrompt} dialog, or `null` when no verified update is pending.
  *
  * @see {@link UpdatePrompt}
- * @see {@link useAnalytics}
+ * @see {@link trackVirtualPageView}
  * @see {@link ./UpdatePromptDialog.test.tsx Unit Tests}
  * @see {@link ./UpdatePromptDialog.stories.tsx Storybook}
  *
@@ -132,7 +131,6 @@ export const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onDismiss, onRefre
  */
 export const UpdatePromptDialog: FC = () => {
 	const { t } = useTranslation();
-	const { sendEvent } = useAnalytics();
 	const [showUpdatePrompt, setShowUpdatePrompt] = useState(false);
 	const updateSWRef = useRef<((reloadPage?: boolean) => Promise<void>) | undefined>(undefined);
 
@@ -172,22 +170,15 @@ export const UpdatePromptDialog: FC = () => {
 
 	useEffect(() => {
 		if (showUpdatePrompt) {
-			const appName = t("appName", { defaultValue: "NMS Optimizer" });
-			const updateTopic = t("dialogs.titles.updatePrompt", {
-				defaultValue: "Update Available",
-			});
-			const pageTitle = formatDocumentTitle(updateTopic, appName);
-
-			sendEvent({
-				action: "page_view",
-				category: "engagement",
-				nonInteraction: true,
-				page: `${window.location.pathname}${window.location.search}#update`,
-				page_location: window.location.href,
-				page_title: pageTitle,
+			trackVirtualPageView({
+				appName: t("appName", { defaultValue: "NMS Optimizer" }),
+				hash: "update",
+				topic: t("dialogs.titles.updatePrompt", {
+					defaultValue: "Update Available",
+				}),
 			});
 		}
-	}, [showUpdatePrompt, sendEvent, t]);
+	}, [showUpdatePrompt, t]);
 
 	const handleRefresh = () => {
 		void import("@/utils/system/setupServiceWorker")

@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useToast } from "@/hooks/useToast/useToast";
 import { useGridStore } from "@/store/grid/gridStore";
+import { sendEvent } from "@/utils/analytics/tracking";
 import { Logger } from "@/utils/system/monitoring";
 
 /**
@@ -56,7 +56,6 @@ interface UseScreenshotReturn {
 export function useScreenshot(): UseScreenshotReturn {
 	const { t } = useTranslation();
 	const { showError, showSuccess } = useToast();
-	const { sendEvent } = useAnalytics();
 	const buildName = useGridStore((state) => state.buildName);
 	const [isCapturing, setIsCapturing] = useState(false);
 
@@ -224,7 +223,7 @@ export function useScreenshot(): UseScreenshotReturn {
 				setIsCapturing(false);
 			}
 		},
-		[t, showSuccess, showError, sendEvent, buildName],
+		[t, showSuccess, showError, buildName],
 	);
 
 	return { handleScreenshot, isCapturing };

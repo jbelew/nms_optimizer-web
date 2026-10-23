@@ -5,6 +5,7 @@ import { MemoryRouter, useNavigate } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import i18n from "@/test/i18n";
+import { captureAcquisitionParams } from "@/utils/analytics/pageView";
 import { sendEvent } from "@/utils/analytics/tracking";
 
 import { Seo } from "./Seo";
@@ -251,5 +252,54 @@ describe("Seo Component", () => {
 				page_referrer: window.location.href,
 			}),
 		);
+	});
+
+	it("should attach buffered acquisition params captured before useUrlSync sanitizes the URL and consume them on first page_view", () => {
+		captureAcquisitionParams(
+			"?utm_source=youtube&utm_medium=video&utm_campaign=launch&ref=creator",
+		);
+
+		let navigateFn!: ReturnType<typeof useNavigate>;
+
+		render(
+			<I18nextProvider i18n={i18n}>
+				<MemoryRouter initialEntries={["/?platform=standard"]}>
+					<Seo />
+					<NavHelper
+						onReady={(nav) => {
+							navigateFn = nav;
+						}}
+					/>
+				</MemoryRouter>
+			</I18nextProvider>,
+		);
+
+		expect(sendEvent).toHaveBeenCalledTimes(1);
+		expect(sendEvent).toHaveBeenNthCalledWith(
+			1,
+			expect.objectContaining({
+				action: "page_view",
+				category: "engagement",
+				page: "/?platform=standard",
+				ref: "creator",
+				utm_campaign: "launch",
+				utm_medium: "video",
+				utm_source: "youtube",
+			}),
+		);
+
+		// Simulate parent useUrlSync's useEffect running captureAcquisitionParams after child Seo's initial page_view
+		captureAcquisitionParams(
+			"?utm_source=youtube&utm_medium=video&utm_campaign=launch&ref=creator",
+		);
+
+		act(() => {
+			navigateFn("/instructions/");
+		});
+
+		expect(sendEvent).toHaveBeenCalledTimes(2);
+		const secondCallPayload = vi.mocked(sendEvent).mock.calls[1][0];
+		expect(secondCallPayload).not.toHaveProperty("utm_source");
+		expect(secondCallPayload).not.toHaveProperty("ref");
 	});
 });

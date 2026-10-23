@@ -8,6 +8,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { usePlatformStore } from "@/store/app/platformStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
+import { sendDeferredEvent } from "@/utils/analytics/tracking";
 
 import { ShipSelection } from "./ShipSelection";
 
@@ -17,11 +18,9 @@ vi.mock("react-router-dom", () => ({
 	useNavigate: () => mockNavigate,
 }));
 
-const mockSendDeferredEvent = vi.fn();
-vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
-	useAnalytics: () => ({
-		sendDeferredEvent: mockSendDeferredEvent,
-	}),
+vi.mock("@/utils/analytics/tracking", () => ({
+	sendDeferredEvent: vi.fn(),
+	sendEvent: vi.fn(),
 }));
 
 const mockShowInfo = vi.fn();
@@ -109,7 +108,7 @@ describe("ShipSelection", () => {
 
 		expect(switchPlatformSpy).not.toHaveBeenCalled();
 		expect(mockNavigate).not.toHaveBeenCalled();
-		expect(mockSendDeferredEvent).not.toHaveBeenCalled();
+		expect(sendDeferredEvent).not.toHaveBeenCalled();
 	});
 
 	it("switches platform, updates URL, and sends telemetry when selecting a new platform", async () => {
@@ -124,7 +123,7 @@ describe("ShipSelection", () => {
 		expect(switchPlatformSpy).toHaveBeenCalled();
 		expect(usePlatformStore.getState().selectedPlatform).toBe("fighter");
 		expect(mockNavigate).toHaveBeenCalledWith("/?platform=fighter");
-		expect(mockSendDeferredEvent).toHaveBeenCalledWith(
+		expect(sendDeferredEvent).toHaveBeenCalledWith(
 			expect.objectContaining({
 				action: "select_content",
 				content_type: "platform",

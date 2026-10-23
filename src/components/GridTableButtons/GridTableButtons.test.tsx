@@ -90,11 +90,9 @@ vi.mock("@/utils/system/dialogUtils", () => ({
 		tutorialFinished: false,
 	}),
 }));
-vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
-	useAnalytics: () => ({
-		sendDeferredEvent: vi.fn(),
-		sendEvent: mockSendEvent,
-	}),
+vi.mock("@/utils/analytics/tracking", () => ({
+	sendDeferredEvent: vi.fn(),
+	sendEvent: mockSendEvent,
 }));
 vi.mock("@/hooks/useOptimize/useOptimize");
 vi.mock("@/store/grid/gridStore", () => ({

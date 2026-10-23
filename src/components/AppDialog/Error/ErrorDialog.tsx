@@ -5,9 +5,8 @@ import { Trans, useTranslation } from "react-i18next";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { ErrorDisplay } from "@/components/ErrorBoundary/ErrorBoundary";
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useOptimizeStore } from "@/store/ui/uiStore";
-import { buildExceptionEvent } from "@/utils/analytics/tracking";
+import { buildExceptionEvent, sendEvent } from "@/utils/analytics/tracking";
 
 /**
  * Props for the {@link ErrorDialog} component.
@@ -40,7 +39,7 @@ interface ErrorDialogProps {
  * @returns The rendered error dialog, or `null` if no error is active.
  *
  * @see {@link ErrorDialogProps}
- * @see {@link useAnalytics}
+ * @see {@link sendEvent}
  * @see {@link useOptimizeStore}
  * @see {@link AppDialog}
  * @see {@link ErrorDisplay}
@@ -59,7 +58,6 @@ interface ErrorDialogProps {
  */
 export const ErrorDialog: FC<ErrorDialogProps> = ({ isOpen: propIsOpen, onClose: propOnClose }) => {
 	const { t } = useTranslation();
-	const { sendEvent } = useAnalytics();
 	const status = useOptimizeStore((s) => s.status);
 	const setShowError = useOptimizeStore((s) => s.setShowError);
 
@@ -81,7 +79,7 @@ export const ErrorDialog: FC<ErrorDialogProps> = ({ isOpen: propIsOpen, onClose:
 		return () => {
 			document.body.classList.remove("error-boundary-visible");
 		};
-	}, [error, isError, sendEvent]);
+	}, [error, isError]);
 
 	if (!isError && propIsOpen === undefined) {
 		return null;

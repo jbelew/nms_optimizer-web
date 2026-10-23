@@ -95,7 +95,6 @@ vi.mock("./components/MainAppContent/MainAppContent", () => ({
 
 vi.mock("./utils/analytics/tracking", () => ({
 	initializeAnalytics: vi.fn(),
-	initializeAnalyticsClient: vi.fn(),
 	resetAnalyticsForTesting: vi.fn(),
 	sendDeferredEvent: vi.fn(),
 	sendEvent: vi.fn(),

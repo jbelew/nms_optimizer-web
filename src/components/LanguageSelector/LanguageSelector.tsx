@@ -28,9 +28,9 @@ import itFlagPath from "@/assets/svg/flags/it.svg";
 import ptFlagPath from "@/assets/svg/flags/pt.svg";
 import usFlagPath from "@/assets/svg/flags/us.svg";
 import xxFlagPath from "@/assets/svg/flags/xx.svg";
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { languages, nativeLanguageNames } from "@/i18n/i18n";
+import { sendDeferredEvent } from "@/utils/analytics/tracking";
 import { buildLocalizedPath } from "@/utils/system/dialogUtils";
 
 /**
@@ -65,7 +65,7 @@ const languageFlagPaths: LanguageFlagPaths = {
  * @returns The rendered language selection dropdown.
  *
  * @see {@link useTranslation} for internationalization state.
- * @see {@link useAnalytics} for event tracking.
+ * @see {@link sendDeferredEvent} for event tracking.
  * @see {@link ./LanguageSelector.test.tsx Unit Tests}
  *
  * @component
@@ -84,7 +84,6 @@ export const LanguageSelector: React.FC = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const currentLanguage = i18n.language.split("-")[0]; // Get base language code
-	const { sendDeferredEvent } = useAnalytics();
 	const [, startTransition] = useTransition();
 
 	const availableLanguageCodes = ((i18n.options.supportedLngs as string[]) || []).filter((code) =>

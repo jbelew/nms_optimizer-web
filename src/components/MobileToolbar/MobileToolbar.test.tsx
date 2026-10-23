@@ -6,6 +6,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { registerToolbarForceShow } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
 import i18n from "@/test/i18n";
+import { sendDeferredEvent } from "@/utils/analytics/tracking";
 
 import { MobileToolbar } from "./MobileToolbar";
 
@@ -13,14 +14,12 @@ const mockForceShow = vi.fn();
 const mockHandleLoadBuild = vi.fn();
 const mockHandleSaveBuild = vi.fn();
 const mockOpenDialog = vi.fn();
-const mockSendDeferredEvent = vi.fn();
 let solvingState = false;
 
 // Mock hooks used in MobileToolbar
-vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
-	useAnalytics: () => ({
-		sendDeferredEvent: mockSendDeferredEvent,
-	}),
+vi.mock("@/utils/analytics/tracking", () => ({
+	sendDeferredEvent: vi.fn(),
+	sendEvent: vi.fn(),
 }));
 
 vi.mock("@/hooks/useScrollGridIntoView/useScrollGridIntoView", () => ({
@@ -191,7 +190,7 @@ describe("MobileToolbar", () => {
 		const shareButton = screen.getByLabelText("buttons.share");
 		fireEvent.click(shareButton);
 
-		expect(mockSendDeferredEvent).toHaveBeenCalledWith({
+		expect(sendDeferredEvent).toHaveBeenCalledWith({
 			action: "share",
 			category: "ui",
 			method: "url",

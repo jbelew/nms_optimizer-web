@@ -4,10 +4,10 @@ import { Code } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { create } from "zustand";
 
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useToast } from "@/hooks/useToast/useToast";
 import { fetchPlatforms, usePlatformStore } from "@/store/app/platformStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
+import { sendEvent } from "@/utils/analytics/tracking";
 import { buildSerializer } from "@/utils/build/buildSerializer";
 import { Logger } from "@/utils/system/monitoring";
 
@@ -89,7 +89,6 @@ export interface UseBuildFileManagerReturn {
 const useImportBuildFile = () => {
 	const { t } = useTranslation();
 	const { showError, showSuccess } = useToast();
-	const { sendEvent } = useAnalytics();
 
 	return useCallback(
 		async (file: File): Promise<void> => {
@@ -149,7 +148,7 @@ const useImportBuildFile = () => {
 				useBuildFileStateStore.getState().setIsLoadPending(false);
 			}
 		},
-		[sendEvent, showError, showSuccess, t],
+		[showError, showSuccess, t],
 	);
 };
 
@@ -170,7 +169,7 @@ const useImportBuildFile = () => {
  * @see {@link buildSerializer}
  * @see {@link sessionCoordinator}
  * @see {@link useToast}
- * @see {@link useAnalytics}
+ * @see {@link sendEvent}
  *
  * @hook
  *
@@ -192,7 +191,6 @@ const useImportBuildFile = () => {
 export const useBuildFileManager = (): UseBuildFileManagerReturn => {
 	const { t } = useTranslation();
 	const { showError, showSuccess } = useToast();
-	const { sendEvent } = useAnalytics();
 	const importBuildFile = useImportBuildFile();
 
 	const {
@@ -300,7 +298,7 @@ export const useBuildFileManager = (): UseBuildFileManagerReturn => {
 				setIsSavePending(false);
 			}
 		},
-		[sendEvent, setIsSaveBuildDialogOpen, setIsSavePending, showError, showSuccess, t],
+		[setIsSaveBuildDialogOpen, setIsSavePending, showError, showSuccess, t],
 	);
 
 	return {

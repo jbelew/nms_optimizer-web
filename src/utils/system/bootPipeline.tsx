@@ -19,7 +19,7 @@ import type { setupServiceWorkerRegistration } from "@/utils/system/setupService
 import { fetchTechTreeAsync } from "@/hooks/useTechTree/useTechTree";
 import { Root } from "@/Root";
 import { fetchPlatforms, resolveInitialPlatform } from "@/store/app/platformStore";
-import { initializeAnalytics, initializeAnalyticsClient } from "@/utils/analytics/tracking";
+import { initializeAnalytics } from "@/utils/analytics/tracking";
 import { performBootstrapMigrations } from "@/utils/system/bootstrap";
 import {
 	handleFatalBootstrapError,
@@ -158,7 +158,6 @@ const registerSentryDeferredTask = (
  * @returns Side-effects only.
  *
  * @see {@link preloadInitialState}
- * @see {@link initializeAnalyticsClient}
  * @see {@link initializeAnalytics}
  * @see {@link initializeSentry}
  * @see {@link setupServiceWorkerRegistration}
@@ -189,7 +188,6 @@ export const registerDefaultDeferredServices = (
 		name: "ga4-analytics",
 		priority: 5,
 		run: async () => {
-			initializeAnalyticsClient();
 			await initializeAnalytics();
 		},
 	});

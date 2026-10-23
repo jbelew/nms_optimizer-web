@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import type { TechTree } from "@/hooks/useTechTree/useTechTree";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
+import { sendEvent } from "@/utils/analytics/tracking";
 
 import { TechTreePresetsCard } from "./TechTreePresetsCard";
 
@@ -48,11 +49,9 @@ vi.mock("@/hooks/useBreakpoint/useBreakpoint", () => ({
 	useBreakpoint: vi.fn(() => false),
 }));
 
-const mockSendEvent = vi.fn();
-vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
-	useAnalytics: () => ({
-		sendEvent: mockSendEvent,
-	}),
+vi.mock("@/utils/analytics/tracking", () => ({
+	sendDeferredEvent: vi.fn(),
+	sendEvent: vi.fn(),
 }));
 
 const mockOpenDialog = vi.fn();
@@ -129,7 +128,7 @@ describe("TechTreePresetsCard", () => {
 		await waitFor(() => {
 			expect(mockScrollIntoView).toHaveBeenCalledTimes(1);
 			expect(applySpy).toHaveBeenCalledWith(mockBuilds[0], mockTechTree);
-			expect(mockSendEvent).toHaveBeenCalledWith({
+			expect(sendEvent).toHaveBeenCalledWith({
 				action: "apply_build",
 				build: "Alpha Preset",
 				category: "build",

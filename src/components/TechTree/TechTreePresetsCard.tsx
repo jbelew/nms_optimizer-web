@@ -16,13 +16,13 @@ import { LayersIcon, MagicWandIcon, StackIcon } from "@radix-ui/react-icons";
 import { Button, Flex, Link, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useScrollGridIntoView } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { type TechTree } from "@/hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { type RecommendedBuild } from "@/types/tech";
+import { sendEvent } from "@/utils/analytics/tracking";
 import { useDialog } from "@/utils/system/dialogUtils";
 import { countBuildModules } from "@/utils/tech/techTreeUtils";
 
@@ -129,7 +129,6 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds, techTre
 	const { openDialog } = useDialog();
 	const isAbove1024 = useBreakpoint("1024px");
 	const { scrollIntoView } = useScrollGridIntoView({ skipOnLargeScreens: false });
-	const { sendEvent } = useAnalytics();
 	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
 
 	const handleApply = useCallback(
@@ -155,7 +154,7 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds, techTre
 				});
 			}, 0);
 		},
-		[isAbove1024, scrollIntoView, sendEvent, selectedPlatform, techTree],
+		[isAbove1024, scrollIntoView, selectedPlatform, techTree],
 	);
 
 	const handleOpenInstructions = useCallback(() => {

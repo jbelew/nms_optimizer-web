@@ -76,7 +76,7 @@ describe("NotFound component", () => {
 		expect(sendEvent).toHaveBeenCalledWith(
 			expect.objectContaining({
 				action: "page_view",
-				category: "navigation",
+				category: "engagement",
 				nonInteraction: true,
 				page_title: "404: Not Found | NMS Optimizer",
 			}),

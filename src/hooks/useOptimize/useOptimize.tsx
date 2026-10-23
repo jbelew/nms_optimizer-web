@@ -4,7 +4,6 @@ import { useShallow } from "zustand/react/shallow";
 
 import type { ApiResponse, Grid } from "@/store/grid/gridStore";
 import { WS_URL } from "@/constants";
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useLatest } from "@/hooks/useLatest/useLatest";
 import { useScrollGridIntoView } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
@@ -13,6 +12,7 @@ import { useGridStore } from "@/store/grid/gridStore";
 import { resolveSolveQuality, sessionCoordinator } from "@/store/sessionCoordinator";
 import { useTechStore } from "@/store/tech/techStore";
 import { useOptimizeStore, useShakeStore } from "@/store/ui/uiStore";
+import { sendEvent } from "@/utils/analytics/tracking";
 import { Logger } from "@/utils/system/monitoring";
 
 /**
@@ -216,13 +216,11 @@ export const useOptimize = (): UseOptimizeReturn => {
 	);
 
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
-	const { sendEvent } = useAnalytics();
 	const isLarge = useBreakpoint("1024px");
 
 	const patternNoFitTechRef = useLatest(patternNoFitTech);
 	const selectedShipTypeRef = useLatest(selectedShipType);
 	const isLargeRef = useLatest(isLarge);
-	const sendEventRef = useLatest(sendEvent);
 
 	const { gridContainerRef, scrollIntoView } = useScrollGridIntoView(SCROLL_OPTIONS);
 
@@ -378,7 +376,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 									tech,
 								});
 								setPatternNoFitTech(tech);
-								sendEventRef.current({
+								sendEvent({
 									action: "no_fit_warning",
 									category: "ui",
 									module_count: availableModules.length,
@@ -420,7 +418,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 								);
 
 								if (translatedData.grid) {
-									sendEventRef.current({
+									sendEvent({
 										action: "optimize_tech",
 										active_tech_count: gridAfterCommit.activeTechs?.size ?? 1,
 										bonus_status: resolveSolveQuality(translatedData.maxBonus),
@@ -546,7 +544,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 			isLargeRef,
 			patternNoFitTechRef,
 			selectedShipTypeRef,
-			sendEventRef,
 		],
 	);
 

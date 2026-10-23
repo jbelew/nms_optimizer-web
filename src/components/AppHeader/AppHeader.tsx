@@ -13,10 +13,10 @@ import { Trans, useTranslation } from "react-i18next";
 import nmslogo from "@/assets/img/nms-icon.svg";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { LanguageSelector } from "@/components/LanguageSelector/LanguageSelector";
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useA11yStore } from "@/store/ui/uiStore";
+import { sendDeferredEvent } from "@/utils/analytics/tracking";
 import { useDialog } from "@/utils/system/dialogUtils";
 import { lazyNamed } from "@/utils/system/lazyNamed";
 
@@ -66,7 +66,6 @@ interface AppHeaderProps {
 const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const { i18n, t } = useTranslation();
 	const { openDialog } = useDialog();
-	const { sendDeferredEvent } = useAnalytics();
 	const isLg = useBreakpoint("1024px");
 	const isSm = useBreakpoint("640px");
 	const { a11yMode, toggleA11yMode } = useA11yStore();

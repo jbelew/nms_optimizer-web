@@ -26,7 +26,6 @@ import { IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { LanguageSelector } from "@/components/LanguageSelector/LanguageSelector";
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBuildFileManager } from "@/hooks/useBuildFileManager/useBuildFileManager";
 import { registerToolbarForceShow } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { useScrollHide } from "@/hooks/useScrollHide/useScrollHide";
@@ -34,6 +33,7 @@ import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useA11yStore, useOptimizeStore } from "@/store/ui/uiStore";
+import { sendDeferredEvent } from "@/utils/analytics/tracking";
 import { useDialog } from "@/utils/system/dialogUtils";
 
 /**
@@ -67,7 +67,6 @@ import { useDialog } from "@/utils/system/dialogUtils";
 export const MobileToolbar: React.FC = () => {
 	const { t } = useTranslation();
 	const { openDialog } = useDialog();
-	const { sendDeferredEvent } = useAnalytics();
 	const { a11yMode, toggleA11yMode } = useA11yStore();
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const hasModulesInGrid = useGridStore((state) => state.hasModulesInGrid);

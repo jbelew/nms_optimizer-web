@@ -3,12 +3,12 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { TechTreeItem } from "@/types/tech";
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useOptimize } from "@/hooks/useOptimize/useOptimize";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
 import { useModuleSelectionDialogStore } from "@/store/ui/uiStore";
+import { sendDeferredEvent } from "@/utils/analytics/tracking";
 
 import { ModuleSelectionDialog } from "./ModuleSelectionDialog";
 
@@ -36,7 +36,10 @@ vi.mock("react-i18next", () => ({
 }));
 
 vi.mock("@/hooks/useOptimize/useOptimize");
-vi.mock("@/hooks/useAnalytics/useAnalytics");
+vi.mock("@/utils/analytics/tracking", () => ({
+	sendDeferredEvent: vi.fn(),
+	sendEvent: vi.fn(),
+}));
 vi.mock("@/utils/system/dialogUtils", () => ({
 	useDialog: () => ({
 		openDialog: vi.fn(),
@@ -188,7 +191,6 @@ interface SeedOptions {
 
 describe("ModuleSelectionDialog", () => {
 	const mockHandleOptimize = vi.fn();
-	const mockSendDeferredEvent = vi.fn();
 
 	const seedAndRender = ({
 		checkedModules = ["core1", "bonus1", "upgrade_theta", "upgrade_tau"],
@@ -237,11 +239,6 @@ describe("ModuleSelectionDialog", () => {
 			solving: false,
 		});
 
-		vi.mocked(useAnalytics).mockReturnValue({
-			sendDeferredEvent: mockSendDeferredEvent,
-			sendEvent: vi.fn(),
-		});
-
 		return render(<ModuleSelectionDialog />);
 	};
 
@@ -257,7 +254,7 @@ describe("ModuleSelectionDialog", () => {
 	it("renders the dialog with localized title and fires page_view analytics on open", async () => {
 		seedAndRender();
 		expect(await screen.findByText("Modules for Hyperdrive")).toBeInTheDocument();
-		expect(mockSendDeferredEvent).toHaveBeenCalledWith(
+		expect(sendDeferredEvent).toHaveBeenCalledWith(
 			expect.objectContaining({
 				action: "page_view",
 				category: "engagement",

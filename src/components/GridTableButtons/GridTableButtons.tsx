@@ -14,7 +14,6 @@ import { Button, IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useBuildFileManager } from "@/hooks/useBuildFileManager/useBuildFileManager";
 import { useScreenshot } from "@/hooks/useScreenshot/useScreenshot";
@@ -23,6 +22,7 @@ import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useTechStore } from "@/store/tech/techStore";
+import { sendEvent } from "@/utils/analytics/tracking";
 import { useDialog } from "@/utils/system/dialogUtils";
 import { lazyNamed } from "@/utils/system/lazyNamed";
 
@@ -65,7 +65,6 @@ const SCROLL_OPTIONS = { skipOnLargeScreens: true };
 const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
 	const { t } = useTranslation();
-	const { sendEvent } = useAnalytics();
 	const [isResetPending, startResetTransition] = useTransition();
 	const [isInfoPending, startInfoTransition] = useTransition();
 	const [isSharePending, startShareTransition] = useTransition();

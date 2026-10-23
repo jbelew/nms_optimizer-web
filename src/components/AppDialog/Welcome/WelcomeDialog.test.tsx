@@ -6,16 +6,14 @@ import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
 
 import type { DialogContextType } from "@/utils/system/dialogUtils";
+import { sendEvent } from "@/utils/analytics/tracking";
 import { DialogContext } from "@/utils/system/dialogUtils";
 
 import WelcomeDialog from "./WelcomeDialog";
 
-const mockSendEvent = vi.fn();
-vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
-	useAnalytics: () => ({
-		sendDeferredEvent: vi.fn(),
-		sendEvent: mockSendEvent,
-	}),
+vi.mock("@/utils/analytics/tracking", () => ({
+	sendDeferredEvent: vi.fn(),
+	sendEvent: vi.fn(),
 }));
 
 vi.mock("@/components/AppDialog/Base/AppDialog", () => ({
@@ -104,7 +102,7 @@ describe("WelcomeDialog", () => {
 		);
 
 		expect(screen.queryByTestId("app-dialog")).not.toBeInTheDocument();
-		expect(mockSendEvent).not.toHaveBeenCalled();
+		expect(sendEvent).not.toHaveBeenCalled();
 	});
 
 	it("dispatches page view analytics with standardized title when open", () => {
@@ -120,7 +118,7 @@ describe("WelcomeDialog", () => {
 			</DialogContext.Provider>,
 		);
 
-		expect(mockSendEvent).toHaveBeenCalledWith(
+		expect(sendEvent).toHaveBeenCalledWith(
 			expect.objectContaining({
 				action: "page_view",
 				category: "engagement",

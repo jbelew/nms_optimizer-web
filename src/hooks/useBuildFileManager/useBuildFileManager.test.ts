@@ -32,10 +32,9 @@ vi.mock("@/hooks/useToast/useToast", () => ({
 	}),
 }));
 
-vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
-	useAnalytics: () => ({
-		sendEvent: mockSendEvent,
-	}),
+vi.mock("@/utils/analytics/tracking", () => ({
+	sendDeferredEvent: vi.fn(),
+	sendEvent: mockSendEvent,
 }));
 
 const mockPlatformCatalog = {

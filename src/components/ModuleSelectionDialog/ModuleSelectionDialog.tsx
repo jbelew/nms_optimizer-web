@@ -34,7 +34,6 @@ import { shallow } from "zustand/shallow";
 import type { GroupedModules, SelectionModule } from "@/types/props";
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useOptimize } from "@/hooks/useOptimize/useOptimize";
 import { usePlatformStore } from "@/store/app/platformStore";
@@ -49,9 +48,9 @@ import {
 } from "@/store/tech/techRules";
 import { useTechStore } from "@/store/tech/techStore";
 import { useModuleSelectionDialogStore } from "@/store/ui/uiStore";
+import { trackVirtualPageView } from "@/utils/analytics/pageView";
 import { determineWindowDimensions } from "@/utils/optimization/windowDimensions";
 import { useDialog } from "@/utils/system/dialogUtils";
-import { formatDocumentTitle } from "@shared/page-metadata.js";
 
 /**
  * Shared types for module grouping and selection items.
@@ -372,7 +371,6 @@ const SafeParagraph: React.FC<SafeParagraphProps> = ({ style, ...props }) => (
 export const ModuleSelectionDialog: React.FC = memo(() => {
 	const { t } = useTranslation();
 	const { handleOptimize } = useOptimize();
-	const { sendDeferredEvent } = useAnalytics();
 	const isSmall = !useBreakpoint("640px");
 	const [, startTransition] = useTransition();
 
@@ -434,18 +432,13 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 		initialModulesRef.current = currentCheckedModulesRef.current;
 		optimizeClickedRef.current = false;
 
-		const appName = t("appName", { defaultValue: "NMS Optimizer" });
-		const pageTitle = formatDocumentTitle(`${translatedTechName} Selection`, appName);
-
-		sendDeferredEvent({
-			action: "page_view",
-			category: "engagement",
-			nonInteraction: true,
-			page: `${window.location.pathname}${window.location.search}#module-selection-${activeTech}`,
-			page_location: window.location.href,
-			page_title: pageTitle,
+		trackVirtualPageView({
+			appName: t("appName", { defaultValue: "NMS Optimizer" }),
+			deferred: true,
+			hash: `module-selection-${activeTech}`,
+			topic: `${translatedTechName} Selection`,
 		});
-	}, [activeTech, isOpen, sendDeferredEvent, t, translatedTechName]);
+	}, [activeTech, isOpen, t, translatedTechName]);
 
 	const handleValueChange = useCallback(
 		(moduleIds: string[]) => {

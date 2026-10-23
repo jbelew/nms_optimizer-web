@@ -7,11 +7,11 @@ import { Trans, useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import type { PlatformDetail } from "@/store/app/platformStore";
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useToast } from "@/hooks/useToast/useToast";
 import { usePlatformsSuspense, usePlatformStore } from "@/store/app/platformStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
+import { sendDeferredEvent } from "@/utils/analytics/tracking";
 import { Logger } from "@/utils/system/monitoring";
 
 /**
@@ -79,7 +79,6 @@ const ShipSelectionMenu: React.FC<ShipSelectionProps> = ({ disabled = false, sol
 	const { showInfo } = useToast();
 	const platformCatalog = usePlatformsSuspense();
 	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
-	const { sendDeferredEvent } = useAnalytics();
 	const [isPending, startTransition] = useTransition();
 	const navigate = useNavigate();
 
@@ -128,7 +127,7 @@ const ShipSelectionMenu: React.FC<ShipSelectionProps> = ({ disabled = false, sol
 				});
 			}
 		},
-		[selectedPlatform, showInfo, t, navigate, sendDeferredEvent],
+		[selectedPlatform, showInfo, t, navigate],
 	);
 
 	const isDisabled = disabled || isPending || solving;

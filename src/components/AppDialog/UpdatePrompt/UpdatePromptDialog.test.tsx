@@ -3,7 +3,7 @@ import { Theme } from "@radix-ui/themes";
 import { act, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { sendEvent } from "@/utils/analytics/tracking";
 
 import { UpdatePrompt, UpdatePromptDialog } from "./UpdatePromptDialog";
 
@@ -13,20 +13,15 @@ vi.mock("react-i18next", () => ({
 	}),
 }));
 
-vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
-	useAnalytics: vi.fn(),
+vi.mock("@/utils/analytics/tracking", () => ({
+	sendDeferredEvent: vi.fn(),
+	sendEvent: vi.fn(),
 }));
 
 describe("UpdatePrompt & UpdatePromptDialog", () => {
-	const mockSendEvent = vi.fn();
-
 	beforeEach(() => {
 		vi.clearAllMocks();
 		vi.stubGlobal("fetch", vi.fn());
-		vi.mocked(useAnalytics).mockReturnValue({
-			sendDeferredEvent: vi.fn(),
-			sendEvent: mockSendEvent,
-		});
 	});
 
 	afterEach(() => {
@@ -70,7 +65,7 @@ describe("UpdatePrompt & UpdatePromptDialog", () => {
 		});
 
 		expect(await screen.findByRole("dialog")).toBeInTheDocument();
-		expect(mockSendEvent).toHaveBeenCalledWith(
+		expect(sendEvent).toHaveBeenCalledWith(
 			expect.objectContaining({
 				action: "page_view",
 				category: "engagement",

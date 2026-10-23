@@ -16,6 +16,7 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
+import { trackVirtualPageView } from "@/utils/analytics/pageView";
 import { sendEvent } from "@/utils/analytics/tracking";
 import { lifecycleCoordinator } from "@/utils/system/lifecycleCoordinator";
 import { formatErrorDocumentTitle } from "@shared/page-metadata.js";
@@ -61,14 +62,7 @@ const NotFound: FC = () => {
 	useEffect(() => {
 		lifecycleCoordinator.markReady();
 
-		sendEvent({
-			action: "page_view",
-			category: "navigation",
-			nonInteraction: true,
-			page: window.location.pathname,
-			page_location: window.location.href,
-			page_title: pageTitle,
-		});
+		trackVirtualPageView({ pageTitle });
 
 		sendEvent({
 			action: "not_found",

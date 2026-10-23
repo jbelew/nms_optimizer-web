@@ -1,45 +1,11 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
-import type { GA4Event } from "@/types/analytics";
-import { sendEvent } from "@/utils/analytics/tracking";
+import { resetPageViewTracking, trackRoutePageView } from "@/utils/analytics/pageView";
 import { buildLocalizedPath, useSupportedLanguages } from "@/utils/system/dialogUtils";
 import { DEFAULT_BASE_URL, getPageMetadata } from "@shared/page-metadata.js";
 import { getSchemaDomId, MANAGED_SCHEMA_IDS, OG_LOCALE_MAP } from "@shared/seo-schema.js";
-
-const ACQUISITION_PARAM_KEYS = [
-	"ref",
-	"utm_campaign",
-	"utm_content",
-	"utm_medium",
-	"utm_source",
-	"utm_term",
-] as const;
-
-/**
- * Extracts inbound campaign and referral query parameters (`utm_*`, `ref`) from a URL search string.
- *
- * @param search - Raw URL query string (e.g. `"?utm_source=reddit&utm_medium=post"`).
- *
- * @returns Partial `GA4Event` object containing any non-empty acquisition parameters.
- */
-const extractAcquisitionParams = (search: string): Partial<GA4Event> => {
-	if (!search) return {};
-
-	const params = new URLSearchParams(search);
-	const extracted: Partial<GA4Event> = {};
-
-	for (const key of ACQUISITION_PARAM_KEYS) {
-		const value = params.get(key)?.trim();
-
-		if (value) {
-			extracted[key] = value.slice(0, 100);
-		}
-	}
-
-	return extracted;
-};
 
 /**
  * Declarative SEO and route metadata module for React 19.
@@ -47,14 +13,15 @@ const extractAcquisitionParams = (search: string): Partial<GA4Event> => {
  * @remarks
  * Computes unified route metadata once per navigation, hoists `<title>`, `<meta>`,
  * and `<link>` tags into `<head>`, synchronizes JSON-LD structured data schemas in-place,
- * updates `document.documentElement.lang`, and dispatches the GA4 `page_view` event.
+ * updates `document.documentElement.lang`, and dispatches the GA4 `page_view` event
+ * via {@link trackRoutePageView}.
  *
  * @see {@link getPageMetadata}
  * @see {@link getSchemaDomId}
  * @see {@link MANAGED_SCHEMA_IDS}
  * @see {@link OG_LOCALE_MAP}
  * @see {@link buildLocalizedPath}
- * @see {@link sendEvent}
+ * @see {@link trackRoutePageView}
  * @see {@link ./Seo.test.tsx Unit Tests}
  *
  * @component
@@ -71,8 +38,6 @@ export const Seo: React.FC = () => {
 	const { i18n, t } = useTranslation();
 	const location = useLocation();
 	const supportedLangs = useSupportedLanguages();
-	const prevUrlRef = useRef<string>(document.referrer);
-	const lastTrackedRouteKeyRef = useRef<null | string>(null);
 
 	const {
 		canonicalUrl,
@@ -94,31 +59,21 @@ export const Seo: React.FC = () => {
 	}, [location.pathname, i18n.language, t, supportedLangs]);
 
 	useEffect(() => {
+		return () => {
+			resetPageViewTracking();
+		};
+	}, []);
+
+	useEffect(() => {
 		document.documentElement.lang = i18n.language;
 
-		const routeKey = `${i18n.language}:${cleanPath}`;
-
-		if (lastTrackedRouteKeyRef.current === routeKey) {
-			return;
-		}
-
-		lastTrackedRouteKeyRef.current = routeKey;
-		const acquisitionParams = extractAcquisitionParams(
-			location.search || window.location.search,
-		);
-
-		// Dispatch manual page_view event with resolved document title
-		sendEvent({
-			action: "page_view",
-			category: "engagement",
+		trackRoutePageView({
+			cleanPath,
+			lang: i18n.language,
 			page: location.pathname + location.search,
-			page_location: window.location.href,
-			page_referrer: prevUrlRef.current,
-			page_title: pageTitle,
-			...acquisitionParams,
+			pageTitle,
+			search: location.search || window.location.search,
 		});
-
-		prevUrlRef.current = window.location.href;
 	}, [cleanPath, location.pathname, location.search, i18n.language, pageTitle]);
 
 	useEffect(() => {

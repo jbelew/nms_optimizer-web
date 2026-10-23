@@ -4,9 +4,8 @@ import { Trans, useTranslation } from "react-i18next";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import DynamicRadixIcon from "@/components/AppDialog/Common/DynamicRadixIcon";
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { trackVirtualPageView } from "@/utils/analytics/pageView";
 import { useDialog } from "@/utils/system/dialogUtils";
-import { formatDocumentTitle } from "@shared/page-metadata.js";
 
 /**
  * Props for the {@link WelcomeDialog} component.
@@ -49,7 +48,6 @@ interface WelcomeDialogProps {
 const WelcomeDialog: React.FC<WelcomeDialogProps> = ({ isOpen, onClose }) => {
 	const { t } = useTranslation();
 	const { openDialog } = useDialog();
-	const { sendEvent } = useAnalytics();
 
 	const iconSize = 16;
 	const iconColor = "var(--accent-11)";
@@ -60,19 +58,12 @@ const WelcomeDialog: React.FC<WelcomeDialogProps> = ({ isOpen, onClose }) => {
 			return;
 		}
 
-		const appName = t("appName", { defaultValue: "NMS Optimizer" });
-		const welcomeTopic = t("dialogs.titles.welcome", { defaultValue: "Welcome" });
-		const pageTitle = formatDocumentTitle(welcomeTopic, appName);
-
-		sendEvent({
-			action: "page_view",
-			category: "engagement",
-			nonInteraction: true,
-			page: `${window.location.pathname}${window.location.search}#welcome`,
-			page_location: window.location.href,
-			page_title: pageTitle,
+		trackVirtualPageView({
+			appName: t("appName", { defaultValue: "NMS Optimizer" }),
+			hash: "welcome",
+			topic: t("dialogs.titles.welcome", { defaultValue: "Welcome" }),
 		});
-	}, [isOpen, sendEvent, t]);
+	}, [isOpen, t]);
 
 	/**
 	 * Closes the welcome dialog and immediately opens the instructions dialog.

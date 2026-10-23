@@ -4,14 +4,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { usePlatformsSuspense, usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
+import { captureAcquisitionParams } from "@/utils/analytics/pageView";
 import { useDialog } from "@/utils/system/dialogUtils";
 import { Logger } from "@/utils/system/monitoring";
 
 const ALLOWED_URL_QUERY_KEYS = ["platform", "grid"];
 
 /**
- * Sanitizes URL query parameters by stripping non-whitelisted keys and removing
- * orphaned `grid` parameters when `platform` is missing.
+ * Sanitizes URL query parameters by capturing inbound acquisition parameters,
+ * stripping non-whitelisted keys, and removing orphaned `grid` parameters when
+ * `platform` is missing.
  *
  * @param pathname - The URL pathname to preserve.
  * @param search - The raw query string to validate.
@@ -19,6 +21,7 @@ const ALLOWED_URL_QUERY_KEYS = ["platform", "grid"];
  * @returns The sanitized search string (including leading `?` if non-empty).
  */
 const sanitizeUrlSearchParams = (pathname: string, search: string): string => {
+	captureAcquisitionParams(search);
 	const currentParams = new URLSearchParams(search);
 	let changed = false;
 
