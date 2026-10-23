@@ -68,7 +68,8 @@
 		"perf:baseline": "NODE_ENV=production bun scripts/performance-check.mjs --baseline",
 		"perf:check": "NODE_ENV=production bun scripts/performance-check.mjs",
 		"perf:compare": "NODE_ENV=production bun scripts/performance-check.mjs --compare",
-		"perf:inp": "./venv/bin/python scripts/report-inp.py"
+		"perf:inp": "./venv/bin/python scripts/report-inp.py",
+		"perf:referrers": "./venv/bin/python scripts/report-referrers.py"
 	},
 	"dependencies": {
 		"@radix-ui/react-dialog": "^1.3.1",

@@ -1,6 +1,7 @@
-import { render } from "@testing-library/react";
+import { useEffect } from "react";
+import { act, render } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, useNavigate } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import i18n from "@/test/i18n";
@@ -13,6 +14,15 @@ vi.mock("@/utils/analytics/tracking", () => ({
 }));
 
 describe("Seo Component", () => {
+	const NavHelper = ({ onReady }: { onReady: (nav: ReturnType<typeof useNavigate>) => void }) => {
+		const nav = useNavigate();
+		useEffect(() => {
+			onReady(nav);
+		}, [nav, onReady]);
+
+		return null;
+	};
+
 	const renderSeo = (path = "/") => {
 		return render(
 			<I18nextProvider i18n={i18n}>
@@ -148,6 +158,97 @@ describe("Seo Component", () => {
 				category: "engagement",
 				page: "/performance/",
 				page_title: "Performance Metrics | NMS Optimizer",
+			}),
+		);
+	});
+
+	it("should preserve initial external referrer and campaign params without firing duplicate page_view on platform query changes", () => {
+		Object.defineProperty(document, "referrer", {
+			configurable: true,
+			value: "https://www.reddit.com/",
+		});
+
+		let navigateFn!: ReturnType<typeof useNavigate>;
+
+		render(
+			<I18nextProvider i18n={i18n}>
+				<MemoryRouter initialEntries={["/?utm_source=reddit&utm_medium=post&ref=sidebar"]}>
+					<Seo />
+					<NavHelper
+						onReady={(nav) => {
+							navigateFn = nav;
+						}}
+					/>
+				</MemoryRouter>
+			</I18nextProvider>,
+		);
+
+		expect(sendEvent).toHaveBeenCalledTimes(1);
+		expect(sendEvent).toHaveBeenCalledWith(
+			expect.objectContaining({
+				action: "page_view",
+				category: "engagement",
+				page: "/?utm_source=reddit&utm_medium=post&ref=sidebar",
+				page_referrer: "https://www.reddit.com/",
+				ref: "sidebar",
+				utm_medium: "post",
+				utm_source: "reddit",
+			}),
+		);
+
+		// Simulate useUrlSync normalizing ?platform=standard and user switching to ?platform=corvette
+		act(() => {
+			navigateFn("/?platform=standard", { replace: true });
+		});
+		act(() => {
+			navigateFn("/?platform=corvette", { replace: true });
+		});
+
+		expect(sendEvent).toHaveBeenCalledTimes(1);
+	});
+
+	it("should dispatch a new page_view with updated page_referrer when navigating to a different route path", () => {
+		Object.defineProperty(document, "referrer", {
+			configurable: true,
+			value: "https://www.google.com/",
+		});
+
+		let navigateFn!: ReturnType<typeof useNavigate>;
+
+		render(
+			<I18nextProvider i18n={i18n}>
+				<MemoryRouter initialEntries={["/"]}>
+					<Seo />
+					<NavHelper
+						onReady={(nav) => {
+							navigateFn = nav;
+						}}
+					/>
+				</MemoryRouter>
+			</I18nextProvider>,
+		);
+
+		expect(sendEvent).toHaveBeenCalledTimes(1);
+		expect(sendEvent).toHaveBeenNthCalledWith(
+			1,
+			expect.objectContaining({
+				action: "page_view",
+				page: "/",
+				page_referrer: "https://www.google.com/",
+			}),
+		);
+
+		act(() => {
+			navigateFn("/instructions/");
+		});
+
+		expect(sendEvent).toHaveBeenCalledTimes(2);
+		expect(sendEvent).toHaveBeenNthCalledWith(
+			2,
+			expect.objectContaining({
+				action: "page_view",
+				page: "/instructions/",
+				page_referrer: window.location.href,
 			}),
 		);
 	});

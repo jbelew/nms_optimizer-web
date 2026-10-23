@@ -96,6 +96,8 @@ export interface GA4Event {
 	processing_duration?: number;
 	/** Slot Restriction violation reason (`'gridFixed'`, `'moduleLocked'`, `'rowLimit'`, `'superchargedFixed'`, `'superchargedLimit'`). */
 	reason?: string;
+	/** Lightweight referral source parameter (`?ref=`) extracted from the landing URL. */
+	ref?: string;
 	/** Screen class for `screen_view` events. */
 	screen_class?: string;
 	/** Optimization solve duration in milliseconds. Maps to `customEvent:solve_duration_ms`. */
@@ -112,6 +114,16 @@ export interface GA4Event {
 	title?: string;
 	/** Tracking source (`'client'` or `'server'`). Maps to `customEvent:tracking_source`. */
 	tracking_source?: string;
+	/** Inbound campaign name (`?utm_campaign=`) extracted from the landing URL. */
+	utm_campaign?: string;
+	/** Inbound campaign content identifier (`?utm_content=`) extracted from the landing URL. */
+	utm_content?: string;
+	/** Inbound marketing medium (`?utm_medium=`) extracted from the landing URL. */
+	utm_medium?: string;
+	/** Inbound acquisition source (`?utm_source=`) extracted from the landing URL. */
+	utm_source?: string;
+	/** Inbound paid/organic search term (`?utm_term=`) extracted from the landing URL. */
+	utm_term?: string;
 	/** Numeric event value. Maps to `customEvent:value`. */
 	value?: number;
 	/** Virtual currency name for `earn_virtual_currency` events. */
