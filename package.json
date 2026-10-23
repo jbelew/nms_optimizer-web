@@ -113,7 +113,7 @@
 		"@semantic-release/exec": "^7.1.0",
 		"@semantic-release/git": "^11.0.1",
 		"@semantic-release/github": "^12.0.10",
-		"@sentry/vite-plugin": "^5.4.1",
+		"@sentry/vite-plugin": "^11.8.0",
 		"@size-limit/file": "^14.1.0",
 		"@storybook/addon-a11y": "^10.6.3",
 		"@storybook/addon-docs": "^10.6.3",
