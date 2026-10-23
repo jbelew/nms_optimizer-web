@@ -1,3 +1,10 @@
+## [8.6.1](https://github.com/jbelew/nms_optimizer-web/compare/v8.6.0...v8.6.1) (2026-10-23)
+
+
+### Bug Fixes
+
+* **seo:** restore title keyword, hreflang links, schema descriptions, and clean dialog URLs ([6db407e](https://github.com/jbelew/nms_optimizer-web/commit/6db407ed4e92d38203057407f5326dcf05483485))
+
 # [8.6.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.5.3...v8.6.0) (2026-10-23)
 
 
