@@ -141,7 +141,7 @@ const useImportBuildFile = () => {
 					value: 1,
 				});
 			} catch (error) {
-				Logger.error("Failed to load build file:", error);
+				Logger.warn("Failed to load build file:", { error });
 				const errorMessage =
 					error instanceof Error ? error.message : t("toast.buildLoadError.description");
 				showError(t("toast.buildLoadError.title"), errorMessage, 5000);

@@ -1,35 +1,36 @@
 import type { MockInstance } from "vitest";
-import * as reactRouter from "react-router-dom";
+import * as SentryReact from "@sentry/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
 	__setSentryInstance,
 	captureException,
-	createAppRouter,
+	flushSentry,
 	initializeSentry,
 	Logger,
 	LogLevel,
 } from "./monitoring";
 
+vi.mock("@sentry/react", () => ({
+	addBreadcrumb: vi.fn(),
+	breadcrumbsIntegration: vi.fn(() => ({ name: "mock-breadcrumbs" })),
+	captureException: vi.fn(),
+	captureMessage: vi.fn(),
+	flush: vi.fn(async () => true),
+	globalHandlersIntegration: vi.fn(() => ({ name: "mock-global-handlers" })),
+	init: vi.fn(),
+}));
+
 // Mock Sentry-like object
 const sentryMock = {
+	addBreadcrumb: vi.fn(),
 	breadcrumbsIntegration: vi.fn(),
 	captureException: vi.fn(),
 	captureMessage: vi.fn(),
+	flush: vi.fn(async () => true),
+	globalHandlersIntegration: vi.fn(),
 	init: vi.fn(),
-	reactRouterV7BrowserTracingIntegration: vi.fn(),
-	wrapCreateBrowserRouterV7: vi.fn((cb) => cb),
 };
-
-// Mock react-router-dom
-vi.mock("react-router-dom", async () => {
-	const actual = await vi.importActual("react-router-dom");
-
-	return {
-		...actual,
-		createBrowserRouter: vi.fn((routes) => ({ mocked: true, routes })),
-	};
-});
 
 describe("monitoring utilities", () => {
 	describe("Logger", () => {
@@ -38,6 +39,7 @@ describe("monitoring utilities", () => {
 
 		beforeEach(() => {
 			Logger.clearLogs();
+			vi.spyOn(console, "info").mockImplementation(() => {});
 			vi.spyOn(console, "log").mockImplementation(() => {});
 			consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 			consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
@@ -50,7 +52,7 @@ describe("monitoring utilities", () => {
 			__setSentryInstance(null);
 		});
 
-		it("should log info messages to internal storage", () => {
+		it("should log info messages to internal storage and attach a Sentry breadcrumb", () => {
 			Logger.info("Test info message", { data: 123 });
 
 			const logs = Logger.getLogs();
@@ -60,18 +62,27 @@ describe("monitoring utilities", () => {
 				level: LogLevel.INFO,
 				message: "Test info message",
 			});
+			expect(sentryMock.addBreadcrumb).toHaveBeenCalledWith({
+				category: "logger",
+				data: { data: 123 },
+				level: "info",
+				message: "Test info message",
+			});
 		});
 
-		it("should log warn messages to console, Sentry, and internal storage", () => {
+		it("should log warn messages to console, internal storage, and Sentry breadcrumbs without creating standalone issues", () => {
 			Logger.warn("Test warn message", { meta: "data" });
 
 			expect(consoleWarnSpy).toHaveBeenCalledWith("[WARN] %s", "Test warn message", {
 				meta: "data",
 			});
 
-			expect(sentryMock.captureMessage).toHaveBeenCalledWith("Test warn message", {
-				extra: { meta: "data" },
+			expect(sentryMock.captureMessage).not.toHaveBeenCalled();
+			expect(sentryMock.addBreadcrumb).toHaveBeenCalledWith({
+				category: "logger",
+				data: { meta: "data" },
 				level: "warning",
+				message: "Test warn message",
 			});
 
 			const logs = Logger.getLogs();
@@ -79,13 +90,14 @@ describe("monitoring utilities", () => {
 			expect(logs[0].level).toBe(LogLevel.WARN);
 		});
 
-		it("should log warn messages to console and internal storage but skip Sentry when skipSentry is true", () => {
+		it("should log warn messages to console and internal storage but skip Sentry breadcrumb when skipSentry is true", () => {
 			Logger.warn("Test skip warn message", { meta: "data" }, true);
 
 			expect(consoleWarnSpy).toHaveBeenCalledWith("[WARN] %s", "Test skip warn message", {
 				meta: "data",
 			});
 
+			expect(sentryMock.addBreadcrumb).not.toHaveBeenCalled();
 			expect(sentryMock.captureMessage).not.toHaveBeenCalled();
 
 			const logs = Logger.getLogs();
@@ -115,6 +127,20 @@ describe("monitoring utilities", () => {
 			expect(logs[0].level).toBe(LogLevel.ERROR);
 		});
 
+		it("should forward level and tags options in Logger.error to Sentry", () => {
+			const error = new Error("Fatal crash");
+			Logger.error("Fatal lifecycle error:", error, {
+				level: "fatal",
+				tags: { area: "lifecycle-coordinator" },
+			});
+
+			expect(sentryMock.captureException).toHaveBeenCalledWith(error, {
+				extra: { message: "Fatal lifecycle error:" },
+				level: "fatal",
+				tags: { area: "lifecycle-coordinator" },
+			});
+		});
+
 		it("should handle non-Error objects in Logger.error", () => {
 			Logger.error("String error", "oops");
 			expect(sentryMock.captureMessage).toHaveBeenCalledWith("String error", {
@@ -141,10 +167,16 @@ describe("monitoring utilities", () => {
 		});
 	});
 
-	describe("Sentry Wrappers", () => {
+	describe("Sentry Wrappers & Early Queue", () => {
 		beforeEach(() => {
+			Logger.clearLogs();
 			vi.clearAllMocks();
 			__setSentryInstance(sentryMock);
+		});
+
+		afterEach(() => {
+			__setSentryInstance(null);
+			vi.unstubAllEnvs();
 		});
 
 		it("captureException should proxy to Sentry if initialized", () => {
@@ -153,38 +185,89 @@ describe("monitoring utilities", () => {
 			expect(sentryMock.captureException).toHaveBeenCalledWith(err, { tag: "val" });
 		});
 
-		it("createAppRouter should wrap router if Sentry enabled", () => {
-			// Mock env
-			vi.stubEnv("VITE_SENTRY_ENABLED", "true");
-
-			const routes = [{ path: "/" }];
-			createAppRouter(routes);
-
-			expect(sentryMock.wrapCreateBrowserRouterV7).toHaveBeenCalled();
-			expect(reactRouter.createBrowserRouter).toHaveBeenCalledWith(routes);
-
-			vi.unstubAllEnvs();
+		it("flushSentry should flush active Sentry instance", async () => {
+			const result = await flushSentry(1200);
+			expect(result).toBe(true);
+			expect(sentryMock.flush).toHaveBeenCalledWith(1200);
 		});
 
-		it("createAppRouter should NOT wrap router if Sentry disabled", () => {
-			vi.stubEnv("VITE_SENTRY_ENABLED", "false");
-
-			const routes = [{ path: "/" }];
-			createAppRouter(routes);
-
-			expect(sentryMock.wrapCreateBrowserRouterV7).not.toHaveBeenCalled();
-			expect(reactRouter.createBrowserRouter).toHaveBeenCalledWith(routes);
-
-			vi.unstubAllEnvs();
+		it("flushSentry should resolve false when Sentry is not initialized", async () => {
+			__setSentryInstance(null);
+			const result = await flushSentry(500);
+			expect(result).toBe(false);
 		});
 	});
 
 	describe("initializeSentry", () => {
+		beforeEach(() => {
+			Logger.clearLogs();
+			vi.clearAllMocks();
+			__setSentryInstance(null);
+			vi.spyOn(console, "info").mockImplementation(() => {});
+			vi.spyOn(console, "warn").mockImplementation(() => {});
+			vi.spyOn(console, "error").mockImplementation(() => {});
+		});
+
+		afterEach(() => {
+			__setSentryInstance(null);
+			vi.restoreAllMocks();
+			vi.unstubAllEnvs();
+		});
+
 		it("should skip if disabled", async () => {
 			vi.stubEnv("VITE_SENTRY_ENABLED", "false");
 			await initializeSentry();
 			expect(sentryMock.init).not.toHaveBeenCalled();
-			vi.unstubAllEnvs();
+		});
+
+		it("should replay early logs as breadcrumbs and flush queued early errors on initialization", async () => {
+			vi.stubEnv("VITE_SENTRY_ENABLED", "false");
+			Logger.info("Early info breadcrumb", { step: 1 });
+			Logger.warn("Early warn breadcrumb", { step: 2 });
+			Logger.warn("Muted early warn breadcrumb", { step: 3 }, true);
+
+			vi.stubEnv("VITE_SENTRY_ENABLED", "true");
+			vi.stubEnv("VITE_SENTRY_DSN", "https://examplePublicKey@o0.ingest.sentry.io/0");
+
+			const earlyError = new Error("Early bootstrap crash");
+			Logger.error("Bootstrap error:", earlyError, {
+				level: "fatal",
+				tags: { area: "boot" },
+			});
+
+			await initializeSentry();
+
+			expect(SentryReact.init).toHaveBeenCalledTimes(1);
+			expect(SentryReact.globalHandlersIntegration).toHaveBeenCalledWith({
+				onerror: false,
+				onunhandledrejection: false,
+			});
+			expect(SentryReact.addBreadcrumb).toHaveBeenCalledWith(
+				expect.objectContaining({
+					category: "logger",
+					data: { step: 1 },
+					level: "info",
+					message: "Early info breadcrumb",
+				}),
+			);
+			expect(SentryReact.addBreadcrumb).toHaveBeenCalledWith(
+				expect.objectContaining({
+					category: "logger",
+					data: { step: 2 },
+					level: "warning",
+					message: "Early warn breadcrumb",
+				}),
+			);
+			expect(SentryReact.addBreadcrumb).not.toHaveBeenCalledWith(
+				expect.objectContaining({
+					message: "Muted early warn breadcrumb",
+				}),
+			);
+			expect(SentryReact.captureException).toHaveBeenCalledWith(earlyError, {
+				extra: { message: "Bootstrap error:" },
+				level: "fatal",
+				tags: { area: "boot" },
+			});
 		});
 	});
 });

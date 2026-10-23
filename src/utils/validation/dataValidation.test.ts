@@ -8,14 +8,14 @@ import {
 } from "./dataValidation";
 
 describe("Data Validation Utilities", () => {
-	const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+	const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
 	afterEach(() => {
-		consoleErrorSpy.mockClear();
+		consoleWarnSpy.mockClear();
 	});
 
 	afterAll(() => {
-		consoleErrorSpy.mockRestore();
+		consoleWarnSpy.mockRestore();
 	});
 
 	describe("isValidBuildFile", () => {
@@ -37,14 +37,14 @@ describe("Data Validation Utilities", () => {
 		it("should return false for null or non-object", () => {
 			expect(isValidBuildFile(null)).toBe(false);
 			expect(isValidBuildFile(123)).toBe(false);
-			expect(consoleErrorSpy).toHaveBeenCalled();
+			expect(consoleWarnSpy).toHaveBeenCalled();
 		});
 
 		it("should return false if required properties are missing", () => {
 			const invalidFile = { ...validBuildFile };
 			delete (invalidFile as unknown as Record<string, unknown>).name;
 			expect(isValidBuildFile(invalidFile)).toBe(false);
-			expect(consoleErrorSpy).toHaveBeenCalled();
+			expect(consoleWarnSpy).toHaveBeenCalled();
 		});
 	});
 

@@ -11,7 +11,7 @@
 import React, { StrictMode, Suspense, useEffect } from "react";
 import { Provider as ToastProviderRadix, Viewport as ToastViewport } from "@radix-ui/react-toast";
 import { Theme } from "@radix-ui/themes";
-import { RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
 import { TooltipManager } from "@/components/TooltipManager/TooltipManager";
@@ -19,7 +19,6 @@ import { TooltipProvider } from "@/context/TooltipContext";
 import { ToastProvider } from "@/hooks/useToast/useToast";
 import { routes } from "@/routes";
 import { useA11yStore, useThemeStore } from "@/store/ui/uiStore";
-import { createAppRouter } from "@/utils/system/monitoring";
 
 /**
  * Root component that manages global theme and provider orchestration.
@@ -48,7 +47,7 @@ import { createAppRouter } from "@/utils/system/monitoring";
  */
 export const Root = () => {
 	const appearance = useThemeStore((s) => s.appearance);
-	const router = React.useMemo(() => createAppRouter(routes), []);
+	const router = React.useMemo(() => createBrowserRouter(routes), []);
 
 	const a11yMode = useA11yStore((s) => s.a11yMode);
 

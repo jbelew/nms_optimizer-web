@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { captureException, Logger } from "@/utils/system/monitoring";
+import { flushSentry, Logger } from "@/utils/system/monitoring";
 
 import { LifecycleCoordinator, lifecycleCoordinator } from "./lifecycleCoordinator";
 
@@ -18,7 +18,7 @@ vi.mock("@/utils/system/idle", () => ({
 
 // Mock monitoring logger and error capture
 vi.mock("@/utils/system/monitoring", () => ({
-	captureException: vi.fn(),
+	flushSentry: vi.fn(async () => true),
 	Logger: {
 		error: vi.fn(),
 		info: vi.fn(),
@@ -248,8 +248,7 @@ describe("LifecycleCoordinator", () => {
 			expect(coordinator.getPhase()).toBe("FATAL");
 			expect(coordinator.isFatal()).toBe(true);
 			expect(coordinator.getFatalError()).toBe(error);
-			expect(Logger.error).toHaveBeenCalledWith("Fatal lifecycle error:", error);
-			expect(captureException).toHaveBeenCalledWith(error, {
+			expect(Logger.error).toHaveBeenCalledWith("Fatal lifecycle error:", error, {
 				level: "fatal",
 				tags: { area: "lifecycle-coordinator" },
 			});
@@ -268,7 +267,7 @@ describe("LifecycleCoordinator", () => {
 			expect(dynamicOnFatal).toHaveBeenCalledWith(error);
 		});
 
-		it("should redirect to /500.html when markFatal is called without custom onFatal handler", () => {
+		it("should flush Sentry and redirect to /500.html when markFatal is called without custom onFatal handler", async () => {
 			const replaceMock = vi.fn();
 			const originalLocation = window.location;
 			Object.defineProperty(window, "location", {
@@ -283,11 +282,14 @@ describe("LifecycleCoordinator", () => {
 			const coordinator = new LifecycleCoordinator();
 			coordinator.markFatal(new Error("Default Fatal Error"));
 
-			expect(replaceMock).toHaveBeenCalledWith(
-				expect.stringContaining(
-					"/500.html?error_type=initialization_error&error_cause=Default%20Fatal%20Error",
-				),
-			);
+			await vi.waitFor(() => {
+				expect(flushSentry).toHaveBeenCalledWith(1500);
+				expect(replaceMock).toHaveBeenCalledWith(
+					expect.stringContaining(
+						"/500.html?error_type=initialization_error&error_cause=Default%20Fatal%20Error",
+					),
+				);
+			});
 
 			Object.defineProperty(window, "location", {
 				configurable: true,
@@ -471,11 +473,11 @@ describe("LifecycleCoordinator", () => {
 			expect(Logger.error).toHaveBeenCalledWith(
 				'Deferred task "failing-task" failed:',
 				failingError,
+				{
+					level: "error",
+					tags: { area: "deferred-services", task: "failing-task" },
+				},
 			);
-			expect(captureException).toHaveBeenCalledWith(failingError, {
-				level: "error",
-				tags: { area: "deferred-services", task: "failing-task" },
-			});
 		});
 
 		it("should clear registered tasks and execution history on reset()", async () => {

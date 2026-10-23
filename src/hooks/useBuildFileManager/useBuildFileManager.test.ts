@@ -82,6 +82,7 @@ describe("useBuildFileManager", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		vi.spyOn(Logger, "error").mockImplementation(() => {});
+		vi.spyOn(Logger, "warn").mockImplementation(() => {});
 
 		originalCreateObjectURL = URL.createObjectURL;
 		originalRevokeObjectURL = URL.revokeObjectURL;

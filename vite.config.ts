@@ -99,9 +99,20 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 	const sentryDsn = process.env.VITE_SENTRY_DSN || env.VITE_SENTRY_DSN || "";
 	const sentryEnv = process.env.VITE_SENTRY_ENV || env.VITE_SENTRY_ENV || "production";
 	const sentryAuthToken = process.env.SENTRY_AUTH_TOKEN || env.SENTRY_AUTH_TOKEN;
+	const sentryUploadEnabled =
+		mode === "production"
+		&& sentryEnabled
+		&& sentryEnv === "production"
+		&& Boolean(sentryAuthToken);
 
-	// Fail build if Sentry token is missing in production to avoid "deploy and pray"
-	if (mode === "production" && sentryEnabled && !sentryAuthToken && !process.env.CI) {
+	// Warn if Sentry token is missing in production to avoid silent missing sourcemaps
+	if (
+		mode === "production"
+		&& sentryEnabled
+		&& sentryEnv === "production"
+		&& !sentryAuthToken
+		&& !process.env.CI
+	) {
 		console.warn("⚠️  SENTRY_AUTH_TOKEN is missing. Source maps will not be uploaded.");
 	}
 
@@ -114,12 +125,13 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 			modulePreload: {
 				resolveDependencies: (filename: string, deps: string[]) => {
 					// Restore aggressive preloading for all critical-path dependencies.
-					// We only exclude truly heavy, asynchronous chunks like charts and markdown.
+					// We only exclude truly heavy, asynchronous chunks like charts, monitoring, and markdown.
 					// We also exclude CSS files to prevent double-loading issues when Vite
 					// injects them separately into the HTML.
 					return deps.filter(
 						(dep: string) =>
 							!dep.endsWith(".css")
+							&& !dep.includes("vendor-monitoring")
 							&& !dep.includes("vendor-telemetry")
 							&& !dep.includes("vendor-charts")
 							&& !dep.includes("vendor-markdown")
@@ -262,7 +274,7 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 					},
 				},
 			},
-			sourcemap: false,
+			sourcemap: sentryUploadEnabled ? "hidden" : false,
 
 			// 'baseline-widely-available' targeting (Chrome 111, Firefox 114, Safari 16.4)
 			// ensures optimal performance for a public tool without excessive polyfilling.
@@ -278,6 +290,8 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 		define: {
 			__APP_VERSION__: JSON.stringify(appVersion),
 			__BUILD_DATE__: JSON.stringify(buildDate),
+			__SENTRY_DEBUG__: false,
+			__SENTRY_TRACING__: false,
 			"import.meta.env.VITE_SENTRY_DSN": JSON.stringify(sentryDsn),
 			"import.meta.env.VITE_SENTRY_ENABLED": JSON.stringify(env.VITE_SENTRY_ENABLED),
 			"import.meta.env.VITE_SENTRY_ENV": JSON.stringify(sentryEnv),
@@ -324,7 +338,7 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 			}),
 			tailwindcss(),
 			// Sentry is positioned after transforms to ensure it captures all generated sourcemaps.
-			...(!process.env.STORYBOOK_BUILD && sentryEnabled ?
+			...(!process.env.STORYBOOK_BUILD && sentryUploadEnabled ?
 				[
 					sentryVitePlugin({
 						authToken: sentryAuthToken,
@@ -333,6 +347,9 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 							process.env.SENTRY_PROJECT || env.SENTRY_PROJECT || "nms-optimizer-web",
 						release: {
 							name: appVersion,
+						},
+						sourcemaps: {
+							filesToDeleteAfterUpload: ["./dist/**/*.map"],
 						},
 						telemetry: false,
 					}),

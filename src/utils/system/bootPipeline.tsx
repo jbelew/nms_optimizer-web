@@ -117,22 +117,50 @@ export interface BootResult {
 }
 
 /**
+ * Registers the deferred Sentry monitoring task on the lifecycle coordinator when enabled.
+ *
+ * @param coordinator - The lifecycle coordinator instance.
+ * @param enableSentry - Whether Sentry monitoring is enabled.
+ *
+ * @returns Side-effects only.
+ */
+const registerSentryDeferredTask = (
+	coordinator: LifecycleCoordinator,
+	enableSentry: boolean,
+): void => {
+	if (!enableSentry) {
+		return;
+	}
+
+	coordinator.registerDeferredTask({
+		name: "sentry-monitoring",
+		priority: 2,
+		run: async () => {
+			await initializeSentry();
+		},
+	});
+};
+
+/**
  * Registers default background capabilities into the {@link LifecycleCoordinator} deferred task registry.
  *
  * @remarks
- * Registers three non-critical background services to run during browser idle cycles once the application
+ * Registers non-critical background services to run during browser idle cycles once the application
  * enters the `IDLE` phase:
  * 1. `api-preload`: Initial state preloading for platforms and tech tree (priority 10).
  * 2. `ga4-analytics`: GA4 analytics client and event tracker initialization (priority 5).
- * 3. `service-worker`: PWA service worker registration and update listeners (priority 0).
+ * 3. `sentry-monitoring`: Deferred Sentry error monitoring initialization when enabled (priority 2).
+ * 4. `service-worker`: PWA service worker registration and update listeners (priority 0).
  *
  * @param coordinator - The lifecycle coordinator instance to register tasks on.
+ * @param [options] - Optional configuration for conditional deferred services.
  *
  * @returns Side-effects only.
  *
  * @see {@link preloadInitialState}
  * @see {@link initializeAnalyticsClient}
  * @see {@link initializeAnalytics}
+ * @see {@link initializeSentry}
  * @see {@link setupServiceWorkerRegistration}
  *
  * @category Utilities
@@ -140,9 +168,13 @@ export interface BootResult {
  * @example
  * ```ts
  * registerDefaultDeferredServices(lifecycleCoordinator);
+ * // returns void
  * ```
  */
-export const registerDefaultDeferredServices = (coordinator: LifecycleCoordinator): void => {
+export const registerDefaultDeferredServices = (
+	coordinator: LifecycleCoordinator,
+	options?: { enableSentry?: boolean },
+): void => {
 	// 1. Initial API state preloading (priority 10)
 	coordinator.registerDeferredTask({
 		name: "api-preload",
@@ -162,7 +194,11 @@ export const registerDefaultDeferredServices = (coordinator: LifecycleCoordinato
 		},
 	});
 
-	// 3. PWA Service Worker setup (priority 0)
+	// 3. Sentry error monitoring initialization (priority 2)
+	const isSentryEnabled = options?.enableSentry ?? import.meta.env.VITE_SENTRY_ENABLED === "true";
+	registerSentryDeferredTask(coordinator, isSentryEnabled);
+
+	// 4. PWA Service Worker setup (priority 0)
 	coordinator.registerDeferredTask({
 		name: "service-worker",
 		priority: 0,
@@ -180,10 +216,9 @@ export const registerDefaultDeferredServices = (coordinator: LifecycleCoordinato
  * @remarks
  * Encapsulates the complete startup sequence:
  * 1. Executes pre-mount data and storage migrations via {@link performBootstrapMigrations}.
- * 2. Initializes Sentry error tracking if enabled.
- * 3. Attaches global error and unhandled rejection interceptors for early error trapping.
- * 4. Resolves the target DOM container and mounts the React root tree.
- * 5. Transitions the application lifecycle to `HYDRATED`.
+ * 2. Attaches global `error` and `unhandledrejection` interceptors for early and runtime error trapping.
+ * 3. Resolves the target DOM container and registers deferred `IDLE` services (including Sentry error monitoring).
+ * 4. Mounts the React root tree and transitions the application lifecycle to `HYDRATED`.
  *
  * @param [options={}] - Configuration options for the boot pipeline.
  *
@@ -229,15 +264,7 @@ export const bootApp = async (options: BootOptions = {}): Promise<BootResult> =>
 		// 1. Perform pre-mount data migrations and cleanups
 		performBootstrapMigrations();
 
-		// 2. Initialize Sentry synchronously as early as possible if enabled
-		const isSentryEnabled =
-			options.enableSentry ?? import.meta.env.VITE_SENTRY_ENABLED === "true";
-
-		if (isSentryEnabled) {
-			initializeSentry();
-		}
-
-		// 4. Attach early error interceptors unless skipped
+		// 2. Attach early and runtime error interceptors unless skipped
 		if (typeof window !== "undefined" && !options.skipGlobalErrorHandlers) {
 			const errorHandler = (event: ErrorEvent) => {
 				if (event.defaultPrevented) {
@@ -259,44 +286,51 @@ export const bootApp = async (options: BootOptions = {}): Promise<BootResult> =>
 					return true;
 				}
 
-				Logger.error("Uncaught initialization error:", event.error || event.message);
+				const filename = event.filename || "";
+				const isOurScript =
+					!filename
+					|| filename.startsWith(window.location.origin)
+					|| filename.startsWith("/")
+					|| filename.includes("/src/")
+					|| filename.includes("/build/");
+
+				if (!isOurScript) {
+					return;
+				}
 
 				if (!coordinator.isReady()) {
-					const filename = event.filename || "";
-					const isOurScript =
-						!filename
-						|| filename.startsWith(window.location.origin)
-						|| filename.startsWith("/")
-						|| filename.includes("/src/")
-						|| filename.includes("/build/");
+					handleFatal(
+						event.error || new Error(errorMessage || "Uncaught initialization error"),
+					);
 
-					if (isOurScript) {
-						handleFatal(
-							event.error
-								|| new Error(errorMessage || "Uncaught initialization error"),
-						);
-					}
+					return;
 				}
+
+				Logger.error("Uncaught runtime error:", event.error || event.message);
 			};
 
 			const unhandledRejectionHandler = (event: PromiseRejectionEvent) => {
-				Logger.error("Unhandled promise rejection:", event.reason);
+				const reason = event.reason;
+				const stack = reason?.stack || "";
+				const isOurScript =
+					!stack
+					|| stack.includes(window.location.origin)
+					|| stack.includes("/src/")
+					|| stack.includes("/build/");
+
+				if (!isOurScript) {
+					return;
+				}
 
 				if (!coordinator.isReady()) {
-					const reason = event.reason;
-					const stack = reason?.stack || "";
-					const isOurScript =
-						!stack
-						|| stack.includes(window.location.origin)
-						|| stack.includes("/src/")
-						|| stack.includes("/build/");
+					handleFatal(
+						reason || new Error("Unhandled promise rejection during bootstrap"),
+					);
 
-					if (isOurScript) {
-						handleFatal(
-							reason || new Error("Unhandled promise rejection during bootstrap"),
-						);
-					}
+					return;
 				}
+
+				Logger.error("Unhandled promise rejection:", reason);
 			};
 
 			window.addEventListener("error", errorHandler);
@@ -308,7 +342,7 @@ export const bootApp = async (options: BootOptions = {}): Promise<BootResult> =>
 			});
 		}
 
-		// 5. Resolve target DOM container
+		// 3. Resolve target DOM container
 		let targetElement: HTMLElement | null = options.target ?? null;
 
 		if (!targetElement && typeof document !== "undefined") {
@@ -319,22 +353,26 @@ export const bootApp = async (options: BootOptions = {}): Promise<BootResult> =>
 			throw new Error("Target root element not found for application mount.");
 		}
 
-		// 6. Expose build date for E2E testing if enabled
+		// 4. Expose build date for E2E testing if enabled
 		if (typeof window !== "undefined" && import.meta.env.VITE_E2E_TESTING) {
 			(window as typeof window & { __BUILD_DATE__?: string }).__BUILD_DATE__ = __BUILD_DATE__;
 		}
 
-		// 7. Register deferred background services onto coordinator
+		// 5. Register deferred background services onto coordinator
 		if (!options.skipDeferredServices) {
-			registerDefaultDeferredServices(coordinator);
+			registerDefaultDeferredServices(coordinator, {
+				enableSentry: options.enableSentry,
+			});
+		} else {
+			registerSentryDeferredTask(coordinator, Boolean(options.enableSentry));
 		}
 
-		// 8. Mount React tree
+		// 6. Mount React tree
 		const root = createRoot(targetElement);
 		const componentToRender = options.rootComponent ?? <Root />;
 		root.render(componentToRender);
 
-		// 9. Signal hydration
+		// 7. Signal hydration
 		coordinator.markHydrated();
 
 		return {

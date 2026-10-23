@@ -7,31 +7,11 @@
 	<meta name="robots" content="noindex, nofollow" />
 	<title>500: Application Error | NMS Optimizer</title>
 
-	<!-- Sentry Error Tracking -->
-	<script src="https://browser.sentry-cdn.com/8.54.0/bundle.min.js"
-		integrity="sha384-OOkJGcfpcHOW2qdROjcfMtqqMTrDnSBag7fGypKUDA4WxyB6mmS5cMzY9YBGcBvF"
-		crossorigin="anonymous"></script>
-	<script>
-		Sentry.init({
-			dsn: "https://1b696a8b6eedd183fde61c368c9f1de9@o4510908417572864.ingest.us.sentry.io/4510908554543104",
-			environment: "production",
-		});
-
-		// Capture error context from URL if present
-		const urlParams = new URLSearchParams(window.location.search);
-		const errorType = urlParams.get('error_type');
-		const errorCause = urlParams.get('error_cause');
-		if (errorType) {
-			Sentry.captureMessage('App Load Failure: ' + errorType, {
-				level: 'error',
-				extra: { type: errorType, cause: errorCause }
-			});
-		}
-	</script>
-
 	<!-- Google tag (gtag.js) -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-P5VBZQ69Q9"></script>
 	<script>
+		const urlParams = new URLSearchParams(window.location.search);
+		const errorType = urlParams.get('error_type');
 		window.dataLayer = window.dataLayer || [];
 		function gtag() { dataLayer.push(arguments); }
 		gtag('js', new Date());

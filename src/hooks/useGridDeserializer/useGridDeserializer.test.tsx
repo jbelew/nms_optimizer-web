@@ -211,90 +211,85 @@ describe("deserialize", () => {
 		consoleWarnSpy.mockRestore();
 	});
 
-	it("should return null and log an error if decodedURIComponent is empty", async () => {
+	it("should return null and log a warning if decodeURIComponent fails", async () => {
 		// Arrange
 		// This serialized grid will result in a URI malformed error
 		const serializedGrid = "%";
-		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+		const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
 		// Act
 		const result = await deserialize(serializedGrid, mockShipType, mockSetTechColors);
 
 		// Assert
 		expect(result).toBeNull();
-		// The actual error thrown is URI malformed, caught by the outer try/catch
-		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			"[ERROR] %s",
-			expect.stringContaining("Error deserializing grid:"),
-			expect.any(URIError),
-			undefined,
+		expect(consoleWarnSpy).toHaveBeenCalledWith(
+			"[WARN] %s",
+			expect.stringContaining("Failed to decodeURIComponent. Skipping deserialization."),
+			{ error: expect.any(URIError) },
 		);
 		expect(mockSetTechColors).not.toHaveBeenCalled();
-		consoleErrorSpy.mockRestore();
+		consoleWarnSpy.mockRestore();
 	});
 
-	it("should return null and log an error if serialized grid format is invalid (wrong number of parts)", async () => {
+	it("should return null and log a warning if serialized grid format is invalid (wrong number of parts)", async () => {
 		// Arrange
 		const serializedGrid = "part1|part2|part3"; // Only 3 parts
-		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+		const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
 		// Act
 		const result = await deserialize(serializedGrid, mockShipType, mockSetTechColors);
 
 		// Assert
 		expect(result).toBeNull();
-		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			"[ERROR] %s",
+		expect(consoleWarnSpy).toHaveBeenCalledWith(
+			"[WARN] %s",
 			expect.stringContaining("Invalid serialized grid format"),
-			expect.any(Error),
 			expect.objectContaining({ received: 3 }),
 		);
 		expect(mockSetTechColors).not.toHaveBeenCalled();
-		consoleErrorSpy.mockRestore();
+		consoleWarnSpy.mockRestore();
 	});
 
-	it("should return null and log an error if serialized grid format is invalid (missing parts)", async () => {
+	it("should return null and log a warning if serialized grid format is invalid (missing parts)", async () => {
 		// Arrange
 		const serializedGrid = "|||||"; // 6 parts, but all undefined/empty
-		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+		const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
 		// Act
 		const result = await deserialize(serializedGrid, mockShipType, mockSetTechColors);
 
 		// Assert
 		expect(result).toBeNull();
-		// This now correctly catches the length mismatch error
-		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			"[ERROR] %s",
+		// This now correctly catches the length mismatch warning
+		expect(consoleWarnSpy).toHaveBeenCalledWith(
+			"[WARN] %s",
 			expect.stringContaining("Invalid serialized grid format: String length mismatch."),
-			undefined,
 			undefined,
 		);
 		expect(mockSetTechColors).not.toHaveBeenCalled();
-		consoleErrorSpy.mockRestore();
+		consoleWarnSpy.mockRestore();
 	});
 
-	it("should return null and log an error if string length mismatch", async () => {
+	it("should return null and log a warning if string length mismatch", async () => {
 		// Arrange
 		// A grid string that is too short
 		const serializedGrid =
 			"1|%033%207%032%2048|ABC%207DE%2048|T3F7T2F48|shield:%03|Cb:A,Ca:B,DS:C,Cc:D,AA:E";
 
-		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+		const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
 		// Act
 		const result = await deserialize(serializedGrid, mockShipType, mockSetTechColors);
 
 		// Assert
 		expect(result).toBeNull();
-		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			"[ERROR] %s",
+		expect(consoleWarnSpy).toHaveBeenCalledWith(
+			"[WARN] %s",
 			expect.stringContaining("Invalid serialized grid format: String length mismatch."),
-			undefined,
 			undefined,
 		);
 		expect(mockSetTechColors).not.toHaveBeenCalled();
-		consoleErrorSpy.mockRestore();
+		consoleWarnSpy.mockRestore();
 	});
 
 	it("should map legacy remembrance and starseed tech keys to core_health", async () => {

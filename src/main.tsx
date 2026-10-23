@@ -20,6 +20,6 @@ if (typeof document !== "undefined" && !import.meta.env.VITEST) {
 	void i18nReady
 		.then(() => bootApp({ rootComponent: <Root /> }))
 		.catch((error: unknown) => {
-			handleFatalBootstrapError(error);
+			void handleFatalBootstrapError(error);
 		});
 }

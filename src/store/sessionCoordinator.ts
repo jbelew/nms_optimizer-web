@@ -242,7 +242,7 @@ export const sessionCoordinator = {
 			gridStore.setGrid(newGrid);
 			gridStore.setIsSharedGrid(true);
 		} else {
-			Logger.error("Deserialization failed, grid not set.");
+			Logger.warn("Deserialization failed, grid not set.");
 		}
 	},
 

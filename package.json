@@ -65,9 +65,9 @@
 		"build-storybook": "STORYBOOK_BUILD=true bunx storybook build",
 		"release": "bunx semantic-release",
 		"lighthouse:ci": "bunx lhci autorun --config=scripts/lighthouserc.cjs --base-dir=/tmp/lighthouse-ci",
-		"perf:baseline": "bun scripts/performance-check.mjs --baseline",
-		"perf:check": "bun scripts/performance-check.mjs",
-		"perf:compare": "bun scripts/performance-check.mjs --compare",
+		"perf:baseline": "NODE_ENV=production bun scripts/performance-check.mjs --baseline",
+		"perf:check": "NODE_ENV=production bun scripts/performance-check.mjs",
+		"perf:compare": "NODE_ENV=production bun scripts/performance-check.mjs --compare",
 		"perf:inp": "./venv/bin/python scripts/report-inp.py"
 	},
 	"dependencies": {

@@ -14,7 +14,7 @@ import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 import { UI_TIMING } from "@/constants";
 import { runWhenIdle } from "@/utils/system/idle";
-import { captureException, Logger } from "@/utils/system/monitoring";
+import { flushSentry, Logger } from "@/utils/system/monitoring";
 
 /**
  * Marker key used by the inline preload error recovery script in `index.html`
@@ -643,8 +643,7 @@ export class LifecycleCoordinator {
 		try {
 			await task.run();
 		} catch (error) {
-			Logger.error(`Deferred task "${task.name}" failed:`, error);
-			captureException(error, {
+			Logger.error(`Deferred task "${task.name}" failed:`, error, {
 				level: "error",
 				tags: { area: "deferred-services", task: task.name },
 			});
@@ -659,8 +658,7 @@ export class LifecycleCoordinator {
 	 * @private
 	 */
 	private handleFatal(error: unknown): void {
-		Logger.error("Fatal lifecycle error:", error);
-		captureException(error, {
+		Logger.error("Fatal lifecycle error:", error, {
 			level: "fatal",
 			tags: { area: "lifecycle-coordinator" },
 		});
@@ -671,7 +669,7 @@ export class LifecycleCoordinator {
 			return;
 		}
 
-		handleFatalBootstrapError(error);
+		void handleFatalBootstrapError(error);
 	}
 
 	/**
@@ -733,29 +731,33 @@ export class LifecycleCoordinator {
  * If an error or unhandled promise rejection occurs during the initial application mount
  * or data loading sequence (before reaching the `READY` phase), this handler:
  * 1. Purges the splash screen components (`#vpss`, `#vpss-style`) to clean up the DOM.
- * 2. Redirects the browser to the static `/500.html` error recovery page, passing the error description.
+ * 2. Flushes any pending Sentry error reports with a bounded 1500ms timeout.
+ * 3. Redirects the browser to the static `/500.html` error recovery page, passing the error description.
  *
  * @param error - The fatal error or rejection reason captured during startup.
  *
- * @returns Side-effects only.
+ * @returns Resolves once the redirect has been initiated.
  *
  * @see {@link LifecycleCoordinator}
+ * @see {@link flushSentry}
  *
  * @category Utilities
  *
  * @example
  * ```ts
- * handleFatalBootstrapError(new TypeError("Failed to initialize store"));
+ * await handleFatalBootstrapError(new TypeError("Failed to initialize store"));
  * // redirects browser to /500.html?error_type=initialization_error&error_cause=...
  * ```
  */
-export const handleFatalBootstrapError = (error: unknown): void => {
+export const handleFatalBootstrapError = async (error: unknown): Promise<void> => {
 	if (typeof window !== "undefined") {
 		try {
 			hideSplashScreen();
 		} catch (_e) {
 			// ignore
 		}
+
+		await flushSentry(1500);
 
 		const errorMessage = error instanceof Error ? error.message : String(error);
 		const errorUrl = `/500.html?error_type=initialization_error&error_cause=${encodeURIComponent(errorMessage)}`;

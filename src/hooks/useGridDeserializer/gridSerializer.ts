@@ -243,10 +243,20 @@ export const deserialize = async (
 			return null;
 		}
 
-		const decoded = decodeURIComponent(serializedGrid);
+		let decoded: string;
+
+		try {
+			decoded = decodeURIComponent(serializedGrid);
+		} catch (decodeError) {
+			Logger.warn("Failed to decodeURIComponent. Skipping deserialization.", {
+				error: decodeError,
+			});
+
+			return null;
+		}
 
 		if (!decoded) {
-			Logger.error("Failed to decodeURIComponent. Skipping deserialization.");
+			Logger.warn("Failed to decodeURIComponent. Skipping deserialization.");
 
 			return null;
 		}
@@ -267,7 +277,7 @@ export const deserialize = async (
 		const parts = payload.split(GRID_SERIALIZATION_CONSTANTS.DELIMITER_CHAR);
 
 		if (parts.length !== 6) {
-			Logger.error("Invalid serialized grid format", new Error("Incorrect number of parts"), {
+			Logger.warn("Invalid serialized grid format", {
 				expected: 6,
 				received: parts.length,
 			});
@@ -294,9 +304,7 @@ export const deserialize = async (
 				moduleMapString,
 			].some((part) => part === undefined)
 		) {
-			Logger.error(
-				"Invalid serialized grid format. Missing parts. Skipping deserialization.",
-			);
+			Logger.warn("Invalid serialized grid format. Missing parts. Skipping deserialization.");
 
 			return null;
 		}
@@ -315,7 +323,7 @@ export const deserialize = async (
 			|| decompressedModule.length !== expectedLength
 			|| decompressedAdjBonus.length !== expectedLength
 		) {
-			Logger.error(
+			Logger.warn(
 				`Invalid serialized grid format: String length mismatch. Expected ${expectedLength}. Got Grid: ${gridString.length}, Tech: ${decompressedTech.length}, Module: ${decompressedModule.length}, AdjBonus: ${decompressedAdjBonus.length}. Skipping deserialization.`,
 			);
 
@@ -384,7 +392,7 @@ export const deserialize = async (
 		}
 
 		if (missingTechs.size > 0) {
-			Logger.error(
+			Logger.warn(
 				`Grid deserialization warning: The following techs no longer exist in the API: ${Array.from(missingTechs).join(", ")}. They will be skipped. This may be due to API changes since the grid was shared.`,
 			);
 		}

@@ -206,7 +206,7 @@ export const buildSerializer = {
 
 			return buildData;
 		} catch (error) {
-			Logger.error("Failed to load build file:", error);
+			Logger.warn("Failed to load build file:", { error });
 			throw error;
 		}
 	},

@@ -1,48 +1,88 @@
 /**
+ * Minimal mock implementation of the Sentry SDK.
+ *
+ * @remarks
+ * Satisfies build-time imports without bundling the full `@sentry/react` library
+ * when `VITE_SENTRY_ENABLED` is disabled.
+ *
+ * @see {@link SentryIntegration}
+ *
  * @category Utilities
- *
- * @file Minimal mock implementation of Sentry SDK to satisfy build-time requirements
- * without bundling the full Sentry library when disabled.
- *
  */
 
 import type {
+	Breadcrumb,
 	BrowserOptions,
 	breadcrumbsIntegration as SentryBreadcrumbsIntegration,
-	reactRouterV7BrowserTracingIntegration as SentryRouterTracingIntegration,
+	globalHandlersIntegration as SentryGlobalHandlersIntegration,
 } from "@sentry/react";
-import type { createBrowserRouter, RouteObject } from "react-router-dom";
 
 /**
  * Type definition for Sentry Integration.
- * Matches the definition in monitoring.ts for consistency.
+ *
+ * @remarks
+ * Extracted from existing integration functions to avoid using `any` or `@sentry/core` directly.
+ *
+ * @category Utilities
  */
-type SentryIntegration =
+export type SentryIntegration =
 	| ReturnType<typeof SentryBreadcrumbsIntegration>
-	| ReturnType<typeof SentryRouterTracingIntegration>;
+	| ReturnType<typeof SentryGlobalHandlersIntegration>;
 
 /**
- * Mock initialization.
+ * Mock breadcrumb adding.
  *
- * @param _options - SDK configuration options.
+ * @remarks
+ * No-op placeholder used when `@sentry/react` is aliased out of the bundle.
+ *
+ * @param [_breadcrumb] - Breadcrumb payload.
  *
  * @returns Side-effects only.
  *
+ * @category Utilities
+ *
  * @example
  * ```ts
- * init({ dsn: "..." });
+ * addBreadcrumb({ message: "test" });
  * // returns void
  * ```
  */
-export const init = (_options: BrowserOptions) => {};
+export const addBreadcrumb = (_breadcrumb?: Breadcrumb) => {};
+
+/**
+ * Mock breadcrumbs integration.
+ *
+ * @remarks
+ * Returns a stub integration descriptor without registering browser listeners.
+ *
+ * @param [_options] - Integration config.
+ *
+ * @returns Mock integration.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * breadcrumbsIntegration();
+ * // returns { name: "mock-breadcrumbs" }
+ * ```
+ */
+export const breadcrumbsIntegration = (
+	_options?: Parameters<typeof SentryBreadcrumbsIntegration>[0],
+): SentryIntegration => ({ name: "mock-breadcrumbs" }) as SentryIntegration;
 
 /**
  * Mock exception capture.
+ *
+ * @remarks
+ * No-op placeholder for exception reporting when Sentry is disabled.
  *
  * @param _error - Exception to report.
  * @param [_options] - Capture context.
  *
  * @returns Side-effects only.
+ *
+ * @category Utilities
  *
  * @example
  * ```ts
@@ -55,10 +95,15 @@ export const captureException = (_error: unknown, _options?: Record<string, unkn
 /**
  * Mock message capture.
  *
+ * @remarks
+ * No-op placeholder for message reporting when Sentry is disabled.
+ *
  * @param _message - Message to report.
  * @param [_options] - Capture context.
  *
  * @returns Side-effects only.
+ *
+ * @category Utilities
  *
  * @example
  * ```ts
@@ -69,59 +114,112 @@ export const captureException = (_error: unknown, _options?: Record<string, unkn
 export const captureMessage = (_message: string, _options?: Record<string, unknown>) => {};
 
 /**
- * Mock breadcrumbs integration.
+ * Mock client flush.
+ *
+ * @remarks
+ * Immediately resolves to `true` when Sentry is disabled.
+ *
+ * @param [_timeout] - Maximum time in milliseconds to wait for pending events.
+ *
+ * @returns Resolves to `true`.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * await flush(1500);
+ * // returns true
+ * ```
+ */
+export const flush = async (_timeout?: number): Promise<boolean> => true;
+
+/**
+ * Mock global handlers integration.
+ *
+ * @remarks
+ * Returns a stub integration descriptor for `globalHandlersIntegration`.
  *
  * @param [_options] - Integration config.
  *
  * @returns Mock integration.
  *
+ * @category Utilities
+ *
  * @example
  * ```ts
- * breadcrumbsIntegration();
- * // returns object
+ * globalHandlersIntegration({ onerror: false, onunhandledrejection: false });
+ * // returns { name: "mock-global-handlers" }
  * ```
  */
-export const breadcrumbsIntegration = (
-	_options?: Parameters<typeof SentryBreadcrumbsIntegration>[0],
-): SentryIntegration => ({ name: "mock-breadcrumbs" }) as SentryIntegration;
+export const globalHandlersIntegration = (
+	_options?: Parameters<typeof SentryGlobalHandlersIntegration>[0],
+): SentryIntegration => ({ name: "mock-global-handlers" }) as SentryIntegration;
 
 /**
- * Mock browser tracing integration.
+ * Mock initialization.
  *
- * @param [_options] - Integration config.
+ * @remarks
+ * No-op placeholder for `Sentry.init` when Sentry is disabled.
  *
- * @returns Mock integration.
+ * @param _options - SDK configuration options.
+ *
+ * @returns Side-effects only.
+ *
+ * @category Utilities
  *
  * @example
  * ```ts
- * reactRouterV7BrowserTracingIntegration();
- * // returns object
+ * init({ dsn: "..." });
+ * // returns void
  * ```
  */
-export const reactRouterV7BrowserTracingIntegration = (
-	_options?: Parameters<typeof SentryRouterTracingIntegration>[0],
-): SentryIntegration => ({ name: "mock-tracing" }) as SentryIntegration;
+export const init = (_options: BrowserOptions) => {};
 
 /**
- * Mock router wrapper.
+ * Mock extra context setting.
  *
- * @param cb - The callback to wrap.
+ * @remarks
+ * No-op placeholder for setting extra context when Sentry is disabled.
  *
- * @returns Instrumented creator.
+ * @returns Side-effects only.
+ *
+ * @category Utilities
  *
  * @example
  * ```ts
- * wrapCreateBrowserRouterV7(createBrowserRouter);
- * // returns function
+ * setExtra();
+ * // returns void
  * ```
  */
-export const wrapCreateBrowserRouterV7 =
-	(cb: typeof createBrowserRouter) => (routes: RouteObject[]) =>
-		cb(routes);
+export const setExtra = () => {};
+
+/**
+ * Mock tag setting.
+ *
+ * @remarks
+ * No-op placeholder for setting tags when Sentry is disabled.
+ *
+ * @returns Side-effects only.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * setTag();
+ * // returns void
+ * ```
+ */
+export const setTag = () => {};
 
 /**
  * Mock user setting.
+ *
+ * @remarks
+ * No-op placeholder for setting user context when Sentry is disabled.
+ *
  * @returns Side-effects only.
+ *
+ * @category Utilities
  *
  * @example
  * ```ts
@@ -130,39 +228,3 @@ export const wrapCreateBrowserRouterV7 =
  * ```
  */
 export const setUser = () => {};
-
-/**
- * Mock tag setting.
- * @returns Side-effects only.
- *
- * @example
- * ```ts
- * setTag("a", "b");
- * // returns void
- * ```
- */
-export const setTag = () => {};
-
-/**
- * Mock extra context setting.
- * @returns Side-effects only.
- *
- * @example
- * ```ts
- * setExtra("a", "b");
- * // returns void
- * ```
- */
-export const setExtra = () => {};
-
-/**
- * Mock breadcrumb adding.
- * @returns Side-effects only.
- *
- * @example
- * ```ts
- * addBreadcrumb({ message: "test" });
- * // returns void
- * ```
- */
-export const addBreadcrumb = () => {};

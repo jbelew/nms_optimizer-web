@@ -116,7 +116,7 @@ export async function apiCall<T = unknown>(
 	try {
 		return await fetchJson<T>(url, fetchOptions, timeout);
 	} catch (error) {
-		Logger.error("API call failed", error);
+		Logger.warn("API call failed", { error, url });
 
 		if (!skipGlobalError && !isCritical) {
 			// Always trigger error dialog for any failure in apiCall unless skipped or critical
@@ -222,7 +222,8 @@ export async function fetchWithTimeout(
 		return response;
 	} catch (error) {
 		if (timeoutTriggered && error instanceof Error && error.name === "AbortError") {
-			Logger.error(`[fetchWithTimeout] Request aborted due to timeout: ${url}`, error, {
+			Logger.warn(`[fetchWithTimeout] Request aborted due to timeout: ${url}`, {
+				error,
 				url,
 			});
 			throw new Error(`Request timeout after ${timeoutMs}ms: ${url}`, { cause: error });

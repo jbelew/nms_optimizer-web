@@ -54,7 +54,7 @@ export type BuildFile = {
  */
 export function isValidBuildFile(obj: unknown): obj is BuildFile {
 	if (typeof obj !== "object" || obj === null) {
-		Logger.error("Validation Error: BuildFile is not an object or is null.", undefined, {
+		Logger.warn("Validation Error: BuildFile is not an object or is null.", {
 			obj,
 		});
 
@@ -75,7 +75,7 @@ export function isValidBuildFile(obj: unknown): obj is BuildFile {
 
 	const allPropsPresent = requiredProps.every((prop) => {
 		if (!(prop in buildFile)) {
-			Logger.error(`Validation Error: BuildFile missing '${prop}' property.`, undefined, {
+			Logger.warn(`Validation Error: BuildFile missing '${prop}' property.`, {
 				buildFile,
 			});
 
@@ -190,7 +190,7 @@ export const sanitizeFilename = (filename: string): string => {
  */
 export function isValidRecommendedBuild(obj: unknown): obj is RecommendedBuild {
 	if (typeof obj !== "object" || obj === null) {
-		Logger.error("Validation Error: RecommendedBuild is not an object or is null.", undefined, {
+		Logger.warn("Validation Error: RecommendedBuild is not an object or is null.", {
 			obj,
 		});
 
@@ -200,7 +200,7 @@ export function isValidRecommendedBuild(obj: unknown): obj is RecommendedBuild {
 	const recommendedBuild = obj as RecommendedBuild;
 
 	if (typeof recommendedBuild.title !== "string") {
-		Logger.error("Validation Error: Invalid 'title' property.", undefined, {
+		Logger.warn("Validation Error: Invalid 'title' property.", {
 			recommendedBuild,
 		});
 
@@ -208,7 +208,7 @@ export function isValidRecommendedBuild(obj: unknown): obj is RecommendedBuild {
 	}
 
 	if (!Array.isArray(recommendedBuild.layout)) {
-		Logger.error("Validation Error: 'layout' is not an array.", undefined, {
+		Logger.warn("Validation Error: 'layout' is not an array.", {
 			recommendedBuild,
 		});
 

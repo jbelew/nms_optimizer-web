@@ -27,7 +27,7 @@ import { useRouteError } from "react-router-dom";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { sendEvent } from "@/utils/analytics/tracking";
 import { lifecycleCoordinator } from "@/utils/system/lifecycleCoordinator";
-import { captureException, Logger } from "@/utils/system/monitoring";
+import { Logger } from "@/utils/system/monitoring";
 
 import "./ErrorBoundary.scss";
 
@@ -116,12 +116,6 @@ interface State {
  */
 const handleError = (error: Error, errorInfo?: ErrorInfo) => {
 	Logger.error("Uncaught error:", error, { errorInfo });
-
-	captureException(error, {
-		extra: {
-			componentStack: errorInfo?.componentStack,
-		},
-	});
 
 	sendEvent({
 		action: error.name,

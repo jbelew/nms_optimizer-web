@@ -15,7 +15,7 @@ import {
 } from "./bootPipeline";
 import { performBootstrapMigrations } from "./bootstrap";
 import { LifecycleCoordinator } from "./lifecycleCoordinator";
-import { initializeSentry } from "./monitoring";
+import { initializeSentry, Logger } from "./monitoring";
 
 vi.mock("./bootstrap", () => ({
 	performBootstrapMigrations: vi.fn(),
@@ -40,8 +40,7 @@ vi.mock("@/utils/system/setupServiceWorker", () => ({
 }));
 
 vi.mock("./monitoring", () => ({
-	captureException: vi.fn(),
-	createAppRouter: vi.fn(() => ({})),
+	flushSentry: vi.fn(async () => true),
 	initializeSentry: vi.fn(),
 	Logger: {
 		error: vi.fn(),
@@ -70,7 +69,7 @@ describe("bootPipeline", () => {
 	});
 
 	describe("Successful Boot", () => {
-		it("should execute migrations, initialize sentry, and mount component to target", async () => {
+		it("should execute migrations, defer sentry to IDLE phase, and mount component to target", async () => {
 			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
 			const TestComponent = () => <div data-testid="test-app">App Rendered</div>;
 
@@ -86,7 +85,9 @@ describe("bootPipeline", () => {
 			});
 
 			expect(performBootstrapMigrations).toHaveBeenCalledTimes(1);
-			expect(initializeSentry).toHaveBeenCalledTimes(1);
+			// Sentry initialization is deferred until IDLE phase
+			expect(initializeSentry).not.toHaveBeenCalled();
+			expect(coordinator.hasDeferredTask("sentry-monitoring")).toBe(true);
 			expect(coordinator.getPhase()).toBe("HYDRATED");
 			expect(coordinator.isHydrated()).toBe(true);
 
@@ -94,6 +95,9 @@ describe("bootPipeline", () => {
 			await waitFor(() => {
 				expect(container.querySelector('[data-testid="test-app"]')).not.toBeNull();
 			});
+
+			await coordinator.flushDeferredTasks();
+			expect(initializeSentry).toHaveBeenCalledTimes(1);
 
 			await act(async () => {
 				result.unmount();
@@ -115,6 +119,8 @@ describe("bootPipeline", () => {
 				});
 			});
 
+			expect(coordinator.hasDeferredTask("sentry-monitoring")).toBe(false);
+			await coordinator.flushDeferredTasks();
 			expect(initializeSentry).not.toHaveBeenCalled();
 			await act(async () => {
 				result.unmount();
@@ -162,7 +168,7 @@ describe("bootPipeline", () => {
 			expect(onFatalError).toHaveBeenCalled();
 		});
 
-		it("should redirect to /500.html on handleFatalBootstrapError in browser", () => {
+		it("should redirect to /500.html on handleFatalBootstrapError in browser", async () => {
 			const replaceMock = vi.fn();
 			const originalLocation = window.location;
 			Object.defineProperty(window, "location", {
@@ -174,7 +180,7 @@ describe("bootPipeline", () => {
 				writable: true,
 			});
 
-			handleFatalBootstrapError(new Error("Test Error"));
+			await handleFatalBootstrapError(new Error("Test Error"));
 
 			expect(replaceMock).toHaveBeenCalledWith(
 				expect.stringContaining(
@@ -270,8 +276,9 @@ describe("bootPipeline", () => {
 			coordinator.markReady();
 			expect(coordinator.isReady()).toBe(true);
 
+			const lateError = new Error("Late runtime error");
 			const errorEvent = new ErrorEvent("error", {
-				error: new Error("Late runtime error"),
+				error: lateError,
 				filename: window.location.origin + "/src/someComponent.tsx",
 				message: "Late runtime error",
 			});
@@ -280,6 +287,38 @@ describe("bootPipeline", () => {
 			// Fatal handler should not be called since app has already reached READY
 			expect(coordinator.isFatal()).toBe(false);
 			expect(onFatalError).not.toHaveBeenCalled();
+			expect(Logger.error).toHaveBeenCalledWith("Uncaught runtime error:", lateError);
+
+			await act(async () => {
+				result.unmount();
+			});
+		});
+
+		it("should ignore errors originating from third-party scripts or browser extensions", async () => {
+			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
+			const onFatalError = vi.fn();
+
+			let result!: Awaited<ReturnType<typeof bootApp>>;
+			await act(async () => {
+				result = await bootApp({
+					coordinator,
+					onFatalError,
+					rootComponent: <div>App</div>,
+					skipGlobalErrorHandlers: false,
+					target: container,
+				});
+			});
+
+			const errorEvent = new ErrorEvent("error", {
+				error: new Error("Extension script error"),
+				filename: "chrome-extension://abcdefghijklmno/content.js",
+				message: "Extension script error",
+			});
+			window.dispatchEvent(errorEvent);
+
+			expect(coordinator.isFatal()).toBe(false);
+			expect(onFatalError).not.toHaveBeenCalled();
+			expect(Logger.error).not.toHaveBeenCalled();
 
 			await act(async () => {
 				result.unmount();
