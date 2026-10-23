@@ -1,3 +1,10 @@
+## [8.5.1](https://github.com/jbelew/nms_optimizer-web/compare/v8.5.0...v8.5.1) (2026-10-23)
+
+
+### Bug Fixes
+
+* **ci:** isolate Vite mode env resolution under Bun and verify production release bundle ([0891b2a](https://github.com/jbelew/nms_optimizer-web/commit/0891b2a90e9df6c28533539a09e4875dee669eb5))
+
 # [8.5.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.4.6...v8.5.0) (2026-10-23)
 
 
