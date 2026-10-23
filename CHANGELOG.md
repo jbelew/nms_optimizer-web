@@ -1,3 +1,10 @@
+## [8.5.2](https://github.com/jbelew/nms_optimizer-web/compare/v8.5.1...v8.5.2) (2026-10-23)
+
+
+### Bug Fixes
+
+* **system:** prevent React.lazy TypeError when vite:preloadError cancels failed dynamic import ([6d6bd85](https://github.com/jbelew/nms_optimizer-web/commit/6d6bd85292e3d4d7a47858eed4a0f1eef25392b1)), closes [#805](https://github.com/jbelew/nms_optimizer-web/issues/805)
+
 ## [8.5.1](https://github.com/jbelew/nms_optimizer-web/compare/v8.5.0...v8.5.1) (2026-10-23)
 
 
