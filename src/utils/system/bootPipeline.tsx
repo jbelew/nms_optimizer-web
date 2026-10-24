@@ -297,12 +297,14 @@ export const bootApp = async (options: BootOptions = {}): Promise<BootResult> =>
 				);
 			};
 
-			const isFirstPartySource = (source: string, allowRelativeRoot: boolean) =>
-				!source
-				|| source.includes(window.location.origin)
-				|| (allowRelativeRoot && source.startsWith("/"))
-				|| source.includes("/src/")
-				|| source.includes("/build/");
+			const isFirstPartySource = (source: string, allowEmptyOrRelative: boolean) =>
+				(allowEmptyOrRelative && (!source || source.startsWith("/")))
+				|| Boolean(
+					source
+					&& (source.includes(window.location.origin)
+						|| source.includes("/src/")
+						|| source.includes("/build/")),
+				);
 
 			const reportBootstrapOrRuntimeError = (
 				logMessage: string,

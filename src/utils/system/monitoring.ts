@@ -15,6 +15,7 @@ import type {
 	Breadcrumb,
 	BrowserOptions,
 	breadcrumbsIntegration as SentryBreadcrumbsIntegration,
+	browserApiErrorsIntegration as SentryBrowserApiErrorsIntegration,
 	globalHandlersIntegration as SentryGlobalHandlersIntegration,
 } from "@sentry/react";
 
@@ -95,6 +96,10 @@ interface SentrySDK {
 	/** Automatic breadcrumb collection integration. */
 	breadcrumbsIntegration: (
 		options: Parameters<typeof SentryBreadcrumbsIntegration>[0],
+	) => SentryIntegration;
+	/** Browser timer/event listener wrapper integration configuration. */
+	browserApiErrorsIntegration?: (
+		options: Parameters<typeof SentryBrowserApiErrorsIntegration>[0],
 	) => SentryIntegration;
 	/** Captures an exception and sends it to Sentry. */
 	captureException: (error: unknown, options?: Record<string, unknown>) => void;
@@ -396,9 +401,11 @@ export const Logger = {
  *
  * @remarks
  * Dynamically imports `@sentry/react` so the monitoring chunk stays out of the critical rendering path.
- * Disables Sentry's built-in `globalHandlersIntegration` because `bootApp` owns global `error` and
- * `unhandledrejection` listeners. Once initialized, replays buffered `INFO`/`WARN` log entries as
- * breadcrumbs and flushes any early error events queued prior to initialization.
+ * Disables Sentry's built-in `globalHandlersIntegration`, `browserApiErrorsIntegration`, and default
+ * `BrowserApiErrors` / `Console` integrations because `bootApp` owns global `error` and
+ * `unhandledrejection` listeners and `Logger` explicitly attaches log breadcrumbs. Once initialized,
+ * replays buffered `INFO`/`WARN` log entries as breadcrumbs and flushes any early error events
+ * queued prior to initialization.
  *
  * @returns Resolves when Sentry initialization and early-event flushing complete.
  *
@@ -434,6 +441,7 @@ export const initializeSentry = async (): Promise<void> => {
 			const {
 				addBreadcrumb,
 				breadcrumbsIntegration,
+				browserApiErrorsIntegration,
 				captureException: sentryCaptureException,
 				captureMessage,
 				flush,
@@ -445,6 +453,18 @@ export const initializeSentry = async (): Promise<void> => {
 					dom: false, // Good performance practice: disables expensive DOM click serialization
 				}),
 			];
+
+			if (browserApiErrorsIntegration) {
+				integrations.push(
+					browserApiErrorsIntegration({
+						eventTarget: false,
+						requestAnimationFrame: false,
+						setInterval: false,
+						setTimeout: false,
+						XMLHttpRequest: false,
+					}),
+				);
+			}
 
 			if (globalHandlersIntegration) {
 				integrations.push(
@@ -471,10 +491,18 @@ export const initializeSentry = async (): Promise<void> => {
 					/Failed to fetch dynamically imported module/i,
 					/error loading dynamically imported module/i,
 					/Unable to preload CSS/i,
+					/Stylesheet append timeout/i,
 					/Non-Error promise rejection captured/i,
 					/QuotaExceededError/i,
 				],
-				integrations,
+				integrations: (defaultIntegrations) => [
+					...defaultIntegrations.filter(
+						(integration) =>
+							integration.name !== "BrowserApiErrors"
+							&& integration.name !== "Console",
+					),
+					...integrations,
+				],
 				maxBreadcrumbs: 50,
 				release: __APP_VERSION__,
 			});
@@ -482,6 +510,7 @@ export const initializeSentry = async (): Promise<void> => {
 			sentryInstance = {
 				addBreadcrumb,
 				breadcrumbsIntegration,
+				browserApiErrorsIntegration,
 				captureException: sentryCaptureException,
 				captureMessage,
 				flush,

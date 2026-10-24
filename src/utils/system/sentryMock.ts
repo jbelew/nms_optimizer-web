@@ -14,6 +14,7 @@ import type {
 	Breadcrumb,
 	BrowserOptions,
 	breadcrumbsIntegration as SentryBreadcrumbsIntegration,
+	browserApiErrorsIntegration as SentryBrowserApiErrorsIntegration,
 	globalHandlersIntegration as SentryGlobalHandlersIntegration,
 } from "@sentry/react";
 
@@ -27,6 +28,7 @@ import type {
  */
 export type SentryIntegration =
 	| ReturnType<typeof SentryBreadcrumbsIntegration>
+	| ReturnType<typeof SentryBrowserApiErrorsIntegration>
 	| ReturnType<typeof SentryGlobalHandlersIntegration>;
 
 /**
@@ -59,6 +61,8 @@ export const addBreadcrumb = (_breadcrumb?: Breadcrumb) => {};
  *
  * @returns Mock integration.
  *
+ * @see {@link SentryIntegration}
+ *
  * @category Utilities
  *
  * @example
@@ -70,6 +74,30 @@ export const addBreadcrumb = (_breadcrumb?: Breadcrumb) => {};
 export const breadcrumbsIntegration = (
 	_options?: Parameters<typeof SentryBreadcrumbsIntegration>[0],
 ): SentryIntegration => ({ name: "mock-breadcrumbs" }) as SentryIntegration;
+
+/**
+ * Mock browser API errors integration.
+ *
+ * @remarks
+ * Returns a stub integration descriptor for `browserApiErrorsIntegration`.
+ *
+ * @param [_options] - Integration config.
+ *
+ * @returns Mock integration.
+ *
+ * @see {@link SentryIntegration}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * browserApiErrorsIntegration({ setTimeout: false });
+ * // returns { name: "mock-browser-api-errors" }
+ * ```
+ */
+export const browserApiErrorsIntegration = (
+	_options?: Parameters<typeof SentryBrowserApiErrorsIntegration>[0],
+): SentryIntegration => ({ name: "mock-browser-api-errors" }) as SentryIntegration;
 
 /**
  * Mock exception capture.
@@ -142,6 +170,8 @@ export const flush = async (_timeout?: number): Promise<boolean> => true;
  * @param [_options] - Integration config.
  *
  * @returns Mock integration.
+ *
+ * @see {@link SentryIntegration}
  *
  * @category Utilities
  *

@@ -13,11 +13,12 @@ import {
 
 vi.mock("@sentry/react", () => ({
 	addBreadcrumb: vi.fn(),
-	breadcrumbsIntegration: vi.fn(() => ({ name: "mock-breadcrumbs" })),
+	breadcrumbsIntegration: vi.fn(() => ({ name: "Breadcrumbs" })),
+	browserApiErrorsIntegration: vi.fn(() => ({ name: "BrowserApiErrors" })),
 	captureException: vi.fn(),
 	captureMessage: vi.fn(),
 	flush: vi.fn(async () => true),
-	globalHandlersIntegration: vi.fn(() => ({ name: "mock-global-handlers" })),
+	globalHandlersIntegration: vi.fn(() => ({ name: "GlobalHandlers" })),
 	init: vi.fn(),
 }));
 
@@ -25,6 +26,7 @@ vi.mock("@sentry/react", () => ({
 const sentryMock = {
 	addBreadcrumb: vi.fn(),
 	breadcrumbsIntegration: vi.fn(),
+	browserApiErrorsIntegration: vi.fn(),
 	captureException: vi.fn(),
 	captureMessage: vi.fn(),
 	flush: vi.fn(async () => true),
@@ -270,11 +272,19 @@ describe("monitoring utilities", () => {
 			});
 		});
 
-		it("should configure ignoreErrors with Safari, Chromium, and Firefox dynamic module and CSS preload failure patterns", async () => {
+		it("should configure ignoreErrors with Safari, Chromium, Firefox, and web clipper failure patterns and filter out BrowserApiErrors and Console default integrations", async () => {
 			vi.stubEnv("VITE_SENTRY_ENABLED", "true");
 			vi.stubEnv("VITE_SENTRY_DSN", "https://examplePublicKey@o0.ingest.sentry.io/0");
 
 			await initializeSentry();
+
+			expect(SentryReact.browserApiErrorsIntegration).toHaveBeenCalledWith({
+				eventTarget: false,
+				requestAnimationFrame: false,
+				setInterval: false,
+				setTimeout: false,
+				XMLHttpRequest: false,
+			});
 
 			expect(SentryReact.init).toHaveBeenCalledWith(
 				expect.objectContaining({
@@ -283,9 +293,32 @@ describe("monitoring utilities", () => {
 						/Failed to fetch dynamically imported module/i,
 						/error loading dynamically imported module/i,
 						/Unable to preload CSS/i,
+						/Stylesheet append timeout/i,
 					]),
+					integrations: expect.any(Function),
 				}),
 			);
+
+			const initOptions = vi.mocked(SentryReact.init).mock.calls[0]?.[0];
+
+			if (typeof initOptions?.integrations !== "function") {
+				throw new Error("Expected integrations option to be a function");
+			}
+
+			const resolvedIntegrations = initOptions.integrations([
+				{ name: "InboundFilters" },
+				{ name: "BrowserApiErrors" },
+				{ name: "Console" },
+				{ name: "Dedupe" },
+			]);
+
+			expect(resolvedIntegrations.map((i) => i.name)).toEqual([
+				"InboundFilters",
+				"Dedupe",
+				"Breadcrumbs",
+				"BrowserApiErrors",
+				"GlobalHandlers",
+			]);
 		});
 	});
 });

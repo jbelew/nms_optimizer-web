@@ -323,6 +323,57 @@ describe("bootPipeline", () => {
 				result.unmount();
 			});
 		});
+
+		it("should ignore unhandled promise rejections with an empty stack or third-party WKWebView stack and report first-party rejections", async () => {
+			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
+			const onFatalError = vi.fn();
+
+			let result!: Awaited<ReturnType<typeof bootApp>>;
+			await act(async () => {
+				result = await bootApp({
+					coordinator,
+					onFatalError,
+					rootComponent: <div>App</div>,
+					skipGlobalErrorHandlers: false,
+					target: container,
+				});
+			});
+
+			coordinator.markReady();
+
+			const dispatchUnhandledRejection = (message: string, stack: string) => {
+				const error = new Error(message);
+				error.stack = stack;
+				const event = new Event("unhandledrejection");
+				Object.assign(event, { reason: error });
+				window.dispatchEvent(event);
+
+				return error;
+			};
+
+			dispatchUnhandledRejection("Stylesheet append timeout", "");
+			dispatchUnhandledRejection(
+				"Stylesheet append timeout",
+				"Error: Stylesheet append timeout\n    at @:1:234",
+			);
+
+			expect(Logger.error).not.toHaveBeenCalled();
+
+			const firstPartyError = dispatchUnhandledRejection(
+				"First-party async failure",
+				`Error: First-party async failure\n    at ${window.location.origin}/src/App.tsx:42:10`,
+			);
+
+			expect(Logger.error).toHaveBeenCalledTimes(1);
+			expect(Logger.error).toHaveBeenCalledWith(
+				"Unhandled promise rejection:",
+				firstPartyError,
+			);
+
+			await act(async () => {
+				result.unmount();
+			});
+		});
 	});
 
 	describe("Deferred Services Registration & Execution", () => {
