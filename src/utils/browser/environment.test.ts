@@ -39,6 +39,29 @@ describe("environment utilities", () => {
 			expect(isBot()).toBe(true);
 		});
 
+		it("should return true if window.wrsParams is present (Google Web Rendering Service)", () => {
+			vi.stubGlobal("window", { wrsParams: {} });
+			vi.stubGlobal("navigator", {
+				userAgent:
+					"Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Mobile Safari/537.36",
+				webdriver: false,
+			});
+			expect(isBot()).toBe(true);
+		});
+
+		it("should return true for Google-Read-Aloud and GoogleOther user agents", () => {
+			vi.stubGlobal("navigator", {
+				userAgent:
+					"Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Mobile Safari/537.36 (compatible; Google-Read-Aloud; +https://support.google.com/webmasters/answer/1061943)",
+			});
+			expect(isBot()).toBe(true);
+
+			vi.stubGlobal("navigator", {
+				userAgent: "Mozilla/5.0 (compatible; GoogleOther)",
+			});
+			expect(isBot()).toBe(true);
+		});
+
 		it("should return true if navigator.userAgentData brands match headless or lighthouse", () => {
 			vi.stubGlobal("navigator", {
 				userAgent:

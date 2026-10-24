@@ -20,7 +20,7 @@ import { Logger } from "@/utils/system/monitoring";
  * @category Utilities
  */
 const BOT_USER_AGENT_PATTERN =
-	/bot|crawl|spider|slurp|mediapartners|facebookexternalhit|ia_archiver|googlebot|google-inspectiontool|adsbot-google|apis-google|lighthouse|chrome-lighthouse|pingdom|uptime|speedcurve|headless|phantom|webdriver|pinterest|whatsapp|twitterbot|linkedinbot|embedly|quora|outbrain|rogerbot|bufferbot|duckduckbot|semrushbot|ahrefsbot|mj12bot|dotbot|archive\.org|baidu/i;
+	/bot|crawl|spider|slurp|mediapartners|facebookexternalhit|ia_archiver|googlebot|google-inspectiontool|google-read-aloud|googleother|storebot-google|adsbot-google|apis-google|lighthouse|chrome-lighthouse|pingdom|uptime|speedcurve|headless|phantom|webdriver|pinterest|whatsapp|twitterbot|linkedinbot|embedly|quora|outbrain|rogerbot|bufferbot|duckduckbot|semrushbot|ahrefsbot|mj12bot|dotbot|archive\.org|baidu/i;
 
 /**
  * A regex pattern matching automated or headless browser brand tokens in `navigator.userAgentData.brands`.
@@ -33,9 +33,10 @@ const BOT_BRAND_PATTERN = /headless|lighthouse|phantom|webdriver/i;
  * Detects whether the current visitor is likely a bot or web crawler.
  *
  * @remarks
- * Uses heuristics including `navigator.webdriver`, the `.is-bot` CSS class on
- * the document root, `navigator.userAgentData.brands` client hints, and
- * User-Agent string matching against known bot signatures.
+ * Uses heuristics including `navigator.webdriver`, the `window.wrsParams`
+ * Google Web Rendering Service global, the `.is-bot` CSS class on the document
+ * root, `navigator.userAgentData.brands` client hints, and User-Agent string
+ * matching against known bot signatures.
  *
  * This check is used to suppress non-essential UI (like Welcome dialogs) for
  * automated visitors to improve SEO and prevent unwanted interactions.
@@ -56,8 +57,11 @@ const BOT_BRAND_PATTERN = /headless|lighthouse|phantom|webdriver/i;
  * ```
  */
 export function isBot(): boolean {
-	// 1. Explicit webdriver flag
-	if (typeof navigator !== "undefined" && navigator.webdriver) {
+	// 1. Explicit webdriver flag or Google Web Rendering Service (wrsParams) global
+	if (
+		(typeof navigator !== "undefined" && navigator.webdriver)
+		|| (typeof window !== "undefined" && "wrsParams" in window)
+	) {
 		return true;
 	}
 

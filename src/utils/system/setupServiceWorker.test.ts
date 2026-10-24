@@ -3,12 +3,16 @@ import type { RegisterSWOptions } from "virtual:pwa-register"; // Import the typ
 import * as pwaMockModule from "virtual:pwa-register";
 import { vi } from "vitest";
 
+import { Logger } from "@/utils/system/monitoring";
+
 import {
 	activateLatestServiceWorker,
+	applyStagedServiceWorkerUpdate,
 	evictStaleServiceWorkers,
 	isAppHiddenOrIdle,
 	setLastUserActivityForTesting,
 	setupServiceWorkerRegistration,
+	verifyStagedUpdateFreshness,
 } from "./setupServiceWorker";
 
 // Set up spies on the mock module
@@ -102,6 +106,73 @@ describe("setupServiceWorkerRegistration", () => {
 		vi.runOnlyPendingTimers();
 
 		expect(mockRegisterSW).not.toHaveBeenCalled();
+	});
+
+	it("should not attempt to register service worker if window.wrsParams is present", async () => {
+		(window as Window & { wrsParams?: unknown }).wrsParams = {};
+
+		try {
+			setupServiceWorkerRegistration();
+			await Promise.resolve();
+
+			window.dispatchEvent(new Event("load"));
+			vi.runOnlyPendingTimers();
+
+			expect(mockRegisterSW).not.toHaveBeenCalled();
+		} finally {
+			delete (window as Window & { wrsParams?: unknown }).wrsParams;
+		}
+	});
+
+	it("should log a warning via Logger.warn (and not Logger.error) when onRegisterError is triggered", async () => {
+		const warnSpy = vi.spyOn(Logger, "warn").mockImplementation(() => {});
+		const errorSpy = vi.spyOn(Logger, "error").mockImplementation(() => {});
+		let onRegisterErrorCallback: ((error: unknown) => void) | undefined;
+
+		mockRegisterSW.mockImplementationOnce((options?: RegisterSWOptions) => {
+			if (options?.onRegisterError) {
+				onRegisterErrorCallback = options.onRegisterError;
+			}
+
+			return mockUpdateSW;
+		});
+
+		setupServiceWorkerRegistration();
+		await Promise.resolve();
+
+		window.dispatchEvent(new Event("load"));
+		vi.advanceTimersByTime(2000);
+		await vi.runAllTimersAsync();
+
+		const registrationError = new Error("Rejected");
+		onRegisterErrorCallback!(registrationError);
+
+		expect(warnSpy).toHaveBeenCalledWith("Service Worker registration failed", {
+			error: registrationError,
+		});
+		expect(errorSpy).not.toHaveBeenCalled();
+	});
+
+	it("should log a warning via Logger.warn (and not Logger.error) when registerSW throws synchronously", async () => {
+		const warnSpy = vi.spyOn(Logger, "warn").mockImplementation(() => {});
+		const errorSpy = vi.spyOn(Logger, "error").mockImplementation(() => {});
+		const registrationError = new Error("Failed to register");
+
+		mockRegisterSW.mockImplementationOnce(() => {
+			throw registrationError;
+		});
+
+		setupServiceWorkerRegistration();
+		await Promise.resolve();
+
+		window.dispatchEvent(new Event("load"));
+		vi.advanceTimersByTime(2000);
+		await vi.runAllTimersAsync();
+
+		expect(warnSpy).toHaveBeenCalledWith("Failed to register Service Worker", {
+			error: registrationError,
+		});
+		expect(errorSpy).not.toHaveBeenCalled();
 	});
 
 	it("should attempt to register the service worker with immediate: true after the window loads", async () => {
@@ -831,6 +902,28 @@ describe("activateLatestServiceWorker", () => {
 });
 
 describe("evictStaleServiceWorkers", () => {
+	let originalServiceWorker: ServiceWorkerContainer | undefined;
+	let originalCaches: CacheStorage | undefined;
+
+	beforeEach(() => {
+		originalServiceWorker = window.navigator.serviceWorker;
+		originalCaches = window.caches;
+	});
+
+	afterEach(() => {
+		vi.restoreAllMocks();
+		Object.defineProperty(window.navigator, "serviceWorker", {
+			configurable: true,
+			value: originalServiceWorker,
+			writable: true,
+		});
+		Object.defineProperty(window, "caches", {
+			configurable: true,
+			value: originalCaches,
+			writable: true,
+		});
+	});
+
 	it("should unregister all active service worker registrations and purge CacheStorage", async () => {
 		const mockUnregister1 = vi.fn().mockResolvedValue(true);
 		const mockUnregister2 = vi.fn().mockResolvedValue(true);
@@ -885,14 +978,19 @@ describe("evictStaleServiceWorkers", () => {
 	});
 
 	it("should handle unregister and cache errors gracefully without throwing", async () => {
-		const mockGetRegistrations = vi.fn().mockRejectedValue(new Error("SecurityError"));
+		const warnSpy = vi.spyOn(Logger, "warn").mockImplementation(() => {});
+		const errorSpy = vi.spyOn(Logger, "error").mockImplementation(() => {});
+		const unregisterError = new Error("SecurityError");
+		const cacheError = new Error("Cache access denied");
+
+		const mockGetRegistrations = vi.fn().mockRejectedValue(unregisterError);
 		Object.defineProperty(window.navigator, "serviceWorker", {
 			configurable: true,
 			value: { getRegistrations: mockGetRegistrations },
 			writable: true,
 		});
 
-		const mockCacheKeys = vi.fn().mockRejectedValue(new Error("Cache access denied"));
+		const mockCacheKeys = vi.fn().mockRejectedValue(cacheError);
 		Object.defineProperty(window, "caches", {
 			configurable: true,
 			value: { keys: mockCacheKeys },
@@ -902,12 +1000,21 @@ describe("evictStaleServiceWorkers", () => {
 		const result = await evictStaleServiceWorkers();
 
 		expect(result).toBe(false);
+		expect(warnSpy).toHaveBeenCalledWith(
+			"Failed to unregister service workers during eviction",
+			{ error: unregisterError },
+		);
+		expect(warnSpy).toHaveBeenCalledWith("Failed to delete cache storage during eviction", {
+			error: cacheError,
+		});
+		expect(errorSpy).not.toHaveBeenCalled();
 	});
 });
 
 describe("verifyStagedUpdateFreshness", () => {
 	beforeEach(() => {
 		vi.stubGlobal("fetch", vi.fn());
+		vi.spyOn(Logger, "info").mockImplementation(() => {});
 	});
 
 	afterEach(() => {
@@ -916,7 +1023,6 @@ describe("verifyStagedUpdateFreshness", () => {
 	});
 
 	it("returns true and does not call updateSW when version.json indicates a newer release", async () => {
-		const { verifyStagedUpdateFreshness } = await import("./setupServiceWorker");
 		const mockUpdateSW = vi.fn();
 		vi.mocked(globalThis.fetch).mockResolvedValueOnce(
 			new Response(
@@ -935,7 +1041,6 @@ describe("verifyStagedUpdateFreshness", () => {
 	});
 
 	it("returns false and triggers Silent Background Activation updateSW(false) when version.json matches current build", async () => {
-		const { verifyStagedUpdateFreshness } = await import("./setupServiceWorker");
 		const mockUpdateSW = vi.fn().mockResolvedValue(undefined);
 		vi.mocked(globalThis.fetch).mockResolvedValueOnce(
 			new Response(
@@ -953,18 +1058,26 @@ describe("verifyStagedUpdateFreshness", () => {
 		expect(mockUpdateSW).toHaveBeenCalledWith(false);
 	});
 
-	it("returns true on network error or missing version fields as a fail-safe", async () => {
-		const { verifyStagedUpdateFreshness } = await import("./setupServiceWorker");
+	it("returns true on network error or missing version fields as a fail-safe and logs via Logger.warn", async () => {
+		const warnSpy = vi.spyOn(Logger, "warn").mockImplementation(() => {});
+		const errorSpy = vi.spyOn(Logger, "error").mockImplementation(() => {});
 		const mockUpdateSW = vi.fn();
-		vi.mocked(globalThis.fetch).mockRejectedValueOnce(new Error("Offline"));
+		const offlineError = new Error("Offline");
+		vi.mocked(globalThis.fetch).mockRejectedValueOnce(offlineError);
 
 		await expect(verifyStagedUpdateFreshness(mockUpdateSW)).resolves.toBe(true);
+		expect(warnSpy).toHaveBeenCalledWith(
+			"Failed to verify version freshness; falling back to prompt",
+			{ error: offlineError },
+		);
 
 		vi.mocked(globalThis.fetch).mockResolvedValueOnce(
 			new Response(JSON.stringify({}), { status: 200 }),
 		);
 
 		await expect(verifyStagedUpdateFreshness(mockUpdateSW)).resolves.toBe(true);
+		expect(warnSpy).toHaveBeenCalledTimes(2);
+		expect(errorSpy).not.toHaveBeenCalled();
 	});
 });
 
@@ -979,7 +1092,6 @@ describe("applyStagedServiceWorkerUpdate", () => {
 	});
 
 	it("invokes activateLatestServiceWorker and schedules 2.5s fallback reload", async () => {
-		const { applyStagedServiceWorkerUpdate } = await import("./setupServiceWorker");
 		const originalLocation = window.location;
 		const mockReload = vi.fn();
 
@@ -1008,7 +1120,6 @@ describe("applyStagedServiceWorkerUpdate", () => {
 	});
 
 	it("evicts stale service workers and caches and reloads when activation rejects", async () => {
-		const { applyStagedServiceWorkerUpdate } = await import("./setupServiceWorker");
 		const originalLocation = window.location;
 		const originalServiceWorker = navigator.serviceWorker;
 		const originalCaches = window.caches;

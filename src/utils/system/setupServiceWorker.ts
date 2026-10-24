@@ -281,7 +281,7 @@ export async function evictStaleServiceWorkers(): Promise<boolean> {
 				unregisteredAny = true;
 			}
 		} catch (error) {
-			Logger.error("Failed to unregister service workers during eviction", { error });
+			Logger.warn("Failed to unregister service workers during eviction", { error });
 		}
 	}
 
@@ -290,7 +290,7 @@ export async function evictStaleServiceWorkers(): Promise<boolean> {
 			const cacheNames = await caches.keys();
 			await Promise.all(cacheNames.map((name) => caches.delete(name)));
 		} catch (error) {
-			Logger.error("Failed to delete cache storage during eviction", { error });
+			Logger.warn("Failed to delete cache storage during eviction", { error });
 		}
 	}
 
@@ -447,13 +447,13 @@ export function setupServiceWorkerRegistration() {
 						);
 					},
 					onRegisterError(error) {
-						Logger.error("Service Worker registration failed", error);
+						Logger.warn("Service Worker registration failed", { error });
 					},
 				});
 			} catch (error) {
 				// Silently catch PWA registration errors
-				// We log it but don't re-throw.
-				Logger.error("Failed to register Service Worker", error);
+				// We log it as a warning but don't re-throw.
+				Logger.warn("Failed to register Service Worker", { error });
 			}
 		};
 
@@ -542,7 +542,7 @@ export async function verifyStagedUpdateFreshness(
 
 		return false;
 	} catch (error) {
-		Logger.error("Failed to verify version freshness; falling back to prompt", {
+		Logger.warn("Failed to verify version freshness; falling back to prompt", {
 			error,
 		});
 
