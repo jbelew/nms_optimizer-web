@@ -7,6 +7,7 @@ import { fetchPlatforms, resolveInitialPlatform } from "@/store/app/platformStor
 import { initializeAnalytics } from "@/utils/analytics/tracking";
 import { setupServiceWorkerRegistration } from "@/utils/system/setupServiceWorker";
 
+import type * as MonitoringModule from "./monitoring";
 import {
 	bootApp,
 	handleFatalBootstrapError,
@@ -38,15 +39,20 @@ vi.mock("@/utils/system/setupServiceWorker", () => ({
 	setupServiceWorkerRegistration: vi.fn(),
 }));
 
-vi.mock("./monitoring", () => ({
-	flushSentry: vi.fn(async () => true),
-	initializeSentry: vi.fn(),
-	Logger: {
-		error: vi.fn(),
-		info: vi.fn(),
-		warn: vi.fn(),
-	},
-}));
+vi.mock("./monitoring", async (importOriginal) => {
+	const actual = await importOriginal<typeof MonitoringModule>();
+
+	return {
+		...actual,
+		flushSentry: vi.fn(async () => true),
+		initializeSentry: vi.fn(),
+		Logger: {
+			error: vi.fn(),
+			info: vi.fn(),
+			warn: vi.fn(),
+		},
+	};
+});
 
 vi.mock("vite-plugin-splash-screen/runtime", () => ({
 	hideSplashScreen: vi.fn(),
@@ -369,6 +375,63 @@ describe("bootPipeline", () => {
 				"Unhandled promise rejection:",
 				firstPartyError,
 			);
+
+			await act(async () => {
+				result.unmount();
+			});
+		});
+
+		it("should ignore AbortError exceptions and signal abort rejections in global error and unhandledrejection listeners", async () => {
+			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
+			const onFatalError = vi.fn();
+
+			let result!: Awaited<ReturnType<typeof bootApp>>;
+			await act(async () => {
+				result = await bootApp({
+					coordinator,
+					onFatalError,
+					rootComponent: <div>App</div>,
+					skipGlobalErrorHandlers: false,
+					target: container,
+				});
+			});
+
+			// 1. Before READY: AbortError in unhandledrejection or error should not mark coordinator FATAL
+			const abortRejection = new DOMException(
+				"signal is aborted without reason",
+				"AbortError",
+			);
+			abortRejection.stack = `AbortError: signal is aborted without reason\n    at finish (${window.location.origin}/src/utils/analytics/tracking.ts:200:15)`;
+
+			const rejectionEvent = new Event("unhandledrejection");
+			Object.assign(rejectionEvent, { reason: abortRejection });
+			window.dispatchEvent(rejectionEvent);
+
+			window.dispatchEvent(
+				new ErrorEvent("error", {
+					error: abortRejection,
+					filename: `${window.location.origin}/src/utils/analytics/tracking.ts`,
+					message: "AbortError: signal is aborted without reason",
+				}),
+			);
+
+			expect(coordinator.isFatal()).toBe(false);
+			expect(onFatalError).not.toHaveBeenCalled();
+			expect(Logger.error).not.toHaveBeenCalled();
+
+			// 2. After READY: AbortError in unhandledrejection or error should not call Logger.error
+			coordinator.markReady();
+
+			window.dispatchEvent(rejectionEvent);
+			window.dispatchEvent(
+				new ErrorEvent("error", {
+					error: null,
+					filename: `${window.location.origin}/src/utils/analytics/tracking.ts`,
+					message: "Uncaught AbortError: signal is aborted without reason",
+				}),
+			);
+
+			expect(Logger.error).not.toHaveBeenCalled();
 
 			await act(async () => {
 				result.unmount();

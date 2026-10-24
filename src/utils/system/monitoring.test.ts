@@ -294,6 +294,8 @@ describe("monitoring utilities", () => {
 						/error loading dynamically imported module/i,
 						/Unable to preload CSS/i,
 						/Stylesheet append timeout/i,
+						/\bAbortError\b/i,
+						/signal is aborted/i,
 					]),
 					integrations: expect.any(Function),
 				}),

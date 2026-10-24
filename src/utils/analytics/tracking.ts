@@ -177,6 +177,7 @@ const detectAdBlocker = (): Promise<boolean> => {
 
 	return new Promise<boolean>((resolve) => {
 		let settled = false;
+		let fetchSettled = false;
 		let failures = 0;
 		let successes = 0;
 
@@ -197,7 +198,9 @@ const detectAdBlocker = (): Promise<boolean> => {
 				timeoutId = null;
 			}
 
-			controller.abort();
+			if (!fetchSettled) {
+				controller.abort();
+			}
 
 			try {
 				script.remove();
@@ -245,10 +248,12 @@ const detectAdBlocker = (): Promise<boolean> => {
 					signal: controller.signal,
 				});
 
+				fetchSettled = true;
 				successes++;
 
 				if (successes + failures === probes.length) finish(failures > 0);
 			} catch {
+				fetchSettled = true;
 				failures++;
 				finish(true);
 			}

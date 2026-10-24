@@ -223,6 +223,40 @@ describe("Analytics Tracking", () => {
 			await tracking.initializeAnalytics();
 			expect(ReactGA.initialize).not.toHaveBeenCalled();
 		});
+
+		it("should only call AbortController.abort() when fetchProbe is still in flight and skip aborting once fetchProbe has settled", async () => {
+			const abortSpy = vi.spyOn(AbortController.prototype, "abort");
+			const fetchSpy = vi.spyOn(globalThis, "fetch");
+
+			// 1. Both probes succeed (fetchProbe settles before finish) -> abort() should not be called
+			fetchSpy.mockResolvedValue(new Response(null, { status: 200 }));
+
+			await tracking.initializeAnalytics();
+
+			expect(abortSpy).not.toHaveBeenCalled();
+			expect(ReactGA.initialize).toHaveBeenCalledTimes(1);
+
+			// 2. Spoofed GTM script loads while fetchProbe is still pending -> abort() should be called once
+			vi.mocked(ReactGA.initialize).mockClear();
+			tracking.resetAnalyticsForTesting();
+			Reflect.deleteProperty(window, "google_tag_manager");
+			fetchSpy.mockImplementation((input, init) => {
+				if (String(input).includes("google-analytics.com")) {
+					return new Promise<Response>((_resolve, reject) => {
+						init?.signal?.addEventListener("abort", () => {
+							reject(init.signal?.reason);
+						});
+					});
+				}
+
+				return Promise.resolve(new Response(null, { status: 200 }));
+			});
+
+			await tracking.initializeAnalytics();
+
+			expect(abortSpy).toHaveBeenCalledTimes(1);
+			expect(ReactGA.initialize).not.toHaveBeenCalled();
+		});
 	});
 
 	describe("Event Dispatching & Server Relay Fallback", () => {

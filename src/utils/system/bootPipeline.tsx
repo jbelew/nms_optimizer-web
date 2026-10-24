@@ -25,7 +25,7 @@ import {
 	handleFatalBootstrapError,
 	lifecycleCoordinator,
 } from "@/utils/system/lifecycleCoordinator";
-import { initializeSentry, Logger } from "@/utils/system/monitoring";
+import { initializeSentry, isAbortError, Logger } from "@/utils/system/monitoring";
 
 export { handleFatalBootstrapError };
 
@@ -284,7 +284,11 @@ export const bootApp = async (options: BootOptions = {}): Promise<BootResult> =>
 					return true;
 				}
 
-				if (/^Script error\.?$/i.test(errorMessage) || (!event.error && !errorMessage)) {
+				if (
+					isAbortError(errorName, errorMessage)
+					|| /^Script error\.?$/i.test(errorMessage)
+					|| (!event.error && !errorMessage)
+				) {
 					return;
 				}
 
@@ -327,6 +331,14 @@ export const bootApp = async (options: BootOptions = {}): Promise<BootResult> =>
 
 			const unhandledRejectionHandler = (event: PromiseRejectionEvent) => {
 				const reason = event.reason;
+				const reasonName = typeof reason?.name === "string" ? reason.name : "";
+				const reasonMessage =
+					typeof reason?.message === "string" ? reason.message : String(reason || "");
+
+				if (isAbortError(reasonName, reasonMessage)) {
+					return;
+				}
+
 				const stack = reason?.stack || "";
 
 				if (!isFirstPartySource(stack, false)) {

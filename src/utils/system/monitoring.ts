@@ -118,6 +118,39 @@ interface SentrySDK {
 const MAX_LOGS = 100;
 
 /**
+ * Shared regular expressions matching intentional `AbortController` / `AbortSignal` cancellations.
+ *
+ * @private
+ */
+const ABORT_ERROR_PATTERNS = [/\bAbortError\b/i, /signal is aborted/i] as const;
+
+/**
+ * Checks whether an error name or message represents an intentional `AbortController` / `AbortSignal` cancellation.
+ *
+ * @remarks
+ * Shared between `bootApp`'s global `error` and `unhandledrejection` listeners and Sentry's
+ * `ignoreErrors` filter so aborted `AbortSignal` reasons (such as `AbortError: signal is aborted without reason`)
+ * are suppressed consistently.
+ *
+ * @param name - The `error.name` string if available.
+ * @param message - The `error.message` or stringified rejection reason.
+ *
+ * @returns `true` if the error represents an `AbortError` cancellation.
+ *
+ * @see {@link initializeSentry}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * isAbortError("AbortError", "signal is aborted without reason");
+ * // returns true
+ * ```
+ */
+export const isAbortError = (name: string, message: string): boolean =>
+	name === "AbortError" || ABORT_ERROR_PATTERNS.some((pattern) => pattern.test(message));
+
+/**
  * Internal reference to Sentry SDK if initialized.
  * Proxies calls to Sentry without requiring static imports that would bloat the initial bundle.
  *
@@ -492,6 +525,7 @@ export const initializeSentry = async (): Promise<void> => {
 					/error loading dynamically imported module/i,
 					/Unable to preload CSS/i,
 					/Stylesheet append timeout/i,
+					...ABORT_ERROR_PATTERNS,
 					/Non-Error promise rejection captured/i,
 					/QuotaExceededError/i,
 				],
