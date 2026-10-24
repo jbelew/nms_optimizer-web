@@ -1,3 +1,10 @@
+## [8.6.6](https://github.com/jbelew/nms_optimizer-web/compare/v8.6.5...v8.6.6) (2026-10-24)
+
+
+### Bug Fixes
+
+* **images:** update exosuit asset images for improved quality ([aa717d0](https://github.com/jbelew/nms_optimizer-web/commit/aa717d0f730cb8aa7cf850ff9545140a8d2bfe29))
+
 ## [8.6.5](https://github.com/jbelew/nms_optimizer-web/compare/v8.6.4...v8.6.5) (2026-10-24)
 
 
