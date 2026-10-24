@@ -139,6 +139,9 @@
 			"warning": "–kzzkt– Warning! –kzzkt–",
 			"insufficientSpace": "There is not a large enough Solver Window to place the selected modules for <1>{{technologyName}}</1>. This usually happens when too many technologies are already placed on the grid.",
 			"insufficientSpaceWithWindow": "There is not a large enough Solver Window (requires <1>{{width}}×{{height}}</1>) to place the selected modules for <1>{{technologyName}}</1>. This usually happens when too many technologies are already placed on the grid.",
+			"superchargedInsufficientSpace": "There is not enough space around the available supercharged slots for the Solver Window for <1>{{technologyName}}</1>.",
+			"superchargedInsufficientSpaceWithWindow": "There is not enough space around the available supercharged slots for a <1>{{width}}×{{height}}</1> Solver Window for <1>{{technologyName}}</1>.",
+			"superchargedForceOptimizeSuggestion": "Clear other technologies to make space, and optimize the technologies that you want to supercharge first. You can also select <1>Force Optimize</1> to run a brute-force solve in the available slots.",
 			"forceOptimizeSuggestion": "You can try <1>Force Optimize</1> for a more intensive solve, but it may fail to find an optimal layout. Consider reordering your technologies or selecting fewer to improve the results.",
 			"cancelButton": "Cancel",
 			"forceOptimizeButton": "Force Optimize"

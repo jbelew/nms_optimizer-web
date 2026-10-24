@@ -3,6 +3,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { vi } from "vitest";
 
 import { useTechStore } from "@/store/tech/techStore";
+import { useOptimizeStore } from "@/store/ui/uiStore";
 
 import OptimizationAlertDialog from "./OptimizationAlertDialog";
 
@@ -30,6 +31,37 @@ vi.mock("react-i18next", () => ({
 				<span>
 					There&apos;s not a large enough window to effectively place the selected modules
 					for <span>{values?.technologyName}</span>.
+				</span>
+			);
+		}
+
+		if (i18nKey === "dialogs.optimizationAlert.superchargedInsufficientSpaceWithWindow") {
+			return (
+				<span>
+					There is not enough space around the available supercharged slots for a{" "}
+					<span>
+						{values?.width}×{values?.height}
+					</span>{" "}
+					Solver Window for <span>{values?.technologyName}</span>.
+				</span>
+			);
+		}
+
+		if (i18nKey === "dialogs.optimizationAlert.superchargedInsufficientSpace") {
+			return (
+				<span>
+					There is not enough space around the available supercharged slots for the Solver
+					Window for <span>{values?.technologyName}</span>.
+				</span>
+			);
+		}
+
+		if (i18nKey === "dialogs.optimizationAlert.superchargedForceOptimizeSuggestion") {
+			return (
+				<span>
+					Clear other technologies to make space, and optimize the technologies that you
+					want to supercharge first. You can also select <strong>Force Optimize</strong>{" "}
+					to run a brute-force solve in the available slots.
 				</span>
 			);
 		}
@@ -80,6 +112,9 @@ describe("OptimizationAlertDialog", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		mockOnForceOptimize.mockResolvedValue(undefined);
+		useOptimizeStore.setState({
+			status: { type: "idle" },
+		});
 		useTechStore.setState({
 			activeGroups: {},
 			checkedModules: {},
@@ -388,5 +423,63 @@ describe("OptimizationAlertDialog", () => {
 		expect(
 			await screen.findByText("dialogs.optimizationAlert.forceOptimizeSuggestion"),
 		).toBeInTheDocument();
+	});
+
+	test("renders ASD-STE100 Supercharged No Fit copy with Solver Window dimensions when warning reason is supercharged_no_fit", async () => {
+		useOptimizeStore.getState().setPatternNoFitTech("pulse", "supercharged_no_fit");
+		useTechStore.setState({
+			activeGroups: { pulse: "normal" },
+			checkedModules: {
+				pulse: ["PE", "PC", "PU1", "PU2", "PU3"],
+			},
+			techGroups: {
+				pulse: [
+					{
+						color: "blue",
+						image: "pulse.webp",
+						key: "pulse",
+						label: "Pulse Engine",
+						module_count: 5,
+						modules: [],
+						type: "normal",
+						window_rules: {
+							"6": [3, 2],
+							default: [4, 4],
+						},
+					},
+				],
+			},
+		});
+
+		render(<OptimizationAlertDialog />);
+
+		expect(
+			await screen.findByText(
+				/There is not enough space around the available supercharged slots for a/i,
+			),
+		).toBeInTheDocument();
+		expect(screen.getByText("3×2")).toBeInTheDocument();
+		expect(screen.getByText("pulse")).toBeInTheDocument();
+		expect(screen.getByText(/Clear other technologies to make space/i)).toBeInTheDocument();
+		expect(
+			screen.queryByText("dialogs.optimizationAlert.forceOptimizeSuggestion"),
+		).not.toBeInTheDocument();
+	});
+
+	test("falls back to generic Supercharged No Fit warning text when Solver Window dimensions are unavailable", async () => {
+		useOptimizeStore.getState().setPatternNoFitTech("unknown-tech", "supercharged_no_fit");
+
+		render(<OptimizationAlertDialog />);
+
+		expect(
+			await screen.findByText(
+				/There is not enough space around the available supercharged slots for the Solver Window for/i,
+			),
+		).toBeInTheDocument();
+		expect(screen.getByText("unknown-tech")).toBeInTheDocument();
+		expect(screen.getByText(/Clear other technologies to make space/i)).toBeInTheDocument();
+		expect(
+			screen.queryByText("dialogs.optimizationAlert.forceOptimizeSuggestion"),
+		).not.toBeInTheDocument();
 	});
 });

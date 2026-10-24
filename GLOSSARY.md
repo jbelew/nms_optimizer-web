@@ -96,6 +96,10 @@ _Avoid_: client fallback, prerendered markdown, noscript shell
 The optimization condition where a precomputed adjacency pattern for a Technology Category cannot fit within any contiguous region of available active slots matching its required Solver Window dimensions.
 _Avoid_: pattern error, no-fit warning, PNF state
 
+**Supercharged No Fit**:
+The optimization condition where unoccupied active supercharged slots exist on the grid and the Technology Category includes supercharge-eligible modules, but no contiguous region of available active slots around any unoccupied supercharged slot matches the required Solver Window dimensions.
+_Avoid_: supercharged window error, SC no-fit, missed supercharge warning
+
 **Forced Solve**:
 A fallback optimization pass initiated by the user after a Pattern No Fit warning that bypasses precomputed pattern templates in favor of full simulated annealing across available grid slots.
 _Avoid_: force optimize, brute-force solve, fallback solve

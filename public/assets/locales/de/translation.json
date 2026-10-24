@@ -115,6 +115,9 @@
 			"warning": "–kzzkt– Warnung! –kzzkt–",
 			"insufficientSpace": "Es gibt keinen ausreichend großen Bereich, um die ausgewählten Module für <1>{{technologyName}}</1> effektiv zu platzieren. Dies passiert oft, wenn zu viele Technologien gleichzeitig ausgewählt sind.",
 			"insufficientSpaceWithWindow": "Es gibt keinen ausreichend großen Bereich (erfordert <1>{{width}}×{{height}}</1>), um die ausgewählten Module für <1>{{technologyName}}</1> effektiv zu platzieren. Dies passiert oft, wenn zu viele Technologien gleichzeitig ausgewählt sind.",
+			"superchargedInsufficientSpace": "Um die verfügbaren Turbolader-Plätze ist nicht genug Platz für das Solver-Fenster für <1>{{technologyName}}</1>.",
+			"superchargedInsufficientSpaceWithWindow": "Um die verfügbaren Turbolader-Plätze ist nicht genug Platz für ein <1>{{width}}×{{height}}</1>-Solver-Fenster für <1>{{technologyName}}</1>.",
+			"superchargedForceOptimizeSuggestion": "Entfernen Sie andere Technologien, um Platz zu schaffen, und optimieren Sie zuerst die Technologien, die Sie überladen möchten. Sie können auch <1>\"Optimierung Erzwingen\"</1> wählen, um eine Brute-Force-Berechnung in den verfügbaren Plätzen auszuführen.",
 			"forceOptimizeSuggestion": "Du kannst <1>\"Optimierung Erzwingen\"</1> für eine intensivere Berechnung versuchen, aber es wird eventuell kein ideales Layout gefunden. Erwäge, deine Technologien umzusortieren oder weniger auszuwählen.",
 			"cancelButton": "Abbrechen",
 			"forceOptimizeButton": "Optimierung Erzwingen"

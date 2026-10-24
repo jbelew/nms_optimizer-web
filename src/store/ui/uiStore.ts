@@ -11,6 +11,17 @@ const SHAKE_ANIMATION_DURATION = 500;
 let lastShakeTime = 0;
 
 /**
+ * Canonical warning reasons emitted when an unforced optimization solve cannot place a Solver Window.
+ *
+ * @remarks
+ * - `pattern_no_fit`: **Pattern No Fit** — no contiguous region of available active slots matches the required Solver Window dimensions.
+ * - `supercharged_no_fit`: **Supercharged No Fit** — unoccupied active supercharged slots exist and the technology includes supercharge-eligible modules, but no Solver Window fits around any open supercharged slot.
+ *
+ * @category State
+ */
+export type OptimizeWarningReason = "pattern_no_fit" | "supercharged_no_fit";
+
+/**
  * Actions shape for the UI store.
  *
  * @category Actions
@@ -40,8 +51,8 @@ export interface UiActions {
 	setGridSectionHeight: (height: null | number) => void;
 	/** Sets the grid table total width. */
 	setGridTableWidth: (width: number | undefined) => void;
-	/** Sets or clears the current "Pattern No Fit" technology warning. */
-	setPatternNoFitTech: (tech: null | string) => void;
+	/** Sets or clears the active Pattern No Fit or Supercharged No Fit technology warning and reason. */
+	setPatternNoFitTech: (tech: null | string, reason?: OptimizeWarningReason) => void;
 	/** Updates the optimization progress percentage. */
 	setProgressPercent: (percent: number) => void;
 	/** Updates the error visibility and metadata. */
@@ -94,7 +105,7 @@ type OptimizeErrorType = "fatal" | "recoverable";
  * Tracks the lifecycle of a WebSocket-based optimization request:
  * - `idle`: No active solve.
  * - `solving`: Active connection with real-time progress updates.
- * - `warning`: Handled edge cases like "Pattern No Fit" (PNF).
+ * - `warning`: Handled edge cases like **Pattern No Fit** or **Supercharged No Fit**.
  * - `error`: Fatal or recoverable failures reported by the backend.
  *
  * @category State
@@ -102,7 +113,7 @@ type OptimizeErrorType = "fatal" | "recoverable";
 type OptimizeStatus =
 	| { details: Error | null; severity: OptimizeErrorType; type: "error" }
 	| { progress: number; type: "solving" }
-	| { tech: string; type: "warning" }
+	| { reason: OptimizeWarningReason; tech: string; type: "warning" }
 	| { type: "idle" };
 
 /**
@@ -234,10 +245,10 @@ export const useUiStore = create<UiStore>()(
 				setAppearance: (appearance) => set({ appearance }),
 				setGridSectionHeight: (gridSectionHeight) => set({ gridSectionHeight }),
 				setGridTableWidth: (gridTableWidth) => set({ gridTableWidth }),
-				setPatternNoFitTech: (tech) =>
+				setPatternNoFitTech: (tech, reason = "pattern_no_fit") =>
 					set((state) => ({
 						optimizeStatus:
-							tech ? { tech, type: "warning" }
+							tech ? { reason, tech, type: "warning" }
 							: state.optimizeStatus.type === "warning" ? { type: "idle" }
 							: state.optimizeStatus,
 					})),
@@ -319,10 +330,15 @@ export interface ModuleSelectionDialogState {
  * Shape of the backward-compatible OptimizeState interface.
  */
 export interface OptimizeState {
-	setPatternNoFitTech: (tech: null | string) => void;
+	/** Sets or clears the active Pattern No Fit or Supercharged No Fit technology warning and reason. */
+	setPatternNoFitTech: (tech: null | string, reason?: OptimizeWarningReason) => void;
+	/** Updates the optimization progress percentage. */
 	setProgressPercent: (percent: number) => void;
+	/** Updates the error visibility and metadata. */
 	setShowError: (show: boolean, severity?: OptimizeErrorType, details?: Error | null) => void;
+	/** Updates the "solving" status. */
 	setSolving: (solving: boolean) => void;
+	/** Current optimization engine status. */
 	status: OptimizeStatus;
 }
 

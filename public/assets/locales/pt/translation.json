@@ -115,6 +115,9 @@
 			"warning": "–kzzkt– Aviso! –kzzkt–",
 			"insufficientSpace": "Não há espaço suficiente para posicionar eficazmente os módulos selecionados para <1>{{technologyName}}</1>. Isso geralmente acontece quando muitas tecnologias são selecionadas.",
 			"insufficientSpaceWithWindow": "Não há espaço suficiente (requer <1>{{width}}×{{height}}</1>) para posicionar eficazmente os módulos selecionados para <1>{{technologyName}}</1>. Isso geralmente acontece quando muitas tecnologias são selecionadas.",
+			"superchargedInsufficientSpace": "Não há espaço suficiente ao redor dos espaços sobrecarregados disponíveis para a janela de cálculo de <1>{{technologyName}}</1>.",
+			"superchargedInsufficientSpaceWithWindow": "Não há espaço suficiente ao redor dos espaços sobrecarregados disponíveis para uma janela de cálculo de <1>{{width}}×{{height}}</1> para <1>{{technologyName}}</1>.",
+			"superchargedForceOptimizeSuggestion": "Limpe outras tecnologias para abrir espaço e otimize primeiro as tecnologias que você deseja sobrecarregar. Você também pode selecionar <1>\"Forçar Otimização\"</1> para executar uma resolução por força bruta nos espaços disponíveis.",
 			"forceOptimizeSuggestion": "Você pode tentar a <1>\"Otimização Forçada\"</1> para uma busca mais intensiva, mas ela pode não encontrar o layout ideal. Considere reordenar suas tecnologias ou selecionar menos módulos.",
 			"cancelButton": "Cancelar",
 			"forceOptimizeButton": "Forçar Otimização"

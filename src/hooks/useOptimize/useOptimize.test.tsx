@@ -353,11 +353,13 @@ describe("useOptimize", () => {
 			});
 
 			const status = useOptimizeStore.getState().status;
-			expect(status.type).toBe("warning");
-
-			if (status.type === "warning") {
-				expect(status.tech).toBe("Test Tech");
-			}
+			expect(status).toEqual({
+				reason: "pattern_no_fit",
+				tech: "Test Tech",
+				type: "warning",
+			});
+			expect(result.current.patternNoFitTech).toBe("Test Tech");
+			expect(result.current.warningReason).toBe("pattern_no_fit");
 
 			expect(result.current.solving).toBe(false);
 			expect(mockSendEvent).toHaveBeenCalledWith(
@@ -383,6 +385,84 @@ describe("useOptimize", () => {
 					tech: "Test Tech",
 				}),
 			);
+		});
+
+		it("should handle Supercharged No Fit warning when forced=false and commit result when forced=true", async () => {
+			const { result } = renderHook(() => useOptimize());
+
+			await act(async () => {
+				await result.current.handleOptimize("pulse");
+			});
+
+			const resultCallback = getSocketListener<(data: Record<string, unknown>) => void>(
+				mockSocket.once.mock.calls,
+				"optimization_result",
+			);
+
+			act(() => {
+				resultCallback({
+					grid: null,
+					solveMethod: "Supercharged No Fit",
+				});
+			});
+
+			expect(useOptimizeStore.getState().status).toEqual({
+				reason: "supercharged_no_fit",
+				tech: "pulse",
+				type: "warning",
+			});
+			expect(result.current.patternNoFitTech).toBe("pulse");
+			expect(result.current.warningReason).toBe("supercharged_no_fit");
+			expect(result.current.solving).toBe(false);
+			expect(mockSetResult).not.toHaveBeenCalled();
+			expect(mockSendEvent).toHaveBeenCalledWith(
+				expect.objectContaining({
+					action: "no_fit_warning",
+					module_count: 0,
+					platform: "standard",
+					tech: "pulse",
+				}),
+			);
+
+			const forcedSocket = createMockSocket();
+			mockIo.mockReturnValueOnce(forcedSocket as unknown as Socket);
+
+			await act(async () => {
+				await result.current.handleForceCurrentPnfOptimize();
+			});
+
+			expect(forcedSocket.emit).toHaveBeenCalledWith(
+				"optimize",
+				expect.objectContaining({
+					forced: true,
+					tech: "pulse",
+				}),
+			);
+
+			const forcedResultCallback = getSocketListener<(data: Record<string, unknown>) => void>(
+				forcedSocket.once.mock.calls,
+				"optimization_result",
+			);
+			const solvedGrid = { cells: [], height: 7, valid: true, width: 7 };
+
+			act(() => {
+				forcedResultCallback({
+					grid: solvedGrid,
+					max_bonus: 100,
+					solve_method: "Supercharged No Fit",
+					solved_bonus: 100,
+				});
+			});
+
+			expect(mockSetResult).toHaveBeenCalledWith({
+				grid: solvedGrid,
+				maxBonus: 100,
+				solvedBonus: 100,
+				solveMethod: "Supercharged No Fit",
+			});
+			expect(result.current.patternNoFitTech).toBeNull();
+			expect(result.current.warningReason).toBeNull();
+			expect(result.current.solving).toBe(false);
 		});
 
 		it("should retry on transient transport errors and fail after MAX_TRANSPORT_RETRIES", async () => {

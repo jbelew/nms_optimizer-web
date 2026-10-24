@@ -3,6 +3,7 @@ import type { ManagerOptions, Socket, SocketOptions } from "socket.io-client";
 import { useShallow } from "zustand/react/shallow";
 
 import type { ApiResponse, Grid } from "@/store/grid/gridStore";
+import type { OptimizeWarningReason } from "@/store/ui/uiStore";
 import { WS_URL } from "@/constants";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useLatest } from "@/hooks/useLatest/useLatest";
@@ -23,11 +24,11 @@ import { Logger } from "@/utils/system/monitoring";
  * @category Hooks
  */
 export interface UseOptimizeReturn {
-	/** Function to clear the "Pattern No Fit" warning state. */
+	/** Function to clear the active optimization warning state. */
 	clearPatternNoFitTech: () => void;
 	/** Ref to the grid container for automated scrolling. */
 	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
-	/** Function to re-run optimization with a Forced Solve for the current Pattern No Fit technology. */
+	/** Function to re-run optimization with a Forced Solve for the current warning technology. */
 	handleForceCurrentPnfOptimize: () => Promise<void>;
 	/**
 	 * Initiates optimization for a specific Technology Category.
@@ -38,10 +39,12 @@ export interface UseOptimizeReturn {
 	 * @returns Resolves when the optimization request is dispatched.
 	 */
 	handleOptimize: (tech: string, forced?: boolean) => Promise<void>;
-	/** The Technology Category identifier that encountered a Pattern No Fit warning, if any. */
+	/** The Technology Category identifier that encountered a Pattern No Fit or Supercharged No Fit warning, if any. */
 	patternNoFitTech: null | string;
 	/** Whether an optimization solve is currently in progress. */
 	solving: boolean;
+	/** The optimization warning reason when `patternNoFitTech` is active, if any. */
+	warningReason?: null | OptimizeWarningReason;
 }
 
 /** Maximum number of silent transport-error retries before surfacing the error modal. */
@@ -169,7 +172,7 @@ function resolveAnalyticsTechName(
  * 1. Enforcing the full-grid Slot Restriction shake guard (`isGridFull && !hasTechInGrid`) via {@link useShakeStore}.
  * 2. Executing a pre-solve **Technology Reset** via {@link sessionCoordinator.resetTechnology}.
  * 3. Managing the Socket.IO connection lifecycle, up to {@link MAX_TRANSPORT_RETRIES} silent transport retries, and wire-format translation.
- * 4. Synchronizing solve progress, **Pattern No Fit** warnings, **Forced Solve** retries, and atomic result commits via {@link sessionCoordinator.commitOptimizationResult} and {@link useOptimizeStore}.
+ * 4. Synchronizing solve progress, **Pattern No Fit** and **Supercharged No Fit** warnings, **Forced Solve** retries, and atomic result commits via {@link sessionCoordinator.commitOptimizationResult} and {@link useOptimizeStore}.
  * 5. Handling automatic viewport scrolling on compact viewports and dispatching analytics events.
  *
  * Because the active socket session and in-flight lock are module-scoped, multiple callers
@@ -208,6 +211,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 		setShowErrorStore,
 		setSolving,
 		solving,
+		warningReason,
 	} = useOptimizeStore(
 		useShallow((s) => ({
 			patternNoFitTech: s.status.type === "warning" ? s.status.tech : null,
@@ -216,6 +220,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 			setShowErrorStore: s.setShowError,
 			setSolving: s.setSolving,
 			solving: s.status.type === "solving",
+			warningReason: s.status.type === "warning" ? s.status.reason : null,
 		})),
 	);
 
@@ -373,13 +378,25 @@ export const useOptimize = (): UseOptimizeReturn => {
 					const translatedData = parseOptimizationResult(data);
 
 					if (translatedData) {
-						if (translatedData.solveMethod === "Pattern No Fit" && !forced) {
+						const isSuperchargedNoFit =
+							translatedData.solveMethod === "Supercharged No Fit";
+						const isPlacementWarning =
+							(translatedData.solveMethod === "Pattern No Fit" || isSuperchargedNoFit)
+							&& !forced;
+
+						if (isPlacementWarning) {
 							if (mountedCount > 0) {
-								Logger.info(`Optimization "Pattern No Fit" for ${tech}`, {
-									platform: selectedShipTypeRef.current,
-									tech,
-								});
-								setPatternNoFitTech(tech);
+								const nextWarningReason: OptimizeWarningReason =
+									isSuperchargedNoFit ? "supercharged_no_fit" : "pattern_no_fit";
+
+								Logger.info(
+									`Optimization "${translatedData.solveMethod}" for ${tech}`,
+									{
+										platform: selectedShipTypeRef.current,
+										tech,
+									},
+								);
+								setPatternNoFitTech(tech, nextWarningReason);
 								sendEvent({
 									action: "no_fit_warning",
 									category: "ui",
@@ -567,5 +584,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 		handleOptimize,
 		patternNoFitTech,
 		solving,
+		warningReason,
 	};
 };

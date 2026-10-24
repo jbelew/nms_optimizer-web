@@ -115,6 +115,9 @@
 			"warning": "–kzzkt– ¡Advertencia! –kzzkt–",
 			"insufficientSpace": "No hay una ventana lo suficientemente grande para colocar eficazmente los módulos seleccionados para <1>{{technologyName}}</1>. Esto suele ocurrir cuando se seleccionan demasiadas tecnologías en tu diseño.",
 			"insufficientSpaceWithWindow": "No hay una ventana lo suficientemente grande (requiere <1>{{width}}×{{height}}</1>) para colocar eficazmente los módulos seleccionados para <1>{{technologyName}}</1>. Esto suele ocurrir cuando se seleccionan demasiadas tecnologías en tu diseño.",
+			"superchargedInsufficientSpace": "No hay espacio suficiente alrededor de las ranuras sobrecargadas disponibles para la ventana de cálculo de <1>{{technologyName}}</1>.",
+			"superchargedInsufficientSpaceWithWindow": "No hay espacio suficiente alrededor de las ranuras sobrecargadas disponibles para una ventana de cálculo de <1>{{width}}×{{height}}</1> para <1>{{technologyName}}</1>.",
+			"superchargedForceOptimizeSuggestion": "Borre otras tecnologías para hacer espacio y optimice primero las tecnologías que desee sobrecargar. También puede seleccionar <1>\"Forzar Optimización\"</1> para ejecutar una resolución por fuerza bruta en las ranuras disponibles.",
 			"forceOptimizeSuggestion": "Puedes intentar <1>\"Forzar Optimización\"</1> para una resolución más intensiva, pero es posible que no encuentre un diseño óptimo. Considera reordenar tus tecnologías o seleccionar menos para mejorar los resultados.",
 			"cancelButton": "Cancelar",
 			"forceOptimizeButton": "Forzar Optimización"

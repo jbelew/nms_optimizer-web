@@ -4,6 +4,7 @@ import { Button, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
+import type { OptimizeWarningReason } from "@/store/ui/uiStore";
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { useOptimize } from "@/hooks/useOptimize/useOptimize";
 import { resolveActiveTechVariant } from "@/store/tech/techRules";
@@ -15,7 +16,7 @@ import { determineWindowDimensions } from "@/utils/optimization/windowDimensions
  *
  * @remarks
  * All props are optional; when omitted, the dialog subscribes directly to
- * {@link useOptimize} for Pattern No Fit state and actions.
+ * {@link useOptimize} for Pattern No Fit and Supercharged No Fit warning state and actions.
  */
 interface OptimizationAlertDialogProps {
 	/** Optional override for whether the alert dialog is currently visible. */
@@ -26,15 +27,18 @@ interface OptimizationAlertDialogProps {
 	onForceOptimize?: () => Promise<void>;
 	/** Optional override for the Technology Category identifier that triggered the alert. */
 	technologyName?: null | string;
+	/** Optional override for the optimization warning reason (`"pattern_no_fit"` or `"supercharged_no_fit"`). */
+	warningReason?: null | OptimizeWarningReason;
 }
 
 /**
- * A modal dialog that warns users on a Pattern No Fit optimization result and offers a Forced Solve.
+ * A modal dialog that warns users on a Pattern No Fit or Supercharged No Fit optimization result and offers a Forced Solve.
  *
  * @remarks
  * Consumes {@link useOptimize} directly (with optional prop overrides for stories/tests),
  * derives the required Solver Window dimensions from the failed Technology Category
- * and its active Module Selection count in {@link useTechStore}, and provides the user with
+ * and its active Module Selection count in {@link useTechStore}, renders ASD-STE100
+ * warning copy tailored to the active {@link OptimizeWarningReason}, and provides the user with
  * two choices: dismiss the warning or attempt a Forced Solve using simulated annealing.
  *
  * @returns The rendered dialog, or `null` if no Technology Category is targeted.
@@ -62,12 +66,21 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 	onClose: onCloseProp,
 	onForceOptimize: onForceOptimizeProp,
 	technologyName: technologyNameProp,
+	warningReason: warningReasonProp,
 } = {}) => {
 	const { t } = useTranslation();
-	const { clearPatternNoFitTech, handleForceCurrentPnfOptimize, patternNoFitTech } =
-		useOptimize();
+	const {
+		clearPatternNoFitTech,
+		handleForceCurrentPnfOptimize,
+		patternNoFitTech,
+		warningReason: storeWarningReason,
+	} = useOptimize();
 
 	const technologyName = technologyNameProp !== undefined ? technologyNameProp : patternNoFitTech;
+	const warningReason =
+		warningReasonProp !== undefined ? warningReasonProp : (
+			(storeWarningReason ?? "pattern_no_fit")
+		);
 	const isOpen = isOpenProp !== undefined ? isOpenProp : Boolean(technologyName);
 	const onClose = onCloseProp ?? clearPatternNoFitTech;
 	const onForceOptimize = onForceOptimizeProp ?? handleForceCurrentPnfOptimize;
@@ -106,7 +119,11 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 						),
 					}}
 					i18nKey={
-						windowDimensions ?
+						warningReason === "supercharged_no_fit" ?
+							windowDimensions ?
+								"dialogs.optimizationAlert.superchargedInsufficientSpaceWithWindow"
+							:	"dialogs.optimizationAlert.superchargedInsufficientSpace"
+						: windowDimensions ?
 							"dialogs.optimizationAlert.insufficientSpaceWithWindow"
 						:	"dialogs.optimizationAlert.insufficientSpace"
 					}
@@ -126,7 +143,11 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 					components={{
 						1: <strong className="font-bold" />,
 					}}
-					i18nKey="dialogs.optimizationAlert.forceOptimizeSuggestion"
+					i18nKey={
+						warningReason === "supercharged_no_fit" ?
+							"dialogs.optimizationAlert.superchargedForceOptimizeSuggestion"
+						:	"dialogs.optimizationAlert.forceOptimizeSuggestion"
+					}
 				/>
 			</Text>
 		</>
