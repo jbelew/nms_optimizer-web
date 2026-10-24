@@ -374,6 +374,95 @@ describe("bootPipeline", () => {
 				result.unmount();
 			});
 		});
+
+		it("should ignore masked cross-origin or empty ErrorEvents without a first-party stack and normalize string ErrorEvents from first-party files into Error instances", async () => {
+			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
+			const onFatalError = vi.fn();
+
+			let result!: Awaited<ReturnType<typeof bootApp>>;
+			await act(async () => {
+				result = await bootApp({
+					coordinator,
+					onFatalError,
+					rootComponent: <div>App</div>,
+					skipGlobalErrorHandlers: false,
+					target: container,
+				});
+			});
+
+			coordinator.markReady();
+
+			// 1. Masked cross-origin "Script error." with empty filename and null error
+			window.dispatchEvent(
+				new ErrorEvent("error", {
+					error: null,
+					filename: "",
+					message: "Script error.",
+				}),
+			);
+
+			// 2. Empty ErrorEvent with empty filename, empty message, and null error
+			window.dispatchEvent(
+				new ErrorEvent("error", {
+					error: null,
+					filename: "",
+					message: "",
+				}),
+			);
+
+			// 3. ErrorEvent with empty filename and third-party/anonymous stack
+			const thirdPartyInlineError = new Error("Injected WKWebView error");
+			thirdPartyInlineError.stack = "Error: Injected WKWebView error\n    at @:1:12";
+			window.dispatchEvent(
+				new ErrorEvent("error", {
+					error: thirdPartyInlineError,
+					filename: "",
+					message: "Injected WKWebView error",
+				}),
+			);
+
+			expect(Logger.error).not.toHaveBeenCalled();
+
+			// 4. ErrorEvent with empty filename but verifiable first-party stack
+			const firstPartyInlineError = new Error("Inline first-party failure");
+			firstPartyInlineError.stack = `Error: Inline first-party failure\n    at ${window.location.origin}/src/main.tsx:10:5`;
+			window.dispatchEvent(
+				new ErrorEvent("error", {
+					error: firstPartyInlineError,
+					filename: "",
+					message: "Inline first-party failure",
+				}),
+			);
+
+			expect(Logger.error).toHaveBeenCalledTimes(1);
+			expect(Logger.error).toHaveBeenCalledWith(
+				"Uncaught runtime error:",
+				firstPartyInlineError,
+			);
+
+			// 5. First-party ErrorEvent with null error (e.g., syntax error) normalizes message to Error instance
+			window.dispatchEvent(
+				new ErrorEvent("error", {
+					error: null,
+					filename: "/src/syntaxError.ts",
+					message: "Uncaught SyntaxError: Unexpected token",
+				}),
+			);
+
+			expect(Logger.error).toHaveBeenCalledTimes(2);
+			expect(Logger.error).toHaveBeenLastCalledWith(
+				"Uncaught runtime error:",
+				expect.objectContaining({
+					message: "Uncaught SyntaxError: Unexpected token",
+				}),
+			);
+			const lastReportedError = vi.mocked(Logger.error).mock.calls[1]?.[1];
+			expect(lastReportedError).toBeInstanceOf(Error);
+
+			await act(async () => {
+				result.unmount();
+			});
+		});
 	});
 
 	describe("Deferred Services Registration & Execution", () => {

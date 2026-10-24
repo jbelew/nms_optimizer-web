@@ -284,40 +284,45 @@ export const bootApp = async (options: BootOptions = {}): Promise<BootResult> =>
 					return true;
 				}
 
-				const filename = event.filename || "";
-
-				if (!isFirstPartySource(filename, true)) {
+				if (/^Script error\.?$/i.test(errorMessage) || (!event.error && !errorMessage)) {
 					return;
 				}
 
-				reportBootstrapOrRuntimeError(
-					"Uncaught runtime error:",
-					event.error || event.message,
-					event.error || new Error(errorMessage || "Uncaught initialization error"),
-				);
+				const filename = event.filename || "";
+				const isFirstParty =
+					filename ?
+						isFirstPartySource(filename, true)
+					:	isFirstPartySource(event.error?.stack || "", false);
+
+				if (!isFirstParty) {
+					return;
+				}
+
+				const normalizedError =
+					event.error instanceof Error ?
+						event.error
+					:	new Error(errorMessage || "Uncaught initialization error");
+
+				reportBootstrapOrRuntimeError("Uncaught runtime error:", normalizedError);
 			};
 
-			const isFirstPartySource = (source: string, allowEmptyOrRelative: boolean) =>
-				(allowEmptyOrRelative && (!source || source.startsWith("/")))
-				|| Boolean(
+			const isFirstPartySource = (source: string, allowRelativeRoot: boolean) =>
+				Boolean(
 					source
-					&& (source.includes(window.location.origin)
+					&& ((allowRelativeRoot && source.startsWith("/"))
+						|| source.includes(window.location.origin)
 						|| source.includes("/src/")
 						|| source.includes("/build/")),
 				);
 
-			const reportBootstrapOrRuntimeError = (
-				logMessage: string,
-				runtimePayload: unknown,
-				bootstrapFallback: unknown,
-			) => {
+			const reportBootstrapOrRuntimeError = (logMessage: string, error: Error) => {
 				if (!coordinator.isReady()) {
-					handleFatal(bootstrapFallback);
+					handleFatal(error);
 
 					return;
 				}
 
-				Logger.error(logMessage, runtimePayload);
+				Logger.error(logMessage, error);
 			};
 
 			const unhandledRejectionHandler = (event: PromiseRejectionEvent) => {
@@ -328,11 +333,12 @@ export const bootApp = async (options: BootOptions = {}): Promise<BootResult> =>
 					return;
 				}
 
-				reportBootstrapOrRuntimeError(
-					"Unhandled promise rejection:",
-					reason,
-					reason || new Error("Unhandled promise rejection during bootstrap"),
-				);
+				const normalizedReason =
+					reason instanceof Error ? reason : (
+						new Error(String(reason || "Unhandled promise rejection during bootstrap"))
+					);
+
+				reportBootstrapOrRuntimeError("Unhandled promise rejection:", normalizedReason);
 			};
 
 			window.addEventListener("error", errorHandler);
