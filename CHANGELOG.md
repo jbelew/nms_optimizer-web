@@ -1,3 +1,10 @@
+## [8.6.4](https://github.com/jbelew/nms_optimizer-web/compare/v8.6.3...v8.6.4) (2026-10-24)
+
+
+### Bug Fixes
+
+* **analytics:** only abort in-flight ad-blocker probe and ignore AbortError ([#810](https://github.com/jbelew/nms_optimizer-web/issues/810)) ([038bdda](https://github.com/jbelew/nms_optimizer-web/commit/038bdda3733d3e2c0399f5667104f8c3c344d00c))
+
 ## [8.6.3](https://github.com/jbelew/nms_optimizer-web/compare/v8.6.2...v8.6.3) (2026-10-24)
 
 
