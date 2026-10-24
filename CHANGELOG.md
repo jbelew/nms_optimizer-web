@@ -1,3 +1,12 @@
+## [8.6.3](https://github.com/jbelew/nms_optimizer-web/compare/v8.6.2...v8.6.3) (2026-10-24)
+
+
+### Bug Fixes
+
+* **monitoring:** prevent BrowserApiErrors wrapper from reporting third-party errors ([#807](https://github.com/jbelew/nms_optimizer-web/issues/807)) ([6e82ded](https://github.com/jbelew/nms_optimizer-web/commit/6e82dedce2a55c40fdaca563763159ee56b808ba))
+* **pwa:** detect Google WRS in isBot and warn on SW fallback errors ([#809](https://github.com/jbelew/nms_optimizer-web/issues/809)) ([a07a59f](https://github.com/jbelew/nms_optimizer-web/commit/a07a59fc82674ba76fa602b67bf28d45acc4a6ff))
+* **system:** ignore masked cross-origin ErrorEvents in bootApp ([#808](https://github.com/jbelew/nms_optimizer-web/issues/808)) ([4bf49cb](https://github.com/jbelew/nms_optimizer-web/commit/4bf49cb1f5a90dc1d1b8e1757eb26a265e80c752))
+
 ## [8.6.2](https://github.com/jbelew/nms_optimizer-web/compare/v8.6.1...v8.6.2) (2026-10-23)
 
 
