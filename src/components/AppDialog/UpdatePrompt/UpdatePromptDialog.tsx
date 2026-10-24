@@ -149,9 +149,13 @@ export const UpdatePromptDialog: FC = () => {
 			};
 
 			try {
-				const { verifyStagedUpdateFreshness } =
-					await import("@/utils/system/setupServiceWorker");
-				const shouldPrompt = await verifyStagedUpdateFreshness(updateSW);
+				const swModule = await import("@/utils/system/setupServiceWorker");
+
+				if (typeof swModule?.verifyStagedUpdateFreshness !== "function") {
+					return;
+				}
+
+				const shouldPrompt = await swModule.verifyStagedUpdateFreshness(updateSW);
 
 				if (shouldPrompt) {
 					openPrompt();
@@ -182,9 +186,11 @@ export const UpdatePromptDialog: FC = () => {
 
 	const handleRefresh = () => {
 		void import("@/utils/system/setupServiceWorker")
-			.then(({ applyStagedServiceWorkerUpdate }) =>
-				applyStagedServiceWorkerUpdate(updateSWRef.current),
-			)
+			.then((swModule) => {
+				if (typeof swModule?.applyStagedServiceWorkerUpdate === "function") {
+					return swModule.applyStagedServiceWorkerUpdate(updateSWRef.current);
+				}
+			})
 			.catch(() => {
 				window.location.reload();
 			});

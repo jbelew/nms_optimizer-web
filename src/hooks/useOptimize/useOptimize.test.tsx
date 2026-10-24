@@ -14,6 +14,7 @@ import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
 import { useOptimizeStore } from "@/store/ui/uiStore";
 import { sendEvent } from "@/utils/analytics/tracking";
+import { Logger } from "@/utils/system/monitoring";
 
 import { SOCKET_OPTIONS, useOptimize } from "./useOptimize";
 
@@ -204,8 +205,9 @@ describe("useOptimize", () => {
 		});
 
 		it("should handle socket initialization error", async () => {
+			const initError = new Error("Connection failed");
 			mockIo.mockImplementationOnce(() => {
-				throw new Error("Connection failed");
+				throw initError;
 			});
 
 			const { result } = renderHook(() => useOptimize());
@@ -214,8 +216,36 @@ describe("useOptimize", () => {
 				await result.current.handleOptimize("Test Tech");
 			});
 
+			expect(Logger.error).toHaveBeenCalledWith(
+				"Failed to create WebSocket instance",
+				initError,
+			);
 			expect(useOptimizeStore.getState().status.type).toBe("error");
 			expect(result.current.solving).toBe(false);
+		});
+
+		it("should stay pending without logging an error or showing the error modal when socket.io-client resolves without io during preload recovery", async () => {
+			const socketModule = (await import("socket.io-client")) as { io?: typeof io };
+			const savedIo = socketModule.io;
+			socketModule.io = undefined;
+
+			const { result, unmount } = renderHook(() => useOptimize());
+
+			try {
+				act(() => {
+					void result.current.handleOptimize("pulse");
+				});
+
+				await act(async () => {
+					await Promise.resolve();
+				});
+
+				expect(Logger.error).not.toHaveBeenCalled();
+				expect(useOptimizeStore.getState().status.type).toBe("solving");
+			} finally {
+				socketModule.io = savedIo;
+				unmount();
+			}
 		});
 
 		it("should update progress state and best_grid on 'progress' event", async () => {

@@ -201,9 +201,8 @@ export const registerDefaultDeferredServices = (
 		name: "service-worker",
 		priority: 0,
 		run: async () => {
-			const { setupServiceWorkerRegistration } =
-				await import("@/utils/system/setupServiceWorker");
-			setupServiceWorkerRegistration();
+			const swModule = await import("@/utils/system/setupServiceWorker");
+			swModule?.setupServiceWorkerRegistration?.();
 		},
 	});
 };

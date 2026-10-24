@@ -151,6 +151,22 @@ describe("monitoring utilities", () => {
 			});
 		});
 
+		it("should unwrap an Error instance nested inside an { error } object passed as the second argument to Logger.error", () => {
+			const nestedError = new Error("Socket import failed");
+			Logger.error("Failed to create WebSocket instance", {
+				context: "ws",
+				error: nestedError,
+			});
+
+			expect(sentryMock.captureMessage).not.toHaveBeenCalled();
+			expect(sentryMock.captureException).toHaveBeenCalledWith(nestedError, {
+				extra: {
+					context: "ws",
+					message: "Failed to create WebSocket instance",
+				},
+			});
+		});
+
 		it("should respect max log size", () => {
 			for (let i = 0; i < 110; i++) {
 				Logger.info(`Message ${i}`);

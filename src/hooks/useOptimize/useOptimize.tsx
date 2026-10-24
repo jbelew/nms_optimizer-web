@@ -88,11 +88,15 @@ async function createSocket(): Promise<null | Socket> {
 	try {
 		Logger.info("Creating new WebSocket connection", { url: WS_URL });
 
-		const { io } = await import("socket.io-client");
+		const socketModule = await import("socket.io-client");
 
-		return io(WS_URL, SOCKET_OPTIONS);
+		if (typeof socketModule?.io !== "function") {
+			return new Promise<never>(() => {});
+		}
+
+		return socketModule.io(WS_URL, SOCKET_OPTIONS);
 	} catch (error) {
-		Logger.error("Failed to create WebSocket instance", { error });
+		Logger.error("Failed to create WebSocket instance", error);
 
 		return null;
 	}
@@ -449,7 +453,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 							}
 						}
 					} else {
-						Logger.error("Invalid API response format", { data });
+						Logger.error("Invalid API response format", undefined, { data });
 
 						if (mountedCount > 0) {
 							setShowErrorStore(

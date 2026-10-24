@@ -160,4 +160,26 @@ describe("useMarkdownContent", () => {
 
 		consoleErrorSpy.mockRestore();
 	});
+
+	it("should stay loading without logging an error when virtual:markdown-bundle resolves without getMarkdown during preload recovery", async () => {
+		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+		const markdownModule = (await import("virtual:markdown-bundle")) as {
+			getMarkdown?: unknown;
+		};
+		const savedGetMarkdown = markdownModule.getMarkdown;
+		markdownModule.getMarkdown = undefined;
+
+		try {
+			const { result } = renderHook(() => useMarkdownContent("about"));
+
+			await new Promise((resolve) => setTimeout(resolve, 20));
+
+			expect(consoleErrorSpy).not.toHaveBeenCalled();
+			expect(result.current.error).toBeNull();
+			expect(result.current.isLoading).toBe(true);
+		} finally {
+			markdownModule.getMarkdown = savedGetMarkdown;
+			consoleErrorSpy.mockRestore();
+		}
+	});
 });

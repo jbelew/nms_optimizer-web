@@ -59,8 +59,13 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 				const langToFetch = markdownFileName === "changelog" ? "en" : lang;
 
 				// Load bundled markdown via dynamic import to avoid blocking entry
-				const { getMarkdown } = await import("virtual:markdown-bundle");
-				const content = getMarkdown(langToFetch, markdownFileName);
+				const markdownModule = await import("virtual:markdown-bundle");
+
+				if (typeof markdownModule?.getMarkdown !== "function") {
+					return;
+				}
+
+				const content = markdownModule.getMarkdown(langToFetch, markdownFileName);
 
 				if (!content) {
 					throw new Error(
@@ -69,11 +74,11 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 				}
 
 				setMarkdown(content);
+				setIsLoading(false);
 			} catch (e) {
 				Logger.error(`Error loading ${markdownFileName}.md:`, e);
 				setError(e instanceof Error ? e.message : "An unknown error occurred");
 				setMarkdown(`Failed to load content for ${markdownFileName}.`); // Fallback content
-			} finally {
 				setIsLoading(false);
 			}
 		};

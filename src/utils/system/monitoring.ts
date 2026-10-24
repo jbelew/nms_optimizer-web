@@ -294,11 +294,36 @@ export const Logger = {
 
 		const { level, tags, ...extraData } = data ?? {};
 
-		if (error instanceof Error) {
+		const isWrappedErrorObject =
+			!(error instanceof Error)
+			&& typeof error === "object"
+			&& error !== null
+			&& "error" in error
+			&& (error as { error?: unknown }).error instanceof Error;
+
+		const resolvedError =
+			error instanceof Error ? error
+			: isWrappedErrorObject ? (error as { error: Error }).error
+			: undefined;
+
+		const unwrappedExtra =
+			isWrappedErrorObject ?
+				Object.fromEntries(
+					Object.entries(error as Record<string, unknown>).filter(
+						([key]) => key !== "error",
+					),
+				)
+			:	{};
+
+		if (resolvedError) {
 			dispatchOrQueueSentryEvent({
-				errorOrMessage: error,
+				errorOrMessage: resolvedError,
 				kind: "exception",
-				options: buildSentryCaptureOptions({ message, ...extraData }, level, tags),
+				options: buildSentryCaptureOptions(
+					{ message, ...unwrappedExtra, ...extraData },
+					level,
+					tags,
+				),
 			});
 		} else {
 			dispatchOrQueueSentryEvent({
@@ -481,6 +506,11 @@ export const initializeSentry = async (): Promise<void> => {
 				globalHandlersIntegration,
 				init,
 			} = await import("@sentry/react");
+
+			if (typeof init !== "function") {
+				return;
+			}
+
 			const integrations: SentryIntegration[] = [
 				breadcrumbsIntegration({
 					dom: false, // Good performance practice: disables expensive DOM click serialization

@@ -614,7 +614,13 @@ const sendVitalsMetric = (metric: Metric): void => {
  * @returns Resolves once all five Core Web Vitals observers are registered.
  */
 const registerWebVitals = async (): Promise<void> => {
-	const { onCLS, onFCP, onINP, onLCP, onTTFB } = await import("web-vitals/attribution");
+	const vitalsModule = await import("web-vitals/attribution");
+
+	if (typeof vitalsModule?.onCLS !== "function") {
+		return;
+	}
+
+	const { onCLS, onFCP, onINP, onLCP, onTTFB } = vitalsModule;
 	onCLS(sendVitalsMetric);
 	onINP(sendVitalsMetric);
 	onFCP(sendVitalsMetric);
@@ -651,14 +657,22 @@ export const initializeAnalytics = async (): Promise<void> => {
 	const isBlocked = await getAdBlockerDetectionResult();
 
 	if (!isBlocked) {
-		const ReactGAModule = (await import("react-ga4")) as unknown as {
-			default: typeof ReactGA & {
-				default?: typeof ReactGA;
-			};
-		};
+		const ReactGAModule = (await import("react-ga4")) as unknown as
+			| undefined
+			| {
+					default?: typeof ReactGA & {
+						default?: typeof ReactGA;
+					};
+			  };
 
 		// Handle potentially nested default export in certain build environments
-		ReactGAInstance = ReactGAModule.default.default ?? ReactGAModule.default;
+		const resolvedGA = ReactGAModule?.default?.default ?? ReactGAModule?.default;
+
+		if (!resolvedGA) {
+			return;
+		}
+
+		ReactGAInstance = resolvedGA;
 
 		ReactGAInstance.initialize(TRACKING_ID, {
 			gtagOptions: {
