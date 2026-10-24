@@ -1,3 +1,10 @@
+## [8.6.5](https://github.com/jbelew/nms_optimizer-web/compare/v8.6.4...v8.6.5) (2026-10-24)
+
+
+### Bug Fixes
+
+* **system:** guard dynamic imports during preload recovery and unwrap Logger.error ([#811](https://github.com/jbelew/nms_optimizer-web/issues/811)) ([2068931](https://github.com/jbelew/nms_optimizer-web/commit/2068931b5aa6473fdfea19fa89d77b339db6bf61))
+
 ## [8.6.4](https://github.com/jbelew/nms_optimizer-web/compare/v8.6.3...v8.6.4) (2026-10-24)
 
 
