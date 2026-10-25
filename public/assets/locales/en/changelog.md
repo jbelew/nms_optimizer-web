@@ -2,6 +2,28 @@
 
 The full commit history for this project is available on [GitHub](https://github.com/jbelew/nms_optimizer-web/blob/main/CHANGELOG.md). A special thanks to [mateo-leal](https://github.com/mateo-leal) for the Spanish translation updates.
 
+## Version 8.7 – Supercharged Slot Warnings & Smarter Forced Solves (2026-10-25)
+
+This update adds warnings when unoccupied supercharged slots lack enough surrounding space for a technology and improves Force Optimize solve results.
+
+- **Supercharged Slot Space Warnings:** The optimizer now detects when unoccupied active supercharged slots do not have enough surrounding space for a technology's required placement window (`W×H`), displaying a tailored warning with guidance to optimize supercharged technologies first or run **Force Optimize**.
+- **Smarter "Force Optimize" Solves:** Updated **Force Optimize** to compare full-grid simulated annealing against windowed placements around supercharged slots and keep whichever layout achieves the higher bonus score.
+
+## Version 8.6 – Exosuit Artwork & Header Alignment (2026-10-24)
+
+This update refreshes Exosuit technology artwork and refines platform title alignment across screen sizes.
+
+- **Sharper Exosuit Icons:** Updated the Exosuit Defense Systems and Rebuilt technology icons with higher-quality artwork across standard and high-resolution displays.
+- **Platform Header Alignment:** Adjusted vertical spacing for the platform title header on mobile and desktop screens.
+
+## Version 8.4 – Placement Window Indicators & Layout Stability (2026-10-18)
+
+This update adds real-time grid window size indicators when selecting modules, prevents desktop startup layout shifts, and refines dialog controls.
+
+- **Live Window Size Indicator:** The Module Selection dialog now displays the required contiguous grid window (`Window: W×H`) in real time as you select or deselect modules, and the insufficient-space warning dialog now shows the exact window dimensions needed to fit your selection.
+- **Desktop Layout Stability & Smoother Solves:** Prevented visual layout shifts when the grid first loads on desktop screens and reduced unnecessary background interface updates while an optimization is running.
+- **Dialog & Guide Refinements:** Adjusted module group heading sizes across phone, tablet, and desktop screens, improved embedded video loading in guides, and updated the instructions link in the Welcome dialog.
+
 ## Version 8.3 – Smart Build Reset & Mobile Performance (2026-10-16)
 
 This update introduces a smarter "Reset Build" control that tracks layout and module changes, updates button labeling across all languages, and boosts mobile animation performance.
