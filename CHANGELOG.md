@@ -1,3 +1,10 @@
+# [8.7.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.6.6...v8.7.0) (2026-10-25)
+
+
+### Features
+
+* **ui:** handle Supercharged No Fit warnings in OptimizationAlertDialog ([4d89233](https://github.com/jbelew/nms_optimizer-web/commit/4d89233de3df2266286417ae85585f22af435b38)), closes [#815](https://github.com/jbelew/nms_optimizer-web/issues/815)
+
 ## [8.6.6](https://github.com/jbelew/nms_optimizer-web/compare/v8.6.5...v8.6.6) (2026-10-24)
 
 

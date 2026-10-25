@@ -1,7 +1,7 @@
 {
 	"name": "nms_optimizer",
 	"private": true,
-	"version": "8.6.6",
+	"version": "8.7.0",
 	"type": "module",
 	"sideEffects": [
 		"src/components/AppDialog/Base/AppDialog.tsx",
