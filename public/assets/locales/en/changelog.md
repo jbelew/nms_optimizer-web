@@ -2,24 +2,26 @@
 
 The full commit history for this project is available on [GitHub](https://github.com/jbelew/nms_optimizer-web/blob/main/CHANGELOG.md). A special thanks to [mateo-leal](https://github.com/mateo-leal) for the Spanish translation updates.
 
-## Version 8.7 – Supercharged Slot Warnings & Smarter Forced Solves (2026-10-25)
+## Version 8.7 – Critical Supercharged Window Fix & Space Warnings (2026-10-25)
 
-This update adds warnings when unoccupied supercharged slots lack enough surrounding space for a technology and improves Force Optimize solve results.
+This update resolves a critical backend window scoring bug that could skip available supercharged slots, adds warnings when supercharged slots lack surrounding space, and improves Force Optimize results.
 
+- **Critical Supercharged Window Calculation Fix:** Fixed a major solver bug where window score calculations used different numeric scales for supercharged and non-supercharged regions, which could cause the optimizer to select a standard pattern window over a window containing an open supercharged slot and skip supercharged refinement entirely.
 - **Supercharged Slot Space Warnings:** The optimizer now detects when unoccupied active supercharged slots do not have enough surrounding space for a technology's required placement window (`W×H`), displaying a tailored warning with guidance to optimize supercharged technologies first or run **Force Optimize**.
 - **Smarter "Force Optimize" Solves:** Updated **Force Optimize** to compare full-grid simulated annealing against windowed placements around supercharged slots and keep whichever layout achieves the higher bonus score.
 
-## Version 8.6 – Exosuit Artwork & Header Alignment (2026-10-24)
+## Version 8.6 – Exosuit Artwork, Module Colors & Header Alignment (2026-10-24)
 
-This update refreshes Exosuit technology artwork and refines platform title alignment across screen sizes.
+This update refreshes Exosuit technology artwork and module colors, and refines platform title alignment across screen sizes.
 
-- **Sharper Exosuit Icons:** Updated the Exosuit Defense Systems and Rebuilt technology icons with higher-quality artwork across standard and high-resolution displays.
+- **Sharper Exosuit Icons & Module Colors:** Updated the Exosuit Defense Systems and Rebuilt technology icons with higher-quality artwork and refined Exosuit upgrade module colors.
 - **Platform Header Alignment:** Adjusted vertical spacing for the platform title header on mobile and desktop screens.
 
-## Version 8.4 – Placement Window Indicators & Layout Stability (2026-10-18)
+## Version 8.4 – Critical Window Sizing Fix & Live Window Indicators (2026-10-18)
 
-This update adds real-time grid window size indicators when selecting modules, prevents desktop startup layout shifts, and refines dialog controls.
+This update resolves a critical backend placement window sizing bug, adds real-time grid window size indicators when selecting modules, and prevents desktop startup layout shifts.
 
+- **Critical Placement Window Sizing Fix:** Fixed a backend window calculation bug where base window rules intercepted custom technology overrides at intermediate module counts—assigning incorrect placement window dimensions—and updated Starship Trails window sizing rules and default Corvette Launch Thruster selections.
 - **Live Window Size Indicator:** The Module Selection dialog now displays the required contiguous grid window (`Window: W×H`) in real time as you select or deselect modules, and the insufficient-space warning dialog now shows the exact window dimensions needed to fit your selection.
 - **Desktop Layout Stability & Smoother Solves:** Prevented visual layout shifts when the grid first loads on desktop screens and reduced unnecessary background interface updates while an optimization is running.
 - **Dialog & Guide Refinements:** Adjusted module group heading sizes across phone, tablet, and desktop screens, improved embedded video loading in guides, and updated the instructions link in the Welcome dialog.
