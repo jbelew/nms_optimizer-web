@@ -60,6 +60,7 @@ const PerformanceDashboardLayout: FC<PerformanceDashboardLayoutProps> = ({
 	<Flex
 		direction="column"
 		gap="0"
+		translate="no"
 	>
 		{cards}
 		<Flex
@@ -226,6 +227,12 @@ const ChartTooltipContent = memo<ChartTooltipContentProps>(function ChartTooltip
 	const item = payload[0].payload;
 	if (!item) return null;
 
+	const versionSuffix =
+		item.originalVersion || item.appVersion ?
+			` (${item.originalVersion || item.appVersion})`
+		:	"";
+	const headerLabel = `${item.displayDate} ${item.hour}${versionSuffix}`;
+
 	if (selectedMetric) {
 		const format = (v: number) => formatMetricValue(selectedMetric, v);
 		const p50 = item[`${selectedMetric}_p50`] as number | undefined;
@@ -244,10 +251,7 @@ const ChartTooltipContent = memo<ChartTooltipContentProps>(function ChartTooltip
 					mb="1"
 					size="1"
 				>
-					{item.displayDate} {item.hour}
-					{item.originalVersion || item.appVersion ?
-						` (${item.originalVersion || item.appVersion})`
-					:	""}
+					{headerLabel}
 				</Text>
 				{p90 !== undefined && (
 					<Flex
@@ -311,10 +315,7 @@ const ChartTooltipContent = memo<ChartTooltipContentProps>(function ChartTooltip
 					color="gray"
 					size="1"
 				>
-					{item.displayDate} {item.hour}
-					{item.originalVersion || item.appVersion ?
-						` (${item.originalVersion || item.appVersion})`
-					:	""}
+					{headerLabel}
 				</Text>
 				<Flex
 					align="center"
@@ -390,7 +391,7 @@ const ChartTooltipContent = memo<ChartTooltipContentProps>(function ChartTooltip
 									color="gray"
 									size="1"
 								>
-									({mScore !== undefined ? Math.round(mScore) : "—"})
+									{`(${mScore !== undefined ? Math.round(mScore) : "—"})`}
 								</Text>
 							</Flex>
 						</Flex>
@@ -527,18 +528,6 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 
 		return getFormatter(locale, formatOptions).format(date);
 	};
-
-	const renderTooltip = (props: {
-		active?: boolean;
-		payload?: ReadonlyArray<{ payload?: ChartDataPoint }>;
-	}) => (
-		<ChartTooltipContent
-			active={props.active}
-			activeMetrics={activeMetrics}
-			payload={props.payload}
-			selectedMetric={selectedMetric}
-		/>
-	);
 
 	return (
 		<PerformanceDashboardLayout
@@ -777,7 +766,12 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 
 							<Tooltip
 								allowEscapeViewBox={TOOLTIP_ALLOW_ESCAPE}
-								content={renderTooltip}
+								content={
+									<ChartTooltipContent
+										activeMetrics={activeMetrics}
+										selectedMetric={selectedMetric}
+									/>
+								}
 								isAnimationActive={false}
 								offset={10}
 								wrapperStyle={TOOLTIP_WRAPPER_STYLE}

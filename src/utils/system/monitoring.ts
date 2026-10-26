@@ -151,6 +151,45 @@ export const isAbortError = (name: string, message: string): boolean =>
 	name === "AbortError" || ABORT_ERROR_PATTERNS.some((pattern) => pattern.test(message));
 
 /**
+ * Shared regular expressions matching browser-translation or extension DOM mutation errors.
+ *
+ * @private
+ */
+const DOM_MUTATION_ERROR_PATTERNS = [
+	/Failed to execute 'removeChild' on 'Node'/i,
+	/Failed to execute 'insertBefore' on 'Node'/i,
+] as const;
+
+/**
+ * Checks whether an error name or message represents an external DOM mutation `NotFoundError`.
+ *
+ * @remarks
+ * Browser page translators (Google Translate, Microsoft Edge Translate) and DOM-mutating extensions
+ * wrap or replace text nodes inside React-managed containers, causing React's commit phase to throw
+ * `NotFoundError: Failed to execute 'removeChild' on 'Node'` or `'insertBefore' on 'Node'`. Shared
+ * between `bootApp`'s global listeners and Sentry's `ignoreErrors` filter so these non-actionable
+ * external DOM errors are suppressed consistently.
+ *
+ * @param name - The `error.name` string if available.
+ * @param message - The `error.message` or stringified rejection reason.
+ *
+ * @returns `true` if the error represents an external `removeChild` or `insertBefore` DOM mutation failure.
+ *
+ * @see {@link initializeSentry}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * isDomMutationError("NotFoundError", "Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.");
+ * // returns true
+ * ```
+ */
+export const isDomMutationError = (name: string, message: string): boolean =>
+	DOM_MUTATION_ERROR_PATTERNS.some((pattern) => pattern.test(message))
+	|| (name === "NotFoundError" && /\b(removeChild|insertBefore)\b/i.test(message));
+
+/**
  * Internal reference to Sentry SDK if initialized.
  * Proxies calls to Sentry without requiring static imports that would bloat the initial bundle.
  *
@@ -556,6 +595,7 @@ export const initializeSentry = async (): Promise<void> => {
 					/Unable to preload CSS/i,
 					/Stylesheet append timeout/i,
 					...ABORT_ERROR_PATTERNS,
+					...DOM_MUTATION_ERROR_PATTERNS,
 					/Non-Error promise rejection captured/i,
 					/QuotaExceededError/i,
 				],

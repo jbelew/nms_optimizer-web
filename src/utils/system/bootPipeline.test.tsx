@@ -438,6 +438,69 @@ describe("bootPipeline", () => {
 			});
 		});
 
+		it("should ignore browser-translation DOM mutation NotFoundError (removeChild / insertBefore) in global error and unhandledrejection listeners", async () => {
+			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
+			const onFatalError = vi.fn();
+
+			let result!: Awaited<ReturnType<typeof bootApp>>;
+			await act(async () => {
+				result = await bootApp({
+					coordinator,
+					onFatalError,
+					rootComponent: <div>App</div>,
+					skipGlobalErrorHandlers: false,
+					target: container,
+				});
+			});
+
+			const removeChildError = new DOMException(
+				"Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.",
+				"NotFoundError",
+			);
+			removeChildError.stack = `NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.\n    at commitDeletionEffectsOnFiber (${window.location.origin}/build/assets/vendor-core.js:10283:24)`;
+
+			const insertBeforeError = new DOMException(
+				"Failed to execute 'insertBefore' on 'Node': The node before which the new node is to be inserted is not a child of this node.",
+				"NotFoundError",
+			);
+			insertBeforeError.stack = `NotFoundError: Failed to execute 'insertBefore' on 'Node': The node before which the new node is to be inserted is not a child of this node.\n    at commitPlacement (${window.location.origin}/build/assets/vendor-core.js:10100:24)`;
+
+			// 1. Before READY: should not mark coordinator FATAL
+			window.dispatchEvent(
+				new ErrorEvent("error", {
+					error: removeChildError,
+					filename: `${window.location.origin}/build/assets/vendor-core.js`,
+					message: removeChildError.message,
+				}),
+			);
+
+			const rejectionEvent = new Event("unhandledrejection");
+			Object.assign(rejectionEvent, { reason: insertBeforeError });
+			window.dispatchEvent(rejectionEvent);
+
+			expect(coordinator.isFatal()).toBe(false);
+			expect(onFatalError).not.toHaveBeenCalled();
+			expect(Logger.error).not.toHaveBeenCalled();
+
+			// 2. After READY: should not call Logger.error
+			coordinator.markReady();
+
+			window.dispatchEvent(
+				new ErrorEvent("error", {
+					error: removeChildError,
+					filename: `${window.location.origin}/build/assets/vendor-core.js`,
+					message: removeChildError.message,
+				}),
+			);
+			window.dispatchEvent(rejectionEvent);
+
+			expect(Logger.error).not.toHaveBeenCalled();
+
+			await act(async () => {
+				result.unmount();
+			});
+		});
+
 		it("should ignore masked cross-origin or empty ErrorEvents without a first-party stack and normalize string ErrorEvents from first-party files into Error instances", async () => {
 			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
 			const onFatalError = vi.fn();

@@ -20,11 +20,38 @@ vi.mock("@/hooks/useBreakpoint/useBreakpoint", () => ({
 	useBreakpoint: () => true,
 }));
 
+let mockTooltipState: {
+	active?: boolean;
+	payload?: ReadonlyArray<{ payload?: Record<string, unknown> }>;
+} = { active: false };
+const tooltipContentSpy = vi.fn();
+
 // Mock recharts to a no-op so we can focus on the summary card interactions.
-// Each component returns its children (or null) without rendering SVG.
+// Tooltip mirrors Recharts' renderContent contract (cloneElement for elements, createElement for functions).
 vi.mock("recharts", () => {
 	const Passthrough = ({ children }: { children?: React.ReactNode }) => <>{children}</>;
 	const Empty = () => null;
+
+	const MockTooltip = ({
+		content,
+	}: {
+		content?: React.ComponentType<Record<string, unknown>> | React.ReactElement;
+	}) => {
+		tooltipContentSpy(content);
+		if (!content) return null;
+
+		if (React.isValidElement(content)) {
+			return React.cloneElement(content, mockTooltipState);
+		}
+
+		if (typeof content === "function") {
+			const ContentComponent = content;
+
+			return <ContentComponent {...mockTooltipState} />;
+		}
+
+		return null;
+	};
 
 	return {
 		Bar: Empty,
@@ -35,7 +62,7 @@ vi.mock("recharts", () => {
 		ReferenceArea: Empty,
 		ReferenceLine: Empty,
 		ResponsiveContainer: Passthrough,
-		Tooltip: Empty,
+		Tooltip: MockTooltip,
 		XAxis: Empty,
 		YAxis: Empty,
 	};
@@ -83,6 +110,7 @@ const renderChart = (initialEntry = "/performance") =>
 describe("PerformanceChart summary cards", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
+		mockTooltipState = { active: false };
 	});
 
 	test("renders summary cards for each metric and overall", () => {
@@ -236,5 +264,103 @@ describe("PerformanceChart summary cards", () => {
 		// Value should still be 1000ms
 		const lcpValue14d = screen.getAllByText("1000ms")[0];
 		expect(lcpValue14d).toBeInTheDocument();
+	});
+
+	test("marks dashboard layout with translate='no' to prevent browser page translation DOM mutations", () => {
+		const { container } = renderChart();
+
+		expect(container.querySelector('[translate="no"]')).toBeInTheDocument();
+	});
+
+	test("passes a React element to Tooltip to preserve ChartTooltipContent fiber across re-renders and consolidates text nodes", () => {
+		mockTooltipState = {
+			active: true,
+			payload: [
+				{
+					payload: {
+						appVersion: "v1.0.0",
+						displayDate: "Apr 25",
+						FCP_deficit_sma: 2,
+						FCP_p75_sma: 800,
+						hour: "10:00 AM",
+						LCP_deficit_sma: 5,
+						LCP_p50: 1000,
+						LCP_p75_sma: 1200,
+						LCP_p90: 1500,
+						overall_score_p75_sma: 95,
+					},
+				},
+			],
+		};
+
+		const { rerender } = render(
+			<Theme>
+				<MemoryRouter initialEntries={["/performance"]}>
+					<Routes>
+						<Route
+							element={
+								<PerformanceChart
+									data={mockData}
+									isPending={false}
+								/>
+							}
+							path="/performance"
+						/>
+						<Route
+							element={
+								<PerformanceChart
+									data={mockData}
+									isPending={false}
+								/>
+							}
+							path="/performance/:metric"
+						/>
+					</Routes>
+				</MemoryRouter>
+			</Theme>,
+		);
+
+		expect(React.isValidElement(tooltipContentSpy.mock.calls[0]?.[0])).toBe(true);
+
+		const overallHeaderBefore = screen.getByText("Apr 25 10:00 AM (v1.0.0)");
+		expect(overallHeaderBefore.childNodes).toHaveLength(1);
+
+		const scoreNode = screen.getByText("(95)");
+		expect(scoreNode.childNodes).toHaveLength(1);
+
+		rerender(
+			<Theme>
+				<MemoryRouter initialEntries={["/performance"]}>
+					<Routes>
+						<Route
+							element={
+								<PerformanceChart
+									data={mockData}
+									isPending={true}
+								/>
+							}
+							path="/performance"
+						/>
+						<Route
+							element={
+								<PerformanceChart
+									data={mockData}
+									isPending={true}
+								/>
+							}
+							path="/performance/:metric"
+						/>
+					</Routes>
+				</MemoryRouter>
+			</Theme>,
+		);
+
+		const overallHeaderAfter = screen.getByText("Apr 25 10:00 AM (v1.0.0)");
+		expect(overallHeaderAfter).toBe(overallHeaderBefore);
+
+		fireEvent.click(screen.getByRole("button", { name: /detailed LCP chart/i }));
+
+		const detailHeader = screen.getByText("Apr 25 10:00 AM (v1.0.0)");
+		expect(detailHeader.childNodes).toHaveLength(1);
 	});
 });

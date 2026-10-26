@@ -7,6 +7,7 @@ import {
 	captureException,
 	flushSentry,
 	initializeSentry,
+	isDomMutationError,
 	Logger,
 	LogLevel,
 } from "./monitoring";
@@ -312,6 +313,8 @@ describe("monitoring utilities", () => {
 						/Stylesheet append timeout/i,
 						/\bAbortError\b/i,
 						/signal is aborted/i,
+						/Failed to execute 'removeChild' on 'Node'/i,
+						/Failed to execute 'insertBefore' on 'Node'/i,
 					]),
 					integrations: expect.any(Function),
 				}),
@@ -337,6 +340,31 @@ describe("monitoring utilities", () => {
 				"BrowserApiErrors",
 				"GlobalHandlers",
 			]);
+		});
+	});
+
+	describe("isDomMutationError", () => {
+		it("detects removeChild and insertBefore Node NotFoundError messages and rejects unrelated errors", () => {
+			expect(
+				isDomMutationError(
+					"NotFoundError",
+					"Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.",
+				),
+			).toBe(true);
+			expect(
+				isDomMutationError(
+					"NotFoundError",
+					"Failed to execute 'insertBefore' on 'Node': The node before which the new node is to be inserted is not a child of this node.",
+				),
+			).toBe(true);
+			expect(
+				isDomMutationError(
+					"NotFoundError",
+					"The object can not be found here. removeChild",
+				),
+			).toBe(true);
+			expect(isDomMutationError("NotFoundError", "Requested device not found")).toBe(false);
+			expect(isDomMutationError("Error", "Unexpected runtime failure")).toBe(false);
 		});
 	});
 });

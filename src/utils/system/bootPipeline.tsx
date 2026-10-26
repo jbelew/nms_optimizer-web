@@ -25,7 +25,12 @@ import {
 	handleFatalBootstrapError,
 	lifecycleCoordinator,
 } from "@/utils/system/lifecycleCoordinator";
-import { initializeSentry, isAbortError, Logger } from "@/utils/system/monitoring";
+import {
+	initializeSentry,
+	isAbortError,
+	isDomMutationError,
+	Logger,
+} from "@/utils/system/monitoring";
 
 export { handleFatalBootstrapError };
 
@@ -285,6 +290,7 @@ export const bootApp = async (options: BootOptions = {}): Promise<BootResult> =>
 
 				if (
 					isAbortError(errorName, errorMessage)
+					|| isDomMutationError(errorName, errorMessage)
 					|| /^Script error\.?$/i.test(errorMessage)
 					|| (!event.error && !errorMessage)
 				) {
@@ -334,7 +340,10 @@ export const bootApp = async (options: BootOptions = {}): Promise<BootResult> =>
 				const reasonMessage =
 					typeof reason?.message === "string" ? reason.message : String(reason || "");
 
-				if (isAbortError(reasonName, reasonMessage)) {
+				if (
+					isAbortError(reasonName, reasonMessage)
+					|| isDomMutationError(reasonName, reasonMessage)
+				) {
 					return;
 				}
 
