@@ -14,10 +14,17 @@
  * @module components/ModuleSelectionDialog/ModuleSelectionDialog
  */
 
-import React, { memo, Suspense, useCallback, useEffect, useRef, useTransition } from "react";
+import React, {
+	memo,
+	Suspense,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useTransition,
+} from "react";
 import { CheckCircledIcon, InfoCircledIcon, MagicWandIcon } from "@radix-ui/react-icons";
 import {
-	Avatar,
 	Badge,
 	Blockquote,
 	Button,
@@ -32,6 +39,7 @@ import { useShallow } from "zustand/react/shallow";
 import { shallow } from "zustand/shallow";
 
 import type { GroupedModules, SelectionModule } from "@/types/props";
+import type { TechColor } from "@/types/tech";
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
@@ -78,7 +86,7 @@ interface ModuleCheckboxProps {
 	/** The module data to display. */
 	module: SelectionModule;
 	/** Accent color for the module avatar. */
-	techColor: React.ComponentProps<typeof Avatar>["color"];
+	techColor: TechColor;
 }
 
 /**
@@ -96,7 +104,7 @@ interface ModuleGroupProps {
 	/** Callback to close the dialog when opening instructions. */
 	onClose: () => void;
 	/** Accent color for module avatars. */
-	techColor: React.ComponentProps<typeof Avatar>["color"];
+	techColor: TechColor;
 	/** Optional display title override for the group. */
 	titleOverride?: string;
 }
@@ -187,21 +195,29 @@ const formatLabel = (label: string): React.ReactNode => {
 /**
  * Individual module selection checkbox with icon and label.
  *
- * @param {ModuleCheckboxProps} props - Component properties.
- * @param {boolean} [props.isCore] - Whether the module is an immutable Core Module rendered outside the interactive checkbox group.
- * @param {boolean} props.isDisabled - Whether the checkbox is disabled due to missing Module Rank Order prerequisites.
- * @param {SelectionModule} props.module - The module data to display.
- * @param {React.ComponentProps<typeof Avatar>["color"]} props.techColor - Accent color for the module avatar.
+ * @remarks
+ * Renders either an immutable Core Module checkbox or an interactive `CheckboxGroup.Item`
+ * paired with a 24×24 module icon and formatted label.
  *
- * @returns {JSX.Element} The rendered checkbox label.
+ * @see {@link ModuleCheckboxProps}
  *
  * @component
  *
  * @category Components
+ *
+ * @example
+ * ```tsx
+ * <ModuleCheckbox isDisabled={false} module={module} techColor="blue" />
+ * // mounts ModuleCheckbox
+ * ```
  */
 const ModuleCheckbox: React.FC<ModuleCheckboxProps> = memo(
 	({ isCore = false, isDisabled, module, techColor }) => {
 		const imagePath = resolveModuleImagePath(module.image);
+		const formattedLabel = useMemo(
+			() => formatLabel(module.label ?? module.id),
+			[module.id, module.label],
+		);
 
 		return (
 			<label
@@ -223,15 +239,21 @@ const ModuleCheckbox: React.FC<ModuleCheckboxProps> = memo(
 						value={module.id}
 					/>
 				}
-				<Avatar
-					alt={module.label}
-					color={techColor}
-					fallback={isCore ? "IK" : module.id}
-					radius="medium"
-					size="1"
-					src={imagePath}
-				/>
-				<span className="flex-1">{formatLabel(module.label ?? module.id)}</span>
+				<span
+					className="rt-reset rt-AvatarRoot rt-r-size-1 rt-variant-soft shrink-0 overflow-hidden"
+					data-accent-color={techColor}
+					data-radius="medium"
+				>
+					<img
+						alt={module.label}
+						className="rt-AvatarImage h-6 w-6 object-cover"
+						decoding="async"
+						height={24}
+						src={imagePath}
+						width={24}
+					/>
+				</span>
+				<span className="flex-1">{formattedLabel}</span>
 			</label>
 		);
 	},
@@ -266,12 +288,18 @@ const ModuleGroup: React.FC<ModuleGroupProps> = ({
 }) => {
 	const { t } = useTranslation();
 	const { openDialog } = useDialog();
+	const dependencyMap = useMemo(
+		() => getModulePrerequisites(groupName, modules),
+		[groupName, modules],
+	);
+	const hasBracketedLabel = useMemo(
+		() => modules.some((m) => m.label?.includes("[") && m.label?.includes("]")),
+		[modules],
+	);
 
 	if (!modules || modules.length === 0) {
 		return null;
 	}
-
-	const dependencyMap = getModulePrerequisites(groupName, modules);
 
 	return (
 		<div className="mb-1">
@@ -282,7 +310,7 @@ const ModuleGroup: React.FC<ModuleGroupProps> = ({
 				style={{ color: "var(--accent-a11)" }}
 			>
 				{titleOverride || t(`moduleSelection.${groupName}`)}
-				{modules.some((m) => m.label?.includes("[") && m.label?.includes("]")) && (
+				{hasBracketedLabel && (
 					<ConditionalTooltip label={t("moduleSelection.aboutUpgradeLabelsTooltip")}>
 						<InfoCircledIcon
 							className="shrink-0 cursor-pointer opacity-70 transition-opacity hover:opacity-100"
@@ -453,8 +481,8 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 
 	const handleOptimizeClick = useCallback(async () => {
 		optimizeClickedRef.current = true;
-		await handleOptimize(activeTech);
 		closeDialog();
+		await handleOptimize(activeTech);
 	}, [activeTech, closeDialog, handleOptimize]);
 
 	const handleClose = useCallback(() => {

@@ -395,18 +395,32 @@ describe("ModuleSelectionDialog", () => {
 		});
 	});
 
-	it("calls handleOptimize and closes dialog without reverting when Optimize is clicked", async () => {
+	it("closes dialog immediately on Optimize click before async handleOptimize resolves and renders native 24x24 module icons", async () => {
+		let resolveOptimize: (() => void) | undefined;
+		mockHandleOptimize.mockImplementation(
+			() =>
+				new Promise<void>((resolve) => {
+					resolveOptimize = resolve;
+				}),
+		);
+
 		seedAndRender({
 			checkedModules: ["core1", "bonus1"],
 		});
 
+		const coreIcon = await screen.findByAltText("Core Module");
+		expect(coreIcon.tagName).toBe("IMG");
+		expect(coreIcon).toHaveAttribute("width", "24");
+		expect(coreIcon).toHaveAttribute("height", "24");
+
 		fireEvent.click(await screen.findByRole("checkbox", { name: /Beta Bonus/i }));
 		fireEvent.click(screen.getByRole("button", { name: "Optimize" }));
 
-		await waitFor(() => {
-			expect(mockHandleOptimize).toHaveBeenCalledWith("hyperdrive");
-			expect(useModuleSelectionDialogStore.getState().isOpen).toBe(false);
-		});
+		// Dialog must close immediately without waiting for async solve completion
+		expect(useModuleSelectionDialogStore.getState().isOpen).toBe(false);
+		expect(mockHandleOptimize).toHaveBeenCalledWith("hyperdrive");
 		expect(useTechStore.getState().checkedModules["hyperdrive"]).toContain("bonus2");
+
+		resolveOptimize?.();
 	});
 });

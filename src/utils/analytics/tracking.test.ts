@@ -193,7 +193,12 @@ describe("Analytics Tracking", () => {
 
 				await vi.waitFor(() => {
 					expect(onCLS).toHaveBeenCalledWith(expect.any(Function));
-					expect(onINP).toHaveBeenCalledWith(expect.any(Function));
+					expect(onINP).toHaveBeenCalledWith(
+						expect.any(Function),
+						expect.objectContaining({
+							generateTarget: expect.any(Function),
+						}),
+					);
 					expect(onFCP).toHaveBeenCalledWith(expect.any(Function));
 					expect(onLCP).toHaveBeenCalledWith(expect.any(Function));
 					expect(onTTFB).toHaveBeenCalledWith(expect.any(Function));
@@ -458,6 +463,77 @@ describe("Analytics Tracking", () => {
 					metric_name: "LCP",
 					nonInteraction: true,
 					value: 1850,
+				}),
+			);
+		});
+
+		it("should skip ephemeral radix-* IDs in generateTarget and recover pre-unmount INP targets from pointerdown capture", async () => {
+			await tracking.initializeAnalytics();
+
+			const inpCall = vi.mocked(onINP).mock.calls[0];
+			const inpCallback = inpCall[0];
+			const inpOpts = inpCall[1];
+			expect(inpOpts?.generateTarget).toBeTypeOf("function");
+
+			const semanticButton = {
+				classList: ["rt-Button"],
+				id: "pulse",
+				nodeName: "BUTTON",
+				nodeType: 1,
+				parentNode: { nodeType: 9 },
+			} as unknown as Node;
+			expect(inpOpts?.generateTarget?.(semanticButton)).toBe("#pulse");
+
+			const radixTrigger = {
+				classList: ["rt-Button", "p-2!"],
+				id: "radix-_r_c_",
+				nodeName: "BUTTON",
+				nodeType: 1,
+				parentNode: {
+					classList: ["ShipSelection"],
+					id: "",
+					nodeName: "DIV",
+					nodeType: 1,
+					parentNode: { nodeType: 9 },
+				},
+			} as unknown as Node;
+			expect(inpOpts?.generateTarget?.(radixTrigger)).toBe(
+				"div.ShipSelection>button.p-2!.rt-Button",
+			);
+
+			// Simulate pointerdown on a dialog button before it unmounts
+			const pointerdownHandlers = documentListeners.pointerdown as
+				Array<(e: { target: Node }) => void> | undefined;
+			expect(pointerdownHandlers?.length).toBeGreaterThan(0);
+			pointerdownHandlers?.[0]?.({ target: radixTrigger });
+
+			inpCallback({
+				attribution: {
+					inputDelay: 4,
+					interactionTarget: "",
+					interactionType: "pointer",
+					loadState: "complete",
+					longAnimationFrameEntries: [],
+					presentationDelay: 40,
+					processedEventEntries: [],
+					processingDuration: 50,
+				},
+				delta: 94,
+				entries: [],
+				id: "v3-unmounted-inp",
+				name: "INP",
+				navigationId: 1,
+				navigationType: "navigate",
+				rating: "good",
+				value: 94,
+			});
+
+			expect(ReactGA.event).toHaveBeenCalledWith(
+				"performance_metric",
+				expect.objectContaining({
+					interaction_target: "div.ShipSelection>button.p-2!.rt-Button",
+					label: "v3-unmounted-inp",
+					metric_name: "INP",
 				}),
 			);
 		});

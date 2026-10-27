@@ -68,6 +68,16 @@ interface AnalyticsEventPayload {
 let gaInitialized = false;
 /** Flag indicating if pagehide/visibilitychange flush listeners have been attached. */
 let hideListenersRegistered = false;
+/** Flag indicating if pre-unmount interaction target listeners have been attached. */
+let interactionCaptureListenersRegistered = false;
+/** Most recent pre-unmount DOM selector captured on `pointerdown` or `keydown`. */
+let lastInteractedTargetSelector = "";
+/** Maximum length for generated INP target selectors. */
+const MAX_SELECTOR_LENGTH = 100;
+/** DOM `Node.ELEMENT_NODE` constant (`1`). */
+const ELEMENT_NODE = 1;
+/** DOM `Node.DOCUMENT_NODE` constant (`9`). */
+const DOCUMENT_NODE = 9;
 /** Cached promise for ad blocker detection. */
 let adBlockerDetectionPromise: null | Promise<boolean> = null;
 /** Cached result of ad blocker detection. */
@@ -509,6 +519,82 @@ const ensureFlushOnHideListeners = (): void => {
 };
 
 /**
+ * Generates a concise CSS selector for an interacted DOM node while skipping ephemeral `#radix-*` IDs.
+ *
+ * @remarks
+ * Mirrors `web-vitals` selector construction (up to 100 characters) but ignores auto-generated
+ * `radix-*` element IDs so Radix primitives resolve to stable semantic ancestors and class selectors.
+ *
+ * @param node - The DOM node to generate a selector for.
+ *
+ * @returns A CSS selector string identifying the target element, or `""` when unavailable.
+ */
+const generateInteractionTarget = (node: Node | null): string => {
+	let selector = "";
+	let current: Node | null = node;
+
+	try {
+		while (current && current.nodeType !== DOCUMENT_NODE) {
+			const el = current as Element;
+			const name =
+				el.nodeType === ELEMENT_NODE ?
+					el.nodeName.toLowerCase()
+				:	el.nodeName.toUpperCase().replace(/^#/, "");
+			const hasSemanticId = Boolean(el.id && !el.id.startsWith("radix-"));
+			const part =
+				hasSemanticId ?
+					`#${el.id}`
+				:	[name, ...Array.from(el.classList ?? []).sort()].join(".");
+
+			if (selector.length + part.length > MAX_SELECTOR_LENGTH - 1) {
+				return selector || part;
+			}
+
+			selector = selector ? `${part}>${selector}` : part;
+
+			if (hasSemanticId) {
+				break;
+			}
+
+			current = el.parentNode;
+		}
+	} catch {
+		// Ignore detached or cross-origin DOM traversal errors
+	}
+
+	return selector;
+};
+
+/**
+ * Registers passive capture-phase `pointerdown` and `keydown` listeners to record the target
+ * selector before synchronous dialog or menu teardown removes the node from the DOM.
+ *
+ * @returns Side-effects only.
+ */
+const ensureInteractionTargetCaptureListeners = (): void => {
+	if (interactionCaptureListenersRegistered || typeof document === "undefined") {
+		return;
+	}
+
+	interactionCaptureListenersRegistered = true;
+
+	const captureTarget = (event: { target?: unknown }) => {
+		const targetNode = (event?.target as Node | null) ?? null;
+
+		if (targetNode && typeof targetNode.nodeName === "string") {
+			const resolved = generateInteractionTarget(targetNode);
+
+			if (resolved) {
+				lastInteractedTargetSelector = resolved;
+			}
+		}
+	};
+
+	document.addEventListener("pointerdown", captureTarget, { capture: true, passive: true });
+	document.addEventListener("keydown", captureTarget, { capture: true, passive: true });
+};
+
+/**
  * Formats and dispatches a Core Web Vitals metric through {@link sendEvent}.
  *
  * @remarks
@@ -542,7 +628,10 @@ const sendVitalsMetric = (metric: Metric): void => {
 		const attribution = inpMetric.attribution;
 
 		if (attribution) {
-			const target = attribution.interactionTarget || "(unmounted element)";
+			const target =
+				attribution.interactionTarget
+				|| lastInteractedTargetSelector
+				|| "(unmounted element)";
 			event.interaction_target = target;
 
 			if (attribution.interactionType) {
@@ -621,8 +710,9 @@ const registerWebVitals = async (): Promise<void> => {
 	}
 
 	const { onCLS, onFCP, onINP, onLCP, onTTFB } = vitalsModule;
+	ensureInteractionTargetCaptureListeners();
 	onCLS(sendVitalsMetric);
-	onINP(sendVitalsMetric);
+	onINP(sendVitalsMetric, { generateTarget: generateInteractionTarget });
 	onFCP(sendVitalsMetric);
 	onLCP(sendVitalsMetric);
 	onTTFB(sendVitalsMetric);
@@ -849,6 +939,8 @@ export const sendDeferredEvent = (event: GA4Event): void => {
 export const resetAnalyticsForTesting = (): void => {
 	gaInitialized = false;
 	hideListenersRegistered = false;
+	interactionCaptureListenersRegistered = false;
+	lastInteractedTargetSelector = "";
 	adBlockerDetectionPromise = null;
 	adBlockerResult = null;
 	clientId = "";

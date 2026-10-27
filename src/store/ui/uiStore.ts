@@ -8,7 +8,15 @@ import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/enviro
 
 /** Duration of the shake CSS animation in milliseconds. */
 const SHAKE_ANIMATION_DURATION = 500;
+/** Default serialized payload for the persisted UI slice (`a11yMode` and `appearance`). */
+const DEFAULT_PERSISTED_UI_STATE = JSON.stringify({
+	state: { a11yMode: false, appearance: "dark" },
+	version: 0,
+});
+/** Timestamp of the most recent shake animation trigger. */
 let lastShakeTime = 0;
+/** Last serialized `nms-optimizer-ui-state` string written to or read from `localStorage`. */
+let lastPersistedUiState: string = DEFAULT_PERSISTED_UI_STATE;
 
 /**
  * Canonical warning reasons emitted when an unforced optimization solve cannot place a Solver Window.
@@ -193,13 +201,19 @@ interface UiState {
  * 6. Slot Restriction counters (grid fixed, module locked, etc.)
  * 7. Optimization solve status
  *
+ * @returns Bound Zustand store hook for global UI state and actions.
+ *
+ * @see {@link UiStore}
+ * @see {@link ./uiStore.test.ts Unit Tests}
+ *
  * @hook
  *
- * @category State
+ * @category Hooks
  *
  * @example
  * ```tsx
  * const { appearance, toggleAppearance } = useUiStore();
+ * // returns current appearance and toggle action
  * ```
  */
 export const useUiStore = create<UiStore>()(
@@ -299,14 +313,23 @@ export const useUiStore = create<UiStore>()(
 				storage: {
 					getItem: (name) => {
 						const item = safeGetItem(name);
+						lastPersistedUiState = item ?? DEFAULT_PERSISTED_UI_STATE;
 
 						return item ? JSON.parse(item) : null;
 					},
 					removeItem: (name) => {
+						lastPersistedUiState = DEFAULT_PERSISTED_UI_STATE;
 						safeRemoveItem(name);
 					},
 					setItem: (name, value) => {
-						safeSetItem(name, JSON.stringify(value));
+						const serialized = JSON.stringify(value);
+
+						if (serialized === lastPersistedUiState) {
+							return;
+						}
+
+						lastPersistedUiState = serialized;
+						safeSetItem(name, serialized);
 					},
 				},
 			},
