@@ -17,12 +17,6 @@
         "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
       }
     ],
-    "@semantic-release/github",
-    [
-      "@semantic-release/exec",
-      {
-        "successCmd": "bunx sentry-cli releases set-commits ${nextRelease.version} --auto"
-      }
-    ]
+    "@semantic-release/github"
   ]
 }

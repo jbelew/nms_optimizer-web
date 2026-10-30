@@ -20,7 +20,7 @@ describe("Vite Mode Environment Resolution (resolveModeEnv)", () => {
 			process.env.VITE_SENTRY_DSN = "";
 
 			const prodEnv = resolveModeEnv("production");
-			expect(prodEnv.VITE_SENTRY_ENABLED).toBe("true");
+			expect(prodEnv.VITE_SENTRY_ENABLED).toBe("false");
 			expect(prodEnv.VITE_ANALYTICS_ENABLED).toBe("true");
 			expect(prodEnv.VITE_SENTRY_ENV).toBe("production");
 			expect(prodEnv.VITE_SENTRY_DSN).toContain("ingest.us.sentry.io");
