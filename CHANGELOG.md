@@ -1,3 +1,15 @@
+## [8.7.1](https://github.com/jbelew/nms_optimizer-web/compare/v8.7.0...v8.7.1) (2026-10-30)
+
+
+### Bug Fixes
+
+* **performance:** stabilize tooltip fiber and guard removeChild errors ([#816](https://github.com/jbelew/nms_optimizer-web/issues/816)) ([a559acf](https://github.com/jbelew/nms_optimizer-web/commit/a559acf47aab28c9267a5ca4f5e8cdbab717e5bb))
+
+
+### Performance Improvements
+
+* **dialog:** reduce ModuleSelectionDialog INP latency and improve target attribution ([9324a6f](https://github.com/jbelew/nms_optimizer-web/commit/9324a6f999680feb5e0633f3c0b42fd9bbfa5241))
+
 # [8.7.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.6.6...v8.7.0) (2026-10-25)
 
 
