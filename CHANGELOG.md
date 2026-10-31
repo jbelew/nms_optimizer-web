@@ -1,3 +1,11 @@
+# [8.8.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.7.1...v8.8.0) (2026-10-31)
+
+
+### Features
+
+* **routing:** negotiate Accept: text/markdown via /__md/* edge handler ([#824](https://github.com/jbelew/nms_optimizer-web/issues/824)) ([1ae552c](https://github.com/jbelew/nms_optimizer-web/commit/1ae552c8cd420a51271eb080407d7d0de885621a))
+* **ssg:** synthesize static Agent Markdown Documents and expose discoverability links ([#823](https://github.com/jbelew/nms_optimizer-web/issues/823)) ([0f0de41](https://github.com/jbelew/nms_optimizer-web/commit/0f0de41811a890052d5b21249eb3ae1cfbf99c1f))
+
 ## [8.7.1](https://github.com/jbelew/nms_optimizer-web/compare/v8.7.0...v8.7.1) (2026-10-30)
 
 
