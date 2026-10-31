@@ -1,3 +1,10 @@
+## [8.8.1](https://github.com/jbelew/nms_optimizer-web/compare/v8.8.0...v8.8.1) (2026-10-31)
+
+
+### Bug Fixes
+
+* **seo:** declare search-only Content-Signal across robots.txt and Markdown ([#829](https://github.com/jbelew/nms_optimizer-web/issues/829)) ([ddd8717](https://github.com/jbelew/nms_optimizer-web/commit/ddd87175b4d6bf6e7272f7da668a1e1f228914a8))
+
 # [8.8.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.7.1...v8.8.0) (2026-10-31)
 
 
