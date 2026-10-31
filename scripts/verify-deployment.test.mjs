@@ -19,6 +19,7 @@ import { verifyDeployment } from "./verify-deployment.mjs";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FN_URL = `file://${path.join(__dirname, "../functions/[[path]].js")}`;
 const { onRequest } = await import(FN_URL);
+const REPO_ROBOTS_TXT = fs.readFileSync(path.join(__dirname, "../public/robots.txt"), "utf-8");
 
 const SILENT_LOGGER = {
 	error: () => {},
@@ -58,6 +59,17 @@ function createEdgeFetchFake({ intercept } = {}) {
 					"cache-control": "public, max-age=60, stale-while-revalidate=300",
 					"cf-cache-status": count > 1 ? "HIT" : "MISS",
 					"content-type": "application/json",
+				},
+				status: 200,
+			});
+		}
+
+		if (pathname === "/robots.txt") {
+			return new Response(REPO_ROBOTS_TXT, {
+				headers: {
+					"cache-control": "public, max-age=86400, stale-while-revalidate=3600",
+					"cf-cache-status": count > 1 ? "HIT" : "MISS",
+					"content-type": "text/plain; charset=utf-8",
 				},
 				status: 200,
 			});
@@ -136,7 +148,7 @@ function createEdgeFetchFake({ intercept } = {}) {
 				headers: {
 					"cache-control": "no-cache, must-revalidate, max-age=0",
 					"cf-cache-status": count > 1 ? "HIT" : "MISS",
-					"content-signal": "ai-train=yes, search=yes, ai-input=yes",
+					"content-signal": "ai-train=no, search=yes, ai-input=no",
 					"content-type": "text/markdown; charset=utf-8",
 					vary: "Accept",
 					"x-markdown-tokens": String(
@@ -183,7 +195,7 @@ describe("verifyDeployment (verify-deployment.mjs)", () => {
 							'---\ntitle: "X"\ndescription: "Y"\nurl: "https://nms-optimizer.app/"\nlang: "en"\nimage: "https://nms-optimizer.app/og.png"\n---\n\n# Heading\n',
 							{
 								headers: {
-									"content-signal": "ai-train=yes, search=yes, ai-input=yes",
+									"content-signal": "ai-train=no, search=yes, ai-input=no",
 									"content-type": "text/markdown; charset=utf-8",
 									vary: "Accept",
 									"x-markdown-tokens": "0",
@@ -213,7 +225,7 @@ describe("verifyDeployment (verify-deployment.mjs)", () => {
 							"<!doctype html><html><body>HTML instead of Markdown</body></html>",
 							{
 								headers: {
-									"content-signal": "ai-train=yes, search=yes, ai-input=yes",
+									"content-signal": "ai-train=no, search=yes, ai-input=no",
 									"content-type": "text/markdown; charset=utf-8",
 									vary: "Accept",
 									"x-markdown-tokens": "42",
@@ -232,6 +244,204 @@ describe("verifyDeployment (verify-deployment.mjs)", () => {
 
 		expect(badFrontmatterResult.ok).toBe(false);
 		expect(badFrontmatterResult.failures.some((msg) => msg.includes("frontmatter"))).toBe(true);
+
+		const staleContentSignalResult = await verifyDeployment({
+			fetchImpl: createEdgeFetchFake({
+				intercept({ accept, pathname }) {
+					if (pathname === "/about/" && accept === "text/markdown") {
+						return new Response(
+							'---\ntitle: "X"\ndescription: "Y"\nurl: "https://nms-optimizer.app/about/"\nlang: "en"\nimage: "https://nms-optimizer.app/og.png"\n---\n\n# Heading\n',
+							{
+								headers: {
+									"content-signal": "ai-train=yes, search=yes, ai-input=yes",
+									"content-type": "text/markdown; charset=utf-8",
+									vary: "Accept",
+									"x-markdown-tokens": "32",
+								},
+								status: 200,
+							},
+						);
+					}
+
+					return null;
+				},
+			}),
+			logger: SILENT_LOGGER,
+			target: "https://nms-optimizer.app",
+		});
+
+		expect(staleContentSignalResult.ok).toBe(false);
+		expect(
+			staleContentSignalResult.failures.some((msg) => msg.includes("Content-Signal")),
+		).toBe(true);
+	});
+
+	it("fails when /robots.txt returns non-200, non-text/plain Content-Type, empty User-agent groups, or omits/mismatches Content-Signal in any User-agent group", async () => {
+		const notFoundResult = await verifyDeployment({
+			fetchImpl: createEdgeFetchFake({
+				intercept({ pathname }) {
+					if (pathname === "/robots.txt") {
+						return new Response("Not Found", {
+							headers: { "content-type": "text/plain; charset=utf-8" },
+							status: 404,
+						});
+					}
+
+					return null;
+				},
+			}),
+			logger: SILENT_LOGGER,
+			target: "https://nms-optimizer.app",
+		});
+
+		expect(notFoundResult.ok).toBe(false);
+		expect(notFoundResult.failures.some((msg) => msg.includes("/robots.txt"))).toBe(true);
+
+		const wrongContentTypeResult = await verifyDeployment({
+			fetchImpl: createEdgeFetchFake({
+				intercept({ pathname }) {
+					if (pathname === "/robots.txt") {
+						return new Response(
+							"User-agent: *\nAllow: /\nContent-Signal: ai-train=no, search=yes, ai-input=no\n",
+							{
+								headers: { "content-type": "text/html; charset=utf-8" },
+								status: 200,
+							},
+						);
+					}
+
+					return null;
+				},
+			}),
+			logger: SILENT_LOGGER,
+			target: "https://nms-optimizer.app",
+		});
+
+		expect(wrongContentTypeResult.ok).toBe(false);
+		expect(
+			wrongContentTypeResult.failures.some(
+				(msg) => msg.includes("/robots.txt") && msg.includes("text/plain"),
+			),
+		).toBe(true);
+
+		const emptyGroupsResult = await verifyDeployment({
+			fetchImpl: createEdgeFetchFake({
+				intercept({ pathname }) {
+					if (pathname === "/robots.txt") {
+						return new Response(
+							"# Comment only\nSitemap: https://nms-optimizer.app/sitemap.xml\n",
+							{
+								headers: { "content-type": "text/plain; charset=utf-8" },
+								status: 200,
+							},
+						);
+					}
+
+					return null;
+				},
+			}),
+			logger: SILENT_LOGGER,
+			target: "https://nms-optimizer.app",
+		});
+
+		expect(emptyGroupsResult.ok).toBe(false);
+		expect(
+			emptyGroupsResult.failures.some(
+				(msg) => msg.includes("/robots.txt") && msg.includes("User-agent"),
+			),
+		).toBe(true);
+
+		const missingNamedGroupSignalResult = await verifyDeployment({
+			fetchImpl: createEdgeFetchFake({
+				intercept({ pathname }) {
+					if (pathname === "/robots.txt") {
+						return new Response(
+							[
+								"User-agent: *",
+								"Allow: /",
+								"Content-Signal: ai-train=no, search=yes, ai-input=no",
+								"",
+								"User-agent: GPTBot",
+								"Allow: /",
+							].join("\n"),
+							{
+								headers: { "content-type": "text/plain; charset=utf-8" },
+								status: 200,
+							},
+						);
+					}
+
+					return null;
+				},
+			}),
+			logger: SILENT_LOGGER,
+			target: "https://nms-optimizer.app",
+		});
+
+		expect(missingNamedGroupSignalResult.ok).toBe(false);
+		expect(
+			missingNamedGroupSignalResult.failures.some(
+				(msg) => msg.includes("/robots.txt") && msg.includes("GPTBot"),
+			),
+		).toBe(true);
+
+		const mismatchedSignalResult = await verifyDeployment({
+			fetchImpl: createEdgeFetchFake({
+				intercept({ pathname }) {
+					if (pathname === "/robots.txt") {
+						return new Response(
+							[
+								"User-agent: *",
+								"Allow: /",
+								"Content-Signal: ai-train=yes, search=yes, ai-input=yes",
+							].join("\n"),
+							{
+								headers: { "content-type": "text/plain; charset=utf-8" },
+								status: 200,
+							},
+						);
+					}
+
+					return null;
+				},
+			}),
+			logger: SILENT_LOGGER,
+			target: "https://nms-optimizer.app",
+		});
+
+		expect(mismatchedSignalResult.ok).toBe(false);
+		expect(
+			mismatchedSignalResult.failures.some(
+				(msg) => msg.includes("/robots.txt") && msg.includes("Content-Signal"),
+			),
+		).toBe(true);
+
+		const midGroupSitemapResult = await verifyDeployment({
+			fetchImpl: createEdgeFetchFake({
+				intercept({ pathname }) {
+					if (pathname === "/robots.txt") {
+						return new Response(
+							[
+								"User-agent: *",
+								"Sitemap: https://nms-optimizer.app/sitemap.xml",
+								"Allow: /",
+								"Content-Signal: ai-train=no, search=yes, ai-input=no",
+							].join("\n"),
+							{
+								headers: { "content-type": "text/plain; charset=utf-8" },
+								status: 200,
+							},
+						);
+					}
+
+					return null;
+				},
+			}),
+			logger: SILENT_LOGGER,
+			target: "https://nms-optimizer.app",
+		});
+
+		expect(midGroupSitemapResult.ok).toBe(true);
 	});
 
 	it("fails when an Accept: text/markdown request poisons subsequent browser HTML cache entries or degrades them to DYNAMIC", async () => {
@@ -380,6 +590,7 @@ describe("verifyDeployment (verify-deployment.mjs)", () => {
 			}
 
 			staticAssets.set("/es/index.html", htmlShell);
+			staticAssets.set("/robots.txt", REPO_ROBOTS_TXT);
 
 			const edgeCacheByPathname = new Map();
 			let functionInvocations = 0;
@@ -456,19 +667,19 @@ describe("verifyDeployment (verify-deployment.mjs)", () => {
 
 				const isExcludedFromPagesFunction =
 					excludedSet.has(rewrittenUrl.pathname)
-					|| (excludedSet.has("/*.md") && rewrittenUrl.pathname.endsWith(".md"));
+					|| (excludedSet.has("/*.md") && rewrittenUrl.pathname.endsWith(".md"))
+					|| (excludedSet.has("/*.txt") && rewrittenUrl.pathname.endsWith(".txt"));
 
 				if (isExcludedFromPagesFunction) {
 					const body = staticAssets.get(rewrittenUrl.pathname) ?? "Not Found";
 					const status = staticAssets.has(rewrittenUrl.pathname) ? 200 : 404;
+					const staticContentType =
+						rewrittenUrl.pathname.endsWith(".md") ? "text/markdown; charset=utf-8"
+						: rewrittenUrl.pathname.endsWith(".txt") ? "text/plain; charset=utf-8"
+						: "text/html; charset=utf-8";
 					const staticHeaders = [
 						["cache-control", "no-cache, must-revalidate, max-age=0"],
-						[
-							"content-type",
-							rewrittenUrl.pathname.endsWith(".md") ?
-								"text/markdown; charset=utf-8"
-							:	"text/html; charset=utf-8",
-						],
+						["content-type", staticContentType],
 					];
 
 					if (!bypassEdgeCache && status === 200) {

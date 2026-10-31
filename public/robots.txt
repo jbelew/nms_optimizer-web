@@ -5,14 +5,16 @@ Disallow: /performance/
 Disallow: /*/performance
 Disallow: /*/performance/
 Crawl-delay: 1
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
-# Explicitly allow AI and Search crawlers
+# Explicit search and AI crawler rules with search-only content usage signals
 User-agent: Googlebot
 Allow: /
 Disallow: /performance
 Disallow: /performance/
 Disallow: /*/performance
 Disallow: /*/performance/
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: Bingbot
 Allow: /
@@ -20,6 +22,7 @@ Disallow: /performance
 Disallow: /performance/
 Disallow: /*/performance
 Disallow: /*/performance/
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: GPTBot
 Allow: /
@@ -27,6 +30,7 @@ Disallow: /performance
 Disallow: /performance/
 Disallow: /*/performance
 Disallow: /*/performance/
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: ChatGPT-User
 Allow: /
@@ -34,6 +38,7 @@ Disallow: /performance
 Disallow: /performance/
 Disallow: /*/performance
 Disallow: /*/performance/
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: PerplexityBot
 Allow: /
@@ -41,6 +46,7 @@ Disallow: /performance
 Disallow: /performance/
 Disallow: /*/performance
 Disallow: /*/performance/
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: ClaudeBot
 Allow: /
@@ -48,6 +54,7 @@ Disallow: /performance
 Disallow: /performance/
 Disallow: /*/performance
 Disallow: /*/performance/
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: anthropic-ai
 Allow: /
@@ -55,5 +62,6 @@ Disallow: /performance
 Disallow: /performance/
 Disallow: /*/performance
 Disallow: /*/performance/
+Content-Signal: ai-train=no, search=yes, ai-input=no
 
 Sitemap: https://nms-optimizer.app/sitemap.xml
