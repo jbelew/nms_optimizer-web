@@ -296,7 +296,7 @@ async function handleMarkdownRewrite(context, url, lang, isSpaRoute) {
 		headers.set("Content-Type", "text/markdown; charset=utf-8");
 		ensureVaryAccept(headers);
 		headers.set("x-markdown-tokens", String(Math.ceil(bodyBuffer.byteLength / 4)));
-		headers.set("Content-Signal", "ai-train=yes, search=yes, ai-input=yes");
+		headers.set("Content-Signal", "ai-train=no, search=yes, ai-input=no");
 		headers.set("Cache-Control", "no-cache, must-revalidate, max-age=0");
 
 		return new Response(bodyBuffer, {

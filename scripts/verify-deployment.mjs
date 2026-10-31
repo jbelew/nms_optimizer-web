@@ -2,8 +2,8 @@
  * @file Verification script for Cloudflare deployment.
  *
  * Runs against the live production site (or a preview URL) to verify static CDN caching,
- * SPA fallback routing, immutable hashed asset caching, and `Accept: text/markdown`
- * Agent Markdown Document content negotiation.
+ * SPA fallback routing, immutable hashed asset caching, `Accept: text/markdown`
+ * Agent Markdown Document content negotiation, and `/robots.txt` Content-Signal directives.
  *
  * Usage: bun scripts/verify-deployment.mjs [url]
  */
@@ -12,7 +12,7 @@ import { SUPPORTED_LANGUAGES } from "../shared/config.js";
 
 const DEFAULT_TARGET = "https://nms-optimizer.app";
 const BROWSER_ACCEPT = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-const EXPECTED_CONTENT_SIGNAL = "ai-train=yes, search=yes, ai-input=yes";
+const EXPECTED_CONTENT_SIGNAL = "ai-train=no, search=yes, ai-input=no";
 
 const MARKDOWN_NEGOTIATION_PATHS = [
 	"/",
@@ -28,7 +28,8 @@ const REQUIRED_FRONTMATTER_KEYS = ["title", "description", "url", "lang", "image
 
 /**
  * Verifies live Cloudflare deployment headers, static CDN cache status, SPA fallback routing,
- * and `Accept: text/markdown` Agent Markdown Document negotiation against `target`.
+ * `Accept: text/markdown` Agent Markdown Document negotiation, and `/robots.txt` Content-Signal
+ * directives against `target`.
  *
  * @remarks
  * Uses `redirect: "manual"` on HTTP probes so canonical `301` redirects and edge response
@@ -359,6 +360,36 @@ export async function verifyDeployment({
 		}
 	}
 
+	// 7. Check robots.txt Content-Signal Policy
+	logger.info("\n--- 7. robots.txt Content-Signal Policy ---");
+	const robotsResponse = await probe("/robots.txt");
+
+	if (robotsResponse) {
+		const rawRobotsContentType = robotsResponse.headers.get("content-type") ?? "";
+		const robotsMediaType = rawRobotsContentType.split(";")[0]?.trim().toLowerCase() ?? "";
+
+		if (robotsResponse.status !== 200) {
+			fail(`/robots.txt - Expected 200 OK, got ${robotsResponse.status}`);
+		} else if (robotsMediaType !== "text/plain") {
+			fail(
+				`/robots.txt - Expected text/plain Content-Type, got "${robotsResponse.headers.get("content-type")}"`,
+			);
+		} else {
+			const robotsBody = await robotsResponse.text();
+			const robotsCheck = validateRobotsContentSignals(robotsBody, EXPECTED_CONTENT_SIGNAL);
+
+			if (!robotsCheck.ok) {
+				for (const reason of robotsCheck.reasons) {
+					fail(`/robots.txt - ${reason}`);
+				}
+			} else {
+				logger.info(
+					`✓ /robots.txt - 200 text/plain (${robotsCheck.groupCount} User-agent groups declare Content-Signal: ${EXPECTED_CONTENT_SIGNAL})`,
+				);
+			}
+		}
+	}
+
 	logger.info(`\n${"=".repeat(40)}`);
 
 	if (failures.length === 0) {
@@ -389,6 +420,102 @@ function hasVaryAccept(varyHeader) {
 		.split(",")
 		.map((token) => token.trim().toLowerCase())
 		.some((token) => token === "accept" || token === "*");
+}
+
+/**
+ * Parses `/robots.txt` into RFC 9309 `User-agent` groups and verifies that at least one group
+ * exists and every group declares `Content-Signal: <expectedSignal>`.
+ *
+ * @param {string} body - Raw `/robots.txt` response body.
+ * @param {string} expectedSignal - Expected `Content-Signal` directive value.
+ * @returns {{ groupCount: number, ok: boolean, reasons: string[] }} Validation summary.
+ */
+function validateRobotsContentSignals(body, expectedSignal) {
+	/** @type {Array<{ contentSignals: string[], hasRules: boolean, userAgents: string[] }>} */
+	const groups = [];
+	/** @type {string[]} */
+	const reasons = [];
+	/** @type {{ contentSignals: string[], hasRules: boolean, userAgents: string[] } | null} */
+	let currentGroup = null;
+
+	for (const rawLine of body.split(/\r?\n/)) {
+		const cleanLine = rawLine.replace(/#.*$/, "").trim();
+
+		if (!cleanLine) {
+			continue;
+		}
+
+		const colonIdx = cleanLine.indexOf(":");
+
+		if (colonIdx <= 0) {
+			reasons.push(`Malformed directive line "${cleanLine}"`);
+			continue;
+		}
+
+		const field = cleanLine.slice(0, colonIdx).trim().toLowerCase();
+		const value = cleanLine.slice(colonIdx + 1).trim();
+
+		if (field === "user-agent") {
+			if (!value) {
+				reasons.push("Empty User-agent directive value");
+				continue;
+			}
+
+			if (!currentGroup || currentGroup.hasRules) {
+				currentGroup = { contentSignals: [], hasRules: false, userAgents: [value] };
+				groups.push(currentGroup);
+			} else {
+				currentGroup.userAgents.push(value);
+			}
+
+			continue;
+		}
+
+		if (field === "sitemap") {
+			continue;
+		}
+
+		if (!currentGroup) {
+			if (field === "content-signal") {
+				reasons.push("Found Content-Signal directive outside a User-agent group");
+			}
+
+			continue;
+		}
+
+		currentGroup.hasRules = true;
+
+		if (field === "content-signal") {
+			currentGroup.contentSignals.push(value);
+		}
+	}
+
+	if (groups.length === 0) {
+		reasons.push("No RFC 9309 User-agent groups found");
+	}
+
+	for (const group of groups) {
+		const groupLabel = group.userAgents.join(", ");
+
+		if (group.contentSignals.length === 0) {
+			reasons.push(
+				`User-agent group "${groupLabel}" is missing Content-Signal "${expectedSignal}"`,
+			);
+		} else if (
+			group.contentSignals.length !== 1
+			|| group.contentSignals[0] !== expectedSignal
+		) {
+			reasons.push(
+				`User-agent group "${groupLabel}" expected single Content-Signal "${expectedSignal}", got "${group.contentSignals.join("; ")}"`,
+			);
+		}
+	}
+
+	return {
+		groupCount: groups.length,
+		ok: reasons.length === 0,
+		reasons,
+	};
 }
 
 /**

@@ -201,9 +201,7 @@ describe("functions/[[path]].js", () => {
 			expect(res.headers.get("content-type")).toBe("text/markdown; charset=utf-8");
 			expect(res.headers.get("vary")).toBe("Accept-Encoding, Accept");
 			expect(res.headers.get("x-markdown-tokens")).toBe("8");
-			expect(res.headers.get("content-signal")).toBe(
-				"ai-train=yes, search=yes, ai-input=yes",
-			);
+			expect(res.headers.get("content-signal")).toBe("ai-train=no, search=yes, ai-input=no");
 			expect(res.headers.get("cache-control")).toBe("no-cache, must-revalidate, max-age=0");
 		});
 
@@ -369,6 +367,7 @@ describe("functions/[[path]].js", () => {
 				expect(res.status).toBe(200);
 				expect(res.headers.get("content-type")).toBe("text/html; charset=utf-8");
 				expect(res.headers.get("vary")).toBe("Accept");
+				expect(res.headers.get("content-signal")).toBeNull();
 				expect(await res.text()).toContain("About HTML");
 			}
 		});
@@ -412,6 +411,7 @@ describe("functions/[[path]].js", () => {
 				expect(res.headers.get("content-type")).toBe("text/html; charset=utf-8");
 				expect(res.headers.get("x-spa-fallback")).toBe("true");
 				expect(res.headers.get("vary")).toBe("Accept");
+				expect(res.headers.get("content-signal")).toBeNull();
 				expect(res.headers.get("cache-control")).toBe(
 					"no-cache, must-revalidate, max-age=0",
 				);
@@ -528,7 +528,7 @@ describe("functions/[[path]].js", () => {
 				expect(esRes.headers.get("content-type")).toBe("text/markdown; charset=utf-8");
 				expect(esRes.headers.get("vary")).toBe("Accept");
 				expect(esRes.headers.get("content-signal")).toBe(
-					"ai-train=yes, search=yes, ai-input=yes",
+					"ai-train=no, search=yes, ai-input=no",
 				);
 				expect(esRes.headers.get("cache-control")).toBe(
 					"no-cache, must-revalidate, max-age=0",

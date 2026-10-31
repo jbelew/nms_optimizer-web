@@ -595,7 +595,7 @@ describe("generate-ssg.mjs", () => {
 	});
 
 	describe("static CDN configuration & discoverability artifacts", () => {
-		it("configures /*.md static headers (with detached Cache-Control), _routes.json exclusion, and canonical llms.txt Agent Markdown Document links", () => {
+		const parseStaticHeaderRules = () => {
 			const headersContent = fs.readFileSync(path.resolve("public/_headers"), "utf-8");
 			const rules = new Map();
 			let currentRule = null;
@@ -615,6 +615,11 @@ describe("generate-ssg.mjs", () => {
 				}
 			}
 
+			return rules;
+		};
+
+		it("configures /*.md static headers (with detached Cache-Control), _routes.json exclusion, and canonical llms.txt Agent Markdown Document links", () => {
+			const rules = parseStaticHeaderRules();
 			const mdDirectives = rules.get("/*.md") ?? [];
 			const detachIdx = mdDirectives.indexOf("! Cache-Control");
 			const cacheControlIdx = mdDirectives.indexOf(
@@ -624,9 +629,19 @@ describe("generate-ssg.mjs", () => {
 			expect(detachIdx).toBeGreaterThanOrEqual(0);
 			expect(cacheControlIdx).toBeGreaterThan(detachIdx);
 			expect(mdDirectives).toContain("Content-Type: text/markdown; charset=utf-8");
-			expect(mdDirectives).toContain(
-				"Content-Signal: ai-train=yes, search=yes, ai-input=yes",
-			);
+			expect(mdDirectives).toContain("Content-Signal: ai-train=no, search=yes, ai-input=no");
+
+			for (const [rulePath, directives] of rules.entries()) {
+				if (rulePath === "/*.md") {
+					continue;
+				}
+
+				expect(
+					directives.some((directive) =>
+						directive.toLowerCase().startsWith("content-signal:"),
+					),
+				).toBe(false);
+			}
 
 			const routesConfig = JSON.parse(
 				fs.readFileSync(path.resolve("public/_routes.json"), "utf-8"),
@@ -647,6 +662,104 @@ describe("generate-ssg.mjs", () => {
 			for (const locale of ["en", "es", "fr", "de", "pt", "it"]) {
 				expect(llmsTxt).toMatch(new RegExp(`\\b${locale}\\b`));
 			}
+		});
+
+		it("declares search-only Content-Signal preferences across every RFC 9309 User-agent group in robots.txt aligned with /*.md static headers", () => {
+			const rules = parseStaticHeaderRules();
+			const mdContentSignalLine = (rules.get("/*.md") ?? []).find((line) =>
+				line.toLowerCase().startsWith("content-signal:"),
+			);
+
+			expect(mdContentSignalLine).toBe(
+				"Content-Signal: ai-train=no, search=yes, ai-input=no",
+			);
+
+			const expectedContentSignal = mdContentSignalLine
+				?.slice("Content-Signal:".length)
+				.trim();
+			const robotsContent = fs.readFileSync(path.resolve("public/robots.txt"), "utf-8");
+			const groups = [];
+			const sitemaps = [];
+			const ungroupedDirectives = [];
+			let currentGroup = null;
+
+			for (const rawLine of robotsContent.split(/\r?\n/)) {
+				const cleanLine = rawLine.replace(/#.*$/, "").trim();
+
+				if (!cleanLine) {
+					continue;
+				}
+
+				const colonIdx = cleanLine.indexOf(":");
+				expect(colonIdx).toBeGreaterThan(0);
+
+				const field = cleanLine.slice(0, colonIdx).trim().toLowerCase();
+				const value = cleanLine.slice(colonIdx + 1).trim();
+
+				if (field === "user-agent") {
+					if (!currentGroup || currentGroup.directives.length > 0) {
+						currentGroup = { directives: [], userAgents: [value] };
+						groups.push(currentGroup);
+					} else {
+						currentGroup.userAgents.push(value);
+					}
+
+					continue;
+				}
+
+				if (field === "sitemap") {
+					sitemaps.push(value);
+					continue;
+				}
+
+				if (!currentGroup) {
+					ungroupedDirectives.push({ field, value });
+					continue;
+				}
+
+				currentGroup.directives.push({ field, value });
+			}
+
+			expect(ungroupedDirectives).toEqual([]);
+			expect(sitemaps).toEqual(["https://nms-optimizer.app/sitemap.xml"]);
+			expect(groups.map((group) => group.userAgents)).toEqual([
+				["*"],
+				["Googlebot"],
+				["Bingbot"],
+				["GPTBot"],
+				["ChatGPT-User"],
+				["PerplexityBot"],
+				["ClaudeBot"],
+				["anthropic-ai"],
+			]);
+
+			for (const group of groups) {
+				const contentSignals = group.directives
+					.filter((directive) => directive.field === "content-signal")
+					.map((directive) => directive.value);
+				const allows = group.directives
+					.filter((directive) => directive.field === "allow")
+					.map((directive) => directive.value);
+				const disallows = group.directives
+					.filter((directive) => directive.field === "disallow")
+					.map((directive) => directive.value);
+
+				expect(contentSignals).toEqual(["ai-train=no, search=yes, ai-input=no"]);
+				expect(contentSignals[0]).toBe(expectedContentSignal);
+				expect(allows).toEqual(["/"]);
+				expect(disallows).toEqual([
+					"/performance",
+					"/performance/",
+					"/*/performance",
+					"/*/performance/",
+				]);
+			}
+
+			const wildcardCrawlDelay = groups[0].directives
+				.filter((directive) => directive.field === "crawl-delay")
+				.map((directive) => directive.value);
+
+			expect(wildcardCrawlDelay).toEqual(["1"]);
 		});
 	});
 

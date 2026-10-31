@@ -147,14 +147,32 @@ describe("provisionCloudflareZone (provision-cloudflare-zone.mjs)", () => {
 
 		expect(cachePut).toBeDefined();
 
-		const [alwaysFreshRule, subShellAndMarkdownRule] = cachePut.body.rules;
+		const rules = cachePut.body.rules;
+		const alwaysFreshIdx = rules.findIndex((rule) => rule.action_parameters?.cache === false);
+		const subShellIdx = rules.findIndex((rule) =>
+			String(rule.expression).includes('starts_with(http.request.uri.path, "/__md/")'),
+		);
+
+		expect(subShellIdx).toBeGreaterThanOrEqual(0);
+		expect(alwaysFreshIdx).toBe(rules.length - 1);
+		expect(alwaysFreshIdx).toBeGreaterThan(subShellIdx);
+
+		const alwaysFreshRule = rules[alwaysFreshIdx];
+		const subShellAndMarkdownRule = rules[subShellIdx];
+
 		expect(alwaysFreshRule.action).toBe("set_cache_settings");
 		expect(alwaysFreshRule.action_parameters).toEqual({ cache: false });
 		expect(alwaysFreshRule.expression).toContain(
 			'starts_with(http.request.uri.path, "/performance/")',
 		);
 		expect(alwaysFreshRule.expression).toContain(
+			'starts_with(http.request.uri.path, "/es/performance/")',
+		);
+		expect(alwaysFreshRule.expression).toContain(
 			'starts_with(http.request.uri.path, "/__md/performance/")',
+		);
+		expect(alwaysFreshRule.expression).toContain(
+			'starts_with(http.request.uri.path, "/__md/es/performance/")',
 		);
 		expect(alwaysFreshRule.expression).toContain(
 			'not any(lower(http.request.headers["accept"][*])[*] contains "text/markdown")',

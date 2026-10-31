@@ -4,8 +4,9 @@ Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all o
 
 ## Conventions
 
-- **Create an issue**: `gh issue create --title "..." --body "..."`. Use a heredoc for multi-line bodies.
-- **Read an issue**: `gh issue view <number> --json number,title,body,labels,comments`.
+- **Create an issue**: `gh issue create --title "..." --body "..."`. Use a heredoc or `--body-file` for multi-line bodies.
+- **Read an issue**: `gh issue view <number> --json number,title,body,labels,comments --jq '"#\(.number) \(.title)\nLabels: \([.labels[].name] | join(", "))\n\n\(.body)"'` (renders readable newlines instead of single-line `\n`-escaped JSON blobs; append `\(.comments | map("\n---\n" + .body) | join(""))` when comments are needed).
+- **Update a PR body or title**: `gh api --method PATCH repos/{owner}/{repo}/pulls/<number> -F body=@<body-file>` (uses GitHub's REST API directly so `gh pr edit` never fails on GitHub's deprecated classic Projects `projectCards` GraphQL field).
 - **List issues**: `gh issue list --state open --json number,title,body,labels,comments --jq '[.[] | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]'` with appropriate `--label` and `--state` filters.
 - **Make an issue a sub-issue of a parent**: `gh api --method POST repos/{owner}/{repo}/issues/<parent>/sub_issues -F sub_issue_id=<child-db-id>` (numeric database id from `gh api repos/{owner}/{repo}/issues/<n> --jq .id`, as in **Blocking** below). On `gh` 2.94+: `gh issue create --parent <parent> ...` or `gh issue edit <parent> --add-sub-issue <child>`. Without sub-issues, put `Part of #<parent>` at the top of the child body.
 - **Comment on an issue**: `gh issue comment <number> --body "..."`
@@ -22,7 +23,7 @@ When set to `yes`, PRs run through the same labels and states as issues, using t
 
 - **Read a PR**: `gh pr view <number> --comments` and `gh pr diff <number>` for the diff.
 - **List external PRs for triage**: `gh api --paginate 'repos/{owner}/{repo}/pulls?state=open' --jq '.[] | select(.author_association | IN("OWNER","MEMBER","COLLABORATOR") | not) | {number, title, author: .user.login, author_association, labels: [.labels[].name]}'`.
-- **Comment / label / close**: `gh pr comment`, `gh pr edit --add-label`/`--remove-label`, `gh pr close`.
+- **Comment / label / edit / close**: `gh pr comment`, `gh pr edit --add-label`/`--remove-label`, `gh api --method PATCH repos/{owner}/{repo}/pulls/<number> -F body=@<file>`, `gh pr close`.
 
 GitHub shares one number space across issues and PRs, so a bare `#42` may be either: resolve with `gh pr view 42 --json number,title,body,labels,comments` and fall back to `gh issue view 42 --json number,title,body,labels,comments`.
 
