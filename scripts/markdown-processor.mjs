@@ -93,6 +93,40 @@ export function createMarkdownProcessor() {
 }
 
 /**
+ * Strips custom `<radix-icon>` tags from raw markdown before SSG compilation,
+ * collapsing surrounding whitespace while preserving leading line indentation.
+ *
+ * @remarks
+ * Prevents non-standard `<radix-icon>` custom elements from appearing in Static SEO Fallback HTML
+ * and synthesized Agent Markdown Documents while keeping 4-space nested list indentation intact.
+ *
+ * @param {string} markdown - Raw markdown content.
+ * @returns {string} Sanitized markdown content without `<radix-icon>` tags.
+ *
+ * @see {@link ./generate-ssg.test.mjs Unit Tests}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```js
+ * stripRadixIconTags('Click <radix-icon name="GearIcon"></radix-icon> button.');
+ * // returns "Click button."
+ * ```
+ */
+export function stripRadixIconTags(markdown) {
+	return markdown
+		.replace(/^<radix-icon\b[^>]*?(?:\/>|>[\s\S]*?<\/radix-icon>)[ \t]*/gim, "")
+		.replace(/<radix-icon\b[^>]*?(?:\/>|>[\s\S]*?<\/radix-icon>)/gi, "")
+		.replace(/([^\S\r\n]){2,}/g, (match, _space, offset, str) => {
+			const lineStart = str.lastIndexOf("\n", offset - 1) + 1;
+
+			return offset === lineStart ? match : " ";
+		})
+		.replace(/ +([.,;:!?])/g, "$1")
+		.replace(/^(\s*[-*+]\s+) +/gm, "$1");
+}
+
+/**
  * Generates a URL-safe section slug from heading text.
  *
  * @remarks
@@ -114,35 +148,4 @@ function getSlug(text) {
 		.toLowerCase()
 		.replace(/[^\w\s-]/g, "")
 		.replace(/\s+/g, "-");
-}
-
-/**
- * Strips custom `<radix-icon>` tags from raw markdown before SSG compilation,
- * collapsing surrounding whitespace while preserving leading line indentation.
- *
- * @remarks
- * Prevents non-standard `<radix-icon>` custom elements from appearing in Static SEO Fallback HTML
- * while keeping 4-space nested list indentation intact.
- *
- * @param {string} markdown - Raw markdown content.
- * @returns {string} Sanitized markdown content without `<radix-icon>` tags.
- *
- * @category Utilities
- *
- * @example
- * ```js
- * stripRadixIconTags('Click <radix-icon name="GearIcon"></radix-icon> button.');
- * // returns "Click button."
- * ```
- */
-function stripRadixIconTags(markdown) {
-	return markdown
-		.replace(/<radix-icon\b[^>]*?(?:\/>|>[\s\S]*?<\/radix-icon>)/gi, "")
-		.replace(/([^\S\r\n]){2,}/g, (match, _space, offset, str) => {
-			const lineStart = str.lastIndexOf("\n", offset - 1) + 1;
-
-			return offset === lineStart ? match : " ";
-		})
-		.replace(/ +([.,;:!?])/g, "$1")
-		.replace(/^(\s*[-*+]\s+) +/gm, "$1");
 }

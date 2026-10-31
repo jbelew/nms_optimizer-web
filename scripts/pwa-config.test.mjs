@@ -25,13 +25,12 @@ describe("PWA Configuration & Manifest", () => {
 	const distExists = fs.existsSync(DIST);
 	const itWhenBuilt = distExists ? it : it.skip;
 
-	const manifest = distExists && fs.existsSync(MANIFEST_PATH)
-		? JSON.parse(fs.readFileSync(MANIFEST_PATH, "utf-8"))
-		: null;
+	const manifest =
+		distExists && fs.existsSync(MANIFEST_PATH) ?
+			JSON.parse(fs.readFileSync(MANIFEST_PATH, "utf-8"))
+		:	null;
 
-	const swContent = distExists && fs.existsSync(SW_PATH)
-		? fs.readFileSync(SW_PATH, "utf-8")
-		: "";
+	const swContent = distExists && fs.existsSync(SW_PATH) ? fs.readFileSync(SW_PATH, "utf-8") : "";
 
 	itWhenBuilt("manifest contains valid PWA shortcuts", () => {
 		expect(manifest).not.toBeNull();
@@ -88,11 +87,14 @@ describe("PWA Configuration & Manifest", () => {
 		]);
 	});
 
-	itWhenBuilt("sw.js excludes index.html from precache list to prevent redundant downloads", () => {
-		expect(swContent).toBeTruthy();
-		// Should NOT have {url:"index.html" in precacheAndRoute
-		expect(swContent).not.toMatch(/\{url:"index\.html"/);
-	});
+	itWhenBuilt(
+		"sw.js excludes index.html from precache list to prevent redundant downloads",
+		() => {
+			expect(swContent).toBeTruthy();
+			// Should NOT have {url:"index.html" in precacheAndRoute
+			expect(swContent).not.toMatch(/\{url:"index\.html"/);
+		},
+	);
 
 	itWhenBuilt("sw.js excludes build JavaScript and CSS bundles from precache manifest", () => {
 		expect(swContent).toBeTruthy();
@@ -117,23 +119,39 @@ describe("PWA Configuration & Manifest", () => {
 		expect(new Set(urls).size).toBe(urls.length);
 	});
 
-	itWhenBuilt("sw.js excludes screenshots, legacy manifest icons, and locale JSONs from precache", () => {
-		expect(swContent).toBeTruthy();
-		expect(swContent).not.toMatch(/\{url:"assets\/img\/screenshots\//);
-		expect(swContent).not.toMatch(/\{url:"assets\/img\/manifest\//);
-		expect(swContent).not.toMatch(/\{url:"assets\/locales\//);
-	});
+	itWhenBuilt(
+		"sw.js excludes screenshots, legacy manifest icons, and locale JSONs from precache",
+		() => {
+			expect(swContent).toBeTruthy();
+			expect(swContent).not.toMatch(/\{url:"assets\/img\/screenshots\//);
+			expect(swContent).not.toMatch(/\{url:"assets\/img\/manifest\//);
+			expect(swContent).not.toMatch(/\{url:"assets\/locales\//);
+		},
+	);
 
-	itWhenBuilt("sw.js includes a build release stamp so code-only deployments trigger Staged Worker detection", () => {
-		expect(swContent).toBeTruthy();
-		expect(swContent).toMatch(/\/\/ Release: v/);
-	});
+	itWhenBuilt(
+		"sw.js includes a build release stamp so code-only deployments trigger Staged Worker detection",
+		() => {
+			expect(swContent).toBeTruthy();
+			expect(swContent).toMatch(/\/\/ Release: v/);
+		},
+	);
 
 	it("public/_headers configures immutable caching for /workbox-*.js and no-cache for /sw.js and /version.json", () => {
 		const headersContent = fs.readFileSync(path.join(ROOT, "public/_headers"), "utf-8");
-		expect(headersContent).toMatch(/\/workbox-\*\.js\s+Cache-Control:\s*public,\s*max-age=31536000,\s*immutable/);
-		expect(headersContent).toMatch(/\/sw\.js\s+Cache-Control:\s*no-cache,\s*must-revalidate,\s*max-age=0/);
-		expect(headersContent).toMatch(/\/version\.json\s+Cache-Control:\s*no-cache,\s*must-revalidate,\s*max-age=0/);
+		expect(headersContent).toMatch(
+			/\/workbox-\*\.js\s+Cache-Control:\s*public,\s*max-age=31536000,\s*immutable/,
+		);
+		expect(headersContent).toMatch(
+			/\/sw\.js\s+Cache-Control:\s*no-cache,\s*must-revalidate,\s*max-age=0/,
+		);
+		expect(headersContent).toMatch(
+			/\/version\.json\s+Cache-Control:\s*no-cache,\s*must-revalidate,\s*max-age=0/,
+		);
+	});
+
+	itWhenBuilt("sw.js excludes .md Agent Markdown Documents from precache manifest", () => {
+		expect(swContent).toBeTruthy();
+		expect(swContent).not.toMatch(/\{url:"[^"]*\.md"/);
 	});
 });
-

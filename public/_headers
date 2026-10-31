@@ -103,3 +103,10 @@
   Cache-Control: no-cache, must-revalidate, max-age=0
 /sw.js
   Cache-Control: no-cache, must-revalidate, max-age=0
+
+# Agent Markdown Documents
+/*.md
+  ! Cache-Control
+  Content-Type: text/markdown; charset=utf-8
+  Cache-Control: no-cache, must-revalidate, max-age=0
+  Content-Signal: ai-train=yes, search=yes, ai-input=yes
