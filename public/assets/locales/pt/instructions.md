@@ -2,12 +2,13 @@
 
 ## Primeiros Passos Com A Grade
 
-- Selecione uma **Plataforma** (Nave, Multiferramenta, Corveta, etc.) usando o ícone <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
-- **Clique** ou **toque duas vezes** (mobile) em um espaço para marcá-lo como **Sobrecarregado**.
-- **Ctrl-clique (Windows) / ⌘-clic (Mac) / toque simples (mobile)** para alternar entre um espaço **ativo** ou **inativo**.
-- **Controles de teclado:** Navegue com as **teclas de seta** (↑, ↓, ←, →) e **Home** / **End**, pressione **S** / **Shift+Enter** para sobrecarregar e **Espaço** / **Enter** para alternar ativo/inativo.
-- Use os **interruptores de linha** para activar ou desativar linhas inteiras. _(Os interruptores são desativados após a colocação de módulos)._
-- Use o botão de **seleção de módulos** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> para adicionar ou remover módulos individuais dentro de um grupo tecnológico.
+- Selecione um **Tipo de plataforma** (Nave, Multiferramenta, Corveta, etc.) com o botão <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
+- **Clique** ou **toque duas vezes** (mobile) em um espaço vazio para alternar seu estado **Sobrecarregado**.
+- **Ctrl-clique** (Windows) / **⌘-clique** (Mac) / **toque simples** (mobile) em um espaço para alternar seu estado **ativo** ou **inativo**.
+- **Controles de teclado:** Pressione as **teclas de seta** (↑, ↓, ←, →) e **Home** / **End** para mover o foco. Pressione **S** ou **Shift+Enter** para alternar o estado **Sobrecarregado**. Pressione **Espaço** ou **Enter** para alternar o estado **ativo** ou **inativo**.
+- Use os **interruptores de linha** para ativar ou desativar uma linha inteira. _(Os interruptores de linha são bloqueados após posicionar módulos na grade.)_
+- Clique no botão de **Seleção de módulos** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> em uma **Categoria de tecnologia** para ativar ou desativar módulos individuais e visualizar as dimensões necessárias da **Janela de cálculo**.
+- Alterne o **Modo de Foco** <radix-icon name="EyeOpenIcon" size="20" color="var(--accent-11)"></radix-icon> para reduzir distrações visuais e melhorar a legibilidade do texto.
 
 > 💡 **Nota:**
 > Exotrajes e Exonaves possuem grades fixas. Os espaços de Exonaves não podem ser modificados. Em Exotrajes, apenas os estados ativo/inativo podem ser alterados — os layouts de espaços sobrecarregados são fixos.

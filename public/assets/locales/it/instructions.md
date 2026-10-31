@@ -2,12 +2,13 @@
 
 ## Iniziare con la Griglia
 
-- Seleziona una **Piattaforma** (Starship, Multi-Tool, Corvette, ecc.) usando l'icona <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
-- **Clicca** o **doppio tocco** (mobile) su uno slot per marcarlo come **Sovraccarico**.
-- **Ctrl-clic (Windows) / ⌘-clic (Mac) / singolo tocco (mobile)** per attivare o disattivare uno slot.
-- **Controlli da tastiera:** Naviga con i **tasti freccia** (↑, ↓, ←, →) e **Inizio** / **Fine**, premi **S** / **Shift+Invio** per sovraccaricare e **Spazio** / **Invio** per attivare/disattivare.
-- Usa gli **interruttori di riga** per abilitare o disabilitare intere righe. _(Gli interruttori di riga sono disabilitati una volta posizionati i moduli.)_
-- Usa il pulsante di **selezione moduli** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> per aggiungere o rimuovere singoli moduli all'interno di un gruppo tecnologico.
+- Seleziona un **Tipo di piattaforma** (Nave Stellare, Multi-Strumento, Corvetta, ecc.) con il pulsante <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
+- **Clicca** o **tocca due volte** (mobile) uno slot vuoto per alternare il suo stato **Sovraccarico**.
+- **Ctrl-clic** (Windows) / **⌘-clic** (Mac) / **tocco singolo** (mobile) su uno slot per alternare il suo stato **attivo** o **inattivo**.
+- **Controlli da tastiera:** Premi i **tasti freccia** (↑, ↓, ←, →) e **Inizio** / **Fine** per spostare il focus. Premi **S** o **Shift+Invio** per alternare lo stato **Sovraccarico**. Premi **Spazio** o **Invio** per alternare lo stato **attivo** o **inattivo**.
+- Usa gli **interruttori di riga** per abilitare o disabilitare un'intera riga. _(Gli interruttori di riga si bloccano dopo aver posizionato moduli sulla griglia.)_
+- Clicca sul pulsante **Selezione moduli** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> di una **Categoria tecnologica** per abilitare o disabilitare singoli moduli e visualizzare le dimensioni richieste della **Finestra di calcolo**.
+- Attiva o disattiva la **Modalità Focus** <radix-icon name="EyeOpenIcon" size="20" color="var(--accent-11)"></radix-icon> per ridurre le distrazioni visive e migliorare la leggibilità del testo.
 
 > 💡 **Nota:**
 > Le Exosuit e gli Exocraft hanno griglie fisse. Gli slot degli Exocraft non possono essere modificati. Sulle Exosuit, solo gli stati attivo/inattivo possono essere cambiati — i layout degli slot sovraccarichi sono fissi.

@@ -91,14 +91,13 @@
 			"performance": "Mesures de Performance"
 		},
 		"welcome": {
-			"title": "Bienvenue sur l'NMS Optimizer !",
-			"description": "Voici un guide rapide pour tirer le meilleur parti de cet outil :",
-			"item1": "Sélectionnez une <strong>Plateforme</strong> via l'icône <icon/>.",
-			"item2": "<strong>Cliquez</strong> ou <strong>appuyez deux fois</strong> sur un emplacement pour le marquer comme <strong>Surchargé</strong>.",
-			"item3": "<strong>Ctrl+clic</strong> (Windows) / <strong>⌘+clic</strong> (Mac) / <strong>appui simple</strong> (Mobile) pour activer/désactiver un emplacement.",
-			"item4": "Utilisez les <strong>interrupteurs de rangée</strong> pour activer ou désactiver des lignes entières (se désactivent une fois les modules placés).",
-			"item5": "Utilisez le bouton de <strong>sélection de modules</strong> <icon/> pour ajouter ou retirer des modules.",
-			"item6": "Activez le <strong>Mode Focus</strong> <icon/> pour réduire les distractions visuelles et optimiser la lisibilité des polices.",
+			"description": "Suivez ces étapes pour configurer et optimiser la disposition de votre grille :",
+			"item1": "Sélectionnez un <strong>Type de plateforme</strong> (Vaisseau, Multi-outil, Corvette, etc.) avec le bouton <icon/>.",
+			"item2": "<strong>Cliquez</strong> ou <strong>appuyez deux fois</strong> (mobile) sur un emplacement vide pour basculer son état <strong>Surchargé</strong>.",
+			"item3": "<strong>Ctrl-clic</strong> (Windows) / <strong>⌘-clic</strong> (Mac) / <strong>appui simple</strong> (mobile) sur un emplacement pour basculer son état <strong>actif</strong> ou <strong>inactif</strong>.",
+			"item4": "Utilisez les <strong>interrupteurs de rangée</strong> pour activer ou désactiver une rangée entière. <i>(Les interrupteurs de rangée se verrouillent après le placement de modules sur la grille.)</i>",
+			"item5": "Cliquez sur le bouton de <strong>Sélection de modules</strong> <icon/> d'une <strong>Catégorie de technologie</strong> pour activer ou désactiver des modules individuels et afficher les dimensions requises de la <strong>Fenêtre de calcul</strong>.",
+			"item6": "Basculez le <strong>Mode Focus</strong> <icon/> pour réduire les distractions visuelles et améliorer la lisibilité du texte.",
 			"viewInstructions": "Pour plus d'informations, <1>consultez les instructions complètes</1>.",
 			"getStarted": "C'est Parti"
 		},

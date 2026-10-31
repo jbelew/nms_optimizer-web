@@ -88,6 +88,14 @@ _Avoid_: cell error, validation error, session error
 A modal view bound to a canonical, localized URL path (such as `/about/`, `/instructions/`, `/changelog/`, `/userstats/`, or `/performance/`) so it can be bookmarked, shared, and indexed independently of the workspace grid.
 _Avoid_: modal page, route wrapper, dialog route
 
+**Welcome Dialog**:
+A non-routed onboarding modal presented on a human visitor's first workspace session to summarize core grid controls and link to the complete instructions.
+_Avoid_: welcome guide, quick-start dialog, onboarding modal
+
+**Focus Mode**:
+A high-legibility visual mode that mutes background distractions and applies an accessible reading typeface across the workspace.
+_Avoid_: accessibility mode, a11y mode, dyslexia mode
+
 **Static SEO Fallback**:
 Pre-rendered semantic copy and route navigation embedded into static entry points for non-JavaScript clients and initial crawler responses before interactive workspace hydration.
 _Avoid_: client fallback, prerendered markdown, noscript shell

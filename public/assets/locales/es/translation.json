@@ -91,14 +91,13 @@
 			"performance": "Métricas de Rendimiento"
 		},
 		"welcome": {
-			"title": "¡Bienvenido al NMS Optimizer!",
-			"description": "Una guía de inicio rápido para ayudarte a aprovechar al máximo esta herramienta:",
-			"item1": "Selecciona una <strong>Plataforma</strong> usando el icono <icon/>.",
-			"item2": "<strong>Haz clic</strong> o <strong>pulsa dos veces</strong> en una ranura para marcarla como <strong>Potenciada</strong>.",
-			"item3": "<strong>Ctrl-clic</strong> (Windows) / <strong>⌘-clic</strong> (Mac) / <strong>pulsar</strong> (Móvil) para activar o desactivar una ranura.",
-			"item4": "Usa los <strong>interruptores de fila</strong> para activar o desactivar filas enteras (se desactivan una vez colocados los módulos).",
-			"item5": "Usa el botón de <strong>selección de módulos</strong> <icon/> para añadir o quitar módulos.",
-			"item6": "Activa el <strong>Modo de Enfoque</strong> <icon/> para minimizar las distracciones visuales y optimizar la legibilidad de la fuente para una experiencia más clara.",
+			"description": "Sigue estos pasos para configurar y optimizar el diseño de tu cuadrícula:",
+			"item1": "Selecciona un <strong>Tipo de plataforma</strong> (Nave espacial, Multiherramienta, Corbeta, etc.) con el botón <icon/>.",
+			"item2": "<strong>Haz clic</strong> o <strong>pulsa dos veces</strong> (móvil) en una ranura vacía para alternar su estado <strong>Potenciado</strong>.",
+			"item3": "<strong>Ctrl-clic</strong> (Windows) / <strong>⌘-clic</strong> (Mac) / <strong>un toque</strong> (móvil) en una ranura para alternar su estado <strong>activo</strong> o <strong>inactivo</strong>.",
+			"item4": "Usa los <strong>interruptores de fila</strong> para activar o desactivar una fila entera. <i>(Los interruptores de fila se bloquean después de colocar módulos en la cuadrícula.)</i>",
+			"item5": "Haz clic en el botón de <strong>Selección de módulos</strong> <icon/> en una <strong>Categoría de tecnología</strong> para activar o desactivar módulos individuales y ver las dimensiones requeridas de la <strong>Ventana de cálculo</strong>.",
+			"item6": "Alterna el <strong>Modo de Enfoque</strong> <icon/> para reducir las distracciones visuales y mejorar la legibilidad del texto.",
 			"viewInstructions": "Para más información, <1>consulta las instrucciones completas</1>.",
 			"getStarted": "Empezar"
 		},

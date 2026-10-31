@@ -91,14 +91,13 @@
 			"performance": "Métricas de Desempenho"
 		},
 		"welcome": {
-			"title": "Bem-vindo ao NMS Optimizer!",
-			"description": "Um guia rápido para ajudar você a aproveitar ao máximo esta ferramenta:",
-			"item1": "Selecione uma <strong>Plataforma</strong> usando o ícone <icon/>.",
-			"item2": "<strong>Clique</strong> ou <strong>toque duas vezes</strong> em um espaço para marcá-lo como <strong>Sobrecarregado</strong>.",
-			"item3": "<strong>Ctrl-clique</strong> (Windows) / <strong>⌘-clique</strong> (Mac) / <strong>toque</strong> (Mobile) para ativar ou desativar um espaço.",
-			"item4": "Use os <strong>interruptores de linha</strong> para ativar ou desativar linhas inteiras (desativado após a inserção de módulos).",
-			"item5": "Use o botão de <strong>seleção de módulos</strong> <icon/> para adicionar ou remover módulos.",
-			"item6": "Ative o <strong>Modo de Foco</strong> <icon/> para minimizar distrações visuais e otimizar a legibilidade da fonte.",
+			"description": "Siga estas etapas para configurar e otimizar o layout da sua grade:",
+			"item1": "Selecione um <strong>Tipo de plataforma</strong> (Nave, Multiferramenta, Corveta, etc.) com o botão <icon/>.",
+			"item2": "<strong>Clique</strong> ou <strong>toque duas vezes</strong> (mobile) em um espaço vazio para alternar seu estado <strong>Sobrecarregado</strong>.",
+			"item3": "<strong>Ctrl-clique</strong> (Windows) / <strong>⌘-clique</strong> (Mac) / <strong>toque simples</strong> (mobile) em um espaço para alternar seu estado <strong>ativo</strong> ou <strong>inativo</strong>.",
+			"item4": "Use os <strong>interruptores de linha</strong> para ativar ou desativar uma linha inteira. <i>(Os interruptores de linha são bloqueados após posicionar módulos na grade.)</i>",
+			"item5": "Clique no botão de <strong>Seleção de módulos</strong> <icon/> em uma <strong>Categoria de tecnologia</strong> para ativar ou desativar módulos individuais e visualizar as dimensões necessárias da <strong>Janela de cálculo</strong>.",
+			"item6": "Alterne o <strong>Modo de Foco</strong> <icon/> para reduzir distrações visuais e melhorar a legibilidade do texto.",
 			"viewInstructions": "Para mais informações, <1>veja as instruções completas</1>.",
 			"getStarted": "Começar"
 		},

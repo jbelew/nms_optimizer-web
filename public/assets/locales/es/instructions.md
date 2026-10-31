@@ -2,12 +2,13 @@
 
 ## Primeros Pasos con la Cuadrícula
 
-- Selecciona una **Plataforma** (Nave espacial, Multiherramienta, Corbeta, etc.) usando el icono <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
-- **Haz clic** o **pulsa dos veces** (móvil) en una ranura para marcarla como **Potenciada**.
-- **Ctrl-clic (Windows) / ⌘-clic (Mac) / pulsar (móvil)** para alternar entre una ranura **activa** o **inactiva**.
-- **Controles de teclado:** Navega con las **teclas de flecha** (↑, ↓, ←, →) e **Inicio** / **Fin**, presiona **S** / **Shift+Enter** para potenciar y **Espacio** / **Enter** para activar o desactivar.
-- Usa los **interruptores de fila** para activar o desactivar filas enteras. _(Los interruptores de fila se desactivan una vez colocados los módulos)._
-- Usa el botón de **selección de módulos** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> para añadir o quitar módulos individuales dentro de un grupo tecnológico.
+- Selecciona un **Tipo de plataforma** (Nave espacial, Multiherramienta, Corbeta, etc.) con el botón <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
+- **Haz clic** o **pulsa dos veces** (móvil) en una ranura vacía para alternar su estado **Potenciado**.
+- **Ctrl-clic** (Windows) / **⌘-clic** (Mac) / **un toque** (móvil) en una ranura para alternar su estado **activo** o **inactivo**.
+- **Controles de teclado:** Presiona las **teclas de flecha** (↑, ↓, ←, →) e **Inicio** / **Fin** para mover el foco. Presiona **S** o **Shift+Enter** para alternar el estado **Potenciado**. Presiona **Espacio** o **Enter** para alternar el estado **activo** o **inactivo**.
+- Usa los **interruptores de fila** para activar o desactivar una fila entera. _(Los interruptores de fila se bloquean después de colocar módulos en la cuadrícula.)_
+- Haz clic en el botón de **Selección de módulos** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> en una **Categoría de tecnología** para activar o desactivar módulos individuales y ver las dimensiones requeridas de la **Ventana de cálculo**.
+- Alterna el **Modo de Enfoque** <radix-icon name="EyeOpenIcon" size="20" color="var(--accent-11)"></radix-icon> para reducir las distracciones visuales y mejorar la legibilidad del texto.
 
 > 💡 **Nota:**
 > Los exotrajes y las exonaves tienen cuadrículas fijas. Las ranuras de las exonaves no se pueden modificar. En los exotrajes, solo se pueden cambiar los estados activo/inactivo; los diseños de las ranuras potenciadas son fijos.

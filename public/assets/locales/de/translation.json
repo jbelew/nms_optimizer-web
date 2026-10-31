@@ -91,14 +91,13 @@
 			"performance": "Leistungsmetriken"
 		},
 		"welcome": {
-			"title": "Willkommen beim NMS-Optimierer!",
-			"description": "Eine Kurzanleitung, um das Beste aus diesem Tool herauszuholen:",
-			"item1": "Wähle eine <strong>Plattform</strong> über das <icon/> Icon.",
-			"item2": "<strong>Klicke</strong> oder <strong>doppeltippe</strong> auf einen Slot, um ihn als <strong>Überladen</strong> zu markieren.",
-			"item3": "<strong>Strg+Klick</strong> (Windows) / <strong>⌘+Klick</strong> (Mac) / <strong>Tippen</strong> (Mobil), um einen Slot zu aktivieren/deaktivieren.",
-			"item4": "Nutze die <strong>Reihen-Schalter</strong>, um ganze Reihen zu aktivieren/deaktivieren (deaktiviert, sobald Module platziert sind).",
-			"item5": "Nutze den <strong>Modulauswahl-Button</strong> <icon/>, um Module hinzuzufügen oder zu entfernen.",
-			"item6": "Aktiviere den <strong>Fokus-Modus</strong> <icon/>, um visuelle Ablenkungen zu minimieren und die Lesbarkeit zu optimieren.",
+			"description": "Befolge diese Schritte, um dein Raster-Layout zu konfigurieren und zu optimieren:",
+			"item1": "Wähle einen <strong>Plattformtyp</strong> (Raumschiff, Multitool, Korvette usw.) über die Schaltfläche <icon/> aus.",
+			"item2": "<strong>Klicke</strong> oder <strong>doppeltippe</strong> (mobil) auf einen leeren Slot, um seinen Status <strong>Überladen</strong> umzuschalten.",
+			"item3": "<strong>Strg-Klick</strong> (Windows) / <strong>⌘-Klick</strong> (Mac) / <strong>einfaches Tippen</strong> (mobil) auf einen Slot, um ihn zwischen <strong>aktiv</strong> und <strong>inaktiv</strong> umzuschalten.",
+			"item4": "Nutze die <strong>Reihen-Schalter</strong>, um eine ganze Reihe zu aktivieren oder zu deaktivieren. <i>(Reihen-Schalter werden gesperrt, sobald Module auf dem Raster platziert sind.)</i>",
+			"item5": "Klicke auf die Schaltfläche <strong>Modulauswahl</strong> <icon/> einer <strong>Technologiekategorie</strong>, um einzelne Module zu aktivieren oder zu deaktivieren und die erforderlichen Abmessungen des <strong>Solver-Fensters</strong> anzuzeigen.",
+			"item6": "Schalte den <strong>Fokus-Modus</strong> <icon/> um, um visuelle Ablenkungen zu reduzieren und die Lesbarkeit des Textes zu verbessern.",
 			"viewInstructions": "Für weitere Informationen, <1>lies die vollständige Anleitung</1>.",
 			"getStarted": "Los Geht's"
 		},

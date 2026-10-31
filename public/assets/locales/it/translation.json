@@ -108,14 +108,13 @@
 			"privacy": "Informativa sulla Privacy"
 		},
 		"welcome": {
-			"title": "Benvenuto in NMS Optimizer!",
-			"description": "Una guida rapida per aiutarti a ottenere il massimo da questo strumento:",
-			"item1": "Seleziona una <strong>Piattaforma</strong> usando l'icona <icon/>.",
-			"item2": "<strong>Clicca</strong> o <strong>tocca due volte</strong> uno slot per contrassegnarlo come <strong>Supercaricato</strong>.",
-			"item3": "<strong>Ctrl-click</strong> (Windows) / <strong>⌘-click</strong> (Mac) / <strong>tocca</strong> (Mobile) per attivare o disattivare uno slot.",
-			"item4": "Usa i <strong>toggle di riga</strong> per abilitare o disabilitare intere righe (disabilitati una volta posizionati i moduli).",
-			"item5": "Usa il pulsante <icon/> di <strong>selezione moduli</strong> per aggiungere o rimuovere moduli.",
-			"item6": "Attiva la <strong>Modalità Focus</strong> <icon/> per minimizzare le distrazioni visive e ottimizzare la leggibilità del font per un'esperienza più chiara.",
+			"description": "Segui questi passaggi per configurare e ottimizzare il layout della tua griglia:",
+			"item1": "Seleziona un <strong>Tipo di piattaforma</strong> (Nave Stellare, Multi-Strumento, Corvetta, ecc.) con il pulsante <icon/>.",
+			"item2": "<strong>Clicca</strong> o <strong>tocca due volte</strong> (mobile) uno slot vuoto per alternare il suo stato <strong>Sovraccarico</strong>.",
+			"item3": "<strong>Ctrl-clic</strong> (Windows) / <strong>⌘-clic</strong> (Mac) / <strong>tocco singolo</strong> (mobile) su uno slot per alternare il suo stato <strong>attivo</strong> o <strong>inattivo</strong>.",
+			"item4": "Usa gli <strong>interruttori di riga</strong> per abilitare o disabilitare un'intera riga. <i>(Gli interruttori di riga si bloccano dopo aver posizionato moduli sulla griglia.)</i>",
+			"item5": "Clicca sul pulsante <strong>Selezione moduli</strong> <icon/> di una <strong>Categoria tecnologica</strong> per abilitare o disabilitare singoli moduli e visualizzare le dimensioni richieste della <strong>Finestra di calcolo</strong>.",
+			"item6": "Attiva o disattiva la <strong>Modalità Focus</strong> <icon/> per ridurre le distrazioni visive e migliorare la leggibilità del testo.",
 			"viewInstructions": "Per maggiori informazioni, <1>consulta le istruzioni complete</1>.",
 			"getStarted": "Inizia"
 		},

@@ -2,12 +2,13 @@
 
 ## Premiers Pas Avec La Grille
 
-- Sélectionnez une **Plateforme** (Vaisseau, Multi-outil, Corvette, etc.) via l'icône <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
-- **Cliquez** ou **appuyez deux fois** (mobile) sur un emplacement pour le marquer comme **Surchargé**.
-- **Ctrl-clic (Windows) / ⌘-clic (Mac) / appui simple (mobile)** pour basculer un emplacement entre **actif** et **inactif**.
-- **Commandes clavier :** Naviguez avec les **touches fléchées** (↑, ↓, ←, →) et **Début** / **Fin**, appuyez sur **S** / **Maj+Entrée** pour surcharger, et sur **Espace** / **Entrée** pour activer/désactiver.
-- Utilisez les **interrupteurs de rangée** pour activer ou désactiver des lignes entières. _(Ils sont désactivés une fois que des modules sont placés)._
-- Utilisez le bouton de **sélection de modules** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> pour ajouter ou retirer des modules individuels.
+- Sélectionnez un **Type de plateforme** (Vaisseau, Multi-outil, Corvette, etc.) avec le bouton <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
+- **Cliquez** ou **appuyez deux fois** (mobile) sur un emplacement vide pour basculer son état **Surchargé**.
+- **Ctrl-clic** (Windows) / **⌘-clic** (Mac) / **appui simple** (mobile) sur un emplacement pour basculer son état **actif** ou **inactif**.
+- **Commandes clavier :** Appuyez sur les **touches fléchées** (↑, ↓, ←, →) et **Début** / **Fin** pour déplacer le focus. Appuyez sur **S** ou **Maj+Entrée** pour basculer l'état **Surchargé**. Appuyez sur **Espace** ou **Entrée** pour basculer l'état **actif** ou **inactif**.
+- Utilisez les **interrupteurs de rangée** pour activer ou désactiver une rangée entière. _(Les interrupteurs de rangée se verrouillent après le placement de modules sur la grille.)_
+- Cliquez sur le bouton de **Sélection de modules** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> d'une **Catégorie de technologie** pour activer ou désactiver des modules individuels et afficher les dimensions requises de la **Fenêtre de calcul**.
+- Basculez le **Mode Focus** <radix-icon name="EyeOpenIcon" size="20" color="var(--accent-11)"></radix-icon> pour réduire les distractions visuelles et améliorer la lisibilité du texte.
 
 > 💡 **Note :**
 > L'Exocombinaison et les Exonefs ont des grilles fixes. Les slots des Exonefs ne peuvent pas être modifiés. Pour l'Exocombinaison, seuls les états actif/inactif peuvent être changés ; la disposition des slots surchargés est fixe.

@@ -4,10 +4,11 @@
 
 - Select a **Platform Type** (Starship, Multi-Tool, Corvette, etc.) with the <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> button.
 - **Click** or **double-tap** (mobile) an empty slot to toggle its **Supercharged** state.
-- **Ctrl-click (Windows) / ⌘-click (Mac) / single-tap (mobile)** a slot to toggle its **active** or **inactive** state.
+- **Ctrl-click** (Windows) / **⌘-click** (Mac) / **single-tap** (mobile) a slot to toggle its **active** or **inactive** state.
 - **Keyboard controls:** Press **Arrow keys** (↑, ↓, ←, →) and **Home** / **End** to move focus. Press **S** or **Shift+Enter** to toggle the **Supercharged** state. Press **Space** or **Enter** to toggle the **active** or **inactive** state.
 - Use the **row toggles** to enable or disable an entire row. _(Row toggles lock after you place modules on the grid.)_
 - Click the **Module Selection** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> button on a **Technology Category** to enable or disable individual modules and view the required **Solver Window** dimensions.
+- Toggle **Focus Mode** <radix-icon name="EyeOpenIcon" size="20" color="var(--accent-11)"></radix-icon> to reduce visual distractions and improve text legibility.
 
 > 💡 **Note:**
 > **Slot Restrictions** apply to Exosuits and Exocraft. Exocraft use a fixed **Default Grid Layout** where slots cannot be changed. Exosuits have fixed supercharged slot locations, so you can only change active and inactive slot states.

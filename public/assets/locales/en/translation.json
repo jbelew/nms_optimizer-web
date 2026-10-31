@@ -115,13 +115,12 @@
 			"privacy": "Privacy Policy"
 		},
 		"welcome": {
-			"title": "Welcome to NMS Optimizer!",
 			"description": "Follow these steps to configure and optimize your grid layout:",
-			"item1": "Select a <strong>Platform Type</strong> with the <icon/> button.",
+			"item1": "Select a <strong>Platform Type</strong> (Starship, Multi-Tool, Corvette, etc.) with the <icon/> button.",
 			"item2": "<strong>Click</strong> or <strong>double-tap</strong> (mobile) an empty slot to toggle its <strong>Supercharged</strong> state.",
-			"item3": "<strong>Ctrl-click</strong> (Windows) / <strong>⌘-click</strong> (Mac) / <strong>single-tap</strong> (mobile) a slot to toggle its <strong>active</strong> or <strong>inactive</strong> state.",
-			"item4": "Use the <strong>row toggles</strong> to enable or disable an entire row (locked after modules are placed).",
-			"item5": "Click the <strong>Module Selection</strong> <icon/> button on a <strong>Technology Category</strong> to enable or disable modules.",
+			"item3": "<strong>Ctrl-click</strong> (Windows) / <strong>⌘-click</strong> (Mac) / <strong>single-tap</strong> (mobile) an empty slot to toggle its <strong>active</strong> or <strong>inactive</strong> state.",
+			"item4": "Use the <strong>row toggles</strong> to enable or disable an entire row. <i>(Row toggles lock after you place modules on the grid.)</i>",
+			"item5": "Click the <strong>Module Selection</strong> <icon/> button on a <strong>Technology Category</strong> to enable or disable individual modules and view the required <strong>Solver Window</strong> dimensions.",
 			"item6": "Toggle <strong>Focus Mode</strong> <icon/> to reduce visual distractions and improve text legibility.",
 			"viewInstructions": "For more information, <1>see the complete instructions</1>.",
 			"getStarted": "Get Started"

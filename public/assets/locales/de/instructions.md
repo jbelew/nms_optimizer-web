@@ -2,12 +2,13 @@
 
 ## Erste Schritte mit dem Raster
 
-- Wählen Sie eine **Plattform** (Starship, Multi-Tool, Corvette, etc.) über das <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> Symbol aus.
-- **Klicken** oder **doppeltippen** (mobil) Sie auf einen Slot, um ihn als **Supercharged** zu markieren.
-- **Strg-Klick (Windows) / ⌘-Klick (Mac) / einfaches Tippen (mobil)**, um einen Slot als **aktiv** oder **inaktiv** umzuschalten.
-- **Tastatursteuerung:** Navigieren Sie mit den **Pfeiltasten** (↑, ↓, ←, →) und **Pos1** / **Ende**, drücken Sie **S** / **Umschalt+Eingabe** zum Superchargen und **Leertaste** / **Eingabe** zum Aktivieren/Deaktivieren.
-- Verwenden Sie die **Reihen-Umschalter**, um ganze Reihen zu aktivieren oder zu deaktivieren. _(Reihen-Umschalter sind deaktiviert, sobald Modules platziert wurden.)_
-- Verwenden Sie die Schaltfläche zur **Modul-Auswahl** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon>, um einzelne Modules innerhalb einer Technology-Gruppe hinzuzufügen oder zu entfernen.
+- Wählen Sie einen **Plattformtyp** (Raumschiff, Multitool, Korvette usw.) über die Schaltfläche <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> aus.
+- **Klicken** oder **doppeltippen** (mobil) Sie auf einen leeren Slot, um seinen Status **Überladen** umzuschalten.
+- **Strg-Klick** (Windows) / **⌘-Klick** (Mac) / **einfaches Tippen** (mobil) auf einen Slot, um ihn zwischen **aktiv** und **inaktiv** umzuschalten.
+- **Tastatursteuerung:** Drücken Sie die **Pfeiltasten** (↑, ↓, ←, →) sowie **Pos1** / **Ende**, um den Fokus zu bewegen. Drücken Sie **S** oder **Umschalt+Eingabe**, um den Status **Überladen** umzuschalten. Drücken Sie **Leertaste** oder **Eingabe**, um zwischen **aktiv** und **inaktiv** umzuschalten.
+- Verwenden Sie die **Reihen-Schalter**, um eine ganze Reihe zu aktivieren oder zu deaktivieren. _(Reihen-Schalter werden gesperrt, sobald Sie Module auf dem Raster platzieren.)_
+- Klicken Sie auf die Schaltfläche **Modulauswahl** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> einer **Technologiekategorie**, um einzelne Module zu aktivieren oder zu deaktivieren und die erforderlichen Abmessungen des **Solver-Fensters** anzuzeigen.
+- Schalten Sie den **Fokus-Modus** <radix-icon name="EyeOpenIcon" size="20" color="var(--accent-11)"></radix-icon> um, um visuelle Ablenkungen zu reduzieren und die Lesbarkeit des Textes zu verbessern.
 
 > 💡 **Hinweis:**
 > Exosuits und Exocraft haben feste Raster. Exocraft-Slots können nicht modifiziert werden. Bei Exosuits können nur aktive/inaktive Zustände geändert werden – Supercharged Slot-Layouts sind fest.
