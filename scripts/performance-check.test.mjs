@@ -5,6 +5,7 @@ import {
 	extractLighthouseMetrics,
 	formatComparisonMarkdown,
 	hasPerfRelevantChanges,
+	isBaselineFresh,
 	isPerfRelevantPath,
 	summarizeBundle,
 } from "./performance-check.mjs";
@@ -202,6 +203,46 @@ describe("performance-check.mjs", () => {
 					"src/store/grid/gridPersistence.ts",
 				]),
 			).toBe(true);
+
+			expect(hasPerfRelevantChanges([])).toBe(false);
+		});
+	});
+
+	describe("isBaselineFresh", () => {
+		it("accepts baselines matching HEAD (uncommitted work) or HEAD~1 (single/amended commit)", () => {
+			const mainContext = {
+				currentBranch: "main",
+				headSha: "9360b84f",
+				mergeBaseSha: "f7f360de",
+				parentSha: "f7f360de",
+			};
+
+			expect(isBaselineFresh("9360b84f", mainContext)).toBe(true);
+			expect(isBaselineFresh("f7f360de", mainContext)).toBe(true);
+		});
+
+		it("rejects stale baselines from older sessions on main", () => {
+			const mainContext = {
+				currentBranch: "main",
+				headSha: "9360b84f",
+				mergeBaseSha: "f7f360de",
+				parentSha: "f7f360de",
+			};
+
+			expect(isBaselineFresh("ddd87175", mainContext)).toBe(false);
+			expect(isBaselineFresh(undefined, mainContext)).toBe(false);
+		});
+
+		it("accepts origin/main merge-base baselines on multi-commit feature branches", () => {
+			const branchContext = {
+				currentBranch: "feat/grid-refactor",
+				headSha: "cccc3333",
+				mergeBaseSha: "aaaa1111",
+				parentSha: "bbbb2222",
+			};
+
+			expect(isBaselineFresh("aaaa1111", branchContext)).toBe(true);
+			expect(isBaselineFresh("dddd0000", branchContext)).toBe(false);
 		});
 	});
 });

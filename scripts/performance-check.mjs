@@ -309,6 +309,42 @@ export function hasPerfRelevantChanges(changedFiles) {
 }
 
 /**
+ * Checks whether a cached `/tmp` baseline snapshot matches the active task's git state.
+ *
+ * @remarks
+ * Treats a baseline as fresh when `baselineSha` matches `headSha` (uncommitted edits on top of
+ * the baseline), `parentSha` (`HEAD~1`, single-commit or amended task), or `mergeBaseSha` on a
+ * non-`main` feature branch. Older `/tmp` snapshots left behind by prior sessions are rejected
+ * so `--if-needed` never diffs across unrelated upstream commits.
+ *
+ * @param {string | undefined} baselineSha - Short commit SHA recorded in the baseline file.
+ * @param {{
+ *   currentBranch: string;
+ *   headSha: string;
+ *   mergeBaseSha: string | null;
+ *   parentSha: string;
+ * }} gitContext - Current repository git context.
+ * @returns {boolean} `true` when the baseline snapshot belongs to the active change set.
+ * @see {@link ./performance-check.test.mjs Unit Tests}
+ */
+export function isBaselineFresh(baselineSha, { currentBranch, headSha, mergeBaseSha, parentSha }) {
+	if (!baselineSha) {
+		return false;
+	}
+
+	if (baselineSha === headSha || baselineSha === parentSha) {
+		return true;
+	}
+
+	return (
+		currentBranch !== "main"
+		&& currentBranch !== ""
+		&& Boolean(mergeBaseSha)
+		&& baselineSha === mergeBaseSha
+	);
+}
+
+/**
  * Checks whether a single repository-relative path impacts production bundles, CSS, or SSG output.
  *
  * @remarks
@@ -580,6 +616,50 @@ function getChangedFilesSinceRef(baseRef = "HEAD~1") {
 }
 
 /**
+ * Reads the current branch name and short SHAs for `HEAD`, `HEAD~1`, and `origin/main` merge-base.
+ *
+ * @returns {{
+ *   currentBranch: string;
+ *   headSha: string;
+ *   mergeBaseSha: string | null;
+ *   parentSha: string;
+ * }} Current git revision anchors for baseline freshness checks.
+ */
+function getCurrentGitContext() {
+	let currentBranch;
+
+	try {
+		currentBranch = execFileSync("git", ["branch", "--show-current"], {
+			cwd: REPO_ROOT,
+			encoding: "utf8",
+		}).trim();
+	} catch {
+		currentBranch = "";
+	}
+
+	let mergeBaseSha;
+
+	try {
+		const rawMergeBase = execFileSync("git", ["merge-base", "HEAD", "origin/main"], {
+			cwd: REPO_ROOT,
+			encoding: "utf8",
+			stdio: ["ignore", "pipe", "ignore"],
+		}).trim();
+
+		mergeBaseSha = rawMergeBase ? getGitShortSha(rawMergeBase) : null;
+	} catch {
+		mergeBaseSha = null;
+	}
+
+	return {
+		currentBranch,
+		headSha: getGitShortSha("HEAD"),
+		mergeBaseSha,
+		parentSha: getGitShortSha("HEAD~1"),
+	};
+}
+
+/**
  * Returns the short git commit SHA for a ref.
  *
  * @param {string} [ref] - Git revision to resolve.
@@ -643,33 +723,42 @@ async function main() {
 	}
 
 	if (isCompare) {
-		const refArg = positionalArgs[0];
+		let effectiveRef = positionalArgs[0];
 		let before = null;
 
-		if (!refArg && fs.existsSync(DEFAULT_BASELINE_PATH)) {
-			before = JSON.parse(fs.readFileSync(DEFAULT_BASELINE_PATH, "utf8"));
+		if (!effectiveRef && fs.existsSync(DEFAULT_BASELINE_PATH)) {
+			const candidate = JSON.parse(fs.readFileSync(DEFAULT_BASELINE_PATH, "utf8"));
+			const gitContext = getCurrentGitContext();
+
+			if (isBaselineFresh(candidate?.commitSha, gitContext)) {
+				before = candidate;
+			} else {
+				console.log(
+					`ℹ️ Ignoring stale baseline at ${DEFAULT_BASELINE_PATH} (${candidate?.commitSha ?? "unknown"} does not match HEAD ${gitContext.headSha} or HEAD~1 ${gitContext.parentSha}).`,
+				);
+			}
 		}
 
 		if (ifNeeded) {
-			const diffBase = refArg || before?.commitSha || "HEAD~1";
+			const diffBase = effectiveRef || before?.commitSha || "HEAD~1";
 			const changedFiles = getChangedFilesSinceRef(diffBase);
 
-			if (
-				changedFiles !== null
-				&& changedFiles.length > 0
-				&& !hasPerfRelevantChanges(changedFiles)
-			) {
+			if (changedFiles !== null && !hasPerfRelevantChanges(changedFiles)) {
 				console.log(
 					`⏭️ Skipping perf:compare build & Lighthouse audit: no bundle, CSS, or SSG inputs changed since ${diffBase}.`,
 				);
 
 				return;
 			}
+
+			if (!effectiveRef && !before) {
+				effectiveRef = "HEAD~1";
+			}
 		}
 
-		if (refArg) {
+		if (effectiveRef) {
 			const after = await captureSnapshot({ bundleOnly, skipBuild });
-			before = await captureSnapshotForRef(refArg, { bundleOnly });
+			before = await captureSnapshotForRef(effectiveRef, { bundleOnly });
 			console.log("\n" + formatComparisonMarkdown(before, after) + "\n");
 
 			return;
