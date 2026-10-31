@@ -297,6 +297,60 @@ export function formatSize(kb) {
 }
 
 /**
+ * Determines whether any path in `changedFiles` can affect production bundle sizes,
+ * runtime Web Vitals, or pre-rendered SSG output.
+ *
+ * @param {string[]} changedFiles - Repository-relative changed file paths.
+ * @returns {boolean} `true` when at least one path requires bundle/Lighthouse verification.
+ * @see {@link ./performance-check.test.mjs Unit Tests}
+ */
+export function hasPerfRelevantChanges(changedFiles) {
+	return changedFiles.some((filePath) => isPerfRelevantPath(filePath));
+}
+
+/**
+ * Checks whether a single repository-relative path impacts production bundles, CSS, or SSG output.
+ *
+ * @remarks
+ * Excludes unit/component tests (`*.test.*`, `*.spec.*`), Storybook stories (`*.stories.*`),
+ * test helpers (`src/test/**`), operational scripts, documentation, and agent steering files.
+ *
+ * @param {string} filePath - Repository-relative file path (POSIX slashes).
+ * @returns {boolean} `true` when modifying `filePath` can alter build artifacts or Web Vitals.
+ * @see {@link ./performance-check.test.mjs Unit Tests}
+ */
+export function isPerfRelevantPath(filePath) {
+	const normalized = filePath.replace(/\\/g, "/").replace(/^\.\//, "");
+
+	if (
+		/\.(?:test|spec|stories)\.[cm]?[jt]sx?$/.test(normalized)
+		|| normalized.startsWith("src/test/")
+	) {
+		return false;
+	}
+
+	if (
+		normalized === "index.html"
+		|| normalized === "package.json"
+		|| normalized === "bun.lock"
+		|| normalized === "vite.config.ts"
+		|| /^tsconfig(?:\..+)?\.json$/.test(normalized)
+		|| normalized.startsWith("src/")
+		|| normalized.startsWith("shared/")
+		|| normalized.startsWith("public/")
+	) {
+		return true;
+	}
+
+	return (
+		normalized.startsWith("scripts/generate-")
+		|| normalized === "scripts/markdown-processor.mjs"
+		|| normalized === "scripts/process-images.mjs"
+		|| normalized === "scripts/resolve-mode-env.mjs"
+	);
+}
+
+/**
  * Computes structured bundle metrics from a list of asset descriptors.
  *
  * @remarks
@@ -499,6 +553,33 @@ function formatTimeDelta(beforeMs, afterMs, unit) {
 }
 
 /**
+ * Lists repository-relative files changed between `baseRef` and the current working tree.
+ *
+ * @param {string} [baseRef] - Baseline git revision to diff against.
+ * @returns {string[]} Deduplicated changed file paths, or `null` when git diff fails.
+ */
+function getChangedFilesSinceRef(baseRef = "HEAD~1") {
+	try {
+		const committed = execFileSync("git", ["diff", "--name-only", `${baseRef}...HEAD`], {
+			cwd: REPO_ROOT,
+			encoding: "utf8",
+		})
+			.split(/\r?\n/)
+			.filter(Boolean);
+		const uncommitted = execFileSync("git", ["diff", "--name-only", "HEAD"], {
+			cwd: REPO_ROOT,
+			encoding: "utf8",
+		})
+			.split(/\r?\n/)
+			.filter(Boolean);
+
+		return [...new Set([...committed, ...uncommitted])];
+	} catch {
+		return null;
+	}
+}
+
+/**
  * Returns the short git commit SHA for a ref.
  *
  * @param {string} [ref] - Git revision to resolve.
@@ -543,6 +624,7 @@ async function main() {
 	const args = process.argv.slice(2);
 	const isBaseline = args.includes("--baseline");
 	const isCompare = args.includes("--compare");
+	const ifNeeded = args.includes("--if-needed");
 	const skipBuild = args.includes("--skip-build");
 	const bundleOnly = args.includes("--bundle-only");
 	const positionalArgs = args.filter((arg) => !arg.startsWith("--"));
@@ -562,7 +644,28 @@ async function main() {
 
 	if (isCompare) {
 		const refArg = positionalArgs[0];
-		let before;
+		let before = null;
+
+		if (!refArg && fs.existsSync(DEFAULT_BASELINE_PATH)) {
+			before = JSON.parse(fs.readFileSync(DEFAULT_BASELINE_PATH, "utf8"));
+		}
+
+		if (ifNeeded) {
+			const diffBase = refArg || before?.commitSha || "HEAD~1";
+			const changedFiles = getChangedFilesSinceRef(diffBase);
+
+			if (
+				changedFiles !== null
+				&& changedFiles.length > 0
+				&& !hasPerfRelevantChanges(changedFiles)
+			) {
+				console.log(
+					`⏭️ Skipping perf:compare build & Lighthouse audit: no bundle, CSS, or SSG inputs changed since ${diffBase}.`,
+				);
+
+				return;
+			}
+		}
 
 		if (refArg) {
 			const after = await captureSnapshot({ bundleOnly, skipBuild });
@@ -572,13 +675,12 @@ async function main() {
 			return;
 		}
 
-		if (!fs.existsSync(DEFAULT_BASELINE_PATH)) {
+		if (!before) {
 			throw new Error(
 				`Baseline file not found at ${DEFAULT_BASELINE_PATH}. Run \`bun run perf:baseline\` before refactoring, or pass a baseline git ref: \`bun run perf:compare <git-ref>\`.`,
 			);
 		}
 
-		before = JSON.parse(fs.readFileSync(DEFAULT_BASELINE_PATH, "utf8"));
 		const after = await captureSnapshot({
 			bundleOnly: bundleOnly || !before.lighthouse,
 			skipBuild,

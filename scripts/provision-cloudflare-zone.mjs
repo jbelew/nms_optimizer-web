@@ -125,20 +125,25 @@ export async function provisionCloudflareZone({
 }
 
 /**
- * Evaluates whether Cache Rule 1 (`cache: false`) bypasses Cloudflare's URI-only edge cache
- * for a `/__md` or `/__md/*` request so direct browser `301` redirects and weighted/mixed
- * RFC 9110 `Accept` headers never collide with cached pure-Markdown `/__md/*` responses.
+ * Evaluates whether the final Always-Fresh Cache Rule (`cache: false`) bypasses Cloudflare's
+ * URI-only edge cache for a `/__md` or `/__md/*` request so direct browser `301` redirects and
+ * weighted/mixed RFC 9110 `Accept` headers never collide with cached pure-Markdown `/__md/*` responses.
  *
  * @remarks
- * Mirrors the Wirefilter expression in `buildCacheRules` Rule 1.
+ * Mirrors the Wirefilter expression in `buildCacheRules`'s trailing `cache: false` rule.
  *
  * @param {string} pathname - Request pathname after `http_request_transform`.
  * @param {string} acceptHeader - Raw `Accept` request header value.
- * @returns {boolean} `true` when the request matches Rule 1 (`cache: false`) bypass conditions.
+ * @returns {boolean} `true` when the request matches the `cache: false` bypass rule.
  * @see {@link ./provision-cloudflare-zone.test.mjs Unit Tests}
  */
 export function shouldBypassMarkdownEdgeCache(pathname, acceptHeader) {
-	if (pathname.startsWith("/__md/performance/")) {
+	if (
+		pathname.startsWith("/__md/performance/")
+		|| SUPPORTED_LANGUAGES.some(
+			(lang) => lang !== "en" && pathname.startsWith(`/__md/${lang}/performance/`),
+		)
+	) {
 		return true;
 	}
 
@@ -227,22 +232,25 @@ function buildCacheRules(domain) {
 			+ ")",
 	].join(" and ");
 
+	const localizedPerformancePrefixes = nonDefaultLocales.flatMap((lang) => [
+		`/${lang}/performance/`,
+		`/__md/${lang}/performance/`,
+	]);
+
 	const alwaysFreshExpression = [
 		'http.request.uri.path in {"/" "/index.html" "/sw.js" "/version.json"}',
 		'starts_with(http.request.uri.path, "/performance/")',
 		'starts_with(http.request.uri.path, "/__md/performance/")',
+		...localizedPerformancePrefixes.map(
+			(prefix) => `starts_with(http.request.uri.path, "${prefix}")`,
+		),
 		`(${markdownDynamicBypassExpression})`,
 	].join(" or ");
 
+	// Cloudflare evaluates ALL matching `http_request_cache_settings` rules top-to-bottom
+	// (last-match-wins), so `cache: false` MUST sit at the end of the ruleset to override
+	// earlier `cache: true` prefix rules (e.g. `starts_with(..., "/__md/")`).
 	return [
-		{
-			action: "set_cache_settings",
-			action_parameters: {
-				cache: false,
-			},
-			description: "Always Fresh Assets (Shells / Service Worker / Version)",
-			expression: `(${alwaysFreshExpression})`,
-		},
 		{
 			action: "set_cache_settings",
 			action_parameters: {
@@ -314,6 +322,15 @@ function buildCacheRules(domain) {
 			},
 			description: "API Cache (Optimized)",
 			expression: `(http.host eq "api.${domain}" and http.request.method eq "GET")`,
+		},
+		{
+			action: "set_cache_settings",
+			action_parameters: {
+				cache: false,
+			},
+			description:
+				"Always Fresh Assets (Shells / Service Worker / Version / Dynamic Bypasses)",
+			expression: `(${alwaysFreshExpression})`,
 		},
 	];
 }

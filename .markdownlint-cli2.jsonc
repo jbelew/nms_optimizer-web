@@ -1,6 +1,10 @@
 {
-  "globs": [
-    "README.md",
-    "public/assets/**/*.md"
-  ]
+	"globs": [
+		"AGENTS.md",
+		"GEMINI.md",
+		"GLOSSARY.md",
+		"README.md",
+		"docs/**/*.md",
+		"public/assets/**/*.md",
+	],
 }

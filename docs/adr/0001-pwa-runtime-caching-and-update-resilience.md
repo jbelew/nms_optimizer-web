@@ -15,8 +15,8 @@ We moved our PWA caching architecture from aggressive JavaScript/CSS bundle prec
 
 ## Considered Options
 
-- **Full Offline Bundle Precaching**: Precache all JS/CSS files for offline usage. *Rejected*: Caused recurrent chunk 404 lockouts, update prompt loops, and heavy background thread/IO contention on mobile devices.
-- **Manifest-Only / No Service Worker**: Retain web manifest for PWA installability without a service worker. *Rejected*: Loses offline asset caching for images, fonts, and locales, and eliminates in-app update notifications.
+- **Full Offline Bundle Precaching**: Precache all JS/CSS files for offline usage. _Rejected_: Caused recurrent chunk 404 lockouts, update prompt loops, and heavy background thread/IO contention on mobile devices.
+- **Manifest-Only / No Service Worker**: Retain web manifest for PWA installability without a service worker. _Rejected_: Loses offline asset caching for images, fonts, and locales, and eliminates in-app update notifications.
 - **HTTP Immutable + Runtime Caching (Selected)**: Combines browser HTTP caching for hashed code bundles with Workbox runtime caching for static media and silent background updates.
 
 ## Consequences

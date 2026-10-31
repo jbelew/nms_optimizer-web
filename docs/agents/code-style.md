@@ -14,6 +14,7 @@ Coding standards and patterns for TypeScript, React, state management, and styli
 - **Immer Middleware**: Use `immer` for stores with nested or complex state structures (e.g., `useGridStore`, `useTechStore`).
 - **Standard Zustand**: Prefer raw Zustand for flat or simple stores to avoid Proxy-based overhead.
 - **Deep Mutations**: Always use the functional `set` pattern for deep mutation safety inside Immer-wrapped stores:
+
     ```typescript
     set((state) => {
     	state.nested.property = newValue; // Safe via Immer

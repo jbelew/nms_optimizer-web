@@ -56,6 +56,10 @@ jobs:
         if: matrix.suite == 'lint'
         run: bun run lint:css
 
+      - name: Run Markdown and Mermaid linter
+        if: matrix.suite == 'lint'
+        run: bun run lint:md
+
       - name: Check for circular dependencies
         if: matrix.suite == 'lint'
         run: bun run lint:circular

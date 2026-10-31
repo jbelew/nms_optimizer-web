@@ -35,6 +35,7 @@ Best practices for unit, component, and integration tests in the NMS Optimizer W
 - **Connecting `chrome-devtools-mcp` (`browser` subagent) to Windows Chrome in WSL2**:
     - `chrome-devtools-mcp` (`--autoConnect`) reads `/home/jbelew/.config/google-chrome/DevToolsActivePort` on Linux, whereas Windows Chrome writes `/mnt/c/Users/John Belew/AppData/Local/Google/Chrome/User Data/DevToolsActivePort`.
     - Copy the file as a regular file before invoking the `browser` subagent (a symlink is rejected by `chrome-devtools-mcp`):
+
         ```bash
         mkdir -p ~/.config/google-chrome && cp "/mnt/c/Users/John Belew/AppData/Local/Google/Chrome/User Data/DevToolsActivePort" ~/.config/google-chrome/DevToolsActivePort
         ```

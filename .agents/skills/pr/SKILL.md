@@ -32,6 +32,15 @@ Use this template for writing the PR body:
 <optional: potential ramifications of merge>
 ```
 
+## Steps
+
+1. Draft the PR body using the template above and `GLOSSARY.md` terms to a temporary `.md` file, then run `bun scripts/verify-mermaid.mjs <body-file>` to validate any Mermaid blocks before publishing.
+2. Inspect `git branch --show-current` and `gh pr list --head <branch> --state open --json number,url`:
+   - **Open PR exists on current branch**: patch its body via `gh api --method PATCH repos/{owner}/{repo}/pulls/<number> -F body=@<body-file>`.
+   - **Feature branch with no open PR**: push (`git push -u origin HEAD`) and publish via `gh pr create --body-file <body-file>`.
+   - **Unpushed commits on `main`**: ask once whether to move them onto a feature branch PR or push directly.
+3. **Done when**: the GitHub PR URL is published or updated with a `verify-mermaid`-clean body (unless the user explicitly requested draft text only).
+
 ## Sections
 
 Skip all preambles and keep prose brief. Use the user's domain language from `GLOSSARY.md`.
@@ -78,7 +87,7 @@ src/
 └── transport/      # sends API requests
 ```
 
-- Show component interaction, control flow, or data flow with Mermaid:
+- Show component interaction, control flow, or data flow with Mermaid (separate multiple items in `sequenceDiagram` messages with commas `,` rather than `;` or `#`, use plain alphanumeric `participant` aliases, quote `flowchart` labels containing parentheses/brackets as `id["Label (detail)"]`, and verify with `bun scripts/verify-mermaid.mjs <body-file>`):
 
 ```mermaid
 sequenceDiagram

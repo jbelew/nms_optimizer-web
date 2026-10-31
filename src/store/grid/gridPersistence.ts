@@ -7,6 +7,9 @@ import { Logger } from "@/utils/system/monitoring";
 
 import type { GridStore } from "./gridTypes";
 
+/**
+ * Asynchronous storage setter callback signature consumed by {@link debounceSetItem}.
+ */
 type SetItemFunction = (name: string, value: StorageValue<Partial<GridStore>>) => Promise<void>;
 
 /**
@@ -64,15 +67,25 @@ function debounceSetItem(
  * 2. **Debounced Writes**: Buffers state changes and writes them after a period of inactivity.
  * 3. **Error Handling**: Gracefully logs and suppresses storage-related exceptions (e.g., QuotaExceededError).
  *
+ * @see {@link GridStore}
+ * @see {@link ./persistence_regression.test.ts Tests}
+ *
  * @category State
  *
  * @example
  * ```ts
  * const value = debouncedStorage.getItem("grid-data");
- * debouncedStorage.setItem("grid-data", { ...state });
+ * await debouncedStorage.setItem("grid-data", { state: { ...state } });
  * ```
  */
 export const debouncedStorage = {
+	/**
+	 * Synchronously reads and validates persisted grid state for `name` from `localStorage`.
+	 *
+	 * @param name - Storage key to retrieve.
+	 *
+	 * @returns Parsed `StorageValue` when valid and matching the active ship/tool platform, or `null`.
+	 */
 	getItem: (name: string): null | StorageValue<Partial<GridStore>> => {
 		try {
 			const storedData = safeGetItem(name);
@@ -115,10 +128,18 @@ export const debouncedStorage = {
 		}
 	},
 
+	/**
+	 * Removes persisted grid state for `name` from `localStorage`.
+	 *
+	 * @param name - Storage key to delete.
+	 */
 	removeItem: (name: string): void => {
 		safeRemoveItem(name);
 	},
 
+	/**
+	 * Schedules a debounced JSON write of `value` under `name` in `localStorage`.
+	 */
 	setItem: debounceSetItem((name: string, value: StorageValue<Partial<GridStore>>) => {
 		try {
 			const storageValue = JSON.stringify(value);

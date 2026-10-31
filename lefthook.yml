@@ -31,13 +31,13 @@ pre-commit:
 
           - name: lint-md
             tags: [lint]
-            glob: "{README.md,public/assets/**/*.md}"
-            run: bunx markdownlint-cli2 --no-globs --fix {staged_files}
+            glob: "{AGENTS.md,GEMINI.md,GLOSSARY.md,README.md,docs/**/*.md,public/assets/**/*.md}"
+            run: bunx markdownlint-cli2 --no-globs --fix {staged_files} && bun scripts/verify-mermaid.mjs {staged_files}
             stage_fixed: true
 
           - name: prettier
             tags: [format]
-            glob: "{src/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},src/**/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},AGENTS.md,GEMINI.md,GLOSSARY.md,README.md,docs/agents/**/*.md,public/assets/**/*.md,public/assets/locales/**/*.json}"
+            glob: "{src/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},src/**/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},AGENTS.md,GEMINI.md,GLOSSARY.md,README.md,docs/**/*.md,public/assets/**/*.md,public/assets/locales/**/*.json}"
             run: bunx prettier --cache --cache-location node_modules/.cache/prettier/.prettier-cache --write {staged_files}
             stage_fixed: true
 
@@ -59,7 +59,7 @@ pre-commit:
           - name: test-scripts
             tags: [test]
             glob: "{scripts/*.{ts,js,mjs,cjs},scripts/**/*.{ts,js,mjs,cjs}}"
-            run: bun run test:scripts
+            run: bun test --dots scripts/
 
 pre-push:
   piped: true
@@ -77,7 +77,7 @@ pre-push:
           - name: test-scripts
             tags: [test]
             glob: "{scripts/**,functions/**,shared/**,public/_*,vite.config.ts,package.json,.size-limit.json,.env*}"
-            run: bun run test:scripts
+            run: bun test --dots scripts/
 
           - name: format
             tags: [format]
@@ -98,6 +98,11 @@ pre-push:
           - name: lint
             tags: [lint]
             run: bun run lint
+
+          - name: lint-md
+            tags: [lint]
+            glob: "{AGENTS.md,GEMINI.md,GLOSSARY.md,README.md,docs/**/*.md,public/assets/**/*.md,.agents/skills/**/*.md}"
+            run: bun run lint:md
 
           - name: lint-css
             tags: [lint]

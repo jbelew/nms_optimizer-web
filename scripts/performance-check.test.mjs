@@ -4,6 +4,8 @@ import {
 	createCleanLighthouseEnv,
 	extractLighthouseMetrics,
 	formatComparisonMarkdown,
+	hasPerfRelevantChanges,
+	isPerfRelevantPath,
 	summarizeBundle,
 } from "./performance-check.mjs";
 
@@ -161,6 +163,45 @@ describe("performance-check.mjs", () => {
 			expect(md).toContain(
 				"| **Total Transfer Size** | `535 KiB` | `534 KiB` | **-1 KiB** |",
 			);
+		});
+	});
+
+	describe("isPerfRelevantPath & hasPerfRelevantChanges", () => {
+		it("marks client runtime, shared config, public assets, and SSG build scripts as perf-relevant", () => {
+			expect(isPerfRelevantPath("src/components/GridTable/GridTable.tsx")).toBe(true);
+			expect(isPerfRelevantPath("shared/page-metadata.js")).toBe(true);
+			expect(isPerfRelevantPath("public/assets/locales/en/about.md")).toBe(true);
+			expect(isPerfRelevantPath("index.html")).toBe(true);
+			expect(isPerfRelevantPath("vite.config.ts")).toBe(true);
+			expect(isPerfRelevantPath("package.json")).toBe(true);
+			expect(isPerfRelevantPath("scripts/generate-ssg.mjs")).toBe(true);
+		});
+
+		it("skips ops scripts, test files, docs, agent steering, and CI workflows", () => {
+			expect(isPerfRelevantPath("scripts/provision-cloudflare-zone.mjs")).toBe(false);
+			expect(isPerfRelevantPath("scripts/verify-deployment.test.mjs")).toBe(false);
+			expect(isPerfRelevantPath("src/store/grid/gridPersistence.test.ts")).toBe(false);
+			expect(isPerfRelevantPath("src/components/Button/Button.stories.tsx")).toBe(false);
+			expect(isPerfRelevantPath("docs/adr/0004-agent-markdown-content-negotiation.md")).toBe(
+				false,
+			);
+			expect(isPerfRelevantPath(".agents/skills/pr/SKILL.md")).toBe(false);
+			expect(isPerfRelevantPath("AGENTS.md")).toBe(false);
+
+			expect(
+				hasPerfRelevantChanges([
+					"scripts/provision-cloudflare-zone.mjs",
+					"scripts/verify-deployment.mjs",
+					"docs/adr/0004-agent-markdown-content-negotiation.md",
+				]),
+			).toBe(false);
+
+			expect(
+				hasPerfRelevantChanges([
+					"docs/agents/architecture.md",
+					"src/store/grid/gridPersistence.ts",
+				]),
+			).toBe(true);
 		});
 	});
 });
