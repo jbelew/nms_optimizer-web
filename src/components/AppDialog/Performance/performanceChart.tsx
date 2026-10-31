@@ -207,14 +207,16 @@ interface ChartTooltipContentProps {
  * Custom tooltip content for the performance chart.
  *
  * @remarks
- * Renders metric details (p50, p75, p90) when a specific metric is selected,
+ * Renders raw metric percentiles (`p50`, `p75`, `p90`, falling back to `_p75_sma`
+ * only when raw `_p75` is unavailable) when a specific metric is selected,
  * or an overall score summary when viewing the aggregate trend.
  *
- * @param props - Component properties.
+ * @returns The rendered tooltip or `null` when inactive.
  *
- * @returns {JSX.Element | null} The rendered tooltip or null if inactive.
+ * @see {@link ChartTooltipContentProps}
+ * @see {@link ./performanceChart.test.tsx Tests}
  *
- * @see {@link ./PerformanceChart.test.tsx Unit Tests}
+ * @component
  */
 const ChartTooltipContent = memo<ChartTooltipContentProps>(function ChartTooltipContent({
 	active,
@@ -236,7 +238,8 @@ const ChartTooltipContent = memo<ChartTooltipContentProps>(function ChartTooltip
 	if (selectedMetric) {
 		const format = (v: number) => formatMetricValue(selectedMetric, v);
 		const p50 = item[`${selectedMetric}_p50`] as number | undefined;
-		const p75 = item[`${selectedMetric}_p75_sma`] as number | undefined;
+		const p75 = (item[`${selectedMetric}_p75`] ?? item[`${selectedMetric}_p75_sma`]) as
+			number | undefined;
 		const p90 = item[`${selectedMetric}_p90`] as number | undefined;
 		const threshold = METRIC_THRESHOLDS[selectedMetric] || 10000;
 
@@ -689,7 +692,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 										fill="var(--green-a4)"
 										stroke="none"
 										y1={0}
-										y2={20}
+										y2={10}
 									/>
 
 									<ReferenceLine
@@ -708,7 +711,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 										stroke="var(--green-a7)"
 										strokeDasharray="0"
 										strokeWidth={1.5}
-										y={20}
+										y={10}
 									/>
 								</>
 							}

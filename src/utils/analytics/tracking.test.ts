@@ -38,7 +38,7 @@ describe("Analytics Tracking", () => {
 		value: 1,
 	};
 
-	let documentListeners: Record<string, Array<() => void>>;
+	let documentListeners: Record<string, Array<(event?: Partial<Event>) => void>>;
 	let windowListeners: Record<string, Array<() => void>>;
 
 	beforeEach(() => {
@@ -66,6 +66,7 @@ describe("Analytics Tracking", () => {
 				setItem: vi.fn((key: string, value: string) => localStorage.setItem(key, value)),
 			},
 			location: {
+				hostname: "nms-optimizer.app",
 				pathname: "/",
 				search: "",
 			},
@@ -93,7 +94,7 @@ describe("Analytics Tracking", () => {
 		};
 
 		vi.stubGlobal("document", {
-			addEventListener: vi.fn((event: string, handler: () => void) => {
+			addEventListener: vi.fn((event: string, handler: (event?: Partial<Event>) => void) => {
 				documentListeners[event] ??= [];
 				documentListeners[event].push(handler);
 			}),
@@ -125,6 +126,7 @@ describe("Analytics Tracking", () => {
 
 	afterEach(() => {
 		vi.restoreAllMocks();
+		vi.unstubAllEnvs();
 		vi.unstubAllGlobals();
 	});
 
@@ -175,6 +177,77 @@ describe("Analytics Tracking", () => {
 
 			expect(ReactGA.initialize).not.toHaveBeenCalled();
 			expect(navigator.sendBeacon).not.toHaveBeenCalled();
+		});
+
+		it("should suppress analytics when DEV is true outside test mode", async () => {
+			vi.stubEnv("MODE", "development");
+			vi.stubEnv("DEV", true);
+
+			tracking.sendEvent(testEvent);
+			await tracking.initializeAnalytics();
+			tracking.sendEvent(testEvent);
+
+			Object.defineProperty(document, "visibilityState", {
+				configurable: true,
+				value: "hidden",
+			});
+			documentListeners.visibilitychange?.forEach((fn) => fn());
+			windowListeners.pagehide?.forEach((fn) => fn());
+
+			expect(ReactGA.initialize).not.toHaveBeenCalled();
+			expect(ReactGA.event).not.toHaveBeenCalled();
+			expect(navigator.sendBeacon).not.toHaveBeenCalled();
+		});
+
+		it.each([
+			"localhost",
+			"127.0.0.1",
+			"[::1]",
+			"preview-branch.nms-optimizer.pages.dev",
+			"nms-optimizer-service-afebcfd47e2a.herokuapp.com",
+		])(
+			"should suppress analytics on non-production hostname %s outside test mode",
+			async (hostname) => {
+				vi.stubEnv("MODE", "production");
+				vi.stubEnv("DEV", false);
+				Object.defineProperty(window, "location", {
+					configurable: true,
+					value: { hostname, pathname: "/", search: "" },
+				});
+
+				tracking.sendEvent(testEvent);
+				await tracking.initializeAnalytics();
+				tracking.sendEvent(testEvent);
+
+				Object.defineProperty(document, "visibilityState", {
+					configurable: true,
+					value: "hidden",
+				});
+				documentListeners.visibilitychange?.forEach((fn) => fn());
+				windowListeners.pagehide?.forEach((fn) => fn());
+
+				expect(ReactGA.initialize).not.toHaveBeenCalled();
+				expect(ReactGA.event).not.toHaveBeenCalled();
+				expect(navigator.sendBeacon).not.toHaveBeenCalled();
+			},
+		);
+
+		it("should allow analytics on production hostnames outside test mode when DEV is false", async () => {
+			vi.stubEnv("MODE", "production");
+			vi.stubEnv("DEV", false);
+			Object.defineProperty(window, "location", {
+				configurable: true,
+				value: { hostname: "nms-optimizer.app", pathname: "/", search: "" },
+			});
+
+			await tracking.initializeAnalytics();
+			tracking.sendEvent(testEvent);
+
+			expect(ReactGA.initialize).toHaveBeenCalledTimes(1);
+			expect(ReactGA.event).toHaveBeenCalledWith(
+				testEvent.action,
+				expect.objectContaining({ tracking_source: "client" }),
+			);
 		});
 
 		it("should initialize GA4 if not blocked", async () => {
@@ -536,6 +609,95 @@ describe("Analytics Tracking", () => {
 					metric_name: "INP",
 				}),
 			);
+		});
+
+		it("should suppress TTFB reports when the page was hidden before responseStart or during reporting, while allowing foreground TTFB", async () => {
+			await tracking.initializeAnalytics();
+			const ttfbCallback = vi.mocked(onTTFB).mock.calls[0][0];
+
+			const navEntry = {
+				activationStart: 0,
+				responseStart: 120,
+			} as PerformanceNavigationTiming;
+
+			const buildTtfbMetric = (id: string): Parameters<typeof ttfbCallback>[0] => ({
+				attribution: {
+					cacheDuration: 0,
+					connectionDuration: 0,
+					dnsDuration: 0,
+					navigationEntry: navEntry,
+					requestDuration: 120,
+					waitingDuration: 0,
+				},
+				delta: 120,
+				entries: [navEntry],
+				id,
+				name: "TTFB",
+				navigationId: 1,
+				navigationType: "navigate",
+				rating: "good",
+				value: 120,
+			});
+
+			// 1. Page currently hidden when TTFB fires -> suppressed
+			Object.defineProperty(document, "visibilityState", {
+				configurable: true,
+				value: "hidden",
+			});
+			ttfbCallback(buildTtfbMetric("v4-ttfb-hidden-now"));
+			expect(ReactGA.event).not.toHaveBeenCalled();
+
+			// 2. Page now visible, but PerformanceObserver visibility-state recorded hidden before responseStart -> suppressed
+			Object.defineProperty(document, "visibilityState", {
+				configurable: true,
+				value: "visible",
+			});
+			const getEntriesSpy = vi.spyOn(performance, "getEntriesByType").mockImplementation(((
+				type: string,
+			): PerformanceEntryList => {
+				if (type === "visibility-state") {
+					return [
+						{
+							duration: 0,
+							entryType: "visibility-state",
+							name: "hidden",
+							startTime: 0,
+							toJSON: () => ({}),
+						},
+					];
+				}
+
+				return [];
+			}) as typeof performance.getEntriesByType);
+
+			ttfbCallback(buildTtfbMetric("v4-ttfb-hidden-before-response"));
+			expect(ReactGA.event).not.toHaveBeenCalled();
+
+			// 3. Foreground navigation (visible through responseStart) -> dispatched
+			getEntriesSpy.mockReturnValue([]);
+			ttfbCallback(buildTtfbMetric("v4-ttfb-foreground"));
+			expect(ReactGA.event).toHaveBeenCalledWith(
+				"performance_metric",
+				expect.objectContaining({
+					label: "v4-ttfb-foreground",
+					metric_name: "TTFB",
+					value: 120,
+				}),
+			);
+
+			// 4. Page hidden via visibilitychange before responseStart, then refocused before TTFB fires -> suppressed
+			vi.mocked(ReactGA.event).mockClear();
+			Object.defineProperty(document, "visibilityState", {
+				configurable: true,
+				value: "hidden",
+			});
+			documentListeners.visibilitychange?.forEach((fn) => fn({ timeStamp: 40 }));
+			Object.defineProperty(document, "visibilityState", {
+				configurable: true,
+				value: "visible",
+			});
+			ttfbCallback(buildTtfbMetric("v4-ttfb-visibilitychange-before-response"));
+			expect(ReactGA.event).not.toHaveBeenCalled();
 		});
 	});
 });

@@ -29,6 +29,7 @@ import type {
 	INPMetricWithAttribution,
 	LCPMetricWithAttribution,
 	Metric,
+	TTFBMetricWithAttribution,
 } from "web-vitals/attribution";
 
 import type { AnalyticsEventParams, GA4Event, PerformanceMetricGA4Event } from "@/types/analytics";
@@ -70,6 +71,10 @@ let gaInitialized = false;
 let hideListenersRegistered = false;
 /** Flag indicating if pre-unmount interaction target listeners have been attached. */
 let interactionCaptureListenersRegistered = false;
+/** Flag indicating if first-hidden-time visibility tracking has been attached. */
+let visibilityWatcherRegistered = false;
+/** Earliest timestamp (ms from time origin) at which the document was hidden, or `-1` before initialization. */
+let firstHiddenTime = -1;
 /** Most recent pre-unmount DOM selector captured on `pointerdown` or `keydown`. */
 let lastInteractedTargetSelector = "";
 /** Maximum length for generated INP target selectors. */
@@ -90,12 +95,57 @@ const globalIsInstalled =
 	typeof window !== "undefined" && window.matchMedia("(display-mode: standalone)").matches;
 
 /**
- * Checks whether telemetry is disabled via environment configuration or bot detection.
+ * Determines whether a hostname belongs to a local loopback or preview deployment environment.
+ *
+ * @param hostname - Browser `window.location.hostname` value.
+ *
+ * @returns `true` for loopback (`localhost`, `127.0.0.1`, `[::1]`) and preview (`*.pages.dev`, `*.herokuapp.com`) hosts.
+ */
+const isNonProductionHost = (hostname: string | undefined): boolean => {
+	if (!hostname) return false;
+
+	const normalized = hostname.toLowerCase();
+
+	return (
+		normalized === "localhost"
+		|| normalized.endsWith(".localhost")
+		|| normalized === "127.0.0.1"
+		|| normalized === "[::1]"
+		|| normalized === "::1"
+		|| normalized === "pages.dev"
+		|| normalized.endsWith(".pages.dev")
+		|| normalized === "herokuapp.com"
+		|| normalized.endsWith(".herokuapp.com")
+	);
+};
+
+/**
+ * Checks whether telemetry is disabled via environment configuration, non-production host guards, or bot detection.
+ *
+ * @remarks
+ * Outside unit test runs (`import.meta.env.MODE !== "test"`), suppresses telemetry during local
+ * development (`import.meta.env.DEV`) and on loopback or preview deployment hostnames so
+ * non-production traffic never pollutes GA4 or BigQuery.
  *
  * @returns `true` when analytics should be suppressed.
  */
-const isAnalyticsDisabled = (): boolean =>
-	import.meta.env.VITE_ANALYTICS_ENABLED === "false" || isBot();
+const isAnalyticsDisabled = (): boolean => {
+	if (import.meta.env.VITE_ANALYTICS_ENABLED === "false" || isBot()) {
+		return true;
+	}
+
+	if (import.meta.env.MODE !== "test") {
+		if (import.meta.env.DEV) {
+			return true;
+		}
+
+		if (typeof window !== "undefined" && isNonProductionHost(window.location?.hostname)) {
+			return true;
+		}
+	}
+
+	return false;
+};
 
 /**
  * Normalizes boolean event parameters (except `nonInteraction`) into `"true"` / `"false"` strings.
@@ -325,6 +375,97 @@ const getGaClientIdFromCookie = (): null | string => {
 };
 
 /**
+ * Initializes first-hidden-time tracking so background-loaded tabs can be excluded from `TTFB`.
+ *
+ * @returns Side-effects only.
+ */
+const ensureVisibilityTracking = (): void => {
+	if (typeof document === "undefined") {
+		return;
+	}
+
+	const isPrerendering = Boolean(
+		(document as Document & { prerendering?: boolean }).prerendering,
+	);
+
+	if (firstHiddenTime < 0) {
+		firstHiddenTime = document.visibilityState === "hidden" && !isPrerendering ? 0 : Infinity;
+	}
+
+	if (visibilityWatcherRegistered) {
+		return;
+	}
+
+	visibilityWatcherRegistered = true;
+
+	document.addEventListener(
+		"visibilitychange",
+		(event?: Event) => {
+			if (document.visibilityState === "hidden" && !Number.isFinite(firstHiddenTime)) {
+				firstHiddenTime =
+					typeof event?.timeStamp === "number" ? event.timeStamp
+					: typeof performance !== "undefined" && typeof performance.now === "function" ?
+						performance.now()
+					:	0;
+			}
+		},
+		{ capture: true, passive: true },
+	);
+};
+
+if (typeof document !== "undefined") {
+	ensureVisibilityTracking();
+}
+
+/**
+ * Checks whether a `TTFB` metric originated from a tab that was hidden before `responseStart` or at report time.
+ *
+ * @param metric - Reported `TTFB` Web Vitals metric.
+ *
+ * @returns `true` if `TTFB` should be suppressed as a background navigation.
+ */
+const isBackgroundTtfb = (metric: Metric): boolean => {
+	if (typeof document !== "undefined" && document.visibilityState === "hidden") {
+		return true;
+	}
+
+	if (metric.navigationType === "back-forward-cache") {
+		return false;
+	}
+
+	const ttfbWithAttr = metric as TTFBMetricWithAttribution;
+	const navEntry = ttfbWithAttr.attribution?.navigationEntry ?? metric.entries?.[0];
+	const activationStart =
+		navEntry && "activationStart" in navEntry && typeof navEntry.activationStart === "number" ?
+			navEntry.activationStart
+		:	0;
+	const responseStart =
+		navEntry && "responseStart" in navEntry && typeof navEntry.responseStart === "number" ?
+			navEntry.responseStart
+		:	metric.value;
+
+	if (firstHiddenTime >= 0 && firstHiddenTime <= responseStart) {
+		return true;
+	}
+
+	if (typeof performance !== "undefined" && typeof performance.getEntriesByType === "function") {
+		const visibilityEntries = performance.getEntriesByType("visibility-state");
+		const wasHiddenBeforeResponse = visibilityEntries.some(
+			(entry) =>
+				entry.name === "hidden"
+				&& entry.startTime >= activationStart
+				&& entry.startTime <= responseStart,
+		);
+
+		if (wasHiddenBeforeResponse) {
+			return true;
+		}
+	}
+
+	return false;
+};
+
+/**
  * Resolves and persists the unique session client ID.
  *
  * @remarks
@@ -338,6 +479,7 @@ const getGaClientIdFromCookie = (): null | string => {
  */
 const initializeAnalyticsClient = (): string => {
 	ensureFlushOnHideListeners();
+	ensureVisibilityTracking();
 
 	const gaId = getGaClientIdFromCookie();
 	const stored = safeGetItem("analytics_client_id");
@@ -608,6 +750,10 @@ const ensureInteractionTargetCaptureListeners = (): void => {
  * @returns Side-effects only.
  */
 const sendVitalsMetric = (metric: Metric): void => {
+	if (metric.name === "TTFB" && isBackgroundTtfb(metric)) {
+		return;
+	}
+
 	const rawValue =
 		metric.name === "CLS" ? metric.delta * 1000
 		: metric.name === "INP" ? (metric.value ?? metric.delta)
@@ -940,6 +1086,8 @@ export const resetAnalyticsForTesting = (): void => {
 	gaInitialized = false;
 	hideListenersRegistered = false;
 	interactionCaptureListenersRegistered = false;
+	visibilityWatcherRegistered = false;
+	firstHiddenTime = -1;
 	lastInteractedTargetSelector = "";
 	adBlockerDetectionPromise = null;
 	adBlockerResult = null;

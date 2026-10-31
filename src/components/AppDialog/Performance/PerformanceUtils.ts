@@ -22,6 +22,8 @@ export interface ChartDataPoint {
 	displayDate: string;
 	/** Localized formatted hour string (e.g., "5 PM") for tooltip display. */
 	hour: string;
+	/** Original application version preserved when the final point is tagged `"LIVE"`. */
+	originalVersion?: string;
 	/** SMA-smoothed overall deficit (100 - score) for inverted chart. */
 	overall_deficit_p75_sma?: number;
 	/** Weighted overall p50 score (0-100). */
@@ -32,8 +34,12 @@ export interface ChartDataPoint {
 	overall_p90?: number;
 	/** SMA-smoothed overall p75 score for trend line. */
 	overall_score_p75_sma?: number;
+	/** Unanchored SMA-smoothed overall p75 score for symmetric trend comparison. */
+	overall_score_p75_trend_sma?: number;
 	/** Overall score range [p90, p50] for bar chart visualization. */
 	overall_score_range?: [number, number];
+	/** Contiguous version-segment mean overall p75 score stamped on each segment start point. */
+	overall_version_avg?: number;
 	/** Unix timestamp in milliseconds for consistent sorting. */
 	timestamp: number;
 }
@@ -261,27 +267,29 @@ export const getStatusColor = (metric: string, value: null | number | undefined)
 };
 
 /**
- * Calculates a Lighthouse-style score (0-100) using a log-normal distribution.
+ * Calculates a Lighthouse v10+ performance score (0–100) using a log-normal survival curve.
  *
  * @remarks
- * Approximates the Lighthouse v10 scoring curve using a log-normal CDF with
- * a Horner-form erf polynomial. The `p90` and `p50` parameters are
- * distribution control points that anchor the curve shape; they do **not**
- * produce output scores of exactly 90 or 50. At the `p90` control point the
- * erf approximation yields ~82, and at `p50` it yields exactly 50.
+ * Evaluates the complementary log-normal cumulative distribution function via a Horner-form
+ * error function (`erf`) polynomial approximation. Because `0.9061938024368232` equals
+ * `erf^-1(0.80) = Phi^-1(0.90) / sqrt(2)`, `standardizedSigma` already incorporates `sqrt(2)`,
+ * anchoring the curve so `value === p90` yields `90` and `value === p50` yields `50`.
  *
- * @param value - The actual metric value (e.g., milliseconds for LCP).
- * @param p90 - The "Good" threshold control point for the log-normal curve.
- * @param p50 - The median control point for the log-normal curve.
+ * @param value - The measured metric value (e.g., milliseconds for `LCP`, or thousandths for `CLS`).
+ * @param p90 - The "Good" threshold control point corresponding to a score of `90`.
+ * @param p50 - The median control point corresponding to a score of `50`.
  *
- * @returns An integer score between 0 and 100.
+ * @returns An integer Lighthouse score between `0` and `100`.
+ *
+ * @see {@link LIGHTHOUSE_CONFIG}
+ * @see {@link ./PerformanceUtils.test.ts Tests}
  *
  * @category Utilities
  *
  * @example
  * ```ts
- * computeLogNormalScore(2500, 2500, 4000); // ~82
- * computeLogNormalScore(4000, 2500, 4000); // 50
+ * computeLogNormalScore(2500, 2500, 4000); // returns 90
+ * computeLogNormalScore(4000, 2500, 4000); // returns 50
  * ```
  */
 export const computeLogNormalScore = (value: number, p90: number, p50: number): number => {
@@ -291,8 +299,8 @@ export const computeLogNormalScore = (value: number, p90: number, p50: number): 
 	const logP50 = Math.log(p50);
 	const logP90 = Math.log(p90);
 
-	const sigma = (logP50 - logP90) / 0.90619;
-	const z = (logP50 - logValue) / (Math.sqrt(2) * sigma);
+	const standardizedSigma = (logP50 - logP90) / 0.9061938024368232;
+	const z = (logP50 - logValue) / standardizedSigma;
 
 	const erf = (x: number) => {
 		const a1 = 0.254829592,
@@ -425,29 +433,34 @@ export const calculateSMA = (
  * Transforms flat API records into a timestamp-keyed structure for Recharts.
  *
  * @remarks
- * This function performs several data preparation steps:
- * 1. Groups metrics by timestamp.
- * 2. Filters out irrelevant metrics like `TBT`.
- * 3. Formats timestamps into human-readable strings.
- * 4. Sub-samples data if it exceeds `maxPoints`.
- * 5. Calculates 3-point SMAs for all active metrics.
+ * Performs the full dashboard timeseries pipeline:
+ * 1. Groups hourly metrics by timestamp and filters out legacy `TBT` entries.
+ * 2. Inserts `undefined` gap points for empty hours while carrying forward prior valid
+ *    metric readings into active-hour `overall_p50`, `overall_p75`, and `overall_p90` scores.
+ * 3. Computes anchored SMAs for visual trend lines and unanchored SMAs for symmetric trend comparison.
+ * 4. Computes contiguous unsampled `appVersion` segment averages (including the terminal `"LIVE"` segment)
+ *    before sub-sampling or padding to `maxPoints`.
  *
  * @param raw - The raw array of metric records from the API.
  * @param locale - The user locale for date formatting.
- * @param maxPoints - Maximum number of points (e.g., 168 for 7 days or 72 for 3 days).
+ * @param maxPoints - Maximum number of points rendered on the X-axis.
  * @param [smaPeriod=3] - The window size for SMA smoothing.
+ * @param [rangeDays] - Optional lookback range in days used to slice the chart view.
  *
- * @returns Transformed data, decoupled summary, and active metric names.
+ * @returns Transformed chart points, range-independent summary, and active metric names.
  *
  * @see {@link ChartDataPoint}
+ * @see {@link RawPerformanceSummary}
  * @see {@link calculateSMA}
  * @see {@link getPerformanceSummary}
+ * @see {@link ./PerformanceUtils.test.ts Tests}
  *
  * @category Utilities
  *
  * @example
  * ```ts
- * const { chartData, summary, uniqueMetrics } = transformPerformanceData(raw, "en-US", 48);
+ * const result = transformPerformanceData(raw, "en-US", 73, 3, 3);
+ * // returns { chartData: [...], summary: { ... }, uniqueMetrics: ["LCP"] }
  * ```
  */
 export const transformPerformanceData = (
@@ -567,11 +580,13 @@ export const transformPerformanceData = (
 	metrics.forEach((m) => {
 		const p75Values = fullChartData.map((p) => p[`${m}_p75`] as number | undefined);
 		const p75SmaValues = calculateSMA(p75Values, smaPeriod, true);
+		const p75TrendSmaValues = calculateSMA(p75Values, smaPeriod, false);
 
 		const config = LIGHTHOUSE_CONFIG[m];
 
 		fullChartData.forEach((p, i) => {
 			p[`${m}_p75_sma`] = p75SmaValues[i];
+			p[`${m}_p75_trend_sma`] = p75TrendSmaValues[i];
 
 			if (config && p[`${m}_p75`] !== undefined) {
 				const score = computeLogNormalScore(
@@ -592,8 +607,16 @@ export const transformPerformanceData = (
 		});
 	});
 
-	// Calculate overall weighted scores for the "Ceiling" view (100 is best, at top)
+	// Calculate overall weighted scores for the "Ceiling" view (100 is best, at top).
+	// On active (non-gap) hours where at least one metric was reported in `raw`, carry
+	// forward the most recent prior valid hourly reading for any missing metric so
+	// `totalWeight` remains stable across partial-metric hours while leaving empty
+	// gap-filled hours `undefined`.
+	const lastValidByMetric: Record<string, { p50: number; p75: number; p90: number }> = {};
+
 	fullChartData.forEach((p) => {
+		const isActiveHour = dateMap[p.timestamp] !== undefined;
+
 		let totalP50 = 0,
 			totalP75 = 0,
 			totalP90 = 0,
@@ -603,16 +626,28 @@ export const transformPerformanceData = (
 			const config = LIGHTHOUSE_CONFIG[m];
 			if (!config) return;
 
-			const p50 = (p[`${m}_p50`] ?? p[`${m}_original`]) as number | undefined;
-			const p75 = (p[`${m}_p75`] ?? p[`${m}_original`]) as number | undefined;
-			const p90 = (p[`${m}_p90`] ?? p[`${m}_original`]) as number | undefined;
+			const directP50 = (p[`${m}_p50`] ?? p[`${m}_original`]) as number | undefined;
+			const directP75 = (p[`${m}_p75`] ?? p[`${m}_original`]) as number | undefined;
+			const directP90 = (p[`${m}_p90`] ?? p[`${m}_original`]) as number | undefined;
 
-			if (p75 !== undefined) {
+			if (directP75 !== undefined) {
+				lastValidByMetric[m] = {
+					p50: directP50 ?? directP75,
+					p75: directP75,
+					p90: directP90 ?? directP75,
+				};
+			}
+
+			if (!isActiveHour) return;
+
+			const reading = lastValidByMetric[m];
+
+			if (reading !== undefined) {
 				totalWeight += config.weight;
 
-				const s50 = computeLogNormalScore(p50 ?? p75, config.p90, config.p50);
-				const s75 = computeLogNormalScore(p75, config.p90, config.p50);
-				const s90 = computeLogNormalScore(p90 ?? p75, config.p90, config.p50);
+				const s50 = computeLogNormalScore(reading.p50, config.p90, config.p50);
+				const s75 = computeLogNormalScore(reading.p75, config.p90, config.p50);
+				const s90 = computeLogNormalScore(reading.p90, config.p90, config.p50);
 
 				totalP50 += s50 * config.weight;
 				totalP75 += s75 * config.weight;
@@ -620,7 +655,7 @@ export const transformPerformanceData = (
 			}
 		});
 
-		if (totalWeight > 0) {
+		if (isActiveHour && totalWeight > 0) {
 			p.overall_p50 = totalP50 / totalWeight;
 			p.overall_p75 = totalP75 / totalWeight;
 			p.overall_p90 = totalP90 / totalWeight;
@@ -632,10 +667,12 @@ export const transformPerformanceData = (
 	// Apply SMA to the overall p75 score trend
 	const overallP75Values = fullChartData.map((p) => p.overall_p75 as number | undefined);
 	const overallP75SmaValues = calculateSMA(overallP75Values, smaPeriod, true);
+	const overallP75TrendSmaValues = calculateSMA(overallP75Values, smaPeriod, false);
 
 	fullChartData.forEach((p, i) => {
 		const score = overallP75SmaValues[i];
 		p.overall_score_p75_sma = score;
+		p.overall_score_p75_trend_sma = overallP75TrendSmaValues[i];
 		// Add deficit for unified chart plotting (0 is perfect)
 		p.overall_deficit_p75_sma = score !== undefined ? 100 - score : undefined;
 	});
@@ -643,14 +680,78 @@ export const transformPerformanceData = (
 	// Extract high-resolution summary from the ABSOLUTE full dataset.
 	const summary = getPerformanceSummary(fullChartData);
 
-	// Slice the full dataset down to the user's requested range for the chart view.
-	let slicedData = fullChartData;
+	// Slice the full dataset down to the user's requested range for the chart view,
+	// cloning points so view-scoped tags ("LIVE", version averages) do not mutate `fullChartData`.
+	let slicedData = fullChartData.map((p) => ({ ...p }));
 
-	if (rangeDays !== undefined && rangeDays > 0 && fullChartData.length > 0) {
-		const latestTs = fullChartData[fullChartData.length - 1].timestamp;
+	if (rangeDays !== undefined && rangeDays > 0 && slicedData.length > 0) {
+		const latestTs = slicedData[slicedData.length - 1].timestamp;
 		const startTs = latestTs - rangeDays * 24 * 3600000;
-		slicedData = fullChartData.filter((p) => p.timestamp >= startTs);
+		slicedData = slicedData.filter((p) => p.timestamp >= startTs);
 	}
+
+	// Create a virtual "LIVE" version for the final plot point before computing
+	// contiguous version segments so the latest reading forms its own terminal segment.
+	if (slicedData.length > 0) {
+		const lastPoint = slicedData[slicedData.length - 1];
+
+		if (lastPoint.displayDate) {
+			lastPoint.originalVersion = lastPoint.appVersion;
+			lastPoint.appVersion = "LIVE";
+		}
+	}
+
+	// Compute per-version averages across contiguous chronological runs of `appVersion`
+	// on the unsampled range slice so sub-sampling does not skew segment means and
+	// non-adjacent reappearances of an older version are never merged.
+	const contiguousSegments: Array<{ indices: number[]; version: string }> = [];
+
+	slicedData.forEach((p, i) => {
+		if (!p.appVersion) return;
+
+		const lastSegment = contiguousSegments[contiguousSegments.length - 1];
+
+		if (lastSegment && lastSegment.version === p.appVersion) {
+			lastSegment.indices.push(i);
+		} else {
+			contiguousSegments.push({ indices: [i], version: p.appVersion });
+		}
+	});
+
+	contiguousSegments.forEach(({ indices }) => {
+		const startIdx = indices[0];
+
+		metrics.forEach((m) => {
+			let sum = 0;
+			let count = 0;
+
+			for (const i of indices) {
+				const val = slicedData[i][`${m}_p75`] as number | undefined;
+
+				if (val !== undefined) {
+					sum += val;
+					count++;
+				}
+			}
+
+			slicedData[startIdx][`${m}_version_avg`] = count > 0 ? sum / count : undefined;
+		});
+
+		let overallSum = 0;
+		let overallCount = 0;
+
+		for (const i of indices) {
+			const val = slicedData[i].overall_p75;
+
+			if (val !== undefined) {
+				overallSum += val;
+				overallCount++;
+			}
+		}
+
+		slicedData[startIdx].overall_version_avg =
+			overallCount > 0 ? overallSum / overallCount : undefined;
+	});
 
 	let chartData = slicedData;
 
@@ -733,71 +834,6 @@ export const transformPerformanceData = (
 		}
 	}
 
-	// Create a virtual "LIVE" version for the final plot point.
-	// This forces the version grouping logic below to treat the current live value
-	// as its own segment, creating a sloping connection from the current version's
-	// period average to the latest telemetry.
-	if (chartData.length > 0) {
-		const lastPoint = chartData[chartData.length - 1];
-
-		if (lastPoint.displayDate) {
-			lastPoint.originalVersion = lastPoint.appVersion;
-			lastPoint.appVersion = "LIVE";
-		}
-	}
-
-	// Compute per-version averages for version-to-version trend lines.
-	// Groups data points by appVersion, computes the mean p75 for each metric
-	// and the mean overall score, then stamps every point with the average
-	// for its version segment.
-	const versionSegments: Map<string, number[]> = new Map();
-	chartData.forEach((p, i) => {
-		const v = p.appVersion || "__unknown__";
-		if (!versionSegments.has(v)) versionSegments.set(v, []);
-		versionSegments.get(v)!.push(i);
-	});
-
-	const allSegments = Array.from(versionSegments.values());
-
-	allSegments.forEach((indices) => {
-		const startIdx = indices[0];
-
-		// Per-metric version averages
-		metrics.forEach((m) => {
-			let sum = 0;
-			let count = 0;
-
-			for (const i of indices) {
-				const val = chartData[i][`${m}_p75`] as number | undefined;
-
-				if (val !== undefined) {
-					sum += val;
-					count++;
-				}
-			}
-
-			const avg = count > 0 ? sum / count : undefined;
-
-			chartData[startIdx][`${m}_version_avg`] = avg;
-		});
-
-		let overallSum = 0;
-		let overallCount = 0;
-
-		for (const i of indices) {
-			const val = chartData[i].overall_p75 as number | undefined;
-
-			if (val !== undefined) {
-				overallSum += val;
-				overallCount++;
-			}
-		}
-
-		const overallAvg = overallCount > 0 ? overallSum / overallCount : undefined;
-
-		chartData[startIdx].overall_version_avg = overallAvg;
-	});
-
 	return { chartData, summary, uniqueMetrics: Array.from(metrics) };
 };
 
@@ -805,19 +841,24 @@ export const transformPerformanceData = (
  * Calculates a complete, range-independent performance summary from transformed chart data.
  *
  * @remarks
- * This function extracts the most recent point's smoothed values and compares them
- * to the previous point's data to determine trends. By using the transformed data,
- * it ensures that summary cards and trend arrows stay synchronized with the visual chart.
+ * Resolves `OVERALL` and each metric in `METRIC_DISPLAY_ORDER` from that metric's own most
+ * recent valid hourly bucket and compares symmetric unanchored SMA windows against its
+ * preceding valid bucket (using `5` thousandths = `0.005` CLS as the `CLS` noise floor).
  *
- * @param chartData - The transformed performance data used for the chart.
+ * @param chartData - The transformed unsampled performance timeseries.
  *
- * @returns Summary data for cards and arrows.
+ * @returns Summary data for dashboard cards and trend arrows, or `null` when `chartData` is empty.
+ *
+ * @see {@link ChartDataPoint}
+ * @see {@link RawPerformanceSummary}
+ * @see {@link ./PerformanceUtils.test.ts Tests}
  *
  * @category Utilities
  *
  * @example
  * ```ts
  * const summary = getPerformanceSummary(chartData);
+ * // returns { metrics: { OVERALL: { score: 90, value: 90 } }, timestamp: 1619370000000, trends: { OVERALL: "neutral" } }
  * ```
  */
 export const getPerformanceSummary = (
@@ -833,25 +874,44 @@ export const getPerformanceSummary = (
 		trends: {},
 	};
 
-	// Helper to find the most recent preceding point with valid data
-	const findPreviousValidPoint = (checkFn: (p: ChartDataPoint) => boolean) => {
-		for (let i = chartData.length - 2; i >= 0; i--) {
-			if (checkFn(chartData[i])) return chartData[i];
+	// Helper to find the most recent point index at or before `fromIndex` matching `checkFn`
+	const findValidPointIndex = (
+		fromIndex: number,
+		checkFn: (p: ChartDataPoint) => boolean,
+	): number => {
+		for (let i = fromIndex; i >= 0; i--) {
+			if (checkFn(chartData[i])) return i;
 		}
 
-		return null;
+		return -1;
 	};
 
 	// 1. Overall Metric and Trend (using SMA smoothed values)
-	const previousOverall = findPreviousValidPoint((p) => p.overall_p75 !== undefined);
+	const latestOverallIdx = findValidPointIndex(
+		chartData.length - 1,
+		(p) => p.overall_p75 !== undefined,
+	);
+	const latestOverall = latestOverallIdx >= 0 ? chartData[latestOverallIdx] : latest;
+	const previousOverallIdx =
+		latestOverallIdx > 0 ?
+			findValidPointIndex(latestOverallIdx - 1, (p) => p.overall_p75 !== undefined)
+		:	-1;
+	const previousOverall = previousOverallIdx >= 0 ? chartData[previousOverallIdx] : null;
 
-	const latestScore = latest.overall_score_p75_sma ?? latest.overall_p75 ?? 0;
+	const latestScore =
+		latestOverall.overall_score_p75_trend_sma
+		?? latestOverall.overall_score_p75_sma
+		?? latestOverall.overall_p75
+		?? 0;
 	const previousScore =
-		previousOverall?.overall_score_p75_sma ?? previousOverall?.overall_p75 ?? 0;
+		previousOverall?.overall_score_p75_trend_sma
+		?? previousOverall?.overall_score_p75_sma
+		?? previousOverall?.overall_p75
+		?? 0;
 
 	summary.metrics.OVERALL = {
-		score: latest.overall_p75 || 0,
-		value: latest.overall_p75 || 0,
+		score: latestOverall.overall_p75 ?? 0,
+		value: latestOverall.overall_p75 ?? 0,
 	};
 
 	if (previousOverall) {
@@ -868,17 +928,32 @@ export const getPerformanceSummary = (
 		summary.trends.OVERALL = "neutral";
 	}
 
-	// 2. Individual Metrics
+	// 2. Individual Metrics (resolving each metric's own latest and preceding valid buckets)
 	METRIC_DISPLAY_ORDER.forEach((m) => {
-		const val1 = latest[`${m}_p75`] as number | undefined;
-		const sma1 = latest[`${m}_p75_sma`] as number | undefined;
+		const latestMetricIdx = findValidPointIndex(
+			chartData.length - 1,
+			(p) => p[`${m}_p75`] !== undefined,
+		);
+		if (latestMetricIdx < 0) return;
 
-		const previousMetric = findPreviousValidPoint((p) => p[`${m}_p75`] !== undefined);
+		const latestMetric = chartData[latestMetricIdx];
+		const previousMetricIdx =
+			latestMetricIdx > 0 ?
+				findValidPointIndex(latestMetricIdx - 1, (p) => p[`${m}_p75`] !== undefined)
+			:	-1;
+		const previousMetric = previousMetricIdx >= 0 ? chartData[previousMetricIdx] : null;
+
+		const val1 = latestMetric[`${m}_p75`] as number | undefined;
+		const sma1 = (latestMetric[`${m}_p75_trend_sma`] ?? latestMetric[`${m}_p75_sma`]) as
+			number | undefined;
 
 		const val2 =
 			previousMetric ? (previousMetric[`${m}_p75`] as number | undefined) : undefined;
 		const sma2 =
-			previousMetric ? (previousMetric[`${m}_p75_sma`] as number | undefined) : undefined;
+			previousMetric ?
+				((previousMetric[`${m}_p75_trend_sma`] ?? previousMetric[`${m}_p75_sma`]) as
+					number | undefined)
+			:	undefined;
 
 		if (val1 !== undefined) {
 			const config = LIGHTHOUSE_CONFIG[m];
@@ -889,7 +964,7 @@ export const getPerformanceSummary = (
 
 			if (val2 !== undefined && sma1 !== undefined && sma2 !== undefined) {
 				const sDiff = sma1 - sma2;
-				const threshold = Math.max(sma2 * 0.01, m === "CLS" ? 0.005 : 1);
+				const threshold = Math.max(sma2 * 0.01, m === "CLS" ? 5 : 1);
 
 				if (Math.abs(sDiff) <= threshold) {
 					summary.trends[m] = "neutral";
@@ -906,11 +981,16 @@ export const getPerformanceSummary = (
 };
 
 /**
- * Interface for the stable raw performance summary.
+ * Stable range-independent performance summary powering the summary cards row.
+ *
+ * @category Interfaces
  */
 export interface RawPerformanceSummary {
+	/** Latest resolved raw value and Lighthouse score (`0–100`) keyed by metric name (`OVERALL`, `LCP`, etc.). */
 	metrics: Record<string, { score: number; value: number }>;
+	/** Unix timestamp in milliseconds of the latest hourly bucket in the dataset. */
 	timestamp: number;
+	/** Symmetric SMA trend direction keyed by metric name. */
 	trends: Record<string, "improvement" | "neutral" | "regression">;
 }
 

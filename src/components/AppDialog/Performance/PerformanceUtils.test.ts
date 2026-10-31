@@ -10,6 +10,7 @@ import {
 	getPerformanceSummary,
 	getStatusColor,
 	getVersionChanges,
+	LIGHTHOUSE_CONFIG,
 	transformPerformanceData,
 } from "./PerformanceUtils";
 
@@ -94,17 +95,14 @@ describe("computeLogNormalScore", () => {
 		expect(computeLogNormalScore(-1, 2500, 4000)).toBe(100);
 	});
 
-	it("returns a high score at the p90 control point", () => {
-		// The log-normal CDF approximation doesn't produce exactly 90 at
-		// the p90 control point. The naming refers to the percentile
-		// distribution, not the output score value.
-		const score = computeLogNormalScore(2500, 2500, 4000);
-		expect(score).toBeGreaterThanOrEqual(75);
-		expect(score).toBeLessThanOrEqual(95);
-	});
-
-	it("returns 50 at the p50 control point", () => {
+	it("returns 90 at p90 and 50 at p50 across all LIGHTHOUSE_CONFIG metrics", () => {
+		expect(computeLogNormalScore(2500, 2500, 4000)).toBe(90);
 		expect(computeLogNormalScore(4000, 2500, 4000)).toBe(50);
+
+		for (const { p50, p90 } of Object.values(LIGHTHOUSE_CONFIG)) {
+			expect(computeLogNormalScore(p90, p90, p50)).toBe(90);
+			expect(computeLogNormalScore(p50, p90, p50)).toBe(50);
+		}
 	});
 
 	it("scores near 100 for extremely fast values", () => {
@@ -118,16 +116,12 @@ describe("computeLogNormalScore", () => {
 	});
 
 	it("handles INP thresholds correctly", () => {
-		const inpP90Score = computeLogNormalScore(200, 200, 500);
-		expect(inpP90Score).toBeGreaterThanOrEqual(75);
-		expect(inpP90Score).toBeLessThanOrEqual(95);
+		expect(computeLogNormalScore(200, 200, 500)).toBe(90);
 		expect(computeLogNormalScore(500, 200, 500)).toBe(50);
 	});
 
 	it("handles CLS thresholds correctly (raw thousandths)", () => {
-		const clsP90Score = computeLogNormalScore(100, 100, 250);
-		expect(clsP90Score).toBeGreaterThanOrEqual(75);
-		expect(clsP90Score).toBeLessThanOrEqual(95);
+		expect(computeLogNormalScore(100, 100, 250)).toBe(90);
 		expect(computeLogNormalScore(250, 100, 250)).toBe(50);
 	});
 });
@@ -300,9 +294,7 @@ describe("getPerformanceSummary", () => {
 			transformPerformanceData(data, "en-US", 0, 1, 0).chartData,
 		);
 		expect(result).not.toBeNull();
-		// Score at the p90 control point — high but not exactly 90
-		expect(result!.metrics.LCP.score).toBeGreaterThanOrEqual(75);
-		expect(result!.metrics.LCP.score).toBeLessThanOrEqual(95);
+		expect(result!.metrics.LCP.score).toBe(90);
 	});
 
 	it("detects improvement when metric value decreases", () => {
@@ -418,6 +410,74 @@ describe("getPerformanceSummary", () => {
 		);
 		expect(result!.metrics.OVERALL).toBeDefined();
 		expect(result!.trends.OVERALL).toBe("improvement");
+	});
+
+	it("uses 5 (0.005 CLS in thousandths) as the minimum CLS trend noise threshold", () => {
+		const hourMs = 3600000;
+		const baseTs = 1619370000000;
+
+		const microShift: PerformanceMetric[] = [
+			{
+				app_version: "v1",
+				average_value: 1,
+				metric_name: "CLS",
+				p75: 1,
+				timestamp: baseTs,
+			},
+			{
+				app_version: "v1",
+				average_value: 4,
+				metric_name: "CLS",
+				p75: 4,
+				timestamp: baseTs + hourMs,
+			},
+		];
+
+		const microSummary = transformPerformanceData(microShift, "en-US", 72, 1).summary;
+		expect(microSummary!.trends.CLS).toBe("neutral");
+
+		const realShift: PerformanceMetric[] = [
+			{
+				app_version: "v1",
+				average_value: 10,
+				metric_name: "CLS",
+				p75: 10,
+				timestamp: baseTs,
+			},
+			{
+				app_version: "v1",
+				average_value: 20,
+				metric_name: "CLS",
+				p75: 20,
+				timestamp: baseTs + hourMs,
+			},
+		];
+
+		const realSummary = transformPerformanceData(realShift, "en-US", 72, 1).summary;
+		expect(realSummary!.trends.CLS).toBe("regression");
+	});
+
+	it("compares symmetric unanchored SMA windows for metric and OVERALL trends rather than raw latest vs 3-hour prior SMA", () => {
+		const hourMs = 3600000;
+		const baseTs = 1619370000000;
+
+		// LCP sequence [2000, 3000, 2000, 2300] with smaPeriod=3:
+		// T2 3h SMA = (2000 + 3000 + 2000) / 3 = 2333.33
+		// T3 3h SMA = (3000 + 2000 + 2300) / 3 = 2433.33 -> regression (+100ms)
+		// (Asymmetric raw T3=2300 vs T2 SMA=2333.33 would falsely report improvement)
+		const data: PerformanceMetric[] = [2000, 3000, 2000, 2300].map((val, i) => ({
+			app_version: "v1",
+			average_value: val,
+			metric_name: "LCP",
+			p75: val,
+			timestamp: baseTs + i * hourMs,
+		}));
+
+		const { chartData, summary } = transformPerformanceData(data, "en-US", 72, 3);
+		expect(summary!.trends.LCP).toBe("regression");
+		expect(summary!.trends.OVERALL).toBe("regression");
+		// Visual chart line still anchors the final point to the latest raw p75
+		expect(chartData[chartData.length - 1].LCP_p75_sma).toBe(2300);
 	});
 });
 
@@ -560,9 +620,8 @@ describe("transformPerformanceData", () => {
 
 		const dataPoint = chartData.find((p) => p.LCP_deficit !== undefined);
 		expect(dataPoint).toBeDefined();
-		// LCP p75=2500 → score~82 (log-normal CDF) → deficit~18
-		expect(dataPoint!.LCP_deficit).toBeGreaterThanOrEqual(5);
-		expect(dataPoint!.LCP_deficit).toBeLessThanOrEqual(25);
+		// LCP p75=2500 → score=90 → deficit=10
+		expect(dataPoint!.LCP_deficit).toBe(10);
 	});
 
 	it("computes overall weighted scores", () => {
@@ -772,5 +831,137 @@ describe("transformPerformanceData", () => {
 		// The last point has valid data, so it gets the LIVE tag
 		const lastPoint = chartData[chartData.length - 1];
 		expect(lastPoint.appVersion).toBe("LIVE");
+	});
+
+	it("carries forward missing metrics in summary cards and active-hour overall_p75 while leaving empty gap hours undefined", () => {
+		const hourMs = 3600000;
+		const baseTs = 1619370000000;
+
+		const raw: PerformanceMetric[] = [
+			// T0: TTFB=800 (score 90, w=0.05), CLS=250 (score 50, w=0.25), INP=500 (score 50, w=0.30)
+			{
+				app_version: "v1.0.0",
+				average_value: 800,
+				metric_name: "TTFB",
+				p50: 800,
+				p75: 800,
+				p90: 800,
+				timestamp: baseTs,
+			},
+			{
+				app_version: "v1.0.0",
+				average_value: 250,
+				metric_name: "CLS",
+				p50: 250,
+				p75: 250,
+				p90: 250,
+				timestamp: baseTs,
+			},
+			{
+				app_version: "v1.0.0",
+				average_value: 500,
+				metric_name: "INP",
+				p50: 500,
+				p75: 500,
+				p90: 500,
+				timestamp: baseTs,
+			},
+			// T1: TTFB=800 (score 90), CLS improves to 100 (score 90), INP omitted (<5 samples)
+			{
+				app_version: "v1.0.0",
+				average_value: 800,
+				metric_name: "TTFB",
+				p50: 800,
+				p75: 800,
+				p90: 800,
+				timestamp: baseTs + hourMs,
+			},
+			{
+				app_version: "v1.0.0",
+				average_value: 100,
+				metric_name: "CLS",
+				p50: 100,
+				p75: 100,
+				p90: 100,
+				timestamp: baseTs + hourMs,
+			},
+			// T2: completely empty gap hour (no raw records)
+			// T3: only TTFB=800 reported; CLS and INP both omitted
+			{
+				app_version: "v1.0.0",
+				average_value: 800,
+				metric_name: "TTFB",
+				p50: 800,
+				p75: 800,
+				p90: 800,
+				timestamp: baseTs + 3 * hourMs,
+			},
+		];
+
+		const { chartData, summary } = transformPerformanceData(raw, "en", 72, 1);
+
+		expect(summary).not.toBeNull();
+		expect(summary!.metrics.TTFB).toEqual({ score: 90, value: 800 });
+		expect(summary!.metrics.CLS).toEqual({ score: 90, value: 100 });
+		expect(summary!.trends.CLS).toBe("improvement");
+		expect(summary!.metrics.INP).toEqual({ score: 50, value: 500 });
+		expect(summary!.trends.INP).toBe("neutral");
+
+		// Weighted active-hour overall_p75 at T1 and T3:
+		// (90*0.05 + 90*0.25 + 50*0.30) / (0.05 + 0.25 + 0.30) = 42 / 0.60 = 70
+		const pointT1 = chartData.find((p) => p.timestamp === baseTs + hourMs);
+		const pointT2Gap = chartData.find((p) => p.timestamp === baseTs + 2 * hourMs);
+		const pointT3 = chartData.find((p) => p.timestamp === baseTs + 3 * hourMs);
+
+		expect(pointT1?.overall_p75).toBeCloseTo(70, 5);
+		expect(pointT2Gap?.overall_p50).toBeUndefined();
+		expect(pointT2Gap?.overall_p75).toBeUndefined();
+		expect(pointT2Gap?.overall_p90).toBeUndefined();
+		expect(pointT2Gap?.overall_score_range).toBeUndefined();
+		expect(pointT3?.overall_p75).toBeCloseTo(70, 5);
+		expect(summary!.metrics.OVERALL.score).toBeCloseTo(70, 5);
+	});
+
+	it("computes contiguous version-average segments from unsampled range data without merging non-adjacent reappearances", () => {
+		const hourMs = 3600000;
+		const baseTs = 1619370000000;
+
+		const schedule: Array<{ lcp: number; version: string }> = [
+			// Run 1 (v1.0): unsampled mean = (1000 + 2000 + 2000 + 3000) / 4 = 2000
+			{ lcp: 1000, version: "v1.0" },
+			{ lcp: 2000, version: "v1.0" },
+			{ lcp: 2000, version: "v1.0" },
+			{ lcp: 3000, version: "v1.0" },
+			// Run 2 (v1.1): unsampled mean = (2500 + 3500) / 2 = 3000
+			{ lcp: 2500, version: "v1.1" },
+			{ lcp: 3500, version: "v1.1" },
+			// Run 3 (v1.0 reappearance): unsampled mean = (4000 + 4000) / 2 = 4000 (score 50)
+			{ lcp: 4000, version: "v1.0" },
+			{ lcp: 4000, version: "v1.0" },
+			// Run 4 (v1.1 resumed before final LIVE point): mean = 1500
+			{ lcp: 1500, version: "v1.1" },
+			// Run 5 (final point -> virtual LIVE): mean = 1800
+			{ lcp: 1800, version: "v1.1" },
+		];
+
+		const raw = schedule.map((entry, i) =>
+			makeMetric(baseTs + i * hourMs, "LCP", entry.lcp, entry.version),
+		);
+
+		// Subsample to maxPoints=5 so interior points (1,2,3,5,7) are dropped from chartData
+		const { chartData } = transformPerformanceData(raw, "en", 5, 1);
+
+		const byTs = new Map(chartData.map((p) => [p.timestamp, p]));
+
+		expect(byTs.get(baseTs)?.LCP_version_avg).toBe(2000);
+		expect(byTs.get(baseTs + 4 * hourMs)?.LCP_version_avg).toBe(3000);
+		expect(byTs.get(baseTs + 6 * hourMs)?.LCP_version_avg).toBe(4000);
+		expect(byTs.get(baseTs + 6 * hourMs)?.overall_version_avg).toBe(50);
+		expect(byTs.get(baseTs + 8 * hourMs)?.LCP_version_avg).toBe(1500);
+
+		const livePoint = byTs.get(baseTs + 9 * hourMs);
+		expect(livePoint?.appVersion).toBe("LIVE");
+		expect(livePoint?.originalVersion).toBe("v1.1");
+		expect(livePoint?.LCP_version_avg).toBe(1800);
 	});
 });

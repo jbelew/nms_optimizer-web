@@ -25,12 +25,26 @@ let mockTooltipState: {
 	payload?: ReadonlyArray<{ payload?: Record<string, unknown> }>;
 } = { active: false };
 const tooltipContentSpy = vi.fn();
+const referenceAreaSpy = vi.fn();
+const referenceLineSpy = vi.fn();
 
 // Mock recharts to a no-op so we can focus on the summary card interactions.
 // Tooltip mirrors Recharts' renderContent contract (cloneElement for elements, createElement for functions).
 vi.mock("recharts", () => {
 	const Passthrough = ({ children }: { children?: React.ReactNode }) => <>{children}</>;
 	const Empty = () => null;
+
+	const MockReferenceArea = (props: Record<string, unknown>) => {
+		referenceAreaSpy(props);
+
+		return null;
+	};
+
+	const MockReferenceLine = (props: Record<string, unknown>) => {
+		referenceLineSpy(props);
+
+		return null;
+	};
 
 	const MockTooltip = ({
 		content,
@@ -59,8 +73,8 @@ vi.mock("recharts", () => {
 		ComposedChart: Passthrough,
 		Label: Empty,
 		Line: Empty,
-		ReferenceArea: Empty,
-		ReferenceLine: Empty,
+		ReferenceArea: MockReferenceArea,
+		ReferenceLine: MockReferenceLine,
 		ResponsiveContainer: Passthrough,
 		Tooltip: MockTooltip,
 		XAxis: Empty,
@@ -362,5 +376,58 @@ describe("PerformanceChart summary cards", () => {
 
 		const detailHeader = screen.getByText("Apr 25 10:00 AM (v1.0.0)");
 		expect(detailHeader.childNodes).toHaveLength(1);
+	});
+
+	test("renders the metric deficit floor reference band and line at y=10 in overall view", () => {
+		renderChart("/performance");
+
+		expect(referenceAreaSpy).toHaveBeenCalledWith(
+			expect.objectContaining({
+				y1: 0,
+				y2: 10,
+			}),
+		);
+		expect(referenceAreaSpy).not.toHaveBeenCalledWith(
+			expect.objectContaining({
+				y1: 0,
+				y2: 20,
+			}),
+		);
+		expect(referenceLineSpy).toHaveBeenCalledWith(
+			expect.objectContaining({
+				y: 10,
+			}),
+		);
+		expect(referenceLineSpy).not.toHaveBeenCalledWith(
+			expect.objectContaining({
+				y: 20,
+			}),
+		);
+	});
+
+	test("renders raw metric p75 instead of smoothed p75_sma in detail tooltip so p50 <= p75 <= p90 holds", () => {
+		mockTooltipState = {
+			active: true,
+			payload: [
+				{
+					payload: {
+						appVersion: "v1.0.0",
+						displayDate: "Apr 25",
+						hour: "10:00 AM",
+						LCP_p50: 1000,
+						LCP_p75: 1150,
+						LCP_p75_sma: 1800,
+						LCP_p90: 1400,
+					},
+				},
+			],
+		};
+
+		renderChart("/performance/lcp");
+
+		expect(screen.getByText("1000ms")).toBeInTheDocument();
+		expect(screen.getByText("1150ms")).toBeInTheDocument();
+		expect(screen.getByText("1400ms")).toBeInTheDocument();
+		expect(screen.queryByText("1800ms")).not.toBeInTheDocument();
 	});
 });
