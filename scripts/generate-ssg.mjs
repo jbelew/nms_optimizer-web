@@ -14,10 +14,11 @@ import i18nextFsBackend from "i18next-fs-backend";
 
 import packageJson from "../package.json" with { type: "json" };
 import { KNOWN_DIALOGS, SUPPORTED_LANGUAGES, TARGET_HOST } from "../shared/config.js";
+import { extractYouTubeVideoId } from "../shared/markdown-utils.js";
 import { getPageMetadata } from "../shared/page-metadata.js";
 import { PAGE_REGISTRY } from "../shared/page-registry.js";
 import { getOgLocale, getSchemaDomId, OG_LOCALE_MAP } from "../shared/seo-schema.js";
-import { createMarkdownProcessor } from "./markdown-processor.mjs";
+import { createMarkdownProcessor, stripRadixIconTags } from "./markdown-processor.mjs";
 
 const DIST_DIR = path.resolve("dist");
 const LOCALES_DIR = path.resolve("public/assets/locales");
@@ -71,6 +72,91 @@ export async function extractSsgTemplate(sourceIndexHtml) {
 }
 
 /**
+ * Synthesizes a standalone localized Agent Markdown Document (`index.md`) for a public SSG route.
+ *
+ * @remarks
+ * Combines escaped YAML frontmatter derived from {@link getPageMetadata}, sanitized Markdown prose
+ * with normalized `# ` heading, and a localized `## Navigation` section while omitting JSON-LD schemas.
+ * Returns `null` when no Markdown source exists, when the route is client-only, or when `userstats`
+ * is excluded in Docker builds.
+ *
+ * @param {string} lang - Target locale code (e.g., `"en"`, `"es"`).
+ * @param {string} pageName - Route slug (`""` for home, or a dialog identifier like `"about"`).
+ * @param {string} baseUrl - Canonical origin URL (e.g., `"https://nms-optimizer.app"`).
+ * @param {import("i18next").TFunction} t - Fixed-language i18next translation function.
+ * @returns {Promise<string | null>} Complete Agent Markdown Document string, or `null` if unavailable.
+ * @throws {TypeError} Thrown if `baseUrl` is not a valid absolute URL.
+ *
+ * @see {@link getPageMetadata}
+ * @see {@link isDockerBuild}
+ * @see {@link readMarkdownFile}
+ * @see {@link stripRadixIconTags}
+ * @see {@link ./generate-ssg.test.mjs Unit Tests}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```js
+ * const md = await generateAgentMarkdown("en", "about", "https://nms-optimizer.app", t);
+ * // returns "---\ntitle: \"About the Optimization Algorithms | NMS Optimizer\"\n..."
+ * ```
+ */
+export async function generateAgentMarkdown(lang, pageName, baseUrl, t) {
+	if (isDockerBuild() && pageName === "userstats") {
+		return null;
+	}
+
+	const pageEntry = PAGE_REGISTRY[pageName === "" ? "home" : pageName];
+
+	if (pageEntry?.isClientOnly) {
+		return null;
+	}
+
+	const normalizedBaseUrl = baseUrl.replace(/\/+$/, "");
+	const pathname = pageName === "" ? "/" : `/${pageName}/`;
+	const markdownFileName = PAGE_TO_MARKDOWN_MAPPING[pageName] || pageName;
+	const markdownContent = await readMarkdownFile(lang, markdownFileName);
+
+	if (!markdownContent) {
+		return null;
+	}
+
+	const pageMetadata = getPageMetadata({
+		baseUrl: normalizedBaseUrl,
+		lang,
+		pathname,
+		t,
+		version: packageJson.version,
+	});
+
+	const frontmatter = [
+		"---",
+		`title: ${formatYamlScalar(pageMetadata.title)}`,
+		`description: ${formatYamlScalar(pageMetadata.description)}`,
+		`url: ${formatYamlScalar(pageMetadata.canonicalUrl)}`,
+		`lang: ${formatYamlScalar(pageMetadata.lang)}`,
+		`image: ${formatYamlScalar(pageMetadata.ogImageUrl)}`,
+		"---",
+	].join("\n");
+
+	const normalizedBody = sanitizeAgentMarkdownBody(
+		markdownContent,
+		pageMetadata.heading,
+		normalizedBaseUrl,
+	);
+
+	const navTitle = t("seo.nav.title", { defaultValue: "Navigation" });
+	const navLines = buildNavigationItems(lang, t).map(({ desc, href, label }) => {
+		const canonicalHref = new URL(href, `${normalizedBaseUrl}/`).href;
+
+		return desc ? `- [${label}](${canonicalHref}) - ${desc}` : `- [${label}](${canonicalHref})`;
+	});
+	const navSection = `## ${navTitle}\n\n${navLines.join("\n")}`;
+
+	return `${frontmatter}\n\n${normalizedBody}\n\n${navSection}\n`;
+}
+
+/**
  * Generates the localized `<nav>` HTML block for a Static SEO Fallback page.
  *
  * @remarks
@@ -93,45 +179,10 @@ export async function extractSsgTemplate(sourceIndexHtml) {
  * ```
  */
 export function generateNavigationLinks(lang, currentPage, t) {
-	const isDocker = process.env.VITE_DOCKER === "true" || process.env.DOCKER === "true";
-	const langPrefix = lang === "en" ? "" : `/${lang}`;
-	const pages = [
-		{ descKey: "seo.navDescriptions.home", key: "seo.nav.home", path: "/" },
-		{
-			descKey: "seo.navDescriptions.instructions",
-			key: "seo.nav.instructions",
-			path: "/instructions",
-		},
-		{ descKey: "seo.navDescriptions.about", key: "seo.nav.about", path: "/about" },
-		{ descKey: "seo.navDescriptions.changelog", key: "seo.nav.changelog", path: "/changelog" },
-		...(!isDocker ?
-			[
-				{
-					descKey: "seo.navDescriptions.userstats",
-					key: "seo.nav.userstats",
-					path: "/userstats",
-				},
-			]
-		:	[]),
-		{
-			descKey: "seo.navDescriptions.translation",
-			key: "seo.nav.translation",
-			path: "/translation",
-		},
-		{ descKey: "seo.navDescriptions.privacy", key: "seo.nav.privacy", path: "/privacy" },
-	];
-
-	const links = pages
-		.map(({ descKey, key, path }) => {
-			const href =
-				path === "/" ?
-					langPrefix ? `${langPrefix}/`
-					:	"/"
-				:	`${langPrefix}${path}/`;
-			const label = t(key, { defaultValue: path.slice(1) || "Home" });
-			const desc = t(descKey, { defaultValue: "" });
-			const currentPath = currentPage === "" ? "/" : `/${currentPage}`;
-			const isCurrent = path === currentPath;
+	const currentPath = currentPage === "" ? "/" : `/${currentPage}`;
+	const links = buildNavigationItems(lang, t)
+		.map(({ desc, href, label, path: pagePath }) => {
+			const isCurrent = pagePath === currentPath;
 
 			return `<li${isCurrent ? ' aria-current="page"' : ""}><a href="${href}">${label}</a> - ${desc}</li>`;
 		})
@@ -254,7 +305,7 @@ export async function generatePage(
 		})
 		// Remove existing SEO tags to avoid duplicates
 		.on(
-			'link[rel="canonical"], meta[property="og:url"], meta[property="og:locale"], meta[property="og:locale:alternate"], link[rel="alternate"][hreflang], script[type="application/ld+json"]',
+			'link[rel="canonical"], link[rel="alternate"][type="text/markdown"], meta[property="og:url"], meta[property="og:locale"], meta[property="og:locale:alternate"], link[rel="alternate"][hreflang], script[type="application/ld+json"]',
 			{
 				element(el) {
 					el.remove();
@@ -361,11 +412,12 @@ export async function generatePage(
 }
 
 /**
- * Generates canonical, Open Graph locale, and `hreflang` alternate tags for a page.
+ * Generates canonical, Agent Markdown Document `alternate`, Open Graph locale, and `hreflang` alternate tags for a page.
  *
  * @remarks
- * Produces the canonical URL, `og:url`, primary and alternate `og:locale` tags,
- * localized `hreflang` links for all {@link SUPPORTED_LANGUAGES}, and `x-default`.
+ * Produces the canonical URL, `<link rel="alternate" type="text/markdown" />` discoverability link,
+ * `og:url`, primary and alternate `og:locale` tags, localized `hreflang` links for all
+ * {@link SUPPORTED_LANGUAGES}, and `x-default`.
  *
  * @param {string} pathname - Route pathname without locale prefix (e.g., `"/"` or `"/about/"`).
  * @param {string} lang - Active locale code (e.g., `"en"`, `"es"`).
@@ -383,7 +435,7 @@ export async function generatePage(
  * @example
  * ```js
  * const tags = generateSeoTags("/about/", "en", "https://nms-optimizer.app");
- * // returns '\n    <link rel="canonical" href="https://nms-optimizer.app/about/" />...'
+ * // returns '\n    <link rel="canonical" href="https://nms-optimizer.app/about/" />\n    <link rel="alternate" type="text/markdown" href="https://nms-optimizer.app/about/index.md" />...'
  * ```
  */
 export function generateSeoTags(pathname, lang, baseUrl, _t) {
@@ -402,6 +454,7 @@ export function generateSeoTags(pathname, lang, baseUrl, _t) {
 
 	let tags = `
     <link rel="canonical" href="${canonicalUrl}" />
+    <link rel="alternate" type="text/markdown" href="${canonicalUrl}index.md" />
     <meta property="og:url" content="${canonicalUrl}" />
     <meta property="og:locale" content="${getOgLocale(lang)}" />`;
 
@@ -421,23 +474,26 @@ export function generateSeoTags(pathname, lang, baseUrl, _t) {
 }
 
 /**
- * Pre-renders all localized static HTML pages into `dist/` after the Vite production build.
+ * Pre-renders all localized static HTML pages and standalone `index.md` Agent Markdown Documents
+ * into `dist/` after the Vite production build.
  *
  * @remarks
- * Iterates over {@link SUPPORTED_LANGUAGES} and {@link KNOWN_DIALOGS} to write localized
- * `index.html` files containing pre-rendered Static SEO Fallback blocks and metadata.
+ * Iterates over {@link SUPPORTED_LANGUAGES} and {@link KNOWN_DIALOGS} (excluding `userstats` when
+ * {@link isDockerBuild} is active) to write localized `index.html` and `index.md` files.
  *
- * @returns {Promise<void>} Resolves when all static pages have been written to `dist/`.
+ * @returns {Promise<void>} Resolves when all static HTML and Agent Markdown Documents have been written to `dist/`.
  *
+ * @see {@link generateAgentMarkdown}
  * @see {@link generatePage}
  * @see {@link initI18n}
+ * @see {@link isDockerBuild}
  *
  * @category Utilities
  *
  * @example
  * ```js
  * await generateSsg();
- * // writes 42 localized index.html files under dist/
+ * // writes 42 localized index.html and index.md files under dist/
  * ```
  */
 export async function generateSsg() {
@@ -468,6 +524,7 @@ export async function generateSsg() {
 
 		console.log("---------------------------------\n");
 
+		const isDocker = isDockerBuild();
 		let generatedCount = 0;
 
 		for (const lang of SUPPORTED_LANGUAGES) {
@@ -483,6 +540,7 @@ export async function generateSsg() {
 				t,
 				ssgHeader,
 			);
+			const rootAgentMd = await generateAgentMarkdown(lang, "", baseUrl, t);
 			const rootDir = path.join(DIST_DIR, rootPath);
 			const rootFile = path.join(rootDir, "index.html");
 
@@ -492,10 +550,18 @@ export async function generateSsg() {
 
 			await fs.writeFile(rootFile, rootPageHtml);
 
+			if (rootAgentMd) {
+				await fs.writeFile(path.join(rootDir, "index.md"), rootAgentMd);
+			}
+
 			console.log(`✓ Generated ${lang === "en" ? "/" : "/" + lang}`);
 			generatedCount++;
 
 			for (const dialog of KNOWN_DIALOGS) {
+				if (isDocker && dialog === "userstats") {
+					continue;
+				}
+
 				const pagePath = lang === "en" ? dialog : `${lang}/${dialog}`;
 				const pageDir = path.join(DIST_DIR, pagePath);
 				const pageHtml = await generatePage(
@@ -507,9 +573,14 @@ export async function generateSsg() {
 					t,
 					ssgHeader,
 				);
+				const pageAgentMd = await generateAgentMarkdown(lang, dialog, baseUrl, t);
 				const pageFile = path.join(pageDir, "index.html");
 				await fs.mkdir(pageDir, { recursive: true });
 				await fs.writeFile(pageFile, pageHtml);
+
+				if (pageAgentMd) {
+					await fs.writeFile(path.join(pageDir, "index.md"), pageAgentMd);
+				}
 
 				console.log(`✓ Generated /${pagePath}`);
 				generatedCount++;
@@ -565,6 +636,28 @@ export async function initI18n() {
 }
 
 /**
+ * Returns whether the current build environment is running in self-hosted Docker mode
+ * (`VITE_DOCKER="true"` or `DOCKER="true"`), where `userstats` routes are excluded.
+ *
+ * @remarks
+ * Centralizes Docker build flag evaluation across Static SEO Fallback navigation,
+ * Agent Markdown Document synthesis, and post-build SSG verification.
+ *
+ * @returns {boolean} `true` when Docker build mode is active.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```js
+ * const docker = isDockerBuild();
+ * // returns false
+ * ```
+ */
+export function isDockerBuild() {
+	return process.env.VITE_DOCKER === "true" || process.env.DOCKER === "true";
+}
+
+/**
  * Reads a localized markdown file from `public/assets/locales/<lang>/<fileName>.md`.
  *
  * @remarks
@@ -607,6 +700,215 @@ export async function readMarkdownFile(lang, fileName) {
 
 		return null;
 	}
+}
+
+/**
+ * Builds the localized site navigation descriptor list shared by Static SEO Fallback HTML
+ * and Agent Markdown Documents.
+ *
+ * @param {string} lang - Active locale code (e.g., `"en"`, `"es"`).
+ * @param {import("i18next").TFunction} t - Fixed-language i18next translation function.
+ * @returns {{ desc: string, href: string, label: string, path: string }[]} Ordered navigation items.
+ */
+function buildNavigationItems(lang, t) {
+	const isDocker = isDockerBuild();
+	const langPrefix = lang === "en" ? "" : `/${lang}`;
+	const pages = [
+		{ descKey: "seo.navDescriptions.home", key: "seo.nav.home", path: "/" },
+		{
+			descKey: "seo.navDescriptions.instructions",
+			key: "seo.nav.instructions",
+			path: "/instructions",
+		},
+		{ descKey: "seo.navDescriptions.about", key: "seo.nav.about", path: "/about" },
+		{ descKey: "seo.navDescriptions.changelog", key: "seo.nav.changelog", path: "/changelog" },
+		...(!isDocker ?
+			[
+				{
+					descKey: "seo.navDescriptions.userstats",
+					key: "seo.nav.userstats",
+					path: "/userstats",
+				},
+			]
+		:	[]),
+		{
+			descKey: "seo.navDescriptions.translation",
+			key: "seo.nav.translation",
+			path: "/translation",
+		},
+		{ descKey: "seo.navDescriptions.privacy", key: "seo.nav.privacy", path: "/privacy" },
+	];
+
+	return pages.map(({ descKey, key, path: pagePath }) => {
+		const href =
+			pagePath === "/" ?
+				langPrefix ? `${langPrefix}/`
+				:	"/"
+			:	`${langPrefix}${pagePath}/`;
+		const label = t(key, { defaultValue: pagePath.slice(1) || "Home" });
+		const desc = t(descKey, { defaultValue: "" });
+
+		return { desc, href, label, path: pagePath };
+	});
+}
+
+/**
+ * Formats a string value as a valid single-line double-quoted YAML 1.2 scalar.
+ *
+ * @param {string} value - Raw metadata field string.
+ * @returns {string} Escaped single-line YAML scalar.
+ */
+function formatYamlScalar(value) {
+	const normalized = String(value ?? "")
+		.replace(/[\r\n\t]+/g, " ")
+		.replace(/ {2,}/g, " ")
+		.trim();
+
+	return JSON.stringify(normalized);
+}
+
+/**
+ * Normalizes the top-level `# ` heading of a Markdown body to the clean semantic heading,
+ * replacing the first ATX H1 outside fenced code blocks or prepending one when absent.
+ *
+ * @param {string} markdownBody - Markdown body content without YAML frontmatter.
+ * @param {string} heading - Clean semantic page heading without brand suffix.
+ * @returns {string} Markdown body with normalized top-level `# ` heading.
+ */
+function normalizeMarkdownTopHeading(markdownBody, heading) {
+	const segments = splitFencedCodeBlocks(markdownBody.trim());
+	let replaced = false;
+
+	const updated = segments
+		.map((segment) => {
+			if (segment.isCodeFence || replaced) {
+				return segment.text;
+			}
+
+			const h1Regex = /^#(?![#])[ \t]+.*$/m;
+
+			if (h1Regex.test(segment.text)) {
+				replaced = true;
+
+				return segment.text.replace(h1Regex, `# ${heading}`);
+			}
+
+			return segment.text;
+		})
+		.join("\n")
+		.trim();
+
+	if (replaced) {
+		return updated;
+	}
+
+	return updated ? `# ${heading}\n\n${updated}` : `# ${heading}`;
+}
+
+/**
+ * Sanitizes and canonicalizes Markdown body prose outside fenced code blocks and inline code spans.
+ *
+ * @param {string} markdownBody - Raw Markdown body content.
+ * @param {string} heading - Clean semantic page heading without brand suffix.
+ * @param {string} normalizedBaseUrl - Canonical origin URL without trailing slash.
+ * @returns {string} Sanitized and canonicalized Markdown body.
+ */
+function sanitizeAgentMarkdownBody(markdownBody, heading, normalizedBaseUrl) {
+	const baseWithSlash = `${normalizedBaseUrl}/`;
+	const sanitizedSegments = splitFencedCodeBlocks(markdownBody.trim()).map((segment) => {
+		if (segment.isCodeFence) {
+			return segment.text;
+		}
+
+		const inlineCodeSpans = [];
+		const masked = segment.text.replace(/(`+)(?:(?!\1)[\s\S])*\1/g, (codeSpan) => {
+			const token = `\uE000INLINECODE${inlineCodeSpans.length}\uE001`;
+			inlineCodeSpans.push(codeSpan);
+
+			return token;
+		});
+
+		const transformed = stripRadixIconTags(masked)
+			.replace(/\[youtube:[^\]]+\]/g, (shortcode) => {
+				const videoId = extractYouTubeVideoId(shortcode)?.trim();
+
+				return videoId ?
+						`[YouTube Video](https://www.youtube.com/watch?v=${videoId})`
+					:	shortcode;
+			})
+			.replace(
+				/(\]\()(<)?(\/(?!\/)[^)\s>]*)(>)?(\s+(?:"[^"]*"|'[^']*'))?(\))/g,
+				(_match, open, lt = "", relPath, gt = "", title = "", close) => {
+					const canonicalTarget = new URL(relPath, baseWithSlash).href;
+
+					return `${open}${lt}${canonicalTarget}${gt}${title}${close}`;
+				},
+			)
+			.replace(
+				/^(\s*\[[^\]]+\]:\s*)(<)?(\/(?!\/)\S*?)(>)?(\s+(?:"[^"]*"|'[^']*'|\([^)]*\)))?$/gm,
+				(_match, prefix, lt = "", relPath, gt = "", title = "") => {
+					const canonicalTarget = new URL(relPath, baseWithSlash).href;
+
+					return `${prefix}${lt}${canonicalTarget}${gt}${title}`;
+				},
+			);
+
+		return transformed.replace(
+			/\uE000INLINECODE(\d+)\uE001/g,
+			(_match, index) => inlineCodeSpans[Number(index)],
+		);
+	});
+
+	return normalizeMarkdownTopHeading(sanitizedSegments.join("\n"), heading);
+}
+
+/**
+ * Splits Markdown content into alternating prose and fenced-code-block segments so
+ * prose transformations never mutate code fences (` ``` ` or `~~~`).
+ *
+ * @param {string} markdown - Raw or partially transformed Markdown text.
+ * @returns {{ isCodeFence: boolean, text: string }[]} Ordered segments.
+ */
+function splitFencedCodeBlocks(markdown) {
+	const lines = markdown.split("\n");
+	const segments = [];
+	let activeFence = null;
+	let buffer = [];
+
+	const flush = (isCodeFence) => {
+		if (buffer.length > 0) {
+			segments.push({ isCodeFence, text: buffer.join("\n") });
+			buffer = [];
+		}
+	};
+
+	for (const line of lines) {
+		if (!activeFence) {
+			const openMatch = line.match(/^\s*(`{3,}|~{3,})/);
+
+			if (openMatch) {
+				flush(false);
+				activeFence = openMatch[1];
+				buffer.push(line);
+				continue;
+			}
+
+			buffer.push(line);
+		} else {
+			buffer.push(line);
+			const fenceChar = activeFence[0];
+			const closeRegex = new RegExp(`^\\s*${fenceChar}{${activeFence.length},}\\s*$`);
+
+			if (closeRegex.test(line)) {
+				flush(true);
+				activeFence = null;
+			}
+		}
+	}
+
+	flush(Boolean(activeFence));
+
+	return segments;
 }
 
 // Only run if executed directly

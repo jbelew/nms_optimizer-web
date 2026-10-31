@@ -92,6 +92,10 @@ _Avoid_: modal page, route wrapper, dialog route
 Pre-rendered semantic copy and route navigation embedded into static entry points for non-JavaScript clients and initial crawler responses before interactive workspace hydration.
 _Avoid_: client fallback, prerendered markdown, noscript shell
 
+**Agent Markdown Document**:
+A standalone, localized Markdown representation of a public route served via content negotiation to AI agents and machine readers in place of the interactive workspace or Static SEO Fallback.
+_Avoid_: markdown fallback, prerendered markdown, raw locale markdown, scraped markdown
+
 **Pattern No Fit**:
 The optimization condition where a precomputed adjacency pattern for a Technology Category cannot fit within any contiguous region of available active slots matching its required Solver Window dimensions.
 _Avoid_: pattern error, no-fit warning, PNF state
