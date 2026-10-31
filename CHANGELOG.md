@@ -1,3 +1,10 @@
+## [8.8.2](https://github.com/jbelew/nms_optimizer-web/compare/v8.8.1...v8.8.2) (2026-10-31)
+
+
+### Bug Fixes
+
+* **performance:** align Lighthouse scoring, metric carry-forward, and telemetry ([#831](https://github.com/jbelew/nms_optimizer-web/issues/831)) ([2ced775](https://github.com/jbelew/nms_optimizer-web/commit/2ced7753943d0df41b2fa3603a99aa66b613017f))
+
 ## [8.8.1](https://github.com/jbelew/nms_optimizer-web/compare/v8.8.0...v8.8.1) (2026-10-31)
 
 
