@@ -1,3 +1,10 @@
+## [8.8.3](https://github.com/jbelew/nms_optimizer-web/compare/v8.8.2...v8.8.3) (2026-11-03)
+
+
+### Performance Improvements
+
+* optimize image delivery, Radix CSS purging, and cache policies ([527f0b0](https://github.com/jbelew/nms_optimizer-web/commit/527f0b02ec8d48e05979f568979be69bdf4799ef))
+
 ## [8.8.2](https://github.com/jbelew/nms_optimizer-web/compare/v8.8.1...v8.8.2) (2026-10-31)
 
 
