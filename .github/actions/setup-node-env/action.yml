@@ -38,4 +38,6 @@ runs:
 
     - name: Install dependencies
       shell: bash
+      env:
+        LEFTHOOK: '0'
       run: bun install --frozen-lockfile
