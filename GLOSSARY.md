@@ -93,7 +93,7 @@ A non-routed onboarding modal presented on a human visitor's first workspace ses
 _Avoid_: welcome guide, quick-start dialog, onboarding modal
 
 **Focus Mode**:
-A high-legibility visual mode that mutes background distractions and applies an accessible reading typeface across the workspace.
+A high-legibility visual mode that mutes background distractions, applies an accessible reading typeface, and increases accent color contrast across the workspace.
 _Avoid_: accessibility mode, a11y mode, dyslexia mode
 
 **Static SEO Fallback**:

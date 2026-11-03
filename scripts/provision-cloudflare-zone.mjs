@@ -287,7 +287,7 @@ function buildCacheRules(domain) {
 			action_parameters: {
 				browser_ttl: { mode: "respect_origin" },
 				cache: true,
-				edge_ttl: { default: 604800, mode: "override_origin" },
+				edge_ttl: { default: 31536000, mode: "override_origin" },
 			},
 			description: "Mutable Static Assets (Images/Fonts)",
 			expression: '(starts_with(http.request.uri.path, "/assets/"))',

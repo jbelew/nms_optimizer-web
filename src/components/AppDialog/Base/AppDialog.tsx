@@ -1,7 +1,7 @@
 import "./AppDialog.scss";
 
 import type { ReactNode } from "react";
-import React, { createContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { createContext, useEffect, useMemo, useRef, useState } from "react";
 import {
 	Close as DialogClose,
 	Content as DialogContent,
@@ -218,7 +218,7 @@ const AppDialogBody: React.FC<AppDialogBodyProps> = ({ children }) => {
 	const sectionRef = useRef<HTMLElement>(null);
 	const [isOverflowing, setIsOverflowing] = useState(false);
 
-	useLayoutEffect(() => {
+	useEffect(() => {
 		const element = sectionRef.current;
 		if (!element) return;
 
@@ -226,7 +226,7 @@ const AppDialogBody: React.FC<AppDialogBodyProps> = ({ children }) => {
 			setIsOverflowing(element.scrollHeight > element.clientHeight);
 		};
 
-		updateOverflow();
+		const timerId = setTimeout(updateOverflow, 0);
 
 		const resizeObserver =
 			typeof ResizeObserver !== "undefined" ? new ResizeObserver(updateOverflow) : null;
@@ -243,6 +243,7 @@ const AppDialogBody: React.FC<AppDialogBodyProps> = ({ children }) => {
 		});
 
 		return () => {
+			clearTimeout(timerId);
 			resizeObserver?.disconnect();
 			mutationObserver?.disconnect();
 		};

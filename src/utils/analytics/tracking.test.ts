@@ -250,10 +250,11 @@ describe("Analytics Tracking", () => {
 			);
 		});
 
-		it("should initialize GA4 if not blocked", async () => {
+		it("should initialize GA4 if not blocked and reuse the GTM script loaded during detection", async () => {
 			vi.mocked(fetch).mockResolvedValue({ status: 200 } as Response);
 			await tracking.initializeAnalytics();
 			expect(ReactGA.initialize).toHaveBeenCalled();
+			expect((ReactGA as unknown as { _hasLoadedGA?: boolean })._hasLoadedGA).toBe(true);
 		});
 
 		it("should register Web Vitals observers before the 3s ad-blocker probe timeout finishes", async () => {

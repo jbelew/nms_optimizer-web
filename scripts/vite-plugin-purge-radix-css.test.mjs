@@ -20,10 +20,14 @@ describe("purgeRadixCss plugin", () => {
 
 		const sampleCss = [
 			".rt-Button{cursor:pointer}",
+			".rt-AvatarRoot{display:inline-flex}",
+			".rt-AvatarImage{object-fit:cover}",
+			".rt-AvatarFallback{display:flex}",
 			".rt-TableRoot{display:table}",
 			".rt-r-fd-column{flex-direction:column}",
+			".-rt-r-m-1{--margin-top:-4px}",
 			"@media (width>=520px){.xs\\:rt-r-p-1{padding:4px}.rt-Text:where(.xs\\:rt-r-size-3){font-size:16px}}",
-			"@media (width>=768px){.rt-Text:where(.sm\\:rt-r-size-3){font-size:16px}.sm\\:rt-r-gtc-3{grid-template-columns:repeat(3,1fr)}}",
+			"@media (width>=768px){.rt-TextAreaRoot:where(.sm\\:rt-r-size-3){font-size:16px}.rt-Text:where(.sm\\:rt-r-size-3){font-size:16px}.sm\\:-rt-r-m-1{--margin-top:-4px}.sm\\:rt-r-gtc-3{grid-template-columns:repeat(3,1fr)}}",
 			"@media (width>=1024px){.md\\:rt-r-fd-row{flex-direction:row}.md\\:rt-r-ai-start{align-items:flex-start}.md\\:rt-r-pb-0{padding-bottom:0}.md\\:rt-r-gap-1{gap:4px}.md\\:rt-r-ml-5{margin-left:24px}.md\\:rt-r-fs-0{flex-shrink:0}.md\\:rt-r-p-9{padding:64px}}",
 			"@media (width>=1640px){.xl\\:rt-r-m-2{margin:8px}}",
 		].join("");
@@ -39,24 +43,30 @@ describe("purgeRadixCss plugin", () => {
 
 		const output = bundle["build/vendor-ui-themes.css"].source.toString();
 
-		// Preserves used component and non-responsive utility rules
+		// Preserves used component and non-responsive utility rules (including explicit .rt-AvatarRoot/.rt-AvatarImage classes)
 		expect(output).toContain(".rt-Button{cursor:pointer}");
+		expect(output).toContain(".rt-AvatarRoot{display:inline-flex}");
+		expect(output).toContain(".rt-AvatarImage{object-fit:cover}");
 		expect(output).toContain(".rt-r-fd-column{flex-direction:column}");
 
-		// Purges unused component rules
+		// Purges unused component rules and unused negative margin base utilities
 		expect(output).not.toContain(".rt-TableRoot");
+		expect(output).not.toContain(".rt-AvatarFallback");
+		expect(output).not.toContain(".-rt-r-m-1");
 
-		// Purges unused responsive breakpoint rules and drops empty @media blocks
+		// Purges unused responsive breakpoint rules (including negative margins and unscoped component responsive rules) and drops empty @media blocks
 		expect(output).not.toContain("xs\\:rt-r-p-1");
 		expect(output).not.toContain("xs\\:rt-r-size-3");
 		expect(output).not.toContain("@media (width>=520px)");
+		expect(output).not.toContain(".rt-Text:where(.sm\\:rt-r-size-3)");
+		expect(output).not.toContain("sm\\:-rt-r-m-1");
 		expect(output).not.toContain("sm\\:rt-r-gtc-3");
 		expect(output).not.toContain("md\\:rt-r-p-9");
 		expect(output).not.toContain("xl\\:rt-r-m-2");
 		expect(output).not.toContain("@media (width>=1640px)");
 
-		// Preserves used responsive breakpoint rules (sm:size, md:direction/align/pb/gap/ml/flexShrink)
-		expect(output).toContain(".rt-Text:where(.sm\\:rt-r-size-3){font-size:16px}");
+		// Preserves used responsive breakpoint rules (TextArea sm:size, md:direction/align/pb/gap/ml/flexShrink)
+		expect(output).toContain(".rt-TextAreaRoot:where(.sm\\:rt-r-size-3){font-size:16px}");
 		expect(output).toContain(".md\\:rt-r-fd-row{flex-direction:row}");
 		expect(output).toContain(".md\\:rt-r-ai-start{align-items:flex-start}");
 		expect(output).toContain(".md\\:rt-r-pb-0{padding-bottom:0}");
@@ -113,55 +123,61 @@ describe("Production Bundle CSS & Radix Chunking", () => {
 		expect(vendorCss.length).toBeLessThan(260 * 1024);
 	});
 
-	itWhenBuilt("excludes dialog-only Radix Themes components from the eager vendor-ui-themes.js chunk", () => {
-		const vendorJsFile = fs
-			.readdirSync(distBuildDir)
-			.find((file) => file.startsWith("vendor-ui-themes-") && file.endsWith(".js"));
-		expect(vendorJsFile).toBeDefined();
+	itWhenBuilt(
+		"excludes dialog-only Radix Themes components from the eager vendor-ui-themes.js chunk",
+		() => {
+			const vendorJsFile = fs
+				.readdirSync(distBuildDir)
+				.find((file) => file.startsWith("vendor-ui-themes-") && file.endsWith(".js"));
+			expect(vendorJsFile).toBeDefined();
 
-		const vendorJs = fs.readFileSync(path.join(distBuildDir, vendorJsFile), "utf-8");
-		const dialogOnlyDisplayNames = [
-			"SegmentedControl.Root",
-			"CheckboxGroup.Root",
-			"DataList.Root",
-			"TextField.Root",
-			"TextArea",
-			"Blockquote",
-			"Card",
-			"Badge",
-			"Kbd",
-		];
+			const vendorJs = fs.readFileSync(path.join(distBuildDir, vendorJsFile), "utf-8");
+			const dialogOnlyDisplayNames = [
+				"SegmentedControl.Root",
+				"CheckboxGroup.Root",
+				"DataList.Root",
+				"TextField.Root",
+				"TextArea",
+				"Blockquote",
+				"Card",
+				"Badge",
+				"Kbd",
+			];
 
-		for (const displayName of dialogOnlyDisplayNames) {
-			expect(vendorJs).not.toContain(`displayName=\`${displayName}\``);
-			expect(vendorJs).not.toContain(`displayName="${displayName}"`);
-		}
-	});
+			for (const displayName of dialogOnlyDisplayNames) {
+				expect(vendorJs).not.toContain(`displayName=\`${displayName}\``);
+				expect(vendorJs).not.toContain(`displayName="${displayName}"`);
+			}
+		},
+	);
 
-	itWhenBuilt("never emits ad-blocker-targeted chunk filenames (monitoring, sentry, analytics, events)", () => {
-		const jsFiles = fs
-			.readdirSync(distBuildDir)
-			.filter((file) => file.endsWith(".js"));
-		expect(jsFiles.length).toBeGreaterThan(0);
+	itWhenBuilt(
+		"never emits ad-blocker-targeted chunk filenames (monitoring, sentry, analytics, events)",
+		() => {
+			const jsFiles = fs.readdirSync(distBuildDir).filter((file) => file.endsWith(".js"));
+			expect(jsFiles.length).toBeGreaterThan(0);
 
-		for (const file of jsFiles) {
-			expect(file.toLowerCase()).not.toMatch(/monitoring|sentry|analytics|events/);
-		}
-	});
+			for (const file of jsFiles) {
+				expect(file.toLowerCase()).not.toMatch(/monitoring|sentry|analytics|events/);
+			}
+		},
+	);
 
-	itWhenBuilt("matches every .size-limit.json path pattern against built dist/build assets", () => {
-		const sizeLimitPath = path.resolve(ROOT, ".size-limit.json");
-		const sizeLimits = JSON.parse(fs.readFileSync(sizeLimitPath, "utf-8"));
-		const builtFiles = fs.readdirSync(distBuildDir);
+	itWhenBuilt(
+		"matches every .size-limit.json path pattern against built dist/build assets",
+		() => {
+			const sizeLimitPath = path.resolve(ROOT, ".size-limit.json");
+			const sizeLimits = JSON.parse(fs.readFileSync(sizeLimitPath, "utf-8"));
+			const builtFiles = fs.readdirSync(distBuildDir);
 
-		for (const entry of sizeLimits) {
-			const fileGlob = path.basename(entry.path);
-			const regex = new RegExp(
-				"^" + fileGlob.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*") + "$",
-			);
-			const matches = builtFiles.filter((f) => regex.test(f));
-			expect(matches.length).toBeGreaterThan(0);
-		}
-	});
+			for (const entry of sizeLimits) {
+				const fileGlob = path.basename(entry.path);
+				const regex = new RegExp(
+					"^" + fileGlob.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*") + "$",
+				);
+				const matches = builtFiles.filter((f) => regex.test(f));
+				expect(matches.length).toBeGreaterThan(0);
+			}
+		},
+	);
 });
-

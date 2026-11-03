@@ -10,7 +10,7 @@ import {
 	ResetIcon,
 	UpdateIcon,
 } from "@radix-ui/react-icons";
-import { Avatar, Button, IconButton, Popover, Text } from "@radix-ui/themes";
+import { Button, IconButton, Popover, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
@@ -332,16 +332,21 @@ export const TechTreeRow = React.memo(({ tech, techColor, techImage }: TechTreeR
 				</IconButton>
 			</ConditionalTooltip>
 
-			<Avatar
-				alt={translatedTechName}
-				color={techColor}
-				fallback="IK"
-				ml="1"
-				radius="full"
-				size="2"
-				src={imagePath}
-				srcSet={`${imagePath} 1x, ${imagePath2x} 2x`}
-			/>
+			<span
+				className="rt-reset rt-AvatarRoot rt-r-size-2 rt-variant-soft rt-r-ml-1 shrink-0 overflow-hidden"
+				data-accent-color={techColor}
+				data-radius="full"
+			>
+				<img
+					alt={translatedTechName}
+					className="rt-AvatarImage h-8 w-8 object-cover"
+					decoding="async"
+					height={32}
+					src={imagePath}
+					srcSet={`${imagePath} 1x, ${imagePath2x} 2x`}
+					width={32}
+				/>
+			</span>
 
 			<div className="grid min-w-0 flex-1 grid-cols-[1fr_auto] items-center gap-2">
 				<Text

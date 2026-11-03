@@ -82,16 +82,16 @@
 /workbox-*.js
   Cache-Control: public, max-age=31536000, immutable
 
-# Mutable static assets (images, fonts).
-# Cache for 7 days, serve stale for 1 day while revalidating in background.
+# Static media and font assets.
+# Cache for 1 year; versioned via query params (?v=...) and purged on Cloudflare deploy.
 /assets/img/*
-  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+  Cache-Control: public, max-age=31536000, stale-while-revalidate=86400
 /assets/fonts/*
-  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+  Cache-Control: public, max-age=31536000, immutable
 /assets/svg/*
-  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+  Cache-Control: public, max-age=31536000, stale-while-revalidate=86400
 /assets/video/*
-  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+  Cache-Control: public, max-age=31536000, stale-while-revalidate=86400
 
 # Translations and markdown content: can change on any deploy.
 # Cache for 1 minute, serve stale for 5 minutes during background revalidation.

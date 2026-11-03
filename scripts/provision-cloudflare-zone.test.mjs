@@ -202,6 +202,16 @@ describe("provisionCloudflareZone (provision-cloudflare-zone.mjs)", () => {
 		expect(subShellAndMarkdownRule.expression).toContain(
 			'starts_with(http.request.uri.path, "/about/")',
 		);
+
+		const staticAssetsRule = rules.find(
+			(rule) => rule.description === "Mutable Static Assets (Images/Fonts)",
+		);
+		expect(staticAssetsRule).toBeDefined();
+		expect(staticAssetsRule.action_parameters).toEqual({
+			browser_ttl: { mode: "respect_origin" },
+			cache: true,
+			edge_ttl: { default: 31536000, mode: "override_origin" },
+		});
 	});
 
 	it("idempotently updates the existing markdown rewrite rule without duplicating it and preserves unrelated transform rules", async () => {

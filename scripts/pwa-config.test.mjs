@@ -137,10 +137,16 @@ describe("PWA Configuration & Manifest", () => {
 		},
 	);
 
-	it("public/_headers configures immutable caching for /workbox-*.js and no-cache for /sw.js and /version.json", () => {
+	it("public/_headers configures immutable caching for /workbox-*.js and /assets/fonts/*, 1-year caching for /assets/img/*, and no-cache for /sw.js and /version.json", () => {
 		const headersContent = fs.readFileSync(path.join(ROOT, "public/_headers"), "utf-8");
 		expect(headersContent).toMatch(
 			/\/workbox-\*\.js\s+Cache-Control:\s*public,\s*max-age=31536000,\s*immutable/,
+		);
+		expect(headersContent).toMatch(
+			/\/assets\/fonts\/\*\s+Cache-Control:\s*public,\s*max-age=31536000,\s*immutable/,
+		);
+		expect(headersContent).toMatch(
+			/\/assets\/img\/\*\s+Cache-Control:\s*public,\s*max-age=31536000,\s*stale-while-revalidate=86400/,
 		);
 		expect(headersContent).toMatch(
 			/\/sw\.js\s+Cache-Control:\s*no-cache,\s*must-revalidate,\s*max-age=0/,
@@ -148,6 +154,7 @@ describe("PWA Configuration & Manifest", () => {
 		expect(headersContent).toMatch(
 			/\/version\.json\s+Cache-Control:\s*no-cache,\s*must-revalidate,\s*max-age=0/,
 		);
+		expect(fs.existsSync(path.join(ROOT, "public/.well-known/security.txt"))).toBe(true);
 	});
 
 	itWhenBuilt("sw.js excludes .md Agent Markdown Documents from precache manifest", () => {

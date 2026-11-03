@@ -1,5 +1,6 @@
 import { mkdir, readdir, stat } from "fs/promises";
 import path from "path";
+
 import sharp from "sharp";
 
 const imageDirs = [
@@ -67,7 +68,7 @@ async function processImages() {
 
 					await sharp(filePath)
 						.resize(res.width, res.height)
-						.webp({ effort: 6, quality: res.suffix === "@2x" ? 55 : 65 })
+						.webp({ effort: 6, quality: res.suffix === "@2x" ? 45 : 65 })
 						.toFile(outputPath);
 				}
 			};
@@ -107,7 +108,7 @@ async function processImages() {
 
 				if (res.suffix === "@mobile") {
 					await sharp(sourceFile)
-						.resize(res.width, res.height, { fit: 'cover', position: 'center' })
+						.resize(res.width, res.height, { fit: "cover", position: "center" })
 						.webp(webpOptions)
 						.toFile(outputPath);
 				} else {

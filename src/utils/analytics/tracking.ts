@@ -262,10 +262,12 @@ const detectAdBlocker = (): Promise<boolean> => {
 				controller.abort();
 			}
 
-			try {
-				script.remove();
-			} catch {
-				/* noop */
+			if (blocked) {
+				try {
+					script.remove();
+				} catch {
+					/* noop */
+				}
 			}
 
 			resolve(blocked);
@@ -909,6 +911,13 @@ export const initializeAnalytics = async (): Promise<void> => {
 		}
 
 		ReactGAInstance = resolvedGA;
+
+		if (
+			typeof window !== "undefined"
+			&& Boolean((window as unknown as { google_tag_manager?: object }).google_tag_manager)
+		) {
+			(ReactGAInstance as unknown as { _hasLoadedGA?: boolean })._hasLoadedGA = true;
+		}
 
 		ReactGAInstance.initialize(TRACKING_ID, {
 			gtagOptions: {

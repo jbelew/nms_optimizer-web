@@ -163,7 +163,7 @@ describe("AppDialog", () => {
 		expect(screen.getByText("Custom Content Line 2")).toBeInTheDocument();
 	});
 
-	test("should apply pr-3 padding when scrollable content overflows vertically", () => {
+	test("should apply pr-3 padding when scrollable content overflows vertically", async () => {
 		const scrollHeightSpy = vi
 			.spyOn(HTMLElement.prototype, "scrollHeight", "get")
 			.mockReturnValue(600);
@@ -180,7 +180,10 @@ describe("AppDialog", () => {
 		);
 
 		const scrollableSection = screen.getByText("About Content").closest("section");
-		expect(scrollableSection?.className).toContain("pr-3");
+
+		await waitFor(() => {
+			expect(scrollableSection?.className).toContain("pr-3");
+		});
 
 		scrollHeightSpy.mockRestore();
 		clientHeightSpy.mockRestore();

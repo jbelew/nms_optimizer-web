@@ -1,0 +1,5 @@
+Contact: https://github.com/jbelew/nms_optimizer-web/security/advisories/new
+Contact: https://github.com/jbelew/nms_optimizer-web/issues
+Expires: 2027-11-03T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://nms-optimizer.app/.well-known/security.txt

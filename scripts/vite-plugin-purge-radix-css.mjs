@@ -38,7 +38,8 @@ import path from "path";
  */
 const COMPONENT_CSS_MAP = {
 	// --- Components NOT typically used (candidates for removal) ---
-	Avatar: ["AvatarRoot", "AvatarImage", "AvatarFallback"],
+	Avatar: ["AvatarRoot", "AvatarImage"],
+	AvatarFallback: ["AvatarFallback"],
 	Badge: ["Badge"],
 	Card: ["Card", "BaseCard"],
 	Checkbox: ["CheckboxRoot", "BaseCheckboxRoot", "BaseCheckboxIndicator"],
@@ -183,6 +184,40 @@ const RESPONSIVE_PROP_CLASS_MAP = {
 };
 
 /**
+ * Maps Radix Themes JSX component names to their `.rt-*` component selector prefixes
+ * for scoping responsive prop rules (`@media (width >= ...)`).
+ *
+ * @type {Record<string, string[]>}
+ */
+const COMPONENT_RESPONSIVE_PREFIX_MAP = {
+	Avatar: ["AvatarRoot"],
+	Badge: ["Badge"],
+	Button: ["BaseButton", "Button"],
+	Callout: ["CalloutRoot"],
+	Card: ["Card"],
+	Checkbox: ["BaseCheckboxRoot"],
+	CheckboxGroup: ["BaseCheckboxRoot"],
+	Code: ["Code"],
+	ContextMenu: ["BaseMenuContent"],
+	DataList: ["DataListRoot", "DataListItem"],
+	Dialog: ["BaseDialogScrollPadding", "BaseDialogContent"],
+	DropdownMenu: ["BaseMenuContent"],
+	Heading: ["Heading"],
+	IconButton: ["IconButton"],
+	Kbd: ["Kbd"],
+	Popover: ["PopoverContent"],
+	Progress: ["ProgressRoot"],
+	ScrollArea: ["ScrollAreaScrollbar"],
+	SegmentedControl: ["SegmentedControlRoot"],
+	Separator: ["Separator"],
+	Spinner: ["Spinner"],
+	Switch: ["SwitchRoot"],
+	Text: ["Text"],
+	TextArea: ["TextAreaRoot"],
+	TextField: ["TextFieldRoot"],
+};
+
+/**
  * Vite plugin that removes unused Radix Themes component and responsive CSS from the production build.
  *
  * @remarks
@@ -210,7 +245,12 @@ export function purgeRadixCss() {
 		enforce: "post",
 
 		generateBundle(_options, bundle) {
-			const { usedComponents, usedResponsivePrefixes } = scanRadixUsage(srcDir);
+			const {
+				hasNegativeMargins,
+				usedComponentResponsivePrefixes,
+				usedComponents,
+				usedResponsivePrefixes,
+			} = scanRadixUsage(srcDir);
 			const unusedPrefixes = buildUnusedPrefixes(usedComponents);
 
 			let totalRemoved = 0;
@@ -224,6 +264,8 @@ export function purgeRadixCss() {
 						chunk.source.toString(),
 						unusedPrefixes,
 						usedResponsivePrefixes,
+						usedComponentResponsivePrefixes,
+						hasNegativeMargins,
 					);
 
 					if (removedBytes > 0) {
@@ -272,6 +314,33 @@ function buildUnusedPrefixes(usedComponents) {
 }
 
 /**
+ * Checks whether a component-scoped responsive breakpoint class reference
+ * (`<rtComponentPrefix>:<bp>:<rt-r-class>`) matches any used component-scoped
+ * responsive prop discovered in `src/`.
+ *
+ * @param {string[]} rtRefs - Component `.rt-*` prefixes in the selector (e.g. `["TextAreaRoot"]`).
+ * @param {string[]} bpRefs - Responsive `<bp>:<rt-r-*>` references in the selector (e.g. `["sm:rt-r-size-1"]`).
+ * @param {Set<string>} usedComponentResponsivePrefixes - Allowed `<rtComponentPrefix>:<bp>:<rt-r-prefix>` entries.
+ *
+ * @returns {boolean} True if at least one component+breakpoint combination is used in `src/`.
+ */
+function isComponentResponsiveRuleUsed(rtRefs, bpRefs, usedComponentResponsivePrefixes) {
+	for (const rtRef of rtRefs) {
+		for (const bpRef of bpRefs) {
+			const candidate = `${rtRef}:${bpRef}`;
+
+			for (const allowedPrefix of usedComponentResponsivePrefixes) {
+				if (candidate === allowedPrefix || candidate.startsWith(`${allowedPrefix}-`)) {
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
+/**
  * Checks whether a single responsive breakpoint class reference (`<bp>:<rt-r-class>`)
  * matches any used responsive class prefix discovered in `src/`.
  *
@@ -282,10 +351,7 @@ function buildUnusedPrefixes(usedComponents) {
  */
 function isResponsiveRefUsed(ref, usedResponsivePrefixes) {
 	for (const allowedPrefix of usedResponsivePrefixes) {
-		if (
-			ref === allowedPrefix ||
-			ref.startsWith(`${allowedPrefix}-`)
-		) {
+		if (ref === allowedPrefix || ref.startsWith(`${allowedPrefix}-`)) {
 			return true;
 		}
 	}
@@ -306,10 +372,18 @@ function isResponsiveRefUsed(ref, usedResponsivePrefixes) {
  * @param {string} css - The CSS string to process.
  * @param {Set<string>} unusedPrefixes - Set of `.rt-` component prefixes to strip.
  * @param {Set<string>} usedResponsivePrefixes - Set of `<bp>:rt-r-*` prefixes to preserve.
+ * @param {Set<string>} [usedComponentResponsivePrefixes] - Set of `<rtPrefix>:<bp>:rt-r-*` prefixes to preserve.
+ * @param {boolean} [hasNegativeMargins] - Whether negative margin utilities (`-rt-r-m*`) are used in `src/`.
  *
  * @returns {{ css: string, removedBytes: number }} The purged CSS and bytes removed.
  */
-function purgeUnusedRadixRules(css, unusedPrefixes, usedResponsivePrefixes) {
+function purgeUnusedRadixRules(
+	css,
+	unusedPrefixes,
+	usedResponsivePrefixes,
+	usedComponentResponsivePrefixes = new Set(),
+	hasNegativeMargins = false,
+) {
 	const originalLength = css.length;
 
 	// Split CSS into rule blocks by finding balanced braces.
@@ -346,6 +420,8 @@ function purgeUnusedRadixRules(css, unusedPrefixes, usedResponsivePrefixes) {
 				innerContent,
 				unusedPrefixes,
 				usedResponsivePrefixes,
+				usedComponentResponsivePrefixes,
+				hasNegativeMargins,
 			);
 
 			if (purgedInner.css.trim()) {
@@ -381,15 +457,28 @@ function purgeUnusedRadixRules(css, unusedPrefixes, usedResponsivePrefixes) {
 		const isUnusedComponentRule =
 			rtRefs.length > 0 && rtRefs.every((ref) => unusedPrefixes.has(ref));
 
-		// 2. Check if this rule's selector references Radix responsive breakpoint classes (.xs\:rt-r-*, etc.)
-		const bpRefs = [...selector.matchAll(/\.([a-z]{2})\\:(rt-r-[a-z0-9-]+)/g)].map(
+		// 2. Check if this rule's selector references Radix responsive breakpoint classes (.xs\:rt-r-*, .sm\:-rt-r-*, etc.)
+		const bpRefs = [...selector.matchAll(/\.([a-z]{2})\\:(-?rt-r-[a-z0-9-]+)/g)].map(
 			(m) => `${m[1]}:${m[2]}`,
 		);
 		const isUnusedResponsiveRule =
-			bpRefs.length > 0 &&
-			!bpRefs.some((ref) => isResponsiveRefUsed(ref, usedResponsivePrefixes));
+			bpRefs.length > 0
+			&& (!bpRefs.some((ref) => isResponsiveRefUsed(ref, usedResponsivePrefixes))
+				|| (rtRefs.length > 0
+					&& !isComponentResponsiveRuleUsed(
+						rtRefs,
+						bpRefs,
+						usedComponentResponsivePrefixes,
+					)));
 
-		if (!isUnusedComponentRule && !isUnusedResponsiveRule) {
+		// 3. Check if this rule's selector only references unused non-responsive negative margin utilities (.-rt-r-m*)
+		const isUnusedNegativeMarginRule =
+			!hasNegativeMargins
+			&& bpRefs.length === 0
+			&& selector.includes(".-rt-r-m")
+			&& selector.split(",").every((part) => part.trim().startsWith(".-rt-r-m"));
+
+		if (!isUnusedComponentRule && !isUnusedResponsiveRule && !isUnusedNegativeMarginRule) {
 			result.push(fullRule);
 		}
 
@@ -405,16 +494,31 @@ function purgeUnusedRadixRules(css, unusedPrefixes, usedResponsivePrefixes) {
 }
 
 /**
- * Scans the source directory for Radix Themes component imports and responsive prop
- * usages, returning both the used component names and used `<bp>:rt-r-*` prefixes.
+ * Scans the source directory for Radix Themes component imports, explicit `.rt-*` classes,
+ * and responsive prop usages, returning the discovered usage sets.
  *
  * @param {string} srcDir - Absolute path to the source directory to scan.
  *
- * @returns {{ usedComponents: Set<string>, usedResponsivePrefixes: Set<string> }} Discovered Radix usage.
+ * @returns {{
+ *   hasNegativeMargins: boolean,
+ *   usedComponentResponsivePrefixes: Set<string>,
+ *   usedComponents: Set<string>,
+ *   usedResponsivePrefixes: Set<string>,
+ * }} Discovered Radix usage.
  */
 function scanRadixUsage(srcDir) {
 	const usedComponents = new Set();
 	const usedResponsivePrefixes = new Set();
+	const usedComponentResponsivePrefixes = new Set();
+	let hasNegativeMargins = false;
+
+	const prefixToComponent = new Map();
+
+	for (const [component, prefixes] of Object.entries(COMPONENT_CSS_MAP)) {
+		for (const prefix of prefixes) {
+			prefixToComponent.set(prefix, component);
+		}
+	}
 
 	/**
 	 * Recursively walks a directory and processes source files.
@@ -430,8 +534,8 @@ function scanRadixUsage(srcDir) {
 			if (entry.isDirectory() && entry.name !== "node_modules") {
 				walk(fullPath);
 			} else if (
-				/\.(tsx?|jsx?)$/.test(entry.name) &&
-				!/\.(test|stories)\.[jt]sx?$/.test(entry.name)
+				/\.(tsx?|jsx?)$/.test(entry.name)
+				&& !/\.(test|stories)\.[jt]sx?$/.test(entry.name)
 			) {
 				const content = fs.readFileSync(fullPath, "utf-8");
 
@@ -449,31 +553,69 @@ function scanRadixUsage(srcDir) {
 					});
 				}
 
-				// 2. Scan responsive JSX prop objects: prop={{ initial: "...", sm: "...", md: "..." }}
-				const responsivePropPattern = /([a-zA-Z]+)\s*=\s*\{\s*\{([^{}]+)\}\s*\}/g;
-				let propMatch;
+				// 1b. Scan explicit .rt-<ComponentPrefix> class names in JSX (e.g. "rt-AvatarRoot", "rt-AvatarImage")
+				const explicitComponentClassPattern = /\brt-([A-Z][a-zA-Z]+)\b/g;
+				let classMatch;
 
-				while ((propMatch = responsivePropPattern.exec(content)) !== null) {
-					const propName = propMatch[1];
-					const objectBody = propMatch[2];
-					const classPrefixes = RESPONSIVE_PROP_CLASS_MAP[propName];
+				while ((classMatch = explicitComponentClassPattern.exec(content)) !== null) {
+					const mappedComponent = prefixToComponent.get(classMatch[1]);
 
-					if (classPrefixes) {
-						const bpPattern = /\b(xs|sm|md|lg|xl)\s*:/g;
-						let bpMatch;
+					if (mappedComponent) {
+						usedComponents.add(mappedComponent);
+					}
+				}
 
-						while ((bpMatch = bpPattern.exec(objectBody)) !== null) {
-							const bp = bpMatch[1];
+				// 1c. Check for negative margin props or explicit negative margin classes
+				if (
+					/\b(?:m|mx|my|mt|mr|mb|ml)\s*=\s*["']-[0-9]+["']/.test(content)
+					|| /\B-rt-r-m/.test(content)
+				) {
+					hasNegativeMargins = true;
+				}
 
-							for (const classPrefix of classPrefixes) {
-								usedResponsivePrefixes.add(`${bp}:${classPrefix}`);
+				// 2. Scan JSX tags with responsive prop objects: <Component ... prop={{ initial: "...", sm: "...", md: "..." }} />
+				const jsxTagPattern = /<([A-Z][a-zA-Z0-9.]*)\b((?:[^>"']|"[^"]*"|'[^']*')*)>/g;
+				let tagMatch;
+
+				while ((tagMatch = jsxTagPattern.exec(content)) !== null) {
+					const rawComponentName = tagMatch[1].split(".")[0];
+					const tagAttrs = tagMatch[2];
+					const componentRtPrefixes =
+						COMPONENT_RESPONSIVE_PREFIX_MAP[rawComponentName] ?? [];
+					const responsivePropPattern = /([a-zA-Z]+)\s*=\s*\{\s*\{([^{}]+)\}\s*\}/g;
+					let propMatch;
+
+					while ((propMatch = responsivePropPattern.exec(tagAttrs)) !== null) {
+						const propName = propMatch[1];
+						const objectBody = propMatch[2];
+						const classPrefixes = RESPONSIVE_PROP_CLASS_MAP[propName];
+
+						if (classPrefixes) {
+							const bpPattern = /\b(xs|sm|md|lg|xl)\s*:\s*["']?(-?[a-zA-Z0-9-]+)/g;
+							let bpMatch;
+
+							while ((bpMatch = bpPattern.exec(objectBody)) !== null) {
+								const bp = bpMatch[1];
+								const val = bpMatch[2];
+								const isNeg = val.startsWith("-");
+
+								for (const classPrefix of classPrefixes) {
+									const resolvedPrefix = isNeg ? `-${classPrefix}` : classPrefix;
+									usedResponsivePrefixes.add(`${bp}:${resolvedPrefix}`);
+
+									for (const rtPrefix of componentRtPrefixes) {
+										usedComponentResponsivePrefixes.add(
+											`${rtPrefix}:${bp}:${resolvedPrefix}`,
+										);
+									}
+								}
 							}
 						}
 					}
 				}
 
 				// 3. Scan any explicit responsive Radix class strings (e.g. "md:rt-r-ai-start" or "sm:rt-r-size-3")
-				const explicitRtPattern = /\b(xs|sm|md|lg|xl):(rt-r-[a-z0-9-]+)/g;
+				const explicitRtPattern = /\b(xs|sm|md|lg|xl):(-?rt-r-[a-z0-9-]+)/g;
 				let explicitMatch;
 
 				while ((explicitMatch = explicitRtPattern.exec(content)) !== null) {
@@ -485,5 +627,10 @@ function scanRadixUsage(srcDir) {
 
 	walk(srcDir);
 
-	return { usedComponents, usedResponsivePrefixes };
+	return {
+		hasNegativeMargins,
+		usedComponentResponsivePrefixes,
+		usedComponents,
+		usedResponsivePrefixes,
+	};
 }
