@@ -145,6 +145,7 @@ jobs:
         with:
           name: dist-bundle
           path: dist/
+          include-hidden-files: true
           retention-days: 1
 
       - name: Check bundle size budgets
@@ -158,6 +159,7 @@ jobs:
         with:
           name: dist-e2e
           path: dist/
+          include-hidden-files: true
           retention-days: 1
 
   lighthouse:
@@ -411,6 +413,7 @@ jobs:
         with:
           name: dist-production
           path: dist/
+          include-hidden-files: true
           retention-days: 1
 
   deploy-production-cloudflare:
