@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 
 import { KNOWN_DIALOGS, SUPPORTED_LANGUAGES, TARGET_HOST } from "../shared/config.js";
 import { getPageMetadata } from "../shared/page-metadata.js";
-import { PAGE_REGISTRY } from "../shared/page-registry.js";
+import { getPageContentLanguages, PAGE_REGISTRY } from "../shared/page-registry.js";
 import { initI18n } from "./generate-ssg.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,7 +20,6 @@ const PAGE_TO_FILE_MAPPING = {
 	changelog: "public/assets/locales/en/changelog.md",
 	instructions: "public/assets/locales/en/instructions.md",
 	privacy: "public/assets/locales/en/privacy.md",
-	translation: "public/assets/locales/en/translation-request.md",
 	userstats: "src/components/AppDialog/UserStats/UserStatsDialog.tsx",
 };
 
@@ -31,7 +30,6 @@ const PRIORITIES = {
 	instructions: "0.8",
 	privacy: "0.5",
 	root: "1.0",
-	translation: "0.5",
 	userstats: "0.5",
 };
 
@@ -41,7 +39,6 @@ const CHANGE_FREQUENCIES = {
 	changelog: "monthly",
 	instructions: "monthly",
 	privacy: "monthly",
-	translation: "monthly",
 	userstats: "monthly",
 };
 
@@ -186,10 +183,6 @@ export const getLocalizedSourceFiles = (pageKey, lang, defaultPath) => {
 	return Array.from(new Set(files));
 };
 
-// Routes excluded from the sitemap. These are either disallowed in robots.txt
-// or are client-only utility routes that should not be indexed.
-const EXCLUDED_FROM_SITEMAP = new Set(["performance"]);
-
 /**
  * Generates the complete XML sitemap content and optionally writes it to public/sitemap.xml.
  *
@@ -203,14 +196,18 @@ export async function generateSitemap({ write = true } = {}) {
 	const pageImages = getPageImages(t, baseUrl);
 
 	const pages = [
-		{
-			changefreq: "weekly",
-			key: "root",
-			path: "public/assets/locales/en/home.md",
-			priority: PRIORITIES.root,
-			url: `${baseUrl}/`,
-		},
-		...KNOWN_DIALOGS.filter((page) => !EXCLUDED_FROM_SITEMAP.has(page)).map((page) => ({
+		...(!PAGE_REGISTRY.home.excludeFromSitemap ?
+			[
+				{
+					changefreq: "weekly",
+					key: "root",
+					path: "public/assets/locales/en/home.md",
+					priority: PRIORITIES.root,
+					url: `${baseUrl}/`,
+				},
+			]
+		:	[]),
+		...KNOWN_DIALOGS.filter((page) => !PAGE_REGISTRY[page]?.excludeFromSitemap).map((page) => ({
 			changefreq: CHANGE_FREQUENCIES[page] || "weekly",
 			key: page,
 			path: PAGE_TO_FILE_MAPPING[page],
@@ -219,11 +216,12 @@ export async function generateSitemap({ write = true } = {}) {
 		})),
 	];
 
-	const languages = SUPPORTED_LANGUAGES;
-
 	const urlEntries = pages.flatMap((page) => {
-		// 1. Generate all alternate URLs for this page
-		const alternateUrls = languages.map((lang) => {
+		const pageEntry = PAGE_REGISTRY[page.key === "root" ? "home" : page.key];
+		const pageLanguages = getPageContentLanguages(pageEntry, SUPPORTED_LANGUAGES);
+
+		// 1. Generate localized alternate URLs only for languages with dedicated content
+		const alternateUrls = pageLanguages.map((lang) => {
 			const url = new URL(page.url);
 			const normalizePath = (p) => (p.endsWith("/") ? p : `${p}/`);
 

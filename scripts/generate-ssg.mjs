@@ -17,7 +17,7 @@ import { KNOWN_DIALOGS, SUPPORTED_LANGUAGES, TARGET_HOST } from "../shared/confi
 import { extractYouTubeVideoId } from "../shared/markdown-utils.js";
 import { getPageMetadata } from "../shared/page-metadata.js";
 import { PAGE_REGISTRY } from "../shared/page-registry.js";
-import { getOgLocale, getSchemaDomId, OG_LOCALE_MAP } from "../shared/seo-schema.js";
+import { getSchemaDomId, OG_LOCALE_MAP } from "../shared/seo-schema.js";
 import { createMarkdownProcessor, stripRadixIconTags } from "./markdown-processor.mjs";
 
 const DIST_DIR = path.resolve("dist");
@@ -250,7 +250,7 @@ export async function generatePage(
 	const ogImageAlt = pageMetadata.ogImageAlt;
 	const ogImageUrl = pageMetadata.ogImageUrl;
 
-	const seoTags = generateSeoTags(pathname, lang, baseUrl, t);
+	const seoTags = formatSeoTagsFromMetadata(pageMetadata, lang);
 	const schemas = pageMetadata.schemas;
 
 	// Prepare Static SEO Fallback content
@@ -305,7 +305,7 @@ export async function generatePage(
 		})
 		// Remove existing SEO tags to avoid duplicates
 		.on(
-			'link[rel="canonical"], link[rel="alternate"][type="text/markdown"], meta[property="og:url"], meta[property="og:locale"], meta[property="og:locale:alternate"], link[rel="alternate"][hreflang], script[type="application/ld+json"]',
+			'meta[name="robots"], link[rel="canonical"], link[rel="alternate"][type="text/markdown"], meta[property="og:url"], meta[property="og:locale"], meta[property="og:locale:alternate"], link[rel="alternate"][hreflang], script[type="application/ld+json"]',
 			{
 				element(el) {
 					el.remove();
@@ -412,22 +412,20 @@ export async function generatePage(
 }
 
 /**
- * Generates canonical, Agent Markdown Document `alternate`, Open Graph locale, and `hreflang` alternate tags for a page.
+ * Generates robots, canonical, Agent Markdown Document `alternate`, Open Graph locale, and `hreflang` alternate tags for a page.
  *
  * @remarks
- * Produces the canonical URL, `<link rel="alternate" type="text/markdown" />` discoverability link,
- * `og:url`, primary and alternate `og:locale` tags, localized `hreflang` links for all
- * {@link SUPPORTED_LANGUAGES}, and `x-default`.
+ * Delegates canonical URL, `robots` directive, `og:locale`, and localized `hreflang` cluster resolution
+ * to {@link getPageMetadata} so partial-translation fallback routes and `noindex` utility dialogs stay synchronized.
  *
  * @param {string} pathname - Route pathname without locale prefix (e.g., `"/"` or `"/about/"`).
  * @param {string} lang - Active locale code (e.g., `"en"`, `"es"`).
  * @param {string} baseUrl - Canonical origin URL (e.g., `"https://nms-optimizer.app"`).
- * @param {import("i18next").TFunction} [_t] - Unused translation function parameter preserved for signature parity.
+ * @param {import("i18next").TFunction} [t] - Translation function passed to {@link getPageMetadata}.
  * @returns {string} HTML string of `<link>` and `<meta>` tags to append to `<head>`.
  *
- * @see {@link getOgLocale}
+ * @see {@link getPageMetadata}
  * @see {@link OG_LOCALE_MAP}
- * @see {@link SUPPORTED_LANGUAGES}
  * @see {@link ./generate-ssg.test.mjs Unit Tests}
  *
  * @category Utilities
@@ -438,39 +436,15 @@ export async function generatePage(
  * // returns '\n    <link rel="canonical" href="https://nms-optimizer.app/about/" />\n    <link rel="alternate" type="text/markdown" href="https://nms-optimizer.app/about/index.md" />...'
  * ```
  */
-export function generateSeoTags(pathname, lang, baseUrl, _t) {
-	const cleanPath = pathname === "/" ? "" : pathname;
-	const normalizePath = (p) => (p.endsWith("/") ? p : `${p}/`);
-	const normalizedCleanPath = normalizePath(cleanPath || "/");
+export function generateSeoTags(pathname, lang, baseUrl, t) {
+	const pageMetadata = getPageMetadata({
+		baseUrl,
+		lang,
+		pathname,
+		t,
+	});
 
-	const buildLocaleUrl = (locale) => {
-		const localePath =
-			locale === "en" ? normalizedCleanPath : `/${locale}${normalizedCleanPath}`;
-
-		return new URL(localePath, baseUrl).href;
-	};
-
-	const canonicalUrl = buildLocaleUrl(lang);
-
-	let tags = `
-    <link rel="canonical" href="${canonicalUrl}" />
-    <link rel="alternate" type="text/markdown" href="${canonicalUrl}index.md" />
-    <meta property="og:url" content="${canonicalUrl}" />
-    <meta property="og:locale" content="${getOgLocale(lang)}" />`;
-
-	for (const [code, locale] of Object.entries(OG_LOCALE_MAP)) {
-		if (code === lang) continue;
-		tags += `\n    <meta property="og:locale:alternate" content="${locale}" />`;
-	}
-
-	for (const l of SUPPORTED_LANGUAGES) {
-		tags += `\n    <link rel="alternate" hreflang="${l}" href="${buildLocaleUrl(l)}" />`;
-	}
-
-	const xDefaultUrl = buildLocaleUrl("en");
-	tags += `\n    <link rel="alternate" hreflang="x-default" href="${xDefaultUrl}" />`;
-
-	return tags;
+	return formatSeoTagsFromMetadata(pageMetadata, lang);
 }
 
 /**
@@ -750,6 +724,39 @@ function buildNavigationItems(lang, t) {
 
 		return { desc, href, label, path: pagePath };
 	});
+}
+
+/**
+ * Formats SEO `<meta>` and `<link>` tags from a resolved {@link getPageMetadata} record.
+ *
+ * @param {import("../shared/page-metadata.js").PageMetadata} pageMetadata - Resolved metadata record.
+ * @param {string} lang - Active locale code (e.g., `"en"`, `"es"`).
+ * @returns {string} HTML string of `<link>` and `<meta>` tags to append to `<head>`.
+ */
+function formatSeoTagsFromMetadata(pageMetadata, lang) {
+	const { canonicalUrl, hreflangUrls, ogLocale, robots } = pageMetadata;
+	let tags = "";
+
+	if (robots) {
+		tags += `\n    <meta name="robots" content="${robots}" />`;
+	}
+
+	tags += `
+    <link rel="canonical" href="${canonicalUrl}" />
+    <link rel="alternate" type="text/markdown" href="${canonicalUrl}index.md" />
+    <meta property="og:url" content="${canonicalUrl}" />
+    <meta property="og:locale" content="${ogLocale}" />`;
+
+	for (const [code, locale] of Object.entries(OG_LOCALE_MAP)) {
+		if (code === lang) continue;
+		tags += `\n    <meta property="og:locale:alternate" content="${locale}" />`;
+	}
+
+	for (const [hreflang, href] of Object.entries(hreflangUrls)) {
+		tags += `\n    <link rel="alternate" hreflang="${hreflang}" href="${href}" />`;
+	}
+
+	return tags;
 }
 
 /**

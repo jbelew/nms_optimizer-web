@@ -34,8 +34,9 @@ describe("Seo Component", () => {
 		);
 	};
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		vi.clearAllMocks();
+		await i18n.changeLanguage("en");
 		document.title = "";
 		document.documentElement.lang = "";
 		// Clean up head
@@ -419,5 +420,119 @@ describe("Seo Component", () => {
 				.querySelector('link[rel="alternate"][hreflang="es"]')
 				?.getAttribute("href"),
 		).toBe("https://nms-optimizer.app/es/");
+	});
+
+	it("should emit noindex, follow on /translation/ and /<lang>/translation/ and remove it when navigating to indexable routes", async () => {
+		// Pre-populate a pre-rendered SSG robots tag to verify no duplicates on hydration
+		document.head.innerHTML = '<meta name="robots" content="noindex, follow" />';
+
+		let navigateFn!: ReturnType<typeof useNavigate>;
+
+		render(
+			<I18nextProvider i18n={i18n}>
+				<MemoryRouter initialEntries={["/translation/"]}>
+					<Seo />
+					<NavHelper
+						onReady={(nav) => {
+							navigateFn = nav;
+						}}
+					/>
+				</MemoryRouter>
+			</I18nextProvider>,
+		);
+
+		const initialRobots = document.head.querySelectorAll('meta[name="robots"]');
+		expect(initialRobots).toHaveLength(1);
+		expect(initialRobots[0]?.getAttribute("content")).toBe("noindex, follow");
+
+		const indexableRoutes = [
+			"/",
+			"/about/",
+			"/instructions/",
+			"/changelog/",
+			"/userstats/",
+			"/privacy/",
+		];
+
+		for (const route of indexableRoutes) {
+			act(() => {
+				navigateFn(route);
+			});
+			expect(document.head.querySelector('meta[name="robots"]')).toBeNull();
+		}
+
+		await act(async () => {
+			await i18n.changeLanguage("es");
+			navigateFn("/es/translation/");
+		});
+
+		const localizedRobots = document.head.querySelectorAll('meta[name="robots"]');
+		expect(localizedRobots).toHaveLength(1);
+		expect(localizedRobots[0]?.getAttribute("content")).toBe("noindex, follow");
+
+		act(() => {
+			navigateFn("/es/about/");
+		});
+		expect(document.head.querySelector('meta[name="robots"]')).toBeNull();
+	});
+
+	it("should canonicalize unlocalized /<lang>/changelog/ routes to /changelog/ and omit fallback locales from hreflang", async () => {
+		let navigateFn!: ReturnType<typeof useNavigate>;
+
+		await i18n.changeLanguage("es");
+
+		render(
+			<I18nextProvider i18n={i18n}>
+				<MemoryRouter initialEntries={["/es/instructions/"]}>
+					<Seo />
+					<NavHelper
+						onReady={(nav) => {
+							navigateFn = nav;
+						}}
+					/>
+				</MemoryRouter>
+			</I18nextProvider>,
+		);
+
+		// Fully localized route emits all 6 locales + x-default
+		expect(document.head.querySelectorAll('link[rel="alternate"][hreflang]')).toHaveLength(7);
+		expect(document.head.querySelector('link[rel="canonical"]')?.getAttribute("href")).toBe(
+			"https://nms-optimizer.app/es/instructions/",
+		);
+
+		// Transition to unlocalized Spanish changelog fallback
+		act(() => {
+			navigateFn("/es/changelog/");
+		});
+
+		expect(document.head.querySelector('link[rel="canonical"]')?.getAttribute("href")).toBe(
+			"https://nms-optimizer.app/changelog/",
+		);
+		expect(
+			document.head.querySelector('meta[property="og:url"]')?.getAttribute("content"),
+		).toBe("https://nms-optimizer.app/changelog/");
+		expect(document.head.querySelector('meta[name="robots"]')).toBeNull();
+
+		const changelogHreflangs = Array.from(
+			document.head.querySelectorAll<HTMLLinkElement>('link[rel="alternate"][hreflang]'),
+		).map((el) => [el.getAttribute("hreflang"), el.getAttribute("href")]);
+		expect(changelogHreflangs).toEqual([
+			["en", "https://nms-optimizer.app/changelog/"],
+			["x-default", "https://nms-optimizer.app/changelog/"],
+		]);
+
+		const navScript = document.getElementById("itemlist-schema");
+		expect(navScript?.textContent).toContain('"url":"https://nms-optimizer.app/changelog/"');
+		expect(navScript?.textContent).not.toContain("https://nms-optimizer.app/es/changelog/");
+
+		// Transition back to fully localized Spanish route restores all 6 locales + x-default
+		act(() => {
+			navigateFn("/es/about/");
+		});
+
+		expect(document.head.querySelector('link[rel="canonical"]')?.getAttribute("href")).toBe(
+			"https://nms-optimizer.app/es/about/",
+		);
+		expect(document.head.querySelectorAll('link[rel="alternate"][hreflang]')).toHaveLength(7);
 	});
 });

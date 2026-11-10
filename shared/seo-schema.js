@@ -5,7 +5,7 @@
  * @category Utilities
  */
 
-import { getPageById } from "./page-registry.js";
+import { getPageById, getPageContentLanguages } from "./page-registry.js";
 
 /**
  * Maps a supported i18next language code to a Facebook/Open Graph locale tag
@@ -136,6 +136,8 @@ const resolveAppVersion = (version) => {
  * @param {string} [version] - Optional explicit application version.
  * @returns {Array<Record<string, unknown>>} Array of Schema.org JSON-LD objects.
  *
+ * @see {@link getPageById}
+ * @see {@link getPageContentLanguages}
  * @see {@link getSchemaDomId}
  * @see {@link resolveAppVersion}
  *
@@ -267,15 +269,18 @@ export const getLocalizedSchema = (t, lang, url, version) => {
 		};
 	}
 
-	// 6. SiteNavigationElement (localized URLs without double slashes)
-	const langPrefix = lang === "en" ? "" : `/${lang}`;
-	const navPaths = [
-		{ name: t("seo.nav.instructions"), url: `${baseUrl}${langPrefix}/instructions/` },
-		{ name: t("seo.nav.about"), url: `${baseUrl}${langPrefix}/about/` },
-		{ name: t("seo.nav.changelog"), url: `${baseUrl}${langPrefix}/changelog/` },
-		{ name: t("seo.nav.userstats"), url: `${baseUrl}${langPrefix}/userstats/` },
-		{ name: t("seo.nav.privacy"), url: `${baseUrl}${langPrefix}/privacy/` },
-	];
+	// 6. SiteNavigationElement (localized URLs without double slashes, canonicalizing partial-translation fallbacks)
+	const navPageIds = ["instructions", "about", "changelog", "userstats", "privacy"];
+	const navPaths = navPageIds.map((navPageId) => {
+		const navPage = getPageById(navPageId);
+		const navContentLangs = getPageContentLanguages(navPage);
+		const navLangPrefix = lang !== "en" && navContentLangs.includes(lang) ? `/${lang}` : "";
+
+		return {
+			name: t(`seo.nav.${navPageId}`),
+			url: `${baseUrl}${navLangPrefix}/${navPageId}/`,
+		};
+	});
 
 	const siteNavigation = {
 		"@context": "https://schema.org",

@@ -135,4 +135,24 @@ describe("seo-schema.js", () => {
 		expect(webPage.description).toBe("Discover how NMS Optimizer uses advanced algorithms.");
 		expect(webPage.isPartOf).toEqual({ "@id": "https://nms-optimizer.app/#website" });
 	});
+
+	it("canonicalizes SiteNavigationElement URL for unlocalized changelog fallbacks while keeping localized routes prefixed", () => {
+		for (const lang of ["es", "fr", "de", "pt", "it"]) {
+			const schemas = getLocalizedSchema(mockT, lang, `https://nms-optimizer.app/${lang}/`);
+			const navList = schemas.find((s) => s["@type"] === "ItemList") as Record<
+				string,
+				unknown
+			>;
+			const navItems = navList.itemListElement as Array<Record<string, unknown>>;
+			const urls = navItems.map((item) => item.url);
+
+			expect(urls).toEqual([
+				`https://nms-optimizer.app/${lang}/instructions/`,
+				`https://nms-optimizer.app/${lang}/about/`,
+				"https://nms-optimizer.app/changelog/",
+				`https://nms-optimizer.app/${lang}/userstats/`,
+				`https://nms-optimizer.app/${lang}/privacy/`,
+			]);
+		}
+	});
 });

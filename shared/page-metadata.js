@@ -8,7 +8,12 @@
  */
 
 import { SUPPORTED_LANGUAGES, TARGET_HOST } from "./config.js";
-import { getPageByPath, PAGE_REGISTRY, parseRoutePath } from "./page-registry.js";
+import {
+	getPageByPath,
+	getPageContentLanguages,
+	PAGE_REGISTRY,
+	parseRoutePath,
+} from "./page-registry.js";
 import { getLocalizedSchema, getOgLocale } from "./seo-schema.js";
 
 export { parseRoutePath };
@@ -30,7 +35,7 @@ export const DEFAULT_OG_IMAGE_PATH = "/assets/img/screenshots/screenshot.webp";
 /**
  * @typedef {Object} PageMetadataOptions
  * @property {string} pathname - The route pathname or identifier (e.g. "/instructions/", "/es/instructions/", "instructions", or "/").
- * @property {(key: string, options?: Record<string, unknown>) => string} t - Translation function (i18next-compatible).
+ * @property {(key: string, options?: Record<string, unknown>) => string} [t] - Translation function (i18next-compatible); defaults to returning `options.defaultValue` or the key.
  * @property {string} [lang] - Language code (e.g., "en", "es", "fr", "de", "it", "pt"). If omitted, resolved from pathname or defaults to "en".
  * @property {string} [baseUrl] - Base URL (defaults to "https://nms-optimizer.app").
  * @property {string[]} [supportedLanguages] - Supported language codes (defaults to SUPPORTED_LANGUAGES).
@@ -41,6 +46,7 @@ export const DEFAULT_OG_IMAGE_PATH = "/assets/img/screenshots/screenshot.webp";
  * @typedef {Object} PageMetadata
  * @property {string} title - Formatted document title for `<title>` tags, social cards, and telemetry (e.g. "How to Optimize Your Tech Layout | NMS Optimizer").
  * @property {string} heading - Clean semantic content heading for `<h1>` tags without brand suffix (e.g. "How to Optimize Your Tech Layout").
+ * @property {Record<string, string>} hreflangUrls - Map of `hreflang` codes (localized content languages plus `"x-default"`) to canonical alternate URLs.
  * @property {string} description - Localized meta description text.
  * @property {string} keywords - Localized meta keywords string.
  * @property {string} canonicalUrl - Canonical URL string for the page and locale.
@@ -50,6 +56,7 @@ export const DEFAULT_OG_IMAGE_PATH = "/assets/img/screenshots/screenshot.webp";
  * @property {string} ogImageUrl - Absolute Open Graph image URL.
  * @property {string} ogImageAlt - Localized Open Graph image alt text.
  * @property {string} ogLocale - Open Graph locale tag (e.g. "en_US").
+ * @property {"noindex, follow" | null} robots - Robots meta directive (`"noindex, follow"`) or `null` for indexable routes.
  * @property {Array<Record<string, unknown>>} schemas - Localized JSON-LD structured data schemas.
  */
 
@@ -110,7 +117,7 @@ export const extractContentHeading = (rawTitle = "", appName = "NMS Optimizer") 
 	const trimmed = String(rawTitle).trim();
 	const brandPattern = new RegExp(
 		`\\s*\\|\\s*${appName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`,
-		"i"
+		"i",
 	);
 	const genericPipePattern = /\s*\|\s*.*$/;
 
@@ -173,6 +180,7 @@ export const formatDocumentTitle = (topic = "", appName = "NMS Optimizer") => {
  * @see {@link formatErrorDocumentTitle}
  * @see {@link getLocalizedSchema}
  * @see {@link getPageByPath}
+ * @see {@link getPageContentLanguages}
  * @see {@link PAGE_REGISTRY}
  *
  * @example
@@ -191,7 +199,7 @@ export const getPageMetadata = (options) => {
 		lang: explicitLang,
 		pathname = "/",
 		supportedLanguages = SUPPORTED_LANGUAGES,
-		t,
+		t = (key, opts) => String(opts?.defaultValue ?? key),
 		version,
 	} = options;
 
@@ -204,9 +212,8 @@ export const getPageMetadata = (options) => {
 	const appName = t("appName", { defaultValue: "NMS Optimizer" });
 	const isRoot = lookupPath === "/";
 
-	const rawTitle = page.seoTitleKey
-		? t(page.seoTitleKey, { defaultValue: isRoot ? appName : "" })
-		: appName;
+	const rawTitle =
+		page.seoTitleKey ? t(page.seoTitleKey, { defaultValue: isRoot ? appName : "" }) : appName;
 
 	const heading = extractContentHeading(rawTitle, appName) || appName;
 
@@ -215,13 +222,29 @@ export const getPageMetadata = (options) => {
 	const description = page.seoDescriptionKey ? t(page.seoDescriptionKey) : "";
 	const keywords = t("seo.keywords", { defaultValue: "" });
 
-	const canonicalPath =
-		lang === "en" ? cleanPath : `/${lang}${cleanPath === "/" ? "/" : cleanPath}`;
-	const canonicalUrl = new URL(canonicalPath, baseUrl).href;
+	const contentLanguages = getPageContentLanguages(page, supportedLanguages);
+	const canonicalLang = contentLanguages.includes(lang) ? lang : "en";
+
+	const buildLocaleUrl = (targetLang) => {
+		const localePath =
+			targetLang === "en" ? cleanPath : (
+				`/${targetLang}${cleanPath === "/" ? "/" : cleanPath}`
+			);
+
+		return new URL(localePath, baseUrl).href;
+	};
+
+	const canonicalUrl = buildLocaleUrl(canonicalLang);
+	/** @type {Record<string, string>} */
+	const hreflangUrls = Object.fromEntries([
+		...contentLanguages.map((locale) => [locale, buildLocaleUrl(locale)]),
+		["x-default", buildLocaleUrl("en")],
+	]);
 
 	const ogImageUrl = `${baseUrl}${DEFAULT_OG_IMAGE_PATH}`;
 	const ogImageAlt = t("seo.ogImageAlt", { defaultValue: "NMS Optimizer Screenshot" });
 	const ogLocale = getOgLocale(lang);
+	const robots = page.noindex ? "noindex, follow" : null;
 	const schemas = getLocalizedSchema(t, lang, canonicalUrl, version);
 
 	return {
@@ -229,12 +252,14 @@ export const getPageMetadata = (options) => {
 		cleanPath,
 		description,
 		heading,
+		hreflangUrls,
 		keywords,
 		lang,
 		ogImageAlt,
 		ogImageUrl,
 		ogLocale,
 		pathname: lookupPath,
+		robots,
 		schemas,
 		title,
 	};

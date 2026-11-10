@@ -24,8 +24,10 @@
  * @property {"default" | "wide" | "full"} [dialogSize] - Modal dialog size variant.
  * @property {boolean} isDialog - Whether this page opens as a modal dialog.
  * @property {"markdown" | "custom"} [componentType] - How the page content is rendered ("markdown" or "custom").
+ * @property {readonly string[]} [contentLanguages] - ISO language codes with dedicated localized content; defaults to all supported languages when omitted.
  * @property {boolean} [isClientOnly] - Whether this route is client-only without static pre-rendering.
  * @property {boolean} [excludeFromSitemap] - Whether to exclude this route from the XML sitemap.
+ * @property {boolean} [noindex] - Whether this route should emit a `noindex, follow` robots directive.
  */
 
 /**
@@ -50,6 +52,7 @@ export const PAGE_REGISTRY = {
 	},
 	changelog: {
 		componentType: "markdown",
+		contentLanguages: ["en"],
 		dialogSize: "default",
 		dialogTitleKey: "dialogs.titles.changelog",
 		iconName: "CounterClockwiseClockIcon",
@@ -92,6 +95,7 @@ export const PAGE_REGISTRY = {
 		id: "performance",
 		isClientOnly: true,
 		isDialog: true,
+		noindex: true,
 		routePath: "/performance/",
 		seoDescriptionKey: "seo.performanceDescription",
 		seoTitleKey: "seo.performancePageTitle",
@@ -112,10 +116,12 @@ export const PAGE_REGISTRY = {
 		componentType: "markdown",
 		dialogSize: "default",
 		dialogTitleKey: "dialogs.titles.translationRequest",
+		excludeFromSitemap: true,
 		iconName: "GlobeIcon",
 		id: "translation",
 		isDialog: true,
 		markdownFileName: "translation-request",
+		noindex: true,
 		routePath: "/translation/",
 		seoDescriptionKey: "seo.translationDescription",
 		seoTitleKey: "seo.translationPageTitle",
@@ -194,6 +200,13 @@ export const getPageById = (id) => PAGE_REGISTRY[id];
  */
 
 /**
+ * Default supported ISO 639-1 language codes when callers omit an explicit list.
+ *
+ * @type {string[]}
+ */
+const DEFAULT_SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "pt", "it"];
+
+/**
  * Parses and normalizes a pathname, extracting any language prefix and ensuring consistent trailing slashes.
  *
  * @remarks
@@ -201,7 +214,7 @@ export const getPageById = (id) => PAGE_REGISTRY[id];
  * and bare route names (e.g. `instructions`).
  *
  * @param {string} [pathname=""] - The raw pathname or route identifier.
- * @param {string[]} [supportedLanguages=["en", "es", "fr", "de", "pt", "it"]] - Array of supported language codes.
+ * @param {string[]} [supportedLanguages=DEFAULT_SUPPORTED_LANGUAGES] - Array of supported language codes.
  * @returns {ParsedRoutePath} The parsed route path object.
  *
  * @category Utilities
@@ -212,10 +225,7 @@ export const getPageById = (id) => PAGE_REGISTRY[id];
  * // returns { cleanPath: "/instructions/", lang: "es" }
  * ```
  */
-export const parseRoutePath = (
-	pathname = "",
-	supportedLanguages = ["en", "es", "fr", "de", "pt", "it"],
-) => {
+export const parseRoutePath = (pathname = "", supportedLanguages = DEFAULT_SUPPORTED_LANGUAGES) => {
 	const raw = String(pathname).trim().split("?")[0].split("#")[0];
 	const parts = raw.split("/").filter(Boolean);
 
@@ -304,6 +314,38 @@ export const getPageByPath = (
  * ```
  */
 export const getAllPages = () => Object.values(PAGE_REGISTRY);
+
+/**
+ * Returns the subset of supported languages that have dedicated localized content for a page.
+ *
+ * @remarks
+ * Defaults to all `supportedLanguages` when `page.contentLanguages` is omitted, or intersects
+ * `supportedLanguages` with `page.contentLanguages` (falling back to `["en"]`) for partial-translation routes.
+ *
+ * @param {PageDefinition | undefined} page - Page definition from {@link PAGE_REGISTRY}.
+ * @param {string[]} [supportedLanguages=DEFAULT_SUPPORTED_LANGUAGES] - Supported ISO language codes.
+ * @returns {string[]} Ordered list of language codes with dedicated localized content.
+ *
+ * @see {@link PAGE_REGISTRY}
+ * @see {@link PageDefinition}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * getPageContentLanguages(PAGE_REGISTRY.changelog);
+ * // returns ["en"]
+ * ```
+ */
+export const getPageContentLanguages = (page, supportedLanguages = DEFAULT_SUPPORTED_LANGUAGES) => {
+	if (!page?.contentLanguages?.length) {
+		return supportedLanguages;
+	}
+
+	const localized = supportedLanguages.filter((lang) => page.contentLanguages?.includes(lang));
+
+	return localized.length > 0 ? localized : ["en"];
+};
 
 /**
  * Returns all routed modal dialog definitions as an array.

@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
 import { resetPageViewTracking, trackRoutePageView } from "@/utils/analytics/pageView";
-import { buildLocalizedPath, useSupportedLanguages } from "@/utils/system/dialogUtils";
-import { DEFAULT_BASE_URL, getPageMetadata } from "@shared/page-metadata.js";
+import { useSupportedLanguages } from "@/utils/system/dialogUtils";
+import { getPageMetadata } from "@shared/page-metadata.js";
 import { getSchemaDomId, MANAGED_SCHEMA_IDS, OG_LOCALE_MAP } from "@shared/seo-schema.js";
 
 /**
@@ -72,20 +72,32 @@ const upsertCanonicalLink = (href: string): void => {
 };
 
 /**
+ * Synchronizes `<meta name="robots">` in `document.head`, upserting the directive when
+ * non-null or removing any existing robots meta tags on indexable routes.
+ *
+ * @param robots - Robots directive string (`"noindex, follow"`) or `null`.
+ */
+const syncRobotsMeta = (robots: "noindex, follow" | null): void => {
+	if (!robots) {
+		document.head.querySelectorAll('meta[name="robots"]').forEach((el) => {
+			el.remove();
+		});
+
+		return;
+	}
+
+	upsertMetaTag("name", "robots", robots);
+	document.head.querySelector('meta[name="robots"]')?.removeAttribute("data-spa-fallback");
+};
+
+/**
  * Synchronizes `<link rel="alternate" hreflang="...">` tags in `document.head` in-place,
  * deduplicating pre-rendered or stale alternate links.
  *
- * @param cleanPath - Normalized route path without locale prefix.
- * @param supportedLangs - Supported language codes.
+ * @param hreflangUrls - Map of `hreflang` codes to canonical alternate URLs from {@link getPageMetadata}.
  */
-const syncHreflangLinks = (cleanPath: string, supportedLangs: string[]): void => {
-	const desiredEntries: Array<[string, string]> = [
-		["x-default", `${DEFAULT_BASE_URL}${cleanPath || "/"}`],
-		...supportedLangs.map((lang): [string, string] => [
-			lang,
-			`${DEFAULT_BASE_URL}${buildLocalizedPath(cleanPath || "/", lang, supportedLangs)}`,
-		]),
-	];
+const syncHreflangLinks = (hreflangUrls: Record<string, string>): void => {
+	const desiredEntries: Array<[string, string]> = Object.entries(hreflangUrls);
 	const desiredMap = new Map<string, string>(desiredEntries);
 	const seenLangs = new Set<string>();
 
@@ -171,7 +183,6 @@ const syncAlternateOgLocales = (activeLang: string): void => {
  * @see {@link getSchemaDomId}
  * @see {@link MANAGED_SCHEMA_IDS}
  * @see {@link OG_LOCALE_MAP}
- * @see {@link buildLocalizedPath}
  * @see {@link trackRoutePageView}
  * @see {@link ./Seo.test.tsx Unit Tests}
  *
@@ -194,10 +205,12 @@ export const Seo: React.FC = () => {
 		canonicalUrl,
 		cleanPath,
 		description: pageDescription,
+		hreflangUrls,
 		keywords: pageKeywords,
 		ogImageAlt,
 		ogImageUrl,
 		ogLocale,
+		robots,
 		schemas,
 		title: pageTitle,
 	} = useMemo(() => {
@@ -228,10 +241,11 @@ export const Seo: React.FC = () => {
 			document.title = pageTitle;
 		}
 
+		syncRobotsMeta(robots);
 		upsertMetaTag("name", "description", pageDescription);
 		upsertMetaTag("name", "keywords", pageKeywords);
 		upsertCanonicalLink(canonicalUrl);
-		syncHreflangLinks(cleanPath || "/", supportedLangs);
+		syncHreflangLinks(hreflangUrls);
 
 		upsertMetaTag("property", "og:site_name", appName);
 		upsertMetaTag("property", "og:title", pageTitle);
@@ -253,7 +267,7 @@ export const Seo: React.FC = () => {
 	}, [
 		appName,
 		canonicalUrl,
-		cleanPath,
+		hreflangUrls,
 		i18n.language,
 		ogImageAlt,
 		ogImageUrl,
@@ -261,7 +275,7 @@ export const Seo: React.FC = () => {
 		pageDescription,
 		pageKeywords,
 		pageTitle,
-		supportedLangs,
+		robots,
 	]);
 
 	useEffect(() => {

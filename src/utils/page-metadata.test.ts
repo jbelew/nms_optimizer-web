@@ -405,7 +405,10 @@ describe("page-metadata.js", () => {
 							const expectedTitle = `${expectedHeading} | NMS Optimizer`;
 							const localizedPath =
 								lang === "en" ? path : `/${lang}${path === "/" ? "/" : path}`;
-							const expectedUrl = `${DEFAULT_BASE_URL}${localizedPath}`;
+							const expectedUrl =
+								key === "changelog" ?
+									`${DEFAULT_BASE_URL}/changelog/`
+								:	`${DEFAULT_BASE_URL}${localizedPath}`;
 
 							const meta = getPageMetadata({
 								lang,
@@ -413,11 +416,33 @@ describe("page-metadata.js", () => {
 								t,
 							});
 
+							const expectedRobots =
+								key === "translation" || key === "performance" ?
+									"noindex, follow"
+								:	null;
+							const expectedHreflangUrls =
+								key === "changelog" ?
+									{
+										en: `${DEFAULT_BASE_URL}/changelog/`,
+										"x-default": `${DEFAULT_BASE_URL}/changelog/`,
+									}
+								:	{
+										de: `${DEFAULT_BASE_URL}/de${path === "/" ? "/" : path}`,
+										en: `${DEFAULT_BASE_URL}${path}`,
+										es: `${DEFAULT_BASE_URL}/es${path === "/" ? "/" : path}`,
+										fr: `${DEFAULT_BASE_URL}/fr${path === "/" ? "/" : path}`,
+										it: `${DEFAULT_BASE_URL}/it${path === "/" ? "/" : path}`,
+										pt: `${DEFAULT_BASE_URL}/pt${path === "/" ? "/" : path}`,
+										"x-default": `${DEFAULT_BASE_URL}${path}`,
+									};
+
 							expect(meta.heading).toBe(expectedHeading);
 							expect(meta.title).toBe(expectedTitle);
 							expect(meta.canonicalUrl).toBe(expectedUrl);
+							expect(meta.hreflangUrls).toEqual(expectedHreflangUrls);
 							expect(meta.cleanPath).toBe(path);
 							expect(meta.lang).toBe(lang);
+							expect(meta.robots).toBe(expectedRobots);
 							expect(DEFAULT_OG_IMAGE_PATH).toBe(
 								"/assets/img/screenshots/screenshot.webp",
 							);
@@ -500,6 +525,10 @@ describe("page-metadata.js", () => {
 					expect(page.iconName).toBeTruthy();
 				}
 			});
+
+			expect(PAGE_REGISTRY.translation.noindex).toBe(true);
+			expect(PAGE_REGISTRY.translation.excludeFromSitemap).toBe(true);
+			expect(PAGE_REGISTRY.changelog.contentLanguages).toEqual(["en"]);
 		});
 
 		it("correctly identifies routed modal dialogs", () => {

@@ -69,6 +69,64 @@ describe("generate-ssg.mjs", () => {
 			expect(tags).toContain(
 				'<link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/" />',
 			);
+			expect(tags).not.toContain('name="robots"');
+		});
+
+		it("emits noindex, follow robots meta on translation routes across all locales and omits it on indexable routes", () => {
+			for (const lang of ["en", "es", "fr", "de", "pt", "it"]) {
+				const translationTags = generateSsgModule.generateSeoTags(
+					"/translation/",
+					lang,
+					baseUrl,
+					t,
+				);
+				expect(translationTags).toContain(
+					'<meta name="robots" content="noindex, follow" />',
+				);
+
+				for (const indexablePath of [
+					"/",
+					"/about/",
+					"/instructions/",
+					"/changelog/",
+					"/userstats/",
+					"/privacy/",
+				]) {
+					const indexableTags = generateSsgModule.generateSeoTags(
+						indexablePath,
+						lang,
+						baseUrl,
+						t,
+					);
+					expect(indexableTags).not.toContain("noindex");
+				}
+			}
+		});
+
+		it("canonicalizes non-English /<lang>/changelog/ tags to /changelog/ and omits untranslated fallback locales from hreflang", () => {
+			for (const lang of ["es", "fr", "de", "pt", "it"]) {
+				const tags = generateSsgModule.generateSeoTags("/changelog/", lang, baseUrl, t);
+
+				expect(tags).toContain(
+					'<link rel="canonical" href="https://nms-optimizer.app/changelog/" />',
+				);
+				expect(tags).toContain(
+					'<meta property="og:url" content="https://nms-optimizer.app/changelog/" />',
+				);
+				expect(tags).toContain(
+					'<link rel="alternate" type="text/markdown" href="https://nms-optimizer.app/changelog/index.md" />',
+				);
+				expect(tags).toContain(
+					'<link rel="alternate" hreflang="en" href="https://nms-optimizer.app/changelog/" />',
+				);
+				expect(tags).toContain(
+					'<link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/changelog/" />',
+				);
+
+				for (const fallbackLang of ["es", "fr", "de", "pt", "it"]) {
+					expect(tags).not.toContain(`hreflang="${fallbackLang}"`);
+				}
+			}
 		});
 	});
 
@@ -288,6 +346,52 @@ describe("generate-ssg.mjs", () => {
 			);
 			expect(result).toContain("<h1>How to Optimize Your Tech Layout</h1>");
 		});
+
+		it("emits deduplicated noindex, follow on /translation/ HTML and strips stale robots meta on indexable pages", async () => {
+			const htmlWithStaleRobots = indexHtml.replace(
+				"</head>",
+				'    <meta name="robots" content="noindex, nofollow" />\n</head>',
+			);
+
+			const translationHtml = await generateSsgModule.generatePage(
+				htmlWithStaleRobots,
+				"es",
+				"translation",
+				baseUrl,
+				mdProcessor,
+				t,
+			);
+			expect(translationHtml).toContain('<meta name="robots" content="noindex, follow" />');
+			expect(translationHtml.match(/name="robots"/g)).toHaveLength(1);
+
+			const aboutHtml = await generateSsgModule.generatePage(
+				htmlWithStaleRobots,
+				"es",
+				"about",
+				baseUrl,
+				mdProcessor,
+				t,
+			);
+			expect(aboutHtml).not.toContain('name="robots"');
+
+			const esChangelogHtml = await generateSsgModule.generatePage(
+				indexHtml,
+				"es",
+				"changelog",
+				baseUrl,
+				mdProcessor,
+				t,
+			);
+			expect(esChangelogHtml).toContain(
+				'<link rel="canonical" href="https://nms-optimizer.app/changelog/" />',
+			);
+			expect(esChangelogHtml).toContain(
+				'<meta property="og:url" content="https://nms-optimizer.app/changelog/" />',
+			);
+			expect(esChangelogHtml).toContain('"url":"https://nms-optimizer.app/changelog/"');
+			expect(esChangelogHtml).not.toContain('hreflang="es"');
+			expect(esChangelogHtml).not.toContain('name="robots"');
+		});
 	});
 
 	describe("generateAgentMarkdown", () => {
@@ -466,7 +570,7 @@ describe("generate-ssg.mjs", () => {
 			expect(md).not.toContain("<iframe");
 		});
 
-		it("retains localized YAML frontmatter, top heading, and navigation links when markdown body falls back to English", async () => {
+		it("canonicalizes YAML frontmatter url to /changelog/ while retaining localized title, top heading, and navigation links when markdown body falls back to English", async () => {
 			const infoSpy = vi.spyOn(console, "info").mockImplementation(() => {});
 
 			try {
@@ -519,7 +623,7 @@ describe("generate-ssg.mjs", () => {
 				expect(md).toContain(
 					'description: "Mantente al día con las últimas funciones y mejoras de NMS Optimizer."\n',
 				);
-				expect(md).toContain('url: "https://nms-optimizer.app/es/changelog/"\n');
+				expect(md).toContain('url: "https://nms-optimizer.app/changelog/"\n');
 				expect(md).toContain('lang: "es"\n');
 				expect(md).toContain(
 					"# Últimas funciones y actualizaciones\n\n## Version 8.7\n\n- Added space warnings.\n\n[YouTube Video](https://www.youtube.com/watch?v=nGbHf9fQmds)",

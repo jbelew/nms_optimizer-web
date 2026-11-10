@@ -10,6 +10,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 import { KNOWN_DIALOGS, SUPPORTED_LANGUAGES, TARGET_HOST } from "../shared/config.js";
+import { getPageMetadata } from "../shared/page-metadata.js";
 import { PAGE_REGISTRY } from "../shared/page-registry.js";
 import { isDockerBuild } from "./generate-ssg.mjs";
 
@@ -29,6 +30,166 @@ const PAGES_WITH_CONTENT = new Set(
 		.filter((page) => page.markdownFileName)
 		.map((page) => (page.id === "home" ? "" : page.id)),
 );
+
+/**
+ * Verifies that a pre-rendered HTML file and its sibling `index.md` Agent Markdown Document
+ * exist and contain required SEO metadata, fallback content, and sanitized Markdown.
+ *
+ * @remarks
+ * Derives expected canonical URL, Open Graph URL, Agent Markdown Document `alternate` link,
+ * `hreflang` cluster, and `robots` directive directly from {@link getPageMetadata}.
+ *
+ * @param {string} filePath - Absolute path to the generated `index.html` file.
+ * @param {string} routeSlug - Route slug (`""` for home, or dialog ID such as `"about"`).
+ * @param {string} lang - Active locale code (e.g., `"en"`, `"es"`).
+ * @param {boolean} [expectContent=true] - Whether the route is expected to include pre-rendered markdown content.
+ * @param {{ log: (...args: unknown[]) => void }} [logger=console] - Logger used for failure diagnostics.
+ * @returns {boolean} `true` if all verification checks pass, `false` otherwise.
+ *
+ * @see {@link getPageMetadata}
+ * @see {@link ./verify-ssg.test.mjs Unit Tests}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```js
+ * const ok = checkFile("/path/to/dist/about/index.html", "about", "en", true);
+ * // returns true
+ * ```
+ */
+export function checkFile(filePath, routeSlug, lang, expectContent = true, logger = console) {
+	if (!fs.existsSync(filePath)) {
+		logger.log(`✗ ${filePath} - NOT FOUND`);
+
+		return false;
+	}
+
+	const content = fs.readFileSync(filePath, "utf-8");
+	const langPrefix = lang === "en" ? "" : `/${lang}`;
+	const routeDisplayPath =
+		routeSlug === "" ?
+			langPrefix ? `${langPrefix}/`
+			:	"/"
+		:	`${langPrefix}/${routeSlug}/`;
+	const pathname = routeSlug === "" ? "/" : `/${routeSlug}/`;
+	const {
+		canonicalUrl: expectedCanonicalUrl,
+		hreflangUrls: expectedHreflangUrls,
+		robots: expectedRobots,
+	} = getPageMetadata({
+		baseUrl: BASE_URL,
+		lang,
+		pathname,
+	});
+	const escapedExpectedCanonicalUrl = escapeRegex(expectedCanonicalUrl);
+	const escapedExpectedMdUrl = escapeRegex(`${expectedCanonicalUrl}index.md`);
+
+	// Helper for flexible multiline matching
+	const hasTag = (pattern) => new RegExp(pattern, "i").test(content);
+
+	const checks = {
+		hasCanonical: hasTag(
+			`<link\\s+rel="canonical"\\s+href="${escapedExpectedCanonicalUrl}"\\s*\\/?>`,
+		),
+		hasContent: !expectContent || content.includes("<h2") || content.includes("<p"),
+		hasDescription: hasTag('<meta\\s+name="description"\\s+content="[^"]+?"\\s*\\/?>'),
+		hasHreflang: matchesHreflangContract(content, expectedHreflangUrls),
+		hasKeywords: hasTag('<meta\\s+name="keywords"\\s+content="[^"]+?"\\s*\\/?>'),
+		hasMarkdownAlternate: hasTag(
+			`<link\\s+rel="alternate"\\s+type="text\\/markdown"\\s+href="${escapedExpectedMdUrl}"\\s*\\/?>`,
+		),
+		hasNavigation: content.includes('aria-label="Site navigation"'),
+		hasOgDescription: hasTag('<meta\\s+property="og:description"\\s+content="[^"]+?"\\s*\\/?>'),
+		hasOgImageAlt: hasTag('<meta\\s+property="og:image:alt"\\s+content="[^"]+?"\\s*\\/?>'),
+		hasOgTitle: hasTag('<meta\\s+property="og:title"\\s+content="[^"]+?"\\s*\\/?>'),
+		hasOgUrl: hasTag(
+			`<meta\\s+property="og:url"\\s+content="${escapedExpectedCanonicalUrl}"\\s*\\/?>`,
+		),
+		hasRoot: content.includes('id="root"'),
+		hasTitle: hasTag("<title>[\\s\\S]*?<\\/title>"),
+		hasValidRobots: matchesRobotsContract(content, expectedRobots),
+	};
+
+	// Specific check for the userstats title fix we made
+	if (lang === "en" && routeSlug === "userstats") {
+		checks.correctUserStatsLabel = content.includes("User Statistics");
+	}
+
+	const failedChecks = Object.entries(checks)
+		.filter(([_, v]) => !v)
+		.map(([k]) => k);
+
+	if (expectContent) {
+		const mdFilePath = path.join(path.dirname(filePath), "index.md");
+		failedChecks.push(...checkAgentMarkdownFile(mdFilePath, expectedCanonicalUrl, lang));
+	}
+
+	if (failedChecks.length > 0) {
+		logger.log(`✗ ${routeDisplayPath} (${lang}): ${failedChecks.join(", ")}`);
+
+		return false;
+	}
+
+	return true;
+}
+
+/**
+ * Verifies all pre-rendered SSG HTML pages and Agent Markdown Documents under `distDir`.
+ *
+ * @param {Object} [options] - Verification options.
+ * @param {string} [options.distDir=DIST_DIR] - Directory containing generated SSG artifacts.
+ * @param {boolean} [options.isDocker=IS_DOCKER] - Whether Docker `userstats` exclusion is active.
+ * @param {{ log: (...args: unknown[]) => void }} [options.logger=console] - Diagnostic logger.
+ * @returns {{ ok: boolean, passedPages: number, totalPages: number }} Verification summary.
+ */
+export function verifySsg({ distDir = DIST_DIR, isDocker = IS_DOCKER, logger = console } = {}) {
+	logger.log("🚀 Verifying SSG Output, Agent Markdown Documents, and SEO parity...\n");
+
+	let totalPages = 0;
+	let passedPages = 0;
+
+	// 1. Check Root Pages
+	SUPPORTED_LANGUAGES.forEach((lang) => {
+		const rootPath = lang === "en" ? "" : lang;
+		const filePath = path.join(distDir, rootPath, "index.html");
+		totalPages++;
+
+		if (checkFile(filePath, "", lang, PAGES_WITH_CONTENT.has(""), logger)) {
+			passedPages++;
+			logger.log(`✓ ${lang === "en" ? "/" : "/" + lang} (+ index.md)`);
+		}
+	});
+
+	// 2. Check Dialog Pages
+	SUPPORTED_LANGUAGES.forEach((lang) => {
+		KNOWN_DIALOGS.forEach((dialog) => {
+			if (isDocker && dialog === "userstats") {
+				return;
+			}
+
+			const pagePath = lang === "en" ? dialog : `${lang}/${dialog}`;
+			const filePath = path.join(distDir, pagePath, "index.html");
+			totalPages++;
+
+			const hasContent = PAGES_WITH_CONTENT.has(dialog);
+
+			if (checkFile(filePath, dialog, lang, hasContent, logger)) {
+				passedPages++;
+				logger.log(`✓ /${pagePath} (+ index.md)`);
+			}
+		});
+	});
+
+	logger.log(
+		`\n${passedPages === totalPages ? "✅" : "⚠️"} ${passedPages}/${totalPages} pages verified`,
+	);
+
+	return {
+		ok: passedPages === totalPages,
+		passedPages,
+		totalPages,
+	};
+}
 
 /**
  * Verifies that a synthesized `index.md` Agent Markdown Document exists and satisfies
@@ -78,95 +239,61 @@ function checkAgentMarkdownFile(mdFilePath, expectedCanonicalUrl, lang) {
 }
 
 /**
- * Verifies that a pre-rendered HTML file and its sibling `index.md` Agent Markdown Document
- * exist and contain required SEO metadata, fallback content, and sanitized Markdown.
+ * Escapes special regular-expression metacharacters in a literal string.
  *
- * @remarks
- * Inspects canonical, `hreflang`, `text/markdown` alternate, Open Graph, and document title tags
- * alongside the Static SEO Fallback body content, site navigation block, and sibling `index.md`.
- *
- * @param {string} filePath - Absolute path to the generated `index.html` file.
- * @param {string} routeSlug - Route slug (`""` for home, or dialog ID such as `"about"`).
- * @param {string} lang - Active locale code (e.g., `"en"`, `"es"`).
- * @param {boolean} [expectContent=true] - Whether the route is expected to include pre-rendered markdown content.
- * @returns {boolean} `true` if all verification checks pass, `false` otherwise.
- *
- * @category Utilities
- *
- * @example
- * ```js
- * const ok = checkFile("/path/to/dist/about/index.html", "about", "en", true);
- * // returns true
- * ```
+ * @param {string} value - Raw string to escape.
+ * @returns {string} Escaped regex-safe string.
  */
-function checkFile(filePath, routeSlug, lang, expectContent = true) {
-	if (!fs.existsSync(filePath)) {
-		console.log(`✗ ${filePath} - NOT FOUND`);
+function escapeRegex(value) {
+	return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 
+/**
+ * Checks whether all `<link rel="alternate" hreflang="...">` tags in `html` match
+ * `expectedHreflangUrls` with no missing, mismatched, or extraneous alternate links.
+ *
+ * @param {string} html - Rendered HTML string.
+ * @param {Record<string, string>} expectedHreflangUrls - Expected map of `hreflang` to `href`.
+ * @returns {boolean} `true` when the emitted `hreflang` cluster matches the contract.
+ */
+function matchesHreflangContract(html, expectedHreflangUrls) {
+	const linkMatches = [
+		...html.matchAll(/<link\s+rel="alternate"\s+hreflang="([^"]+)"\s+href="([^"]+)"\s*\/?>/gi),
+	];
+	const expectedEntries = Object.entries(expectedHreflangUrls);
+
+	if (linkMatches.length !== expectedEntries.length) {
 		return false;
 	}
 
-	const content = fs.readFileSync(filePath, "utf-8");
-	const langPrefix = lang === "en" ? "" : `/${lang}`;
-	const canonicalPath =
-		routeSlug === "" ?
-			langPrefix ? `${langPrefix}/`
-			:	"/"
-		:	`${langPrefix}/${routeSlug}/`;
-	const expectedCanonicalUrl = `${BASE_URL}${canonicalPath}`;
-	const escapedExpectedMdUrl = `${expectedCanonicalUrl}index.md`.replace(
-		/[.*+?^${}()|[\]\\]/g,
-		"\\$&",
-	);
+	const actualMap = new Map(linkMatches.map((match) => [match[1], match[2]]));
 
-	// Helper for flexible multiline matching
-	const hasTag = (pattern) => new RegExp(pattern, "i").test(content);
-
-	const checks = {
-		hasCanonical: hasTag(
-			'<link\\s+rel="canonical"\\s+href="https:\\/\\/nms-optimizer\\.app\\/[^"]*?"\\s*\\/?>',
-		),
-		hasContent: !expectContent || content.includes("<h2") || content.includes("<p"),
-		hasDescription: hasTag('<meta\\s+name="description"\\s+content="[^"]+?"\\s*\\/?>'),
-		hasHreflang: hasTag(
-			'<link\\s+rel="alternate"\\s+hreflang="[^"]+?"\\s+href="https:\\/\\/nms-optimizer\\.app\\/[^"]*?"\\s*\\/?>',
-		),
-		hasKeywords: hasTag('<meta\\s+name="keywords"\\s+content="[^"]+?"\\s*\\/?>'),
-		hasMarkdownAlternate: hasTag(
-			`<link\\s+rel="alternate"\\s+type="text\\/markdown"\\s+href="${escapedExpectedMdUrl}"\\s*\\/?>`,
-		),
-		hasNavigation: content.includes('aria-label="Site navigation"'),
-		hasOgDescription: hasTag('<meta\\s+property="og:description"\\s+content="[^"]+?"\\s*\\/?>'),
-		hasOgImageAlt: hasTag('<meta\\s+property="og:image:alt"\\s+content="[^"]+?"\\s*\\/?>'),
-		hasOgTitle: hasTag('<meta\\s+property="og:title"\\s+content="[^"]+?"\\s*\\/?>'),
-		hasOgUrl: hasTag(
-			'<meta\\s+property="og:url"\\s+content="https:\\/\\/nms-optimizer\\.app\\/[^"]*?"\\s*\\/?>',
-		),
-		hasRoot: content.includes('id="root"'),
-		hasTitle: hasTag("<title>[\\s\\S]*?<\\/title>"),
-	};
-
-	// Specific check for the userstats title fix we made
-	if (lang === "en" && routeSlug === "userstats") {
-		checks.correctUserStatsLabel = content.includes("User Statistics");
-	}
-
-	const failedChecks = Object.entries(checks)
-		.filter(([_, v]) => !v)
-		.map(([k]) => k);
-
-	if (expectContent) {
-		const mdFilePath = path.join(path.dirname(filePath), "index.md");
-		failedChecks.push(...checkAgentMarkdownFile(mdFilePath, expectedCanonicalUrl, lang));
-	}
-
-	if (failedChecks.length > 0) {
-		console.log(`✗ ${canonicalPath} (${lang}): ${failedChecks.join(", ")}`);
-
+	if (actualMap.size !== expectedEntries.length) {
 		return false;
 	}
 
-	return true;
+	return expectedEntries.every(([hreflang, href]) => actualMap.get(hreflang) === href);
+}
+
+/**
+ * Checks whether `<meta name="robots">` tags in `html` match `expectedRobots`.
+ *
+ * @param {string} html - Rendered HTML string.
+ * @param {string | null} expectedRobots - Expected `robots` content or `null` when none should exist.
+ * @returns {boolean} `true` when the `robots` meta directive matches the contract.
+ */
+function matchesRobotsContract(html, expectedRobots) {
+	const robotsTags = [...html.matchAll(/<meta\b[^>]*\bname="robots"[^>]*>/gi)];
+
+	if (!expectedRobots) {
+		return robotsTags.length === 0;
+	}
+
+	if (robotsTags.length !== 1) {
+		return false;
+	}
+
+	return new RegExp(`\\bcontent="${escapeRegex(expectedRobots)}"`, "i").test(robotsTags[0][0]);
 }
 
 /**
@@ -210,47 +337,10 @@ function parseAgentMarkdownFrontmatter(mdContent) {
 	return { body, fields };
 }
 
-console.log("🚀 Verifying SSG Output, Agent Markdown Documents, and SEO parity...\n");
+if (import.meta.main) {
+	const { ok } = verifySsg();
 
-let totalPages = 0;
-let passedPages = 0;
-
-// 1. Check Root Pages
-SUPPORTED_LANGUAGES.forEach((lang) => {
-	const rootPath = lang === "en" ? "" : lang;
-	const filePath = path.join(DIST_DIR, rootPath, "index.html");
-	totalPages++;
-
-	if (checkFile(filePath, "", lang, PAGES_WITH_CONTENT.has(""))) {
-		passedPages++;
-		console.log(`✓ ${lang === "en" ? "/" : "/" + lang} (+ index.md)`);
+	if (!ok) {
+		process.exit(1);
 	}
-});
-
-// 2. Check Dialog Pages
-SUPPORTED_LANGUAGES.forEach((lang) => {
-	KNOWN_DIALOGS.forEach((dialog) => {
-		if (IS_DOCKER && dialog === "userstats") {
-			return;
-		}
-
-		const pagePath = lang === "en" ? dialog : `${lang}/${dialog}`;
-		const filePath = path.join(DIST_DIR, pagePath, "index.html");
-		totalPages++;
-
-		const hasContent = PAGES_WITH_CONTENT.has(dialog);
-
-		if (checkFile(filePath, dialog, lang, hasContent)) {
-			passedPages++;
-			console.log(`✓ /${pagePath} (+ index.md)`);
-		}
-	});
-});
-
-console.log(
-	`\n${passedPages === totalPages ? "✅" : "⚠️"} ${passedPages}/${totalPages} pages verified`,
-);
-
-if (passedPages !== totalPages) {
-	process.exit(1);
 }

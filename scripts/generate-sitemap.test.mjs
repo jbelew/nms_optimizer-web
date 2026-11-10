@@ -124,5 +124,45 @@ describe("generate-sitemap.mjs", () => {
 
 			expect(xml).not.toContain("<loc>https://nms-optimizer.app/performance/</loc>");
 		});
+
+		it("omits translation routes and untranslated changelog fallbacks, yielding 31 canonical URLs with aligned hreflang clusters", async () => {
+			const xml = await generateSitemap({ write: false });
+			const locMatches = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+
+			expect(locMatches).toHaveLength(31);
+			expect(locMatches).toContain("https://nms-optimizer.app/changelog/");
+
+			for (const lang of ["en", "es", "fr", "de", "pt", "it"]) {
+				const prefix = lang === "en" ? "" : `/${lang}`;
+				expect(locMatches).not.toContain(`https://nms-optimizer.app${prefix}/translation/`);
+				expect(xml).not.toContain(`https://nms-optimizer.app${prefix}/translation/`);
+			}
+
+			for (const fallbackLang of ["es", "fr", "de", "pt", "it"]) {
+				expect(locMatches).not.toContain(
+					`https://nms-optimizer.app/${fallbackLang}/changelog/`,
+				);
+				expect(xml).not.toContain(`https://nms-optimizer.app/${fallbackLang}/changelog/`);
+			}
+
+			const urlBlocks = [...xml.matchAll(/<url>([\s\S]*?)<\/url>/g)].map((m) => m[1]);
+			const changelogBlock = urlBlocks.find((block) =>
+				block.includes("<loc>https://nms-optimizer.app/changelog/</loc>"),
+			);
+			expect(changelogBlock).toBeDefined();
+
+			const changelogHreflangs = [
+				...(changelogBlock?.matchAll(/hreflang="([^"]+)"/g) ?? []),
+			].map((m) => m[1]);
+			expect(changelogHreflangs).toEqual(["en", "x-default"]);
+
+			const aboutBlock = urlBlocks.find((block) =>
+				block.includes("<loc>https://nms-optimizer.app/about/</loc>"),
+			);
+			const aboutHreflangs = [...(aboutBlock?.matchAll(/hreflang="([^"]+)"/g) ?? [])].map(
+				(m) => m[1],
+			);
+			expect(aboutHreflangs).toEqual(["en", "es", "fr", "de", "pt", "it", "x-default"]);
+		});
 	});
 });
