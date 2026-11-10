@@ -12,6 +12,8 @@ Crucial codebase rules, legacy browser workarounds, and workflow conventions tha
 ## SEO (Search Engine Optimization)
 
 - **Metadata**: Do not shorten the meta description in [`index.html`](file:///home/jbelew/projects/nms_optimizer-web/index.html) to preserve search engine ranking metadata.
+- **Zero-UI-Impact Default**: Keep SEO changes invisible to human UI/UX unless explicitly requested—implement improvements via `<head>` tags, JSON-LD, pre-rendered **Static SEO Fallback** / **Agent Markdown Documents**, `sr-only` text, and polymorphic tag swaps (`asChild` `<a href>`) rather than adding visible workspace copy, footer link bars, heading copy changes, or URL-bar scheme changes.
+- **Structured Data (`JSON-LD`)**: Restrict JSON-LD to eligible schemas managed in [`shared/seo-schema.js`](file:///home/jbelew/projects/nms_optimizer-web/shared/seo-schema.js) (`SoftwareApplication`, `Organization`, `WebSite`, `WebPage`, `ItemList`, `BreadcrumbList`). Never propose or emit `FAQPage` JSON-LD—Google restricts `FAQPage` rich results exclusively to authoritative government and health websites (`8fd500fc`).
 
 ## Commit Conventions & Automated Releases
 

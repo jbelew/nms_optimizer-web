@@ -34,7 +34,7 @@ Before marking any code task complete, execute this sequence (also enforced auto
 Read these specialized guides when working on matching branches:
 
 - **When naming props, variables, JSDoc, or test cases**: Read [`GLOSSARY.md`](GLOSSARY.md) for canonical domain terms (even when destructuring legacy store keys like `state.techGroups` or `state.checkedModules`) and [`docs/agents/domain.md`](docs/agents/domain.md) for ADR conventions.
-- **When writing CSS, SEO metadata, or commit messages**: Read [`docs/agents/project-rules.md`](docs/agents/project-rules.md) for critical iOS Safari GPU rendering workarounds, `<meta>` description preservation, and Angular commit conventions.
+- **When auditing/planning SEO or writing CSS, SEO metadata/JSON-LD, or commit messages**: Read [`docs/agents/project-rules.md`](docs/agents/project-rules.md) for zero-UI-impact SEO constraints, `FAQPage` JSON-LD prohibition, `<meta>` description preservation, iOS Safari GPU workarounds, and Angular commit conventions.
 - **When creating or refactoring UI components**: Read [`docs/agents/component-architecture.md`](docs/agents/component-architecture.md) for dialog directory layout, prop drilling prevention, and the Colocated Hook Pattern.
 - **When writing Zustand stores, React hooks, or Tailwind styling**: Read [`docs/agents/code-style.md`](docs/agents/code-style.md) for `perfectionist` alphabetical sorting, Immer deep mutation rules, Tailwind v4 CSS-first config, and pre-paint `useLayoutEffect` measurement rules.
 - **When writing or fixing tests, Storybook stories, or running Chrome/Lighthouse audits**: Read [`docs/agents/testing.md`](docs/agents/testing.md) for module mocking, console log bans, Storybook bundle cache safeguards, and WSL2 Chrome DevTools / Lighthouse workflows.
