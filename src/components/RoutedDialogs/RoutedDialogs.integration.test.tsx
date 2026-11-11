@@ -73,7 +73,7 @@ const EXPECTED_EN_PAGE_HEADINGS: Record<(typeof SUBPAGE_IDS)[number], string> = 
 
 const EXPECTED_DIALOG_TITLES_BY_LOCALE: Record<string, Record<string, string>> = {
 	de: {
-		about: "Über Uns",
+		about: "Über",
 		changelog: "Änderungsprotokoll",
 		instructions: "Anleitung",
 		privacy: "Datenschutz",
@@ -88,24 +88,24 @@ const EXPECTED_DIALOG_TITLES_BY_LOCALE: Record<string, Record<string, string>> =
 	},
 	es: {
 		about: "Acerca de",
-		changelog: "Registro de Cambios",
+		changelog: "Registro de cambios",
 		instructions: "Instrucciones",
-		privacy: "Política de Privacidad",
-		userstats: "Estadísticas de Usuario",
+		privacy: "Política de privacidad",
+		userstats: "Estadísticas de usuario",
 	},
 	fr: {
-		about: "À Propos",
-		changelog: "Notes de Version",
+		about: "À propos",
+		changelog: "Notes de version",
 		instructions: "Instructions",
-		privacy: "Politique de Confidentialité",
-		userstats: "Statistiques Utilisateur",
+		privacy: "Politique de confidentialité",
+		userstats: "Statistiques utilisateur",
 	},
 	it: {
 		about: "Informazioni",
-		changelog: "Registro Modifiche",
+		changelog: "Registro modifiche",
 		instructions: "Istruzioni",
-		privacy: "Informativa sulla Privacy",
-		userstats: "Statistiche Utente",
+		privacy: "Informativa sulla privacy",
+		userstats: "Statistiche utente",
 	},
 	pt: {
 		about: "Sobre",

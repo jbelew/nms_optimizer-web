@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { getShakeCount, resetGrid, waitForStore } from "./helpers/store-helpers";
+import { getShakeCount, resetGrid, waitForStore, waitForTechTree } from "./helpers/store-helpers";
 
 test.describe("GridCell Supercharge Interaction", () => {
 	test.beforeEach(async ({ page }) => {
@@ -20,6 +20,8 @@ test.describe("GridCell Supercharge Interaction", () => {
 
 		// Wait for the app and store to be initialized
 		await waitForStore(page);
+		// Wait for technology data to be fetched so GridTable exits its empty loading state
+		await waitForTechTree(page);
 
 		await resetGrid(page);
 
@@ -125,7 +127,9 @@ test.describe("Mobile Touch Interactions", () => {
 		);
 		await page.goto("/?platform=standard");
 		await waitForStore(page);
+		await waitForTechTree(page);
 		await resetGrid(page);
+		await expect(page.locator(".gridTable")).toBeVisible();
 	});
 
 	test("should toggle active state on single tap", async ({ page }) => {

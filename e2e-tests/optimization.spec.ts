@@ -31,8 +31,8 @@ test.describe("End-to-End Optimization Flow", () => {
 		await resetGrid(page);
 	});
 
-	test("should run a full optimization flow for Infraknife Accelerator", async ({ page }) => {
-		const techName = "Infraknife Accelerator";
+	test("should run a full optimization flow for Infra-Knife Accelerator", async ({ page }) => {
+		const techName = "Infra-Knife Accelerator";
 
 		// 1. Open the Module Selection Dialog
 		// We use a more flexible locator to handle potential translation/casing variations
@@ -48,7 +48,7 @@ test.describe("End-to-End Optimization Flow", () => {
 		await expect(dialog).toContainText(techName);
 
 		// 3. Select modules
-		// "Q-Resonator" is a standard upgrade for Infraknife
+		// "Q-Resonator" is a standard upgrade for Infra-Knife Accelerator
 		const upgradeLabel = "Q-Resonator";
 		const upgradeCheckbox = dialog.getByLabel(upgradeLabel);
 		await expect(upgradeCheckbox).toBeVisible();

@@ -68,6 +68,11 @@ pre-commit:
             glob: "{public/assets/locales/**,shared/constants.js,shared/page-registry.js}"
             run: bun run verify:locales
 
+          - name: test-locales
+            tags: [test]
+            glob: "public/assets/locales/**/*.json"
+            run: bun run test -- src/components/RoutedDialogs/RoutedDialogs.integration.test.tsx src/components/Seo/Seo.test.tsx src/utils/seo-schema.test.ts
+
 pre-push:
   piped: true
   jobs:
@@ -115,6 +120,11 @@ pre-push:
             tags: [lint]
             glob: "{public/assets/locales/**,shared/constants.js,shared/page-registry.js,scripts/verify-locales*}"
             run: bun run verify:locales
+
+          - name: test-locales
+            tags: [test]
+            glob: "public/assets/locales/**/*.json"
+            run: bun run test -- src/components/RoutedDialogs/RoutedDialogs.integration.test.tsx src/components/Seo/Seo.test.tsx src/utils/seo-schema.test.ts
 
           - name: lint-css
             tags: [lint]
