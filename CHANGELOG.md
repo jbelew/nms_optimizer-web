@@ -1,3 +1,17 @@
+# [8.9.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.8.3...v8.9.0) (2026-11-11)
+
+
+### Bug Fixes
+
+* **telemetry:** harden ErrorBoundary against bot crawl 404s and gate static 500 GA4 to production ([3b644ac](https://github.com/jbelew/nms_optimizer-web/commit/3b644ac053d41c8aa9a627df18e765ccc42e3882)), closes [#840](https://github.com/jbelew/nms_optimizer-web/issues/840) [#836](https://github.com/jbelew/nms_optimizer-web/issues/836)
+
+
+### Features
+
+* **seo:** apply noindex to translation route and canonicalize changelog fallbacks ([d91e576](https://github.com/jbelew/nms_optimizer-web/commit/d91e5765e401b1e6204f1da691651636e3f5a15b)), closes [#837](https://github.com/jbelew/nms_optimizer-web/issues/837) [#836](https://github.com/jbelew/nms_optimizer-web/issues/836)
+* **seo:** enrich localized subpage titles, schema, and pre-render copy ([eed1871](https://github.com/jbelew/nms_optimizer-web/commit/eed18710e1093f9735ce7f26e48331917e45fcbc)), closes [#838](https://github.com/jbelew/nms_optimizer-web/issues/838) [#836](https://github.com/jbelew/nms_optimizer-web/issues/836)
+* **seo:** upgrade Routed Dialog triggers to crawlable links and fix heading hierarchy ([b8eefa5](https://github.com/jbelew/nms_optimizer-web/commit/b8eefa5a9d34b91fcf7a9fb716184c0f3cd6b2aa)), closes [#839](https://github.com/jbelew/nms_optimizer-web/issues/839)
+
 ## [8.8.3](https://github.com/jbelew/nms_optimizer-web/compare/v8.8.2...v8.8.3) (2026-11-03)
 
 
