@@ -50,6 +50,7 @@ const MANAGED_SCHEMA_TYPES = [
  * can be updated in-place without DOM teardown.
  *
  * @param {Record<string, unknown>} schema - A Schema.org JSON-LD object containing an `@type` string.
+ *
  * @returns {string} The lowercase `<type>-schema` DOM identifier.
  *
  * @see {@link MANAGED_SCHEMA_IDS}
@@ -92,6 +93,7 @@ export const MANAGED_SCHEMA_IDS = MANAGED_SCHEMA_TYPES.map((type) =>
  * Normalizes ISO 639-1 language codes into Open Graph `language_TERRITORY` tags.
  *
  * @param {string} lang - i18n language code (e.g. `"de"`).
+ *
  * @returns {string} OG locale tag (e.g. `"de_DE"`).
  *
  * @see {@link OG_LOCALE_MAP}
@@ -111,6 +113,7 @@ export const getOgLocale = (lang) => OG_LOCALE_MAP[lang] || "en_US";
  * or explicit parameter, normalizing any leading `v` character.
  *
  * @param {string} [version] - Optional explicit version string.
+ *
  * @returns {string | undefined} Normalized semantic version string without a leading `v`.
  */
 const resolveAppVersion = (version) => {
@@ -134,6 +137,7 @@ const resolveAppVersion = (version) => {
  * @param {string} lang - Current language code (e.g., `'en'`, `'fr'`).
  * @param {string} url - Current page canonical URL.
  * @param {string} [version] - Optional explicit application version.
+ *
  * @returns {Array<Record<string, unknown>>} Array of Schema.org JSON-LD objects.
  *
  * @see {@link getPageById}

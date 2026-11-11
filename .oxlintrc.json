@@ -42,6 +42,7 @@
 		".lighthouseci/",
 		"docs/",
 		"bundle/",
-		".wrangler/"
+		".wrangler/",
+		".agents/"
 	]
 }

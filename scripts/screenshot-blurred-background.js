@@ -1,19 +1,22 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+
 import { chromium } from "playwright";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 (async () => {
 	try {
-		console.log("🎨 Generating blurred and tinted mobile background with Chromium (Playwright)...");
+		console.log(
+			"🎨 Generating blurred and tinted mobile background with Chromium (Playwright)...",
+		);
 
 		// Use the high-res desktop background as source to ensure quality
 		const bgImagePath = path.resolve(__dirname, "../public/assets/img/background@2x.webp");
 		const outputPath = path.resolve(
 			__dirname,
-			"../public/assets/img/background@mobile-blurred_v6.webp"
+			"../public/assets/img/background@mobile-blurred_v6.webp",
 		);
 
 		// Mobile dimensions (Reverting to 640w to maintain blur scale/softness)
@@ -97,7 +100,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 		const tempScreenshotPath = path.resolve(
 			__dirname,
-			"../public/assets/img/.temp-screenshot.png"
+			"../public/assets/img/.temp-screenshot.png",
 		);
 		await page.setContent(html);
 		await page.screenshot({ path: tempScreenshotPath });

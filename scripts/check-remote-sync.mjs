@@ -10,7 +10,6 @@
  * screenshot updates, merged PRs) within ~1-2 seconds, failing fast with a clear
  * hint to rebase or pull before wasting developer time.
  */
-
 import { execFileSync, spawnSync } from "node:child_process";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -32,11 +31,21 @@ export function checkRemoteSync({
 	targetRef = null,
 } = {}) {
 	if (process.env.SKIP_REMOTE_SYNC_CHECK === "1" || process.env.SKIP_SYNC_CHECK === "1") {
-		return { behindCount: 0, missingCommits: [], reason: "Bypassed via environment variable", skipped: true };
+		return {
+			behindCount: 0,
+			missingCommits: [],
+			reason: "Bypassed via environment variable",
+			skipped: true,
+		};
 	}
 
 	if (isForceOrDeletePush()) {
-		return { behindCount: 0, missingCommits: [], reason: "Bypassed due to force/delete push flag", skipped: true };
+		return {
+			behindCount: 0,
+			missingCommits: [],
+			reason: "Bypassed due to force/delete push flag",
+			skipped: true,
+		};
 	}
 
 	const branch = getCurrentBranch(cwd);
@@ -51,7 +60,12 @@ export function checkRemoteSync({
 		const upstream = getUpstreamInfo(branch, cwd);
 
 		if (!upstream) {
-			return { behindCount: 0, missingCommits: [], reason: "No remote upstream found", skipped: true };
+			return {
+				behindCount: 0,
+				missingCommits: [],
+				reason: "No remote upstream found",
+				skipped: true,
+			};
 		}
 
 		const { remote, remoteBranch, upstreamRef } = upstream;
@@ -96,7 +110,7 @@ export function checkRemoteSync({
 				cwd,
 				encoding: "utf-8",
 				stdio: ["pipe", "pipe", "ignore"],
-			}
+			},
 		).trim();
 
 		const behindCount = parseInt(countOutput, 10) || 0;
@@ -109,7 +123,7 @@ export function checkRemoteSync({
 					cwd,
 					encoding: "utf-8",
 					stdio: ["pipe", "pipe", "ignore"],
-				}
+				},
 			).trim();
 
 			const missingCommits = missingOutput ? missingOutput.split("\n") : [];
@@ -165,7 +179,7 @@ export function getUpstreamInfo(branch, cwd = process.cwd()) {
 				cwd,
 				encoding: "utf-8",
 				stdio: ["pipe", "pipe", "ignore"],
-			}
+			},
 		).trim();
 
 		if (upstream) {
@@ -235,7 +249,7 @@ export function isForceOrDeletePush() {
 					const bypassFlags = ["-f", "--force", "--force-with-lease", "--delete", "-d"];
 
 					return cmdline.some((arg) =>
-						bypassFlags.some((flag) => arg === flag || arg.startsWith(`${flag}=`))
+						bypassFlags.some((flag) => arg === flag || arg.startsWith(`${flag}=`)),
 					);
 				}
 
@@ -304,7 +318,9 @@ export function main() {
 			console.error(`   • ${commit}`);
 		}
 
-		console.error("\n⚡ Fail-fast guard: Aborted push before running expensive tests, typechecking, or linting.");
+		console.error(
+			"\n⚡ Fail-fast guard: Aborted push before running expensive tests, typechecking, or linting.",
+		);
 		console.error("👉 Please pull or rebase the remote changes first:");
 		console.error("   git pull --rebase\n");
 
@@ -314,9 +330,9 @@ export function main() {
 
 // Execute when invoked directly
 const isDirectCall =
-	process.argv[1] &&
-	(process.argv[1] === fileURLToPath(import.meta.url) ||
-		process.argv[1].endsWith("/check-remote-sync.mjs"));
+	process.argv[1]
+	&& (process.argv[1] === fileURLToPath(import.meta.url)
+		|| process.argv[1].endsWith("/check-remote-sync.mjs"));
 
 if (isDirectCall) {
 	main();

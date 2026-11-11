@@ -242,16 +242,11 @@ export default tseslint.config(
 	},
 
 	//
-	// --- BUILD, UTILITY & SHARED SCRIPTS ---
+	// --- BUILD & UTILITY SCRIPTS ---
 	//
 	{
 		...shared,
-		files: [
-			"scripts/**/*.{js,mjs,cjs,ts}",
-			"functions/**/*.{js,ts}",
-			"shared/**/*.{js,ts}",
-			"*.{js,mjs,cjs,ts}",
-		],
+		files: ["scripts/**/*.{js,mjs,cjs,ts}", "*.{js,mjs,cjs,ts}"],
 		rules: {
 			...shared.rules,
 			"import-x/no-relative-parent-imports": "off",
@@ -272,6 +267,62 @@ export default tseslint.config(
 					],
 				},
 			],
+		},
+	},
+	{
+		files: ["scripts/**/*.test.{js,mjs,cjs,ts}", "src/**/*.test.{ts,tsx}"],
+		rules: {
+			"no-restricted-syntax": [
+				"error",
+				{
+					message:
+						"Use `vi.mocked(fn)` instead of casting mocked functions with `as` before calling `.mock*`.",
+					selector:
+						"CallExpression[callee.property.name=/^(mockImplementation|mockImplementationOnce|mockReturnValue|mockReturnValueOnce|mockResolvedValue|mockResolvedValueOnce|mockRejectedValue|mockRejectedValueOnce)$/] > MemberExpression.callee > TSAsExpression.object",
+				},
+				{
+					message:
+						"Avoid calling console.log/info/debug/trace in test files to prevent noisy parallel runs and RPC teardown issues.",
+					selector:
+						"CallExpression[callee.object.name='console'][callee.property.name=/^(log|info|debug|trace)$/]",
+				},
+			],
+		},
+	},
+
+	//
+	// --- SHARED & EDGE RUNTIME MODULES ---
+	//
+	{
+		...shared,
+		files: ["shared/**/*.{js,ts}", "functions/**/*.{js,ts}"],
+		rules: {
+			...shared.rules,
+			...jsdocRules,
+			"import-x/no-relative-parent-imports": "off",
+			// Plain JS modules require JSDoc `{type}`, `@property`, and `@file` annotations
+			"jsdoc/no-types": "off",
+			"jsdoc/sort-tags": [
+				"warn",
+				{
+					tagSequence: [
+						{ tags: ["file"] },
+						{ tags: ["remarks"] },
+						{ tags: ["typedef", "property", "type"] },
+						{ tags: ["template"] },
+						{ tags: ["param"] },
+						{ tags: ["returns"] },
+						{ tags: ["throws"] },
+						{ tags: ["deprecated"] },
+						{ tags: ["default"] },
+						{ tags: ["see"] },
+						{ tags: ["hook", "component"] },
+						{ tags: ["category"] },
+						{ tags: ["example"] },
+					],
+				},
+			],
+			"repo/no-jsdoc-import-links": "error",
 		},
 	},
 
@@ -328,15 +379,6 @@ export default tseslint.config(
 			"jsdoc/require-description": "off",
 			"jsdoc/require-example": "off",
 			"jsdoc/require-jsdoc": "off",
-			"no-restricted-syntax": [
-				"warn",
-				{
-					message:
-						"Use `vi.mocked(fn)` instead of casting mocked functions with `as` before calling `.mock*`.",
-					selector:
-						"CallExpression[callee.property.name=/^(mockImplementation|mockImplementationOnce|mockReturnValue|mockReturnValueOnce|mockResolvedValue|mockResolvedValueOnce|mockRejectedValue|mockRejectedValueOnce)$/] > MemberExpression.callee > TSAsExpression.object",
-				},
-			],
 			"react-refresh/only-export-components": "off",
 		},
 	},

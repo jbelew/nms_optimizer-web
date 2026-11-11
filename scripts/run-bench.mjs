@@ -16,11 +16,10 @@
  * Assumes `bun run build` has already been executed; tachometer compares the
  * dist/ output against the deployed production URL.
  */
-
 import { spawn } from "node:child_process";
 import { createConnection } from "node:net";
-import { fileURLToPath } from "node:url";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..");
@@ -76,10 +75,14 @@ process.on("SIGTERM", () => shutdown(143));
 
 try {
 	console.log(`▶︎ Starting SSG preview server on ${SERVE_HOST}:${SERVE_PORT}…`);
-	server = spawn("bun", ["run", "preview", "--", "--host", SERVE_HOST, "--port", SERVE_PORT.toString()], {
-		cwd: repoRoot,
-		stdio: ["ignore", "ignore", "inherit"],
-	});
+	server = spawn(
+		"bun",
+		["run", "preview", "--", "--host", SERVE_HOST, "--port", SERVE_PORT.toString()],
+		{
+			cwd: repoRoot,
+			stdio: ["ignore", "ignore", "inherit"],
+		},
+	);
 
 	server.on("exit", (code, signal) => {
 		if (code !== null && code !== 0) {

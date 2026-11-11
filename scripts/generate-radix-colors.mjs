@@ -42,23 +42,53 @@ function optimizeCss(css) {
 	// First, remove P3 @supports blocks
 	let result = css.replace(
 		/@supports \(color: color\(display-p3[^}]+\)\) \{[\s\S]*?\n\}(?=\n|$)/gm,
-		""
+		"",
 	);
 
 	// Remove light mode colors (everything from ':root, .light' to the closing brace)
 	result = result.replace(/:root,\s*\.light,\s*\.light-theme\s*\{[\s\S]*?\n\}(?:\n|$)/m, "");
 
 	// Remove color-scheme: light blocks
-	result = result.replace(/\.radix-themes:where\(\.light, \.light-theme\)[^{]*\{[\s\S]*?\n\}(?:\n|$)/g, "");
+	result = result.replace(
+		/\.radix-themes:where\(\.light, \.light-theme\)[^{]*\{[\s\S]*?\n\}(?:\n|$)/g,
+		"",
+	);
 
 	return result;
 }
 
 const ALL_RADIX_COLORS = [
-	"gray", "gold", "bronze", "brown", "yellow", "amber", "orange", "tomato", 
-	"red", "ruby", "crimson", "pink", "plum", "purple", "violet", "iris", 
-	"indigo", "blue", "cyan", "teal", "jade", "green", "grass", "lime", 
-	"mint", "sky", "mauve", "slate", "sage", "olive", "sand"
+	"gray",
+	"gold",
+	"bronze",
+	"brown",
+	"yellow",
+	"amber",
+	"orange",
+	"tomato",
+	"red",
+	"ruby",
+	"crimson",
+	"pink",
+	"plum",
+	"purple",
+	"violet",
+	"iris",
+	"indigo",
+	"blue",
+	"cyan",
+	"teal",
+	"jade",
+	"green",
+	"grass",
+	"lime",
+	"mint",
+	"sky",
+	"mauve",
+	"slate",
+	"sage",
+	"olive",
+	"sand",
 ];
 
 console.log("Generating optimized Radix UI color files...\n");
@@ -78,16 +108,22 @@ try {
 	// Strip unused accent colors and gray colors from base.css to save space
 	for (const color of ALL_RADIX_COLORS) {
 		if (!colors.includes(color)) {
-			// We always want to preserve the 'gray' accent block because components 
+			// We always want to preserve the 'gray' accent block because components
 			// might use color="gray" which maps to the configured grayColor (e.g. slate)
 			if (color !== "gray") {
 				// Remove [data-accent-color='color'] block
-				const accentRegex = new RegExp(`\\[data-accent-color=['"]${color}['"]\\]\\s*\\{[\\s\\S]*?\\n\\}(?:\\n|$)`, "g");
+				const accentRegex = new RegExp(
+					`\\[data-accent-color=['"]${color}['"]\\]\\s*\\{[\\s\\S]*?\\n\\}(?:\\n|$)`,
+					"g",
+				);
 				optimizedBaseCss = optimizedBaseCss.replace(accentRegex, "");
 			}
-			
+
 			// Remove .radix-themes:where([data-gray-color='color']) block
-			const grayRegex = new RegExp(`\\.radix-themes:where\\(\\[data-gray-color=['"]${color}['"]\\]\\)\\s*\\{[\\s\\S]*?\\n\\}(?:\\n|$)`, "g");
+			const grayRegex = new RegExp(
+				`\\.radix-themes:where\\(\\[data-gray-color=['"]${color}['"]\\]\\)\\s*\\{[\\s\\S]*?\\n\\}(?:\\n|$)`,
+				"g",
+			);
 			optimizedBaseCss = optimizedBaseCss.replace(grayRegex, "");
 		}
 	}
@@ -116,7 +152,7 @@ for (const color of colors) {
 		totalOptimizedSize += optimizedSize;
 
 		console.log(
-			`✓ ${color.padEnd(10)} ${originalSize} → ${optimizedSize} bytes (${savings}% reduction)`
+			`✓ ${color.padEnd(10)} ${originalSize} → ${optimizedSize} bytes (${savings}% reduction)`,
 		);
 	} catch (error) {
 		console.error(`✗ ${color}: ${error.message}`);
@@ -130,9 +166,9 @@ writeFileSync(concatenatedPath, concatenatedContent);
 
 const totalSavings = ((1 - totalOptimizedSize / totalOriginalSize) * 100).toFixed(1);
 console.log(
-	`\n✨ Total: ${totalOriginalSize} → ${totalOptimizedSize} bytes (${totalSavings}% reduction)`
+	`\n✨ Total: ${totalOriginalSize} → ${totalOptimizedSize} bytes (${totalSavings}% reduction)`,
 );
 console.log(`📦 Saved ${totalOriginalSize - totalOptimizedSize} bytes from color CSS`);
 console.log(
-	`\n✓ Generated concatenated file: radix-colors.css (${optimizedColorContents.length} colors)\n`
+	`\n✓ Generated concatenated file: radix-colors.css (${optimizedColorContents.length} colors)\n`,
 );

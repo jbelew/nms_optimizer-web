@@ -4,6 +4,8 @@
 # Per-file-type jobs run only against staged/pushed files matching their glob.
 # A metadata-only commit or push will skip file-scoped jobs automatically.
 
+no_tty: true
+
 pre-commit:
   piped: true
   jobs:
@@ -19,7 +21,7 @@ pre-commit:
           - name: lint-js
             tags: [lint]
             glob: "*.{js,jsx,ts,tsx,cjs,mjs}"
-            exclude: "*.d.ts"
+            exclude: "{*.d.ts,.agents/**}"
             run: bunx oxlint --fix {staged_files} && bunx eslint --cache --cache-location node_modules/.cache/eslint/.eslintcache --fix {staged_files}
             stage_fixed: true
 
@@ -37,7 +39,7 @@ pre-commit:
 
           - name: prettier
             tags: [format]
-            glob: "{src/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},src/**/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},AGENTS.md,GEMINI.md,GLOSSARY.md,README.md,docs/**/*.md,public/assets/**/*.md,public/assets/locales/**/*.json}"
+            glob: "{src/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},src/**/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,json,html},shared/*.{ts,tsx,js,jsx,cjs,mjs,json},shared/**/*.{ts,tsx,js,jsx,cjs,mjs,json},scripts/*.{ts,tsx,js,jsx,cjs,mjs,json},scripts/**/*.{ts,tsx,js,jsx,cjs,mjs,json},functions/*.{ts,tsx,js,jsx,cjs,mjs,json},functions/**/*.{ts,tsx,js,jsx,cjs,mjs,json},AGENTS.md,GEMINI.md,GLOSSARY.md,README.md,docs/**/*.md,public/assets/**/*.md,public/assets/locales/**/*.json}"
             run: bunx prettier --cache --cache-location node_modules/.cache/prettier/.prettier-cache --write {staged_files}
             stage_fixed: true
 
@@ -48,7 +50,7 @@ pre-commit:
         jobs:
           - name: typecheck
             tags: [types]
-            glob: "*.{ts,tsx}"
+            glob: "*.{ts,tsx,js,mjs,cjs}"
             run: bun run typecheck
 
           - name: test
@@ -58,7 +60,7 @@ pre-commit:
 
           - name: test-scripts
             tags: [test]
-            glob: "{scripts/*.{ts,js,mjs,cjs},scripts/**/*.{ts,js,mjs,cjs}}"
+            glob: "{scripts/*.{ts,js,mjs,cjs},scripts/**/*.{ts,js,mjs,cjs},functions/*.{ts,js,mjs,cjs},functions/**/*.{ts,js,mjs,cjs},shared/*.{ts,js,mjs,cjs},shared/**/*.{ts,js,mjs,cjs},public/_*,vite.config.ts,package.json,.size-limit.json,.env*}"
             run: bun test --dots scripts/
 
 pre-push:

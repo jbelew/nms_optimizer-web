@@ -1,8 +1,9 @@
 import fs from "node:fs/promises";
 import path from "path";
+import { fileURLToPath } from "url";
+
 import { chromium } from "playwright";
 import sharp from "sharp";
-import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -75,7 +76,9 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 		console.error(`BROWSER ERROR: ${err.stack || err.message}`);
 	});
 	page.on("requestfailed", (request) => {
-		console.warn(`REQUEST FAILED: ${request.url()} - ${request.failure()?.errorText || "Unknown error"}`);
+		console.warn(
+			`REQUEST FAILED: ${request.url()} - ${request.failure()?.errorText || "Unknown error"}`,
+		);
 	});
 	page.on("request", (request) => {
 		console.log(`REQUEST: ${request.method()} ${request.url()}`);
@@ -118,16 +121,30 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 		console.log(`✅ Build loaded successfully. Found ${moduleCount} modules in the grid.`);
 
 		// Wait for the tech tree to update and fully load for the newly loaded platform
-		await page.locator("text=Loading Tech").waitFor({ state: "detached", timeout: 15000 }).catch(() => {});
+		await page
+			.locator("text=Loading Tech")
+			.waitFor({ state: "detached", timeout: 15000 })
+			.catch(() => {});
 		await page.waitForSelector(".tech-tree-content", { state: "visible", timeout: 15000 });
-		await page.waitForSelector(".tech-tree-content .optimizationButton", { state: "visible", timeout: 15000 });
+		await page.waitForSelector(".tech-tree-content .optimizationButton", {
+			state: "visible",
+			timeout: 15000,
+		});
 
 		// Wait for tech tree avatar images and web fonts to load
-		await page.waitForFunction(() => {
-			const images = Array.from(document.querySelectorAll(".tech-tree-content img"));
+		await page
+			.waitForFunction(
+				() => {
+					const images = Array.from(document.querySelectorAll(".tech-tree-content img"));
 
-			return images.length > 0 && images.every((img) => img.complete && img.naturalHeight !== 0);
-		}, { timeout: 15000 }).catch(() => {});
+					return (
+						images.length > 0
+						&& images.every((img) => img.complete && img.naturalHeight !== 0)
+					);
+				},
+				{ timeout: 15000 },
+			)
+			.catch(() => {});
 		await page.evaluate(() => document.fonts.ready);
 
 		// Dismiss the build loaded toast so it does not obstruct the screenshot
@@ -135,7 +152,10 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 
 		if ((await toastClose.count()) > 0) {
 			await toastClose.first().click();
-			await page.locator(".Toast").waitFor({ state: "detached", timeout: 5000 }).catch(() => {});
+			await page
+				.locator(".Toast")
+				.waitFor({ state: "detached", timeout: 5000 })
+				.catch(() => {});
 		}
 
 		// Inject CSS to hide scrollbars and scrollbar gutter across all screenshots
@@ -161,7 +181,7 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 				"public/assets/img/screenshots/screenshot_desktop.webp",
 			],
 			{ fullPage: true },
-			1280
+			1280,
 		);
 
 		console.log("Taking tablet screenshot ...");
@@ -172,7 +192,7 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 			page,
 			"public/assets/img/screenshots/screenshot_tablet.webp",
 			{ fullPage: false },
-			800
+			800,
 		);
 
 		console.log("Taking mobile screenshot ...");
@@ -183,7 +203,7 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 			page,
 			"public/assets/img/screenshots/screenshot_mobile.webp",
 			{ fullPage: false },
-			375
+			375,
 		);
 	} catch (error) {
 		console.error("Screenshot script failed:", error);

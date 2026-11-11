@@ -20,6 +20,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "bun:test";
+
 import { ROUTED_DIALOG_IDS } from "../shared/page-registry.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -74,8 +75,8 @@ describe("SPA_ROUTES ↔ pages ↔ SSG output consistency", () => {
 		const missing = pages.filter((p) => !hasSsgOutput(p)).filter((p) => !spaRoutes.includes(p));
 		expect(
 			missing,
-			`These pages have no dist/{page}/index.html and would 404 in production. ` +
-				`Add them to SPA_ROUTES in functions/[[path]].js: ${missing.join(", ")}`
+			`These pages have no dist/{page}/index.html and would 404 in production. `
+				+ `Add them to SPA_ROUTES in functions/[[path]].js: ${missing.join(", ")}`,
 		).toEqual([]);
 	});
 
@@ -85,8 +86,8 @@ describe("SPA_ROUTES ↔ pages ↔ SSG output consistency", () => {
 			.filter((r) => !HYBRID_ROUTES.includes(r));
 		expect(
 			shadowed,
-			`These routes are in SPA_ROUTES but ALSO have dist/{route}/index.html. ` +
-				`If they are not Hybrid routes with sub-paths, remove from SPA_ROUTES: ${shadowed.join(", ")}`
+			`These routes are in SPA_ROUTES but ALSO have dist/{route}/index.html. `
+				+ `If they are not Hybrid routes with sub-paths, remove from SPA_ROUTES: ${shadowed.join(", ")}`,
 		).toEqual([]);
 	});
 });

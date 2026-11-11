@@ -32,11 +32,11 @@ GitHub shares one number space across issues and PRs, so a bare `#42` may be eit
 Create a GitHub issue:
 
 - **Specs (`/to-spec`)**: Prefix the issue title with `spec:` (or `spec(<scope>):`) and apply the `spec` label (`gh issue create --title "spec: ..." --label "spec"`).
-- **Tickets (`/to-tickets`)**: Use Conventional Commit prefixes (`feat:`, `fix:`, `refactor:`, etc.) for child ticket titles, link each child as a sub-issue of the parent spec, and ensure the parent spec carries `spec` without `ready-for-agent` (`gh issue edit <parent> --add-label spec --remove-label ready-for-agent`) so only actionable leaf tickets carry `ready-for-agent`.
+- **Tickets (`/to-tickets`)**: Use Conventional Commit prefixes (`feat:`, `fix:`, `refactor:`, etc.) for child ticket titles, link each child as a sub-issue of the parent spec, and ensure the parent spec carries `spec` without `ready-for-agent` (`gh issue edit <parent> --add-label spec --remove-label ready-for-agent`) so only actionable leaf tickets carry `ready-for-agent`. For zero-UI or infrastructure slices (`seo`, `ssg`, `edge`, `ci`), inline concrete contract invariants (headers, tag attributes, status codes, fallback paths) from the parent spec's `Implementation Decisions` into the child body so each ticket stands alone in one context window.
 
 ## When a skill says "fetch the relevant ticket"
 
-Read it as in **Read an issue** above. When `/implement` completes (after commit and `code-review` pass), immediately resolve the ticket as in **Close / resolve a ticket** above—check off `- [ ]` → `- [x]` in the issue body and close the issue with the commit SHA. Do not defer closing until `git push`.
+Read it as in **Read an issue** above. When the ticket body references a parent spec (`## Parent #<id>` or `Part of #<id>`), also fetch that parent issue's matching `Implementation Decisions` and `Out of Scope` sections during `/code-review` (for the **Spec** reviewer) and during `/implement` whenever contract details are summarized rather than inlined. When `/implement` completes (after commit and `code-review` pass), immediately resolve the ticket as in **Close / resolve a ticket** above—check off `- [ ]` → `- [x]` in the issue body and close the issue with the commit SHA. Do not defer closing until `git push`.
 
 ## Wayfinding operations
 

@@ -38,12 +38,21 @@ describe("Remote Synchronization Check (check-remote-sync.mjs)", () => {
 
 		try {
 			execFileSync("git", ["init", "-b", "main"], { cwd: tempDir, stdio: "ignore" });
-			execFileSync("git", ["config", "user.name", "CI Tester"], { cwd: tempDir, stdio: "ignore" });
-			execFileSync("git", ["config", "user.email", "tester@ci.local"], { cwd: tempDir, stdio: "ignore" });
+			execFileSync("git", ["config", "user.name", "CI Tester"], {
+				cwd: tempDir,
+				stdio: "ignore",
+			});
+			execFileSync("git", ["config", "user.email", "tester@ci.local"], {
+				cwd: tempDir,
+				stdio: "ignore",
+			});
 			fs.writeFileSync(path.join(tempDir, "file.txt"), "content");
 			execFileSync("git", ["add", "."], { cwd: tempDir, stdio: "ignore" });
 			execFileSync("git", ["commit", "-m", "Init"], { cwd: tempDir, stdio: "ignore" });
-			execFileSync("git", ["checkout", "--detach", "HEAD"], { cwd: tempDir, stdio: "ignore" });
+			execFileSync("git", ["checkout", "--detach", "HEAD"], {
+				cwd: tempDir,
+				stdio: "ignore",
+			});
 
 			const branch = getCurrentBranch(tempDir);
 			expect(branch).toBeNull();
@@ -57,10 +66,14 @@ describe("Remote Synchronization Check (check-remote-sync.mjs)", () => {
 
 		try {
 			execFileSync("git", ["init", "-b", "main"], { cwd: tempDir, stdio: "ignore" });
-			execFileSync("git", ["remote", "add", "origin", "https://github.com/example/repo.git"], {
-				cwd: tempDir,
-				stdio: "ignore",
-			});
+			execFileSync(
+				"git",
+				["remote", "add", "origin", "https://github.com/example/repo.git"],
+				{
+					cwd: tempDir,
+					stdio: "ignore",
+				},
+			);
 
 			const upstream = getUpstreamInfo("main", tempDir);
 			expect(upstream).toEqual({
@@ -134,13 +147,25 @@ describe("Remote Synchronization Check (check-remote-sync.mjs)", () => {
 			});
 			fs.writeFileSync(path.join(tempDir, "file1.txt"), "first");
 			execFileSync("git", ["add", "."], { cwd: tempDir, stdio: "ignore" });
-			execFileSync("git", ["commit", "-m", "Initial commit"], { cwd: tempDir, stdio: "ignore" });
-			const c1 = execFileSync("git", ["rev-parse", "HEAD"], { cwd: tempDir, encoding: "utf-8" }).trim();
+			execFileSync("git", ["commit", "-m", "Initial commit"], {
+				cwd: tempDir,
+				stdio: "ignore",
+			});
+			const c1 = execFileSync("git", ["rev-parse", "HEAD"], {
+				cwd: tempDir,
+				encoding: "utf-8",
+			}).trim();
 
 			fs.writeFileSync(path.join(tempDir, "file2.txt"), "second");
 			execFileSync("git", ["add", "."], { cwd: tempDir, stdio: "ignore" });
-			execFileSync("git", ["commit", "-m", "Second commit"], { cwd: tempDir, stdio: "ignore" });
-			const c2 = execFileSync("git", ["rev-parse", "HEAD"], { cwd: tempDir, encoding: "utf-8" }).trim();
+			execFileSync("git", ["commit", "-m", "Second commit"], {
+				cwd: tempDir,
+				stdio: "ignore",
+			});
+			const c2 = execFileSync("git", ["rev-parse", "HEAD"], {
+				cwd: tempDir,
+				encoding: "utf-8",
+			}).trim();
 
 			const result = checkRemoteSync({
 				baseRef: c1,

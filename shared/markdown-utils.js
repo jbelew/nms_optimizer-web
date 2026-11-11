@@ -26,6 +26,7 @@ export const MARKDOWN_IFRAME_SANDBOX =
  * or `null` when no shortcode is present.
  *
  * @param {string} text - Raw paragraph text to inspect.
+ *
  * @returns {string | null} Extracted YouTube video ID, or `null` if not matched.
  *
  * @category Utilities
@@ -52,6 +53,7 @@ export function extractYouTubeVideoId(text) {
  *
  * @param {string | undefined} href - Link destination URL to classify.
  * @param {string} [baseOrigin] - Optional runtime origin URL (defaults to `https://nms-optimizer.app`).
+ *
  * @returns {boolean} `true` if the link is internal, `false` if external.
  *
  * @see {@link TARGET_HOST}

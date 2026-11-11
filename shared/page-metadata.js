@@ -69,6 +69,7 @@ export const DEFAULT_OG_IMAGE_PATH = "/assets/img/screenshots/screenshot.webp";
  * @param {number | string} code - The HTTP or application error status code (e.g., 404, 500).
  * @param {string} [message=""] - The localized error message or description.
  * @param {string} [appName="NMS Optimizer"] - The application brand name.
+ *
  * @returns {string} The fully formatted error document title.
  *
  * @category Utilities
@@ -103,6 +104,7 @@ export const formatErrorDocumentTitle = (code, message = "", appName = "NMS Opti
  *
  * @param {string} [rawTitle=""] - The raw translated title or topic string.
  * @param {string} [appName="NMS Optimizer"] - The application brand name to strip.
+ *
  * @returns {string} The naked topic heading.
  *
  * @example
@@ -138,6 +140,7 @@ export const extractContentHeading = (rawTitle = "", appName = "NMS Optimizer") 
  *
  * @param {string} [topic=""] - The topic heading or naked page title.
  * @param {string} [appName="NMS Optimizer"] - The application brand name.
+ *
  * @returns {string} The fully formatted document title.
  *
  * @example
@@ -175,6 +178,7 @@ export const formatDocumentTitle = (topic = "", appName = "NMS Optimizer") => {
  * telemetry `page_view` tracking, and build-time SSG pre-rendering.
  *
  * @param {PageMetadataOptions} options - Configuration options and translation functions.
+ *
  * @returns {PageMetadata} The resolved page metadata record.
  *
  * @see {@link formatErrorDocumentTitle}

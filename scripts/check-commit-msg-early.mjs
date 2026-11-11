@@ -7,7 +7,6 @@
  * the commit message with `commitlint` immediately (<1s) before expensive
  * checks (tests, typecheck, linting) execute.
  */
-
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 

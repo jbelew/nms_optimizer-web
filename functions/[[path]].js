@@ -1,5 +1,6 @@
 /**
  * @file Cloudflare Pages Function for NMS Optimizer.
+ *
  * @remarks
  * Responsibilities:
  *  1. Unwrapping internal `/__md` Zone URL Rewrite prefixes before canonical redirects.
@@ -14,6 +15,8 @@
  * (e.g. `/index.html`, `/es/index.html`), all 42 SSG HTML routes, and `/*.md` from the
  * Function so static CDN traffic and internal `env.ASSETS.fetch()` calls bypass Function invocation.
  */
+
+import { SUPPORTED_LANGUAGES, TARGET_HOST } from "../shared/constants.js";
 
 /**
  * Cloudflare Pages static asset binding interface exposed on `context.env.ASSETS`.
@@ -49,10 +52,8 @@
  * @property {string} type - Lowercase primary media type or `"*"`.
  */
 
-/** Supported ISO 639-1 locale codes served by NMS Optimizer. */
-const SUPPORTED_LANGS = ["en", "es", "fr", "de", "pt", "it"];
 /** Non-default locales that get a path prefix (e.g. `/es/...`). */
-const LOCALE_LANGS = SUPPORTED_LANGS.filter((l) => l !== "en");
+const LOCALE_LANGS = SUPPORTED_LANGUAGES.filter((l) => l !== "en");
 
 /**
  * Client-only Routed Dialogs that have no SSG output and require the PWA shell.
@@ -79,6 +80,7 @@ const SPA_ROUTES = new Set(["performance"]);
  * SPA routes and `404` unknown paths.
  *
  * @param {PagesFunctionContext} context - Cloudflare Pages Function execution context.
+ *
  * @returns {Promise<Response>} Negotiated Markdown, canonical `301` redirect, static HTML/SPA shell, or `404` response.
  *
  * @see {@link ../scripts/cloudflare-function.test.mjs Unit Tests}
@@ -102,8 +104,8 @@ export async function onRequest(context) {
 	let shouldRedirect = false;
 
 	// 1. Canonical Host Redirect (www. -> apex)
-	if (url.hostname === "www.nms-optimizer.app") {
-		url.hostname = "nms-optimizer.app";
+	if (url.hostname === `www.${TARGET_HOST}`) {
+		url.hostname = TARGET_HOST;
 		shouldRedirect = true;
 	}
 
@@ -137,7 +139,7 @@ export async function onRequest(context) {
 
 	if (lng) {
 		const normalizedLng = lng.toLowerCase();
-		const supportedLang = SUPPORTED_LANGS.includes(normalizedLng) ? normalizedLng : "en";
+		const supportedLang = SUPPORTED_LANGUAGES.includes(normalizedLng) ? normalizedLng : "en";
 		url.searchParams.delete("lng");
 		const strippedParts = url.pathname.split("/").filter(Boolean);
 		const withoutLocale =
@@ -214,6 +216,7 @@ function ensureVaryAccept(headers) {
  * @param {AcceptMediaRange[]} ranges - Parsed media ranges.
  * @param {string} targetType - Lowercase primary media type (e.g., `"text"`).
  * @param {string} targetSubtype - Lowercase media subtype (e.g., `"markdown"`).
+ *
  * @returns {number} Resolved quality weight between `0` and `1`.
  */
 function getMediaTypeQuality(ranges, targetType, targetSubtype) {
@@ -262,6 +265,7 @@ function getMediaTypeQuality(ranges, targetType, targetSubtype) {
  * @param {URL} url - Public unwrapped canonical URL.
  * @param {string | null} lang - Non-default locale code prefix, or `null` for English.
  * @param {boolean} isSpaRoute - Whether the unwrapped path targets a client-only Routed Dialog.
+ *
  * @returns {Promise<Response>} Negotiated HTTP response.
  */
 async function handleMarkdownRewrite(context, url, lang, isSpaRoute) {
@@ -314,6 +318,7 @@ async function handleMarkdownRewrite(context, url, lang, isSpaRoute) {
  * Parses an HTTP `Accept` header string into RFC 9110 media ranges with quality weights.
  *
  * @param {string} acceptHeader - Raw `Accept` header value.
+ *
  * @returns {AcceptMediaRange[]} Parsed media ranges.
  */
 function parseAcceptRanges(acceptHeader) {
@@ -377,6 +382,7 @@ function parseAcceptRanges(acceptHeader) {
  * according to RFC 9110 media-range quality weights (`q=`).
  *
  * @param {string} acceptHeader - Raw `Accept` header string.
+ *
  * @returns {boolean} `true` when `q(text/markdown) > 0` and `q(text/markdown) >= max(q(text/html), q(application/xhtml+xml))`.
  */
 function prefersMarkdownAccept(acceptHeader) {
@@ -397,6 +403,7 @@ function prefersMarkdownAccept(acceptHeader) {
  * @param {PagesFunctionContext} context - Cloudflare Pages Function execution context.
  * @param {URL} url - Unwrapped request URL.
  * @param {string | null} lang - Non-default locale code prefix, or `null` for English.
+ *
  * @returns {Promise<Response>} Rewritten `200 OK` HTML SPA fallback response.
  */
 async function serveSpaShell(context, url, lang) {
@@ -447,6 +454,7 @@ async function serveSpaShell(context, url, lang) {
  *
  * @param {string} value - Input header string.
  * @param {string} delimiter - Single-character delimiter (`,` or `;`).
+ *
  * @returns {string[]} Split segments.
  */
 function splitOutsideQuotes(value, delimiter) {
@@ -492,6 +500,7 @@ function splitOutsideQuotes(value, delimiter) {
  * Clones a `Response` while ensuring `Vary: Accept` is present on its headers.
  *
  * @param {Response} response - Source asset response.
+ *
  * @returns {Response} Response carrying `Vary: Accept`.
  */
 function withVaryAccept(response) {

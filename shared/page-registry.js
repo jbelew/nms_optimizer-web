@@ -8,6 +8,8 @@
  * @category Routing
  */
 
+import { SUPPORTED_LANGUAGES } from "./constants.js";
+
 /**
  * Configuration definition for an application page or routed modal dialog.
  *
@@ -181,6 +183,7 @@ export const SSG_DIALOG_IDS = Object.values(PAGE_REGISTRY)
  * Retrieves a page definition by its unique identifier.
  *
  * @param {string} id - The page identifier (e.g., "about", "home").
+ *
  * @returns {PageDefinition | undefined} The matching page definition or undefined if not found.
  *
  * @category Utilities
@@ -200,13 +203,6 @@ export const getPageById = (id) => PAGE_REGISTRY[id];
  */
 
 /**
- * Default supported ISO 639-1 language codes when callers omit an explicit list.
- *
- * @type {string[]}
- */
-const DEFAULT_SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "pt", "it"];
-
-/**
  * Parses and normalizes a pathname, extracting any language prefix and ensuring consistent trailing slashes.
  *
  * @remarks
@@ -214,8 +210,11 @@ const DEFAULT_SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "pt", "it"];
  * and bare route names (e.g. `instructions`).
  *
  * @param {string} [pathname=""] - The raw pathname or route identifier.
- * @param {string[]} [supportedLanguages=DEFAULT_SUPPORTED_LANGUAGES] - Array of supported language codes.
+ * @param {string[]} [supportedLanguages=SUPPORTED_LANGUAGES] - Array of supported language codes.
+ *
  * @returns {ParsedRoutePath} The parsed route path object.
+ *
+ * @see {@link SUPPORTED_LANGUAGES}
  *
  * @category Utilities
  *
@@ -225,7 +224,7 @@ const DEFAULT_SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "pt", "it"];
  * // returns { cleanPath: "/instructions/", lang: "es" }
  * ```
  */
-export const parseRoutePath = (pathname = "", supportedLanguages = DEFAULT_SUPPORTED_LANGUAGES) => {
+export const parseRoutePath = (pathname = "", supportedLanguages = SUPPORTED_LANGUAGES) => {
 	const raw = String(pathname).trim().split("?")[0].split("#")[0];
 	const parts = raw.split("/").filter(Boolean);
 
@@ -253,8 +252,13 @@ export const parseRoutePath = (pathname = "", supportedLanguages = DEFAULT_SUPPO
  * bare route names (e.g., "instructions"), and additional sub-route patterns (e.g., "/performance/inp/").
  *
  * @param {string} [pathname=""] - The raw URL path or route identifier to look up.
- * @param {string[]} [supportedLanguages=["en", "es", "fr", "de", "pt", "it"]] - Supported language codes.
+ * @param {string[]} [supportedLanguages=SUPPORTED_LANGUAGES] - Supported language codes.
+ *
  * @returns {PageDefinition} The resolved page definition, falling back to the "home" page definition.
+ *
+ * @see {@link PAGE_REGISTRY}
+ * @see {@link parseRoutePath}
+ * @see {@link SUPPORTED_LANGUAGES}
  *
  * @category Utilities
  *
@@ -264,10 +268,7 @@ export const parseRoutePath = (pathname = "", supportedLanguages = DEFAULT_SUPPO
  * // returns PageDefinition for "about"
  * ```
  */
-export const getPageByPath = (
-	pathname = "",
-	supportedLanguages = ["en", "es", "fr", "de", "pt", "it"],
-) => {
+export const getPageByPath = (pathname = "", supportedLanguages = SUPPORTED_LANGUAGES) => {
 	const { cleanPath } = parseRoutePath(pathname, supportedLanguages);
 
 	if (cleanPath === "/") {
@@ -323,11 +324,13 @@ export const getAllPages = () => Object.values(PAGE_REGISTRY);
  * `supportedLanguages` with `page.contentLanguages` (falling back to `["en"]`) for partial-translation routes.
  *
  * @param {PageDefinition | undefined} page - Page definition from {@link PAGE_REGISTRY}.
- * @param {string[]} [supportedLanguages=DEFAULT_SUPPORTED_LANGUAGES] - Supported ISO language codes.
+ * @param {string[]} [supportedLanguages=SUPPORTED_LANGUAGES] - Supported ISO language codes.
+ *
  * @returns {string[]} Ordered list of language codes with dedicated localized content.
  *
  * @see {@link PAGE_REGISTRY}
  * @see {@link PageDefinition}
+ * @see {@link SUPPORTED_LANGUAGES}
  *
  * @category Utilities
  *
@@ -337,7 +340,7 @@ export const getAllPages = () => Object.values(PAGE_REGISTRY);
  * // returns ["en"]
  * ```
  */
-export const getPageContentLanguages = (page, supportedLanguages = DEFAULT_SUPPORTED_LANGUAGES) => {
+export const getPageContentLanguages = (page, supportedLanguages = SUPPORTED_LANGUAGES) => {
 	if (!page?.contentLanguages?.length) {
 		return supportedLanguages;
 	}
