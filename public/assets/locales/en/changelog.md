@@ -2,6 +2,22 @@
 
 The full commit history for this project is available on [GitHub](https://github.com/jbelew/nms_optimizer-web/blob/main/CHANGELOG.md). A special thanks to [mateo-leal](https://github.com/mateo-leal) for the Spanish translation updates.
 
+## Version 8.9 – Translation Overhaul & Dialog Links (2026-11-11)
+
+This update aligns translations and module names across all six supported languages with official in-game terminology, turns dialog buttons into standard links for multi-tab navigation, and refines header typography.
+
+- **In-Game Terminology & Multi-Language Audit:** Audited and updated interface text, guides, technology names, and over 100 upgrade module labels across English, Spanish, French, German, Italian, and Portuguese to match official *No Man's Sky* in-game names. Corrected Freighter Fleet Trade upgrade labels, standardized Multi-Tool **Mining Beam** and Starship **Infra-Knife Accelerator** naming, and fixed **Minotaur** modules incorrectly displaying a **Tau** rank badge on the grid.
+- **Direct Links for Info Dialogs:** Navigation buttons for **Instructions**, **About**, **Changelog**, **User Statistics**, **Performance Metrics**, **Help Translate**, and **Privacy Policy** across the header, mobile toolbar, grid controls, and footer now work as standard links. Clicking still opens each dialog immediately without leaving your layout, while middle-clicking, Ctrl/⌘-clicking, or right-clicking lets you open or copy direct page links in a new tab.
+- **Header & Guide Refinements:** Softened the main header title weight for cleaner visual balance and fixed a wording typo in the **About** guide.
+
+## Version 8.8 – Faster Loading, Focus Mode & Metrics (2026-11-03)
+
+This update speeds up icon and stylesheet loading, refines Focus Mode typography and localized guides across all six languages, and improves Performance Metrics accuracy.
+
+- **Faster Icon & Stylesheet Loading:** Prevented duplicate standard and high-resolution icon downloads in the technology list, compressed high-resolution module artwork, trimmed unused styles, and deferred dialog scroll checks so the app loads faster and opens dialogs more smoothly.
+- **Focus Mode & Localized Guide Updates:** Refined **Focus Mode** font weights for clearer reading and updated the **Welcome** dialog and **Instructions** guide across all six supported languages with guidance on **Focus Mode** and placement window dimensions.
+- **Accurate Performance Metrics Charts:** Corrected hourly session aggregation, overall score curves, version averages, and chart tooltips in the **Performance Metrics** dialog so real-user performance trends reflect accurate session readings.
+
 ## Version 8.7 – Critical Supercharged Window Fix & Space Warnings (2026-10-25)
 
 This update resolves a critical backend window scoring bug that could skip available supercharged slots, adds warnings when supercharged slots lack surrounding space, and improves Force Optimize results.
@@ -9,6 +25,7 @@ This update resolves a critical backend window scoring bug that could skip avail
 - **Critical Supercharged Window Calculation Fix:** Fixed a major solver bug where window score calculations used different numeric scales for supercharged and non-supercharged regions, which could cause the optimizer to select a standard pattern window over a window containing an open supercharged slot and skip supercharged refinement entirely.
 - **Supercharged Slot Space Warnings:** The optimizer now detects when unoccupied active supercharged slots do not have enough surrounding space for a technology's required placement window (`W×H`), displaying a tailored warning with guidance to optimize supercharged technologies first or run **Force Optimize**.
 - **Smarter "Force Optimize" Solves:** Updated **Force Optimize** to compare full-grid simulated annealing against windowed placements around supercharged slots and keep whichever layout achieves the higher bonus score.
+- **Snappier Module Selection & Browser Translation Stability:** Clicking **Optimize** in the Module Selection dialog now closes the dialog immediately instead of waiting for the solve to finish, module checkboxes respond faster, and browser page-translation extensions no longer trigger crashes during startup or when hovering chart tooltips.
 
 ## Version 8.6 – Exosuit Artwork, Module Colors & Header Alignment (2026-10-24)
 
