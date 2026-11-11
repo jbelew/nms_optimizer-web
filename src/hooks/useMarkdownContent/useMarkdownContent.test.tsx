@@ -1,13 +1,22 @@
-import type { Mock } from "vitest";
+import type { MockedFunction } from "vitest";
 import { renderHook, waitFor } from "@testing-library/react";
-import { useTranslation } from "react-i18next";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useMarkdownContent } from "./useMarkdownContent";
 
+const mockUseTranslation = vi.fn<
+	() => {
+		i18n: {
+			language: string;
+			options: { fallbackLng: string[] };
+		};
+		t: (key: string) => string;
+	}
+>();
+
 // Mock react-i18next's useTranslation
 vi.mock("react-i18next", () => ({
-	useTranslation: vi.fn(),
+	useTranslation: () => mockUseTranslation(),
 }));
 
 // Mock the virtual markdown bundle
@@ -16,15 +25,14 @@ vi.mock("virtual:markdown-bundle", () => ({
 }));
 
 describe("useMarkdownContent", () => {
-	const mockUseTranslation = useTranslation as Mock;
-	let mockGetMarkdown: Mock;
+	let mockGetMarkdown: MockedFunction<(lang: string, fileName: string) => string>;
 
 	beforeEach(async () => {
 		vi.clearAllMocks();
 
 		// Get the mocked getMarkdown function
 		const markdownModule = await import("virtual:markdown-bundle");
-		mockGetMarkdown = markdownModule.getMarkdown as Mock;
+		mockGetMarkdown = vi.mocked(markdownModule.getMarkdown);
 
 		// Default mock for useTranslation
 		mockUseTranslation.mockReturnValue({

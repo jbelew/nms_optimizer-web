@@ -1,4 +1,5 @@
 import "@testing-library/jest-dom";
+
 import { vi } from "vitest";
 
 // Suppress known console warnings from Radix UI accessibility checks during tests
@@ -8,10 +9,10 @@ console.warn = (...args: unknown[]) => {
 	const message = String(args[0]);
 
 	if (
-		message.includes("DialogContent") ||
-		message.includes("VisuallyHidden") ||
-		message.includes("Description") ||
-		message.includes("aria-describedby")
+		message.includes("DialogContent")
+		|| message.includes("VisuallyHidden")
+		|| message.includes("Description")
+		|| message.includes("aria-describedby")
 	) {
 		return;
 	}
@@ -19,7 +20,7 @@ console.warn = (...args: unknown[]) => {
 	originalWarn(...args);
 };
 
-// Mock virtual modules
+// Mock virtual modules and HTTP-backed production i18n bootstrap in unit tests
 vi.mock("virtual:pwa-register", () => ({
 	registerSW: vi.fn((_options: unknown) => vi.fn()),
 }));
@@ -27,6 +28,24 @@ vi.mock("virtual:pwa-register", () => ({
 vi.mock("virtual:markdown-bundle", () => ({
 	getMarkdown: vi.fn(() => Promise.resolve("")),
 }));
+
+vi.mock("@/i18n/i18n", async () => {
+	const { default: testI18n } = await import("@/test/i18n");
+
+	return {
+		default: testI18n,
+		i18nReady: Promise.resolve(testI18n),
+		languages: ["en", "es", "fr", "de", "pt", "it"],
+		nativeLanguageNames: {
+			de: "Deutsch",
+			en: "English",
+			es: "Español",
+			fr: "Français",
+			it: "Italiano",
+			pt: "Português",
+		},
+	};
+});
 
 // Define global variables
 declare global {

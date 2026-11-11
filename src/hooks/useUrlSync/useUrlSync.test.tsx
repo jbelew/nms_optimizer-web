@@ -15,11 +15,11 @@ import { useUrlSync } from "./useUrlSync";
 
 vi.mock("@/store/grid/gridStore", () => ({
 	createGrid: vi.fn(),
-	useGridStore: vi.fn() as unknown as Mock,
+	useGridStore: vi.fn(),
 }));
 vi.mock("@/store/app/platformStore", () => ({
-	usePlatformsSuspense: vi.fn() as unknown as Mock,
-	usePlatformStore: vi.fn() as unknown as Mock,
+	usePlatformsSuspense: vi.fn(),
+	usePlatformStore: vi.fn(),
 }));
 const mockNavigate = vi.fn();
 vi.mock("react-router-dom", () => ({

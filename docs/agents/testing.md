@@ -9,7 +9,7 @@ Best practices for unit, component, and integration tests in the NMS Optimizer W
 
 ## Testing Conventions
 
-- **Mocking**: Mock external dependencies (such as `i18next` and API calls). Use `vi.mock()` for module-level mocks and `vi.mocked(fn)` for typed mock access (never cast mocked functions with `as Mock` or `as unknown as ...`). For partial test fixtures, read [`.agents/skills/migrate-to-shoehorn/SKILL.md`](../../.agents/skills/migrate-to-shoehorn/SKILL.md).
+- **Mocking**: Mock external dependencies (`@/i18n/i18n`, `virtual:markdown-bundle`, and `virtual:pwa-register` are already stubbed globally for unit tests in [`vitest.setup.ts`](file:///home/jbelew/projects/nms_optimizer-web/vitest.setup.ts)). Use `vi.mock()` for module-level mocks and `vi.mocked(fn)` or typed `vi.fn<...>()` for mock access (casting with `as Mock` is disallowed by ESLint). For partial `vi.mock` overrides, declare a top-level `import type * as Mod from "..."` and type `importOriginal<typeof Mod>()` to satisfy `@typescript-eslint/consistent-type-imports`. For partial test fixtures, narrow parameter types with `Pick<T, ...>` or typed factory helpers (or install `@total-typescript/shoehorn` per [`.agents/skills/migrate-to-shoehorn/SKILL.md`](../../.agents/skills/migrate-to-shoehorn/SKILL.md) when migrating suites).
 - **Console Logs**: Avoid using console logs in test files to prevent RPC teardown errors during parallel runs.
 
 ## Storybook Testing & Builds

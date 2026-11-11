@@ -4,7 +4,7 @@ NMS Optimizer Web is a React-based frontend application for optimizing technolog
 
 ## Core Directives
 
-- **Package Manager**: Exclusively use **Bun** (version 1.2.0+). Always invoke scripts with `bun`.
+- **Package Manager**: Exclusively use **Bun** (version 1.2.0+). Always invoke scripts with `bun` (never `npx`; refresh Browserslist data with `bun update caniuse-lite`, and if `Browserslist` still warns despite a current `bun.lock`, prune orphaned nested copies via `rm -rf node_modules && bun install --frozen-lockfile`).
 - **Strict TypeScript**: Write explicit types, interfaces, and discriminated unions. The `any` type is strictly prohibited.
 - **Zero Linter Suppressions**: Resolve underlying type or logic issues; inline `eslint-disable` comments are disallowed.
 - **Documentation**: Document all exported and top-level declarations, public APIs, functions, hooks, stores, and React components with JSDoc; read [`.agents/skills/agentic-jsdoc/SKILL.md`](.agents/skills/agentic-jsdoc/SKILL.md) when writing or updating JSDoc, and [`.agents/skills/agentic-jsdoc/reference/react.md`](.agents/skills/agentic-jsdoc/reference/react.md) only when documenting `.tsx` React components or custom hooks.
@@ -20,7 +20,7 @@ Before marking any code task complete, execute this sequence (also enforced auto
 1. `bun run typecheck` — Must report 0 TypeScript diagnostics (`tsgo`).
 2. Targeted tests — Run `bun run test -- <path>` / `bun run test:related` for `src/` or `shared/` changes, `bun test --dots scripts/` for `scripts/` or `functions/` changes, and `bun run lint:md` for Markdown/Mermaid changes.
 3. `bun run lint` — Must report 0 oxlint/ESLint errors and 0 warnings (use `bunx eslint --fix <touched-files>` to auto-fix `perfectionist` sorting).
-4. **Code Review (when running `/implement`)**: After committing, run [`.agents/skills/code-review/SKILL.md`](.agents/skills/code-review/SKILL.md) against `HEAD~1`—exclude generated outputs from the diff command (e.g., `-- . ':!public/sitemap.xml'`), include parent `#<spec>` context per [`docs/agents/issue-tracker.md`](docs/agents/issue-tracker.md), and scope reviewer subagents to touched files and direct collaborators—then amend any fixes (`git commit --amend --no-edit`) before running `perf:compare` or closing the ticket.
+4. **Code Review (when running `/implement`)**: After committing, run [`.agents/skills/code-review/SKILL.md`](.agents/skills/code-review/SKILL.md) against `HEAD~1`—exclude generated outputs (`-- . ':!public/sitemap.xml'`), write the diff and fetched `#<ticket>` / parent `#<spec>` bodies ([`docs/agents/issue-tracker.md`](docs/agents/issue-tracker.md)) to scratch files when reviewer subagents run in read-only sandboxes without shell access, and scope reviewers to touched files and direct collaborators—then stage explicit touched paths (`git add <files> && git commit --amend --no-edit`) before running `perf:compare` or closing the ticket.
 5. **Post-Refactor Validation**: When the commit touches bundle, CSS, or SSG build inputs (checkable automatically via `bun run perf:compare:if-needed`), run `bun run perf:compare` (or `bun run perf:compare <base-git-ref>`) on the final commit and **include the generated Before vs. After Bundle Size and Desktop/Mobile Lighthouse Markdown tables in your response to the user**.
 
 ## Key Gotchas

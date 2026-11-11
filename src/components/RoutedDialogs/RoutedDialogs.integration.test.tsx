@@ -47,10 +47,6 @@ vi.mock("@/hooks/useBreakpoint/useBreakpoint", () => ({
 	useBreakpoint: vi.fn(() => true),
 }));
 
-vi.mock("@/components/LanguageSelector/LanguageSelector", () => ({
-	LanguageSelector: () => <div data-testid="language-selector">LanguageSelector</div>,
-}));
-
 vi.mock("@/utils/api/network", () => ({
 	apiCall: vi.fn().mockResolvedValue([]),
 }));

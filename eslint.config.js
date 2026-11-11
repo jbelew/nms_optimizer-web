@@ -346,6 +346,12 @@ export default tseslint.config(
 					selector:
 						"CallExpression[callee.name='lazy'], CallExpression[callee.object.name='React'][callee.property.name='lazy']",
 				},
+				{
+					message:
+						'Pair `sr-only` with `whitespace-pre` (`className="sr-only whitespace-pre"`) when text starts or ends with a space so browser `innerText` does not collapse boundary whitespace under `position: absolute`.',
+					selector:
+						"JSXElement:has(.openingElement > JSXAttribute[name.name='className'][value.value=/\\bsr-only\\b/]:not([value.value=/\\bwhitespace-pre\\b/])):not(:has(.children JSXOpeningElement > JSXAttribute[name.name='className'][value.value=/\\bsr-only\\b/])) > JSXText[value=/^(?: [^\\r\\n]*|[^\\r\\n]* )$/], JSXElement:has(.openingElement > JSXAttribute[name.name='className'][value.value=/\\bsr-only\\b/]:not([value.value=/\\bwhitespace-pre\\b/])):not(:has(.children JSXOpeningElement > JSXAttribute[name.name='className'][value.value=/\\bsr-only\\b/])) > JSXExpressionContainer > Literal[value=/^ | $/]",
+				},
 			],
 			"repo/no-jsdoc-import-links": "warn",
 		},
@@ -379,6 +385,14 @@ export default tseslint.config(
 			"jsdoc/require-description": "off",
 			"jsdoc/require-example": "off",
 			"jsdoc/require-jsdoc": "off",
+			"no-restricted-syntax": [
+				"error",
+				{
+					message:
+						"Use `vi.mocked(fn)` or a typed `vi.fn<...>()` instead of casting with `as Mock` or `as unknown as Mock`.",
+					selector: "TSAsExpression[typeAnnotation.typeName.name='Mock']",
+				},
+			],
 			"react-refresh/only-export-components": "off",
 		},
 	},
