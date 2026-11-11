@@ -61,13 +61,15 @@ vi.mock("@/utils/analytics/tracking", () => ({
 }));
 
 const supportedLanguages = ["en", "es", "fr", "de", "it", "pt"];
-const ENRICHED_SUBPAGE_IDS = [
-	"instructions",
-	"about",
-	"changelog",
-	"userstats",
-	"privacy",
-] as const;
+const SUBPAGE_IDS = ["instructions", "about", "changelog", "userstats", "privacy"] as const;
+
+const EXPECTED_EN_PAGE_HEADINGS: Record<(typeof SUBPAGE_IDS)[number], string> = {
+	about: "About the Optimization Algorithms",
+	changelog: "Latest Features and Updates",
+	instructions: "How to Optimize Your Tech Layout",
+	privacy: "Privacy Policy",
+	userstats: "Community Meta & Tech Stats",
+};
 
 const EXPECTED_DIALOG_TITLES_BY_LOCALE: Record<string, Record<string, string>> = {
 	de: {
@@ -187,8 +189,8 @@ describe("Routed Dialogs & Page Registry Integration", () => {
 					},
 				);
 
-				it.each(ENRICHED_SUBPAGE_IDS)(
-					"enriches %s document title with No Man's Sky while preserving unchanged modal header title",
+				it.each(SUBPAGE_IDS)(
+					"synchronizes %s document title and preserves unchanged modal header title",
 					async (subpageId) => {
 						const dialog = PAGE_REGISTRY[subpageId];
 						const langT = realI18n.getFixedT(lang, "translation");
@@ -202,15 +204,18 @@ describe("Routed Dialogs & Page Registry Integration", () => {
 							t: langT,
 						});
 
-						expect(meta.heading).toContain("No Man's Sky");
-						expect(meta.title).toContain("No Man's Sky");
 						expect(meta.title).toContain("NMS Optimizer");
+
+						if (lang === "en") {
+							const expectedHeading = EXPECTED_EN_PAGE_HEADINGS[subpageId];
+							expect(meta.heading).toBe(expectedHeading);
+							expect(meta.title).toBe(`${expectedHeading} | NMS Optimizer`);
+						}
 
 						const dialogHeaderTitle = langT(dialog.dialogTitleKey!);
 						expect(dialogHeaderTitle).toBe(
 							EXPECTED_DIALOG_TITLES_BY_LOCALE[lang][subpageId],
 						);
-						expect(dialogHeaderTitle).not.toContain("No Man's Sky");
 						expect(dialogHeaderTitle).not.toContain(" | ");
 
 						await realI18n.changeLanguage(lang);
@@ -223,7 +228,6 @@ describe("Routed Dialogs & Page Registry Integration", () => {
 						);
 
 						expect(document.title).toBe(meta.title);
-						expect(document.title).toContain("No Man's Sky");
 						unmount();
 					},
 				);

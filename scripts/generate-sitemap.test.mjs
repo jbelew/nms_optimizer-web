@@ -109,13 +109,13 @@ describe("generate-sitemap.mjs", () => {
 				"<image:title>No Man&apos;s Sky Tech Layout &amp; Adjacency Bonus Calculator | NMS Optimizer</image:title>",
 			);
 			expect(xml).toContain(
-				"<image:title>About No Man&apos;s Sky Adjacency Bonus &amp; Solver Algorithms | NMS Optimizer</image:title>",
+				"<image:title>About the Optimization Algorithms | NMS Optimizer</image:title>",
 			);
 			expect(xml).toContain(
-				"<image:title>No Man&apos;s Sky Tech Layout &amp; Supercharged Slot Guide | NMS Optimizer</image:title>",
+				"<image:title>How to Optimize Your Tech Layout | NMS Optimizer</image:title>",
 			);
 			expect(xml).toContain(
-				"<image:title>No Man&apos;s Sky Community Layout Stats &amp; Supercharged Meta | NMS Optimizer</image:title>",
+				"<image:title>Community Meta &amp; Tech Stats | NMS Optimizer</image:title>",
 			);
 		});
 

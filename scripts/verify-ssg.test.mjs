@@ -294,7 +294,18 @@ describe("verify-ssg.mjs", () => {
 			pt: { cosmetic: /cosmétic/i, platform: /corvetas/i, reactor: /reator/i },
 		};
 
-		const enrichedSubpages = ["about", "instructions", "changelog", "userstats", "privacy"];
+		const expectedEnSubpageTitles = {
+			about: "About the Optimization Algorithms | NMS Optimizer",
+			changelog: "Latest Features and Updates | NMS Optimizer",
+			instructions: "How to Optimize Your Tech Layout | NMS Optimizer",
+			privacy: "Privacy Policy | NMS Optimizer",
+			userstats: "Community Meta &amp; Tech Stats | NMS Optimizer",
+		};
+
+		for (const [slug, expectedTitle] of Object.entries(expectedEnSubpageTitles)) {
+			const enSubpageHtml = fs.readFileSync(path.join(distDir, slug, "index.html"), "utf-8");
+			expect(enSubpageHtml.match(/<title>([^<]+)<\/title>/)?.[1]).toBe(expectedTitle);
+		}
 
 		for (const lang of SUPPORTED_LANGUAGES) {
 			const langPrefix = lang === "en" ? "" : lang;
@@ -325,14 +336,12 @@ describe("verify-ssg.mjs", () => {
 			expect(homeMd).toMatch(rules.reactor);
 			expect(homeMd).toMatch(rules.cosmetic);
 
-			// 4. Subpage <title> across all 6 locales includes "No Man's Sky"
-			for (const slug of enrichedSubpages) {
+			// 4. Subpage HTML across all 6 locales omits FAQPage schema
+			for (const slug of Object.keys(expectedEnSubpageTitles)) {
 				const subpageHtml = fs.readFileSync(
 					path.join(distDir, langPrefix, slug, "index.html"),
 					"utf-8",
 				);
-				const titleMatch = subpageHtml.match(/<title>([^<]+)<\/title>/);
-				expect(titleMatch?.[1]).toMatch(/No Man(?:'|&#39;|&apos;)s Sky/);
 				expect(subpageHtml).not.toContain('"FAQPage"');
 			}
 		}
