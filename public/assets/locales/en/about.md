@@ -43,7 +43,7 @@ Yes. It is 100% free, ad-free, and open-source (GPL-3.0). You do not need to cre
 **Can I save and share my layouts?**
 Yes! You can save your favorite builds locally as `.nms` files, generate shareable links to send to friends, or share high-quality layout screenshots directly to social media. Builds are validated for integrity before sharing.
 
-**Why doesn't the tool not show in-game stats?**
+**Why doesn't the tool show in-game stats?**
 The tool intentionally avoids calculating standard in-game metrics like DPS or Light Year range. Because exact numbers require hidden ship seeds inaccessible without a save editor, the optimizer relies on a "percentage of maximum" score instead.
 
 **Why doesn't the optimized layout include my specific Expedition module?**

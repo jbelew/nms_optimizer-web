@@ -6,11 +6,11 @@ Bienvenido al **NMS Optimizer**, una herramienta 100% gratuita, sin anuncios y d
 
 Un diseño optimizado normalmente obtiene una puntuación **15-20% mayor** que lo que la mayoría de los jugadores pueden organizar a mano.
 
-## Maximiza las Bonificaciones de Adyacencia (Adjacency Bonuses) y las Ranuras Potenciadas
+## Maximiza las Bonificaciones de Adyacencia (Líneas Ley) y las Ranuras Potenciadas
 
 Encontrar el diseño de tecnología perfecto en NMS significa equilibrar dos complejas mecánicas de juego a lo largo de millones de permutaciones posibles (¡hasta ~8.32 × 10⁸¹ para una cuadrícula completa!):
 
-- **Bonificaciones de Adyacencia:** Cuando módulos de tecnología compatibles (como tu Motor de Pulso (Pulse Engine) y sus actualizaciones de Clase S/Clase X) comparten un borde en tu cuadrícula de inventario, reciben un aumento porcentual en sus estadísticas. Cuantos más bordes compartidos crees, mayor será la bonificación.
+- **Bonificaciones de Adyacencia (Líneas Ley):** Cuando módulos de tecnología compatibles (como tu Motor de Pulso (Pulse Engine) y sus actualizaciones de Clase S/Clase X) comparten un borde en tu cuadrícula de inventario, crean líneas ley que otorgan un aumento porcentual en sus estadísticas. Cuantos más bordes compartidos crees, mayor será la bonificación.
 - **Ranuras Potenciadas:** Estas raras ranuras de inventario (hasta 4 por cuadrícula) proporcionan un multiplicador masivo de ~25-30% a cualquier módulo que se coloque dentro de ellas. Debido a que estas ranuras se generan al azar en casi todas las piezas de equipo, el "diseño perfecto" cambia para cada nave o herramienta individual que encuentres.
 
 Nuestro creador de diseños prueba miles de configuraciones en milisegundos para encontrar el equilibrio perfecto entre tus tecnologías principales, tus actualizaciones de Clase X con las mejores estadísticas y tus ranuras potenciadas únicas.
@@ -23,6 +23,7 @@ El NMS Optimizer proporciona resolución dinámica y construcciones recomendadas
 - **Multiherramientas (Multi-Tools):** Maximiza tu rendimiento del Rayo Minero (Mining Beam) o daño de armas en todas las variantes, incluyendo estándar, Centinela (Sentinel), Atlantid y Báculos (Staves).
 - **Exotrajes (Exosuits) y Exovehículos (Exocraft):** Accede a construcciones óptimas y probadas por la comunidad para la protección contra peligros de tu Exotraje y todos los vehículos (Minotauro, Roamer, Nómada, Coloso, Peregrino y Nautilon).
 - **Cargueros (Freighters):** Optimiza el rango del Hiperturbo de tu nave capital y la tecnología de coordinación de la flota.
+- **Corbetas (Corvettes):** Equilibra mejoras procedimentales junto con módulos de reactor y módulos cosméticos únicos en cuadrículas complejas de Corbeta.
 
 ## Impulsado por IA y Algoritmos Avanzados
 

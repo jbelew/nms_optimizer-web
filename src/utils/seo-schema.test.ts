@@ -1,6 +1,10 @@
 import type { TFunction } from "i18next";
+import i18next from "i18next";
 import { describe, expect, it, vi } from "vitest";
 
+import { createRealI18nInstance, loadLocaleBundle } from "@/test/i18n";
+
+import { SUPPORTED_LANGUAGES } from "../../shared/config.js";
 import { getLocalizedSchema } from "../../shared/seo-schema.js";
 
 describe("seo-schema.js", () => {
@@ -153,6 +157,94 @@ describe("seo-schema.js", () => {
 				`https://nms-optimizer.app/${lang}/userstats/`,
 				`https://nms-optimizer.app/${lang}/privacy/`,
 			]);
+		}
+	});
+
+	it("emits localized SoftwareApplication featureList and keywords across all 6 locales and never emits FAQPage", async () => {
+		const instance = await createRealI18nInstance("en");
+
+		const enT = instance.getFixedT("en", "translation");
+		const enSchemas = getLocalizedSchema(enT, "en", "https://nms-optimizer.app/");
+		const enSoftwareApp = enSchemas.find((s) => s["@type"] === "SoftwareApplication");
+
+		expect(enSoftwareApp).toBeDefined();
+		const enFeatures = enSoftwareApp?.featureList;
+		const enKeywords = enSoftwareApp?.keywords;
+
+		expect(Array.isArray(enFeatures)).toBe(true);
+		expect((enFeatures as string[]).length).toBeGreaterThanOrEqual(5);
+		expect(typeof enKeywords).toBe("string");
+		expect(String(enKeywords)).toContain("No Man's Sky");
+
+		for (const lang of SUPPORTED_LANGUAGES) {
+			const langT = instance.getFixedT(lang, "translation");
+			const rootUrl =
+				lang === "en" ? "https://nms-optimizer.app/" : `https://nms-optimizer.app/${lang}/`;
+			const schemas = getLocalizedSchema(langT, lang, rootUrl);
+
+			expect(schemas.some((s) => s["@type"] === "FAQPage")).toBe(false);
+			expect(JSON.stringify(schemas)).not.toContain("FAQPage");
+
+			const softwareApp = schemas.find((s) => s["@type"] === "SoftwareApplication");
+			expect(softwareApp).toBeDefined();
+
+			const featureList = softwareApp?.featureList as string[];
+			const keywords = softwareApp?.keywords as string;
+
+			expect(Array.isArray(featureList)).toBe(true);
+			expect(featureList.length).toBeGreaterThanOrEqual(5);
+			featureList.forEach((item) => {
+				expect(typeof item).toBe("string");
+				expect(item.trim().length).toBeGreaterThan(0);
+			});
+
+			expect(typeof keywords).toBe("string");
+			expect(keywords).toContain("No Man's Sky");
+
+			if (lang !== "en") {
+				expect(featureList).not.toEqual(enFeatures);
+				expect(keywords).not.toBe(enKeywords);
+			}
+
+			const aboutUrl =
+				lang === "en" ?
+					"https://nms-optimizer.app/about/"
+				:	`https://nms-optimizer.app/${lang}/about/`;
+			const subpageSchemas = getLocalizedSchema(langT, lang, aboutUrl);
+			expect(subpageSchemas.some((s) => s["@type"] === "FAQPage")).toBe(false);
+		}
+	});
+
+	it("falls back safely to English featureList and keywords when translation keys are missing", async () => {
+		const emptyInstance = i18next.createInstance();
+		await emptyInstance.init({
+			defaultNS: "translation",
+			lng: "fr",
+			resources: { fr: { translation: {} } },
+		});
+
+		const schemas = getLocalizedSchema(
+			emptyInstance.getFixedT("fr", "translation"),
+			"fr",
+			"https://nms-optimizer.app/fr/",
+		);
+		const softwareApp = schemas.find((s) => s["@type"] === "SoftwareApplication");
+
+		expect(softwareApp).toBeDefined();
+		const featureList = softwareApp?.featureList as string[];
+		const keywords = softwareApp?.keywords as string;
+
+		expect(Array.isArray(featureList)).toBe(true);
+		expect(featureList.length).toBeGreaterThanOrEqual(5);
+		expect(featureList[0]).toContain("Simulated annealing");
+		expect(keywords).toContain("No Man's Sky");
+		expect(keywords).not.toBe("seo.keywords");
+	});
+
+	it("removes orphaned faq translation objects from all 6 locale bundles", () => {
+		for (const lang of SUPPORTED_LANGUAGES) {
+			const bundle = loadLocaleBundle(lang);
+			expect(bundle).not.toHaveProperty("faq");
 		}
 	});
 });

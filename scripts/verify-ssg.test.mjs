@@ -5,7 +5,12 @@ import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, spyOn } from "bun:test";
 
 import { KNOWN_DIALOGS, SUPPORTED_LANGUAGES } from "../shared/config.js";
-import { generateAgentMarkdown, generatePage } from "./generate-ssg.mjs";
+import {
+	extractSsgTemplate,
+	generateAgentMarkdown,
+	generatePage,
+	initI18n,
+} from "./generate-ssg.mjs";
 import { createMarkdownProcessor } from "./markdown-processor.mjs";
 import { checkFile, verifySsg } from "./verify-ssg.mjs";
 
@@ -211,5 +216,141 @@ describe("verify-ssg.mjs", () => {
 			"utf-8",
 		);
 		expect(checkFile(htmlPath, "changelog", "es", true, silentLogger)).toBe(false);
+	});
+
+	it("renders enriched localized subpage titles, localized SoftwareApplication schema, Corvette homepage copy, Spanish líneas ley, and fixed About FAQ copy across real locale bundles", async () => {
+		const distDir = fs.mkdtempSync(path.join(os.tmpdir(), "nms-verify-ssg-real-"));
+		tempDirs.push(distDir);
+
+		const sourceIndexHtml = fs.readFileSync(path.resolve(process.cwd(), "index.html"), "utf-8");
+		const { ssgHeader } = await extractSsgTemplate(sourceIndexHtml);
+		const mdProcessor = createMarkdownProcessor();
+		const realI18n = await initI18n();
+
+		for (const lang of SUPPORTED_LANGUAGES) {
+			const t = realI18n.getFixedT(lang, "translation");
+
+			const writeRealRoute = async (slug) => {
+				const relDir =
+					slug === "" ?
+						lang === "en" ?
+							""
+						:	lang
+					: lang === "en" ? slug
+					: `${lang}/${slug}`;
+				const routeDir = path.join(distDir, relDir);
+				fs.mkdirSync(routeDir, { recursive: true });
+
+				const html = await generatePage(
+					sourceIndexHtml,
+					lang,
+					slug,
+					BASE_URL,
+					mdProcessor,
+					t,
+					ssgHeader,
+				);
+				const md = await generateAgentMarkdown(lang, slug, BASE_URL, t);
+				fs.writeFileSync(path.join(routeDir, "index.html"), html, "utf-8");
+
+				if (md) {
+					fs.writeFileSync(path.join(routeDir, "index.md"), md, "utf-8");
+				}
+			};
+
+			await writeRealRoute("");
+
+			for (const dialog of KNOWN_DIALOGS) {
+				await writeRealRoute(dialog);
+			}
+		}
+
+		const silentLogger = { log: () => {} };
+		const summary = verifySsg({ distDir, isDocker: false, logger: silentLogger });
+		expect(summary.totalPages).toBe(42);
+		expect(summary.passedPages).toBe(42);
+		expect(summary.ok).toBe(true);
+
+		// 1. English root <title> and <meta name="description"> remain byte-for-byte unchanged
+		const sourceTitleMatch = sourceIndexHtml.match(/<title>([^<]+)<\/title>/);
+		const sourceDescMatch = sourceIndexHtml.match(
+			/<meta\s+name="description"\s+content="([^"]+)"\s*\/>/,
+		);
+		const enHomeHtml = fs.readFileSync(path.join(distDir, "index.html"), "utf-8");
+		const enHomeTitleMatch = enHomeHtml.match(/<title>([^<]+)<\/title>/);
+		const enHomeDescMatch = enHomeHtml.match(
+			/<meta\s+name="description"\s+content="([^"]+)"\s*\/>/,
+		);
+
+		expect(enHomeTitleMatch?.[1]).toBe(sourceTitleMatch?.[1]);
+		expect(enHomeDescMatch?.[1]).toBe(sourceDescMatch?.[1]);
+
+		const corvetteExpectations = {
+			de: { cosmetic: /kosmetisch/i, platform: /korvetten/i, reactor: /reaktor/i },
+			en: { cosmetic: /cosmetic/i, platform: /corvettes/i, reactor: /reactor/i },
+			es: { cosmetic: /cosmétic/i, platform: /corbetas/i, reactor: /reactor/i },
+			fr: { cosmetic: /cosmétique/i, platform: /corvettes/i, reactor: /réacteur/i },
+			it: { cosmetic: /estetic/i, platform: /corvette/i, reactor: /reattore/i },
+			pt: { cosmetic: /cosmétic/i, platform: /corvetas/i, reactor: /reator/i },
+		};
+
+		const enrichedSubpages = ["about", "instructions", "changelog", "userstats", "privacy"];
+
+		for (const lang of SUPPORTED_LANGUAGES) {
+			const langPrefix = lang === "en" ? "" : lang;
+			const homeHtml = fs.readFileSync(path.join(distDir, langPrefix, "index.html"), "utf-8");
+			const homeMd = fs.readFileSync(path.join(distDir, langPrefix, "index.md"), "utf-8");
+
+			// 2. SoftwareApplication JSON-LD localized featureList & keywords, no FAQPage
+			expect(homeHtml).not.toContain('"FAQPage"');
+			const softwareSchemaMatch = homeHtml.match(
+				/<script[^>]*id="softwareapplication-schema"[^>]*>([\s\S]*?)<\/script>/,
+			);
+			expect(softwareSchemaMatch).not.toBeNull();
+			const softwareSchema = JSON.parse(softwareSchemaMatch?.[1] ?? "{}");
+			expect(Array.isArray(softwareSchema.featureList)).toBe(true);
+			expect(softwareSchema.featureList.length).toBeGreaterThanOrEqual(5);
+			expect(typeof softwareSchema.keywords).toBe("string");
+			expect(softwareSchema.keywords).toContain("No Man's Sky");
+
+			// 3. Homepage Static SEO Fallback & Agent Markdown Document include Corvettes (Reactor & Cosmetic Modules)
+			const mainMatch = homeHtml.match(/<main[\s\S]*?<\/main>/);
+			expect(mainMatch).not.toBeNull();
+			const mainHtml = mainMatch?.[0] ?? "";
+			const rules = corvetteExpectations[lang];
+			expect(mainHtml).toMatch(rules.platform);
+			expect(mainHtml).toMatch(rules.reactor);
+			expect(mainHtml).toMatch(rules.cosmetic);
+			expect(homeMd).toMatch(rules.platform);
+			expect(homeMd).toMatch(rules.reactor);
+			expect(homeMd).toMatch(rules.cosmetic);
+
+			// 4. Subpage <title> across all 6 locales includes "No Man's Sky"
+			for (const slug of enrichedSubpages) {
+				const subpageHtml = fs.readFileSync(
+					path.join(distDir, langPrefix, slug, "index.html"),
+					"utf-8",
+				);
+				const titleMatch = subpageHtml.match(/<title>([^<]+)<\/title>/);
+				expect(titleMatch?.[1]).toMatch(/No Man(?:'|&#39;|&apos;)s Sky/);
+				expect(subpageHtml).not.toContain('"FAQPage"');
+			}
+		}
+
+		// 5. Spanish homepage pre-rendered HTML & Agent Markdown include "líneas ley" alongside "bonificaciones de adyacencia"
+		const esHomeHtml = fs.readFileSync(path.join(distDir, "es", "index.html"), "utf-8");
+		const esHomeMd = fs.readFileSync(path.join(distDir, "es", "index.md"), "utf-8");
+		expect(esHomeHtml.toLowerCase()).toContain("líneas ley");
+		expect(esHomeHtml.toLowerCase()).toContain("bonificaciones de adyacencia");
+		expect(esHomeMd.toLowerCase()).toContain("líneas ley");
+		expect(esHomeMd.toLowerCase()).toContain("bonificaciones de adyacencia");
+
+		// 6. English About double-negative typo fixed in both HTML and Agent Markdown Document
+		const enAboutHtml = fs.readFileSync(path.join(distDir, "about", "index.html"), "utf-8");
+		const enAboutMd = fs.readFileSync(path.join(distDir, "about", "index.md"), "utf-8");
+		expect(enAboutMd).toContain("Why doesn't the tool show in-game stats?");
+		expect(enAboutMd).not.toContain("doesn't the tool not show");
+		expect(enAboutHtml).toMatch(/Why doesn(?:'|&#39;|&apos;|’)t the tool show in-game stats\?/);
+		expect(enAboutHtml).not.toMatch(/doesn(?:'|&#39;|&apos;|’)t the tool not show/);
 	});
 });

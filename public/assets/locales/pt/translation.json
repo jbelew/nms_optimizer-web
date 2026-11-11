@@ -646,31 +646,6 @@
 			"rerouter": "Redirecionador de Oxigênio"
 		}
 	},
-	"faq": {
-		"name": "Perguntas Frequentes do NMS Optimizer",
-		"questions": {
-			"adjacencyBonus": {
-				"name": "O que é um bônus de adjacência no No Man's Sky?",
-				"answer": "Quando você coloca módulos de tecnologia compatíveis um ao lado do outro, eles recebem um aumento de estatísticas. Módulos do mesmo tipo que compartilham uma borda recebem um aumento percentual em sua eficácia. Quanto mais bordas compartilhadas, maior o bônus."
-			},
-			"superchargedSlots": {
-				"name": "O que são espaços sobrecarregados e como eles funcionam?",
-				"answer": "Espaços sobrecarregados fornecem um multiplicador massivo às estatísticas base de qualquer módulo de tecnologia colocado neles. Este impulso é aplicado além dos bônus normais de adjacência, tornando sua localização crítica para builds de alto desempenho."
-			},
-			"maximizeBonus": {
-				"name": "Como maximizo bônus de adjacência e espaços sobrecarregados?",
-				"answer": "Para obter as melhores estatísticas, agrupe tecnologias semelhantes em forma de quadrado ou 'L' e coloque seus módulos mais potentes (como a arma principal ou o motor central) em espaços sobrecarregados adjacentes a outros módulos do grupo."
-			},
-			"calculation": {
-				"name": "Como o NMS Optimizer encontra o melhor layout de tecnologia?",
-				"answer": "O otimizador usa algoritmos avançados para explorar milhares de disposições possíveis em segundos. Ele pontua cada layout com base nos bônus de adjacência, multiplicadores de espaços sobrecarregados e pesos específicos de cada módulo para encontrar o ideal matemático para seu equipamento."
-			},
-			"platforms": {
-				"name": "Quais equipamentos e tipos de naves o NMS Optimizer suporta?",
-				"answer": "O NMS Optimizer suporta todos os principais equipamentos: Naves Espaciais (incluindo naves Sentinelas e Vivas), Corvetas, Multiferramentas, Exotrajes, Exonaves e Cargueiros."
-			}
-		}
-	},
 	"moduleSelection": {
 		"core": "Módulo Central",
 		"bonus": "Módulos de Bônus",
@@ -697,18 +672,25 @@
 	"seo": {
 		"mainPageTitle": "Calculadora de Tecnologia e Adjacência de No Man's Sky",
 		"appDescription": "Otimize layouts de tecnologia no No Man's Sky. Maximize bônus de adjacência e slots sobrecarregados para naves, multiferramentas e mais com algoritmos avançados.",
+		"featureList": [
+			"Otimização de layouts via recozimento simulado e aprendizado de máquina (IA)",
+			"Cálculo e visualização de bônus de adjacência",
+			"Priorização inteligente de espaços sobrecarregados",
+			"Suporte para Naves, Multiferramentas, Corvetas, Cargueiros, Exotrajes e Exoveículos",
+			"Aplicativo Web Progressivo (PWA) com suporte offline"
+		],
 		"keywords": "NMS Optimizer, No Man's Sky, bônus de adjacência, espaços sobrecarregados, ferramenta de layout NMS, layout técnico de naves, build de multiferramenta, calculadora de espaço sobrecarregado",
-		"instructionsPageTitle": "Como otimizar seu layout técnico",
+		"instructionsPageTitle": "Guia de Layout de Tecnologia e Espaços Sobrecarregados no No Man's Sky",
 		"instructionsDescription": "Aprenda a usar a grade, gerenciar espaços sobrecarregados e o sistema Theta/Tau/Sigma para builds de No Man's Sky.",
-		"aboutPageTitle": "Sobre os algoritmos de otimização",
+		"aboutPageTitle": "Algoritmos de Bônus de Adjacência e Otimização no No Man's Sky",
 		"aboutDescription": "Descubra como o NMS Optimizer usa algoritmos e Rust para calcular o melhor posicionamento de módulos para seu equipamento.",
-		"changelogPageTitle": "Últimas novidades e atualizações",
+		"changelogPageTitle": "Notas de Atualização e Novidades do Otimizador de No Man's Sky",
 		"changelogDescription": "Fique por dentro das últimas funcionalidades, correções e melhorias no algoritmo do NMS Optimizer. Conheça a melhor ferramenta de layout para No Man's Sky.",
-		"userstatsPageTitle": "Meta da comunidade e estatísticas",
+		"userstatsPageTitle": "Estatísticas da Comunidade e Meta de Builds no No Man's Sky",
 		"userstatsDescription": "Explore o meta de No Man's Sky. Veja as tecnologias sobrecarregadas mais populares da comunidade.",
 		"translationPageTitle": "Ajude a traduzir o NMS Optimizer: Una-se à equipe",
 		"translationDescription": "Contribua com a comunidade de No Man's Sky ajudando a traduzir o NMS Optimizer. Torne a melhor ferramenta de layout acessível a todos os viajantes.",
-		"privacyPageTitle": "Política de Privacidade",
+		"privacyPageTitle": "Política de Privacidade do Otimizador de No Man's Sky",
 		"privacyDescription": "Leia sobre nosso compromisso com sua privacidade. Usamos análises anônimas para melhorar o otimizador sem nunca rastrear sua identidade ou dados de jogo.",
 		"ogImageAlt": "Uma captura de tela detalhada do aplicativo NMS Optimizer mostrando uma grade de nave otimizada com bônus de adjacência elevados.",
 		"nav": {

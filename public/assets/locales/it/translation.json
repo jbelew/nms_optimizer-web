@@ -663,31 +663,6 @@
 			"rerouter": "Reindirizzatore di Ossigeno"
 		}
 	},
-	"faq": {
-		"name": "Domande Frequenti su NMS Optimizer",
-		"questions": {
-			"adjacencyBonus": {
-				"name": "Cos'è un bonus di adiacenza in No Man's Sky?",
-				"answer": "Quando posizioni moduli tecnologici compatibili uno accanto all'altro, ricevono un potenziamento delle statistiche. I moduli dello stesso tipo che condividono un bordo ottengono un aumento percentuale della loro efficacia. Più bordi sono condivisi, maggiore è il bonus."
-			},
-			"superchargedSlots": {
-				"name": "Cosa sono gli slot sovraccarichi e come funzionano?",
-				"answer": "Gli slot sovraccarichi forniscono un enorme moltiplicatore alle statistiche base di qualsiasi modulo tecnologico posizionato al loro interno. Questo potenziamento viene applicato in aggiunta ai normali bonus di adiacenza, rendendo il loro posizionamento critico per configurazioni ad alte prestazioni."
-			},
-			"maximizeBonus": {
-				"name": "Come posso massimizzare i bonus di adiacenza e gli slot sovraccarichi?",
-				"answer": "Per ottenere le statistiche più alte, raggruppa tecnologie simili in una forma quadrata o a 'L' e posiziona i tuoi moduli più potenti (come l'arma principale o il motore centrale) negli slot sovraccarichi adiacenti ad altri moduli del gruppo."
-			},
-			"calculation": {
-				"name": "Come fa NMS Optimizer a trovare la migliore disposizione tecnologica?",
-				"answer": "L'ottimizzatore utilizza algoritmi avanzati per esplorare migliaia di possibili disposizioni in pochi secondi. Valuta ogni disposizione in base ai bonus di adiacenza, ai moltiplicatori degli slot sovraccarichi e ai pesi specifici dei moduli per trovare l'ottimo matematico per il tuo equipaggiamento."
-			},
-			"platforms": {
-				"name": "Quali tipi di equipaggiamento e navi supporta NMS Optimizer?",
-				"answer": "NMS Optimizer supporta tutti i principali equipaggiamenti: Navi Stellari (incluse navi Sentinella e Viventi), Corvette, Multitool, Exosuit, Exocraft e Fregate."
-			}
-		}
-	},
 	"moduleSelection": {
 		"aboutUpgradeLabelsTooltip": "Informazioni sulle Etichette di Potenziamento",
 		"core": "Modulo Principale",
@@ -715,18 +690,25 @@
 		"mainPageTitle": "Calcolatore Layout Tecnologia e Bonus Adiacenza No Man's Sky",
 		"appDescription": "Ottimizza i layout tecnologici di No Man's Sky. Massimizza i bonus di adiacenza e gli slot sovraccarichi per Navi Stellari, Multitool e altro ancora.",
 		"genre": "Strumento di Gioco",
+		"featureList": [
+			"Ottimizzazione dei layout tramite simulated annealing e machine learning (IA)",
+			"Calcolo e visualizzazione dei bonus di adiacenza",
+			"Prioritizzazione degli slot sovraccarichi",
+			"Supporto per Navi Stellari, Multi-Tool, Corvette, Mercantili, Exotute ed Exocraft",
+			"Progressive Web App (PWA) con supporto offline"
+		],
 		"keywords": "NMS Optimizer, No Man's Sky, bonus adiacenza, slot sovraccarichi, strumento layout NMS, layout tecnologia nave stellare, configurazione multitool, calcolatore slot sovraccarichi",
-		"instructionsPageTitle": "Come Ottimizzare il Tuo Layout Tecnologico",
+		"instructionsPageTitle": "Guida Layout Tecnologico e Slot Sovraccarichi di No Man's Sky",
 		"instructionsDescription": "Scopri come usare la griglia, gestire gli slot sovraccarichi e comprendere il sistema di classificazione dei moduli Theta/Tau/Sigma per configurazioni ottimali di No Man's Sky.",
-		"aboutPageTitle": "Informazioni sugli Algoritmi di Ottimizzazione",
+		"aboutPageTitle": "Algoritmi di Bonus Adiacenza e Ottimizzazione per No Man's Sky",
 		"aboutDescription": "Scopri come NMS Optimizer utilizza algoritmi avanzati e un risolutore Rust ad alte prestazioni per calcolare i migliori posizionamenti assoluti dei moduli per il tuo equipaggiamento.",
-		"changelogPageTitle": "Ultime Funzionalità e Aggiornamenti",
+		"changelogPageTitle": "Registro Modifiche e Aggiornamenti dell'Ottimizzatore No Man's Sky",
 		"changelogDescription": "Rimani aggiornato con le ultime funzionalità, correzioni di bug e miglioramenti degli algoritmi di NMS Optimizer. Scopri le novità nel miglior strumento di ottimizzazione del layout di No Man's Sky.",
-		"userstatsPageTitle": "Meta della Community e Statistiche Tecnologiche",
+		"userstatsPageTitle": "Statistiche della Community e Meta Configurazioni No Man's Sky",
 		"userstatsDescription": "Esplora l'attuale meta di configurazione di No Man's Sky. Scopri le tecnologie sovraccariche più popolari basate su migliaia di sessioni di ottimizzazione della community.",
 		"translationPageTitle": "Aiuta a Tradurre NMS Optimizer: Unisciti al Team",
 		"translationDescription": "Contribuisci alla community di No Man's Sky aiutando a tradurre NMS Optimizer. Rendi il miglior strumento di layout accessibile ai viaggiatori in ogni lingua.",
-		"privacyPageTitle": "Informativa sulla Privacy",
+		"privacyPageTitle": "Informativa sulla Privacy dell'Ottimizzatore No Man's Sky",
 		"privacyDescription": "Leggi il nostro impegno per la tua privacy. Utilizziamo analisi anonime per migliorare l'ottimizzatore senza mai tracciare la tua identità personale o i dati di salvataggio.",
 		"performancePageTitle": "Metriche di Prestazione",
 		"performanceDescription": "Metriche di performance in tempo reale e Core Web Vitals per l'applicazione NMS Optimizer.",

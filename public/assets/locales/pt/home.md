@@ -23,6 +23,7 @@ O NMS Optimizer fornece resolução dinâmica e builds recomendadas selecionadas
 - **Multiferramentas (Multi-Tools):** Maximize o rendimento do seu Feixe de Mineração (Mining Beam) ou dano de armas em todas as variantes, incluindo padrão, Sentinela (Sentinel), Atlantid e Cajados (Staves).
 - **Exotrajes (Exosuits) & Exoveículos (Exocraft):** Acesse builds ideais testadas pela comunidade para a proteção contra perigos do seu Exotraje e todos os veículos (Minotauro, Roamer, Nômade, Colosso, Pilgrim e Nautilon).
 - **Cargueiros (Freighters):** Otimize o alcance do Hiperpropulsor de sua nave capital e a tecnologia de coordenação de frota.
+- **Corvetas (Corvettes):** Equilibre melhorias procedimentais com módulos de reator e módulos cosméticos exclusivos nas grades complexas de Corveta.
 
 ## Alimentado por IA & Algoritmos Avançados
 

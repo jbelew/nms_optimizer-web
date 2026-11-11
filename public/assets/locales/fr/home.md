@@ -23,6 +23,7 @@ L'NMS Optimizer fournit une résolution dynamique et des builds recommandés sé
 - **Multi-outils (Multi-Tools) :** Maximisez le rendement de votre Rayon d'Extraction (Mining Beam) ou les dégâts de vos armes sur toutes les variantes, y compris standard, Sentinelle (Sentinel), Atlantide et les Bâtons (Staves).
 - **Exocombinaisons (Exosuits) & Exonefs (Exocraft) :** Accédez à des builds optimaux et testés par la communauté pour la protection environnementale de votre Exocombinaison et tous les véhicules (Minotaure, Vagabond, Nomade, Colosse, Pèlerin et Nautilon).
 - **Cargos (Freighters) :** Optimisez la portée de l'Hyperpropulsion de votre vaisseau amiral et la technologie de coordination de la flotte.
+- **Corvettes :** Équilibrez vos améliorations procédurales avec les modules de réacteur et les modules cosmétiques uniques des grilles de Corvette.
 
 ## Propulsé par l'IA & des Algorithmes Avancés
 

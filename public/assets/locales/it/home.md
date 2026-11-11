@@ -23,6 +23,7 @@ NMS Optimizer fornisce soluzioni dinamiche e build consigliate curate manualment
 - **Multi-Tools:** Massimizza la resa del tuo mining beam o il danno delle armi su tutte le varianti, incluse standard, Sentinel, Atlantid e Staves.
 - **Exosuits & Exocraft:** Accedi a build ottimali, testate dalla community, per la protezione dai pericoli della tua Exosuit e per tutti i veicoli (Minotaur, Roamer, Nomad, Colossus, Pilgrim e Nautilon).
 - **Freighters:** Ottimizza il raggio dell'Hyperdrive della tua nave capitale e la tecnologia di coordinamento della flotta.
+- **Corvette:** Bilancia i potenziamenti procedurali insieme ai moduli reattore e ai moduli estetici unici nelle griglie complesse delle Corvette.
 
 ## Alimentato da AI e Algoritmi Avanzati
 

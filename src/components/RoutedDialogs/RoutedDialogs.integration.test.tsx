@@ -6,18 +6,22 @@
  * Radix UI icons, and document titles across all supported locales.
  */
 
+import fs from "node:fs";
+import path from "node:path";
+
 import React, { act, Suspense } from "react";
-import type { TFunction } from "i18next";
+import type { i18n as I18nInstance, TFunction } from "i18next";
 import { Theme } from "@radix-ui/themes";
 import { render, screen } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
 import { MemoryRouter } from "react-router-dom";
-import { describe, expect, it, vi } from "vitest";
+import { beforeAll, describe, expect, it, vi } from "vitest";
 
 import PerformanceDialog from "@/components/AppDialog/Performance/PerformanceDialog";
 import UserStatsDialog from "@/components/AppDialog/UserStats/UserStatsDialog";
 import { RoutedDialogs } from "@/components/RoutedDialogs/RoutedDialogs";
-import i18n from "@/test/i18n";
+import { Seo } from "@/components/Seo/Seo";
+import i18n, { createRealI18nInstance } from "@/test/i18n";
 import { getDialogIconAndStyle, radixIconRegistry } from "@/utils/icons/iconRegistry";
 import { DialogProvider, useDialog } from "@/utils/system/dialogUtils";
 import { formatDocumentTitle, getPageMetadata } from "@shared/page-metadata.js";
@@ -38,7 +42,69 @@ vi.mock("@/hooks/useTechTree/useTechTree", () => ({
 	fetchTechTreeAsync: vi.fn().mockResolvedValue({}),
 }));
 
+vi.mock("@/utils/analytics/tracking", () => ({
+	sendEvent: vi.fn(),
+}));
+
 const supportedLanguages = ["en", "es", "fr", "de", "it", "pt"];
+const ENRICHED_SUBPAGE_IDS = [
+	"instructions",
+	"about",
+	"changelog",
+	"userstats",
+	"privacy",
+] as const;
+
+const EXPECTED_DIALOG_TITLES_BY_LOCALE: Record<string, Record<string, string>> = {
+	de: {
+		about: "Über Uns",
+		changelog: "Änderungsprotokoll",
+		instructions: "Anleitung",
+		privacy: "Datenschutz",
+		userstats: "Benutzerstatistiken",
+	},
+	en: {
+		about: "About",
+		changelog: "Changelog",
+		instructions: "Instructions",
+		privacy: "Privacy Policy",
+		userstats: "User Statistics",
+	},
+	es: {
+		about: "Acerca de",
+		changelog: "Registro de Cambios",
+		instructions: "Instrucciones",
+		privacy: "Política de Privacidad",
+		userstats: "Estadísticas de Usuario",
+	},
+	fr: {
+		about: "À Propos",
+		changelog: "Notes de Version",
+		instructions: "Instructions",
+		privacy: "Politique de Confidentialité",
+		userstats: "Statistiques Utilisateur",
+	},
+	it: {
+		about: "Informazioni",
+		changelog: "Registro Modifiche",
+		instructions: "Istruzioni",
+		privacy: "Informativa sulla Privacy",
+		userstats: "Statistiche Utente",
+	},
+	pt: {
+		about: "Sobre",
+		changelog: "Notas de Atualização",
+		instructions: "Instruções",
+		privacy: "Política de Privacidade",
+		userstats: "Estatísticas de Uso",
+	},
+};
+
+let realI18n: I18nInstance;
+
+beforeAll(async () => {
+	realI18n = await createRealI18nInstance("en", supportedLanguages);
+});
 
 describe("Routed Dialogs & Page Registry Integration", () => {
 	const routedDialogs = getRoutedDialogs();
@@ -106,7 +172,74 @@ describe("Routed Dialogs & Page Registry Integration", () => {
 						expect(dialogHeaderTitle).not.toContain(" | ");
 					},
 				);
+
+				it.each(ENRICHED_SUBPAGE_IDS)(
+					"enriches %s document title with No Man's Sky while preserving unchanged modal header title",
+					async (subpageId) => {
+						const dialog = PAGE_REGISTRY[subpageId];
+						const langT = realI18n.getFixedT(lang, "translation");
+						const localizedPath =
+							lang === "en" ? dialog.routePath : `/${lang}${dialog.routePath}`;
+
+						const meta = getPageMetadata({
+							lang,
+							pathname: localizedPath,
+							supportedLanguages,
+							t: langT,
+						});
+
+						expect(meta.heading).toContain("No Man's Sky");
+						expect(meta.title).toContain("No Man's Sky");
+						expect(meta.title).toContain("NMS Optimizer");
+
+						const dialogHeaderTitle = langT(dialog.dialogTitleKey!);
+						expect(dialogHeaderTitle).toBe(
+							EXPECTED_DIALOG_TITLES_BY_LOCALE[lang][subpageId],
+						);
+						expect(dialogHeaderTitle).not.toContain("No Man's Sky");
+						expect(dialogHeaderTitle).not.toContain(" | ");
+
+						await realI18n.changeLanguage(lang);
+						const { unmount } = render(
+							<MemoryRouter initialEntries={[localizedPath]}>
+								<I18nextProvider i18n={realI18n}>
+									<Seo />
+								</I18nextProvider>
+							</MemoryRouter>,
+						);
+
+						expect(document.title).toBe(meta.title);
+						expect(document.title).toContain("No Man's Sky");
+						unmount();
+					},
+				);
 			});
+		});
+
+		it("preserves English root index.html <title> and <meta name='description'> byte-for-byte", () => {
+			const indexHtml = fs.readFileSync(path.resolve(process.cwd(), "index.html"), "utf-8");
+			const titleMatch = indexHtml.match(/<title>([^<]+)<\/title>/);
+			const descMatch = indexHtml.match(
+				/<meta\s+name="description"\s+content="([^"]+)"\s*\/>/,
+			);
+
+			expect(titleMatch?.[1]).toBe(
+				"No Man's Sky Tech Layout &amp; Adjacency Bonus Calculator | NMS Optimizer",
+			);
+			expect(descMatch?.[1]).toBe(
+				"Optimize No Man's Sky technology layouts using advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, Corvettes, and more.",
+			);
+
+			const enT = realI18n.getFixedT("en", "translation");
+			const homeMeta = getPageMetadata({
+				lang: "en",
+				pathname: "/",
+				supportedLanguages,
+				t: enT,
+			});
+
+			expect(homeMeta.title.replace(/&/g, "&amp;")).toBe(titleMatch?.[1]);
+			expect(homeMeta.description).toBe(descMatch?.[1]);
 		});
 	});
 

@@ -23,6 +23,7 @@ Der NMS-Optimierer bietet dynamische Lösungsfindung und handverlesene empfohlen
 - **Multifunktionswerkzeuge (Multi-Tools):** Maximiere den Ertrag deines Minenlasers (Mining Beam) oder deinen Waffenschaden bei allen Varianten, einschließlich Standard, Wächter (Sentinel), Atlantid und Stäben (Staves).
 - **Exo-Anzüge (Exosuits) & Exofahrzeuge (Exocraft):** Greife auf optimale, von der Community getestete Builds für deinen Exo-Anzug-Gefahrenschutz und alle Fahrzeuge (Minotaurus, Roamer, Nomad, Koloss, Pilgrim und Nautilon) zu.
 - **Frachter (Freighters):** Optimiere die Hyperantrieb-Reichweite deines Großkampfschiffs und die Flotten-Koordinationstechnologie.
+- **Korvetten (Corvettes):** Kombiniere prozedurale Upgrades optimal mit einzigartigen Reaktor-Modulen und kosmetischen Modulen auf komplexen Korvetten-Rastern.
 
 ## Angetrieben durch KI & fortschrittliche Algorithmen
 

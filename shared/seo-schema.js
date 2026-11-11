@@ -41,6 +41,27 @@ const MANAGED_SCHEMA_TYPES = [
 ];
 
 /**
+ * Default English `SoftwareApplication.featureList` fallback entries.
+ *
+ * @type {readonly string[]}
+ */
+const DEFAULT_FEATURE_LIST = [
+	"Simulated annealing and ML layout optimization",
+	"Adjacency bonus calculation and visualization",
+	"Supercharged slot prioritization",
+	"Support for Starships, Multi-Tools, Corvettes, Freighters, Exosuits, and Exocraft",
+	"Offline Progressive Web App (PWA) support",
+];
+
+/**
+ * Default English `SoftwareApplication.keywords` fallback string.
+ *
+ * @type {string}
+ */
+const DEFAULT_SOFTWARE_KEYWORDS =
+	"NMS Optimizer, No Man's Sky, adjacency bonus, supercharged slots, NMS layout tool, starship tech layout, multitool build, supercharged slot calculator";
+
+/**
  * Derives the deterministic DOM `id` attribute for a JSON-LD schema object
  * from its `@type` property.
  *
@@ -127,23 +148,78 @@ const resolveAppVersion = (version) => {
 };
 
 /**
+ * Resolves the localized `SoftwareApplication.featureList` array with safe English fallback.
+ *
+ * @param {(key: string, options?: Record<string, unknown>) => unknown} t - Translation lookup function.
+ *
+ * @returns {string[]} Non-empty list of localized application features.
+ *
+ * @see {@link DEFAULT_FEATURE_LIST}
+ */
+const resolveFeatureList = (t) => {
+	const raw = t("seo.featureList", {
+		defaultValue: DEFAULT_FEATURE_LIST,
+		returnObjects: true,
+	});
+
+	if (
+		Array.isArray(raw)
+		&& raw.length > 0
+		&& raw.every((item) => typeof item === "string" && item.trim().length > 0)
+	) {
+		return raw.map((item) => item.trim());
+	}
+
+	return [...DEFAULT_FEATURE_LIST];
+};
+
+/**
+ * Resolves a translated string key via `t`, falling back to `fallback` (or `key`)
+ * when the lookup returns a non-string, blank string, or uninterpolated key echo.
+ *
+ * @param {(key: string, options?: Record<string, unknown>) => unknown} t - Translation lookup function.
+ * @param {string} key - Translation key to resolve.
+ * @param {string} [fallback] - Optional explicit fallback string.
+ *
+ * @returns {string} Trimmed translation string or fallback.
+ */
+const translateSchemaText = (t, key, fallback) => {
+	const options = fallback !== undefined ? { defaultValue: fallback } : {};
+	const raw = t(key, options);
+
+	if (
+		typeof raw === "string"
+		&& raw.trim().length > 0
+		&& (fallback === undefined || raw !== key)
+	) {
+		return raw.trim();
+	}
+
+	return fallback ?? key;
+};
+
+/**
  * Generates the full set of localized structured data schemas for a given page.
  *
  * @remarks
  * Produces `SoftwareApplication`, `Organization`, `WebSite`, and `ItemList` schemas
  * for all routes, plus `WebPage` and `BreadcrumbList` schemas for secondary routes.
+ * Never emits `FAQPage` JSON-LD (restricted by Google to authoritative government and health sites).
  *
- * @param {import('i18next').TFunction} t - Translation function (i18next-compatible).
+ * @param {import('i18next').TFunction | ((key: string, options?: Record<string, unknown>) => unknown)} t - Translation function (i18next-compatible).
  * @param {string} lang - Current language code (e.g., `'en'`, `'fr'`).
  * @param {string} url - Current page canonical URL.
  * @param {string} [version] - Optional explicit application version.
  *
  * @returns {Array<Record<string, unknown>>} Array of Schema.org JSON-LD objects.
  *
+ * @see {@link DEFAULT_SOFTWARE_KEYWORDS}
  * @see {@link getPageById}
  * @see {@link getPageContentLanguages}
  * @see {@link getSchemaDomId}
  * @see {@link resolveAppVersion}
+ * @see {@link resolveFeatureList}
+ * @see {@link translateSchemaText}
  *
  * @category Utilities
  *
@@ -155,8 +231,8 @@ const resolveAppVersion = (version) => {
  */
 export const getLocalizedSchema = (t, lang, url, version) => {
 	const baseUrl = "https://nms-optimizer.app";
-	const appName = t("appName", { defaultValue: "NMS Optimizer" });
-	const appDescription = t("seo.appDescription");
+	const appName = translateSchemaText(t, "appName", "NMS Optimizer");
+	const appDescription = translateSchemaText(t, "seo.appDescription");
 
 	const urlObj = new URL(url);
 	const isHomePage = urlObj.pathname === "/" || urlObj.pathname === `/${lang}/`;
@@ -174,15 +250,10 @@ export const getLocalizedSchema = (t, lang, url, version) => {
 		},
 		browserRequirements: "Requires JavaScript. Requires HTML5.",
 		description: appDescription,
-		featureList: [
-			"Simulated annealing and ML layout optimization",
-			"Adjacency bonus calculation and visualization",
-			"Supercharged slot prioritization",
-			"Support for Starships, Multi-tools, Corvettes, Freighters, Exosuits, and Exocrafts",
-			"Offline Progressive Web App (PWA) support",
-		],
-		genre: t("seo.genre", { defaultValue: "Game Tool" }),
+		featureList: resolveFeatureList(t),
+		genre: translateSchemaText(t, "seo.genre", "Game Tool"),
 		inLanguage: lang,
+		keywords: translateSchemaText(t, "seo.keywords", DEFAULT_SOFTWARE_KEYWORDS),
 		name: appName,
 		offers: {
 			"@type": "Offer",
@@ -226,7 +297,7 @@ export const getLocalizedSchema = (t, lang, url, version) => {
 		{
 			"@type": "ListItem",
 			item: homeUrl,
-			name: t("seo.nav.home", { defaultValue: "Home" }),
+			name: translateSchemaText(t, "seo.nav.home", "Home"),
 			position: 1,
 		},
 	];
@@ -244,7 +315,7 @@ export const getLocalizedSchema = (t, lang, url, version) => {
 		itemListElement.push({
 			"@type": "ListItem",
 			item: url,
-			name: t(`seo.nav.${pageName}`, { defaultValue: pageName }),
+			name: translateSchemaText(t, `seo.nav.${pageName}`, pageName),
 			position: 2,
 		});
 	}
@@ -264,11 +335,11 @@ export const getLocalizedSchema = (t, lang, url, version) => {
 			"@type": "WebPage",
 			description:
 				descriptionKey ?
-					t(descriptionKey, { defaultValue: appDescription })
+					translateSchemaText(t, descriptionKey, appDescription)
 				:	appDescription,
 			inLanguage: lang,
 			isPartOf: { "@id": `${baseUrl}/#website` },
-			name: titleKey ? t(titleKey, { defaultValue: appName }) : appName,
+			name: titleKey ? translateSchemaText(t, titleKey, appName) : appName,
 			url: url,
 		};
 	}
@@ -281,7 +352,7 @@ export const getLocalizedSchema = (t, lang, url, version) => {
 		const navLangPrefix = lang !== "en" && navContentLangs.includes(lang) ? `/${lang}` : "";
 
 		return {
-			name: t(`seo.nav.${navPageId}`),
+			name: translateSchemaText(t, `seo.nav.${navPageId}`),
 			url: `${baseUrl}${navLangPrefix}/${navPageId}/`,
 		};
 	});
@@ -295,7 +366,7 @@ export const getLocalizedSchema = (t, lang, url, version) => {
 			position: index + 1,
 			url: nav.url,
 		})),
-		name: t("seo.nav.home", { defaultValue: "Site Navigation" }),
+		name: translateSchemaText(t, "seo.nav.home", "Site Navigation"),
 	};
 
 	const schemas = [softwareApp, organization, webSite, siteNavigation];

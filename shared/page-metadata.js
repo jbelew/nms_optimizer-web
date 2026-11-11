@@ -35,7 +35,7 @@ export const DEFAULT_OG_IMAGE_PATH = "/assets/img/screenshots/screenshot.webp";
 /**
  * @typedef {Object} PageMetadataOptions
  * @property {string} pathname - The route pathname or identifier (e.g. "/instructions/", "/es/instructions/", "instructions", or "/").
- * @property {(key: string, options?: Record<string, unknown>) => string} [t] - Translation function (i18next-compatible); defaults to returning `options.defaultValue` or the key.
+ * @property {import('i18next').TFunction | ((key: string, options?: Record<string, unknown>) => string)} [t] - Translation function (i18next-compatible); defaults to returning `options.defaultValue` or the key.
  * @property {string} [lang] - Language code (e.g., "en", "es", "fr", "de", "it", "pt"). If omitted, resolved from pathname or defaults to "en".
  * @property {string} [baseUrl] - Base URL (defaults to "https://nms-optimizer.app").
  * @property {string[]} [supportedLanguages] - Supported language codes (defaults to SUPPORTED_LANGUAGES).

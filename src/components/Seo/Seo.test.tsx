@@ -4,7 +4,7 @@ import { I18nextProvider } from "react-i18next";
 import { MemoryRouter, useNavigate } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import i18n from "@/test/i18n";
+import i18n, { createRealI18nInstance } from "@/test/i18n";
 import { captureAcquisitionParams } from "@/utils/analytics/pageView";
 import { sendEvent } from "@/utils/analytics/tracking";
 
@@ -534,5 +534,37 @@ describe("Seo Component", () => {
 			"https://nms-optimizer.app/es/about/",
 		);
 		expect(document.head.querySelectorAll('link[rel="alternate"][hreflang]')).toHaveLength(7);
+	});
+
+	it("includes 'líneas ley' alongside 'bonificaciones de adyacencia' in Spanish SEO metadata and SoftwareApplication schema", async () => {
+		const esInstance = await createRealI18nInstance("es", ["en", "es"]);
+
+		render(
+			<I18nextProvider i18n={esInstance}>
+				<MemoryRouter initialEntries={["/es/"]}>
+					<Seo />
+				</MemoryRouter>
+			</I18nextProvider>,
+		);
+
+		const description = document.head
+			.querySelector('meta[name="description"]')
+			?.getAttribute("content");
+		const keywords = document.head
+			.querySelector('meta[name="keywords"]')
+			?.getAttribute("content");
+		const softwareSchemaText = document.getElementById(
+			"softwareapplication-schema",
+		)?.textContent;
+
+		expect(document.title.toLowerCase()).toContain("no man's sky");
+		expect(document.title.toLowerCase()).toContain("líneas ley");
+		expect(description?.toLowerCase()).toContain("líneas ley");
+		expect(description?.toLowerCase()).toContain("bonificaciones de adyacencia");
+		expect(keywords?.toLowerCase()).toContain("líneas ley");
+		expect(keywords?.toLowerCase()).toContain("bonificaciones de adyacencia");
+		expect(softwareSchemaText?.toLowerCase()).toContain("líneas ley");
+		expect(softwareSchemaText?.toLowerCase()).toContain("bonificaciones de adyacencia");
+		expect(document.getElementById("faqpage-schema")).toBeNull();
 	});
 });
