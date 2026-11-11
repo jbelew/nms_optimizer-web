@@ -1,3 +1,10 @@
+## [8.9.3](https://github.com/jbelew/nms_optimizer-web/compare/v8.9.2...v8.9.3) (2026-11-11)
+
+
+### Bug Fixes
+
+* **ui:** improve mobile wrapping and alignment in ModuleSelectionDialog ([20e1b8c](https://github.com/jbelew/nms_optimizer-web/commit/20e1b8cdd1c08b096ec9743dc56c70affaee5584))
+
 ## [8.9.2](https://github.com/jbelew/nms_optimizer-web/compare/v8.9.1...v8.9.2) (2026-11-11)
 
 
