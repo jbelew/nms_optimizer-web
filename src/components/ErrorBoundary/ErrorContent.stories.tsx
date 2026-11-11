@@ -3,12 +3,65 @@ import { expect, within } from "storybook/test";
 
 import { ErrorContent } from "./ErrorBoundary";
 
+const HUMAN_CHROME_UA =
+	"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36";
+
+/**
+ * Extended `Navigator` shape exposing User-Agent Client Hints in Chromium test environments.
+ */
+interface NavigatorWithUAData extends Navigator {
+	/** Optional User-Agent Client Hints object. */
+	userAgentData?: unknown;
+}
+
 const meta = {
 	argTypes: {
 		variant: {
 			control: "radio",
 			options: ["page", "inset"],
 		},
+	},
+	beforeEach: () => {
+		const nav = navigator as NavigatorWithUAData;
+		const originalUserAgent = navigator.userAgent;
+		const originalWebdriver = navigator.webdriver;
+		const originalUserAgentData = nav.userAgentData;
+		const hadBotClass = document.documentElement.classList.contains("is-bot");
+
+		document.documentElement.classList.remove("is-bot");
+		Object.defineProperty(navigator, "webdriver", {
+			configurable: true,
+			value: false,
+		});
+		Object.defineProperty(navigator, "userAgent", {
+			configurable: true,
+			value: HUMAN_CHROME_UA,
+		});
+		Object.defineProperty(navigator, "userAgentData", {
+			configurable: true,
+			value: {
+				brands: [{ brand: "Google Chrome", version: "135" }],
+			},
+		});
+
+		return () => {
+			if (hadBotClass) {
+				document.documentElement.classList.add("is-bot");
+			}
+
+			Object.defineProperty(navigator, "webdriver", {
+				configurable: true,
+				value: originalWebdriver,
+			});
+			Object.defineProperty(navigator, "userAgent", {
+				configurable: true,
+				value: originalUserAgent,
+			});
+			Object.defineProperty(navigator, "userAgentData", {
+				configurable: true,
+				value: originalUserAgentData,
+			});
+		};
 	},
 	component: ErrorContent,
 	parameters: {

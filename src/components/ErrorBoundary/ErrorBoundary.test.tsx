@@ -55,7 +55,30 @@ const ThrowError: FC<{ shouldThrow?: boolean }> = ({ shouldThrow = true }) => {
  */
 const SafeComponent: FC = () => <div>Safe component</div>;
 
+const removeRobotsMetas = (): void => {
+	document.head.querySelectorAll('meta[name="robots"]').forEach((el) => {
+		el.remove();
+	});
+};
+
+const renderChunkErrorContent = () => {
+	const chunkError = new Error("Chunk crash");
+	chunkError.stack = "Error: Chunk crash\n    at LazyDialog (/build/chunk-abc123.js:1:420)";
+
+	return render(
+		<ErrorContent
+			error={chunkError}
+			errorInfo={{
+				componentStack: "\n    at GridTable (/build/entry-xyz789.js:12:34)",
+			}}
+			variant="page"
+		/>,
+	);
+};
+
 describe("ErrorBoundary", () => {
+	const originalUserAgent = navigator.userAgent;
+
 	beforeEach(() => {
 		// Suppress console errors during tests
 		vi.spyOn(console, "error").mockImplementation(() => {});
@@ -64,7 +87,127 @@ describe("ErrorBoundary", () => {
 	});
 
 	afterEach(() => {
+		Object.defineProperty(navigator, "userAgent", {
+			configurable: true,
+			value: originalUserAgent,
+		});
+		document.documentElement.classList.remove("is-bot");
+		removeRobotsMetas();
 		vi.restoreAllMocks();
+	});
+
+	describe("bot vs. human stack trace rendering", () => {
+		const ThrowChunkError: FC = () => {
+			const err = new Error("Chunk crash");
+			err.stack = "Error: Chunk crash\n    at ThrowChunkError (/build/chunk-abc123.js:1:420)";
+			throw err;
+		};
+
+		it("omits raw stack trace and componentStack code blocks for bot user-agents while keeping heading and recovery actions", () => {
+			Object.defineProperty(navigator, "userAgent", {
+				configurable: true,
+				value: "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+			});
+
+			const { unmount } = render(
+				<ErrorBoundary>
+					<ThrowChunkError />
+				</ErrorBoundary>,
+			);
+
+			expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument();
+			expect(screen.getByText("Chunk crash")).toBeInTheDocument();
+			expect(
+				screen.getByRole("button", { name: "errorContent.clearAndReload" }),
+			).toBeInTheDocument();
+			expect(screen.getByRole("button", { name: "common.reload" })).toBeInTheDocument();
+
+			expect(screen.queryByText("errorDisplay.stackTraceLabel")).not.toBeInTheDocument();
+			expect(document.body.textContent).not.toContain("/build/chunk-abc123.js");
+			expect(document.body.textContent).not.toContain("ThrowChunkError");
+
+			unmount();
+
+			renderChunkErrorContent();
+
+			expect(document.body.textContent).not.toContain("/build/chunk-abc123.js");
+			expect(document.body.textContent).not.toContain("/build/entry-xyz789.js");
+		});
+
+		it("renders full error stack trace and componentStack for human browser sessions", () => {
+			Object.defineProperty(navigator, "userAgent", {
+				configurable: true,
+				value: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
+			});
+
+			renderChunkErrorContent();
+
+			expect(screen.getByText("errorDisplay.stackTraceLabel")).toBeInTheDocument();
+			expect(document.body.textContent).toContain("/build/chunk-abc123.js:1:420");
+			expect(document.body.textContent).toContain("/build/entry-xyz789.js:12:34");
+		});
+	});
+
+	describe("robots metadata lifecycle", () => {
+		it("injects noindex, nofollow into document.head when fallback mounts and removes it on unmount", () => {
+			expect(document.head.querySelector('meta[name="robots"]')).toBeNull();
+
+			const { unmount } = render(
+				<ErrorBoundary>
+					<ThrowError shouldThrow={true} />
+				</ErrorBoundary>,
+			);
+
+			const robotsMeta = document.head.querySelector('meta[name="robots"]');
+			expect(robotsMeta).not.toBeNull();
+			expect(robotsMeta).toHaveAttribute("content", "noindex, nofollow");
+
+			unmount();
+
+			expect(document.head.querySelector('meta[name="robots"]')).toBeNull();
+		});
+
+		it("injects noindex, nofollow when a custom fallback prop mounts and cleans up on unmount", () => {
+			const { unmount } = render(
+				<ErrorBoundary fallback={<div>Custom crash fallback</div>}>
+					<ThrowError shouldThrow={true} />
+				</ErrorBoundary>,
+			);
+
+			expect(screen.getByText("Custom crash fallback")).toBeInTheDocument();
+			expect(document.head.querySelector('meta[name="robots"]')).toHaveAttribute(
+				"content",
+				"noindex, nofollow",
+			);
+
+			unmount();
+
+			expect(document.head.querySelector('meta[name="robots"]')).toBeNull();
+		});
+
+		it("overrides an existing robots meta tag in-place with noindex, nofollow and restores prior content on unmount", () => {
+			const priorMeta = document.createElement("meta");
+			priorMeta.setAttribute("name", "robots");
+			priorMeta.setAttribute("content", "noindex, follow");
+			document.head.appendChild(priorMeta);
+
+			const { unmount } = render(
+				<ErrorBoundary>
+					<ThrowError shouldThrow={true} />
+				</ErrorBoundary>,
+			);
+
+			const robotsMetas = document.head.querySelectorAll('meta[name="robots"]');
+			expect(robotsMetas).toHaveLength(1);
+			expect(robotsMetas[0]).toHaveAttribute("content", "noindex, nofollow");
+
+			unmount();
+
+			expect(document.head.querySelector('meta[name="robots"]')).toHaveAttribute(
+				"content",
+				"noindex, follow",
+			);
+		});
 	});
 
 	describe("rendering", () => {
@@ -325,7 +468,23 @@ describe("RouteError", () => {
 	});
 
 	afterEach(() => {
+		removeRobotsMetas();
 		vi.restoreAllMocks();
+	});
+
+	it("injects noindex, nofollow into document.head when RouteError mounts and removes it on unmount", () => {
+		vi.mocked(useRouteError).mockReturnValue(new Error("Route loading failed"));
+
+		const { unmount } = render(<RouteError />);
+
+		expect(document.head.querySelector('meta[name="robots"]')).toHaveAttribute(
+			"content",
+			"noindex, nofollow",
+		);
+
+		unmount();
+
+		expect(document.head.querySelector('meta[name="robots"]')).toBeNull();
 	});
 
 	it("should report error, signal lifecycleCoordinator.markReady, and render ErrorContent", () => {

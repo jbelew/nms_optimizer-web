@@ -26,6 +26,7 @@ import { useRouteError } from "react-router-dom";
 
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { buildExceptionEvent, sendEvent } from "@/utils/analytics/tracking";
+import { isBot } from "@/utils/browser/environment";
 import { lifecycleCoordinator } from "@/utils/system/lifecycleCoordinator";
 import { Logger } from "@/utils/system/monitoring";
 
@@ -170,11 +171,14 @@ const InsetMessage = () => (
  * A reusable component for rendering technical error details.
  *
  * @remarks
- * It formats the error message and stack trace (both JS and React component stack)
- * in a readable, monospace layout. It is used within {@link ErrorContent} and
- * `ErrorDialog` to provide debugging information.
+ * Formats the error message and stack trace (both JS and React component stack)
+ * in a readable, monospace layout for human browsers, while suppressing raw
+ * stack trace and component stack code blocks when {@link isBot} returns `true`
+ * so search crawlers never extract `/build/*.js:line:col` references as 404 URLs.
+ * Used within {@link ErrorContent} and `ErrorDialog` to provide debugging information.
  *
  * @see {@link ErrorDisplayProps}
+ * @see {@link isBot}
  * @see {@link ./ErrorBoundary.test.tsx Unit Tests}
  *
  * @component
@@ -195,7 +199,7 @@ export const ErrorDisplay = ({
 	errorInfo,
 }: ErrorDisplayProps) => {
 	const { t } = useTranslation();
-	const hasStackTrace = error?.stack || errorInfo?.componentStack;
+	const showStackTrace = !isBot() && Boolean(error?.stack || errorInfo?.componentStack);
 
 	return (
 		<div
@@ -219,28 +223,96 @@ export const ErrorDisplay = ({
 						<strong>{t("errorDisplay.errorLabel")}</strong> {error.message}
 					</Code>
 				)}
-				{hasStackTrace && (
-					<Code
-						className="block"
-						color="red"
-					>
-						<strong>{t("errorDisplay.stackTraceLabel")}</strong>
-					</Code>
+				{showStackTrace && (
+					<>
+						<Code
+							className="block"
+							color="red"
+						>
+							<strong>{t("errorDisplay.stackTraceLabel")}</strong>
+						</Code>
+						{error?.stack && <Code color="red">{error.stack}</Code>}
+						{errorInfo?.componentStack && (
+							<Code color="red">{errorInfo.componentStack}</Code>
+						)}
+					</>
 				)}
-				{error?.stack && <Code color="red">{error.stack}</Code>}
-				{errorInfo?.componentStack && <Code color="red">{errorInfo.componentStack}</Code>}
 			</div>
 		</div>
 	);
 };
 
 /**
+ * Synchronizes `<meta name="robots" content="noindex, nofollow">` in `document.head`
+ * while an error boundary fallback is mounted, restoring or removing it on unmount.
+ *
+ * @remarks
+ * Deduplicates pre-existing `<meta name="robots">` elements, updates the active tag
+ * in-place so `querySelector('meta[name="robots"]')` resolves deterministically to
+ * `"noindex, nofollow"`, and restores any prior `content` attribute on unmount.
+ *
+ * @returns Side-effects only.
+ *
+ * @hook
+ */
+const useErrorRobotsMeta = (): void => {
+	useEffect(() => {
+		const existingRobotsMetas =
+			document.head.querySelectorAll<HTMLMetaElement>('meta[name="robots"]');
+
+		for (let i = 1; i < existingRobotsMetas.length; i++) {
+			existingRobotsMetas[i]?.remove();
+		}
+
+		const existingRobotsMeta = existingRobotsMetas[0] ?? null;
+		const previousRobotsContent = existingRobotsMeta?.getAttribute("content") ?? null;
+		const robotsMeta = existingRobotsMeta ?? document.createElement("meta");
+
+		if (!existingRobotsMeta) {
+			robotsMeta.setAttribute("name", "robots");
+			document.head.appendChild(robotsMeta);
+		}
+
+		robotsMeta.setAttribute("content", "noindex, nofollow");
+
+		return () => {
+			if (existingRobotsMeta) {
+				if (existingRobotsMeta.isConnected) {
+					if (previousRobotsContent !== null) {
+						existingRobotsMeta.setAttribute("content", previousRobotsContent);
+					} else {
+						existingRobotsMeta.remove();
+					}
+				}
+			} else {
+				robotsMeta.remove();
+			}
+		};
+	}, []);
+};
+
+/**
+ * Head-only guard mounted alongside custom {@link ErrorBoundary} `fallback` nodes
+ * so custom fallbacks also enforce `noindex, nofollow` during crash recovery.
+ *
+ * @returns `null` (head side-effects only).
+ *
+ * @component
+ */
+const ErrorFallbackRobotsGuard = () => {
+	useErrorRobotsMeta();
+
+	return null;
+};
+
+/**
  * A layout component for displaying crash information and recovery steps.
  *
  * @remarks
- * This component is used by both the global {@link ErrorBoundary} and {@link RouteError}.
- * It automatically ensures the splash screen is hidden and adapts its
- * styling based on the `variant` (full page overlay vs. inset card).
+ * Used by both the global {@link ErrorBoundary} and {@link RouteError}.
+ * Enforces `<meta name="robots" content="noindex, nofollow">` via {@link useErrorRobotsMeta}
+ * while mounted, ensures the splash screen is hidden, and adapts its styling based on
+ * `variant` (full-page overlay vs. inset card).
  *
  * @see {@link ErrorContentProps}
  * @see {@link ErrorDisplay}
@@ -261,6 +333,8 @@ export const ErrorContent = ({ children, error, errorInfo, variant }: ErrorConte
 	const { t } = useTranslation();
 	const isLarge = useBreakpoint("1024px");
 	const [isResetting, setIsResetting] = useState(false);
+
+	useErrorRobotsMeta();
 
 	useEffect(() => {
 		document.body.classList.add("error-boundary-visible");
@@ -502,7 +576,12 @@ class ErrorBoundary extends Component<Props, State> {
 
 		if (hasError) {
 			if (fallback) {
-				return fallback;
+				return (
+					<>
+						<ErrorFallbackRobotsGuard />
+						{fallback}
+					</>
+				);
 			}
 
 			return (
