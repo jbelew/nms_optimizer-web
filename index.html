@@ -1,335 +1,419 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NMS Optimizer: Mobile Performance Insights</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        @font-face {
-            font-family: 'Geosans';
-            src: url('assets/fonts/geonms.woff2') format('woff2');
-            font-display: swap;
-        }
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>NMS Optimizer: Mobile Performance Insights</title>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<style>
+			@font-face {
+				font-family: "Geosans";
+				src: url("assets/fonts/geonms.woff2") format("woff2");
+				font-display: swap;
+			}
 
-        @font-face {
-            font-family: 'Roboto Flex';
-            src: url('assets/fonts/roboto-flex.woff2') format('woff2');
-            font-weight: 100 1000;
-            font-style: normal;
-            font-display: swap;
-        }
+			@font-face {
+				font-family: "Roboto Flex";
+				src: url("assets/fonts/roboto-flex.woff2") format("woff2");
+				font-weight: 100 1000;
+				font-style: normal;
+				font-display: swap;
+			}
 
-        :root {
-            --bg: #0c0d0e;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-hover: rgba(255, 255, 255, 0.06);
-            --border: rgba(255, 255, 255, 0.08);
-            --text: #ececec;
-            --text-dim: #94a3b8;
-            --accent: #00befd; /* Cyan */
-            --amber: #ffb224; /* Amber */
-            --letter-spacing-wide: 0.175em;
-        }
+			:root {
+				--bg: #0c0d0e;
+				--glass: rgba(255, 255, 255, 0.03);
+				--glass-hover: rgba(255, 255, 255, 0.06);
+				--border: rgba(255, 255, 255, 0.08);
+				--text: #ececec;
+				--text-dim: #94a3b8;
+				--accent: #00befd; /* Cyan */
+				--amber: #ffb224; /* Amber */
+				--letter-spacing-wide: 0.175em;
+			}
 
-        body {
-            font-family: 'Roboto Flex', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 3rem 2rem;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+			body {
+				font-family: "Roboto Flex", sans-serif;
+				background: var(--bg);
+				color: var(--text);
+				margin: 0;
+				padding: 3rem 2rem;
+				min-height: 100vh;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
 
-        .container {
-            width: 100%;
-            max-width: 1280px;
-        }
+			.container {
+				width: 100%;
+				max-width: 1280px;
+			}
 
-        /* Replicating .heading-styled from app */
-        .heading-styled {
-            font-family: 'Geosans', sans-serif;
-            font-weight: 400;
-            letter-spacing: var(--letter-spacing-wide);
-            text-transform: uppercase;
-            -webkit-text-stroke: 0.04em;
-            paint-order: stroke fill;
-            word-spacing: -0.15em;
-        }
+			/* Replicating .heading-styled from app */
+			.heading-styled {
+				font-family: "Geosans", sans-serif;
+				font-weight: 400;
+				letter-spacing: var(--letter-spacing-wide);
+				text-transform: uppercase;
+				-webkit-text-stroke: 0.04em;
+				paint-order: stroke fill;
+				word-spacing: -0.15em;
+			}
 
-        header {
-            text-align: left;
-            margin-bottom: 4rem;
-            border-left: 2px solid var(--accent);
-            padding-left: 1.5rem;
-        }
+			header {
+				text-align: left;
+				margin-bottom: 4rem;
+				border-left: 2px solid var(--accent);
+				padding-left: 1.5rem;
+			}
 
-        h1 {
-            font-size: 2.25rem;
-            margin: 0 0 0.5rem 0;
-            background: linear-gradient(to right, var(--accent), #fff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+			h1 {
+				font-size: 2.25rem;
+				margin: 0 0 0.5rem 0;
+				background: linear-gradient(to right, var(--accent), #fff);
+				-webkit-background-clip: text;
+				background-clip: text;
+				-webkit-text-fill-color: transparent;
+			}
 
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(580px, 1fr));
-            gap: 2.5rem;
-            margin-bottom: 4rem;
-        }
+			.dashboard-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(580px, 1fr));
+				gap: 2.5rem;
+				margin-bottom: 4rem;
+			}
 
-        .card {
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2.5rem;
-            position: relative;
-            transition: transform 0.2s ease, background 0.2s ease;
-        }
+			.card {
+				background: var(--glass);
+				backdrop-filter: blur(12px);
+				-webkit-backdrop-filter: blur(12px);
+				border: 1px solid var(--border);
+				border-radius: 12px;
+				padding: 2.5rem;
+				position: relative;
+				transition:
+					transform 0.2s ease,
+					background 0.2s ease;
+			}
 
-        .card:hover {
-            background: var(--glass-hover);
-        }
+			.card:hover {
+				background: var(--glass-hover);
+			}
 
-        h2 {
-            font-size: 0.875rem;
-            margin-top: 0;
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            opacity: 0.9;
-        }
+			h2 {
+				font-size: 0.875rem;
+				margin-top: 0;
+				margin-bottom: 2rem;
+				display: flex;
+				align-items: center;
+				gap: 0.75rem;
+				opacity: 0.9;
+			}
 
-        .dot {
-            width: 8px; height: 8px; border-radius: 50%;
-            box-shadow: 0 0 10px currentColor;
-        }
+			.dot {
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+				box-shadow: 0 0 10px currentColor;
+			}
 
-        canvas {
-            width: 100% !important;
-            height: 320px !important;
-        }
+			canvas {
+				width: 100% !important;
+				height: 320px !important;
+			}
 
-        .history-list {
-            margin-top: 4rem;
-        }
+			.history-list {
+				margin-top: 4rem;
+			}
 
-        .section-header {
-            font-size: 1.125rem;
-            margin-bottom: 2rem;
-            opacity: 0.8;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 1rem;
-        }
+			.section-header {
+				font-size: 1.125rem;
+				margin-bottom: 2rem;
+				opacity: 0.8;
+				border-bottom: 1px solid var(--border);
+				padding-bottom: 1rem;
+			}
 
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 0.75rem;
-        }
+			table {
+				width: 100%;
+				border-collapse: separate;
+				border-spacing: 0 0.75rem;
+			}
 
-        th {
-            text-align: left;
-            padding: 1rem 1.5rem;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            opacity: 0.4;
-            font-weight: 600;
-        }
+			th {
+				text-align: left;
+				padding: 1rem 1.5rem;
+				font-size: 0.75rem;
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				opacity: 0.4;
+				font-weight: 600;
+			}
 
-        td {
-            padding: 1.25rem 1.5rem;
-            background: var(--glass);
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-            transition: background 0.2s ease;
-        }
+			td {
+				padding: 1.25rem 1.5rem;
+				background: var(--glass);
+				border-top: 1px solid var(--border);
+				border-bottom: 1px solid var(--border);
+				transition: background 0.2s ease;
+			}
 
-        tr:hover td {
-            background: var(--glass-hover);
-        }
+			tr:hover td {
+				background: var(--glass-hover);
+			}
 
-        td:first-child { border-left: 1px solid var(--border); border-radius: 8px 0 0 8px; }
-        td:last-child { border-right: 1px solid var(--border); border-radius: 0 8px 8px 0; }
+			td:first-child {
+				border-left: 1px solid var(--border);
+				border-radius: 8px 0 0 8px;
+			}
+			td:last-child {
+				border-right: 1px solid var(--border);
+				border-radius: 0 8px 8px 0;
+			}
 
-        .tag {
-            font-family: monospace;
-            font-size: 0.875rem;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--accent);
-        }
+			.tag {
+				font-family: monospace;
+				font-size: 0.875rem;
+				padding: 0.2rem 0.5rem;
+				border-radius: 4px;
+				background: rgba(255, 255, 255, 0.05);
+				color: var(--accent);
+			}
 
-        .score-pill {
-            font-family: inherit;
-            font-weight: 600;
-            padding: 0.25rem 0.75rem;
-            border-radius: 4px;
-            font-size: 0.8125rem;
-            margin-right: 0.5rem;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid transparent;
-        }
+			.score-pill {
+				font-family: inherit;
+				font-weight: 600;
+				padding: 0.25rem 0.75rem;
+				border-radius: 4px;
+				font-size: 0.8125rem;
+				margin-right: 0.5rem;
+				background: rgba(255, 255, 255, 0.03);
+				border: 1px solid transparent;
+			}
 
-        .score-good { color: var(--accent); border-color: rgba(0, 190, 253, 0.2); }
-        .score-ok { color: var(--amber); border-color: rgba(255, 178, 36, 0.2); }
-        .score-bad { color: #ef4444; border-color: rgba(239, 68, 68, 0.2); }
+			.score-good {
+				color: var(--accent);
+				border-color: rgba(0, 190, 253, 0.2);
+			}
+			.score-ok {
+				color: var(--amber);
+				border-color: rgba(255, 178, 36, 0.2);
+			}
+			.score-bad {
+				color: #ef4444;
+				border-color: rgba(239, 68, 68, 0.2);
+			}
 
-        a { color: var(--accent); text-decoration: none; font-weight: 500; font-size: 0.875rem; }
-        a:hover { filter: brightness(1.2); text-decoration: underline; }
+			a {
+				color: var(--accent);
+				text-decoration: none;
+				font-weight: 500;
+				font-size: 0.875rem;
+			}
+			a:hover {
+				filter: brightness(1.2);
+				text-decoration: underline;
+			}
 
-        @media (max-width: 768px) {
-            .dashboard-grid { grid-template-columns: 1fr; }
-            body { padding: 1.5rem; }
-            h1 { font-size: 1.75rem; }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1 class="heading-styled">Mobile Performance Insights</h1>
-            <p style="opacity: 0.6; margin: 0; font-size: 0.875rem;">Tactical analysis for the NMS Optimizer platform</p>
-        </header>
+			@media (max-width: 768px) {
+				.dashboard-grid {
+					grid-template-columns: 1fr;
+				}
+				body {
+					padding: 1.5rem;
+				}
+				h1 {
+					font-size: 1.75rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<header>
+				<h1 class="heading-styled">Mobile Performance Insights</h1>
+				<p style="opacity: 0.6; margin: 0; font-size: 0.875rem">
+					Tactical analysis for the NMS Optimizer platform
+				</p>
+			</header>
 
-        <div class="dashboard-grid">
-            <div class="card">
-                <h2 class="heading-styled"><span class="dot" style="background: var(--accent); color: var(--accent);"></span> Performance Trend</h2>
-                <canvas id="perfChart"></canvas>
-            </div>
-            <div class="card">
-                <h2 class="heading-styled"><span class="dot" style="background: var(--amber); color: var(--amber);"></span> Accessibility Trend</h2>
-                <canvas id="accChart"></canvas>
-            </div>
-            <div class="card">
-                <h2 class="heading-styled"><span class="dot" style="background: var(--accent); color: var(--accent);"></span> Best Practices Trend</h2>
-                <canvas id="bestChart"></canvas>
-            </div>
-            <div class="card">
-                <h2 class="heading-styled"><span class="dot" style="background: var(--amber); color: var(--amber);"></span> SEO Trend</h2>
-                <canvas id="seoChart"></canvas>
-            </div>
-        </div>
+			<div class="dashboard-grid">
+				<div class="card">
+					<h2 class="heading-styled">
+						<span
+							class="dot"
+							style="background: var(--accent); color: var(--accent)"
+						></span>
+						Performance Trend
+					</h2>
+					<canvas id="perfChart"></canvas>
+				</div>
+				<div class="card">
+					<h2 class="heading-styled">
+						<span
+							class="dot"
+							style="background: var(--amber); color: var(--amber)"
+						></span>
+						Accessibility Trend
+					</h2>
+					<canvas id="accChart"></canvas>
+				</div>
+				<div class="card">
+					<h2 class="heading-styled">
+						<span
+							class="dot"
+							style="background: var(--accent); color: var(--accent)"
+						></span>
+						Best Practices Trend
+					</h2>
+					<canvas id="bestChart"></canvas>
+				</div>
+				<div class="card">
+					<h2 class="heading-styled">
+						<span
+							class="dot"
+							style="background: var(--amber); color: var(--amber)"
+						></span>
+						SEO Trend
+					</h2>
+					<canvas id="seoChart"></canvas>
+				</div>
+			</div>
 
-        <div class="history-list">
-            <h2 class="heading-styled section-header">Audit Logs</h2>
-            <table id="historyTable">
-                <thead>
-                    <tr>
-                        <th>Date of Audit</th>
-                        <th>Commit Ref</th>
-                        <th>Scores (P/A/B/S)</th>
-                        <th>Archive</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Populated via JS -->
-                </tbody>
-            </table>
-        </div>
-    </div>
+			<div class="history-list">
+				<h2 class="heading-styled section-header">Audit Logs</h2>
+				<table id="historyTable">
+					<thead>
+						<tr>
+							<th>Date of Audit</th>
+							<th>Commit Ref</th>
+							<th>Scores (P/A/B/S)</th>
+							<th>Archive</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- Populated via JS -->
+					</tbody>
+				</table>
+			</div>
+		</div>
 
-    <script>
-        async function init() {
-            try {
-                const response = await fetch('data.json');
-                const history = await response.json();
+		<script>
+			async function init() {
+				try {
+					const response = await fetch("data.json");
+					const history = await response.json();
 
-                const plotData = history.slice(-20);
-                const labels = plotData.map(d => new Date(d.date).toLocaleDateString());
+					const plotData = history.slice(-20);
+					const labels = plotData.map((d) => new Date(d.date).toLocaleDateString());
 
-                Chart.defaults.font.family = "'Roboto Flex', sans-serif";
-                Chart.defaults.color = 'rgba(255, 255, 255, 0.4)';
+					Chart.defaults.font.family = "'Roboto Flex', sans-serif";
+					Chart.defaults.color = "rgba(255, 255, 255, 0.4)";
 
-                const commonOptions = {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            min: 0, max: 100,
-                            grid: { color: 'rgba(255,255,255,0.03)' },
-                            ticks: { font: { size: 10 }, padding: 10 }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: { font: { size: 10 }, padding: 10 }
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: 'rgba(12, 13, 14, 0.9)',
-                            titleFont: { family: 'Syncopate', size: 10 },
-                            bodyFont: { family: 'Roboto Flex', size: 12 },
-                            padding: 12,
-                            borderColor: 'rgba(255,255,255,0.1)',
-                            borderWidth: 1
-                        }
-                    },
-                    elements: {
-                        line: { tension: 0.3, borderWidth: 2 },
-                        point: { radius: 3, hoverRadius: 6, backgroundColor: '#fff', borderColor: '#00befd' }
-                    }
-                };
+					const commonOptions = {
+						responsive: true,
+						maintainAspectRatio: false,
+						scales: {
+							y: {
+								min: 0,
+								max: 100,
+								grid: { color: "rgba(255,255,255,0.03)" },
+								ticks: { font: { size: 10 }, padding: 10 },
+							},
+							x: {
+								grid: { display: false },
+								ticks: { font: { size: 10 }, padding: 10 },
+							},
+						},
+						plugins: {
+							legend: { display: false },
+							tooltip: {
+								backgroundColor: "rgba(12, 13, 14, 0.9)",
+								titleFont: { family: "Syncopate", size: 10 },
+								bodyFont: { family: "Roboto Flex", size: 12 },
+								padding: 12,
+								borderColor: "rgba(255,255,255,0.1)",
+								borderWidth: 1,
+							},
+						},
+						elements: {
+							line: { tension: 0.3, borderWidth: 2 },
+							point: {
+								radius: 3,
+								hoverRadius: 6,
+								backgroundColor: "#fff",
+								borderColor: "#00befd",
+							},
+						},
+					};
 
-                const createChart = (id, color, key) => {
-                    new Chart(document.getElementById(id), {
-                        type: 'line',
-                        data: {
-                            labels,
-                            datasets: [{
-                                data: plotData.map(d => Math.round(d.scores[key] * 100)),
-                                borderColor: color,
-                                background: 'transparent'
-                            }]
-                        },
-                        options: commonOptions
-                    });
-                };
+					const createChart = (id, color, key) => {
+						new Chart(document.getElementById(id), {
+							type: "line",
+							data: {
+								labels,
+								datasets: [
+									{
+										data: plotData.map((d) => Math.round(d.scores[key] * 100)),
+										borderColor: color,
+										background: "transparent",
+									},
+								],
+							},
+							options: commonOptions,
+						});
+					};
 
-                createChart('perfChart', '#00befd', 'performance');
-                createChart('accChart', '#ffb224', 'accessibility');
-                createChart('bestChart', '#00befd', 'best-practices');
-                createChart('seoChart', '#ffb224', 'seo');
+					createChart("perfChart", "#00befd", "performance");
+					createChart("accChart", "#ffb224", "accessibility");
+					createChart("bestChart", "#00befd", "best-practices");
+					createChart("seoChart", "#ffb224", "seo");
 
-                const tableBody = document.querySelector('#historyTable tbody');
-                history.reverse().slice(0, 10).forEach(run => {
-                    const row = document.createElement('tr');
-                    const date = new Date(run.date).toLocaleDateString() + ' @ ' + new Date(run.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                    const sha = run.sha.substring(0, 7);
+					const tableBody = document.querySelector("#historyTable tbody");
+					history
+						.reverse()
+						.slice(0, 10)
+						.forEach((run) => {
+							const row = document.createElement("tr");
+							const date =
+								new Date(run.date).toLocaleDateString()
+								+ " @ "
+								+ new Date(run.date).toLocaleTimeString([], {
+									hour: "2-digit",
+									minute: "2-digit",
+								});
+							const sha = run.sha.substring(0, 7);
 
-                    const getScoreClass = (s) => s >= 0.9 ? 'score-good' : s >= 0.5 ? 'score-ok' : 'score-bad';
+							const getScoreClass = (s) =>
+								s >= 0.9 ? "score-good"
+								: s >= 0.5 ? "score-ok"
+								: "score-bad";
 
-                    row.innerHTML = `
+							row.innerHTML = `
                         <td style="font-size: 0.8125rem; opacity: 0.7;">${date}</td>
                         <td><a href="https://github.com/jbelew/nms_optimizer-web/commit/${run.sha}" target="_blank"><code class="tag">${sha}</code></a></td>
                         <td>
                             <span class="score-pill ${getScoreClass(run.scores.performance)}">${Math.round(run.scores.performance * 100)}</span>
                             <span class="score-pill ${getScoreClass(run.scores.accessibility)}">${Math.round(run.scores.accessibility * 100)}</span>
-                            <span class="score-pill ${getScoreClass(run.scores['best-practices'])}">${Math.round(run.scores['best-practices'] * 100)}</span>
+                            <span class="score-pill ${getScoreClass(run.scores["best-practices"])}">${Math.round(run.scores["best-practices"] * 100)}</span>
                             <span class="score-pill ${getScoreClass(run.scores.seo)}">${Math.round(run.scores.seo * 100)}</span>
                         </td>
                         <td><a href="reports/${run.sha}/index.html" target="_blank">DEPLOY LOG</a></td>
                     `;
-                    tableBody.appendChild(row);
-                });
+							tableBody.appendChild(row);
+						});
+				} catch (e) {
+					console.error(
+						"Access failure: Performance history data corrupted or missing.",
+						e,
+					);
+				}
+			}
 
-            } catch (e) {
-                console.error("Access failure: Performance history data corrupted or missing.", e);
-            }
-        }
-
-        init();
-    </script>
-</body>
+			init();
+		</script>
+	</body>
 </html>
