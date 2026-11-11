@@ -1,3 +1,10 @@
+## [8.9.1](https://github.com/jbelew/nms_optimizer-web/compare/v8.9.0...v8.9.1) (2026-11-11)
+
+
+### Bug Fixes
+
+* **seo:** restore original subpage titles across all locales ([7f0d2c9](https://github.com/jbelew/nms_optimizer-web/commit/7f0d2c959b2ca1f2450949c7d7fb7d6307c53284))
+
 # [8.9.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.8.3...v8.9.0) (2026-11-11)
 
 
