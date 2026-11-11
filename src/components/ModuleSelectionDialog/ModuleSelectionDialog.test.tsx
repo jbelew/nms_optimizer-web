@@ -423,4 +423,52 @@ describe("ModuleSelectionDialog", () => {
 
 		resolveOptimize?.();
 	});
+
+	it("separates leading bracketed badges for hanging indent, binds Greek rank suffixes, and dims locked prerequisite rows", async () => {
+		seedAndRender({
+			checkedModules: ["core1"],
+			modules: [
+				baseModules[0],
+				{
+					...baseModules[0],
+					checked: false,
+					id: "ranked_theta",
+					label: "[1] Fleet Mining and Industrial Upgrade Theta",
+					type: "upgrade",
+				},
+				{
+					...baseModules[0],
+					checked: false,
+					id: "ranked_tau",
+					label: "[2] Fleet Mining and Industrial Upgrade Tau",
+					type: "upgrade",
+				},
+			],
+		});
+
+		const thetaCheckbox = await screen.findByRole("checkbox", {
+			name: /Fleet Mining and Industrial Upgrade Theta/i,
+		});
+		const tauCheckbox = screen.getByRole("checkbox", {
+			name: /Fleet Mining and Industrial Upgrade Tau/i,
+		});
+
+		const thetaLabel = thetaCheckbox.closest("label");
+		const tauLabel = tauCheckbox.closest("label");
+
+		// Theta is unlocked while Tau is locked until Theta is checked
+		expect(thetaLabel).not.toHaveClass("opacity-50");
+		expect(tauLabel).toHaveClass("opacity-50");
+
+		// Prefix badge [1] is rendered outside the wrapping text span for hanging indent
+		const codeBadge = thetaLabel?.querySelector("code");
+		expect(codeBadge).toHaveTextContent("[1]");
+		expect(codeBadge?.nextElementSibling).toHaveTextContent(
+			"Fleet Mining and Industrial Upgrade Theta",
+		);
+
+		// Rank suffix pair "Upgrade Theta" is bound with whitespace-nowrap to prevent orphan wrapping
+		const noWrapSpan = thetaLabel?.querySelector("span.whitespace-nowrap");
+		expect(noWrapSpan).toHaveTextContent("Upgrade Theta");
+	});
 });

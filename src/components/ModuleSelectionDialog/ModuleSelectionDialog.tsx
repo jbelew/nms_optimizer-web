@@ -68,6 +68,10 @@ export type { GroupedModules, SelectionModule };
 
 /** Default empty array for modules to ensure stable reference when dialog is closed. */
 const EMPTY_MODULES_ARRAY: SelectionModule[] = [];
+/** Matches a leading bracketed rank or priority token (e.g., `[1]`, `[C1]`, `[P1]`). */
+const LEADING_BRACKET_PATTERN = /^(\[[^\]]+\])\s*(.*)$/;
+/** Matches a preceding word paired with a Greek Module Rank Order suffix (`Theta`, `Tau`, `Sigma`). */
+const RANK_SUFFIX_PATTERN = /(\S+\s+(?:Theta|Tau|Sigma))\b/g;
 /** Path to the fallback technology icon. */
 const fallbackImage = "/assets/img/grid/infra.webp";
 /** Base path for grid module images. */
@@ -134,6 +138,47 @@ const resolveModuleImagePath = (image?: null | string): string =>
 	:	fallbackImage;
 
 /**
+ * Parsed representation of a technology module's display label.
+ *
+ * @category Components
+ */
+interface ParsedModuleLabel {
+	/** Formatted label content with parenthetical badges and orphan-safe rank suffixes. */
+	formattedText: React.ReactNode;
+	/** Optional leading bracketed code (e.g., `[1]`, `[C1]`, `[P1]`) rendered as a hanging-indent prefix. */
+	prefixBadge: null | string;
+}
+
+/**
+ * Binds a Greek Module Rank Order suffix (`Theta`, `Tau`, `Sigma`) to its preceding word
+ * so tier names do not wrap onto a second line as single-word orphans on narrow viewports.
+ *
+ * @param text - Plain text fragment to format.
+ *
+ * @returns Text or React fragments with `whitespace-nowrap` rank pairs.
+ *
+ * @category Utilities
+ */
+const formatRankNoWrap = (text: string): React.ReactNode => {
+	const parts = text.split(RANK_SUFFIX_PATTERN);
+
+	if (parts.length === 1) {
+		return text;
+	}
+
+	return parts.map((part, index) =>
+		index % 2 === 1 ?
+			<span
+				className="whitespace-nowrap"
+				key={index}
+			>
+				{part}
+			</span>
+		:	part,
+	);
+};
+
+/**
  * Parses and styles parenthetical text fragments within a string.
  *
  * @param text - The input text containing parentheses.
@@ -148,12 +193,12 @@ const formatParentheses = (text: string): React.ReactNode => {
 	const matches = text.match(pattern) || [];
 
 	if (matches.length === 0) {
-		return text;
+		return formatRankNoWrap(text);
 	}
 
 	return parts.map((part, index) => (
 		<React.Fragment key={index}>
-			{part}
+			{formatRankNoWrap(part)}
 			{matches[index] && (
 				<Badge
 					className="hidden! font-mono! sm:inline!"
@@ -167,7 +212,7 @@ const formatParentheses = (text: string): React.ReactNode => {
 };
 
 /**
- * Parses and styles bracketed text fragments within a technology label.
+ * Parses and styles inline bracketed text fragments within a technology label.
  *
  * @param label - The input label string.
  *
@@ -193,11 +238,37 @@ const formatLabel = (label: string): React.ReactNode => {
 };
 
 /**
+ * Splits a module label into an optional leading bracketed badge and formatted body text.
+ *
+ * @param label - Raw module display label.
+ *
+ * @returns Parsed prefix badge and formatted label body.
+ *
+ * @category Utilities
+ */
+const parseModuleLabel = (label: string): ParsedModuleLabel => {
+	const leadingMatch = label.match(LEADING_BRACKET_PATTERN);
+
+	if (!leadingMatch) {
+		return {
+			formattedText: formatLabel(label),
+			prefixBadge: null,
+		};
+	}
+
+	return {
+		formattedText: formatLabel(leadingMatch[2]),
+		prefixBadge: leadingMatch[1],
+	};
+};
+
+/**
  * Individual module selection checkbox with icon and label.
  *
  * @remarks
  * Renders either an immutable Core Module checkbox or an interactive `CheckboxGroup.Item`
- * paired with a 24×24 module icon and formatted label.
+ * paired with a 24×24 module icon, an optional hanging-indent rank `<Code>` badge, and
+ * top-aligned formatted label text for clean multi-line wrapping on mobile viewports.
  *
  * @see {@link ModuleCheckboxProps}
  *
@@ -214,31 +285,33 @@ const formatLabel = (label: string): React.ReactNode => {
 const ModuleCheckbox: React.FC<ModuleCheckboxProps> = memo(
 	({ isCore = false, isDisabled, module, techColor }) => {
 		const imagePath = resolveModuleImagePath(module.image);
-		const formattedLabel = useMemo(
-			() => formatLabel(module.label ?? module.id),
+		const { formattedText, prefixBadge } = useMemo(
+			() => parseModuleLabel(module.label ?? module.id),
 			[module.id, module.label],
 		);
+		const isLocked = !isCore && isDisabled;
 
 		return (
 			<label
-				className={`mb-2 flex items-center gap-2 text-sm font-medium sm:text-base ${
-					isCore ? "" : (
-						"cursor-pointer transition-colors duration-200 hover:text-(--accent-a12)"
-					)
+				className={`mb-1 flex items-start gap-2 py-0.5 text-sm font-medium sm:text-base ${
+					isCore ? ""
+					: isLocked ? "cursor-not-allowed opacity-50"
+					: "cursor-pointer transition-colors duration-200 hover:text-(--accent-a12)"
 				}`}
 				key={module.id}
-				style={isCore ? undefined : { cursor: "pointer" }}
 			>
-				{isCore ?
-					<Checkbox
-						checked={true}
-						disabled={true}
-					/>
-				:	<CheckboxGroup.Item
-						disabled={isDisabled}
-						value={module.id}
-					/>
-				}
+				<span className="mt-1 flex shrink-0">
+					{isCore ?
+						<Checkbox
+							checked={true}
+							disabled={true}
+						/>
+					:	<CheckboxGroup.Item
+							disabled={isDisabled}
+							value={module.id}
+						/>
+					}
+				</span>
 				<span
 					className="rt-reset rt-AvatarRoot rt-r-size-1 rt-variant-soft shrink-0 overflow-hidden"
 					data-accent-color={techColor}
@@ -253,7 +326,14 @@ const ModuleCheckbox: React.FC<ModuleCheckboxProps> = memo(
 						width={24}
 					/>
 				</span>
-				<span className="flex-1">{formattedLabel}</span>
+				<span className="mt-[3px] flex min-w-0 flex-1 items-baseline gap-1.5 sm:mt-0.5">
+					{prefixBadge && (
+						<Code className="shrink-0 font-normal! tabular-nums">{prefixBadge}</Code>
+					)}
+					<span className="min-w-0 flex-1 leading-[1.3] text-pretty wrap-break-word sm:leading-snug">
+						{formattedText}
+					</span>
+				</span>
 			</label>
 		);
 	},
@@ -302,7 +382,7 @@ const ModuleGroup: React.FC<ModuleGroupProps> = ({
 	}
 
 	return (
-		<div className="mb-1">
+		<div className="mb-2 last:mb-0">
 			<div
 				className={`heading-styled flex items-center gap-1 text-base! sm:text-lg! ${
 					groupName !== "cosmetic" ? "mb-2" : "mb-0"
@@ -560,7 +640,7 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 					/>
 				</Text>
 			)}
-			<label className="flex cursor-pointer items-center text-sm font-medium transition-colors duration-200 hover:text-(--accent-a12) sm:text-base">
+			<label className="flex cursor-pointer items-center py-0.5 text-sm font-medium transition-colors duration-200 hover:text-(--accent-a12) sm:text-base">
 				<Checkbox
 					aria-label={t("moduleSelection.selectAll")}
 					checked={allModulesSelected}
@@ -581,7 +661,7 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 			<div className="flex flex-col">
 				{groupedModules["core"]?.length > 0 && (
 					<div
-						className="mb-2"
+						className="mb-2.5"
 						key="core"
 					>
 						<div
