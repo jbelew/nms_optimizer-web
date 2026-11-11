@@ -1,3 +1,10 @@
+## [8.9.2](https://github.com/jbelew/nms_optimizer-web/compare/v8.9.1...v8.9.2) (2026-11-11)
+
+
+### Bug Fixes
+
+* **i18n:** audit translations across all locales and add locale verification ([61a3546](https://github.com/jbelew/nms_optimizer-web/commit/61a35469e2351fc9c3fa12fd76a0621d569639ed))
+
 ## [8.9.1](https://github.com/jbelew/nms_optimizer-web/compare/v8.9.0...v8.9.1) (2026-11-11)
 
 
