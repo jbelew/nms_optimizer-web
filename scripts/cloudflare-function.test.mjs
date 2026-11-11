@@ -533,7 +533,11 @@ describe("functions/[[path]].js", () => {
 				expect(esRes.headers.get("cache-control")).toBe(
 					"no-cache, must-revalidate, max-age=0",
 				);
-				expect(esRes.headers.get("x-markdown-tokens")).toBe("2122");
+				const expectedTokens = String(
+					Math.ceil(Buffer.byteLength(esAboutMd ?? "", "utf-8") / 4),
+				);
+				expect(esRes.headers.get("x-markdown-tokens")).toBe(expectedTokens);
+				expect(Number(expectedTokens)).toBeGreaterThan(1500);
 				expect(esBody).toBe(esAboutMd);
 				expect(esBody.startsWith("---\n")).toBe(true);
 				expect(esBody).toContain('url: "https://nms-optimizer.app/es/about/"');

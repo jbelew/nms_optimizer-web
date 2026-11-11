@@ -1,76 +1,76 @@
 # Sobre o NMS Optimizer: A Calculadora Definitiva de Layouts de Tecnologia para No Man's Sky
 
-**NMS Optimizer** é uma ferramenta 100% gratuita e sem anúncios projetada para descobrir exatamente onde colocar seus módulos de tecnologia em _No Man's Sky_. Você escolhe seu equipamento, seleciona seus módulos de atualização Classe S ou Classe X, marca seus espaços superalimentados (Supercharged Slots) e nossa calculadora gera quase instantaneamente o layout que maximiza seus atributos no jogo.
+O **NMS Optimizer** é uma ferramenta 100% gratuita e sem anúncios projetada para descobrir exatamente onde posicionar seus módulos de tecnologia em _No Man's Sky_. Você escolhe seu equipamento, seleciona seus módulos de atualização de Classe S ou Classe X, marca seus espaços supercarregados e nossa calculadora gera quase instantaneamente o layout que maximiza seus atributos no jogo.
 
-Ao equilibrar perfeitamente as mecânicas de jogo, um layout otimizado normalmente pontua **15-20% mais alto** do que a maioria dos jogadores consegue organizar à mão.
+Ao equilibrar perfeitamente as mecânicas do jogo, um layout otimizado normalmente alcança uma pontuação **15-20% maior** do que o que a maioria dos jogadores consegue organizar manualmente.
 
-## O Problema: Maximizando Bônus de Adjacência (Adjacency Bonuses) & Espaços Superalimentados
+## O Problema: Maximizar Bônus de Adjacência e Espaços Supercarregados
 
-_No Man's Sky_ não explica explicitamente os bônus de adjacência e não oferece orientação sobre a estratégia para espaços superalimentados. Maximizar a manobrabilidade de sua nave ou o dano de sua multiferramenta significa lidar com dois sistemas complexos:
+_No Man's Sky_ não explica explicitamente os bônus de adjacência e não oferece nenhuma orientação sobre estratégias para espaços supercarregados. Maximizar a manobrabilidade da sua nave ou o dano da sua multiferramenta exige conciliar dois sistemas complexos:
 
-- **Bônus de Adjacência:** Quando você coloca módulos de tecnologia compatíveis lado a lado na grade do inventário, eles ganham um bônus de atributos. Tecnologias diferentes têm parceiros de adjacência diferentes — atualizações de armas impulsionam umas às outras, tecnologia de movimento impulsiona outra tecnologia de movimento, e quanto mais bordas compartilhadas você criar, maior será o bônus cumulativo.
-- **Espaços Superalimentados:** Esses raros espaços de inventário (geralmente até 4 por grade) fornecem um enorme multiplicador de atributos de ~25-30% para qualquer módulo colocado neles.
+- **Bônus de Adjacência:** Quando você coloca módulos de tecnologia compatíveis lado a lado na grade de inventário, eles recebem um bônus nos atributos. Tecnologias diferentes têm parceiros de adjacência diferentes — atualizações de armas fortalecem umas às outras, tecnologias de movimento impulsionam outras tecnologias de movimento e, quanto mais bordas compartilhadas você criar, maior será o bônus acumulado.
+- **Espaços Supercarregados:** Esses raros espaços de inventário (geralmente até 4 por grade) concedem um enorme multiplicador de ~25-30% nos atributos de qualquer módulo colocado dentro deles.
 
-Descobrir o melhor arranjo absoluto significa testar combinações em milhões de permutações possíveis — até cerca de 8.32 × 10⁸¹ para uma grade totalmente expandida. Ninguém está resolvendo isso à mão.
+Descobrir o melhor arranjo absoluto exige testar combinações entre milhões de permutações possíveis — até cerca de 8,32 × 10⁸¹ em uma grade totalmente expandida. Ninguém resolve isso manualmente.
 
-## Como o Motor de Otimização de Layout Funciona
+## Como Funciona o Motor de Otimização de Layouts
 
-Nós não dependemos de adivinhação. O motor do NMS Optimizer usa um sofisticado fluxo de trabalho de quatro etapas para encontrar automaticamente sua melhor build:
+Nós não dependemos de palpites. O motor do NMS Optimizer utiliza um pipeline sofisticado de quatro etapas para encontrar automaticamente sua melhor build:
 
-1. **Reconhecimento de Padrões:** O solucionador começa com arranjos testados manualmente e aprovados pela comunidade que obtêm boas pontuações de forma confiável para conjuntos de módulos comuns.
-2. **Aprendizado de Máquina (IA):** Se sua grade possui espaços superalimentados únicos, um modelo de aprendizado de máquina TensorFlow — treinado em mais de 16.000 layouts de alta pontuação — prevê os posicionamentos mais inteligentes para suas tecnologias principais em relação aos seus módulos de atualização.
-3. **Recozimento Simulado (Simulated Annealing):** Nosso principal motor de otimização, construído em Rust, troca rapidamente os módulos e testa milhares de arranjos em milissegundos para escalar em direção à pontuação mais alta absoluta possível.
-4. **Exibição de Resultados:** Você vê imediatamente o layout vencedor ao lado de um detalhamento completo dos multiplicadores de adjacência.
+1. **Reconhecimento de Padrões:** O solucionador começa com arranjos testados manualmente e comprovados pela comunidade que obtêm ótimas pontuações de forma consistente em conjuntos comuns de módulos.
+2. **Aprendizado de Máquina (IA):** Se a sua grade possui espaços supercarregados exclusivos, um modelo de aprendizado de máquina em TensorFlow — treinado com mais de 16.000 layouts de alta pontuação — prevê os posicionamentos mais inteligentes para suas tecnologias principais em relação aos seus módulos de atualização.
+3. **Recozimento Simulado:** Nosso motor central de otimização, desenvolvido em Rust, troca módulos rapidamente e testa milhares de arranjos em milissegundos para alcançar a maior pontuação possível.
+4. **Exibição dos Resultados:** Você vê imediatamente o layout vencedor acompanhado do detalhamento completo dos multiplicadores de adjacência.
 
 ## Equipamentos Suportados
 
-O NMS Optimizer fornece resolução dinâmica para cada plataforma principal do jogo:
+O NMS Optimizer oferece otimização dinâmica para todas as principais plataformas do jogo:
 
-- **Naves (Starships):** Naves Padrão, Exóticas (Exotic), Interceptadores Sentinela (Sentinel Interceptor), Solares, Caças (Fighter), Vivas (Living) e Atlantid.
-- **Multiferramentas (Multi-Tools):** Todas as variantes de armas e mineração, incluindo Cajados (Staves).
-- **Exotrajes (Exosuits) & Exoveículos (Exocraft):** Todas as tecnologias de Exotraje e tipos de veículos (Nômade, Colosso, Pilgrim, Roamer, Minotauro, Nautilon).
-- **Cargueiros (Freighters):** Tecnologia de hiperpropulsor de nave capital e coordenação de frota.
-- **Corvetas (Corvettes):** Suporte para layouts complexos, incluindo módulos de reator únicos e espaços de tecnologia estética.
+- **Naves:** Padrão, Exóticas, Interceptadores sentinela, Solares, Caças e Vivas.
+- **Multiferramentas:** Todas as variantes de armas e mineração, incluindo Bastões.
+- **Exotrajes e Exoveículos:** Todas as tecnologias de Exotraje e tipos de veículos (Nômade, Colosso, Peregrino, Andarilho, Minotauro e Nautilon).
+- **Naves Cargueiras:** Tecnologias de hiperpropulsor de nave capital e coordenação de frota.
+- **Corvetas:** Suporte a layouts complexos, incluindo módulos de reator exclusivos e espaços de tecnologia cosmética.
 
-## Perguntas Frecuentes (FAQ)
+## Perguntas Frequentes (FAQ)
 
-**O que devo colocar nos meus espaços superalimentados?**
-Depende do seu layout! Às vezes é melhor superalimentar sua tecnologia principal, e outras vezes é melhor superalimentar sua atualização com os atributos mais altos. Nosso modelo de IA foi treinado em mais de 16.000 layouts reais especificamente para tomar essa decisão por você.
+**O que devo colocar nos meus espaços supercarregados?**
+Depende do seu layout! Às vezes é melhor supercarregar sua tecnologia principal, e em outros casos vale mais a pena supercarregar sua atualização com os atributos mais altos. Nosso modelo de IA foi treinado com mais de 16.000 layouts reais especificamente para tomar essa decisão por você.
 
 **O NMS Optimizer é gratuito?**
-Sim. É 100% gratuito, sem anúncios e de código aberto (GPL-3.0). Você não precisa criar uma conta ou fornecer um e-mail.
+Sim. É 100% gratuito, sem anúncios e de código aberto (GPL-3.0). Você não precisa criar conta nem informar um e-mail.
 
 **Posso salvar e compartilhar meus layouts?**
-Sim! Você pode salvar suas builds favoritas localmente como arquivos `.nms`, gerar links compartilháveis para enviar a amigos, ou compartilhar capturas de tela de alta qualidade dos layouts diretamente nas redes sociais. As builds são validadas quanto à integridade antes de serem compartilhadas.
+Sim! Você pode salvar suas builds favoritas localmente como arquivos `.nms`, gerar links compartilháveis para enviar a amigos ou compartilhar capturas de tela em alta qualidade dos layouts diretamente nas redes sociais. As builds passam por validação de integridade antes do compartilhamento.
 
-**Por que a ferramenta não mostra as estatísticas do jogo?**
-A ferramenta evita intencionalmente calcular métricas padrão do jogo, como DPS ou Alcance de Anos-Luz. Como números exatos requerem "seeds" (sementes) ocultas da nave, inacessíveis sem um editor de save, o otimizador confia em uma pontuação de "porcentagem do máximo" em seu lugar.
+**Por que a ferramenta não mostra os atributos numéricos do jogo?**
+A ferramenta evita intencionalmente calcular métricas brutas do jogo, como DPS ou alcance em anos-luz. Como os números exatos dependem de sementes (_seeds_) ocultas da nave que são inacessíveis sem um editor de salvamento, o otimizador utiliza uma pontuação baseada em "porcentagem do máximo".
 
 **Por que o layout otimizado não inclui meu módulo específico de Expedição?**
-O NMS Optimizer suporta totalmente todas as **Recompensas de Expedição e Redux de Expedição** oferecidas após a atualização _Worlds Part I_. No entanto, como nem todos os jogadores possuem esses itens raros, esses módulos opcionais não são incluídos por padrão em suas soluções. Você pode ativá-los facilmente para sua build abrindo a <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> **Interface de Seleção de Módulos**.
+O NMS Optimizer oferece suporte completo a todas as **Recompensas de Expedição e Redux de Expedição** lançadas após a atualização _Worlds Part I_. No entanto, como nem todos os jogadores possuem esses itens raros, esses módulos opcionais não são incluídos por padrão nas otimizações. Você pode ativá-los facilmente na sua build abrindo a <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> **interface de Seleção de Módulos**.
 
-## Sob o Capô: Nossa Pilha de Tecnologia
+## Nos Bastidores: Nossa Stack Tecnológica
 
-Para os desenvolvedores e nerds de dados, aqui está a pilha de tecnologia que alimenta o NMS Optimizer:
+Para desenvolvedores e entusiastas de dados, esta é a stack tecnológica por trás do NMS Optimizer:
 
 - **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
-- **Backend Solucionador:** Python, Flask, TensorFlow, NumPy, Rust (alimenta o recozimento simulado e o motor de pontuação)
+- **Solucionador Backend:** Python, Flask, TensorFlow, NumPy, Rust (responsável pelo recozimento simulado e pelo motor de pontuação)
 - **Testes:** Vitest, Python Unittest
-- **Implantação & Hospedagem:** Heroku (hospedagem da API), Cloudflare (DNS/CDN), Docker
+- **Implantação e Hospedagem:** Heroku (hospedagem da API), Cloudflare (DNS/CDN), Docker
 - **CI/CD:** GitHub Actions
 
 ### Repositórios de Código Aberto
 
-Quer contribuir? O NMS Optimizer é totalmente de código aberto.
+Quer contribuir? O NMS Optimizer tem código totalmente aberto.
 
 - Interface Web: [github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
 - Backend: [github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
 
-## Um Enorme Muito Obrigado à Comunidade
+## Um Enorme Agradecimento à Comunidade
 
-Este projeto não seria possível sem a incrível comunidade de _No Man's Sky_. Um agradecimiento especial a **George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray, jayriley, arratikbehavior, Someone, Cal Abunga**, e todos os outros que contribuíram. Seu apoio, doações, compartilhamentos e palavras gentis significam tudo e ajudam a manter este projeto vivo.
+Este projeto não seria possível sem a incrível comunidade de _No Man's Sky_. Um agradecimento especial a **George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray, jayriley, arratikbehavior, Someone, Cal Abunga** e a todas as outras pessoas que contribuíram. Seu apoio, doações, compartilhamentos e palavras gentis significam tudo e ajudam a manter este projeto vivo.
 
-## Uma Olhada no Passado: Versões Iniciais
+## Uma Olhada no Passado: Primeiras Versões
 
-![Early prototype of No Man's Sky layout optimizer user interface](/assets/img/screenshots/screenshot_v03.webp)
-Se você esteve conosco desde o começo, pode se lembrar da aparência da interface do usuário em seus estágios iniciais alfa. Ela funcionava, mas o design era minimalista. A versão atual representa uma grande e contínua melhoria em design, usabilidade móvel e clareza geral.
+![Protótipo inicial da interface de usuário do otimizador de layouts para No Man's Sky](/assets/img/screenshots/screenshot_v03.webp)
+Se você nos acompanha desde o início, talvez se lembre de como era a interface nas primeiras fases alfa. Ela funcionava, mas o visual era minimalista. A versão atual representa uma evolução grande e contínua em design, usabilidade móvel e clareza geral.

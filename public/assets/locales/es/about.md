@@ -1,76 +1,76 @@
-# Acerca del NMS Optimizer: La Calculadora Definitiva de Diseños de Tecnología para No Man's Sky
+# Acerca de NMS Optimizer: la calculadora definitiva de diseños de tecnología para No Man's Sky
 
-**NMS Optimizer** es una herramienta 100% gratuita y sin anuncios diseñada para descifrar exactamente dónde colocar tus módulos de tecnología en _No Man's Sky_. Tú eliges tu equipo, seleccionas tus módulos de actualización de Clase S o Clase X, marcas tus ranuras potenciadas (Supercharged Slots) y nuestra calculadora genera casi al instante el diseño que maximiza tus estadísticas dentro del juego.
+**NMS Optimizer** es una herramienta 100 % gratuita y sin anuncios diseñada para calcular con exactitud dónde colocar tus módulos de tecnología en _No Man's Sky_. Eliges tu equipo, seleccionas tus módulos de mejora de clase S o clase X, marcas tus ranuras potenciadas y nuestra calculadora genera casi al instante la distribución que maximiza tus estadísticas dentro del juego.
 
-Al equilibrar perfectamente las mecánicas del juego, un diseño optimizado normalmente obtiene una puntuación **15-20% mayor** que lo que la mayoría de los jugadores pueden organizar a mano.
+Al equilibrar con precisión las mecánicas del juego, un diseño optimizado suele obtener una puntuación entre un **15 y un 20 % superior** a la que la mayoría de los jugadores logran organizar a mano.
 
-## El Problema: Maximizar las Bonificaciones de Adyacencia (Adjacency Bonuses) y las Ranuras Potenciadas
+## El problema: maximizar las bonificaciones por adyacencia y las ranuras potenciadas
 
-_No Man's Sky_ no explica explícitamente las bonificaciones de adyacencia y no ofrece ninguna guía sobre la estrategia de las ranuras potenciadas. Maximizar la maniobrabilidad de tu nave o el daño de tu multiherramienta significa hacer malabares con dos complejos sistemas:
+_No Man's Sky_ no explica de forma explícita las bonificaciones por adyacencia ni ofrece indicaciones sobre cómo aprovechar las ranuras potenciadas. Maximizar la maniobrabilidad de tu nave o el daño de tu multiherramienta exige combinar dos sistemas complejos:
 
-- **Bonificaciones de Adyacencia:** Cuando colocas módulos de tecnología compatibles uno al lado del otro en la cuadrícula de inventario, obtienen un aumento de estadísticas. Diferentes tecnologías tienen diferentes compañeros de adyacencia: las actualizaciones de armas se potencian entre sí, la tecnología de movimiento potencia otra tecnología de movimiento, y cuantos más bordes compartidos crees, mayor será la bonificación acumulativa.
-- **Ranuras Potenciadas:** Estas raras ranuras de inventario (normalmente hasta 4 por cuadrícula) otorgan un multiplicador masivo de ~25-30% a cualquier módulo que se coloque dentro de ellas.
+- **Bonificaciones por adyacencia:** Cuando colocas módulos de tecnología compatibles juntos en la cuadrícula de inventario, reciben un aumento de estadísticas. Cada tecnología tiene sus propios compañeros de adyacencia: las mejoras de armas se potencian entre sí, las tecnologías de movimiento potencian otras tecnologías de movimiento y, cuantos más bordes compartidos crees, mayor será la bonificación acumulada.
+- **Ranuras potenciadas:** Estas escasas ranuras de inventario (normalmente hasta 4 por cuadrícula) otorgan un enorme multiplicador de ~25-30 % a las estadísticas de cualquier módulo que coloques en ellas.
 
-Descubrir el mejor arreglo absoluto significa probar combinaciones a lo largo de millones de posibles permutaciones, hasta aproximadamente 8.32 × 10⁸¹ para una cuadrícula completamente expandida. Nadie está resolviendo eso a mano.
+Encontrar la mejor disposición posible requiere probar combinaciones entre millones de permutaciones —hasta aproximadamente 8,32 × 10⁸¹ en una cuadrícula ampliada al máximo—. Nadie puede resolver eso a mano.
 
-## Cómo Funciona el Motor de Optimización de Diseños
+## Cómo funciona el motor de optimización de diseños
 
-No dependemos de conjeturas. El motor del NMS Optimizer utiliza un sofisticado flujo de trabajo de cuatro pasos para encontrar automáticamente tu mejor construcción:
+No nos basamos en conjeturas. El motor de NMS Optimizer utiliza un proceso de cuatro fases para encontrar automáticamente tu mejor diseño:
 
-1. **Reconocimiento de Patrones:** El solucionador comienza con arreglos probados a mano y comprobados por la comunidad que de manera confiable obtienen buenas puntuaciones para conjuntos de módulos comunes.
-2. **Aprendizaje Automático (IA):** Si tu cuadrícula tiene ranuras potenciadas únicas, un modelo de aprendizaje automático de TensorFlow, entrenado en más de 16,000 diseños de alta puntuación, predice las colocaciones más inteligentes para tus tecnologías principales frente a tus módulos de actualización.
-3. **Recocido Simulado (Simulated Annealing):** Nuestro motor principal de optimización, construido en Rust, intercambia módulos rápidamente y prueba miles de arreglos en milisegundos para escalar hacia la puntuación más alta absoluta posible.
-4. **Visualización de Resultados:** Inmediatamente ves el diseño ganador junto con un desglose completo de los multiplicadores de adyacencia.
+1. **Reconocimiento de patrones:** El motor de cálculo parte de disposiciones probadas a mano y validadas por la comunidad que obtienen puntuaciones altas de forma fiable en los conjuntos de módulos más habituales.
+2. **Aprendizaje automático (IA):** Si tu cuadrícula tiene ranuras potenciadas en posiciones concretas, un modelo de aprendizaje automático en TensorFlow —entrenado con más de 16 000 diseños de alta puntuación— predice las ubicaciones más inteligentes para tus tecnologías principales frente a tus módulos de mejora.
+3. **Recocido simulado:** Nuestro motor principal de optimización, programado en Rust, intercambia módulos con rapidez y evalúa miles de combinaciones en milisegundos hasta alcanzar la puntuación más alta posible.
+4. **Visualización de resultados:** Al instante ves la distribución ganadora junto con el desglose completo de multiplicadores por adyacencia.
 
-## Equipos Compatibles
+## Equipos compatibles
 
-El NMS Optimizer proporciona resolución dinámica para cada plataforma principal del juego:
+NMS Optimizer ofrece cálculo dinámico para todas las plataformas principales del juego:
 
-- **Naves (Starships):** Naves Estándar, Exóticas (Exotic), Interceptores Centinela (Sentinel Interceptor), Solares, de Combate (Fighter), Vivas (Living) y Atlantid.
-- **Multiherramientas (Multi-Tools):** Todas las variantes de armas y minería, incluidos los Báculos (Staves).
-- **Exotrajes (Exosuits) y Exovehículos (Exocraft):** Todas las tecnologías de Exotraje y tipos de vehículos (Nómada, Coloso, Peregrino, Roamer, Minotauro, Nautilon).
-- **Cargueros (Freighters):** Tecnología de hiperimpulso y coordinación de la flota de naves capitales.
-- **Corbetas (Corvettes):** Soporte para diseños complejos, incluyendo módulos reactores únicos y ranuras de tecnología cosmética.
+- **Naves:** Naves estándar, exóticas, interceptores centinela, solares, cazas y vivientes.
+- **Multiherramientas:** Todas las variantes de armas y extracción, incluidos los bastones.
+- **Exotrajes y exonaves:** Todas las tecnologías de exotraje y todos los tipos de vehículos (Nómada, Coloso, Peregrino, Vagabundo, Minotauro y Nautilo).
+- **Cargueros:** Tecnología de hiperturbo de naves capitales y coordinación de flota.
+- **Corbetas:** Compatibilidad con cuadrículas complejas, incluidos módulos de reactor únicos y ranuras de tecnología cosmética.
 
-## Preguntas Frecuentes (FAQ)
+## Preguntas frecuentes (FAQ)
 
-**¿Qué debería poner en mis ranuras potenciadas?**
-¡Depende de tu diseño! A veces es mejor potenciar tu tecnología principal y otras veces es mejor potenciar tu actualización con los números más altos. Nuestro modelo de IA fue entrenado en más de 16,000 diseños reales específicamente para tomar esta decisión por ti.
+**¿Qué debo colocar en mis ranuras potenciadas?**
+¡Depende de tu cuadrícula! A veces conviene potenciar la tecnología principal y otras veces resulta mejor potenciar el módulo de mejora con mejores estadísticas. Nuestro modelo de IA se entrenó con más de 16 000 diseños reales específicamente para tomar esta decisión por ti.
 
-**¿Es gratuito el NMS Optimizer?**
-Sí. Es 100% gratuito, sin anuncios y de código abierto (GPL-3.0). No necesitas crear una cuenta ni proporcionar un correo electrónico.
+**¿Es gratuito NMS Optimizer?**
+Sí. Es 100 % gratuito, sin anuncios y de código abierto (GPL-3.0). No necesitas crear una cuenta ni facilitar un correo electrónico.
 
 **¿Puedo guardar y compartir mis diseños?**
-¡Sí! Puedes guardar tus construcciones favoritas localmente como archivos `.nms`, generar enlaces para enviar a amigos o compartir capturas de pantalla de diseños de alta calidad directamente en redes sociales. La integridad de las construcciones es validada antes de compartir.
+¡Sí! Puedes guardar tus diseños favoritos localmente como archivos `.nms`, generar enlaces para enviarlos a tus amigos o compartir capturas de pantalla de alta calidad en redes sociales. La integridad de los diseños se valida antes de compartirlos.
 
-**¿Por qué la herramienta no muestra las estadísticas dentro del juego?**
-La herramienta evita intencionalmente calcular métricas estándar dentro del juego como DPS o Rango en Años Luz. Debido a que los números exactos requieren semillas de nave ocultas que son inaccesibles sin un editor de guardado, el optimizador confía en un puntaje de "porcentaje del máximo" en su lugar.
+**¿Por qué la herramienta no muestra las estadísticas exactas del juego?**
+La herramienta evita de forma deliberada calcular métricas internas como el DPS exacto o el alcance en años luz. Como las cifras exactas dependen de semillas ocultas de cada nave a las que no se puede acceder sin un editor de partidas guardadas, el optimizador utiliza en su lugar una puntuación de «porcentaje respecto al máximo».
 
-**¿Por qué el diseño optimizado no incluye mi módulo específico de Expedición?**
-El NMS Optimizer apoya completamente todas las **Recompensas de Expedición y Redux de Expedición** ofrecidas tras la actualización _Worlds Part I_. Sin embargo, debido a que no todos los jugadores poseen estos artículos raros, estos módulos opcionales no se incluyen por defecto en tus soluciones. Puedes activarlos fácilmente para tu construcción abriendo la <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> **interfaz de Selección de Módulos**.
+**¿Por qué el diseño optimizado no incluye mi módulo concreto de expedición?**
+NMS Optimizer es totalmente compatible con todas las **recompensas de expedición y expediciones Redux** publicadas tras la actualización _Worlds Part I_. Sin embargo, como no todos los jugadores cuentan con estos objetos poco comunes, estos módulos opcionales no se activan por defecto en los cálculos. Puedes activarlos fácilmente para tu diseño abriendo la <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> **interfaz de Selección de módulos**.
 
-## Bajo el Capó: Nuestra Pila Tecnológica
+## Bajo el capó: nuestra pila tecnológica
 
-Para los desarrolladores y fanáticos de los datos, aquí está la tecnología que impulsa el NMS Optimizer:
+Para desarrolladores y entusiastas de los datos, esta es la pila tecnológica que impulsa NMS Optimizer:
 
 - **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
-- **Backend Solucionador:** Python, Flask, TensorFlow, NumPy, Rust (impulsa el recocido simulado y el motor de puntuación)
+- **Motor de cálculo (backend):** Python, Flask, TensorFlow, NumPy, Rust (impulsa el recocido simulado y el motor de puntuación)
 - **Pruebas:** Vitest, Python Unittest
-- **Despliegue y Alojamiento:** Heroku (alojamiento de API), Cloudflare (DNS/CDN), Docker
+- **Despliegue y alojamiento:** Heroku (alojamiento de la API), Cloudflare (DNS/CDN), Docker
 - **CI/CD:** GitHub Actions
 
-### Repositorios de Código Abierto
+### Repositorios de código abierto
 
-¿Quieres contribuir? El NMS Optimizer es completamente de código abierto.
+¿Quieres colaborar? NMS Optimizer es íntegramente de código abierto.
 
-- Interfaz Web: [github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
+- Interfaz web: [github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
 - Backend: [github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
 
-## Un Enorme Agradecimiento a la Comunidad
+## Un enorme agradecimiento a la comunidad
 
-Este proyecto no sería posible sin la increíble comunidad de _No Man's Sky_. Un agradecimiento especial a **George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray, jayriley, arratikbehavior, Someone, Cal Abunga**, y todos los demás que han contribuido. Su apoyo, donaciones, compartidos y palabras amables significan todo y ayudan a mantener vivo este proyecto.
+Este proyecto no sería posible sin la increíble comunidad de _No Man's Sky_. Un agradecimiento muy especial a **George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray, jayriley, arratikbehavior, Someone, Cal Abunga** y a todas las demás personas que han contribuido. Tu apoyo, tus donaciones, las veces que compartes la herramienta y tus amables palabras lo significan todo y ayudan a mantener vivo este proyecto.
 
-## Mirando Atrás: Primeras Versiones
+## Mirando atrás: primeras versiones
 
-![Early prototype of No Man's Sky layout optimizer user interface](/assets/img/screenshots/screenshot_v03.webp)
-Si estuviste con nosotros desde el principio, podrías recordar cómo lucía la interfaz de usuario en sus primeras fases alfa. Funcionaba, pero el diseño era mínimo. La versión actual representa una mejora importante y continua en diseño, usabilidad móvil y claridad general.
+![Prototipo inicial de la interfaz de usuario del optimizador de diseños de No Man's Sky](/assets/img/screenshots/screenshot_v03.webp)
+Si estuviste con nosotros desde el principio, quizá recuerdes cómo era la interfaz en sus primeras fases alfa. Funcionaba, pero su aspecto era mínimo. La versión actual supone una mejora constante y profunda en diseño, usabilidad móvil y claridad general.

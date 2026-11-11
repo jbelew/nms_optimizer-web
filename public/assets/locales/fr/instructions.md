@@ -1,6 +1,6 @@
-# Instructions de l'NMS Optimizer : Modules et Emplacements Surchargés
+# Instructions de NMS Optimizer : modules et emplacements surchargés
 
-## Premiers Pas Avec La Grille
+## Premiers pas avec la grille
 
 - Sélectionnez un **Type de plateforme** (Vaisseau, Multi-outil, Corvette, etc.) avec le bouton <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
 - **Cliquez** ou **appuyez deux fois** (mobile) sur un emplacement vide pour basculer son état **Surchargé**.
@@ -10,76 +10,72 @@
 - Cliquez sur le bouton de **Sélection de modules** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> d'une **Catégorie de technologie** pour activer ou désactiver des modules individuels et afficher les dimensions requises de la **Fenêtre de calcul**.
 - Basculez le **Mode Focus** <radix-icon name="EyeOpenIcon" size="20" color="var(--accent-11)"></radix-icon> pour réduire les distractions visuelles et améliorer la lisibilité du texte.
 
-> 💡 **Note :**
-> L'Exocombinaison et les Exonefs ont des grilles fixes. Les slots des Exonefs ne peuvent pas être modifiés. Pour l'Exocombinaison, seuls les états actif/inactif peuvent être changés ; la disposition des slots surchargés est fixe.
+> 💡 **Remarque :**
+> Des **Restrictions d'emplacements** s'appliquent à l'exocombinaison et aux exonefs. Les exonefs utilisent une **Disposition de grille par défaut** fixe dont les emplacements ne peuvent pas être modifiés. L'exocombinaison possède des emplacements surchargés à position fixe : vous pouvez uniquement modifier l'état actif ou inactif des emplacements.
 
-## Avant De Commencer
+## Avant de commencer
 
-Cet outil est conçu pour l'**optimisation de fin de jeu** et fonctionne mieux quand :
+Cet outil est conçu pour l'**optimisation de fin de jeu** et produit les meilleurs résultats lorsque :
 
-- La plupart des slots de la grille sont déverrouillés.
-- Toutes les technologies pertinentes sont disponibles.
-- Vous possédez **trois modules d'amélioration** par technologie.
+- La plupart ou la totalité des emplacements de la grille sont actifs.
+- Tous les modules de chaque **Catégorie de technologie** sont débloqués.
+- Vous possédez **trois modules d'amélioration procéduraux** par **Catégorie de technologie**.
 
-Les configurations partielles sont supportées, mais les résultats sont optimisés pour les plateformes totalement améliorées.
+Vous pouvez optimiser des configurations partielles, mais le solveur cible des **Types de plateforme** entièrement améliorés.
 
-## Conseils d'Utilisation
+## Conseils d'utilisation
 
-Les emplacements surchargés sont limités — leur placement est crucial.
+Les emplacements surchargés sont limités. Répartissez-les sur plusieurs **Catégories de technologie** pour obtenir le bonus global le plus élevé :
 
-- **N'assignez pas tous vos slots surchargés à la première technologie que vous placez.** Cela bloque souvent des dispositions globales plus puissantes par la suite.
-- Commencez par assigner **2 à 3 slots surchargés à une technologie à fort impact**, pas la totalité.
-- Réservez au moins **un ou plusieurs slots surchargés** pour une **deuxième technologie prioritaire** afin d'améliorer l'efficacité globale.
-- Une fois vos slots surchargés épuisés, priorisez les technologies ayant le **plus grand nombre de modules** avant que l'espace ne manque.
-- Laissez le moteur de calcul gérer le placement ; votre rôle est de **fixer les priorités et la répartition**.
+- **N'attribuez pas tous les emplacements surchargés à la première Catégorie de technologie.** Cela réduit le bonus disponible pour les autres systèmes.
+- Attribuez **2 à 3 emplacements surchargés** à votre **Catégorie de technologie** prioritaire.
+- Réservez **1 ou plusieurs emplacements surchargés** pour une deuxième **Catégorie de technologie**.
+- Une fois tous les emplacements surchargés occupés, optimisez d'abord les **Catégories de technologie** qui nécessitent les plus grandes dimensions de **Fenêtre de calcul**.
+- Définissez vos priorités et laissez le solveur calculer le placement optimal des modules.
 
-Si l'espace devient trop restreint, vous devrez peut-être réinitialiser et optimiser les technologies dans un ordre différent pour éviter une **Alerte d'Optimisation**.
+### Fenêtre de calcul et alertes d'optimisation
 
-## Astuce De Pro
+Chaque **Catégorie de technologie** requiert une **Fenêtre de calcul** (`largeur × hauteur`) déterminée par sa **Sélection de modules** active.
 
-L'optimiseur utilise des fenêtres fixes dimensionnées selon le nombre de modules de chaque technologie pour trouver les emplacements les plus compacts.
-Si les résultats ne sont pas idéaux, **désactivez temporairement certains slots** pour guider l'optimiseur vers une meilleure disposition.
+- Si aucune zone contiguë d'emplacements actifs ne correspond à la **Fenêtre de calcul** requise, une **Alerte d'optimisation** (**Modèle incompatible**) s'affiche.
+- Depuis cette alerte, vous pouvez lancer une **Optimisation forcée** (recuit simulé complet sur l'ensemble des emplacements disponibles) ou annuler, utiliser la **Réinitialisation de technologie** sur des catégories déjà placées, puis optimiser dans un ordre différent.
+- **Astuce de pro :** Désactivez temporairement certains emplacements (**inactifs**) avant de lancer le calcul afin de guider l'endroit où la **Fenêtre de calcul** sera placée.
 
-## Étiquettes Theta / Tau / Sigma
+## Ordre de rang des modules (Theta / Tau / Sigma)
 
-Ces labels classent les améliorations procédurales **par statistiques**, et non par classe. Ce sont des termes historiques conservés pour la cohérence.
+L'**Ordre de rang des modules** (`Theta → Tau → Sigma`) classe les modules d'amélioration procéduraux **selon la valeur de leurs statistiques**, et non selon leur classe d'amélioration :
 
-- **Theta (1)** — meilleures statistiques
-- **Tau (2)** — intermédiaire
-- **Sigma (3)** — plus faible
+- **Theta (1)** — statistiques les plus élevées
+- **Tau (2)** — statistiques intermédiaires
+- **Sigma (3)** — statistiques les plus basses
 
-Vous ne verrez pas ces étiquettes en jeu. Elles sont attribuées en comparant directement les valeurs des améliorations.
+Ces étiquettes n'apparaissent pas en jeu. Comparez directement les valeurs de statistiques de vos améliorations procédurales :
 
-### Comparaison En Jeu
+- Statistiques les plus élevées → **Theta**
+- Deuxièmes statistiques les plus élevées → **Tau**
+- Statistiques les plus basses → **Sigma**
 
-Ignorez les lettres de classe (S, X, etc.) et comparez les stats :
-
-- Meilleur → **Theta**
-- Second → **Tau**
-- Moins bon → **Sigma**
-
-**La classe ne détermine pas le rang.** Une amélioration de classe X peut être supérieure ou inférieure à une classe S.
+**La classe d'amélioration ne détermine pas l'Ordre de rang des modules.** Une amélioration de classe X peut afficher des statistiques supérieures ou inférieures à celles d'une amélioration de classe S.
 
 ## Corvettes
 
-Les Corvettes diffèrent des autres plateformes : elles peuvent avoir **jusqu'à trois ensembles d'améliorations distincts**.
+Les Corvettes prennent en charge jusqu'à **trois Groupes de modules d'amélioration distincts** au sein d'une même **Catégorie de technologie** :
 
-- Les **améliorations cosmétiques** sont notées `Cn`.
-- Les **améliorations de réacteur** sont notées `Rn`.
+- Les **modules cosmétiques** portent l'étiquette `Cn`.
+- Les **modules de réacteur** portent l'étiquette `Rn`.
 
-L'optimiseur peut suggérer des améliorations cosmétiques pour la performance plutôt que pour l'apparence, bien que les différences soient généralement mineures.
+Le solveur privilégie les bonus de statistiques plutôt que l'apparence visuelle lors du placement des modules cosmétiques.
 
-## Builds Recommandées
+## Builds recommandés
 
-Pour l'**Exocombinaison** et les **Exonefs**, les slots surchargés sont fixes et les dispositions viables sont limitées.
-L'outil propose des **builds recommandées sélectionnées à la main** qui reflètent les combinaisons optimales.
+L'exocombinaison et les exonefs possèdent des emplacements surchargés fixes et moins de permutations possibles. Utilisez le menu **Builds recommandés** pour charger des dispositions éprouvées adaptées aux configurations courantes.
 
-Vos suggestions et variantes sont les bienvenues sur les discussions du projet :
+Proposez vos suggestions de dispositions ou vos retours dans les discussions du projet :
 <https://github.com/jbelew/nms_optimizer-web/discussions>
 
-## Sauvegarder, Charger Et Partager
+## Sauvegarder, charger et partager
 
-- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Charger** — Téléchargez un fichier `.nms` pour restaurer une build.
-- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Sauvegarder** — Téléchargez la build actuelle au format `.nms`.
-- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Partager** — Générez un lien que d'autres peuvent ouvrir directement.
-- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Capture** — Générez une image de votre build actuelle.
+- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Charger** — Ouvrez un **fichier de build** `.nms` sauvegardé depuis votre disque.
+- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Sauvegarder** — Téléchargez la disposition actuelle sous forme de **fichier de build** `.nms`.
+- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Partager** — Générez une URL de **Grille partagée** qui ouvre votre disposition dans l'optimiseur.
+- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Capture d'écran** — Enregistrez une image PNG de la disposition actuelle de la grille.

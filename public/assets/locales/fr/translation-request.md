@@ -1,52 +1,46 @@
-# Aidez à Traduire l'NMS Optimizer : Rejoignez la Localisation Communautaire
+# Aidez à traduire NMS Optimizer : rejoignez notre localisation communautaire
 
-## Participez à la Traduction de l'NMS Optimizer
+## Participez à la traduction de NMS Optimizer
 
-Les statistiques montrent des visiteurs venant du monde entier, et je serais ravi de rendre cet outil plus accessible à toute la communauté No Man's Sky. C'est là que vous intervenez !
+Les statistiques montrent des visiteurs venus du monde entier, et j'aimerais rendre l'optimiseur accessible à toute la communauté internationale de _No Man's Sky_ — c'est là que vous intervenez.
 
-## Comment Vous Pouvez Aider
+## Comment vous pouvez aider
 
-Je recherche des joueurs bilingues pour m'aider à traduire l'application — en particulier pour **relire et corriger les traductions générées par IA (Français, Allemand, Espagnol, Portugais)**, ou pour ajouter de nouvelles langues portées par de fortes communautés NMS.
+Je recherche des joueurs bilingues pour relire et affiner les localisations en **espagnol, français, allemand, portugais et italien**, ou pour contribuer à de nouvelles langues comptant une importante communauté de joueurs NMS.
 
-Pas besoin d'être un traducteur professionnel : il suffit d'être à l'aise avec la langue, de bien connaître le jeu et d'avoir envie d'aider. Bien que l'IA soit un bon point de départ, elle manque souvent de contexte ou de nuances spécifiques à l'univers du jeu. Vous serez bien sûr crédité (ou pourrez rester anonyme si vous préférez).
+Vous n'avez pas besoin d'être traducteur professionnel — il suffit de maîtriser la langue, de connaître _No Man's Sky_ dans votre langue et d'avoir envie de donner un coup de main. Même si les traductions assistées par IA offrent une large couverture, les joueurs bilingues sont précieux pour repérer les subtilités de formulation ou vérifier la terminologie exacte utilisée en jeu. Vous serez crédité (ou pourrez rester anonyme si vous le préférez).
 
-La plupart des textes sont des libellés d'interface courts, des infobulles ou des messages de statut amusants.
+La majorité des chaînes consiste en de courts libellés d'interface, des infobulles ou des messages de statut pleins d'humour.
 
-## Le Flux de Travail
+## Comment contribuer
 
-L'NMS Optimizer utilise désormais un **Système de Traduction Automatisé Par IA** via l'API Gemini 2.5 Flash. Cela garantit que chaque mise à jour du contenu anglais est répercutée sur les autres langues en quelques minutes seulement.
+Le moyen le plus simple de contribuer consiste à passer directement par GitHub. Il n'est pas nécessaire de savoir coder pour proposer une meilleure traduction :
 
-Cependant, l'IA n'est pas parfaite. Nous comptons sur la communauté pour repérer et corriger les erreurs de terminologie ou les tournures maladroites.
+1. **Repérez le fichier** : Tous les fichiers de localisation se trouvent dans `/public/assets/locales/[language_code]/` :
+    - `translation.json` : **Lot de langue** contenant les libellés d'interface, les noms du catalogue, les infobulles et les métadonnées de page.
+    - `*.md` : **Documents de route localisés** pour les guides complets et les fenêtres d'information (À propos, Instructions, etc.).
+2. **Modifiez directement sur GitHub** :
+    - Ouvrez le fichier correspondant à votre langue (par exemple, `/public/assets/locales/fr/translation.json`).
+    - Cliquez sur l'**icône de crayon (Edit this file)**.
+    - Apportez vos modifications.
+    - Cliquez sur **Commit changes...** et GitHub vous guidera pour ouvrir une Pull Request.
 
-## Comment Contribuer
+## Langues prises en charge
 
-La méthode la plus simple est de passer directement par GitHub. Pas besoin de savoir coder pour proposer une meilleure traduction !
-
-1. **Trouvez le Fichier** : Tous les fichiers de localisation sont dans `/public/assets/locales/[code_langue]/`.
-    - `translation.json` : Libellés UI, infobulles et messages de statut.
-    - `*.md` : Contenu des dialogues plus longs (À propos, Instructions, etc.).
-2. **Éditez Directement Sur GitHub** :
-    - Naviguez jusqu'au fichier de votre langue (ex : `/public/assets/locales/fr/translation.json`).
-    - Cliquez sur l'icône **Crayon (Modifier ce fichier)**.
-    - Faites vos modifications.
-    - Cliquez sur **Commit changes...** et GitHub créera automatiquement une Pull Request pour vous.
-3. **Attendez la Validation** : Une fois que j'aurai validé et fusionné votre PR, le script d'IA détectera vos corrections et veillera à les préserver lors des futures mises à jour.
-
-## Langues Supportées
-
-Nous supportons actuellement :
+Nous prenons actuellement en charge :
 
 - `en` (Anglais - Source)
 - `es` (Espagnol)
 - `fr` (Français)
 - `de` (Allemand)
 - `pt` (Portugais)
+- `it` (Italien)
 
-Si vous souhaitez ajouter une **Nouvelle Langue**, créez simplement un dossier avec le [code ISO 639-1](https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1) approprié et je l'ajouterai à la rotation de l'IA !
+Si vous souhaitez ajouter une **nouvelle langue**, ouvrez un ticket ou une Pull Request avec un dossier utilisant son [code ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
 
-## Notes
+## Remarques
 
-- **Interpolation** : Vous verrez des balises comme `<1></1>` ou `{{techName}}`. **Merci de les laisser telles quelles**, car l'application les utilise pour insérer du contenu dynamique ou du style.
-- **Priorité à l'Humain** : Le script de traduction est conçu pour respecter les modifications humaines. Si vous changez une valeur manuellement, l'IA ne l'écrasera pas lors des prochaines exécutions.
+- **Termes officiels du jeu** : Les noms des plateformes, des technologies et des modules doivent correspondre aux textes officiels localisés par Hello Games en jeu plutôt qu'à des traductions littérales de l'anglais.
+- **Interpolation** : Conservez intactes les balises telles que `<1></1>`, `<strong></strong>`, `<icon/>` ainsi que les variables telles que `{{techName}}` afin que la mise en forme dynamique de l'interface continue de fonctionner.
 
-Merci de nous aider à rendre l'Optimiseur de Technologie No Man's Sky meilleur pour tout le monde ! N'hésitez pas à me contacter si vous avez des questions.
+Merci d'aider à améliorer l'optimiseur de dispositions technologiques de No Man's Sky pour tous les voyageurs !

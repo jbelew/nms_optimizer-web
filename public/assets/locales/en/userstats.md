@@ -10,7 +10,7 @@ The charts below display aggregated user statistics from the last **28 days**, s
 
 - **Starship Technologies** - Including Standard, Sentinel, and Solar starship variants
 - **Multi-Tool Technologies** - Covering Standard, Sentinel, Atlantid, and Staves multi-tools
-- **Corvette Technologies** - The specialized corsair ships introduced in the **Omega** update
+- **Corvette Technologies** - The specialized corsair ships introduced in the **Voyagers** update
 
 ## What These Charts Mean
 
@@ -39,7 +39,7 @@ Understanding community patterns can help inform your own build decisions:
 
 Once you've reviewed the popular choices here, head to the [optimizer](/) to create your own optimized build. You can:
 
-1. Select your platform (Starship, Multi-tool, Corvette, Exosuit, or Exocraft)
+1. Select your platform (Starship, Multi-Tool, Corvette, Exosuit, or Exocraft)
 2. Configure your **supercharged slots** and **active cells**
 3. Run the solver to find your perfect layout
 

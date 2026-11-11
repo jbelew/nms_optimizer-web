@@ -1,52 +1,46 @@
-# Hilf bei der Übersetzung des NMS Optimizers: Werde Teil unserer Community-Lokalisierung
+# Hilf bei der Übersetzung von NMS Optimizer: Werde Teil unserer Community-Lokalisierung
 
 ## Hilf bei der Übersetzung des NMS Optimizers
 
-Analysen zeigen Besucher aus der ganzen Welt, und ich möchte die App der globalen No Man's Sky-Community zugänglicher machen – und hier kommst du ins Spiel.
+Unsere Zugriffsstatistiken zeigen Besucher aus aller Welt, und ich möchte den Optimierer für die weltweite _No Man's Sky_-Community zugänglich machen – genau hier kommst du ins Spiel.
 
 ## Wie du helfen kannst
 
-Ich suche zweisprachige Spieler, die bei der Übersetzung der App helfen – insbesondere beim **Bearbeiten und Korrekturlesen der KI-generierten französischen, deutschen, spanischen und portugiesischen Übersetzungen**, oder um an anderen Sprachen mit starken NMS-Spieler-Communities zu arbeiten.
+Ich suche zweisprachige Spieler, die beim Korrekturlesen und Verfeinern der **spanischen, französischen, deutschen, portugiesischen und italienischen** Lokalisierungen helfen oder neue Sprachen mit aktiven NMS-Communities beisteuern möchten.
 
-Du musst kein professioneller Übersetzer sein – nur fließend, mit dem Spiel vertraut und bereit zu helfen. Obwohl KI-generierte Übersetzungen ein großartiger Ausgangspunkt sind, übersehen sie oft spielspezifischen Kontext oder Nuancen. Du wirst namentlich erwähnt (oder bleibst anonym, wenn du es vorziehst).
+Du musst kein professioneller Übersetzer sein – Sprachgefühl, Vertrautheit mit _No Man's Sky_ in deiner Sprache und Lust mitzuhelfen reichen völlig aus. Während KI-gestützte Übersetzungen eine breite Abdeckung ermöglichen, sind zweisprachige Spieler unersetzlich, um feine Formulierungsnuancen zu verbessern oder die exakten Begriffe aus dem Spiel zu prüfen. Auf Wunsch wirst du namentlich genannt (oder bleibst anonym).
 
-Die meisten Zeichenketten sind kurze UI-Beschriftungen, Tooltips oder lustige Statusmeldungen.
-
-## Der Arbeitsablauf
-
-Der NMS Optimizer verwendet jetzt einen **KI-basierten Übersetzungs-Workflow** unter Nutzung der Gemini 2.5 Flash API. Dies stellt sicher, dass jedes Mal, wenn der englische Inhalt aktualisiert wird, alle anderen unterstützten Sprachen innerhalb von Minuten automatisch aktualisiert werden.
-
-Allerdings ist KI nicht perfekt. Wir verlassen uns auf die Community, um „Halluzinationen“ oder falsche NMS-Terminologie zu identifizieren und zu korrigieren.
+Die meisten Texte sind kurze UI-Beschriftungen, Tooltips oder humorvolle Statusmeldungen.
 
 ## Wie du beitragen kannst
 
-Der einfachste Weg, einen Beitrag zu leisten, ist direkt über GitHub. Du musst nicht programmieren können, um eine bessere Übersetzung vorzuschlagen.
+Am einfachsten beteiligst du dich direkt über GitHub. Programmierkenntnisse sind nicht nötig, um eine bessere Übersetzung vorzuschlagen:
 
-1. **Finde die Datei**: Alle Lokalisierungsdateien befinden sich in `/public/assets/locales/[language_code]/`.
-    - `translation.json`: UI-Beschriftungen, Tooltips und Statusmeldungen.
-    - `*.md`: Inhalt für größere Dialoge (Über, Anweisungen usw.).
+1. **Datei finden**: Alle Lokalisierungsdateien liegen unter `/public/assets/locales/[language_code]/`:
+    - `translation.json`: **Sprachpaket** mit UI-Beschriftungen, Katalognamen, Tooltips und Seiten-Metadaten.
+    - `*.md`: **Lokalisierte Routendokumente** für vollständige Anleitungen und Dialoge (Über, Anleitung usw.).
 2. **Direkt auf GitHub bearbeiten**:
-    - Navigiere zur Datei für deine Sprache (z.B. `/public/assets/locales/es/translation.json`).
-    - Klicke auf das **Bleistiftsymbol (Diese Datei bearbeiten)**.
+    - Öffne die Datei deiner Sprache (zum Beispiel `/public/assets/locales/de/translation.json`).
+    - Klicke auf das **Stiftsymbol (Edit this file)**.
     - Nimm deine Änderungen vor.
-    - Klicke auf **Änderungen committen...** und GitHub erstellt automatisch einen Pull Request für dich.
-3. **Auf Zusammenführung warten**: Sobald ich deinen PR zusammenführe, erkennt das KI-Skript deine menschlichen Bearbeitungen automatisch und stellt sicher, dass sie bei zukünftigen Updates erhalten bleiben.
+    - Klicke auf **Commit changes...** – GitHub führt dich anschließend durch das Erstellen eines Pull Requests.
 
 ## Unterstützte Sprachen
 
-Wir unterstützen derzeit:
+Derzeit unterstützen wir:
 
 - `en` (Englisch - Quelle)
 - `es` (Spanisch)
 - `fr` (Französisch)
 - `de` (Deutsch)
 - `pt` (Portugiesisch)
+- `it` (Italienisch)
 
-Wenn du eine **neue Sprache** hinzufügen möchtest, erstelle einfach einen neuen Ordner mit dem entsprechenden [ISO 639-1-Code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) und ich werde ihn zur Rotation der KI hinzufügen!
+Wenn du eine **neue Sprache** ergänzen möchtest, eröffne ein Issue oder einen Pull Request mit einem Ordner im entsprechenden [ISO-639-1-Code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
 
 ## Hinweise
 
-- **Interpolation**: Du wirst Tags wie `<1></1>` oder `{{techName}}` sehen – **bitte behalte diese genau so bei**, da die App sie verwendet, um dynamische Inhalte oder Stile einzufügen.
-- **Menschliche Priorität**: Das Übersetzungs-Skript ist so konzipiert, dass es menschliche Bearbeitungen respektiert. Wenn du einen Wert in einer JSON-Datei änderst, wird die KI ihn beim nächsten automatischen Durchlauf nicht überschreiben.
+- **Offizielle Spielbegriffe**: Plattform-, Technologie- und Modulnamen sollten exakt den offiziellen lokalisierten Texten von Hello Games im Spiel entsprechen und nicht wörtlich aus dem Englischen übersetzt werden.
+- **Platzhalter & Tags**: Behalte Tags wie `<1></1>`, `<strong></strong>`, `<icon/>` sowie Platzhalter wie `{{techName}}` unverändert bei, damit die dynamische Formatierung der Oberfläche weiterhin funktioniert.
 
-Vielen Dank, dass du hilfst, den No Man's Sky Technology Layout Optimizer für alle besser zu machen! Lass mich wissen, wenn du Fragen hast – ich helfe gerne.
+Vielen Dank, dass du mithilfst, den No Man's Sky Technology Layout Optimizer für alle besser zu machen!

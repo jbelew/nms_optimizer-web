@@ -53,6 +53,7 @@
 		"test:ci": "bunx vitest run --project unit --coverage",
 		"typecheck": "bunx tsgo --noEmit",
 		"provision:cloudflare": "bun scripts/provision-cloudflare-zone.mjs",
+		"verify:locales": "bun scripts/verify-locales.mjs",
 		"verify:ssg": "bun scripts/verify-ssg.mjs",
 		"verify:routes": "bun scripts/verify-routes-consistency.mjs",
 		"verify:deployment": "bun scripts/verify-deployment.mjs",

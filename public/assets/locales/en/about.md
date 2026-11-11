@@ -26,7 +26,7 @@ We don't rely on guesswork. The NMS Optimizer engine uses a sophisticated four-s
 
 The NMS Optimizer provides dynamic solving for every major platform in the game:
 
-- **Starships:** Standard, Exotic, Sentinel Interceptor, Solar, Fighter, Living, and Atlantid ships.
+- **Starships:** Standard, Exotic, Sentinel Interceptor, Solar, Fighter, and Living ships.
 - **Multi-Tools:** All weapon and mining variants, including Staves.
 - **Exosuits & Exocraft:** All Exosuit technologies and vehicle types (Nomad, Colossus, Pilgrim, Roamer, Minotaur, Nautilon).
 - **Freighters:** Capital ship hyperdrive and fleet coordination technology.

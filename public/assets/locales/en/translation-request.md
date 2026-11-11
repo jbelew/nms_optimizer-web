@@ -2,35 +2,28 @@
 
 ## Help Translate the NMS Optimizer
 
-Analytics show visitors from all over the world and I'd love to make it more accessible to the global No Man's Sky community — and that's where you come in.
+Analytics show visitors from all over the world, and I'd love to make the optimizer accessible to the global _No Man's Sky_ community — and that's where you come in.
 
 ## How You Can Help
 
-I'm looking for bilingual players to help translate the app — especially to **edit and proof the AI-generated French, German, Spanish, and Portuguese translations**, or to work on other languages with strong NMS player communities.
+I'm looking for bilingual players to help proofread and refine the **Spanish, French, German, Portuguese, and Italian** localizations, or to contribute new languages with strong NMS player communities.
 
-You don't need to be a professional translator — just fluent, familiar with the game, and willing to help out. While AI-generated translations are a great starting point, they often miss game-specific context or nuance. You'll be credited (or remain anonymous if you prefer).
+You don't need to be a professional translator — just fluent, familiar with _No Man's Sky_ in your language, and willing to help out. While AI-assisted translations provide broad coverage, bilingual players are invaluable for catching subtle phrasing issues or verifying exact in-game terminology. You'll be credited (or remain anonymous if you prefer).
 
 Most strings are short UI labels, tooltips, or fun status messages.
 
-## The Workflow
-
-The NMS Optimizer now uses an **AI-first translation workflow** using the Gemini 2.5 Flash API. This ensures that every time the English content is updated, all other supported languages are automatically updated within minutes.
-
-However, AI isn't perfect. We rely on the community to identify and fix "hallucinations" or incorrect NMS terminology.
-
 ## How to Contribute
 
-The easiest way to contribute is directly through GitHub. You don't need to know how to code to suggest a better translation.
+The easiest way to contribute is directly through GitHub. You don't need to know how to code to suggest a better translation:
 
-1. **Find the file**: All localization files are located in `/public/assets/locales/[language_code]/`.
-    - `translation.json`: UI labels, tooltips, and status messages.
-    - `*.md`: Content for larger dialogs (About, Instructions, etc.).
+1. **Find the file**: All localization files live in `/public/assets/locales/[language_code]/`:
+    - `translation.json`: **Locale Bundle** containing UI labels, catalog names, tooltips, and page metadata.
+    - `*.md`: **Localized Route Documents** for full-page guides and dialogs (About, Instructions, etc.).
 2. **Edit directly on GitHub**:
-    - Navigate to the file for your language (e.g., `/public/assets/locales/es/translation.json`).
+    - Open the file for your language (for example, `/public/assets/locales/es/translation.json`).
     - Click the **Pencil icon (Edit this file)**.
     - Make your changes.
-    - Click **Commit changes...** and GitHub will automatically create a Pull Request for you.
-3. **Wait for Merge**: Once I merge your PR, the AI script will automatically detect your human edits and ensure they are preserved during future updates.
+    - Click **Commit changes...** and GitHub will walk you through opening a Pull Request.
 
 ## Supported Languages
 
@@ -41,12 +34,13 @@ We currently support:
 - `fr` (French)
 - `de` (German)
 - `pt` (Portuguese)
+- `it` (Italian)
 
-If you'd like to add a **new language**, simply create a new folder with the appropriate [ISO 639-1 code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) and I will add it to the AI's rotation!
+If you'd like to add a **new language**, open an issue or pull request with a folder using its [ISO 639-1 code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
 
 ## Notes
 
-- **Interpolation**: You'll see tags like `<1></1>` or `{{techName}}` — **please keep these exactly as they are**, as the app uses them to insert dynamic content or styling.
-- **Human Priority**: The translation script is designed to respect human edits. If you change a value in a JSON file, the AI will not overwrite it during the next automated run.
+- **Canonical Game Terms**: Platform, technology, and module names should match Hello Games' official localized in-game text rather than literal translations of the English names.
+- **Interpolation**: Keep tags such as `<1></1>`, `<strong></strong>`, `<icon/>`, and placeholders such as `{{techName}}` intact so dynamic UI formatting continues to work.
 
-Thanks for helping make the No Man's Sky Technology Layout Optimizer better for everyone! Let me know if you have any questions — happy to help.
+Thanks for helping make the No Man's Sky Technology Layout Optimizer better for everyone!

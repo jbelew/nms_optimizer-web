@@ -1,85 +1,81 @@
-# Istruzioni NMS Optimizer: Moduli e Slot Sovraccarichi
+# Istruzioni di NMS Optimizer: moduli e slot sovralimentati
 
-## Iniziare con la Griglia
+## Primi passi con la griglia
 
-- Seleziona un **Tipo di piattaforma** (Nave Stellare, Multi-Strumento, Corvetta, ecc.) con il pulsante <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
-- **Clicca** o **tocca due volte** (mobile) uno slot vuoto per alternare il suo stato **Sovraccarico**.
-- **Ctrl-clic** (Windows) / **⌘-clic** (Mac) / **tocco singolo** (mobile) su uno slot per alternare il suo stato **attivo** o **inattivo**.
-- **Controlli da tastiera:** Premi i **tasti freccia** (↑, ↓, ←, →) e **Inizio** / **Fine** per spostare il focus. Premi **S** o **Shift+Invio** per alternare lo stato **Sovraccarico**. Premi **Spazio** o **Invio** per alternare lo stato **attivo** o **inattivo**.
+- Seleziona un **Tipo di piattaforma** (Astronave, Multi-tool, Corvetta, ecc.) con il pulsante <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
+- **Fai clic** o **tocca due volte** (dispositivi mobili) uno slot vuoto per attivare o disattivare lo stato **Sovralimentato**.
+- **Ctrl+clic** (Windows) / **⌘+clic** (Mac) / **tocco singolo** (dispositivi mobili) su uno slot per alternare lo stato **attivo** o **inattivo**.
+- **Controlli da tastiera:** Premi i **tasti freccia** (↑, ↓, ←, →) e **Inizio** / **Fine** per spostare il focus. Premi **S** o **Shift+Invio** per attivare o disattivare lo stato **Sovralimentato**. Premi **Spazio** o **Invio** per alternare lo stato **attivo** o **inattivo**.
 - Usa gli **interruttori di riga** per abilitare o disabilitare un'intera riga. _(Gli interruttori di riga si bloccano dopo aver posizionato moduli sulla griglia.)_
-- Clicca sul pulsante **Selezione moduli** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> di una **Categoria tecnologica** per abilitare o disabilitare singoli moduli e visualizzare le dimensioni richieste della **Finestra di calcolo**.
-- Attiva o disattiva la **Modalità Focus** <radix-icon name="EyeOpenIcon" size="20" color="var(--accent-11)"></radix-icon> per ridurre le distrazioni visive e migliorare la leggibilità del testo.
+- Fai clic sul pulsante **Selezione moduli** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> di una **Categoria tecnologica** per abilitare o disabilitare i singoli moduli e visualizzare le dimensioni richieste della **Finestra di calcolo**.
+- Attiva o disattiva la **Modalità focus** <radix-icon name="EyeOpenIcon" size="20" color="var(--accent-11)"></radix-icon> per ridurre le distrazioni visive e migliorare la leggibilità del testo.
 
 > 💡 **Nota:**
-> Le Exosuit e gli Exocraft hanno griglie fisse. Gli slot degli Exocraft non possono essere modificati. Sulle Exosuit, solo gli stati attivo/inattivo possono essere cambiati — i layout degli slot sovraccarichi sono fissi.
+> Alle Exotute e agli Exoscafi si applicano **Restrizioni degli slot**. Gli Exoscafi usano un **Layout predefinito della griglia** fisso in cui gli slot non possono essere modificati. Le Exotute hanno posizioni fisse per gli slot sovralimentati, quindi puoi modificare solo gli stati attivo e inattivo degli slot.
 
-## Prima di Iniziare
+## Prima di iniziare
 
-Questo strumento è inteso per l'**ottimizzazione di fine gioco** e funziona al meglio quando:
+Questo strumento è progettato per l'**ottimizzazione di fine gioco** e produce i risultati migliori quando:
 
-- La maggior parte o tutti gli slot della griglia sono sbloccati.
-- Tutte le tecnologie rilevanti sono disponibili.
-- Hai **tre moduli di potenziamento** per tecnologia.
+- La maggior parte o la totalità degli slot della griglia è attiva.
+- Tutti i moduli di ciascuna **Categoria tecnologica** sono sbloccati.
+- Possiedi **tre moduli di potenziamento procedurali** per ogni **Categoria tecnologica**.
 
-Le configurazioni parziali sono supportate, ma i risultati sono ottimizzati per piattaforme completamente potenziate.
+Puoi ottimizzare anche configurazioni parziali, ma il risolutore è pensato per **Tipi di piattaforma** completamente potenziati.
 
-## Consigli d'Uso
+## Consigli d'uso
 
-Gli slot sovraccarichi sono limitati — il posizionamento è importante.
+Gli slot sovralimentati sono limitati. Distribuiscili tra più **Categorie tecnologiche** per ottenere il bonus complessivo più elevato:
 
-- **Non assegnare tutti gli slot sovraccarichi alla prima tecnologia che posizioni.** Questo spesso blocca layout complessivi più forti in seguito.
-- Inizia assegnando **2-3 slot sovraccarichi a una tecnologia ad alto impatto**, non tutti.
-- Riserva almeno **uno o più slot sovraccarichi** per una **tecnologia di seconda priorità** per migliorare l'efficacia totale.
-- Una volta utilizzati tutti gli slot sovraccarichi, dai priorità alle tecnologie con un **numero maggiore di moduli** prima che lo spazio diventi limitato.
-- Lascia che il solutore gestisca il posizionamento; il tuo ruolo è **impostare priorità e distribuzione**.
+- **Non assegnare tutti gli slot sovralimentati alla prima Categoria tecnologica.** Questo riduce il bonus disponibile per gli altri sistemi.
+- Assegna **da 2 a 3 slot sovralimentati** alla tua **Categoria tecnologica** a priorità più alta.
+- Riserva **1 o più slot sovralimentati** per una seconda **Categoria tecnologica**.
+- Una volta occupati tutti gli slot sovralimentati, risolvi per prime le **Categorie tecnologiche** che richiedono dimensioni maggiori della **Finestra di calcolo**.
+- Imposta le tue priorità e lascia che il risolutore calcoli il posizionamento ottimale dei moduli.
 
-Se lo spazio diventa ristretto, potresti dover resettare e risolvere le tecnologie in un ordine diverso per evitare un **Avviso di Ottimizzazione**.
+### Finestra di calcolo e avvisi di ottimizzazione
 
-## Suggerimento Pro
+Ogni **Categoria tecnologica** richiede una **Finestra di calcolo** (`larghezza × altezza`) basata sulla **Selezione moduli** attiva.
 
-Il solutore utilizza finestre fisse dimensionate in base al numero di moduli di ogni tecnologia per trovare posizionamenti efficienti in termini di spazio.
-Se i risultati non sono ideali, **disabilita temporaneamente gli slot** per guidare il solutore verso un layout migliore.
+- Se nessuna regione contigua di slot attivi corrisponde alla **Finestra di calcolo** richiesta, compare un **Avviso di ottimizzazione** (**Modello non adattabile**).
+- Dall'avviso puoi avviare una **Risoluzione forzata** (simulated annealing completo sugli slot disponibili) oppure annullare, usare **Ripristino tecnologia** sulle categorie già posizionate e risolverle in un ordine diverso.
+- **Consiglio utile:** Imposta temporaneamente specifici slot come **inattivi** prima del calcolo per guidare il punto in cui viene posizionata la **Finestra di calcolo**.
 
-## Etichette Theta / Tau / Sigma
+## Ordine di rango dei moduli (Theta / Tau / Sigma)
 
-Queste etichette classificano i potenziamenti procedurali **in base alle statistiche**, non alla classe. Sono termini ereditati mantenuti per coerenza.
+L'**Ordine di rango dei moduli** (`Theta → Tau → Sigma`) classifica i moduli di potenziamento procedurali **in base al valore delle statistiche**, non alla classe del potenziamento:
 
-- **Theta (1)** — migliori statistiche
-- **Tau (2)** — medie
-- **Sigma (3)** — più deboli
+- **Theta (1)** — statistiche più alte
+- **Tau (2)** — statistiche intermedie
+- **Sigma (3)** — statistiche più basse
 
-Non vedrai queste etichette nel gioco. Sono assegnate confrontando direttamente le statistiche di potenziamento.
+Queste etichette non compaiono nel gioco. Confronta direttamente i valori delle statistiche dei tuoi potenziamenti procedurali:
 
-### Confronto nel Gioco
+- Statistiche più alte → **Theta**
+- Seconde statistiche più alte → **Tau**
+- Statistiche più basse → **Sigma**
 
-Ignora le lettere di classe (S, X, ecc.) e confronta le statistiche:
-
-- Migliore → **Theta**
-- Secondo → **Tau**
-- Peggiore → **Sigma**
-
-**La classe non determina il rango.** I potenziamenti di Classe X possono superare o essere inferiori a quelli di Classe S.
+**La classe del potenziamento non determina l'Ordine di rango dei moduli.** Un potenziamento di classe X può avere statistiche superiori o inferiori rispetto a un potenziamento di classe S.
 
 ## Corvette
 
-Le Corvette differiscono dalle altre piattaforme: possono avere **fino a tre set di potenziamenti separati**.
+Le Corvette supportano fino a **tre Gruppi di moduli di potenziamento separati** all'interno di una **Categoria tecnologica**:
 
-- I **potenziamenti estetici** sono mostrati come `Cn`.
-- I **potenziamenti del reattore** sono mostrati come `Rn`.
+- I **moduli estetici** usano l'etichetta `Cn`.
+- I **moduli reattore** usano l'etichetta `Rn`.
 
-Il solutore potrebbe suggerire potenziamenti estetici per le prestazioni piuttosto che per l'aspetto, sebbene le differenze siano solitamente minime.
+Quando posiziona i moduli estetici, il risolutore dà priorità ai bonus alle statistiche rispetto all'aspetto visivo.
 
-## Costruzioni Raccomandate
+## Configurazioni consigliate
 
-Per le **Exosuit** e gli **Exocraft**, gli slot sovraccarichi sono fissi e i layout praticabili sono limitati.
-Lo strumento fornisce **costruzioni raccomandate curate manualmente** che riflettono le combinazioni ottimali.
+Le Exotute e gli Exoscafi hanno slot sovralimentati fissi e un numero inferiore di permutazioni di layout. Usa il menu **Configurazioni consigliate** per caricare layout curati per le combinazioni più comuni.
 
-Suggerimenti e layout alternativi sono benvenuti tramite le discussioni del progetto:
+Invia suggerimenti sui layout o feedback nelle discussioni del progetto:
 <https://github.com/jbelew/nms_optimizer-web/discussions>
 
-## Salvataggio, Caricamento e Condivisione
+## Salvataggio, caricamento e condivisione
 
-- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Carica** — Carica un file `.nms` salvato per ripristinare un layout.
-- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Salva** — Scarica il layout attuale come file `.nms`.
-- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Condividi** — Genera un link che altri possono aprire direttamente nell'optimizer.
-- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Screenshot** — Genera uno screenshot del layout attuale.
+- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Carica** — Apri dal disco un **File di configurazione** `.nms` salvato.
+- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Salva** — Scarica il layout attuale come **File di configurazione** `.nms`.
+- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Condividi** — Genera un URL di **Griglia condivisa** che apre il tuo layout nell'ottimizzatore.
+- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Screenshot** — Cattura un'immagine PNG del layout attuale della griglia.

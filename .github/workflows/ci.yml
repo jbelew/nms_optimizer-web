@@ -60,6 +60,10 @@ jobs:
         if: matrix.suite == 'lint'
         run: bun run lint:md
 
+      - name: Verify locale bundles and Markdown parity
+        if: matrix.suite == 'lint'
+        run: bun run verify:locales
+
       - name: Check for circular dependencies
         if: matrix.suite == 'lint'
         run: bun run lint:circular
@@ -348,11 +352,6 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
-
-      - name: Sync with remote (fetch auto-translate commits)
-        run: |
-          git checkout ${{ github.ref_name }}
-          git pull origin ${{ github.ref_name }}
 
       - name: Release
         env:

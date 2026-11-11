@@ -60,8 +60,8 @@ vi.mock("react-i18next", () => ({
 			return (
 				<span>
 					Clear other technologies to make space, and optimize the technologies that you
-					want to supercharge first. You can also select <strong>Force Optimize</strong>{" "}
-					to run a brute-force solve in the available slots.
+					want to supercharge first. You can also select <strong>Forced Solve</strong> to
+					run full simulated annealing across the available slots.
 				</span>
 			);
 		}

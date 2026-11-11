@@ -14,6 +14,11 @@ import { Logger } from "@/utils/system/monitoring";
 /** Regular expression to match `.webp` file extensions at the end of a string. */
 const WEBP_REGEX = /\.webp$/;
 
+/** Word-boundary regular expressions for Module Rank Order tier matching (avoids matching `"tau"` inside `"Minotaur"`). */
+const TIER_THETA_REGEX = /\btheta\b/;
+const TIER_TAU_REGEX = /\btau\b/;
+const TIER_SIGMA_REGEX = /\bsigma\b/;
+
 /** Default fallback grid width for keyboard navigation. */
 const DEFAULT_GRID_WIDTH = 10;
 
@@ -140,9 +145,9 @@ const getModuleRankBadge = (label: string | undefined): string => {
 	const lowerLabel = label.toLowerCase();
 
 	let tier = "";
-	if (lowerLabel.includes("theta")) tier = "1";
-	else if (lowerLabel.includes("tau")) tier = "2";
-	else if (lowerLabel.includes("sigma")) tier = "3";
+	if (TIER_THETA_REGEX.test(lowerLabel)) tier = "1";
+	else if (TIER_TAU_REGEX.test(lowerLabel)) tier = "2";
+	else if (TIER_SIGMA_REGEX.test(lowerLabel)) tier = "3";
 
 	if (!tier) return "";
 

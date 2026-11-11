@@ -63,6 +63,11 @@ pre-commit:
             glob: "{scripts/*.{ts,js,mjs,cjs},scripts/**/*.{ts,js,mjs,cjs},functions/*.{ts,js,mjs,cjs},functions/**/*.{ts,js,mjs,cjs},shared/*.{ts,js,mjs,cjs},shared/**/*.{ts,js,mjs,cjs},public/_*,vite.config.ts,package.json,.size-limit.json,.env*}"
             run: bun test --dots scripts/
 
+          - name: verify-locales
+            tags: [lint]
+            glob: "{public/assets/locales/**,shared/constants.js,shared/page-registry.js}"
+            run: bun run verify:locales
+
 pre-push:
   piped: true
   jobs:
@@ -105,6 +110,11 @@ pre-push:
             tags: [lint]
             glob: "{AGENTS.md,GEMINI.md,GLOSSARY.md,README.md,docs/**/*.md,public/assets/**/*.md,.agents/skills/**/*.md}"
             run: bun run lint:md
+
+          - name: verify-locales
+            tags: [lint]
+            glob: "{public/assets/locales/**,shared/constants.js,shared/page-registry.js,scripts/verify-locales*}"
+            run: bun run verify:locales
 
           - name: lint-css
             tags: [lint]

@@ -1,85 +1,81 @@
-# Instrucciones del NMS Optimizer: Módulos y Ranuras Potenciadas
+# Instrucciones de NMS Optimizer: módulos y ranuras potenciadas
 
-## Primeros Pasos con la Cuadrícula
+## Primeros pasos con la cuadrícula
 
-- Selecciona un **Tipo de plataforma** (Nave espacial, Multiherramienta, Corbeta, etc.) con el botón <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
+- Selecciona un **Tipo de plataforma** (nave, multiherramienta, corbeta, etc.) con el botón <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
 - **Haz clic** o **pulsa dos veces** (móvil) en una ranura vacía para alternar su estado **Potenciado**.
 - **Ctrl-clic** (Windows) / **⌘-clic** (Mac) / **un toque** (móvil) en una ranura para alternar su estado **activo** o **inactivo**.
-- **Controles de teclado:** Presiona las **teclas de flecha** (↑, ↓, ←, →) e **Inicio** / **Fin** para mover el foco. Presiona **S** o **Shift+Enter** para alternar el estado **Potenciado**. Presiona **Espacio** o **Enter** para alternar el estado **activo** o **inactivo**.
+- **Controles de teclado:** Pulsa las **teclas de flecha** (↑, ↓, ←, →) e **Inicio** / **Fin** para mover el foco. Pulsa **S** o **Shift+Enter** para alternar el estado **Potenciado**. Pulsa **Espacio** o **Enter** para alternar el estado **activo** o **inactivo**.
 - Usa los **interruptores de fila** para activar o desactivar una fila entera. _(Los interruptores de fila se bloquean después de colocar módulos en la cuadrícula.)_
-- Haz clic en el botón de **Selección de módulos** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> en una **Categoría de tecnología** para activar o desactivar módulos individuales y ver las dimensiones requeridas de la **Ventana de cálculo**.
-- Alterna el **Modo de Enfoque** <radix-icon name="EyeOpenIcon" size="20" color="var(--accent-11)"></radix-icon> para reducir las distracciones visuales y mejorar la legibilidad del texto.
+- Haz clic en el botón de **Selección de módulos** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> de una **Categoría de tecnología** para activar o desactivar módulos individuales y ver las dimensiones requeridas de la **Ventana de cálculo**.
+- Alterna el **Modo de enfoque** <radix-icon name="EyeOpenIcon" size="20" color="var(--accent-11)"></radix-icon> para reducir las distracciones visuales y mejorar la legibilidad del texto.
 
 > 💡 **Nota:**
-> Los exotrajes y las exonaves tienen cuadrículas fijas. Las ranuras de las exonaves no se pueden modificar. En los exotrajes, solo se pueden cambiar los estados activo/inactivo; los diseños de las ranuras potenciadas son fijos.
+> A los exotrajes y las exonaves se les aplican **Restricciones de ranuras**. Las exonaves usan un **Diseño de cuadrícula predeterminado** fijo en el que las ranuras no se pueden modificar. Los exotrajes tienen ubicaciones fijas para las ranuras potenciadas, por lo que solo puedes cambiar el estado activo o inactivo de las ranuras.
 
-## Antes de Empezar
+## Antes de empezar
 
-Esta herramienta está pensada para la **optimización al final del juego** y funciona mejor cuando:
+Esta herramienta está pensada para la **optimización al final del juego** y ofrece los mejores resultados cuando:
 
-- La mayoría o todas las ranuras de la cuadrícula están desbloqueadas.
-- Todas las tecnologías relevantes están disponibles.
-- Tienes **tres módulos de mejora** por tecnología.
+- La mayoría o la totalidad de las ranuras de la cuadrícula están activas.
+- Todos los módulos de cada **Categoría de tecnología** están desbloqueados.
+- Tienes **tres módulos de mejora procedimentales** por cada **Categoría de tecnología**.
 
-Se admiten configuraciones parciales, pero los resultados están optimizados para plataformas totalmente mejoradas.
+Puedes optimizar configuraciones parciales, pero el motor de cálculo está orientado a **Tipos de plataforma** mejorados al máximo.
 
-## Consejos de Uso
+## Consejos de uso
 
-Las ranuras potenciadas son limitadas; su ubicación importa.
+Las ranuras potenciadas son limitadas. Repártelas entre varias **Categorías de tecnología** para conseguir la mayor bonificación total:
 
-- **No asignes todas las ranuras potenciadas a la primera tecnología que coloques.** Esto suele bloquear diseños generales más potentes más adelante.
-- Empieza asignando **2 o 3 ranuras potenciadas a una tecnología de alto impacto**, no todas ellas.
-- Reserva al menos **una o más ranuras potenciadas** para una **segunda tecnología prioritaria** para mejorar la efectividad total.
-- Una vez que hayas usado todas tus ranuras potenciadas, prioriza las tecnologías con **mayor número de módulos** antes de que el espacio se vea limitado.
-- Deja que el optimizador se encargue de la ubicación; tu función es **establecer las prioridades y la distribución**.
+- **No asignes todas las ranuras potenciadas a la primera Categoría de tecnología.** Hacerlo reduce la bonificación disponible para otros sistemas.
+- Asigna **de 2 a 3 ranuras potenciadas** a tu **Categoría de tecnología** de máxima prioridad.
+- Reserva **1 o más ranuras potenciadas** para una segunda **Categoría de tecnología**.
+- Una vez ocupadas todas las ranuras potenciadas, optimiza primero las **Categorías de tecnología** que requieran mayores dimensiones de **Ventana de cálculo**.
+- Define tus prioridades y deja que el optimizador calcule la ubicación óptima de los módulos.
 
-Si el espacio se vuelve escaso, es posible que debas reiniciar y optimizar las tecnologías en un orden diferente para evitar una **Alerta de Optimización**.
+### Ventana de cálculo y alertas de optimización
 
-## Consejo Profesional
+Cada **Categoría de tecnología** requiere una **Ventana de cálculo** (`ancho × alto`) determinada por su **Selección de módulos** activa.
 
-El optimizador utiliza ventanas fijas dimensionadas según el recuento de módulos de cada tecnología para encontrar ubicaciones eficientes en cuanto a espacio.
-Si los resultados no son ideales, **desactiva ranuras temporalmente** para guiar al optimizador hacia un mejor diseño.
+- Si ninguna región contigua de ranuras activas coincide con la **Ventana de cálculo** requerida, aparece una **Alerta de optimización** (**Patrón sin espacio**).
+- Desde la alerta puedes ejecutar una **Optimización forzada** (recocido simulado completo sobre las ranuras disponibles) o cancelar, aplicar **Reinicio de tecnología** a las categorías ya colocadas y optimizarlas en otro orden.
+- **Consejo experto:** Desactiva temporalmente ranuras concretas antes de optimizar para orientar dónde se coloca la **Ventana de cálculo**.
 
-## Etiquetas Theta / Tau / Sigma
+## Orden de rango de módulos (Theta / Tau / Sigma)
 
-Estas etiquetas clasifican las mejoras procedimentales **por estadísticas**, no por clase. Son términos antiguos que se conservan por coherencia.
+El **Orden de rango de módulos** (`Theta → Tau → Sigma`) clasifica los módulos de mejora procedimentales **según el valor de sus estadísticas**, no según su clase:
 
-- **Theta (1)** — mejores estadísticas
-- **Tau (2)** — intermedias
-- **Sigma (3)** — más débiles
+- **Theta (1)** — estadísticas más altas
+- **Tau (2)** — estadísticas intermedias
+- **Sigma (3)** — estadísticas más bajas
 
-No verás estas etiquetas en el juego. Se asignan comparando directamente las estadísticas de las mejoras.
+Estas etiquetas no aparecen dentro del juego. Compara directamente los valores de estadísticas de tus mejoras procedimentales:
 
-### Comparación en el Juego
+- Estadísticas más altas → **Theta**
+- Segundas estadísticas más altas → **Tau**
+- Estadísticas más bajas → **Sigma**
 
-Ignora las letras de clase (S, X, etc.) y compara las estadísticas:
-
-- Mejor → **Theta**
-- Segunda → **Tau**
-- Peor → **Sigma**
-
-**La clase no determina el rango.** Las mejoras de clase X pueden ser mejores o peores que las de clase S.
+**La clase de mejora no determina el Orden de rango de módulos.** Una mejora de clase X puede tener estadísticas superiores o inferiores a una mejora de clase S.
 
 ## Corbetas
 
-Las corbetas se diferencian de otras plataformas: pueden tener **hasta tres conjuntos de mejoras distintos**.
+Las corbetas admiten hasta **tres Grupos de módulos de mejora independientes** dentro de una misma **Categoría de tecnología**:
 
-- Las **mejoras cosméticas** se muestran como `Cn`.
-- Las **mejoras del reactor** se muestran como `Rn`.
+- Los **módulos cosméticos** usan la etiqueta `Cn`.
+- Los **módulos de reactor** usan la etiqueta `Rn`.
 
-El optimizador puede sugerir mejoras cosméticas por rendimiento en lugar de por apariencia, aunque las diferencias suelen ser mínimas.
+Al colocar módulos cosméticos, el optimizador prioriza las bonificaciones de estadísticas sobre la apariencia visual.
 
-## Diseños Recomendados
+## Diseños recomendados
 
-Para los **exotrajes** y las **exonaves**, las ranuras potenciadas son fijas y los diseños viables son limitados.
-La herramienta proporciona **diseños recomendados seleccionados a mano** que reflejan las combinaciones óptimas.
+Los exotrajes y las exonaves tienen ranuras potenciadas fijas y menos permutaciones posibles. Usa el menú **Diseños recomendados** para cargar distribuciones seleccionadas para las configuraciones más habituales.
 
-Las sugerencias y diseños alternativos son bienvenidos a través de las discusiones del proyecto:
+Envía sugerencias de diseños o comentarios en los debates del proyecto:
 <https://github.com/jbelew/nms_optimizer-web/discussions>
 
-## Guardar, Cargar y Compartir
+## Guardar, cargar y compartir
 
-- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Cargar** — Sube un archivo `.nms` guardado para restaurar un diseño.
-- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Guardar** — Descarga el diseño actual como un archivo `.nms`.
-- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Compartir** — Generia un enlace que otros pueden abrir directamente en el optimizador.
-- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Capturar Pantalla** — Genera una captura de pantalla del diseño actual.
+- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Cargar** — Abre desde el disco un **Archivo de diseño** `.nms` guardado.
+- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Guardar** — Descarga la distribución actual como un **Archivo de diseño** `.nms`.
+- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Compartir** — Genera una URL de **Cuadrícula compartida** que abre tu diseño en el optimizador.
+- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Capturar pantalla** — Guarda una imagen PNG del diseño actual de la cuadrícula.

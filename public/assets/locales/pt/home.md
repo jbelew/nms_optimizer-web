@@ -1,42 +1,42 @@
-# NMS Optimizer: Criador de Layouts de Tecnologia & Calculadora de Adjacência
+# NMS Optimizer: Criador de Layouts de Tecnologia e Calculadora de Adjacência
 
-![Screenshot of NMS Optimizer application showing a starship technology grid with optimized module placement](/assets/img/screenshots/screenshot.webp)
+![Captura de tela do aplicativo NMS Optimizer mostrando uma grade de tecnologia de nave com posicionamento otimizado de módulos](/assets/img/screenshots/screenshot.webp)
 
-Bem-vindo ao **NMS Optimizer**, uma ferramenta 100% gratuita, sem anúncios e de código aberto projetada para ajudá-lo a encontrar os melhores layouts de tecnologia em _No Man's Sky_. Pare de adivinhar onde colocar seus módulos de atualização Classe S e Classe X. Escolha sua plataforma, selecione sua tecnologia, marque seus espaços superalimentados (Supercharged Slots) e deixe nossa calculadora gerar instantaneamente um layout que maximiza seu DPS, manobrabilidade e alcance do Hiperpropulsor (Hyperdrive).
+Bem-vindo ao **NMS Optimizer**, uma ferramenta 100% gratuita, sem anúncios e de código aberto projetada para ajudar você a encontrar os melhores layouts de tecnologia em _No Man's Sky_. Pare de adivinhar onde colocar seus módulos de atualização de Classe S e Classe X. Escolha sua plataforma, selecione suas tecnologias, marque seus espaços supercarregados e deixe nossa calculadora gerar instantaneamente um layout que maximiza seu DPS, manobrabilidade e alcance do hiperpropulsor.
 
-Um layout otimizado normalmente pontua **15-20% mais alto** do que a maioria dos jogadores pode organizar à mão.
+Um layout otimizado normalmente alcança uma pontuação **15-20% maior** do que o que a maioria dos jogadores consegue organizar manualmente.
 
-## Maximize Bônus de Adjacência (Adjacency Bonuses) & Espaços Superalimentados
+## Maximize Bônus de Adjacência e Espaços Supercarregados
 
-Encontrar o layout de tecnologia perfeito em NMS significa equilibrar duas mecânicas de jogo complexas através de milhões de permutações possíveis (até ~8.32 × 10⁸¹ para uma grade completa!):
+Encontrar o layout de tecnologia perfeito em NMS exige equilibrar duas mecânicas complexas do jogo entre milhões de permutações possíveis (até ~8,32 × 10⁸¹ em uma grade completa!):
 
-- **Bônus de Adjacência:** Quando módulos de tecnologia compatíveis (como seu Motor de Pulso (Pulse Engine) e suas atualizações Classe S/Classe X) compartilham uma borda na grade do seu inventário, eles recebem um aumento percentual em seus atributos. Quanto mais bordas compartilhadas você criar, maior será o bônus.
-- **Espaços Superalimentados:** Esses raros espaços de inventário (até 4 por grade) fornecem um enorme multiplicador de atributos de ~25-30% para qualquer módulo colocado dentro deles. Como esses espaços são gerados aleatoriamente em quase todas as peças de equipamento, o "layout perfeito" muda para cada nave ou ferramenta individual que você encontrar.
+- **Bônus de Adjacência:** Quando módulos de tecnologia compatíveis (como seu Mecanismo de pulso e suas atualizações de Classe S/Classe X) compartilham uma borda na grade de inventário, eles recebem um aumento percentual em seus atributos. Quanto mais bordas compartilhadas você criar, maior será o bônus.
+- **Espaços Supercarregados:** Esses raros espaços de inventário (até 4 por grade) concedem um enorme multiplicador de ~25-30% nos atributos de qualquer módulo colocado dentro deles. Como esses espaços são gerados aleatoriamente em quase todo equipamento, o "layout perfeito" muda para cada nave ou multiferramenta que você encontra.
 
-Nosso criador de layouts testa milhares de configurações em milissegundos para encontrar o equilíbrio perfeito entre suas tecnologias principais, suas atualizações Classe X com os melhores atributos e seus espaços superalimentados únicos.
+Nosso criador de layouts testa milhares de configurações em milissegundos para encontrar o equilíbrio ideal entre suas tecnologias principais, suas atualizações de Classe X com os melhores atributos e seus espaços supercarregados exclusivos.
 
-## Plataformas & Equipamentos Suportados
+## Plataformas e Equipamentos Suportados
 
-O NMS Optimizer fornece resolução dinâmica e builds recomendadas selecionadas a dedo para cada tipo principal de equipamento no jogo:
+O NMS Optimizer oferece otimização dinâmica e builds recomendadas selecionadas manualmente para todos os principais tipos de equipamento do jogo:
 
-- **Naves (Starships):** Encontre o maior DPS e manobrabilidade para Caças (Fighters), Exploradores (Explorers), Transportadores (Haulers), Exóticas (Exotics), Naves Solares (Solar Ships), Interceptadores Sentinela (Sentinel Interceptors) e Naves Vivas (Living Ships).
-- **Multiferramentas (Multi-Tools):** Maximize o rendimento do seu Feixe de Mineração (Mining Beam) ou dano de armas em todas as variantes, incluindo padrão, Sentinela (Sentinel), Atlantid e Cajados (Staves).
-- **Exotrajes (Exosuits) & Exoveículos (Exocraft):** Acesse builds ideais testadas pela comunidade para a proteção contra perigos do seu Exotraje e todos os veículos (Minotauro, Roamer, Nômade, Colosso, Pilgrim e Nautilon).
-- **Cargueiros (Freighters):** Otimize o alcance do Hiperpropulsor de sua nave capital e a tecnologia de coordenação de frota.
-- **Corvetas (Corvettes):** Equilibre melhorias procedimentais com módulos de reator e módulos cosméticos exclusivos nas grades complexas de Corveta.
+- **Naves:** Encontre o maior DPS e a melhor manobrabilidade para Caças, Exploradoras, Cargueiras leves (Haulers), Exóticas, Naves solares, Interceptadores sentinela e Naves vivas.
+- **Multiferramentas:** Maximize o rendimento do seu Feixe de mineração ou o dano das armas em todas as variantes, incluindo padrão, Sentinela, de Atlante e Bastões.
+- **Exotrajes e Exoveículos:** Acesse builds ideais testadas pela comunidade para a proteção antirrisco do seu Exotraje e para todos os veículos (Minotauro, Andarilho, Nômade, Colosso, Peregrino e Nautilon).
+- **Naves Cargueiras:** Otimize o alcance do hiperpropulsor da sua nave capital e as tecnologias de coordenação de frota.
+- **Corvetas:** Equilibre atualizações procedimentais com Módulos de Reator e Módulos Cosméticos exclusivos em grades multicategoria de Corveta.
 
-## Alimentado por IA & Algoritmos Avançados
+## Impulsionado por IA e Algoritmos Avançados
 
-Nós não estamos apenas adivinhando. O motor do NMS Optimizer usa um fluxo de trabalho sofisticado para garantir os melhores resultados:
+Nós não dependemos de palpites. O motor do NMS Optimizer utiliza um pipeline sofisticado para garantir os melhores resultados:
 
-1. **Reconhecimento de Padrões:** Começamos com arranjos testados manualmente e aprovados pela comunidade.
-2. **Aprendizado de Máquina (IA):** Uma rede neural do TensorFlow, treinada em mais de 16.000 layouts de alta pontuação, prevê os posicionamentos mais inteligentes para seus espaços superalimentados.
-3. **Recozimento Simulado (Simulated Annealing):** Nosso backend ultrarrápido, construído em Rust, troca rapidamente os módulos para escalar em direção às estatísticas mais altas possíveis.
+1. **Reconhecimento de Padrões:** Começamos com arranjos testados manualmente e comprovados pela comunidade.
+2. **Aprendizado de Máquina (IA):** Uma rede neural em TensorFlow, treinada com mais de 16.000 layouts de alta pontuação, prevê os posicionamentos mais inteligentes para seus espaços supercarregados.
+3. **Recozimento Simulado:** Nosso backend ultrarrápido, desenvolvido em Rust, troca módulos rapidamente para alcançar os atributos mais altos possíveis.
 
-## Privacidade em Primeiro Lugar & Focado na Comunidade
+## Privacidade em Primeiro Lugar e Foco na Comunidade
 
-- **100% Gratuito & Código Aberto:** Licenciado sob GPL-3.0 com zero anúncios.
-- **Nenhum Login Necessário:** Os dados de seus builds são salvos com segurança no armazenamento local do seu navegador.
-- **Salvar & Compartilhar:** Exporte seus layouts favoritos, gere links compartilháveis para seus amigos ou faça capturas de tela de alta qualidade de seus layouts diretamente do aplicativo.
+- **100% Gratuito e de Código Aberto:** Licenciado sob GPL-3.0 e totalmente sem anúncios.
+- **Sem Necessidade de Login:** Os dados das suas builds são salvos com segurança no armazenamento local do seu navegador.
+- **Salve e Compartilhe:** Exporte seus layouts favoritos, gere links compartilháveis para seus amigos ou faça capturas de tela em alta qualidade diretamente pelo aplicativo.
 
-**Ative o JavaScript para Começar a Construir Seu Layout Perfeito Agora!**
+**Ative o JavaScript para começar a montar seu layout perfeito agora!**

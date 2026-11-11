@@ -1,50 +1,50 @@
-# Statistiche NMS Optimizer: Layout di Tecnologia Più Popolari
+# Statistiche di NMS Optimizer: i layout tecnologici più popolari
 
-## Statistiche Utente e Layout Popolari
+## Statistiche utente e layout popolari
 
-Questa pagina aggrega i dati degli utenti di NMS Optimizer per rivelare le tecnologie più frequentemente supercaricate su diverse piattaforme. Sia che tu stia pianificando la tua prossima configurazione o cercando ispirazione, queste statistiche mostrano le reali preferenze e i modelli della community.
+Questa pagina aggrega i dati degli utenti di NMS Optimizer per rivelare le tecnologie più frequentemente sovralimentate sulle diverse piattaforme. Che tu stia pianificando la tua prossima configurazione o cercando ispirazione, queste statistiche mostrano le preferenze e le tendenze reali della community.
 
-## Comprendere i Dati
+## Comprendere i dati
 
-I grafici sottostanti mostrano statistiche utente aggregate degli ultimi **28 giorni**, indicando quali tecnologie i giocatori ottimizzano più comunemente per gli **supercharged slots**. I dati rappresentano migliaia di sessioni di ottimizzazione su tre tipi di piattaforma principali:
+I grafici sottostanti mostrano le statistiche aggregate degli utenti degli ultimi **28 giorni**, indicando quali tecnologie i giocatori ottimizzano più spesso per gli **slot sovralimentati**. I dati rappresentano migliaia di sessioni di ottimizzazione su tre tipi principali di piattaforma:
 
-- **Tecnologie delle Navi Stellari** - Incluse le varianti Standard, Sentinel e Solar delle navi stellari
-- **Tecnologie dei Multi-Strumenti** - Che coprono i multi-strumenti Standard, Sentinel, Atlantid e Staves
-- **Tecnologie delle Corvette** - Le navi corsare specializzate introdotte nell'aggiornamento **Omega**
+- **Tecnologie astronave** - Incluse le varianti standard, Sentinella e solari delle astronavi
+- **Tecnologie multi-tool** - Incluse le varianti standard, Sentinella, di Atlantide e i Bastoni
+- **Tecnologie corvetta** - Le navi corsare specializzate introdotte nell'aggiornamento **Voyagers**
 
-## Cosa Significano Questi Grafici
+## Cosa significano questi grafici
 
-Ogni grafico mostra la popolarità relativa delle diverse tecnologie quando gli utenti scelgono di supercaricarle. Una fetta più grande significa che quella tecnologia è stata selezionata per la supercarica più frequentemente dalla community. Questo riflette:
+Ogni grafico mostra la popolarità relativa delle diverse tecnologie quando gli utenti scelgono di sovralimentarle. Uno spicchio più ampio indica che quella tecnologia è stata selezionata più spesso dalla community per la sovralimentazione. Questo riflette:
 
-1. **Efficacia Meta** - Le tecnologie che forniscono i maggiori incrementi di prestazioni tendono a raggrupparsi verso l'alto
-2. **Preferenze dei Giocatori** - I giocatori focalizzati sul combattimento danno priorità a tecnologie diverse rispetto a quelli focalizzati sull'esplorazione
-3. **Opportunità di Sinergia** - Alcune tecnologie si abbinano particolarmente bene con la supercarica, rendendole scelte naturali
+1. **Efficacia nel meta** - Le tecnologie che offrono i maggiori incrementi di prestazioni tendono a concentrarsi in cima
+2. **Preferenze dei giocatori** - Chi predilige il combattimento dà priorità a tecnologie diverse rispetto a chi punta sull'esplorazione
+3. **Opportunità di sinergia** - Alcune tecnologie si abbinano particolarmente bene alla sovralimentazione, diventando scelte naturali
 
-### Leggere i Grafici
+### Come leggere i grafici
 
-- Le tecnologie che rappresentano meno del **2% delle selezioni totali** sono raggruppate nella categoria "Altro" per mantenere i grafici leggibili
-- Le percentuali appaiono su ogni fetta quando rappresentano almeno il 6% del totale
-- I colori delle tecnologie corrispondono a quelli utilizzati in tutto l'optimizer per un facile riferimento
+- Le tecnologie che rappresentano meno del **2% delle selezioni totali** vengono raggruppate nella categoria "Altro" per mantenere i grafici leggibili
+- Le percentuali compaiono su ogni spicchio quando rappresentano almeno il 6% del totale
+- I colori delle tecnologie corrispondono a quelli usati in tutto l'ottimizzatore per un riferimento immediato
 
-## Perché Questo è Importante
+## Perché è utile
 
-Comprendere i modelli della community può aiutare a informare le tue decisioni di configurazione:
+Conoscere le tendenze della community può aiutarti nelle decisioni per la tua configurazione:
 
-- **Validazione** - Se una tecnologia che stai considerando è popolare, è probabilmente per una buona ragione
-- **Scoperta** - Trova tecnologie che potresti non aver considerato vedendo cosa gli altri prioritizzano
-- **Cambiamenti Meta** - Osserva come i dati cambiano man mano che il gioco si evolve e vengono rilasciati nuovi contenuti
-- **Varietà di Configurazioni** - Usalo come punto di partenza, quindi personalizza in base al tuo stile di gioco e alle tue esigenze specifiche
+- **Conferma** - Se una tecnologia che stai valutando è molto diffusa, probabilmente c'è un ottimo motivo
+- **Scoperta** - Individua tecnologie che potresti non aver preso in considerazione osservando le priorità degli altri giocatori
+- **Evoluzione del meta** - Osserva come cambiano i dati man mano che il gioco si evolve ed escono nuovi contenuti
+- **Varietà di configurazioni** - Usa questi dati come punto di partenza, poi personalizza il layout in base al tuo stile di gioco e alle tue esigenze
 
-## Per Iniziare
+## Per iniziare
 
-Una volta esaminate le scelte popolari qui, vai all'[optimizer](/it/) per creare la tua configurazione ottimizzata. Puoi:
+Dopo aver consultato le scelte più popolari, vai all'[ottimizzatore](/it/) per creare la tua configurazione ottimizzata. Puoi:
 
-1. Seleziona la tua piattaforma (Starship, Multi-tool, Corvette, Exosuit o Exocraft)
-2. Configura i tuoi **supercharged slots** e le **active cells**
-3. Esegui il risolutore per trovare il tuo layout perfetto
+1. Selezionare la tua piattaforma (Astronave, Multi-tool, Corvetta, Exotuta o Exoscafo)
+2. Configurare gli **slot sovralimentati** e le **celle attive**
+3. Avviare il risolutore per trovare il tuo layout perfetto
 
-Per istruzioni dettagliate sull'uso dell'optimizer, visita la [pagina delle istruzioni](/it/instructions/).
+Per istruzioni dettagliate sull'uso dell'ottimizzatore, visita la [pagina delle istruzioni](/it/instructions/).
 
-## Raccolta Dati
+## Raccolta dei dati
 
-Questi dati sono raccolti in forma anonima dalle richieste di ottimizzazione e non includono alcuna informazione di identificazione personale. Aiuta la community di NMS Optimizer a capire quali tecnologie offrono il maggior valore e informa i futuri miglioramenti agli algoritmi del risolutore.
+Questi dati vengono raccolti in forma anonima dalle richieste di ottimizzazione e non includono alcuna informazione di identificazione personale. Aiutano la community di NMS Optimizer a capire quali tecnologie offrono il valore maggiore e guidano i futuri miglioramenti agli algoritmi del risolutore.

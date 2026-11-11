@@ -1,49 +1,47 @@
-# NMS Optimizer Datenschutzrichtlinie: Ihre Daten & Sicherheit
+# NMS Optimizer Datenschutzrichtlinie: Deine Daten & Sicherheit
 
 **Zuletzt aktualisiert:** 16. März 2026
 
-Ihre Privatsphäre ist uns wichtig. Diese Datenschutzrichtlinie erklärt, wie **NMS Optimizer** („wir“, „uns“ oder „unser“) Ihre Informationen sammelt, verwendet und schützt, wenn Sie unsere Webanwendung und die zugehörige Optimierungs-Engine nutzen.
-
----
+Deine Privatsphäre ist uns wichtig. Diese Datenschutzrichtlinie erläutert, wie **NMS Optimizer** („wir“, „uns“ oder „unser“) deine Daten erfasst, nutzt und schützt, wenn du unsere Webanwendung und die zugehörige Optimierungs-Engine verwendest.
 
 ## 1. Datenerfassung
 
-NMS Optimizer ist als datenschutzorientiertes Tool konzipiert.
+NMS Optimizer ist als datenschutzfreundliches Tool konzipiert.
 
-- **Keine persönlichen Informationen:** Wir erfassen keine persönlich identifizierbaren Informationen (PII) wie Ihren Namen, Ihre E-Mail-Adresse oder Ihre physische Adresse. Es gibt kein Login- oder Kontosystem.
-- **Lokaler Speicher:** Die Anwendung verwendet den **LocalStorage** Ihres Browsers, um Ihre Präferenzen und den Build-Zustand zu speichern. Diese Daten verbleiben auf Ihrem Gerät und werden nicht an unsere Server übertragen oder von uns gespeichert.
-- **Anonyme Nutzungsdaten:** Wir verwenden **Google Analytics**, um anonyme Nutzungsstatistiken (wie Seitenaufrufe und Feature-Interaktionen) zu erfassen. Diese Daten werden aggregiert und identifizieren Sie nicht persönlich.
+- **Keine personenbezogenen Daten:** Wir erfassen keine personenbezogenen Daten (PII) wie deinen Namen, deine E-Mail-Adresse oder deine Anschrift. Es gibt weder einen Login noch ein Benutzerkonto.
+- **Lokaler Speicher:** Die Anwendung nutzt den **LocalStorage** deines Browsers, um deine Einstellungen und deinen aktuellen Build-Status zu sichern. Diese Daten bleiben auf deinem Gerät und werden weder an unsere Server übertragen noch von uns gespeichert.
+- **Anonyme Nutzungsdaten:** Wir setzen **Google Analytics** ein, um anonyme Nutzungsstatistiken (etwa Seitenaufrufe und Funktionsnutzung) zu erheben. Diese Daten werden aggregiert ausgewertet und lassen keine Rückschlüsse auf deine Person zu.
 
 ## 2. Technische Infrastruktur & Überwachung
 
-Um sicherzustellen, dass die Anwendung sicher, schnell und fehlerfrei ist, nutzen wir die folgenden Dienstleister:
+Damit die Anwendung sicher, schnell und fehlerfrei läuft, greifen wir auf folgende Dienstleister zurück:
 
-- **Cloudflare:** Unsere Anwendung wird über Cloudflare gehostet und gesichert. Cloudflare verarbeitet IP-Adressen und technische Metadaten, um DDoS-Schutz zu bieten und die Inhaltsbereitstellung zu optimieren.
-- **Heroku (Salesforce):** Unsere interne Optimierungs-API wird auf Heroku gehostet. Heroku verarbeitet technische Anfragedaten und führt Standard-Serverprotokolle (z. B. IP-Adressen und Zeitstempel), um sicherzustellen, dass die API betriebsbereit und sicher bleibt.
-- **Sentry:** Wir verwenden Sentry zur Fehlerüberwachung. Wenn die Anwendung einen Fehler aufweist, wird ein technischer Bericht an Sentry gesendet. Diese Berichte sind so konfiguriert, dass sie Ihre persönlichen Daten ausschließen und werden ausschließlich zur Fehlerbehebung verwendet.
+- **Cloudflare:** Unsere Anwendung wird über Cloudflare bereitgestellt und abgesichert. Cloudflare verarbeitet IP-Adressen und technische Metadaten, um DDoS-Schutz zu gewährleisten und die Auslieferung von Inhalten zu beschleunigen.
+- **Heroku (Salesforce):** Unsere interne Optimierungs-API wird bei Heroku betrieben. Heroku verarbeitet technische Anfragedaten und führt übliche Serverprotokolle (z. B. IP-Adressen und Zeitstempel), um den sicheren Betrieb der API sicherzustellen.
+- **Sentry:** Zur Fehlerüberwachung nutzen wir Sentry. Tritt in der Anwendung ein Programmfehler auf, wird ein technischer Bericht an Sentry übermittelt. Diese Berichte sind so konfiguriert, dass sie keine persönlichen Daten enthalten, und dienen ausschließlich der Fehlerbehebung.
 
 ## 3. Datenverarbeitung (Interne API)
 
-NMS Optimizer interagiert mit einer dedizierten API, die von uns erstellt und auf Heroku gehostet wird, um Technologie-Layout-Berechnungen durchzuführen.
+Zur Berechnung von Technologie-Layouts kommuniziert NMS Optimizer mit einer eigenen, auf Heroku betriebenen API.
 
-- **Zweck:** Wenn Sie eine Optimierung durchführen, werden die technischen Parameter der Technologie und Ihres Raster-Layouts an diese API gesendet.
-- **Datenschutz:** Diese Interaktion ist rein funktional. Es werden keine persönlichen Daten oder dauerhaften Benutzerkennungen mit diesen Anfragen gesendet. Daten werden im Arbeitsspeicher verarbeitet und nicht in einer Datenbank gespeichert.
+- **Zweck:** Wenn du eine Optimierung startest, werden die technischen Parameter der gewählten Technologie sowie dein Raster-Layout an diese API übertragen.
+- **Datenschutz:** Diese Übertragung dient rein funktionalen Zwecken. Es werden weder personenbezogene Daten noch dauerhafte Benutzerkennungen mitgesendet. Die Verarbeitung erfolgt ausschließlich im Arbeitsspeicher; eine Speicherung in einer Datenbank findet nicht statt.
 
 ## 4. Datensicherheit
 
-Wir implementieren angemessene Sicherheitsmaßnahmen, einschließlich **SSL/TLS-Verschlüsselung** für alle Daten während der Übertragung (über Cloudflare und Heroku), um die Integrität der Anwendung zu schützen.
+Wir treffen angemessene Sicherheitsvorkehrungen – darunter eine durchgehende **SSL/TLS-Verschlüsselung** sämtlicher Datenübertragungen (über Cloudflare und Heroku) –, um die Integrität der Anwendung zu schützen.
 
-## 5. Ihre Kontrolle
+## 5. Deine Kontrolle
 
-Da Ihr Anwendungsstatus lokal gespeichert wird:
+Da dein Anwendungsstatus lokal gespeichert wird, hast du jederzeit die volle Kontrolle:
 
-- **So löschen Sie Ihre Daten:** Löschen Sie einfach die „Website-Daten“ oder den Cache Ihres Browsers für diese Domain.
-- **So deaktivieren Sie das Tracking:** Sie können Browser-Erweiterungen (wie uBlock Origin) verwenden, um die Erfassung von Nutzungsdaten zu verhindern, ohne die Funktionalität der App zu beeinträchtigen.
+- **Daten löschen:** Lösche in deinem Browser einfach die „Website-Daten“ oder den Cache für diese Domain.
+- **Tracking unterbinden:** Du kannst Browser-Erweiterungen (wie uBlock Origin) verwenden, um die Erfassung anonymer Nutzungsdaten zu blockieren, ohne die Funktion der App einzuschränken.
 
 ## 6. Änderungen dieser Richtlinie
 
-Wir können unsere Datenschutzrichtlinie von Zeit zu Zeit aktualisieren. Wir werden Sie über Änderungen informieren, indem wir das Datum der „Letzten Aktualisierung“ oben auf dieser Seite aktualisieren.
+Wir können diese Datenschutzrichtlinie gelegentlich anpassen. Über Änderungen informieren wir dich, indem wir das Datum unter „Zuletzt aktualisiert“ oben auf dieser Seite erneuern.
 
 ## 7. Kontakt
 
-Wenn Sie Fragen zu dieser Datenschutzrichtlinie haben, können Sie uns über [GitHub Issues](https://github.com/jbelew/nms_optimizer-web/issues) kontaktieren.
+Wenn du Fragen zu dieser Datenschutzrichtlinie hast, erreichst du uns jederzeit über [GitHub Issues](https://github.com/jbelew/nms_optimizer-web/issues).

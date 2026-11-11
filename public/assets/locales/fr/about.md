@@ -1,76 +1,76 @@
-# À Propos de l'NMS Optimizer : Le Calculateur de Disposition de Technologie Ultime pour No Man's Sky
+# À propos de NMS Optimizer : le calculateur ultime de dispositions technologiques pour No Man's Sky
 
-**NMS Optimizer** est un outil 100 % gratuit et sans publicité conçu pour déterminer exactement où placer vos modules de technologie dans _No Man's Sky_. Vous choisissez votre équipement, sélectionnez vos modules d'amélioration de Classe S ou de Classe X, marquez vos emplacements suralimentés (Supercharged Slots), et notre calculateur génère presque instantanément la disposition qui maximise vos statistiques en jeu.
+**NMS Optimizer** est un outil 100 % gratuit et sans publicité conçu pour déterminer exactement où placer vos modules de technologie dans _No Man's Sky_. Vous choisissez votre équipement, sélectionnez vos modules d'amélioration de classe S ou de classe X, marquez vos emplacements surchargés, et notre calculateur génère quasi instantanément la disposition qui maximise vos statistiques en jeu.
 
-En équilibrant parfaitement les mécanismes du jeu, une disposition optimisée obtient généralement un score **15-20 % plus élevé** que ce que la plupart des joueurs peuvent arranger manuellement.
+En équilibrant parfaitement les mécaniques du jeu, une disposition optimisée obtient généralement un score **15 à 20 % plus élevé** que ce que la plupart des joueurs parviennent à agencer manuellement.
 
-## Le Problème : Maximiser les Bonus d'Adjacence (Adjacency Bonuses) & les Emplacements Suralimentés
+## Le problème : maximiser les bonus d'adjacence et les emplacements surchargés
 
-_No Man's Sky_ n'explique pas explicitement les bonus d'adjacence et n'offre aucune indication sur la stratégie des emplacements suralimentés. Maximiser la maniabilité de votre vaisseau ou les dégâts de votre multi-outil signifie jongler avec deux systèmes complexes :
+_No Man's Sky_ n'explique pas explicitement les bonus d'adjacence et ne fournit aucune indication sur la stratégie d'utilisation des emplacements surchargés. Maximiser la maniabilité de votre vaisseau ou les dégâts de votre multi-outil exige de combiner deux systèmes complexes :
 
-- **Bonus d'Adjacence :** Lorsque vous placez des modules de technologie compatibles côte à côte sur la grille d'inventaire, ils obtiennent un boost de statistiques. Différentes technologies ont des partenaires d'adjacence différents : les améliorations d'armes se boostent mutuellement, la technologie de mouvement booste d'autres technologies de mouvement, et plus vous créez de bords partagés, plus le bonus cumulatif est important.
-- **Emplacements Suralimentés :** Ces rares emplacements d'inventaire (généralement jusqu'à 4 par grille) donnent un multiplicateur massif de statistiques de ~25-30 % à tout module placé à l'intérieur.
+- **Bonus d'adjacence :** Lorsque vous placez des modules technologiques compatibles côte à côte sur la grille d'inventaire, ils bénéficient d'un gain de statistiques. Chaque technologie possède ses propres partenaires d'adjacence : les améliorations d'armes se renforcent mutuellement, les systèmes de mouvement renforcent les autres technologies de mouvement, et plus les bords partagés sont nombreux, plus le bonus cumulé est important.
+- **Emplacements surchargés :** Ces emplacements d'inventaire rares (généralement jusqu'à 4 par grille) confèrent un multiplicateur de statistiques massif d'environ 25 à 30 % au module qui y est installé.
 
-Trouver le meilleur arrangement absolu signifie tester des combinaisons sur des millions de permutations possibles — jusqu'à environ 8.32 × 10⁸¹ pour une grille entièrement étendue. Personne ne résout cela manuellement.
+Trouver le meilleur agencement absolu implique de tester des combinaisons parmi des millions de permutations possibles — jusqu'à environ 8,32 × 10⁸¹ pour une grille entièrement débloquée. Personne ne peut résoudre cela à la main.
 
-## Comment Fonctionne le Moteur d'Optimisation de Disposition
+## Fonctionnement du moteur d'optimisation de disposition
 
-Nous ne comptons pas sur des suppositions. Le moteur de l'NMS Optimizer utilise un flux de travail sophistiqué en quatre étapes pour trouver automatiquement votre meilleur build :
+Nous ne comptons pas sur l'approximation. Le moteur de NMS Optimizer s'appuie sur un pipeline sophistiqué en quatre étapes pour déterminer automatiquement votre meilleur build :
 
-1. **Reconnaissance de Modèles :** Le solveur commence avec des arrangements testés manuellement et approuvés par la communauté qui obtiennent de manière fiable de bons scores pour des ensembles de modules communs.
-2. **Apprentissage Automatique (IA) :** Si votre grille a des emplacements suralimentés uniques, un modèle d'apprentissage automatique TensorFlow — entraîné sur plus de 16 000 dispositions à haut score — prédit les placements les plus intelligents pour vos technologies principales par rapport à vos modules d'amélioration.
-3. **Recuit Simulé (Simulated Annealing) :** Notre moteur d'optimisation central, construit en Rust, échange rapidement les modules et teste des milliers d'arrangements en quelques millisecondes pour grimper vers le score le plus élevé absolu possible.
-4. **Affichage des Résultats :** Vous voyez immédiatement la disposition gagnante aux côtés d'une ventilation complète des multiplicateurs d'adjacence.
+1. **Reconnaissance de modèles :** Le solveur démarre avec des agencements testés manuellement et éprouvés par la communauté qui obtiennent d'excellents scores pour les ensembles de modules courants.
+2. **Apprentissage automatique (IA) :** Si votre grille comporte des emplacements surchargés spécifiques, un modèle d'apprentissage automatique TensorFlow — entraîné sur plus de 16 000 dispositions à haut score — prédit s'il est plus avantageux d'y placer vos technologies principales ou vos modules d'amélioration.
+3. **Recuit simulé :** Notre moteur d'optimisation central, développé en Rust, permute rapidement les modules et évalue des milliers d'agencements en quelques millisecondes afin d'atteindre le score maximal possible.
+4. **Affichage du résultat :** Vous visualisez immédiatement la disposition retenue accompagnée du détail complet des multiplicateurs d'adjacence.
 
-## Équipements Pris en Charge
+## Équipements pris en charge
 
-L'NMS Optimizer fournit une résolution dynamique pour chaque plateforme majeure du jeu :
+NMS Optimizer propose une résolution dynamique pour chaque plateforme majeure du jeu :
 
-- **Vaisseaux (Starships) :** Vaisseaux Standard, Exotiques (Exotic), Intercepteurs Sentinelles (Sentinel Interceptor), Solaires, Chasseurs (Fighter), Vivants (Living), et Atlantide.
-- **Multi-outils (Multi-Tools) :** Toutes les variantes d'armes et d'extraction, y compris les Bâtons (Staves).
-- **Exocombinaisons (Exosuits) & Exonefs (Exocraft) :** Toutes les technologies d'Exocombinaison et les types de véhicules (Nomade, Colosse, Pèlerin, Vagabond, Minotaure, Nautilon).
-- **Cargos (Freighters) :** Technologie d'hyperpropulsion de vaisseau amiral et de coordination de la flotte.
-- **Corvettes :** Prise en charge des dispositions complexes, y compris les modules de réacteur uniques et les emplacements de technologie cosmétique.
+- **Vaisseaux :** Vaisseaux standards, exotiques, intercepteurs sentinelles, solaires, chasseurs et vivants.
+- **Multi-outils :** Toutes les variantes d'armes et d'extraction, y compris les bâtons.
+- **Exocombinaison et exonefs :** Toutes les technologies d'exocombinaison et tous les types de véhicules (Nomade, Colosse, Pèlerin, Vagabond, Minotaure, Nautilon).
+- **Cargos :** Technologies d'hyperpropulsion de vaisseau amiral et de coordination de flotte.
+- **Corvettes :** Prise en charge des dispositions complexes, y compris les modules de réacteur uniques et les emplacements de technologies cosmétiques.
 
-## Foire Aux Questions (FAQ)
+## Foire aux questions (FAQ)
 
-**Que devrais-je mettre dans mes emplacements suralimentés ?**
-Cela dépend de votre disposition ! Parfois, il est préférable de suralimenter votre technologie principale, et d'autres fois, il est préférable de suralimenter votre amélioration aux statistiques les plus élevées. Notre modèle d'IA a été entraîné sur plus de 16 000 dispositions réelles spécifiquement pour prendre cette décision à votre place.
+**Que dois-je placer dans mes emplacements surchargés ?**
+Tout dépend de votre disposition ! Il est parfois préférable de surcharger votre technologie principale, et d'autres fois d'y placer votre module d'amélioration aux statistiques les plus élevées. Notre modèle d'IA a été entraîné sur plus de 16 000 dispositions réelles précisément pour prendre cette décision à votre place.
 
-**L'NMS Optimizer est-il gratuit ?**
-Oui. Il est 100 % gratuit, sans publicité et open-source (GPL-3.0). Vous n'avez pas besoin de créer de compte ou de fournir une adresse e-mail.
+**NMS Optimizer est-il gratuit ?**
+Oui. Il est 100 % gratuit, sans publicité et open source (GPL-3.0). Vous n'avez pas besoin de créer de compte ni de fournir d'adresse e-mail.
 
 **Puis-je sauvegarder et partager mes dispositions ?**
-Oui ! Vous pouvez sauvegarder vos builds préférés localement sous forme de fichiers `.nms`, générer des liens partageables à envoyer à vos amis, ou partager des captures d'écran de dispositions de haute qualité directement sur les réseaux sociaux. Les builds sont validés pour leur intégrité avant d'être partagés.
+Oui ! Vous pouvez sauvegarder vos builds favoris localement sous forme de fichiers `.nms`, générer des liens de partage à envoyer à vos amis ou partager des captures d'écran haute qualité de vos dispositions sur les réseaux sociaux. L'intégrité des builds est vérifiée avant le partage.
 
-**Pourquoi l'outil ne montre-t-il pas les statistiques en jeu ?**
-L'outil évite intentionnellement de calculer les métriques standard du jeu comme le DPS ou la Portée en Années-Lumière. Parce que les nombres exacts nécessitent des seeds de vaisseau cachées inaccessibles sans un éditeur de sauvegarde, l'optimiseur s'appuie plutôt sur un score en "pourcentage du maximum".
+**Pourquoi l'outil n'affiche-t-il pas les statistiques exactes en jeu ?**
+L'outil évite volontairement de calculer les valeurs brutes affichées en jeu telles que le DPS ou la portée en années-lumière. Comme les chiffres exacts dépendent de graines procédurales cachées inaccessibles sans éditeur de sauvegarde, l'optimiseur exprime plutôt ses résultats sous forme de « pourcentage du maximum ».
 
 **Pourquoi la disposition optimisée n'inclut-elle pas mon module d'Expédition spécifique ?**
-L'NMS Optimizer prend entièrement en charge toutes les **Récompenses d'Expédition et Redux d'Expédition** offertes après la mise à jour _Worlds Part I_. Cependant, comme tous les joueurs ne possèdent pas ces objets rares, ces modules optionnels ne sont pas inclus par défaut dans vos résolutions. Vous pouvez facilement les activer pour votre build en ouvrant <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> l'**interface de Sélection des Modules**.
+NMS Optimizer prend entièrement en charge toutes les **récompenses d'Expédition et d'Expédition Redux** introduites après la mise à jour _Worlds Part I_. Toutefois, comme tous les joueurs ne possèdent pas ces objets rares, ces modules optionnels ne sont pas activés par défaut dans vos calculs. Vous pouvez facilement les activer pour votre build en ouvrant l'**interface de Sélection de modules** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon>.
 
-## Sous le Capot : Notre Pile Technologique
+## Sous le capot : notre pile technologique
 
-Pour les développeurs et les passionnés de données, voici la pile technologique qui alimente l'NMS Optimizer :
+Pour les développeurs et les passionnés de données, voici la pile technologique qui propulse NMS Optimizer :
 
 - **Frontend :** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
-- **Backend Solveur :** Python, Flask, TensorFlow, NumPy, Rust (alimente le recuit simulé et le moteur de notation)
+- **Solveur backend :** Python, Flask, TensorFlow, NumPy, Rust (propulse le recuit simulé et le moteur de calcul des scores)
 - **Tests :** Vitest, Python Unittest
-- **Déploiement & Hébergement :** Heroku (hébergement API), Cloudflare (DNS/CDN), Docker
+- **Déploiement et hébergement :** Heroku (hébergement API), Cloudflare (DNS/CDN), Docker
 - **CI/CD :** GitHub Actions
 
-### Dépôts Open Source
+### Dépôts open source
 
-Vous voulez contribuer ? L'NMS Optimizer est entièrement open-source.
+Envie de contribuer ? NMS Optimizer est entièrement open source.
 
 - Interface Web : [github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
 - Backend : [github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
 
-## Un Grand Merci à la Communauté
+## Un immense merci à la communauté
 
-Ce projet ne serait pas possible sans l'incroyable communauté de _No Man's Sky_. Un merci spécial à **George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray, jayriley, arratikbehavior, Someone, Cal Abunga**, et à tous les autres qui ont contribué. Votre soutien, vos dons, vos partages et vos mots gentils signifient tout et aident à garder ce projet en vie.
+Ce projet n'existerait pas sans l'incroyable communauté de _No Man's Sky_. Un remerciement tout particulier à **George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray, jayriley, arratikbehavior, Someone, Cal Abunga**, ainsi qu'à toutes les personnes qui ont contribué. Votre soutien, vos dons, vos partages et vos encouragements comptent énormément et font vivre ce projet.
 
-## Un Regard en Arrière : Les Premières Versions
+## Rétrospective : les premières versions
 
-![Early prototype of No Man's Sky layout optimizer user interface](/assets/img/screenshots/screenshot_v03.webp)
-Si vous étiez avec nous depuis le début, vous vous souvenez peut-être à quoi ressemblait l'interface utilisateur dans ses premières phases alpha. Elle fonctionnait, mais la conception était minimale. La version actuelle représente une amélioration majeure et continue en matière de conception, d'utilisabilité mobile et de clarté globale.
+![Premier prototype de l'interface utilisateur de l'optimiseur de dispositions No Man's Sky](/assets/img/screenshots/screenshot_v03.webp)
+Si vous nous suivez depuis les débuts, vous vous souvenez peut-être de l'apparence de l'interface lors de ses premières versions alpha. Elle fonctionnait, mais son design restait minimaliste. La version actuelle est le fruit d'améliorations majeures et continues en matière de design, d'ergonomie mobile et de clarté générale.

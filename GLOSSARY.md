@@ -119,3 +119,15 @@ _Avoid_: force optimize, brute-force solve, fallback solve
 **Solve Quality**:
 The optimization outcome tier for a placed Technology Category relative to its baseline theoretical adjacency score: boosted (`> 100%` via supercharged slots), standard (`100%` optimal adjacency), or insufficient space (`< 100%` due to constrained grid space).
 _Avoid_: bonus status icon, supercharged flag, solve score status
+
+**Canonical Game Term**:
+An official No Man's Sky name for a platform, technology, module, or gameplay mechanic whose translation must match Hello Games' localized in-game text verbatim rather than being freely paraphrased.
+_Avoid_: game string, literal item translation, raw item name
+
+**Locale Bundle**:
+The structured collection of localized user-interface labels, accessibility announcements, catalog names, and page metadata strings for a single supported language.
+_Avoid_: translation file, JSON locale, language pack
+
+**Localized Route Document**:
+The long-form localized prose content for a public route that serves as the shared editorial source for its Routed Dialog, Static SEO Fallback, and Agent Markdown Document.
+_Avoid_: markdown translation, locale markdown, dialog copy file

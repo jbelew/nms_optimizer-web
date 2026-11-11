@@ -135,17 +135,11 @@ To maintain a shallow component tree and minimize prop-drilling, we utilize the 
 
 ## 🌐 Localization & i18n
 
-This project uses an automated translation pipeline to maintain its multi-language support (English, Spanish, French, German, and Portuguese).
+NMS Optimizer supports **6 languages** (`en`, `es`, `fr`, `de`, `pt`, and `it`) with localized `translation.json` **Locale Bundles** and `*.md` **Localized Route Documents** under `public/assets/locales/{lang}/`.
 
-### Auto-Translation Workflow
-
-We leverage Gemini AI to keep translations in sync without manual intervention:
-
-1. **Trigger**: The [**Auto-Translate**](.github/workflows/auto-translate.yml) workflow runs whenever JSON files in `public/assets/locales/en/` are updated on the `main` branch.
-2. **Process**: A Python script (`scripts/translate.py`) identifies changed keys and uses the Google Gemini API to generate translations for all other supported languages.
-3. **Commit**: The workflow automatically commits the updated locale files to the repository with a `chore(l10n)` prefix.
-
-_Target files: `public/assets/locales/{lang}/*.json`_
+- **Terminology Alignment**: Platform, technology, and module names follow Hello Games' official localized in-game text rather than literal word-for-word translations.
+- **Verification Gate**: `bun run verify:locales` enforces deterministic key-set parity, `<Trans>` / inline HTML tag balance and parity, `{{variable}}` interpolation parity, `<radix-icon>` and `[youtube:...]` Markdown shortcode parity, and SEO title/heading formatting across all supported locales in Lefthook and CI.
+- **Community Contributions**: Bilingual players can suggest refinements or contribute new ISO 639-1 locales directly via Pull Request in `public/assets/locales/`.
 
 ## 🐳 Docker
 
@@ -168,7 +162,7 @@ services:
 - `scripts/`: Build-time utilities (SSG, image processing, sitemaps).
 - `server/`: Node.js/Express application for handling SSG and runtime serving.
 - `public/`: Static assets, globally available icons, and localized markdown bundles.
-- `.github/workflows/`: CI/CD pipelines for testing, deployment, and auto-translation.
+- `.github/workflows/`: CI/CD pipelines for quality checks, testing, and deployment.
 
 ## 📄 License
 

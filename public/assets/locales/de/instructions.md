@@ -1,85 +1,81 @@
-# NMS Optimizer Anweisungen: Modules & Supercharged Slots
+# NMS Optimizer Anleitung: Module & turbogeladene Plätze
 
 ## Erste Schritte mit dem Raster
 
-- Wählen Sie einen **Plattformtyp** (Raumschiff, Multitool, Korvette usw.) über die Schaltfläche <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> aus.
-- **Klicken** oder **doppeltippen** (mobil) Sie auf einen leeren Slot, um seinen Status **Überladen** umzuschalten.
-- **Strg-Klick** (Windows) / **⌘-Klick** (Mac) / **einfaches Tippen** (mobil) auf einen Slot, um ihn zwischen **aktiv** und **inaktiv** umzuschalten.
-- **Tastatursteuerung:** Drücken Sie die **Pfeiltasten** (↑, ↓, ←, →) sowie **Pos1** / **Ende**, um den Fokus zu bewegen. Drücken Sie **S** oder **Umschalt+Eingabe**, um den Status **Überladen** umzuschalten. Drücken Sie **Leertaste** oder **Eingabe**, um zwischen **aktiv** und **inaktiv** umzuschalten.
-- Verwenden Sie die **Reihen-Schalter**, um eine ganze Reihe zu aktivieren oder zu deaktivieren. _(Reihen-Schalter werden gesperrt, sobald Sie Module auf dem Raster platzieren.)_
-- Klicken Sie auf die Schaltfläche **Modulauswahl** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> einer **Technologiekategorie**, um einzelne Module zu aktivieren oder zu deaktivieren und die erforderlichen Abmessungen des **Solver-Fensters** anzuzeigen.
-- Schalten Sie den **Fokus-Modus** <radix-icon name="EyeOpenIcon" size="20" color="var(--accent-11)"></radix-icon> um, um visuelle Ablenkungen zu reduzieren und die Lesbarkeit des Textes zu verbessern.
+- Wähle über die Schaltfläche <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> einen **Plattformtyp** aus (Raumschiff, Multiwerkzeug, Korvette usw.).
+- **Klicke** oder **doppeltippe** (mobil) auf einen leeren Platz, um den Status **Turbogeladen** umzuschalten.
+- Nutze **Strg+Klick** (Windows) / **⌘+Klick** (Mac) / **einfaches Tippen** (mobil) auf einen Platz, um ihn zwischen **aktiv** und **inaktiv** umzuschalten.
+- **Tastatursteuerung:** Drücke die **Pfeiltasten** (↑, ↓, ←, →) sowie **Pos1** / **Ende**, um den Fokus zu bewegen. Drücke **S** oder **Umschalt+Eingabe**, um den Status **Turbogeladen** umzuschalten. Drücke **Leertaste** oder **Eingabe**, um zwischen **aktiv** und **inaktiv** umzuschalten.
+- Verwende die **Reihen-Schalter**, um eine ganze Reihe zu aktivieren oder zu deaktivieren. _(Reihen-Schalter werden gesperrt, sobald du Module auf dem Raster platzierst.)_
+- Klicke bei einer **Technologiekategorie** auf die Schaltfläche **Modulauswahl** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon>, um einzelne Module zu aktivieren oder zu deaktivieren und die erforderlichen Abmessungen des **Solver-Fensters** einzusehen.
+- Schalte den **Fokus-Modus** <radix-icon name="EyeOpenIcon" size="20" color="var(--accent-11)"></radix-icon> um, um visuelle Ablenkungen zu reduzieren und die Lesbarkeit des Textes zu verbessern.
 
 > 💡 **Hinweis:**
-> Exosuits und Exocraft haben feste Raster. Exocraft-Slots können nicht modifiziert werden. Bei Exosuits können nur aktive/inaktive Zustände geändert werden – Supercharged Slot-Layouts sind fest.
+> Für Exo-Anzüge und Exo-Fahrzeuge gelten **Platzbeschränkungen**. Exo-Fahrzeuge verwenden ein festes **Standard-Rasterlayout**, bei dem Plätze nicht verändert werden können. Bei Exo-Anzügen sind die Positionen der turbogeladenen Plätze fest vorgegeben, sodass du nur zwischen aktiven und inaktiven Plätzen umschalten kannst.
 
-## Bevor Sie beginnen
+## Bevor du beginnst
 
-Dieses Tool ist für die **Endgame-Optimierung** gedacht und funktioniert am besten, wenn:
+Dieses Tool ist auf **Endgame-Optimierung** ausgelegt und liefert die besten Ergebnisse, wenn:
 
-- Die meisten oder alle Raster-Slots freigeschaltet sind.
-- Alle relevanten Technologies verfügbar sind.
-- Sie **drei Upgrade Modules** pro Technology haben.
+- die meisten oder alle Rasterplätze aktiv sind,
+- alle Module in jeder **Technologiekategorie** freigeschaltet sind,
+- du über **drei prozedurale Upgrade-Module** pro **Technologiekategorie** verfügst.
 
-Teilweise Setups werden unterstützt, aber die Ergebnisse sind für vollständig aufgerüstete Plattformen optimiert.
+Du kannst auch unvollständige Setups optimieren, der Solver ist jedoch auf voll ausgebaute **Plattformtypen** ausgelegt.
 
 ## Nutzungstipps
 
-Supercharged Slots sind begrenzt – die Platzierung ist entscheidend.
+Turbogeladene Plätze sind begrenzt. Verteile sie auf mehrere **Technologiekategorien**, um den höchsten Gesamtbonus zu erzielen:
 
-- **Weisen Sie nicht alle Supercharged Slots der ersten Technology zu, die Sie platzieren.** Dies blockiert oft später stärkere Gesamt-Layouts.
-- Beginnen Sie damit, **2–3 Supercharged Slots einer High-Impact Technology** zuzuweisen, nicht alle.
-- Reservieren Sie mindestens **einen oder mehrere Supercharged Slots** für eine **zweite Prioritäts-Technology**, um die Gesamteffektivität zu verbessern.
-- Sobald Sie alle Ihre Supercharged Slots verwendet haben, priorisieren Sie Technologies mit **größeren Module Counts**, bevor der Platz knapp wird.
-- Lassen Sie den Solver die Platzierung übernehmen; Ihre Rolle ist es, **Prioritäten und Verteilung festzulegen**.
+- **Weise nicht alle turbogeladenen Plätze der ersten Technologiekategorie zu.** Dadurch sinkt der verfügbare Bonus für andere Systeme.
+- Weise deiner wichtigsten **Technologiekategorie** **2 bis 3 turbogeladene Plätze** zu.
+- Reserviere **mindestens 1 turbogeladenen Platz** für eine zweite **Technologiekategorie**.
+- Sobald alle turbogeladenen Plätze belegt sind, berechne zuerst die **Technologiekategorien**, die ein größeres **Solver-Fenster** benötigen.
+- Lege deine Prioritäten fest und überlass dem Solver die optimale Modulplatzierung.
 
-Wenn der Platz knapp wird, müssen Sie möglicherweise zurücksetzen und Technologies in einer anderen Reihenfolge lösen, um eine **Optimization Alert** zu vermeiden.
+### Solver-Fenster & Optimierungswarnungen
 
-## Pro-Tipp
+Jede **Technologiekategorie** benötigt abhängig von ihrer aktiven **Modulauswahl** ein **Solver-Fenster** (`Breite × Höhe`).
 
-Der Solver verwendet feste Fenster, die an die Module Count jeder Technology angepasst sind, um platzsparende Platzierungen zu finden.
-Wenn die Ergebnisse nicht ideal sind, **deaktivieren Sie temporär Slots**, um den Solver zu einem besseren Layout zu führen.
+- Wenn kein zusammenhängender Bereich aktiver Plätze in das erforderliche **Solver-Fenster** passt, erscheint eine **Optimierungswarnung** (**Muster passt nicht**).
+- Über die Warnung kannst du eine **Erzwungene Berechnung** (vollständiges Simulated Annealing über alle verfügbaren Plätze) starten oder abbrechen, bereits platzierte Kategorien über **Technologie zurücksetzen** leeren und in einer anderen Reihenfolge berechnen.
+- **Profi-Tipp:** Setze vor der Berechnung gezielt einzelne Plätze vorübergehend auf **inaktiv**, um zu steuern, wo das **Solver-Fenster** platziert wird.
 
-## Theta / Tau / Sigma Bezeichnungen
+## Modul-Rangfolge (Theta / Tau / Sigma)
 
-Diese Bezeichnungen ranken Procedural Upgrades **nach Stats**, nicht nach Class. Es sind veraltete Begriffe, die aus Konsistenzgründen beibehalten wurden.
+Die **Modul-Rangfolge** (`Theta → Tau → Sigma`) sortiert prozedurale Upgrade-Module **nach ihren Werten**, nicht nach ihrer Upgrade-Klasse:
 
-- **Theta (1)** — beste Stats
-- **Tau (2)** — mittel
-- **Sigma (3)** — schwächste
+- **Theta (1)** – höchste Werte
+- **Tau (2)** – mittlere Werte
+- **Sigma (3)** – niedrigste Werte
 
-Sie werden diese Bezeichnungen im Spiel nicht sehen. Sie werden durch den direkten Vergleich der Upgrade Stats zugewiesen.
+Diese Bezeichnungen erscheinen nicht im Spiel. Vergleiche direkt die Werte deiner prozeduralen Upgrades:
 
-### In-Game Vergleich
+- Höchste Werte → **Theta**
+- Zweithöchste Werte → **Tau**
+- Niedrigste Werte → **Sigma**
 
-Ignorieren Sie Class-Buchstaben (S, X, etc.) und vergleichen Sie Stats:
+**Die Upgrade-Klasse bestimmt nicht die Modul-Rangfolge.** Ein Upgrade der X-Klasse kann höhere oder niedrigere Werte als ein Upgrade der S-Klasse aufweisen.
 
-- Beste → **Theta**
-- Zweite → **Tau**
-- Schlechteste → **Sigma**
+## Korvetten
 
-**Class bestimmt nicht den Rang.** X-Class Upgrades können S-Class übertreffen oder unterbieten.
+Korvetten unterstützen bis zu **drei separate Upgrade-Modulgruppen** innerhalb einer **Technologiekategorie**:
 
-## Corvettes
+- **Kosmetische Module** tragen die Kennzeichnung `Cn`.
+- **Reaktor-Module** tragen die Kennzeichnung `Rn`.
 
-Corvettes unterscheiden sich von anderen Plattformen: Sie können **bis zu drei separate Upgrade Sets** haben.
-
-- **Cosmetic Upgrades** werden als `Cn` angezeigt.
-- **Reactor Upgrades** werden als `Rn` angezeigt.
-
-Der Solver kann Cosmetic Upgrades für die Leistung gegenüber dem Aussehen vorschlagen, obwohl die Unterschiede normalerweise gering sind.
+Beim Platzieren kosmetischer Module priorisiert der Solver Werteboni gegenüber dem optischen Erscheinungsbild.
 
 ## Empfohlene Builds
 
-Für **Exosuits** und **Exocraft** sind Supercharged Slots fest und praktikable Layouts begrenzt.
-Das Tool bietet **handverlesene empfohlene Builds**, die optimale Kombinationen widerspiegeln.
+Exo-Anzüge und Exo-Fahrzeuge haben feste turbogeladene Plätze und weniger mögliche Layout-Varianten. Über das Menü **Empfohlene Builds** kannst du kuratierte Layouts für gängige Setups laden.
 
-Vorschläge und alternative Layouts sind über die Projektdiskussionen willkommen:
+Layout-Vorschläge oder Feedback kannst du gerne in den Projektdiskussionen einreichen:
 <https://github.com/jbelew/nms_optimizer-web/discussions>
 
 ## Speichern, Laden und Teilen
 
-- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Laden** — Laden Sie eine gespeicherte `.nms`-Datei hoch, um ein Layout wiederherzustellen.
-- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Speichern** — Laden Sie das aktuelle Layout als `.nms`-Datei herunter.
-- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Teilen** — Erzeugen Sie einen Link, den andere direkt im Optimizer öffnen können.
-- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Screenshot** — Erzeugen Sie einen Screenshot des aktuellen Layouts.
+- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Laden** – Öffne eine gespeicherte `.nms`-**Build-Datei** von deinem Gerät.
+- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Speichern** – Lade das aktuelle Layout als `.nms`-**Build-Datei** herunter.
+- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Teilen** – Erzeuge eine **Geteiltes-Raster**-URL, mit der sich dein Layout direkt im Optimierer öffnen lässt.
+- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Screenshot** – Speichere ein PNG-Bild des aktuellen Raster-Layouts.

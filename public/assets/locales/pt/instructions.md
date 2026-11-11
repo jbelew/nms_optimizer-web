@@ -1,85 +1,81 @@
-# Instruções do NMS Optimizer: Módulos e Espaços Sobrecarregados
+# Instruções do NMS Optimizer: Módulos e Espaços Supercarregados
 
-## Primeiros Passos Com A Grade
+## Primeiros Passos com a Grade
 
-- Selecione um **Tipo de plataforma** (Nave, Multiferramenta, Corveta, etc.) com o botão <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
-- **Clique** ou **toque duas vezes** (mobile) em um espaço vazio para alternar seu estado **Sobrecarregado**.
-- **Ctrl-clique** (Windows) / **⌘-clique** (Mac) / **toque simples** (mobile) em um espaço para alternar seu estado **ativo** ou **inativo**.
-- **Controles de teclado:** Pressione as **teclas de seta** (↑, ↓, ←, →) e **Home** / **End** para mover o foco. Pressione **S** ou **Shift+Enter** para alternar o estado **Sobrecarregado**. Pressione **Espaço** ou **Enter** para alternar o estado **ativo** ou **inativo**.
+- Selecione um **Tipo de Plataforma** (Nave, Multiferramenta, Corveta, etc.) com o botão <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
+- **Clique** ou **toque duas vezes** (celular) em um espaço vazio para alternar seu estado **Supercarregado**.
+- **Ctrl-clique** (Windows) / **⌘-clique** (Mac) / **toque uma vez** (celular) em um espaço para alternar seu estado **ativo** ou **inativo**.
+- **Controles do teclado:** Pressione as **teclas de seta** (↑, ↓, ←, →) e **Home** / **End** para mover o foco. Pressione **S** ou **Shift+Enter** para alternar o estado **Supercarregado**. Pressione **Espaço** ou **Enter** para alternar o estado **ativo** ou **inativo**.
 - Use os **interruptores de linha** para ativar ou desativar uma linha inteira. _(Os interruptores de linha são bloqueados após posicionar módulos na grade.)_
-- Clique no botão de **Seleção de módulos** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> em uma **Categoria de tecnologia** para ativar ou desativar módulos individuais e visualizar as dimensões necessárias da **Janela de cálculo**.
+- Clique no botão **Seleção de Módulos** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> em uma **Categoria de Tecnologia** para ativar ou desativar módulos individuais e visualizar as dimensões necessárias da **Janela de Cálculo**.
 - Alterne o **Modo de Foco** <radix-icon name="EyeOpenIcon" size="20" color="var(--accent-11)"></radix-icon> para reduzir distrações visuais e melhorar a legibilidade do texto.
 
 > 💡 **Nota:**
-> Exotrajes e Exonaves possuem grades fixas. Os espaços de Exonaves não podem ser modificados. Em Exotrajes, apenas os estados ativo/inativo podem ser alterados — os layouts de espaços sobrecarregados são fixos.
+> **Restrições de Espaço** se aplicam a Exotrajes e Exoveículos. Os Exoveículos usam um **Layout Padrão da Grade** fixo onde os espaços não podem ser alterados. Os Exotrajes possuem posições fixas para espaços supercarregados, permitindo alterar apenas os estados ativo e inativo dos espaços.
 
-## Antes De Começar
+## Antes de Começar
 
-Esta ferramenta é destinada à **otimização de final de jogo (endgame)** e funciona melhor quando:
+Esta ferramenta foi projetada para **otimização de fim de jogo (endgame)** e produz os melhores resultados quando:
 
-- A maioria ou todos os espaços da grade estão desbloqueados.
-- Todas as tecnologias relevantes estão disponíveis.
-- Você possui **três módulos de melhoria** por tecnologia.
+- A maioria ou todos os espaços da grade estão ativos.
+- Todos os módulos de cada **Categoria de Tecnologia** estão desbloqueados.
+- Você possui **três módulos de atualização procedimentais** por **Categoria de Tecnologia**.
 
-Configurações parciais são suportadas, mas os resultados são otimizados para plataformas totalmente melhoradas.
+Você pode otimizar configurações parciais, mas o solucionador é voltado para **Tipos de Plataforma** totalmente aprimorados.
 
-## Dicas De Uso
+## Dicas de Uso
 
-Espaços sobrecarregados são limitados — o posicionamento importa.
+Os espaços supercarregados são limitados. Distribua-os entre várias **Categorias de Tecnologia** para obter o maior bônus total:
 
-- **Não atribua todos os espaços sobrecarregados à primeira tecnologia que você colocar.** Isso geralmente bloqueia layouts gerais mais fortes posteriormente.
-- Comece atribuindo **2–3 espaços sobrecarregados a uma tecnologia de alto impacto**, não todos eles.
-- Reserve pelo menos **um ou mais espaços sobrecarregados** para uma **segunda tecnologia prioritária** para melhorar a eficácia total.
-- Depois de usar todos os seus espaços sobrecarregados, priorize tecnologias com **maior contagem de módulos** antes que o espaço se torne limitado.
-- Deixe o otimizador cuidar do posicionamento; seu papel é **definir prioridades e distribuição**.
+- **Não atribua todos os espaços supercarregados à primeira Categoria de Tecnologia.** Isso reduz o bônus disponível para os demais sistemas.
+- Atribua **2 a 3 espaços supercarregados** à sua **Categoria de Tecnologia** de maior prioridade.
+- Reserve **1 ou mais espaços supercarregados** para uma segunda **Categoria de Tecnologia**.
+- Depois que todos os espaços supercarregados estiverem ocupados, resolva primeiro as **Categorias de Tecnologia** que exigem dimensões maiores de **Janela de Cálculo**.
+- Defina suas prioridades e deixe o solucionador calcular o posicionamento ideal dos módulos.
 
-Si o espaço ficar apertado, você pode precisar redefinir e resolver as tecnologias em uma ordem diferente para evitar um **Alerta de Otimização**.
+### Janela de Cálculo e Alertas de Otimização
 
-## Dica Profissional
+Cada **Categoria de Tecnologia** exige uma **Janela de Cálculo** (`largura × altura`) baseada na sua **Seleção de Módulos** ativa.
 
-O otimizador usa janelas fixas dimensionadas para a contagem de módulos de cada tecnologia para encontrar posicionamentos eficientes.
-Si os resultados não forem ideais, **desative espaços temporariamente** para guiar o otimizador em direção a um layout melhor.
+- Se nenhuma região contígua de espaços ativos comportar a **Janela de Cálculo** necessária, um **Alerta de Otimização** (**Padrão sem Encaixe**) será exibido.
+- No alerta, você pode executar uma **Otimização Forçada** (recozimento simulado completo nos espaços disponíveis) ou cancelar, usar **Redefinir Tecnologia** nas categorias já posicionadas e resolver em outra ordem.
+- **Dica Profissional:** Defina temporariamente espaços específicos como **inativos** antes de otimizar para guiar onde a **Janela de Cálculo** será posicionada.
 
-## Rótulos Theta / Tau / Sigma
+## Ordem de Classificação dos Módulos (Theta / Tau / Sigma)
 
-Esses rótulos classificam melhorias procedimentais **pelos atributos**, não pela classe. São termos legados mantidos para consistência.
+A **Ordem de Classificação dos Módulos** (`Theta → Tau → Sigma`) classifica os módulos de atualização procedimentais **pelo valor dos atributos**, e não pela classe da atualização:
 
-- **Theta (1)** — melhores atributos
-- **Tau (2)** — intermediário
-- **Sigma (3)** — mais fraco
+- **Theta (1)** — maiores atributos
+- **Tau (2)** — atributos intermediários
+- **Sigma (3)** — menores atributos
 
-Você não verá esses rótulos no jogo. Eles são atribuídos comparando diretamente os atributos das melhorias.
+Esses rótulos não aparecem dentro do jogo. Compare diretamente os valores dos atributos das suas atualizações procedimentais:
 
-### Comparação No Jogo
+- Maiores atributos → **Theta**
+- Segundos maiores atributos → **Tau**
+- Menores atributos → **Sigma**
 
-Ignore as letras de classe (S, X, etc.) e compare os atributos:
+**A classe da atualização não determina a Ordem de Classificação dos Módulos.** Uma atualização de Classe X pode ter atributos maiores ou menores que uma atualização de Classe S.
 
-- Melhor → **Theta**
-- Segundo → **Tau**
-- Pior → **Sigma**
+## Corvetas
 
-**A classe não determina a classificação.** Melhorias de Classe X podem superar ou subestimar as de Classe S.
+As Corvetas suportam até **três Grupos de Módulos de atualização separados** dentro de uma mesma **Categoria de Tecnologia**:
 
-## Corbetas
+- **Módulos cosméticos** usam o rótulo `Cn`.
+- **Módulos de reator** usam o rótulo `Rn`.
 
-Corvetas diferem de outras plataformas: elas podem ter **até três conjuntos de melhorias separados**.
-
-- **Melhorias cosméticas** são mostradas como `Cn`.
-- **Melhorias de reator** são mostradas como `Rn`.
-
-O otimizador pode sugerir melhorias Cosméticas pelo desempenho em vez da aparência, embora as diferenças sejam geralmente pequenas.
+O solucionador prioriza bônus de atributos em vez da aparência visual ao posicionar módulos cosméticos.
 
 ## Builds Recomendadas
 
-Para **Exotrajes** e **Exonaves**, os espaços sobrecarregados são fixos e os layouts viáveis são limitados.
-A ferramenta fornece **builds recomendadas selecionadas manualmente** que refletem as combinações ideais.
+Exotrajes e Exoveículos possuem espaços supercarregados fixos e menos permutações de layout. Use o menu **Builds Recomendadas** para carregar layouts selecionados para configurações comuns.
 
-Sugestões e layouts alternativos são bem-vindos através das discussões do projeto:
+Envie sugestões de layouts ou comentários nas discussões do projeto:
 <https://github.com/jbelew/nms_optimizer-web/discussions>
 
-## Salvando, Carregando E Compartilhando
+## Salvando, Carregando e Compartilhando
 
-- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Carregar** — Carregue um arquivo `.nms` salvo para restaurar um layout.
-- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Salvar** — Baixe o layout atual como um arquivo `.nms`.
-- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Compartilhar** — Gere um link que outros podem abrir diretamente no otimizador.
-- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Capturar Tela** — Gere uma captura de tela do layout atual.
+- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Carregar** — Abre um **Arquivo de Build** `.nms` salvo no disco.
+- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Salvar** — Baixa o layout atual como um **Arquivo de Build** `.nms`.
+- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Compartilhar** — Gera um URL de **Grade Compartilhada** que abre seu layout no otimizador.
+- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Capturar Tela** — Captura uma imagem PNG do layout atual da grade.
