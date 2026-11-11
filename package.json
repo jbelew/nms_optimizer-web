@@ -178,7 +178,9 @@
 		"vitest": "^5.1.0"
 	},
 	"overrides": {
-		"lighthouse": "^13.5.0"
+		"lighthouse": "^13.5.0",
+		"stylelint-config-recommended": "^19.0.0",
+		"stylelint-config-standard": "^41.0.0"
 	},
 	"patchedDependencies": {
 		"@storybook/addon-vitest@10.6.2": "patches/@storybook%2Faddon-vitest@10.6.2.patch"
