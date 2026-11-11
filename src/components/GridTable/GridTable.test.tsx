@@ -2,6 +2,8 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 
+import type * as dialogUtilsModule from "@/utils/system/dialogUtils";
+
 import { GridTable } from "./GridTable";
 
 // Mock react-i18next
@@ -96,11 +98,17 @@ vi.mock("@/hooks/useBreakpoint/useBreakpoint", () => ({
 }));
 
 // Mock context
-vi.mock("@/utils/system/dialogUtils", () => ({
-	useDialog: () => ({
-		tutorialFinished: false,
-	}),
-}));
+vi.mock("@/utils/system/dialogUtils", async (importOriginal) => {
+	const actual = await importOriginal<typeof dialogUtilsModule>();
+
+	return {
+		...actual,
+		useDialog: () => ({
+			getDialogHref: vi.fn((dialog: string) => `/${dialog}/`),
+			tutorialFinished: false,
+		}),
+	};
+});
 
 describe("GridTable", () => {
 	beforeEach(() => {

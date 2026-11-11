@@ -74,6 +74,7 @@ vi.mock("react-i18next", () => ({
 const mockDialogContext: DialogContextType = {
 	activeDialog: null,
 	closeDialog: vi.fn(),
+	getDialogHref: vi.fn((dialog) => `/${dialog}/`),
 	markTutorialFinished: vi.fn(),
 	markUserVisited: vi.fn(),
 	openDialog: vi.fn(),

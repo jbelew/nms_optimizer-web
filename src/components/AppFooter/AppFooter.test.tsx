@@ -1,26 +1,36 @@
 import { Theme } from "@radix-ui/themes";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
-import { describe, expect, it, vi } from "vitest";
+import { MemoryRouter, useLocation } from "react-router-dom";
+import { beforeEach, describe, expect, it } from "vitest";
 
 import i18n from "@/test/i18n";
+import { DialogProvider } from "@/utils/system/dialogUtils";
 
 import AppFooter from "./AppFooter";
 
-vi.mock("@/utils/system/dialogUtils", () => ({
-	useDialog: () => ({
-		closeDialog: vi.fn(),
-		openDialog: vi.fn(),
-	}),
-}));
+const LocationDisplay = () => {
+	const location = useLocation();
+
+	return <div data-testid="router-location">{`${location.pathname}${location.search}`}</div>;
+};
 
 describe("AppFooter Component", () => {
-	const renderComponent = () => {
+	beforeEach(async () => {
+		await i18n.changeLanguage("en");
+	});
+
+	const renderComponent = (initialEntry = "/") => {
 		return render(
 			<I18nextProvider i18n={i18n}>
-				<Theme>
-					<AppFooter buildVersion="1.0.0" />
-				</Theme>
+				<MemoryRouter initialEntries={[initialEntry]}>
+					<DialogProvider>
+						<Theme>
+							<AppFooter buildVersion="1.0.0" />
+							<LocationDisplay />
+						</Theme>
+					</DialogProvider>
+				</MemoryRouter>
 			</I18nextProvider>,
 		);
 	};
@@ -33,5 +43,32 @@ describe("AppFooter Component", () => {
 	it("should render developer name", () => {
 		renderComponent();
 		expect(screen.getByText(/void23/i)).toBeDefined();
+	});
+
+	it("renders Privacy Policy as a crawlable <a href> link with SPA primary click and native modifier click", async () => {
+		await i18n.changeLanguage("es");
+		const { unmount } = renderComponent("/es/?platform=corvette");
+
+		try {
+			const privacyLink = screen.getByRole("link", { name: "buttons.privacy" });
+
+			expect(privacyLink.tagName).toBe("A");
+			expect(privacyLink).toHaveClass("app-footer__link");
+			expect(privacyLink).toHaveAttribute("href", "/es/privacy/?platform=corvette");
+
+			expect(fireEvent.click(privacyLink, { button: 0, metaKey: true })).toBe(true);
+			expect(fireEvent.click(privacyLink, { button: 1 })).toBe(true);
+			expect(screen.getByTestId("router-location")).toHaveTextContent(
+				"/es/?platform=corvette",
+			);
+
+			expect(fireEvent.click(privacyLink, { button: 0 })).toBe(false);
+			expect(screen.getByTestId("router-location")).toHaveTextContent(
+				"/es/privacy/?platform=corvette",
+			);
+		} finally {
+			unmount();
+			await i18n.changeLanguage("en");
+		}
 	});
 });

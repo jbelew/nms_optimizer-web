@@ -5,6 +5,7 @@ import { I18nextProvider } from "react-i18next";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import type * as dialogUtilsModule from "@/utils/system/dialogUtils";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
@@ -35,15 +36,21 @@ vi.mock("@/hooks/useUrlSync/useUrlSync", () => ({
 	}),
 }));
 
-vi.mock("@/utils/system/dialogUtils", () => ({
-	DialogContext: React.createContext(undefined),
-	useDialog: () => ({
-		closeDialog: vi.fn(),
-		markTutorialFinished: vi.fn(),
-		openDialog: vi.fn(),
-		tutorialFinished: true,
-	}),
-}));
+vi.mock("@/utils/system/dialogUtils", async (importOriginal) => {
+	const actual = await importOriginal<typeof dialogUtilsModule>();
+
+	return {
+		...actual,
+		useDialog: () => ({
+			activeDialog: null,
+			closeDialog: vi.fn(),
+			getDialogHref: vi.fn((dialog: string) => `/${dialog}/`),
+			markTutorialFinished: vi.fn(),
+			openDialog: vi.fn(),
+			tutorialFinished: true,
+		}),
+	};
+});
 
 vi.mock("@/components/LanguageSelector/LanguageSelector", () => ({
 	LanguageSelector: () => <div data-testid="language-selector">LanguageSelector</div>,

@@ -34,7 +34,7 @@ import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useA11yStore, useOptimizeStore } from "@/store/ui/uiStore";
 import { sendDeferredEvent } from "@/utils/analytics/tracking";
-import { useDialog } from "@/utils/system/dialogUtils";
+import { isPlainLeftClick, useDialog } from "@/utils/system/dialogUtils";
 
 /**
  * A responsive toolbar designed for mobile devices.
@@ -66,7 +66,7 @@ import { useDialog } from "@/utils/system/dialogUtils";
  */
 export const MobileToolbar: React.FC = () => {
 	const { t } = useTranslation();
-	const { openDialog } = useDialog();
+	const { getDialogHref, openDialog } = useDialog();
 	const { a11yMode, toggleA11yMode } = useA11yStore();
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const hasModulesInGrid = useGridStore((state) => state.hasModulesInGrid);
@@ -153,25 +153,41 @@ export const MobileToolbar: React.FC = () => {
 				type="multiple"
 			>
 				<IconButton
-					aria-label={t("buttons.changelog") ?? ""}
-					onClick={() => {
-						openDialog("changelog");
-					}}
+					asChild
 					size="2"
 					variant="soft"
 				>
-					<CounterClockwiseClockIcon className="h-4 w-4" />
+					<a
+						aria-label={t("buttons.changelog") ?? ""}
+						href={getDialogHref("changelog")}
+						onClick={(event) => {
+							if (isPlainLeftClick(event)) {
+								event.preventDefault();
+								openDialog("changelog");
+							}
+						}}
+					>
+						<CounterClockwiseClockIcon className="h-4 w-4" />
+					</a>
 				</IconButton>
 
 				<IconButton
-					aria-label={t("buttons.userStats") ?? ""}
-					onClick={() => {
-						openDialog("userstats");
-					}}
+					asChild
 					size="2"
 					variant="soft"
 				>
-					<PieChartIcon className="h-4 w-4" />
+					<a
+						aria-label={t("buttons.userStats") ?? ""}
+						href={getDialogHref("userstats")}
+						onClick={(event) => {
+							if (isPlainLeftClick(event)) {
+								event.preventDefault();
+								openDialog("userstats");
+							}
+						}}
+					>
+						<PieChartIcon className="h-4 w-4" />
+					</a>
 				</IconButton>
 
 				{/* A11y mode switch */}

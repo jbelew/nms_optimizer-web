@@ -17,7 +17,7 @@ import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useA11yStore } from "@/store/ui/uiStore";
 import { sendDeferredEvent } from "@/utils/analytics/tracking";
-import { useDialog } from "@/utils/system/dialogUtils";
+import { isPlainLeftClick, useDialog } from "@/utils/system/dialogUtils";
 import { lazyNamed } from "@/utils/system/lazyNamed";
 
 /**
@@ -65,7 +65,7 @@ interface AppHeaderProps {
  */
 const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const { i18n, t } = useTranslation();
-	const { openDialog } = useDialog();
+	const { activeDialog, getDialogHref, openDialog } = useDialog();
 	const isLg = useBreakpoint("1024px");
 	const isSm = useBreakpoint("640px");
 	const { a11yMode, toggleA11yMode } = useA11yStore();
@@ -73,6 +73,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const isDockerBuild = import.meta.env.VITE_DOCKER === "true";
 
 	const handleShowChangelog = onShowChangelog ?? (() => openDialog("changelog"));
+	const WorkspaceTitleTag = activeDialog ? "div" : "h1";
 
 	const accessibilityToggle = (
 		<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
@@ -116,28 +117,48 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				>
 					<ConditionalTooltip label={t("buttons.changelog") ?? ""}>
 						<IconButton
-							aria-label={t("buttons.changelog") ?? ""}
-							onClick={handleShowChangelog}
-							onMouseEnter={() => {
-								void import("@/components/AppDialog/Markdown/MarkdownContentRenderer");
-							}}
+							asChild
 							variant="soft"
 						>
-							<CounterClockwiseClockIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+							<a
+								aria-label={t("buttons.changelog") ?? ""}
+								href={getDialogHref("changelog")}
+								onClick={(event) => {
+									if (isPlainLeftClick(event)) {
+										event.preventDefault();
+										handleShowChangelog();
+									}
+								}}
+								onMouseEnter={() => {
+									void import("@/components/AppDialog/Markdown/MarkdownContentRenderer");
+								}}
+							>
+								<CounterClockwiseClockIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+							</a>
 						</IconButton>
 					</ConditionalTooltip>
 
 					{!isDockerBuild && (
 						<ConditionalTooltip label={t("buttons.userStats") ?? ""}>
 							<IconButton
-								aria-label={t("buttons.userStats") ?? ""}
-								onClick={() => openDialog("userstats")}
-								onMouseEnter={() => {
-									void import("@/components/AppDialog/UserStats/UserStatsDialog");
-								}}
+								asChild
 								variant="soft"
 							>
-								<PieChartIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+								<a
+									aria-label={t("buttons.userStats") ?? ""}
+									href={getDialogHref("userstats")}
+									onClick={(event) => {
+										if (isPlainLeftClick(event)) {
+											event.preventDefault();
+											openDialog("userstats");
+										}
+									}}
+									onMouseEnter={() => {
+										void import("@/components/AppDialog/UserStats/UserStatsDialog");
+									}}
+								>
+									<PieChartIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+								</a>
 							</IconButton>
 						</ConditionalTooltip>
 					)}
@@ -226,25 +247,28 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 
 			<Heading
 				align="center"
-				as="h1"
+				asChild
 				className="app-header__title"
 				mt="1"
 				size={isSm ? "3" : "2"}
 				wrap="pretty"
 			>
-				<Trans
-					components={{
-						1: <span style={{ color: "var(--accent-11)" }} />,
-					}}
-					i18nKey="appHeader.subTitle"
-				/>
-				<span
-					className="font-medium"
-					style={{ color: "var(--gray-11)" }}
-				>
-					{" "}
-					{__APP_VERSION__}
-				</span>
+				<WorkspaceTitleTag>
+					<span className="sr-only whitespace-pre">{"No Man's Sky - "}</span>
+					<Trans
+						components={{
+							1: <span style={{ color: "var(--accent-11)" }} />,
+						}}
+						i18nKey="appHeader.subTitle"
+					/>
+					<span
+						className="font-medium"
+						style={{ color: "var(--gray-11)" }}
+					>
+						{" "}
+						{__APP_VERSION__}
+					</span>
+				</WorkspaceTitleTag>
 			</Heading>
 		</header>
 	);

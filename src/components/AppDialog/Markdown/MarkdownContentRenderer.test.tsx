@@ -18,20 +18,21 @@ vi.mock("@/components/AppDialog/Common/LoremIpsumSkeleton", () => ({
 	default: () => <div data-testid="lorem-ipsum-skeleton">Loading...</div>,
 }));
 
-// Mock react-markdown and remark-gfm
-vi.mock("react-markdown", () => ({
-	default: ({ children }: { children: React.ReactNode }) => (
-		<div data-testid="markdown-content">{children}</div>
-	),
-}));
+// Wrap real react-markdown so existing data-testid assertions and real component mapping both work
+vi.mock("react-markdown", async () => {
+	const actual = await vi.importActual<{ default: React.ComponentType<Record<string, unknown>> }>(
+		"react-markdown",
+	);
+	const ActualReactMarkdown = actual.default;
 
-vi.mock("remark-gfm", () => ({
-	default: vi.fn(() => {}),
-}));
-
-vi.mock("rehype-raw", () => ({
-	default: vi.fn(() => {}),
-}));
+	return {
+		default: (props: Record<string, unknown>) => (
+			<div data-testid="markdown-content">
+				<ActualReactMarkdown {...props} />
+			</div>
+		),
+	};
+});
 
 describe("MarkdownContentRenderer", () => {
 	const mockMarkdownContent = "# Test Heading\n\nTest paragraph";
@@ -94,12 +95,16 @@ describe("MarkdownContentRenderer", () => {
 			default: new Promise((resolve) => setTimeout(() => resolve(vi.fn()), 100)),
 		}));
 
-		render(<MarkdownContentRenderer markdownFileName="test.md" />);
+		try {
+			render(<MarkdownContentRenderer markdownFileName="test.md" />);
 
-		// Should show skeleton initially while remarkGfm is loading
-		await waitFor(() => {
-			expect(screen.getByTestId("lorem-ipsum-skeleton")).toBeInTheDocument();
-		});
+			// Should show skeleton initially while remarkGfm is loading
+			await waitFor(() => {
+				expect(screen.getByTestId("lorem-ipsum-skeleton")).toBeInTheDocument();
+			});
+		} finally {
+			vi.doUnmock("remark-gfm");
+		}
 	});
 
 	test("should accept markdownFileName prop", () => {
@@ -177,6 +182,24 @@ describe("MarkdownContentRenderer", () => {
 			expect(article).toBeInTheDocument();
 			expect(article).toHaveClass("text-sm", "sm:text-base");
 		});
+	});
+
+	test("renders level-3 Markdown headings (###) as semantic h3 elements rather than h1", async () => {
+		mockUseMarkdownContent.mockReturnValue({
+			error: null,
+			isLoading: false,
+			markdown: "# Ignored H1\n\n## Release Notes\n\n### Bug Fixes\n\nFixed layout.",
+		});
+
+		const { container } = render(<MarkdownContentRenderer markdownFileName="changelog" />);
+
+		const h3 = await screen.findByRole("heading", { level: 3, name: "Bug Fixes" });
+		expect(h3.tagName).toBe("H3");
+
+		const h2 = screen.getByRole("heading", { level: 2, name: "Release Notes" });
+		expect(h2.tagName).toBe("H2");
+
+		expect(container.querySelectorAll("h1")).toHaveLength(0);
 	});
 });
 

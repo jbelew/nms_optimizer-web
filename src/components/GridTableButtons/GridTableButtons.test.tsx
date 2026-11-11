@@ -3,6 +3,8 @@ import React from "react";
 import { act, fireEvent, render, renderHook, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import type { PageName } from "@/routeConfig";
+import type * as dialogUtilsModule from "@/utils/system/dialogUtils";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import {
 	__resetScrollGridIntoViewRef,
@@ -15,6 +17,7 @@ import GridTableButtons from "./GridTableButtons";
 
 const {
 	markTutorialFinishedMock,
+	mockDialogState,
 	mockHandleScreenshot,
 	mockResetGrid,
 	mockSendEvent,
@@ -22,6 +25,10 @@ const {
 	openDialogMock,
 } = vi.hoisted(() => ({
 	markTutorialFinishedMock: vi.fn(),
+	mockDialogState: {
+		lang: "en",
+		search: "",
+	},
 	mockHandleScreenshot: vi.fn(),
 	mockResetGrid: vi.fn(),
 	mockSendEvent: vi.fn(),
@@ -83,13 +90,20 @@ vi.mock("@/components/ConditionalTooltip/ConditionalTooltip", () => ({
 	ConditionalTooltip: ({ children }: { children: React.ReactNode }) => children,
 }));
 vi.mock("@/hooks/useBreakpoint/useBreakpoint");
-vi.mock("@/utils/system/dialogUtils", () => ({
-	useDialog: () => ({
-		markTutorialFinished: markTutorialFinishedMock,
-		openDialog: openDialogMock,
-		tutorialFinished: false,
-	}),
-}));
+vi.mock("@/utils/system/dialogUtils", async (importOriginal) => {
+	const actual = await importOriginal<typeof dialogUtilsModule>();
+
+	return {
+		...actual,
+		useDialog: () => ({
+			getDialogHref: (dialog: PageName) =>
+				actual.buildRoutedDialogHref(dialog, mockDialogState.lang, mockDialogState.search),
+			markTutorialFinished: markTutorialFinishedMock,
+			openDialog: openDialogMock,
+			tutorialFinished: false,
+		}),
+	};
+});
 vi.mock("@/utils/analytics/tracking", () => ({
 	sendDeferredEvent: vi.fn(),
 	sendEvent: mockSendEvent,
@@ -130,6 +144,8 @@ describe("GridTableButtons", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		__resetScrollGridIntoViewRef();
+		mockDialogState.lang = "en";
+		mockDialogState.search = "";
 		vi.mocked(useBreakpoint).mockReturnValue(true); // Default to smallAndUp
 		setGridStoreState(false, true); // Default to not shared, has modules
 		useTechStore.setState({ isDefaultModuleSelection: true });
@@ -203,14 +219,75 @@ describe("GridTableButtons", () => {
 		expect(screen.getByLabelText("Reset Grid Button")).not.toBeDisabled();
 	});
 
-	it("disables instructions button when solving is true", () => {
-		renderComponent(true);
-		expect(screen.getByLabelText("buttons.instructions")).toBeDisabled();
+	it("disables instructions link when solving is true and restores interactive link when idle", () => {
+		const { rerender } = renderComponent(true);
+		const instructionsLink = screen.getByRole("link", { name: "buttons.instructions" });
+
+		expect(instructionsLink).toHaveAttribute("aria-disabled", "true");
+		expect(instructionsLink).toHaveAttribute("data-disabled", "true");
+		expect(instructionsLink).toHaveAttribute("tabindex", "-1");
+		expect(fireEvent.click(instructionsLink)).toBe(false);
+		expect(fireEvent.click(instructionsLink, { button: 0, ctrlKey: true })).toBe(false);
+		expect(openDialogMock).not.toHaveBeenCalled();
+
+		rerender(
+			<div className="main-app__grid-section">
+				<GridTableButtons solving={false} />
+			</div>,
+		);
+
+		expect(instructionsLink).not.toHaveAttribute("aria-disabled");
+		expect(instructionsLink).not.toHaveAttribute("data-disabled");
+		expect(instructionsLink).not.toHaveAttribute("tabindex");
+		expect(fireEvent.click(instructionsLink)).toBe(false);
+		expect(openDialogMock).toHaveBeenCalledWith("instructions");
 	});
 
-	it("disables about button when solving is true", () => {
+	it("disables about link when solving is true and blocks navigation on click", () => {
 		renderComponent(true);
-		expect(screen.getByLabelText("buttons.about")).toBeDisabled();
+		const aboutLink = screen.getByRole("link", { name: "buttons.about" });
+
+		expect(aboutLink).toHaveAttribute("aria-disabled", "true");
+		expect(aboutLink).toHaveAttribute("data-disabled", "true");
+		expect(aboutLink).toHaveAttribute("tabindex", "-1");
+		expect(fireEvent.click(aboutLink)).toBe(false);
+		expect(openDialogMock).not.toHaveBeenCalled();
+	});
+
+	it("renders Instructions and About as crawlable <a href> links across desktop and mobile breakpoints while preserving modifier clicks", () => {
+		mockDialogState.lang = "de";
+		mockDialogState.search = "?platform=corvette";
+
+		const { unmount } = renderComponent(false);
+		const desktopInstructions = screen.getByRole("link", { name: "buttons.instructions" });
+		const desktopAbout = screen.getByRole("link", { name: "buttons.about" });
+
+		expect(desktopInstructions.tagName).toBe("A");
+		expect(desktopInstructions).toHaveAttribute("href", "/de/instructions/?platform=corvette");
+		expect(desktopAbout.tagName).toBe("A");
+		expect(desktopAbout).toHaveAttribute("href", "/de/about/?platform=corvette");
+
+		// Modifier and middle clicks preserve native browser behavior
+		expect(fireEvent.click(desktopInstructions, { button: 0, ctrlKey: true })).toBe(true);
+		expect(fireEvent.click(desktopAbout, { button: 1 })).toBe(true);
+		expect(openDialogMock).not.toHaveBeenCalled();
+
+		// Unmodified primary left-click intercepts for SPA modal navigation
+		expect(fireEvent.click(desktopAbout, { button: 0 })).toBe(false);
+		expect(openDialogMock).toHaveBeenCalledWith("about");
+
+		unmount();
+
+		// Mobile (<640px) IconButton asChild branch
+		vi.mocked(useBreakpoint).mockReturnValue(false);
+		renderComponent(false);
+		const mobileInstructions = screen.getByRole("link", { name: "buttons.instructions" });
+		const mobileAbout = screen.getByRole("link", { name: "buttons.about" });
+
+		expect(mobileInstructions.tagName).toBe("A");
+		expect(mobileInstructions).toHaveAttribute("href", "/de/instructions/?platform=corvette");
+		expect(mobileAbout.tagName).toBe("A");
+		expect(mobileAbout).toHaveAttribute("href", "/de/about/?platform=corvette");
 	});
 
 	it("calls handleShowInstructions on instructions button click", () => {

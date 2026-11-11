@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import type { PageName } from "@/routeConfig";
 import { languages } from "@/routeConfig";
 import { safeGetItem, safeSetItem } from "@/utils/browser/environment";
-import { getPageByPath, ROUTED_DIALOG_IDS } from "@shared/page-registry.js";
+import { getPageById, getPageByPath, ROUTED_DIALOG_IDS } from "@shared/page-registry.js";
 
 /**
  * Returns the list of language codes supported by the application.
@@ -76,9 +76,17 @@ export interface DialogContextType {
 	/**
 	 * Navigates away from the active Routed Dialog or closes the share modal.
 	 *
-	 * @returns {void} Side-effects only.
+	 * @returns Side-effects only.
 	 */
 	closeDialog: () => void;
+	/**
+	 * Resolves the canonical localized trailing-slash href for a Routed Dialog, preserving active query parameters.
+	 *
+	 * @param dialog - The Routed Dialog identifier to resolve.
+	 *
+	 * @returns Root-relative localized href with trailing slash and preserved query string.
+	 */
+	getDialogHref: (dialog: NonNullable<DialogType>) => string;
 	/**
 	 * Sets the tutorial completion flag.
 	 *
@@ -225,6 +233,134 @@ export const buildLocalizedPath = (
 	return normalizedLang === "en" ? normalizedBase : `/${normalizedLang}${normalizedBase}`;
 };
 
+/** Whitelisted URL query parameter keys preserved across Routed Dialog links and transitions. */
+const ALLOWED_DIALOG_QUERY_KEYS = new Set(["grid", "platform"]);
+
+/**
+ * Normalizes and sanitizes a URL query string for canonical **Routed Dialog** hrefs.
+ *
+ * @remarks
+ * Retains only canonical state parameters (`platform`, plus `grid` when `platform` is present),
+ * strips non-whitelisted acquisition parameters (e.g., `utm_*`, `gclid`), and treats empty or
+ * standalone `"?"` inputs as `""` so crawlable hrefs never end with a dangling `"?"` or leak
+ * stripped query keys.
+ *
+ * @param search - Raw URL query string (with or without a leading `?`).
+ *
+ * @returns Sanitized query string (`"?platform=..."`) or `""` when empty.
+ *
+ * @default ""
+ *
+ * @category Utilities
+ */
+const normalizeSearchString = (search = ""): string => {
+	if (!search || search === "?") {
+		return "";
+	}
+
+	const params = new URLSearchParams(search);
+
+	for (const key of Array.from(params.keys())) {
+		if (!ALLOWED_DIALOG_QUERY_KEYS.has(key)) {
+			params.delete(key);
+		}
+	}
+
+	if (params.has("grid") && !params.has("platform")) {
+		params.delete("grid");
+	}
+
+	const serialized = params.toString();
+
+	return serialized ? `?${serialized}` : "";
+};
+
+/**
+ * Builds the canonical root-relative href for a **Routed Dialog**, including locale prefix,
+ * trailing slash, and preserved URL query parameters.
+ *
+ * @remarks
+ * Resolves the canonical `routePath` from the Unified Page Registry (`about`, `instructions`,
+ * `changelog`, `userstats`, `privacy`, `translation`, `performance`), applies locale prefixing
+ * via {@link buildLocalizedPath}, and appends sanitized query parameters (`?platform=...`).
+ *
+ * @param dialog - Target **Routed Dialog** identifier.
+ * @param targetLang - Active ISO language code or locale tag (e.g., `'en'`, `'es'`, `'pt-BR'`).
+ * @param search - Optional URL query string to preserve (defaults to `""`).
+ * @param supportedLangs - Supported language codes used for path normalization (defaults to {@link languages}).
+ *
+ * @returns Normalized root-relative href with trailing slash (e.g., `"/es/about/?platform=corvette"`).
+ *
+ * @see {@link buildLocalizedPath}
+ * @see {@link getPageById}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * buildRoutedDialogHref("about", "es", "?platform=corvette");
+ * // returns "/es/about/?platform=corvette"
+ * ```
+ */
+export const buildRoutedDialogHref = (
+	dialog: PageName,
+	targetLang: string,
+	search = "",
+	supportedLangs: string[] = languages,
+): string => {
+	const routePath = getPageById(dialog)?.routePath ?? `/${dialog}/`;
+	const localizedPath = buildLocalizedPath(routePath, targetLang, supportedLangs);
+
+	return `${localizedPath}${normalizeSearchString(search)}`;
+};
+
+/**
+ * Minimal mouse-event fields required to distinguish an unmodified primary left-click.
+ *
+ * @category Dialog
+ */
+export type PlainLeftClickEvent = Pick<
+	React.MouseEvent<HTMLAnchorElement>,
+	"altKey" | "button" | "ctrlKey" | "defaultPrevented" | "metaKey" | "shiftKey"
+>;
+
+/**
+ * Determines whether a mouse click on an anchor element is an unmodified primary left-click
+ * that should be handled via client-side SPA navigation rather than browser default behavior.
+ *
+ * @remarks
+ * Preserves native browser behavior for middle-clicks (`button !== 0`), modifier clicks
+ * (`Ctrl`, `Meta`/`Cmd`, `Shift`, `Alt`), and already-prevented events.
+ *
+ * @param event - Mouse click event dispatched on an `<a>` trigger.
+ *
+ * @returns `true` when the event is an unmodified primary left-click; `false` otherwise.
+ *
+ * @see {@link PlainLeftClickEvent}
+ * @see {@link useDialog}
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```tsx
+ * if (isPlainLeftClick(event)) {
+ *   event.preventDefault();
+ *   openDialog("instructions");
+ * }
+ * // returns true for unmodified left-click
+ * ```
+ */
+export const isPlainLeftClick = (event: PlainLeftClickEvent): boolean => {
+	return (
+		!event.defaultPrevented
+		&& event.button === 0
+		&& !event.metaKey
+		&& !event.altKey
+		&& !event.ctrlKey
+		&& !event.shiftKey
+	);
+};
+
 /**
  * Provider component for managing the state and routing of Routed Dialogs.
  *
@@ -269,8 +405,15 @@ export const DialogProvider: React.FC<DialogProviderProps> = ({ children }) => {
 		return safeGetItem("tutorialFinished") === "true";
 	});
 
-	const supportedLangs = getSupportedLanguages(i18n);
+	const supportedLangs = React.useMemo(() => getSupportedLanguages(i18n), [i18n]);
 	const activeDialog = getActiveDialogFromPathname(location.pathname, supportedLangs);
+	const activeSearch = location.search || window.location.search;
+
+	const getDialogHref = React.useCallback(
+		(dialog: NonNullable<DialogType>) =>
+			buildRoutedDialogHref(dialog, i18n.language, activeSearch, supportedLangs),
+		[activeSearch, i18n.language, supportedLangs],
+	);
 
 	const openDialog = React.useCallback(
 		(
@@ -282,8 +425,7 @@ export const DialogProvider: React.FC<DialogProviderProps> = ({ children }) => {
 					setShareUrl(data.shareUrl || "");
 				});
 			} else if (dialog) {
-				const path = buildLocalizedPath(`/${dialog}/`, i18n.language);
-				navigate(path + window.location.search);
+				navigate(getDialogHref(dialog));
 			}
 
 			if (data?.section) {
@@ -292,19 +434,19 @@ export const DialogProvider: React.FC<DialogProviderProps> = ({ children }) => {
 				setSectionToScrollTo(undefined);
 			}
 		},
-		[i18n.language, navigate],
+		[getDialogHref, navigate],
 	);
 
 	const closeDialog = React.useCallback(() => {
 		if (shareUrl) {
 			setShareUrl("");
 		} else if (activeDialog) {
-			const path = buildLocalizedPath("/", i18n.language);
-			navigate(path + window.location.search);
+			const path = buildLocalizedPath("/", i18n.language, supportedLangs);
+			navigate(`${path}${normalizeSearchString(activeSearch)}`);
 		}
 
 		setSectionToScrollTo(undefined);
-	}, [activeDialog, i18n.language, navigate, shareUrl]);
+	}, [activeDialog, activeSearch, i18n.language, navigate, shareUrl, supportedLangs]);
 
 	const markTutorialFinished = React.useCallback(() => {
 		if (!tutorialFinished) {
@@ -324,6 +466,7 @@ export const DialogProvider: React.FC<DialogProviderProps> = ({ children }) => {
 		() => ({
 			activeDialog,
 			closeDialog,
+			getDialogHref,
 			markTutorialFinished,
 			markUserVisited,
 			openDialog,
@@ -335,6 +478,7 @@ export const DialogProvider: React.FC<DialogProviderProps> = ({ children }) => {
 		[
 			activeDialog,
 			closeDialog,
+			getDialogHref,
 			markTutorialFinished,
 			markUserVisited,
 			openDialog,

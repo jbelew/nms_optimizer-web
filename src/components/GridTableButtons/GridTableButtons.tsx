@@ -13,6 +13,7 @@ import {
 import { Button, IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import type { PageName } from "@/routeConfig";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useBuildFileManager } from "@/hooks/useBuildFileManager/useBuildFileManager";
@@ -23,7 +24,7 @@ import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useTechStore } from "@/store/tech/techStore";
 import { sendEvent } from "@/utils/analytics/tracking";
-import { useDialog } from "@/utils/system/dialogUtils";
+import { isPlainLeftClick, useDialog } from "@/utils/system/dialogUtils";
 import { lazyNamed } from "@/utils/system/lazyNamed";
 
 /**
@@ -69,7 +70,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	const [isInfoPending, startInfoTransition] = useTransition();
 	const [isSharePending, startShareTransition] = useTransition();
 
-	const { markTutorialFinished, openDialog, tutorialFinished } = useDialog();
+	const { getDialogHref, markTutorialFinished, openDialog, tutorialFinished } = useDialog();
 	const hasModulesInGrid = useGridStore((state) => state.hasModulesInGrid);
 	const isDefaultGrid = useGridStore((state) => state.isDefaultGrid);
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
@@ -172,39 +173,65 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	const instructionGlowClass = !tutorialFinished ? "button--glow" : "";
 
 	/**
-	 * Internal helper to render a button that collapses to an icon on mobile.
+	 * Renders a responsive Routed Dialog link that collapses to an icon-only button on mobile.
 	 */
-	const renderResponsiveButton = (
+	const renderResponsiveDialogLink = (
+		dialog: Extract<PageName, "about" | "instructions">,
 		icon: React.ReactNode,
 		labelKey: string,
-		onClick: () => void,
+		onActivate: () => void,
 		disabled: boolean,
 		className: string,
 		variant: "soft" | "solid" = "soft",
 	) => {
 		const translatedLabel = t(labelKey);
+		const anchor = (
+			<a
+				aria-disabled={disabled || undefined}
+				aria-label={translatedLabel}
+				href={getDialogHref(dialog)}
+				onAuxClick={(event) => {
+					if (disabled) {
+						event.preventDefault();
+					}
+				}}
+				onClick={(event) => {
+					if (disabled) {
+						event.preventDefault();
+
+						return;
+					}
+
+					if (isPlainLeftClick(event)) {
+						event.preventDefault();
+						onActivate();
+					}
+				}}
+				tabIndex={disabled ? -1 : undefined}
+			>
+				{icon}
+				{isSmallAndUp && <span className="hidden sm:inline">{translatedLabel}</span>}
+			</a>
+		);
 
 		return isSmallAndUp ?
 				<Button
-					aria-label={translatedLabel}
+					asChild
 					className={className}
 					disabled={disabled}
-					onClick={onClick}
 					size="2"
 					variant={variant}
 				>
-					{icon}
-					<span className="hidden sm:inline">{translatedLabel}</span>
+					{anchor}
 				</Button>
 			:	<IconButton
-					aria-label={translatedLabel}
+					asChild
 					className={className}
 					disabled={disabled}
-					onClick={onClick}
 					size="2"
 					variant={variant}
 				>
-					{icon}
+					{anchor}
 				</IconButton>;
 	};
 
@@ -236,7 +263,8 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 				data-screenshot-exclude="true"
 			>
 				<div className="gridTable-buttons__left">
-					{renderResponsiveButton(
+					{renderResponsiveDialogLink(
+						"instructions",
 						<InfoCircledIcon />,
 						"buttons.instructions",
 						handleShowInstructions,
@@ -244,7 +272,8 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 						`gridTable__button gridTable__button--instructions ${instructionGlowClass}`,
 						instructionsVariant as "soft" | "solid",
 					)}
-					{renderResponsiveButton(
+					{renderResponsiveDialogLink(
+						"about",
 						<QuestionMarkCircledIcon />,
 						"buttons.about",
 						handleShowAboutPage,

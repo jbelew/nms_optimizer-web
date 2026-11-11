@@ -11,27 +11,44 @@ import path from "node:path";
 
 import React, { act, Suspense } from "react";
 import type { i18n as I18nInstance, TFunction } from "i18next";
+import { Provider as ToastProviderRadix } from "@radix-ui/react-toast";
+import { Provider as TooltipProvider } from "@radix-ui/react-tooltip";
 import { Theme } from "@radix-ui/themes";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
-import { MemoryRouter } from "react-router-dom";
-import { beforeAll, describe, expect, it, vi } from "vitest";
+import { MemoryRouter, useLocation } from "react-router-dom";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 import PerformanceDialog from "@/components/AppDialog/Performance/PerformanceDialog";
 import UserStatsDialog from "@/components/AppDialog/UserStats/UserStatsDialog";
+import AppFooter from "@/components/AppFooter/AppFooter";
+import AppHeader from "@/components/AppHeader/AppHeader";
+import GridTableButtons from "@/components/GridTableButtons/GridTableButtons";
+import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 import { RoutedDialogs } from "@/components/RoutedDialogs/RoutedDialogs";
 import { Seo } from "@/components/Seo/Seo";
+import { ToastProvider } from "@/hooks/useToast/useToast";
 import i18n, { createRealI18nInstance } from "@/test/i18n";
 import { getDialogIconAndStyle, radixIconRegistry } from "@/utils/icons/iconRegistry";
 import { DialogProvider, useDialog } from "@/utils/system/dialogUtils";
 import { formatDocumentTitle, getPageMetadata } from "@shared/page-metadata.js";
 import { getRoutedDialogs, PAGE_REGISTRY } from "@shared/page-registry.js";
 
-// Mock MarkdownContentRenderer to avoid async file loads in unit/integration test
-vi.mock("@/components/AppDialog/Markdown/MarkdownContentRenderer", () => ({
-	MarkdownContentRenderer: ({ markdownFileName }: { markdownFileName: string }) => (
-		<div data-testid={`markdown-${markdownFileName}`}>Markdown Content: {markdownFileName}</div>
-	),
+// Mock only the Markdown file-loader boundary so real MarkdownContentRenderer + react-markdown run
+vi.mock("@/hooks/useMarkdownContent/useMarkdownContent", () => ({
+	useMarkdownContent: (markdownFileName: string) => ({
+		error: null,
+		isLoading: false,
+		markdown: `## Overview (${markdownFileName})\n\n### Subsection (${markdownFileName})\n\nMarkdown Content: ${markdownFileName}`,
+	}),
+}));
+
+vi.mock("@/hooks/useBreakpoint/useBreakpoint", () => ({
+	useBreakpoint: vi.fn(() => true),
+}));
+
+vi.mock("@/components/LanguageSelector/LanguageSelector", () => ({
+	LanguageSelector: () => <div data-testid="language-selector">LanguageSelector</div>,
 }));
 
 vi.mock("@/utils/api/network", () => ({
@@ -43,6 +60,7 @@ vi.mock("@/hooks/useTechTree/useTechTree", () => ({
 }));
 
 vi.mock("@/utils/analytics/tracking", () => ({
+	sendDeferredEvent: vi.fn(),
 	sendEvent: vi.fn(),
 }));
 
@@ -247,7 +265,8 @@ describe("Routed Dialogs & Page Registry Integration", () => {
 		const markdownDialogs = routedDialogs.filter((d) => d.componentType === "markdown");
 
 		markdownDialogs.forEach((dialog) => {
-			it(`renders ${dialog.id} dialog when activeDialog is "${dialog.id}"`, async () => {
+			it(`renders ${dialog.id} dialog with semantic <h3> Markdown headings and sole dialog <h1>`, async () => {
+				const fileKey = dialog.markdownFileName || dialog.id;
 				render(
 					<MemoryRouter initialEntries={[`/${dialog.id}/`]}>
 						<I18nextProvider i18n={i18n}>
@@ -265,9 +284,14 @@ describe("Routed Dialogs & Page Registry Integration", () => {
 				const expectedTitle = i18n.t(dialog.dialogTitleKey!);
 				const matchingElements = await screen.findAllByText(expectedTitle);
 				expect(matchingElements.length).toBeGreaterThanOrEqual(1);
-				expect(
-					await screen.findByTestId(`markdown-${dialog.markdownFileName || dialog.id}`),
-				).toBeInTheDocument();
+				expect(await screen.findByText(`Markdown Content: ${fileKey}`)).toBeInTheDocument();
+
+				const h3Heading = await screen.findByRole("heading", {
+					level: 3,
+					name: `Subsection (${fileKey})`,
+				});
+				expect(h3Heading.tagName).toBe("H3");
+				expect(document.querySelectorAll("h1")).toHaveLength(1);
 			});
 		});
 	});
@@ -340,6 +364,192 @@ describe("Routed Dialogs & Page Registry Integration", () => {
 			);
 
 			expect(screen.getByTestId("active-dialog-spy")).toHaveTextContent("performance");
+		});
+	});
+
+	describe("Workspace Crawlability & Heading Hierarchy Integration", () => {
+		const LocationDisplay: React.FC = () => {
+			const location = useLocation();
+
+			return (
+				<div data-testid="router-location">{`${location.pathname}${location.search}`}</div>
+			);
+		};
+
+		const WorkspaceHarness: React.FC<{ solving?: boolean }> = ({ solving = false }) => (
+			<>
+				<AppHeader />
+				<div data-testid="mobile-toolbar-region">
+					<MobileToolbar />
+				</div>
+				<div
+					className="main-app__grid-section"
+					data-testid="grid-buttons-region"
+				>
+					<GridTableButtons solving={solving} />
+				</div>
+				<AppFooter buildVersion="1.0.0" />
+				<Suspense fallback={null}>
+					<RoutedDialogs />
+				</Suspense>
+				<LocationDisplay />
+			</>
+		);
+
+		const WorkspaceShell: React.FC<{ solving?: boolean }> = ({ solving = false }) => (
+			<I18nextProvider i18n={realI18n}>
+				<DialogProvider>
+					<Theme>
+						<TooltipProvider>
+							<ToastProviderRadix swipeDirection="right">
+								<ToastProvider>
+									<WorkspaceHarness solving={solving} />
+								</ToastProvider>
+							</ToastProviderRadix>
+						</TooltipProvider>
+					</Theme>
+				</DialogProvider>
+			</I18nextProvider>
+		);
+
+		beforeEach(async () => {
+			await realI18n.changeLanguage("en");
+		});
+
+		it("renders all 7 upgraded Routed Dialog triggers as crawlable links, preserves query params on SPA navigation, and toggles single <h1> between workspace and open dialog", async () => {
+			await realI18n.changeLanguage("es");
+			const { unmount } = render(
+				<MemoryRouter initialEntries={["/es/?platform=corvette"]}>
+					<WorkspaceShell />
+				</MemoryRouter>,
+			);
+
+			try {
+				const esT = realI18n.getFixedT("es", "translation");
+
+				// 1. Workspace idle: single <h1> with visually hidden "No Man's Sky - " prefix
+				const initialH1s = document.querySelectorAll("h1");
+				expect(initialH1s).toHaveLength(1);
+				const workspaceHeaderTitle = document.querySelector(".app-header__title");
+				expect(workspaceHeaderTitle?.tagName).toBe("H1");
+				const srPrefix = workspaceHeaderTitle?.querySelector(".sr-only");
+				expect(srPrefix).toHaveClass("whitespace-pre");
+				expect(srPrefix?.textContent).toBe("No Man's Sky - ");
+				expect(workspaceHeaderTitle?.textContent?.startsWith("No Man's Sky - ")).toBe(true);
+
+				// 2. All 7 upgraded triggers render as crawlable <a href="..."> elements
+				const banner = screen.getByRole("banner");
+				const headerChangelog = within(banner).getByRole("link", {
+					name: esT("buttons.changelog"),
+				});
+				const headerUserStats = within(banner).getByRole("link", {
+					name: esT("buttons.userStats"),
+				});
+
+				const mobileRegion = screen.getByTestId("mobile-toolbar-region");
+				const mobileChangelog = within(mobileRegion).getByRole("link", {
+					name: esT("buttons.changelog"),
+				});
+				const mobileUserStats = within(mobileRegion).getByRole("link", {
+					name: esT("buttons.userStats"),
+				});
+
+				const gridRegion = screen.getByTestId("grid-buttons-region");
+				const gridInstructions = within(gridRegion).getByRole("link", {
+					name: esT("buttons.instructions"),
+				});
+				const gridAbout = within(gridRegion).getByRole("link", {
+					name: esT("buttons.about"),
+				});
+
+				const footer = screen.getByRole("contentinfo");
+				const footerPrivacy = within(footer).getByRole("link", {
+					name: esT("buttons.privacy"),
+				});
+
+				expect(headerChangelog).toHaveAttribute("href", "/es/changelog/?platform=corvette");
+				expect(headerUserStats).toHaveAttribute("href", "/es/userstats/?platform=corvette");
+				expect(mobileChangelog).toHaveAttribute("href", "/es/changelog/?platform=corvette");
+				expect(mobileUserStats).toHaveAttribute("href", "/es/userstats/?platform=corvette");
+				expect(gridInstructions).toHaveAttribute(
+					"href",
+					"/es/instructions/?platform=corvette",
+				);
+				expect(gridAbout).toHaveAttribute("href", "/es/about/?platform=corvette");
+				expect(footerPrivacy).toHaveAttribute("href", "/es/privacy/?platform=corvette");
+
+				// 3. Modifier & middle clicks preserve native browser behavior
+				expect(fireEvent.click(gridAbout, { button: 0, metaKey: true })).toBe(true);
+				expect(fireEvent.click(footerPrivacy, { button: 1 })).toBe(true);
+				expect(screen.getByTestId("router-location")).toHaveTextContent(
+					"/es/?platform=corvette",
+				);
+
+				// 4. Primary left-click opens Routed Dialog via SPA navigation preserving query string
+				expect(fireEvent.click(gridInstructions, { button: 0 })).toBe(false);
+				expect(screen.getByTestId("router-location")).toHaveTextContent(
+					"/es/instructions/?platform=corvette",
+				);
+
+				// Wait for lazy Markdown dialog and verify semantic <h3> + sole dialog <h1>
+				const h3Heading = await screen.findByRole("heading", {
+					level: 3,
+					name: "Subsection (instructions)",
+				});
+				expect(h3Heading.tagName).toBe("H3");
+
+				const demotedWorkspaceTitle = document.querySelector(".app-header__title");
+				expect(demotedWorkspaceTitle?.tagName).toBe("DIV");
+
+				const openDialogH1s = document.querySelectorAll("h1");
+				expect(openDialogH1s).toHaveLength(1);
+				expect(openDialogH1s[0]).toHaveTextContent(esT("dialogs.titles.instructions"));
+			} finally {
+				unmount();
+				await realI18n.changeLanguage("en");
+			}
+		});
+
+		it("blocks SPA navigation on Instructions and About while solving is active and restores crawlable interactive links when idle", () => {
+			const enT = realI18n.getFixedT("en", "translation");
+			const { rerender, unmount } = render(
+				<MemoryRouter initialEntries={["/?platform=solar"]}>
+					<WorkspaceShell solving={true} />
+				</MemoryRouter>,
+			);
+
+			try {
+				const gridRegion = screen.getByTestId("grid-buttons-region");
+				const instructionsLink = within(gridRegion).getByRole("link", {
+					name: enT("buttons.instructions"),
+				});
+				const aboutLink = within(gridRegion).getByRole("link", {
+					name: enT("buttons.about"),
+				});
+
+				expect(instructionsLink).toHaveAttribute("href", "/instructions/?platform=solar");
+				expect(aboutLink).toHaveAttribute("href", "/about/?platform=solar");
+				expect(instructionsLink).toHaveAttribute("aria-disabled", "true");
+				expect(aboutLink).toHaveAttribute("aria-disabled", "true");
+
+				expect(fireEvent.click(instructionsLink, { button: 0 })).toBe(false);
+				expect(fireEvent.click(aboutLink, { button: 0 })).toBe(false);
+				expect(screen.getByTestId("router-location")).toHaveTextContent("/?platform=solar");
+
+				rerender(
+					<MemoryRouter initialEntries={["/?platform=solar"]}>
+						<WorkspaceShell solving={false} />
+					</MemoryRouter>,
+				);
+
+				expect(instructionsLink).not.toHaveAttribute("aria-disabled");
+				expect(fireEvent.click(aboutLink, { button: 0 })).toBe(false);
+				expect(screen.getByTestId("router-location")).toHaveTextContent(
+					"/about/?platform=solar",
+				);
+			} finally {
+				unmount();
+			}
 		});
 	});
 });

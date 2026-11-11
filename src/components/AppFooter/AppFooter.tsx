@@ -7,7 +7,7 @@ import { Trans, useTranslation } from "react-i18next";
 
 import Buymeacoffee from "@/components/BuyMeACoffee/BuyMeACoffee";
 import { build, getBuildDate } from "@/routeConfig";
-import { useDialog } from "@/utils/system/dialogUtils";
+import { isPlainLeftClick, useDialog } from "@/utils/system/dialogUtils";
 
 /**
  * Props for the {@link AppFooter} component.
@@ -58,7 +58,7 @@ const AppFooter: React.FC<AppFooterProps> = ({
 	buildVersion = build,
 }) => {
 	const { i18n, t } = useTranslation();
-	const { openDialog } = useDialog();
+	const { getDialogHref, openDialog } = useDialog();
 
 	return (
 		<footer
@@ -125,16 +125,18 @@ const AppFooter: React.FC<AppFooterProps> = ({
 						{t("footer.license")}
 					</a>{" "}
 					•{" "}
-					<button
+					<a
 						className="app-footer__link"
-						onClick={(e) => {
-							e.preventDefault();
-							openDialog("privacy");
+						href={getDialogHref("privacy")}
+						onClick={(event) => {
+							if (isPlainLeftClick(event)) {
+								event.preventDefault();
+								openDialog("privacy");
+							}
 						}}
-						type="button"
 					>
 						{t("buttons.privacy")}
-					</button>{" "}
+					</a>{" "}
 					• {t("footer.buildLabel")} {buildVersion}{" "}
 					{buildDate && `(${new Date(buildDate).toLocaleString()})`}
 				</div>

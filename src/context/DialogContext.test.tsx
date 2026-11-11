@@ -1,11 +1,17 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, useLocation } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import type { PlainLeftClickEvent } from "@/utils/system/dialogUtils";
 import i18n from "@/test/i18n";
-import { DialogProvider, useDialog } from "@/utils/system/dialogUtils";
+import {
+	buildRoutedDialogHref,
+	DialogProvider,
+	isPlainLeftClick,
+	useDialog,
+} from "@/utils/system/dialogUtils";
 
 // Test the window.location.search preservation logic directly
 /**
@@ -239,5 +245,109 @@ describe("DialogProvider Component", () => {
 	it("should ignore unknown paths", () => {
 		renderWithProviders("/unknown");
 		expect(screen.getByTestId("activeDialog")).toHaveTextContent("null");
+	});
+
+	it("builds canonical localized trailing-slash hrefs for all Routed Dialog identifiers", () => {
+		expect(buildRoutedDialogHref("about", "en")).toBe("/about/");
+		expect(buildRoutedDialogHref("instructions", "en", "?platform=corvette")).toBe(
+			"/instructions/?platform=corvette",
+		);
+		expect(buildRoutedDialogHref("about", "es", "?platform=corvette")).toBe(
+			"/es/about/?platform=corvette",
+		);
+		expect(buildRoutedDialogHref("changelog", "fr", "platform=standard&grid=abc")).toBe(
+			"/fr/changelog/?platform=standard&grid=abc",
+		);
+		expect(buildRoutedDialogHref("userstats", "de", "?")).toBe("/de/userstats/");
+		expect(buildRoutedDialogHref("privacy", "pt-BR", "?platform=solar")).toBe(
+			"/pt/privacy/?platform=solar",
+		);
+		expect(buildRoutedDialogHref("translation", "it")).toBe("/it/translation/");
+		expect(buildRoutedDialogHref("about", "es", "?platform=corvette&utm_source=reddit")).toBe(
+			"/es/about/?platform=corvette",
+		);
+		expect(buildRoutedDialogHref("about", "en", "?utm_source=reddit&fbclid=123")).toBe(
+			"/about/",
+		);
+		expect(buildRoutedDialogHref("instructions", "en", "?grid=orphan")).toBe("/instructions/");
+	});
+
+	it("detects unmodified primary left-clicks vs middle and modifier clicks", () => {
+		const baseEvent: PlainLeftClickEvent = {
+			altKey: false,
+			button: 0,
+			ctrlKey: false,
+			defaultPrevented: false,
+			metaKey: false,
+			shiftKey: false,
+		};
+
+		expect(isPlainLeftClick(baseEvent)).toBe(true);
+		expect(isPlainLeftClick({ ...baseEvent, button: 1 })).toBe(false);
+		expect(isPlainLeftClick({ ...baseEvent, ctrlKey: true })).toBe(false);
+		expect(isPlainLeftClick({ ...baseEvent, metaKey: true })).toBe(false);
+		expect(isPlainLeftClick({ ...baseEvent, shiftKey: true })).toBe(false);
+		expect(isPlainLeftClick({ ...baseEvent, altKey: true })).toBe(false);
+		expect(isPlainLeftClick({ ...baseEvent, defaultPrevented: true })).toBe(false);
+	});
+
+	it("exposes getDialogHref and preserves Router query parameters when opening and closing dialogs", async () => {
+		await i18n.changeLanguage("es");
+
+		const Probe = () => {
+			const { activeDialog, closeDialog, getDialogHref, openDialog } = useDialog();
+			const location = useLocation();
+
+			return (
+				<div>
+					<div data-testid="location">{`${location.pathname}${location.search}`}</div>
+					<div data-testid="active">{activeDialog || "null"}</div>
+					<div data-testid="aboutHref">{getDialogHref("about")}</div>
+					<button
+						onClick={() => openDialog("about")}
+						type="button"
+					>
+						Open About Route
+					</button>
+					<button
+						onClick={closeDialog}
+						type="button"
+					>
+						Close Route
+					</button>
+				</div>
+			);
+		};
+
+		let unmount: (() => void) | undefined;
+
+		try {
+			({ unmount } = render(
+				<MemoryRouter initialEntries={["/es/?platform=corvette&utm_source=reddit"]}>
+					<I18nextProvider i18n={i18n}>
+						<DialogProvider>
+							<Probe />
+						</DialogProvider>
+					</I18nextProvider>
+				</MemoryRouter>,
+			));
+
+			expect(screen.getByTestId("aboutHref")).toHaveTextContent(
+				"/es/about/?platform=corvette",
+			);
+
+			fireEvent.click(screen.getByText("Open About Route"));
+			expect(screen.getByTestId("location")).toHaveTextContent(
+				"/es/about/?platform=corvette",
+			);
+			expect(screen.getByTestId("active")).toHaveTextContent("about");
+
+			fireEvent.click(screen.getByText("Close Route"));
+			expect(screen.getByTestId("location")).toHaveTextContent("/es/?platform=corvette");
+			expect(screen.getByTestId("active")).toHaveTextContent("null");
+		} finally {
+			unmount?.();
+			await i18n.changeLanguage("en");
+		}
 	});
 });
