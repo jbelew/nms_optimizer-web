@@ -30,7 +30,7 @@ Gli slot sovralimentati sono limitati. Distribuiscili tra più **Categorie tecno
 - **Non assegnare tutti gli slot sovralimentati alla prima Categoria tecnologica.** Questo riduce il bonus disponibile per gli altri sistemi.
 - Assegna **da 2 a 3 slot sovralimentati** alla tua **Categoria tecnologica** a priorità più alta.
 - Riserva **1 o più slot sovralimentati** per una seconda **Categoria tecnologica**.
-- Una volta occupati tutti gli slot sovralimentati, risolvi per prime le **Categorie tecnologiche** che richiedono dimensioni maggiori della **Finestra di calcolo**.
+- Una volta occupati tutti gli slot sovralimentati, ottimizza per prime le **Categorie tecnologiche** che richiedono dimensioni maggiori della **Finestra di calcolo**.
 - Imposta le tue priorità e lascia che il risolutore calcoli il posizionamento ottimale dei moduli.
 
 ### Finestra di calcolo e avvisi di ottimizzazione
@@ -38,8 +38,8 @@ Gli slot sovralimentati sono limitati. Distribuiscili tra più **Categorie tecno
 Ogni **Categoria tecnologica** richiede una **Finestra di calcolo** (`larghezza × altezza`) basata sulla **Selezione moduli** attiva.
 
 - Se nessuna regione contigua di slot attivi corrisponde alla **Finestra di calcolo** richiesta, compare un **Avviso di ottimizzazione** (**Modello non adattabile**).
-- Dall'avviso puoi avviare una **Risoluzione forzata** (simulated annealing completo sugli slot disponibili) oppure annullare, usare **Ripristino tecnologia** sulle categorie già posizionate e risolverle in un ordine diverso.
-- **Consiglio utile:** Imposta temporaneamente specifici slot come **inattivi** prima del calcolo per guidare il punto in cui viene posizionata la **Finestra di calcolo**.
+- Dall'avviso puoi avviare una **Risoluzione forzata** (simulated annealing completo sugli slot disponibili) oppure annullare, usare **Ripristina** sulle categorie già posizionate e ottimizzarle in un ordine diverso.
+- **Consiglio utile:** Imposta temporaneamente specifici slot come **inattivi** prima di ottimizzare per guidare il punto in cui viene posizionata la **Finestra di calcolo**.
 
 ## Ordine di rango dei moduli (Theta / Tau / Sigma)
 
@@ -75,7 +75,7 @@ Invia suggerimenti sui layout o feedback nelle discussioni del progetto:
 
 ## Salvataggio, caricamento e condivisione
 
-- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Carica** — Apri dal disco un **File di configurazione** `.nms` salvato.
-- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Salva** — Scarica il layout attuale come **File di configurazione** `.nms`.
-- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Condividi** — Genera un URL di **Griglia condivisa** che apre il tuo layout nell'ottimizzatore.
-- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Screenshot** — Cattura un'immagine PNG del layout attuale della griglia.
+- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Carica configurazione** — Apri dal disco un **File di configurazione** `.nms` salvato.
+- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Salva configurazione** — Scarica il layout attuale come **File di configurazione** `.nms`.
+- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Condividi configurazione** — Genera un URL di **Griglia condivisa** che apre il tuo layout nell'ottimizzatore.
+- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Cattura screenshot della configurazione** — Cattura un'immagine PNG del layout attuale della griglia.

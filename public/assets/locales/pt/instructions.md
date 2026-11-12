@@ -30,7 +30,7 @@ Os espaços supercarregados são limitados. Distribua-os entre várias **Categor
 - **Não atribua todos os espaços supercarregados à primeira Categoria de Tecnologia.** Isso reduz o bônus disponível para os demais sistemas.
 - Atribua **2 a 3 espaços supercarregados** à sua **Categoria de Tecnologia** de maior prioridade.
 - Reserve **1 ou mais espaços supercarregados** para uma segunda **Categoria de Tecnologia**.
-- Depois que todos os espaços supercarregados estiverem ocupados, resolva primeiro as **Categorias de Tecnologia** que exigem dimensões maiores de **Janela de Cálculo**.
+- Depois que todos os espaços supercarregados estiverem ocupados, otimize primeiro as **Categorias de Tecnologia** que exigem dimensões maiores de **Janela de Cálculo**.
 - Defina suas prioridades e deixe o solucionador calcular o posicionamento ideal dos módulos.
 
 ### Janela de Cálculo e Alertas de Otimização
@@ -38,7 +38,7 @@ Os espaços supercarregados são limitados. Distribua-os entre várias **Categor
 Cada **Categoria de Tecnologia** exige uma **Janela de Cálculo** (`largura × altura`) baseada na sua **Seleção de Módulos** ativa.
 
 - Se nenhuma região contígua de espaços ativos comportar a **Janela de Cálculo** necessária, um **Alerta de Otimização** (**Padrão sem Encaixe**) será exibido.
-- No alerta, você pode executar uma **Otimização Forçada** (recozimento simulado completo nos espaços disponíveis) ou cancelar, usar **Redefinir Tecnologia** nas categorias já posicionadas e resolver em outra ordem.
+- No alerta, você pode executar uma **Resolução Forçada** (recozimento simulado completo nos espaços disponíveis) ou cancelar, usar **Redefinir** nas categorias já posicionadas e otimizar em outra ordem.
 - **Dica Profissional:** Defina temporariamente espaços específicos como **inativos** antes de otimizar para guiar onde a **Janela de Cálculo** será posicionada.
 
 ## Ordem de Classificação dos Módulos (Theta / Tau / Sigma)
@@ -75,7 +75,7 @@ Envie sugestões de layouts ou comentários nas discussões do projeto:
 
 ## Salvando, Carregando e Compartilhando
 
-- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Carregar** — Abre um **Arquivo de Build** `.nms` salvo no disco.
-- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Salvar** — Baixa o layout atual como um **Arquivo de Build** `.nms`.
-- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Compartilhar** — Gera um URL de **Grade Compartilhada** que abre seu layout no otimizador.
-- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Capturar Tela** — Captura uma imagem PNG do layout atual da grade.
+- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Carregar Build** — Abre um **Arquivo de Build** `.nms` salvo no disco.
+- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Salvar Build** — Baixa o layout atual como um **Arquivo de Build** `.nms`.
+- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Compartilhar Build** — Gera um URL de **Grade Compartilhada** que abre seu layout no otimizador.
+- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Capturar Tela da Build** — Captura uma imagem PNG do layout atual da grade.

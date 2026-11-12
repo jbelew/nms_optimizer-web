@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Theme } from "@radix-ui/themes";
-import { render, screen } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -47,7 +47,7 @@ vi.mock("@/store/app/platformStore", async () => {
 });
 
 const mockT = vi.fn((key: string, defaultVal?: string) => {
-	if (key === "shipSelection.ariaLabel") return "Select ship type";
+	if (key === "shipSelection.ariaLabel") return "Select Platform Type";
 	if (key === "platforms.standard") return "Standard / Exotic";
 	if (key === "platforms.fighter") return "Fighter";
 	if (key === "platforms.corvette") return "Corvettes";
@@ -81,21 +81,21 @@ describe("ShipSelection", () => {
 
 	it("renders trigger button with localized accessible name", () => {
 		renderShipSelection();
-		const triggerButton = screen.getByRole("button", { name: "Select ship type" });
+		const triggerButton = screen.getByRole("button", { name: "Select Platform Type" });
 		expect(triggerButton).toBeInTheDocument();
 		expect(triggerButton).not.toBeDisabled();
 	});
 
 	it("disables trigger button when disabled or solving is true", () => {
 		const { rerender } = renderShipSelection({ disabled: true });
-		expect(screen.getByRole("button", { name: "Select ship type" })).toBeDisabled();
+		expect(screen.getByRole("button", { name: "Select Platform Type" })).toBeDisabled();
 
 		rerender(
 			<Theme>
 				<ShipSelection solving={true} />
 			</Theme>,
 		);
-		expect(screen.getByRole("button", { name: "Select ship type" })).toBeDisabled();
+		expect(screen.getByRole("button", { name: "Select Platform Type" })).toBeDisabled();
 	});
 
 	it("does nothing when selecting the already active platform from the dropdown", async () => {
@@ -104,7 +104,7 @@ describe("ShipSelection", () => {
 
 		renderShipSelection();
 
-		await user.click(screen.getByRole("button", { name: "Select ship type" }));
+		await user.click(screen.getByRole("button", { name: "Select Platform Type" }));
 		await user.click(screen.getByRole("menuitemradio", { name: "Standard / Exotic" }));
 
 		expect(switchPlatformSpy).not.toHaveBeenCalled();
@@ -112,18 +112,28 @@ describe("ShipSelection", () => {
 		expect(sendDeferredEvent).not.toHaveBeenCalled();
 	});
 
-	it("switches platform, updates URL, and sends telemetry when selecting a new platform", async () => {
+	it("defers switchPlatform and URL navigation until after next paint while emitting telemetry", async () => {
 		const user = userEvent.setup();
 		const switchPlatformSpy = vi.spyOn(sessionCoordinator, "switchPlatform");
 
 		renderShipSelection();
 
-		await user.click(screen.getByRole("button", { name: "Select ship type" }));
+		await user.click(screen.getByRole("button", { name: "Select Platform Type" }));
+
+		const rafCallbacks: Array<FrameRequestCallback> = [];
+		const rafSpy = vi
+			.spyOn(window, "requestAnimationFrame")
+			.mockImplementation((cb: FrameRequestCallback) => {
+				rafCallbacks.push(cb);
+
+				return rafCallbacks.length;
+			});
+
 		await user.click(screen.getByRole("menuitemradio", { name: "Fighter" }));
 
-		expect(switchPlatformSpy).toHaveBeenCalled();
-		expect(usePlatformStore.getState().selectedPlatform).toBe("fighter");
-		expect(mockNavigate).toHaveBeenCalledWith("/?platform=fighter");
+		// Frame 1 allows Radix DropdownMenu to close before running heavy store/router updates
+		expect(switchPlatformSpy).not.toHaveBeenCalled();
+		expect(mockNavigate).not.toHaveBeenCalled();
 		expect(sendDeferredEvent).toHaveBeenCalledWith(
 			expect.objectContaining({
 				action: "select_content",
@@ -131,6 +141,20 @@ describe("ShipSelection", () => {
 				item_id: "fighter",
 			}),
 		);
+
+		act(() => {
+			for (const cb of rafCallbacks.splice(0)) {
+				cb(performance.now());
+			}
+		});
+
+		await waitFor(() => {
+			expect(switchPlatformSpy).toHaveBeenCalledWith("fighter");
+			expect(usePlatformStore.getState().selectedPlatform).toBe("fighter");
+			expect(mockNavigate).toHaveBeenCalledWith("/?platform=fighter");
+		});
+
+		rafSpy.mockRestore();
 	});
 
 	it("removes existing grid query parameter and preserves hash when switching platform", async () => {
@@ -143,10 +167,12 @@ describe("ShipSelection", () => {
 
 		renderShipSelection();
 
-		await user.click(screen.getByRole("button", { name: "Select ship type" }));
+		await user.click(screen.getByRole("button", { name: "Select Platform Type" }));
 		await user.click(screen.getByRole("menuitemradio", { name: "Fighter" }));
 
-		expect(mockNavigate).toHaveBeenCalledWith("/es/?platform=fighter#module-selection");
+		await waitFor(() => {
+			expect(mockNavigate).toHaveBeenCalledWith("/es/?platform=fighter#module-selection");
+		});
 	});
 
 	it("displays corvette warning toast when switching to corvette", async () => {
@@ -154,13 +180,15 @@ describe("ShipSelection", () => {
 
 		renderShipSelection();
 
-		await user.click(screen.getByRole("button", { name: "Select ship type" }));
+		await user.click(screen.getByRole("button", { name: "Select Platform Type" }));
 		await user.click(screen.getByRole("menuitemradio", { name: "Corvettes" }));
 
-		expect(mockShowInfo).toHaveBeenCalledWith(
-			"shipSelection.corvetteWarning.title",
-			expect.anything(),
-		);
-		expect(mockNavigate).toHaveBeenCalledWith("/?platform=corvette");
+		await waitFor(() => {
+			expect(mockShowInfo).toHaveBeenCalledWith(
+				"shipSelection.corvetteWarning.title",
+				expect.anything(),
+			);
+			expect(mockNavigate).toHaveBeenCalledWith("/?platform=corvette");
+		});
 	});
 });

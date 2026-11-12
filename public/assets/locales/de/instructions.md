@@ -30,7 +30,7 @@ Turbogeladene Plätze sind begrenzt. Verteile sie auf mehrere **Technologiekateg
 - **Weise nicht alle turbogeladenen Plätze der ersten Technologiekategorie zu.** Dadurch sinkt der verfügbare Bonus für andere Systeme.
 - Weise deiner wichtigsten **Technologiekategorie** **2 bis 3 turbogeladene Plätze** zu.
 - Reserviere **mindestens 1 turbogeladenen Platz** für eine zweite **Technologiekategorie**.
-- Sobald alle turbogeladenen Plätze belegt sind, berechne zuerst die **Technologiekategorien**, die ein größeres **Solver-Fenster** benötigen.
+- Sobald alle turbogeladenen Plätze belegt sind, optimiere zuerst die **Technologiekategorien**, die ein größeres **Solver-Fenster** benötigen.
 - Lege deine Prioritäten fest und überlass dem Solver die optimale Modulplatzierung.
 
 ### Solver-Fenster & Optimierungswarnungen
@@ -38,8 +38,8 @@ Turbogeladene Plätze sind begrenzt. Verteile sie auf mehrere **Technologiekateg
 Jede **Technologiekategorie** benötigt abhängig von ihrer aktiven **Modulauswahl** ein **Solver-Fenster** (`Breite × Höhe`).
 
 - Wenn kein zusammenhängender Bereich aktiver Plätze in das erforderliche **Solver-Fenster** passt, erscheint eine **Optimierungswarnung** (**Muster passt nicht**).
-- Über die Warnung kannst du eine **Erzwungene Berechnung** (vollständiges Simulated Annealing über alle verfügbaren Plätze) starten oder abbrechen, bereits platzierte Kategorien über **Technologie zurücksetzen** leeren und in einer anderen Reihenfolge berechnen.
-- **Profi-Tipp:** Setze vor der Berechnung gezielt einzelne Plätze vorübergehend auf **inaktiv**, um zu steuern, wo das **Solver-Fenster** platziert wird.
+- Über die Warnung kannst du eine **Erzwungene Berechnung** (vollständiges Simulated Annealing über alle verfügbaren Plätze) starten oder abbrechen, bereits platzierte Kategorien über **Zurücksetzen** leeren und in einer anderen Reihenfolge optimieren.
+- **Profi-Tipp:** Setze vor dem Optimieren gezielt einzelne Plätze vorübergehend auf **inaktiv**, um zu steuern, wo das **Solver-Fenster** platziert wird.
 
 ## Modul-Rangfolge (Theta / Tau / Sigma)
 
@@ -75,7 +75,7 @@ Layout-Vorschläge oder Feedback kannst du gerne in den Projektdiskussionen einr
 
 ## Speichern, Laden und Teilen
 
-- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Laden** – Öffne eine gespeicherte `.nms`-**Build-Datei** von deinem Gerät.
-- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Speichern** – Lade das aktuelle Layout als `.nms`-**Build-Datei** herunter.
-- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Teilen** – Erzeuge eine **Geteiltes-Raster**-URL, mit der sich dein Layout direkt im Optimierer öffnen lässt.
-- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Screenshot** – Speichere ein PNG-Bild des aktuellen Raster-Layouts.
+- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Build laden** – Öffne eine gespeicherte `.nms`-**Build-Datei** von deinem Gerät.
+- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Build speichern** – Lade das aktuelle Layout als `.nms`-**Build-Datei** herunter.
+- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Build teilen** – Erzeuge eine **Geteiltes-Raster**-URL, mit der sich dein Layout direkt im Optimierer öffnen lässt.
+- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Build-Screenshot aufnehmen** – Speichere ein PNG-Bild des aktuellen Raster-Layouts.

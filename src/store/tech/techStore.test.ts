@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useTechStore } from "./techStore";
 
@@ -1083,6 +1083,49 @@ describe("TechStore", () => {
 
 			resetSession();
 			expect(useTechStore.getState().isDefaultModuleSelection).toBe(true);
+		});
+	});
+
+	describe("batched tech result transitions", () => {
+		it("sets and clears a technology's bonus status, scores, and solve method in one notification each", () => {
+			const listener = vi.fn();
+			const unsubscribe = useTechStore.subscribe(listener);
+
+			try {
+				useTechStore.getState().setTechResult("pulse", {
+					bonusStatus: { icon: "lightning", percent: 5 },
+					maxBonus: 105,
+					solvedBonus: 102,
+					solveMethod: "Simulated Annealing",
+				});
+
+				expect(listener).toHaveBeenCalledTimes(1);
+				expect(useTechStore.getState().bonusStatus["pulse"]).toEqual({
+					icon: "lightning",
+					percent: 5,
+				});
+				expect(useTechStore.getState().maxBonus["pulse"]).toBe(105);
+				expect(useTechStore.getState().max_bonus["pulse"]).toBe(105);
+				expect(useTechStore.getState().solvedBonus["pulse"]).toBe(102);
+				expect(useTechStore.getState().solved_bonus["pulse"]).toBe(102);
+				expect(useTechStore.getState().solveMethod["pulse"]).toBe("Simulated Annealing");
+				expect(useTechStore.getState().solve_method["pulse"]).toBe("Simulated Annealing");
+
+				listener.mockClear();
+
+				useTechStore.getState().clearTechResult("pulse");
+
+				expect(listener).toHaveBeenCalledTimes(1);
+				expect(useTechStore.getState().bonusStatus["pulse"]).toBeUndefined();
+				expect(useTechStore.getState().maxBonus["pulse"]).toBe(0);
+				expect(useTechStore.getState().max_bonus["pulse"]).toBe(0);
+				expect(useTechStore.getState().solvedBonus["pulse"]).toBe(0);
+				expect(useTechStore.getState().solved_bonus["pulse"]).toBe(0);
+				expect(useTechStore.getState().solveMethod["pulse"]).toBeUndefined();
+				expect(useTechStore.getState().solve_method["pulse"]).toBeUndefined();
+			} finally {
+				unsubscribe();
+			}
 		});
 	});
 });

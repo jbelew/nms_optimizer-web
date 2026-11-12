@@ -374,28 +374,31 @@ describe("ModuleSelectionDialog", () => {
 		expect(screen.getByRole("button", { name: "Optimize" })).toBeDisabled();
 	});
 
-	it("reverts uncommitted Module Selection changes to the initial snapshot when Cancel is clicked", async () => {
+	it("closes dialog in frame 1 and defers dirty Module Selection rollback until after next paint when Cancel is clicked", async () => {
 		seedAndRender({
 			checkedModules: ["core1", "bonus1"],
 		});
 
+		const betaCheckbox = await screen.findByRole("checkbox", { name: /Beta Bonus/i });
+
 		// Modify selection by checking Beta Bonus
-		fireEvent.click(await screen.findByRole("checkbox", { name: /Beta Bonus/i }));
+		fireEvent.click(betaCheckbox);
 		expect(useTechStore.getState().checkedModules["hyperdrive"]).toContain("bonus2");
 
-		// Click Cancel -> reverts to ["core1", "bonus1"] and closes dialog
+		// Click Cancel -> frame 1 closes dialog immediately; frame 2 reverts checkedModules
 		fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+		expect(useModuleSelectionDialogStore.getState().isOpen).toBe(false);
+		expect(useTechStore.getState().checkedModules["hyperdrive"]).toContain("bonus2");
 
 		await waitFor(() => {
 			expect(useTechStore.getState().checkedModules["hyperdrive"]).toEqual([
 				"core1",
 				"bonus1",
 			]);
-			expect(useModuleSelectionDialogStore.getState().isOpen).toBe(false);
 		});
 	});
 
-	it("closes dialog immediately on Optimize click before async handleOptimize resolves and renders native 24x24 module icons", async () => {
+	it("closes dialog in frame 1 on Optimize click, defers handleOptimize until after next paint, and renders native 24x24 module icons", async () => {
 		let resolveOptimize: (() => void) | undefined;
 		mockHandleOptimize.mockImplementation(
 			() =>
@@ -416,9 +419,14 @@ describe("ModuleSelectionDialog", () => {
 		fireEvent.click(await screen.findByRole("checkbox", { name: /Beta Bonus/i }));
 		fireEvent.click(screen.getByRole("button", { name: "Optimize" }));
 
-		// Dialog must close immediately without waiting for async solve completion
+		// Frame 1: Dialog closes synchronously before handleOptimize starts
 		expect(useModuleSelectionDialogStore.getState().isOpen).toBe(false);
-		expect(mockHandleOptimize).toHaveBeenCalledWith("hyperdrive");
+		expect(mockHandleOptimize).not.toHaveBeenCalled();
+
+		// Frame 2: handleOptimize runs after next paint
+		await waitFor(() => {
+			expect(mockHandleOptimize).toHaveBeenCalledWith("hyperdrive");
+		});
 		expect(useTechStore.getState().checkedModules["hyperdrive"]).toContain("bonus2");
 
 		resolveOptimize?.();

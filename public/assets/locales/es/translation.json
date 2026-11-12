@@ -20,7 +20,7 @@
 	"shipSelection": {
 		"dropdownTooltip": "Seleccionar tipo de plataforma",
 		"selectPlatform": "Seleccionar plataforma",
-		"ariaLabel": "Seleccionar tipo de nave",
+		"ariaLabel": "Seleccionar tipo de plataforma",
 		"corvetteWarning": {
 			"title": "¡Advertencia de corbeta!",
 			"description": "¡Las corbetas <strong>todavía</strong> tienen problemas de distribución conocidos! Si creas un diseño, te recomendamos encarecidamente usar la función <strong>Guardar diseño</strong> para mantener una copia de seguridad de tu trabajo."
@@ -140,10 +140,10 @@
 			"insufficientSpaceWithWindow": "No hay una Ventana de cálculo lo bastante grande (requiere <1>{{width}}×{{height}}</1>) para colocar los módulos seleccionados de <1>{{technologyName}}</1>. Esto suele ocurrir cuando ya hay demasiadas tecnologías colocadas en la cuadrícula.",
 			"superchargedInsufficientSpace": "No hay espacio suficiente alrededor de las ranuras potenciadas disponibles para la Ventana de cálculo de <1>{{technologyName}}</1>.",
 			"superchargedInsufficientSpaceWithWindow": "No hay espacio suficiente alrededor de las ranuras potenciadas disponibles para una Ventana de cálculo de <1>{{width}}×{{height}}</1> de <1>{{technologyName}}</1>.",
-			"superchargedForceOptimizeSuggestion": "Quita otras tecnologías para dejar espacio y optimiza primero las tecnologías que quieras potenciar. También puedes seleccionar <1>Optimización forzada</1> para ejecutar un recocido simulado completo sobre las ranuras disponibles.",
-			"forceOptimizeSuggestion": "Puedes probar <1>Optimización forzada</1> para una optimización más intensiva, aunque puede que no encuentre una distribución óptima. Prueba a reordenar las tecnologías o a seleccionar menos módulos para mejorar los resultados.",
+			"superchargedForceOptimizeSuggestion": "Quita otras tecnologías para dejar espacio y optimiza primero las tecnologías que quieras potenciar. También puedes seleccionar <1>Resolución forzada</1> para ejecutar un recocido simulado completo sobre las ranuras disponibles.",
+			"forceOptimizeSuggestion": "Puedes probar <1>Resolución forzada</1> para un cálculo por fuerza bruta, aunque puede que no encuentre una distribución óptima. Prueba a reordenar las tecnologías o a seleccionar menos módulos para mejorar los resultados.",
 			"cancelButton": "Cancelar",
-			"forceOptimizeButton": "Optimización forzada"
+			"forceOptimizeButton": "Resolución forzada"
 		},
 		"shareLink": {
 			"description": "Copia el enlace de abajo para compartir tu diseño de cuadrícula actual. Ten en cuenta que esta URL es una captura instantánea y no se actualizará automáticamente.",
@@ -269,7 +269,7 @@
 			"header": "Diseños recomendados",
 			"selectBuildButton": "Seleccionar un diseño recomendado",
 			"selectBuildLabel": "Seleccionar diseño",
-			"summary": "Las tecnologías con <1>ranuras potenciadas fijas</1> admiten <5>diseños recomendados</5>."
+			"summary": "Las plataformas con <1>ranuras potenciadas fijas</1> admiten <5>diseños recomendados</5>."
 		}
 	},
 	"technologies": {
@@ -753,11 +753,11 @@
 		"backToMain": "Volver a la página principal"
 	},
 	"restrictions": {
-		"title": "Acción no disponible",
+		"title": "¡Acción no disponible!",
 		"superchargedLimit": "Solo puedes tener hasta cuatro ranuras potenciadas.",
 		"superchargedFixed": "La ubicación de las ranuras potenciadas para exonaves y exotrajes no se puede cambiar.",
 		"gridFixed": "Las ubicaciones de las ranuras son fijas para las exonaves y no se pueden cambiar.",
-		"moduleLocked": "Las ranuras con módulos no se pueden cambiar. Quita primero el grupo de módulos.",
+		"moduleLocked": "Las ranuras con módulos no se pueden cambiar. Reinicia primero la categoría de tecnología.",
 		"rowLimit": "Las ranuras potenciadas solo se pueden colocar en las cuatro primeras filas."
 	}
 }

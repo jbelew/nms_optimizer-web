@@ -47,7 +47,7 @@ Sí. Es 100 % gratuito, sin anuncios y de código abierto (GPL-3.0). No necesita
 La herramienta evita de forma deliberada calcular métricas internas como el DPS exacto o el alcance en años luz. Como las cifras exactas dependen de semillas ocultas de cada nave a las que no se puede acceder sin un editor de partidas guardadas, el optimizador utiliza en su lugar una puntuación de «porcentaje respecto al máximo».
 
 **¿Por qué el diseño optimizado no incluye mi módulo concreto de expedición?**
-NMS Optimizer es totalmente compatible con todas las **recompensas de expedición y expediciones Redux** publicadas tras la actualización _Worlds Part I_. Sin embargo, como no todos los jugadores cuentan con estos objetos poco comunes, estos módulos opcionales no se activan por defecto en los cálculos. Puedes activarlos fácilmente para tu diseño abriendo la <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> **interfaz de Selección de módulos**.
+NMS Optimizer es totalmente compatible con todas las **recompensas de expedición y expediciones Redux** publicadas tras la actualización _Worlds Part I_. Sin embargo, como no todos los jugadores cuentan con estos objetos poco comunes, estos módulos opcionales no se activan por defecto en tus optimizaciones. Puedes activarlos fácilmente para tu diseño abriendo el <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> **diálogo de Selección de módulos**.
 
 ## Bajo el capó: nuestra pila tecnológica
 

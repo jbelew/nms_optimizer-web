@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type * as useOptimizeModule from "@/hooks/useOptimize/useOptimize";
@@ -43,7 +43,7 @@ vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
 		t: (key: string, options?: { count?: number; techName?: string }) => {
 			if (key === "technologies.test") return "Test Tech Name";
-			if (key === "techTree.tooltips.solve") return "Solve";
+			if (key === "techTree.tooltips.solve") return "Optimize";
 			if (key === "techTree.tooltips.reset") return "Reset";
 			if (key === "techTree.tooltips.update") return "Update";
 			if (key === "techTree.tooltips.gridFull") return "Grid Full";
@@ -161,7 +161,7 @@ describe("TechTreeRow", () => {
 		renderWithProviders(<TechTreeRow {...defaultProps} />);
 
 		expect(screen.getByText("Test Tech Name")).toBeInTheDocument();
-		const solveButton = screen.getByRole("button", { name: "Solve Test Tech Name" });
+		const solveButton = screen.getByRole("button", { name: "Optimize Test Tech Name" });
 		const resetButton = screen.getByRole("button", { name: "Reset Test Tech Name" });
 		expect(solveButton).not.toBeDisabled();
 		expect(resetButton).toBeDisabled();
@@ -207,7 +207,7 @@ describe("TechTreeRow", () => {
 		);
 
 		const solveButton = screen.getByRole("button", {
-			name: "Solve technologies.testTech",
+			name: "Optimize technologies.testTech",
 		});
 		expect(solveButton).toBeDisabled();
 		const moduleButton = screen.getByRole("button", {
@@ -230,7 +230,7 @@ describe("TechTreeRow", () => {
 
 		renderWithProviders(<TechTreeRow {...defaultProps} />);
 
-		const solveButton = screen.getByRole("button", { name: "Solve Test Tech Name" });
+		const solveButton = screen.getByRole("button", { name: "Optimize Test Tech Name" });
 		fireEvent.click(solveButton);
 
 		expect(handleOptimizeMock).toHaveBeenCalledWith("testTech");
@@ -246,7 +246,7 @@ describe("TechTreeRow", () => {
 		expect(resetButton).toBeDisabled();
 	});
 
-	it("should call handleReset and initiate reset transition when the reset button is clicked", () => {
+	it("should dispatch deferred analytics and defer Technology Reset until after next paint when reset is clicked", async () => {
 		const resetTechSpy = vi
 			.spyOn(sessionCoordinator, "resetTechnology")
 			.mockImplementation(() => {});
@@ -261,7 +261,7 @@ describe("TechTreeRow", () => {
 		const resetButton = screen.getByRole("button", { name: "Reset Test Tech Name" });
 		fireEvent.click(resetButton);
 
-		expect(resetTechSpy).toHaveBeenCalledWith("testTech");
+		expect(resetTechSpy).not.toHaveBeenCalled();
 		expect(sendDeferredEvent).toHaveBeenCalledWith({
 			action: "reset_grid",
 			category: "ui",
@@ -269,6 +269,10 @@ describe("TechTreeRow", () => {
 			platform: "standard",
 			reset_scope: "technology",
 			tech: "testTech",
+		});
+
+		await waitFor(() => {
+			expect(resetTechSpy).toHaveBeenCalledWith("testTech");
 		});
 		resetTechSpy.mockRestore();
 	});
@@ -294,7 +298,7 @@ describe("TechTreeRow", () => {
 
 		renderWithProviders(<TechTreeRow {...defaultProps} />);
 
-		const solveButton = screen.getByRole("button", { name: "Solve Test Tech Name" });
+		const solveButton = screen.getByRole("button", { name: "Optimize Test Tech Name" });
 		fireEvent.click(solveButton);
 
 		expect(handleOptimizeMock).toHaveBeenCalledWith("testTech");
@@ -312,7 +316,7 @@ describe("TechTreeRow", () => {
 		expect(moduleButton).toHaveTextContent("x1");
 	});
 
-	it("should open module selection dialog within transition when module count button is clicked", () => {
+	it("should open Module Selection Dialog after next paint without flashing button state when module count button is clicked", async () => {
 		setupMocks(false);
 		mockUseTechStore.mockImplementation((selector?: (state: TechStore) => unknown) => {
 			const state: Partial<TechStore> = {
@@ -377,10 +381,17 @@ describe("TechTreeRow", () => {
 		expect(moduleButton).not.toBeDisabled();
 		fireEvent.click(moduleButton);
 
-		expect(mockOpenDialog).toHaveBeenCalledWith({
-			tech: "testTech",
-			techColor: "blue",
-			techImage: "test.webp",
+		// Frame 1: Button remains enabled without flash and openDialog has not fired yet
+		expect(moduleButton).not.toBeDisabled();
+		expect(mockOpenDialog).not.toHaveBeenCalled();
+
+		await waitFor(() => {
+			expect(mockOpenDialog).toHaveBeenCalledTimes(1);
+			expect(mockOpenDialog).toHaveBeenCalledWith({
+				tech: "testTech",
+				techColor: "blue",
+				techImage: "test.webp",
+			});
 		});
 	});
 

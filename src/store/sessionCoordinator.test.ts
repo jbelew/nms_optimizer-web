@@ -41,12 +41,14 @@ const mockTechStore = {
 	clearResult: vi.fn(),
 	clearTechGroups: vi.fn(),
 	clearTechMaxBonus: vi.fn(),
+	clearTechResult: vi.fn(),
 	clearTechSolvedBonus: vi.fn(),
 	clearTechSolveMethod: vi.fn(),
 	maxBonus: { pulse: 100 },
 	resetSession: vi.fn(),
 	restoreTechState: vi.fn(),
 	setTechColors: vi.fn(),
+	setTechResult: vi.fn(),
 	solvedBonus: { pulse: 100 },
 	solveMethod: { pulse: "pattern" },
 };
@@ -168,10 +170,31 @@ describe("sessionCoordinator", () => {
 		sessionCoordinator.resetTechnology("pulse");
 
 		expect(mockGridStore.resetGridTech).toHaveBeenCalledWith("pulse");
-		expect(mockTechStore.clearTechMaxBonus).toHaveBeenCalledWith("pulse");
-		expect(mockTechStore.clearTechSolvedBonus).toHaveBeenCalledWith("pulse");
-		expect(mockTechStore.clearBonusStatus).toHaveBeenCalledWith("pulse");
-		expect(mockTechStore.clearTechSolveMethod).toHaveBeenCalledWith("pulse");
+		expect(mockTechStore.clearTechResult).toHaveBeenCalledTimes(1);
+		expect(mockTechStore.clearTechResult).toHaveBeenCalledWith("pulse");
+	});
+
+	it("commitOptimizationResult commits solved grid and batched setTechResult payload", () => {
+		const solvedGrid: Grid = { cells: [], height: 6, valid: true, width: 10 };
+		sessionCoordinator.commitOptimizationResult(
+			{
+				grid: solvedGrid,
+				maxBonus: 105,
+				solvedBonus: 102,
+				solveMethod: "Simulated Annealing",
+			},
+			"pulse",
+		);
+
+		expect(mockGridStore.setResult).toHaveBeenCalledTimes(1);
+		expect(mockGridStore.setGrid).toHaveBeenCalledWith(solvedGrid);
+		expect(mockTechStore.setTechResult).toHaveBeenCalledTimes(1);
+		expect(mockTechStore.setTechResult).toHaveBeenCalledWith("pulse", {
+			bonusStatus: { icon: "lightning", percent: 5 },
+			maxBonus: 105,
+			solvedBonus: 102,
+			solveMethod: "Simulated Annealing",
+		});
 	});
 
 	it("getShareUrl serializes current grid and platform into a shareable URL", () => {

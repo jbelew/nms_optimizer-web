@@ -47,7 +47,7 @@ Ja! Du kannst deine Lieblings-Builds lokal als `.nms`-Dateien speichern, teilbar
 Das Tool verzichtet bewusst darauf, konkrete Anzeigewerte aus dem Spiel wie DPS oder Lichtjahre-Reichweite zu berechnen. Da exakte Zahlen verborgene Schiffs-Seeds voraussetzen, die ohne Save-Editor nicht einsehbar sind, arbeitet der Optimierer stattdessen mit einer Bewertung als „Prozentsatz vom Maximum“.
 
 **Warum enthält das optimierte Layout nicht mein spezielles Expeditionsmodul?**
-Der NMS Optimizer unterstützt sämtliche **Expeditions- und Expeditions-Redux-Belohnungen**, die seit dem Update _Worlds Part I_ erschienen sind. Da jedoch nicht alle Spieler diese seltenen Gegenstände besitzen, sind solche optionalen Module bei Berechnungen standardmäßig deaktiviert. Du kannst sie jederzeit für deinen Build zuschalten, indem du den Dialog <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> **Modulauswahl** öffnest.
+Der NMS Optimizer unterstützt sämtliche **Expeditions- und Expeditions-Redux-Belohnungen**, die seit dem Update _Worlds Part I_ erschienen sind. Da jedoch nicht alle Spieler diese seltenen Gegenstände besitzen, sind solche optionalen Module bei Optimierungen standardmäßig deaktiviert. Du kannst sie jederzeit für deinen Build zuschalten, indem du den Dialog <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> **Modulauswahl** öffnest.
 
 ## Unter der Haube: Unser Tech-Stack
 

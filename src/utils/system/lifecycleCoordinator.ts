@@ -151,8 +151,13 @@ export class LifecycleCoordinator {
 	 *
 	 * @remarks
 	 * Tasks are executed sequentially in descending order of priority.
+	 * When `options.yieldBetweenTasks` is enabled (such as during the automatic `IDLE` transition),
+	 * a macrotask yield (`setTimeout(0)`) is inserted between tasks so pending user interactions
+	 * can be processed between background initializers.
 	 * If a task fails or throws an exception, the error is logged and captured via Sentry,
 	 * but execution continues for all remaining registered deferred tasks.
+	 *
+	 * @param [options] - Execution options controlling inter-task macrotask yielding.
 	 *
 	 * @returns Resolves when all registered deferred tasks have settled.
 	 *
@@ -166,12 +171,23 @@ export class LifecycleCoordinator {
 	 * // returns Promise<void>
 	 * ```
 	 */
-	public async flushDeferredTasks(): Promise<void> {
+	public async flushDeferredTasks(options?: { yieldBetweenTasks?: boolean }): Promise<void> {
 		const tasks = this.getDeferredTasks();
+		const shouldYield = options?.yieldBetweenTasks === true;
+		let executedCount = 0;
 
 		for (const task of tasks) {
 			if (!this.executedTaskNames.has(task.name)) {
-				await this.executeDeferredTask(task);
+				if (shouldYield && executedCount > 0) {
+					await new Promise<void>((resolve) => {
+						setTimeout(resolve, 0);
+					});
+				}
+
+				if (!this.executedTaskNames.has(task.name)) {
+					await this.executeDeferredTask(task);
+					executedCount += 1;
+				}
 			}
 		}
 	}
@@ -512,7 +528,7 @@ export class LifecycleCoordinator {
 		} else if (nextPhase === "READY") {
 			this.handleReady();
 		} else if (nextPhase === "IDLE") {
-			void this.flushDeferredTasks();
+			void this.flushDeferredTasks({ yieldBetweenTasks: true });
 		}
 
 		// Notify global subscribers

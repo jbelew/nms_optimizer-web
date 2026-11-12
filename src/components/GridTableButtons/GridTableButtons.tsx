@@ -23,9 +23,10 @@ import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useTechStore } from "@/store/tech/techStore";
-import { sendEvent } from "@/utils/analytics/tracking";
+import { sendDeferredEvent, sendEvent } from "@/utils/analytics/tracking";
 import { isPlainLeftClick, useDialog } from "@/utils/system/dialogUtils";
 import { lazyNamed } from "@/utils/system/lazyNamed";
+import { useAfterNextPaint } from "@/utils/system/postPaint";
 
 /**
  * Lazy-loaded dialog for entering a Build File name prior to saving.
@@ -66,7 +67,7 @@ const SCROLL_OPTIONS = { skipOnLargeScreens: true };
 const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
 	const { t } = useTranslation();
-	const [isResetPending, startResetTransition] = useTransition();
+	const scheduleReset = useAfterNextPaint();
 	const [isInfoPending, startInfoTransition] = useTransition();
 	const [isSharePending, startShareTransition] = useTransition();
 
@@ -155,7 +156,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	const handleResetGrid = () => {
 		scrollIntoView();
 
-		sendEvent({
+		sendDeferredEvent({
 			action: "reset_grid",
 			category: "ui",
 			nonInteraction: false,
@@ -163,7 +164,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 			reset_scope: "session",
 		});
 
-		startResetTransition(() => {
+		scheduleReset(() => {
 			sessionCoordinator.resetSession();
 		});
 	};
@@ -348,9 +349,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 					<Button
 						aria-label={t("buttons.resetGrid")}
 						className="gridTable__button gridTable__button--reset"
-						disabled={
-							solving || isResetPending || (isDefaultGrid && isDefaultModuleSelection)
-						}
+						disabled={solving || (isDefaultGrid && isDefaultModuleSelection)}
 						onClick={handleResetGrid}
 						size="2"
 						variant="soft"

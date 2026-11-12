@@ -20,7 +20,7 @@
 	"shipSelection": {
 		"dropdownTooltip": "Selecionar Tipo de Plataforma",
 		"selectPlatform": "Selecionar Plataforma",
-		"ariaLabel": "Selecionar tipo de nave",
+		"ariaLabel": "Selecionar Tipo de Plataforma",
 		"corvetteWarning": {
 			"title": "Aviso de Corveta!",
 			"description": "As Corvetas <strong>ainda</strong> apresentam problemas conhecidos de layout! Se você criar um layout, recomendamos fortemente usar o recurso <strong>Salvar Build</strong> para manter um backup do seu trabalho."
@@ -140,10 +140,10 @@
 			"insufficientSpaceWithWindow": "Não há uma Janela de Cálculo grande o suficiente (exige <1>{{width}}×{{height}}</1>) para posicionar os módulos selecionados de <1>{{technologyName}}</1>. Isso geralmente acontece quando muitas tecnologias já foram posicionadas na grade.",
 			"superchargedInsufficientSpace": "Não há espaço suficiente ao redor dos espaços supercarregados disponíveis para a Janela de Cálculo de <1>{{technologyName}}</1>.",
 			"superchargedInsufficientSpaceWithWindow": "Não há espaço suficiente ao redor dos espaços supercarregados disponíveis para uma Janela de Cálculo de <1>{{width}}×{{height}}</1> para <1>{{technologyName}}</1>.",
-			"superchargedForceOptimizeSuggestion": "Remova outras tecnologias para abrir espaço e otimize primeiro as tecnologias que você deseja supercarregar. Você também pode selecionar <1>Otimização Forçada</1> para executar o recozimento simulado completo nos espaços disponíveis.",
-			"forceOptimizeSuggestion": "Você pode tentar <1>Otimização Forçada</1> para uma resolução mais intensiva, mas ela pode não encontrar um layout ideal. Considere reordenar suas tecnologias ou selecionar menos módulos para melhorar os resultados.",
+			"superchargedForceOptimizeSuggestion": "Remova outras tecnologias para abrir espaço e otimize primeiro as tecnologias que você deseja supercarregar. Você também pode selecionar <1>Resolução Forçada</1> para executar o recozimento simulado completo nos espaços disponíveis.",
+			"forceOptimizeSuggestion": "Você pode tentar <1>Resolução Forçada</1> para um cálculo por força bruta, mas ela pode não encontrar um layout ideal. Considere reordenar suas tecnologias ou selecionar menos módulos para melhorar os resultados.",
 			"cancelButton": "Cancelar",
-			"forceOptimizeButton": "Otimização Forçada"
+			"forceOptimizeButton": "Resolução Forçada"
 		},
 		"shareLink": {
 			"description": "Copie o link abaixo para compartilhar o layout da sua grade. Note que este URL é uma captura instantânea e não será atualizado automaticamente.",
@@ -237,7 +237,7 @@
 	"techTree": {
 		"loading": "CARREGANDO TECNOLOGIA",
 		"tooltips": {
-			"insufficientSpace": "Otimização Incompleta",
+			"insufficientSpace": "Otimização incompleta",
 			"validSolve": "Otimização válida!",
 			"boostedSolve": "Otimização supercarregada!",
 			"gridFull": "Grade cheia!",
@@ -269,7 +269,7 @@
 			"header": "Builds Recomendadas",
 			"selectBuildButton": "Selecionar Build Recomendada",
 			"selectBuildLabel": "Selecionar Build",
-			"summary": "Tecnologias com <1>espaços supercarregados fixos</1> suportam <5>builds recomendadas</5>."
+			"summary": "Plataformas com <1>espaços supercarregados fixos</1> suportam <5>builds recomendadas</5>."
 		}
 	},
 	"technologies": {
@@ -753,11 +753,11 @@
 		"backToMain": "Voltar para o Início"
 	},
 	"restrictions": {
-		"title": "Ação Indisponível",
+		"title": "Ação Indisponível!",
 		"superchargedLimit": "Você só pode ter até quatro espaços supercarregados.",
 		"superchargedFixed": "A localização dos espaços supercarregados em Exoveículos e Exotrajes não pode ser alterada.",
 		"gridFixed": "As posições dos espaços são fixas para Exoveículos e não podem ser alteradas.",
-		"moduleLocked": "Espaços com módulos não podem ser alterados. Remova o grupo de módulos primeiro.",
+		"moduleLocked": "Espaços com módulos não podem ser alterados. Redefina a categoria de tecnologia primeiro.",
 		"rowLimit": "Espaços supercarregados só podem ser colocados nas primeiras quatro linhas."
 	}
 }

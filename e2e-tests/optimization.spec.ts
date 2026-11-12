@@ -84,9 +84,9 @@ test.describe("End-to-End Optimization Flow", () => {
 		});
 		expect(moduleCount).toBeGreaterThan(0);
 
-		// 8. Verify the "Valid optimization achieved" icon appears in the technology row
+		// 8. Verify the "Valid optimization!" icon appears in the technology row
 		// Using a regex to be resilient to minor translation changes
-		const validSolveIcon = page.getByLabel(/Valid optimization achieved|Valid solve/);
+		const validSolveIcon = page.getByLabel(/Valid optimization|Valid solve/);
 		await expect(validSolveIcon).toBeVisible();
 
 		// 9. Verify that we can reset the optimization results for this tech

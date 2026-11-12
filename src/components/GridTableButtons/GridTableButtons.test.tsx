@@ -1,6 +1,6 @@
 /// <reference types="@testing-library/jest-dom" />
 import React from "react";
-import { act, fireEvent, render, renderHook, screen } from "@testing-library/react";
+import { act, fireEvent, render, renderHook, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { PageName } from "@/routeConfig";
@@ -20,6 +20,7 @@ const {
 	mockDialogState,
 	mockHandleScreenshot,
 	mockResetGrid,
+	mockSendDeferredEvent,
 	mockSendEvent,
 	mockSetIsSharedGrid,
 	openDialogMock,
@@ -31,6 +32,7 @@ const {
 	},
 	mockHandleScreenshot: vi.fn(),
 	mockResetGrid: vi.fn(),
+	mockSendDeferredEvent: vi.fn(),
 	mockSendEvent: vi.fn(),
 	mockSetIsSharedGrid: vi.fn(),
 	openDialogMock: vi.fn(),
@@ -105,7 +107,7 @@ vi.mock("@/utils/system/dialogUtils", async (importOriginal) => {
 	};
 });
 vi.mock("@/utils/analytics/tracking", () => ({
-	sendDeferredEvent: vi.fn(),
+	sendDeferredEvent: mockSendDeferredEvent,
 	sendEvent: mockSendEvent,
 }));
 vi.mock("@/hooks/useOptimize/useOptimize");
@@ -324,11 +326,11 @@ describe("GridTableButtons", () => {
 		getShareUrlSpy.mockRestore();
 	});
 
-	it("calls reset grid and related functions on reset button click", () => {
+	it("defers resetSession until after next paint and tracks deferred GA event on reset button click", async () => {
 		renderComponent(false);
 		fireEvent.click(screen.getByText("Reset Grid Button"));
 
-		expect(mockSendEvent).toHaveBeenCalledWith({
+		expect(mockSendDeferredEvent).toHaveBeenCalledWith({
 			action: "reset_grid",
 			category: "ui",
 			nonInteraction: false,
@@ -336,8 +338,12 @@ describe("GridTableButtons", () => {
 			reset_scope: "session",
 		});
 
-		// Check that the functions inside handleResetGrid are called
-		expect(mockResetGrid).toHaveBeenCalled();
+		// Reset must not execute synchronously in the click tick
+		expect(mockResetGrid).not.toHaveBeenCalled();
+
+		await waitFor(() => {
+			expect(mockResetGrid).toHaveBeenCalled();
+		});
 		expect(mockSetIsSharedGrid).not.toHaveBeenCalled();
 	});
 
@@ -352,34 +358,38 @@ describe("GridTableButtons", () => {
 		expect(markTutorialFinishedMock).toHaveBeenCalled();
 	});
 
-	it("triggers reset grid action handler when clicking its child SVG icon", () => {
+	it("triggers reset grid action handler when clicking its child SVG icon", async () => {
 		renderComponent(false);
 		const button = screen.getByText("Reset Grid Button").closest("button");
 		const svg = button?.querySelector("svg");
 		expect(svg).toBeInTheDocument();
 		fireEvent.click(svg!);
 
-		expect(mockSendEvent).toHaveBeenCalledWith({
+		expect(mockSendDeferredEvent).toHaveBeenCalledWith({
 			action: "reset_grid",
 			category: "ui",
 			nonInteraction: false,
 			platform: "standard",
 			reset_scope: "session",
 		});
-		expect(mockResetGrid).toHaveBeenCalled();
+		await waitFor(() => {
+			expect(mockResetGrid).toHaveBeenCalled();
+		});
 		expect(mockSetIsSharedGrid).not.toHaveBeenCalled();
 	});
 
-	it("initiates reset transition immediately and delegates scrolling asynchronously on mobile", () => {
+	it("defers both resetSession and scrolling until after paint on mobile", async () => {
 		// Mock mobile breakpoint (< 1024px and < 640px)
 		vi.mocked(useBreakpoint).mockImplementation((_bp: string) => false);
 
 		const rafCallbacks: Array<FrameRequestCallback> = [];
-		vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb: FrameRequestCallback) => {
-			rafCallbacks.push(cb);
+		const rafSpy = vi
+			.spyOn(window, "requestAnimationFrame")
+			.mockImplementation((cb: FrameRequestCallback) => {
+				rafCallbacks.push(cb);
 
-			return rafCallbacks.length;
-		});
+				return rafCallbacks.length;
+			});
 		const scrollToMock = vi.fn();
 		Object.defineProperty(window, "scrollTo", {
 			configurable: true,
@@ -409,29 +419,36 @@ describe("GridTableButtons", () => {
 		const resetButton = screen.getByLabelText("Reset Grid Button");
 		fireEvent.click(resetButton);
 
-		// 1. Reset state transitions must be initiated immediately
-		expect(mockResetGrid).toHaveBeenCalled();
+		// 1. Neither session reset nor layout measurement occurs in the synchronous click tick
+		expect(mockResetGrid).not.toHaveBeenCalled();
 		expect(mockSetIsSharedGrid).not.toHaveBeenCalled();
-
-		// 2. Synchronous layout measurement and scrolling must NOT occur in the click tick
 		expect(getBoundingClientRectMock).not.toHaveBeenCalled();
 		expect(scrollToMock).not.toHaveBeenCalled();
 
-		// 3. Animation frame is scheduled
-		expect(window.requestAnimationFrame).toHaveBeenCalledTimes(1);
+		// 2. Animation frames are scheduled for scrollIntoView and post-paint reset
+		expect(window.requestAnimationFrame).toHaveBeenCalledTimes(2);
 
-		// Step 2: Flush pre-paint frame
+		// Step 2: Flush pre-paint frame callbacks (scrollIntoView frame 1 + postPaint frame 1)
 		act(() => {
-			rafCallbacks.shift()?.(performance.now());
+			const firstWave = rafCallbacks.splice(0, 2);
+
+			for (const cb of firstWave) {
+				cb(performance.now());
+			}
 		});
 		expect(getBoundingClientRectMock).not.toHaveBeenCalled();
 		expect(scrollToMock).not.toHaveBeenCalled();
 
-		// Step 3: Flush post-paint frame
+		// Step 3: Flush post-paint frame for scrollIntoView and macrotask for resetSession
 		act(() => {
 			rafCallbacks.shift()?.(performance.now());
+		});
+		await waitFor(() => {
+			expect(mockResetGrid).toHaveBeenCalledTimes(1);
 		});
 		expect(getBoundingClientRectMock).toHaveBeenCalledTimes(1);
 		expect(scrollToMock).toHaveBeenCalledTimes(1);
+
+		rafSpy.mockRestore();
 	});
 });

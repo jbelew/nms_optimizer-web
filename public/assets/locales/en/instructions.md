@@ -30,7 +30,7 @@ Supercharged slots are limited. Distribute them across multiple **Technology Cat
 - **Do not assign all supercharged slots to the first Technology Category.** This reduces the available bonus for other systems.
 - Assign **2 to 3 supercharged slots** to your highest-priority **Technology Category**.
 - Reserve **1 or more supercharged slots** for a second **Technology Category**.
-- After all supercharged slots are occupied, solve **Technology Categories** that require larger **Solver Window** dimensions first.
+- After all supercharged slots are occupied, optimize **Technology Categories** that require larger **Solver Window** dimensions first.
 - Set your priorities and let the solver calculate the optimal module placement.
 
 ### Solver Window & Optimization Alerts
@@ -38,8 +38,8 @@ Supercharged slots are limited. Distribute them across multiple **Technology Cat
 Each **Technology Category** requires a **Solver Window** (`width × height`) based on its active **Module Selection**.
 
 - If no contiguous region of active slots matches the required **Solver Window**, an **Optimization Alert** (**Pattern No Fit**) appears.
-- From the alert, you can run a **Forced Solve** (full simulated annealing across available slots) or cancel, use **Technology Reset** on placed categories, and solve in a different order.
-- **Pro Tip:** Temporarily set specific slots to **inactive** before solving to guide where the **Solver Window** is placed.
+- From the alert, you can run a **Forced Solve** (full simulated annealing across available slots) or cancel, use **Reset** on placed categories, and optimize in a different order.
+- **Pro Tip:** Temporarily set specific slots to **inactive** before optimizing to guide where the **Solver Window** is placed.
 
 ## Module Rank Order (Theta / Tau / Sigma)
 
@@ -75,7 +75,7 @@ Submit layout suggestions or feedback in the project discussions:
 
 ## Saving, Loading, and Sharing
 
-- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Load** — Open a saved `.nms` **Build File** from disk.
-- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Save** — Download the current layout as a `.nms` **Build File**.
-- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Share** — Generate a **Shared Grid** URL that opens your layout in the optimizer.
-- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Screenshot** — Capture a PNG image of the current grid layout.
+- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Load Build** — Open a saved `.nms` **Build File** from disk.
+- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Save Build** — Download the current layout as a `.nms` **Build File**.
+- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Share Build** — Generate a **Shared Grid** URL that opens your layout in the optimizer.
+- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Capture Build Screenshot** — Capture a PNG image of the current grid layout.

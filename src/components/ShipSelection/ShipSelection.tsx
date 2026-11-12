@@ -1,6 +1,6 @@
 import "./ShipSelection.scss";
 
-import React, { Suspense, useCallback, useMemo, useTransition } from "react";
+import React, { Suspense, useCallback, useMemo } from "react";
 import { GearIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator, Spinner } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
@@ -13,6 +13,7 @@ import { usePlatformsSuspense, usePlatformStore } from "@/store/app/platformStor
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { sendDeferredEvent } from "@/utils/analytics/tracking";
 import { Logger } from "@/utils/system/monitoring";
+import { useAfterNextPaint } from "@/utils/system/postPaint";
 
 /**
  * Props for the {@link ShipSelection} component.
@@ -79,7 +80,7 @@ const ShipSelectionMenu: React.FC<ShipSelectionProps> = ({ disabled = false, sol
 	const { showInfo } = useToast();
 	const platformCatalog = usePlatformsSuspense();
 	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
-	const [isPending, startTransition] = useTransition();
+	const scheduleSwitch = useAfterNextPaint();
 	const navigate = useNavigate();
 
 	const groupedPlatformTypes = useMemo(() => {
@@ -99,23 +100,12 @@ const ShipSelectionMenu: React.FC<ShipSelectionProps> = ({ disabled = false, sol
 		(option: string) => {
 			if (option !== selectedPlatform) {
 				Logger.info(`Platform selected: ${option}`, { platform: option });
-				startTransition(() => {
-					if (option === "corvette") {
-						showInfo(
-							t("shipSelection.corvetteWarning.title"),
-							<Trans i18nKey="shipSelection.corvetteWarning.description" />,
-						);
-					}
-
-					sessionCoordinator.switchPlatform(option);
-				});
-
 				const searchParams = new URLSearchParams(window.location.search);
 				searchParams.set("platform", option);
 				searchParams.delete("grid");
 				const search = searchParams.toString();
 				const hash = window.location.hash;
-				navigate(`${window.location.pathname}${search ? `?${search}` : ""}${hash}`);
+				const targetUrl = `${window.location.pathname}${search ? `?${search}` : ""}${hash}`;
 
 				sendDeferredEvent({
 					action: "select_content",
@@ -124,12 +114,24 @@ const ShipSelectionMenu: React.FC<ShipSelectionProps> = ({ disabled = false, sol
 					item_id: option,
 					nonInteraction: false,
 				});
+
+				scheduleSwitch(() => {
+					if (option === "corvette") {
+						showInfo(
+							t("shipSelection.corvetteWarning.title"),
+							<Trans i18nKey="shipSelection.corvetteWarning.description" />,
+						);
+					}
+
+					sessionCoordinator.switchPlatform(option);
+					navigate(targetUrl);
+				});
 			}
 		},
-		[selectedPlatform, showInfo, t, navigate],
+		[selectedPlatform, scheduleSwitch, showInfo, t, navigate],
 	);
 
-	const isDisabled = disabled || isPending || solving;
+	const isDisabled = disabled || solving;
 
 	return (
 		<DropdownMenu.Root modal={false}>

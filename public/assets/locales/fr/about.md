@@ -47,7 +47,7 @@ Oui ! Vous pouvez sauvegarder vos builds favoris localement sous forme de fichie
 L'outil évite volontairement de calculer les valeurs brutes affichées en jeu telles que le DPS ou la portée en années-lumière. Comme les chiffres exacts dépendent de graines procédurales cachées inaccessibles sans éditeur de sauvegarde, l'optimiseur exprime plutôt ses résultats sous forme de « pourcentage du maximum ».
 
 **Pourquoi la disposition optimisée n'inclut-elle pas mon module d'Expédition spécifique ?**
-NMS Optimizer prend entièrement en charge toutes les **récompenses d'Expédition et d'Expédition Redux** introduites après la mise à jour _Worlds Part I_. Toutefois, comme tous les joueurs ne possèdent pas ces objets rares, ces modules optionnels ne sont pas activés par défaut dans vos calculs. Vous pouvez facilement les activer pour votre build en ouvrant l'**interface de Sélection de modules** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon>.
+NMS Optimizer prend entièrement en charge toutes les **récompenses d'Expédition et d'Expédition Redux** introduites après la mise à jour _Worlds Part I_. Toutefois, comme tous les joueurs ne possèdent pas ces objets rares, ces modules optionnels ne sont pas activés par défaut dans vos optimisations. Vous pouvez facilement les activer pour votre build en ouvrant le **dialogue de Sélection de modules** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon>.
 
 ## Sous le capot : notre pile technologique
 

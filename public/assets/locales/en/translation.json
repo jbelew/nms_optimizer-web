@@ -20,7 +20,7 @@
 	"shipSelection": {
 		"dropdownTooltip": "Select Platform Type",
 		"selectPlatform": "Select Platform",
-		"ariaLabel": "Select ship type",
+		"ariaLabel": "Select Platform Type",
 		"corvetteWarning": {
 			"title": "Corvette Warning!",
 			"description": "Corvettes <strong>still</strong> have known layout issues! If you create a layout, we highly recommend using the <strong>Save Build</strong> feature to keep a backup of your work."
@@ -141,7 +141,7 @@
 			"superchargedInsufficientSpace": "There is not enough space around the available supercharged slots for the Solver Window for <1>{{technologyName}}</1>.",
 			"superchargedInsufficientSpaceWithWindow": "There is not enough space around the available supercharged slots for a <1>{{width}}×{{height}}</1> Solver Window for <1>{{technologyName}}</1>.",
 			"superchargedForceOptimizeSuggestion": "Clear other technologies to make space, and optimize the technologies that you want to supercharge first. You can also select <1>Forced Solve</1> to run full simulated annealing across the available slots.",
-			"forceOptimizeSuggestion": "You can try <1>Forced Solve</1> for a more intensive solve, but it may fail to find an optimal layout. Consider reordering your technologies or selecting fewer to improve the results.",
+			"forceOptimizeSuggestion": "You can try <1>Forced Solve</1> for a brute-force pass, but it may fail to find an optimal layout. Consider reordering your technologies or selecting fewer to improve the results.",
 			"cancelButton": "Cancel",
 			"forceOptimizeButton": "Forced Solve"
 		},
@@ -204,7 +204,7 @@
 		}
 	},
 	"footer": {
-		"issuePrompt": "Something off with your solve or found a bug? <1>Open an issue on GitHub</1> and let us know!",
+		"issuePrompt": "Something off with your optimization or found a bug? <1>Open an issue on GitHub</1> and let us know!",
 		"builtBy": "Built by jbelew",
 		"license": "GPL-3.0",
 		"buildLabel": "Build",
@@ -237,12 +237,12 @@
 	"techTree": {
 		"loading": "LOADING TECH",
 		"tooltips": {
-			"insufficientSpace": "Incomplete Solve",
-			"validSolve": "Valid solve!",
-			"boostedSolve": "Boosted solve!",
+			"insufficientSpace": "Incomplete optimization",
+			"validSolve": "Valid optimization!",
+			"boostedSolve": "Boosted optimization!",
 			"gridFull": "Grid full!",
 			"update": "Update",
-			"solve": "Solve",
+			"solve": "Optimize",
 			"reset": "Reset"
 		},
 		"categories": {
@@ -269,7 +269,7 @@
 			"header": "Recommended Builds",
 			"selectBuildButton": "Select a Recommended Build",
 			"selectBuildLabel": "Select Build",
-			"summary": "Technologies with <1>fixed Supercharged slots</1> support <5>recommended builds</5>."
+			"summary": "Platforms with <1>fixed supercharged slots</1> support <5>recommended builds</5>."
 		}
 	},
 	"technologies": {
@@ -753,11 +753,11 @@
 		"backToMain": "Go back to the main page"
 	},
 	"restrictions": {
-		"title": "Action Unavailable",
+		"title": "Action Unavailable!",
 		"superchargedLimit": "You can only have up to four supercharged slots.",
 		"superchargedFixed": "Supercharged slot locations for Exocraft and Exosuits can't be changed.",
 		"gridFixed": "Slot locations are fixed for Exocraft and can’t be changed.",
-		"moduleLocked": "Slots with modules can’t be changed. Remove the module group first.",
+		"moduleLocked": "Slots with modules can’t be changed. Reset the technology category first.",
 		"rowLimit": "Supercharged slots can only be placed in the first four rows."
 	}
 }

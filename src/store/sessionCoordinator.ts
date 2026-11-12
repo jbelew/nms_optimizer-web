@@ -239,13 +239,14 @@ export const sessionCoordinator = {
 
 		// 2. Synchronize tech-specific stats in Tech Store
 		if (data) {
-			techStore.setTechMaxBonus(tech, data.maxBonus);
-			techStore.setTechSolvedBonus(tech, data.solvedBonus);
-			techStore.setTechSolveMethod(tech, data.solveMethod);
-
-			// 3. Update Bonus Status Store
 			const status = computeBonusStatus(data.maxBonus);
-			techStore.setBonusStatus(tech, status);
+
+			techStore.setTechResult?.(tech, {
+				bonusStatus: status,
+				maxBonus: data.maxBonus,
+				solvedBonus: data.solvedBonus,
+				solveMethod: data.solveMethod,
+			});
 		}
 	},
 
@@ -430,10 +431,7 @@ export const sessionCoordinator = {
 		const techStore = useTechStore.getState();
 
 		gridStore.resetGridTech?.(tech);
-		techStore.clearTechMaxBonus?.(tech);
-		techStore.clearTechSolvedBonus?.(tech);
-		techStore.clearBonusStatus?.(tech);
-		techStore.clearTechSolveMethod?.(tech);
+		techStore.clearTechResult?.(tech);
 	},
 
 	/**

@@ -12,7 +12,7 @@ import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
-import { useOptimizeStore } from "@/store/ui/uiStore";
+import { useOptimizeStore, useUiStore } from "@/store/ui/uiStore";
 import { sendEvent } from "@/utils/analytics/tracking";
 import { Logger } from "@/utils/system/monitoring";
 
@@ -119,9 +119,11 @@ describe("useOptimize", () => {
 		mockUseTechStore.getState.mockReturnValue({
 			activeGroups: {},
 			checkedModules: {},
+			clearTechResult: vi.fn(),
 			initializeTechTree: vi.fn(),
 			setBonusStatus: vi.fn(),
 			setTechMaxBonus: vi.fn(),
+			setTechResult: vi.fn(),
 			setTechSolvedBonus: vi.fn(),
 			setTechSolveMethod: vi.fn(),
 			techGroups: {},
@@ -277,9 +279,11 @@ describe("useOptimize", () => {
 			mockUseTechStore.getState.mockReturnValue({
 				activeGroups: {},
 				checkedModules: { pulse: ["PC"] },
+				clearTechResult: vi.fn(),
 				initializeTechTree: vi.fn(),
 				setBonusStatus: vi.fn(),
 				setTechMaxBonus: vi.fn(),
+				setTechResult: vi.fn(),
 				setTechSolvedBonus: vi.fn(),
 				setTechSolveMethod: vi.fn(),
 				techGroups: {},
@@ -704,10 +708,7 @@ describe("useOptimize", () => {
 
 		it("should execute pre-solve Technology Reset before emitting optimize", async () => {
 			const mockResetGridTech = vi.fn();
-			const mockClearTechMaxBonus = vi.fn();
-			const mockClearTechSolvedBonus = vi.fn();
-			const mockClearBonusStatus = vi.fn();
-			const mockClearTechSolveMethod = vi.fn();
+			const mockClearTechResult = vi.fn();
 
 			mockUseGridStore.getState.mockReturnValue({
 				activeTechs: new Set(["Test Tech"]),
@@ -721,10 +722,7 @@ describe("useOptimize", () => {
 			mockUseTechStore.getState.mockReturnValue({
 				activeGroups: {},
 				checkedModules: {},
-				clearBonusStatus: mockClearBonusStatus,
-				clearTechMaxBonus: mockClearTechMaxBonus,
-				clearTechSolvedBonus: mockClearTechSolvedBonus,
-				clearTechSolveMethod: mockClearTechSolveMethod,
+				clearTechResult: mockClearTechResult,
 				initializeTechTree: vi.fn(),
 				techGroups: {},
 			} as unknown as TechStore);
@@ -736,11 +734,51 @@ describe("useOptimize", () => {
 			});
 
 			expect(mockResetGridTech).toHaveBeenCalledWith("Test Tech");
-			expect(mockClearTechMaxBonus).toHaveBeenCalledWith("Test Tech");
-			expect(mockClearTechSolvedBonus).toHaveBeenCalledWith("Test Tech");
-			expect(mockClearBonusStatus).toHaveBeenCalledWith("Test Tech");
-			expect(mockClearTechSolveMethod).toHaveBeenCalledWith("Test Tech");
+			expect(mockClearTechResult).toHaveBeenCalledWith("Test Tech");
 			expect(mockSocket.emit).toHaveBeenCalledWith("optimize", expect.any(Object));
+		});
+
+		it("notifies useUiStore subscribers only once when transitioning into solving and once on completion", async () => {
+			useOptimizeStore.setState({
+				status: { reason: "pattern_no_fit", tech: "pulse", type: "warning" },
+			});
+
+			const { result } = renderHook(() => useOptimize());
+			const uiListener = vi.fn();
+			const unsubscribe = useUiStore.subscribe(uiListener);
+
+			try {
+				await act(async () => {
+					await result.current.handleOptimize("pulse", true);
+				});
+
+				expect(uiListener).toHaveBeenCalledTimes(1);
+				expect(useOptimizeStore.getState().status).toEqual({
+					progress: 0,
+					type: "solving",
+				});
+
+				uiListener.mockClear();
+
+				const resultCallback = getSocketListener<(data: Record<string, unknown>) => void>(
+					mockSocket.once.mock.calls,
+					"optimization_result",
+				);
+
+				act(() => {
+					resultCallback({
+						grid: { cells: [], height: 7, valid: true, width: 7 },
+						max_bonus: 100,
+						solve_method: "Pattern",
+						solved_bonus: 100,
+					});
+				});
+
+				expect(uiListener).toHaveBeenCalledTimes(1);
+				expect(useOptimizeStore.getState().status).toEqual({ type: "idle" });
+			} finally {
+				unsubscribe();
+			}
 		});
 	});
 });

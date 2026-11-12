@@ -251,8 +251,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 		activeCleanup = null;
 		if (mountedCount <= 0) return;
 		setSolving(false);
-		setProgressPercent(0);
-	}, [setSolving, setProgressPercent]);
+	}, [setSolving]);
 
 	// Track mounted consumers and tear down active socket only when the last consumer unmounts
 	useEffect(() => {
@@ -309,9 +308,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 
 			isOptimizingActive = true;
 			setSolving(true);
-			setProgressPercent(0);
-			setShowErrorStore(false);
-			if (forced || patternNoFitTechRef.current === tech) setPatternNoFitTech(null);
 			scrollIntoView();
 
 			Logger.info(`Optimization started for ${tech}`, {

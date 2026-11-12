@@ -23,6 +23,25 @@ export type BonusStatusData = {
 
 type SetItemFunction = (name: string, value: StorageValue<Partial<TechStore>>) => Promise<void>;
 
+/**
+ * Batched solve-result payload for a single Technology Category.
+ *
+ * @see {@link BonusStatusData}
+ * @see {@link TechStore}
+ *
+ * @category State
+ */
+interface TechResultUpdate {
+	/** Calculated Solve Quality icon and delta percentage. */
+	bonusStatus: BonusStatusData;
+	/** Theoretical maximum bonus percentage returned by the solver. */
+	maxBonus: number;
+	/** Actual bonus percentage achieved by the solver. */
+	solvedBonus: number;
+	/** Identifier of the solver method used. */
+	solveMethod: string;
+}
+
 function debounceSetItem(
 	setItemFn: SetItemFunction,
 	msToWait: number,
@@ -121,6 +140,12 @@ export interface TechStore {
 	 * @param {string} tech - The technology key to clear.
 	 */
 	clearTechMaxBonus: (tech: string) => void;
+	/**
+	 * Atomically clears bonus status, max bonus, solved bonus, and solve method for a technology.
+	 *
+	 * @param tech - The Technology Category identifier to clear.
+	 */
+	clearTechResult: (tech: string) => void;
 	/**
 	 * Resets the solved bonus value for a technology to zero.
 	 *
@@ -270,6 +295,13 @@ export interface TechStore {
 	 */
 	setTechMaxBonus: (tech: string, bonus: number) => void;
 	/**
+	 * Atomically commits bonus status, max bonus, solved bonus, and solve method for a technology.
+	 *
+	 * @param tech - The Technology Category identifier.
+	 * @param result - The batched solve-result payload.
+	 */
+	setTechResult: (tech: string, result: TechResultUpdate) => void;
+	/**
 	 * Sets the solved bonus value for a technology.
 	 *
 	 * @param {string} tech - The technology key.
@@ -344,15 +376,27 @@ const computeIsDefaultModuleSelection = (state: TechStore): boolean => {
 };
 
 /**
+ * Synchronizes snake_case result aliases without recomputing Module Selection defaults.
+ *
+ * @param state - The mutable state draft.
+ *
+ * @returns Side-effects only.
+ */
+const syncResultAliases = (state: TechStore) => {
+	if (!state) return;
+	if (state.maxBonus !== undefined) state.max_bonus = state.maxBonus;
+	if (state.solveMethod !== undefined) state.solve_method = state.solveMethod;
+	if (state.solvedBonus !== undefined) state.solved_bonus = state.solvedBonus;
+};
+
+/**
  * Helper to synchronize snake_case aliases and derived flags with camelCase fields.
  *
  * @param state - The mutable state draft.
  */
 const syncAliases = (state: TechStore) => {
 	if (!state) return;
-	if (state.maxBonus !== undefined) state.max_bonus = state.maxBonus;
-	if (state.solveMethod !== undefined) state.solve_method = state.solveMethod;
-	if (state.solvedBonus !== undefined) state.solved_bonus = state.solvedBonus;
+	syncResultAliases(state);
 	if (state.checkedModules !== undefined) state.moduleSelections = state.checkedModules;
 
 	if (state.techGroups !== undefined && state.checkedModules !== undefined) {
@@ -400,7 +444,6 @@ export const useTechStore = create<TechStore>()(
 			clearAllBonusStatus: () => {
 				set((state) => {
 					state.bonusStatus = {};
-					syncAliases(state);
 				});
 			},
 			clearAllCheckedModules: () => {
@@ -419,7 +462,6 @@ export const useTechStore = create<TechStore>()(
 			clearBonusStatus: (tech) => {
 				set((state) => {
 					delete state.bonusStatus[tech];
-					syncAliases(state);
 				});
 			},
 			clearCheckedModules: (tech) =>
@@ -438,7 +480,7 @@ export const useTechStore = create<TechStore>()(
 					state.maxBonus = {};
 					state.solvedBonus = {};
 					state.solveMethod = {};
-					syncAliases(state);
+					syncResultAliases(state);
 				}),
 			clearTechGroups: () =>
 				set((state: TechStore) => {
@@ -450,17 +492,25 @@ export const useTechStore = create<TechStore>()(
 			clearTechMaxBonus: (tech) =>
 				set((state: TechStore) => {
 					state.maxBonus[tech] = 0;
-					syncAliases(state);
+					syncResultAliases(state);
+				}),
+			clearTechResult: (tech) =>
+				set((state: TechStore) => {
+					delete state.bonusStatus[tech];
+					state.maxBonus[tech] = 0;
+					state.solvedBonus[tech] = 0;
+					delete state.solveMethod[tech];
+					syncResultAliases(state);
 				}),
 			clearTechSolvedBonus: (tech) =>
 				set((state: TechStore) => {
 					state.solvedBonus[tech] = 0;
-					syncAliases(state);
+					syncResultAliases(state);
 				}),
 			clearTechSolveMethod: (tech) =>
 				set((state: TechStore) => {
 					delete state.solveMethod[tech];
-					syncAliases(state);
+					syncResultAliases(state);
 				}),
 
 			getBonusStatus: (tech) => get().bonusStatus[tech] ?? null,
@@ -526,7 +576,6 @@ export const useTechStore = create<TechStore>()(
 			setBonusStatus: (tech, data) => {
 				set((state) => {
 					state.bonusStatus[tech] = data;
-					syncAliases(state);
 				});
 			},
 			setCheckedModules: (tech, updater) =>
@@ -568,17 +617,25 @@ export const useTechStore = create<TechStore>()(
 			setTechMaxBonus: (tech, bonus) =>
 				set((state: TechStore) => {
 					state.maxBonus[tech] = bonus;
-					syncAliases(state);
+					syncResultAliases(state);
+				}),
+			setTechResult: (tech, result) =>
+				set((state: TechStore) => {
+					state.bonusStatus[tech] = result.bonusStatus;
+					state.maxBonus[tech] = result.maxBonus;
+					state.solvedBonus[tech] = result.solvedBonus;
+					state.solveMethod[tech] = result.solveMethod;
+					syncResultAliases(state);
 				}),
 			setTechSolvedBonus: (tech, bonus) =>
 				set((state: TechStore) => {
 					state.solvedBonus[tech] = bonus;
-					syncAliases(state);
+					syncResultAliases(state);
 				}),
 			setTechSolveMethod: (tech, method) =>
 				set((state: TechStore) => {
 					state.solveMethod[tech] = method;
-					syncAliases(state);
+					syncResultAliases(state);
 				}),
 			solve_method: {},
 			solved_bonus: {},

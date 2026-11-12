@@ -38,8 +38,8 @@ Les emplacements surchargés sont limités. Répartissez-les sur plusieurs **Cat
 Chaque **Catégorie de technologie** requiert une **Fenêtre de calcul** (`largeur × hauteur`) déterminée par sa **Sélection de modules** active.
 
 - Si aucune zone contiguë d'emplacements actifs ne correspond à la **Fenêtre de calcul** requise, une **Alerte d'optimisation** (**Modèle incompatible**) s'affiche.
-- Depuis cette alerte, vous pouvez lancer une **Optimisation forcée** (recuit simulé complet sur l'ensemble des emplacements disponibles) ou annuler, utiliser la **Réinitialisation de technologie** sur des catégories déjà placées, puis optimiser dans un ordre différent.
-- **Astuce de pro :** Désactivez temporairement certains emplacements (**inactifs**) avant de lancer le calcul afin de guider l'endroit où la **Fenêtre de calcul** sera placée.
+- Depuis cette alerte, vous pouvez lancer une **Résolution forcée** (recuit simulé complet sur l'ensemble des emplacements disponibles) ou annuler, utiliser **Réinitialiser** sur des catégories déjà placées, puis optimiser dans un ordre différent.
+- **Astuce de pro :** Désactivez temporairement certains emplacements (**inactifs**) avant d'optimiser afin de guider l'endroit où la **Fenêtre de calcul** sera placée.
 
 ## Ordre de rang des modules (Theta / Tau / Sigma)
 
@@ -75,7 +75,7 @@ Proposez vos suggestions de dispositions ou vos retours dans les discussions du 
 
 ## Sauvegarder, charger et partager
 
-- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Charger** — Ouvrez un **fichier de build** `.nms` sauvegardé depuis votre disque.
-- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Sauvegarder** — Téléchargez la disposition actuelle sous forme de **fichier de build** `.nms`.
-- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Partager** — Générez une URL de **Grille partagée** qui ouvre votre disposition dans l'optimiseur.
-- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Capture d'écran** — Enregistrez une image PNG de la disposition actuelle de la grille.
+- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Charger un build** — Ouvrez un **fichier de build** `.nms` sauvegardé depuis votre disque.
+- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Sauvegarder le build** — Téléchargez la disposition actuelle sous forme de **fichier de build** `.nms`.
+- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Partager le build** — Générez une URL de **Grille partagée** qui ouvre votre disposition dans l'optimiseur.
+- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Capture d'écran du build** — Enregistrez une image PNG de la disposition actuelle de la grille.

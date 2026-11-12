@@ -38,7 +38,7 @@ Las ranuras potenciadas son limitadas. Repártelas entre varias **Categorías de
 Cada **Categoría de tecnología** requiere una **Ventana de cálculo** (`ancho × alto`) determinada por su **Selección de módulos** activa.
 
 - Si ninguna región contigua de ranuras activas coincide con la **Ventana de cálculo** requerida, aparece una **Alerta de optimización** (**Patrón sin espacio**).
-- Desde la alerta puedes ejecutar una **Optimización forzada** (recocido simulado completo sobre las ranuras disponibles) o cancelar, aplicar **Reinicio de tecnología** a las categorías ya colocadas y optimizarlas en otro orden.
+- Desde la alerta puedes ejecutar una **Resolución forzada** (recocido simulado completo sobre las ranuras disponibles) o cancelar, aplicar **Reiniciar** a las categorías ya colocadas y optimizarlas en otro orden.
 - **Consejo experto:** Desactiva temporalmente ranuras concretas antes de optimizar para orientar dónde se coloca la **Ventana de cálculo**.
 
 ## Orden de rango de módulos (Theta / Tau / Sigma)
@@ -75,7 +75,7 @@ Envía sugerencias de diseños o comentarios en los debates del proyecto:
 
 ## Guardar, cargar y compartir
 
-- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Cargar** — Abre desde el disco un **Archivo de diseño** `.nms` guardado.
-- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Guardar** — Descarga la distribución actual como un **Archivo de diseño** `.nms`.
-- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Compartir** — Genera una URL de **Cuadrícula compartida** que abre tu diseño en el optimizador.
-- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Capturar pantalla** — Guarda una imagen PNG del diseño actual de la cuadrícula.
+- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Cargar diseño** — Abre desde el disco un **Archivo de diseño** `.nms` guardado.
+- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Guardar diseño** — Descarga la distribución actual como un **Archivo de diseño** `.nms`.
+- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Compartir diseño** — Genera una URL de **Cuadrícula compartida** que abre tu diseño en el optimizador.
+- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Capturar pantalla del diseño** — Guarda una imagen PNG del diseño actual de la cuadrícula.

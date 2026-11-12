@@ -47,7 +47,7 @@ Sì! Puoi salvare localmente le tue configurazioni preferite come file `.nms`, g
 Lo strumento evita intenzionalmente di calcolare metriche di gioco standard come il DPS o la portata in anni luce. Poiché i valori esatti richiedono i seed nascosti delle astronavi, inaccessibili senza un editor di salvataggi, l'ottimizzatore si basa invece su un punteggio espresso come "percentuale del massimo".
 
 **Perché il layout ottimizzato non include il mio specifico modulo da spedizione?**
-NMS Optimizer supporta pienamente tutte le **ricompense di spedizione e spedizione Redux** introdotte dopo l'aggiornamento _Worlds Part I_. Tuttavia, poiché non tutti i giocatori possiedono questi oggetti rari, tali moduli opzionali non vengono inclusi per impostazione predefinita nei calcoli. Puoi attivarli facilmente per la tua configurazione aprendo l'**interfaccia Selezione moduli** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon>.
+NMS Optimizer supporta pienamente tutte le **ricompense di spedizione e spedizione Redux** introdotte dopo l'aggiornamento _Worlds Part I_. Tuttavia, poiché non tutti i giocatori possiedono questi oggetti rari, tali moduli opzionali non vengono inclusi per impostazione predefinita nelle tue ottimizzazioni. Puoi attivarli facilmente per la tua configurazione aprendo la **finestra di dialogo Selezione moduli** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon>.
 
 ## Dietro le quinte: il nostro stack tecnologico
 

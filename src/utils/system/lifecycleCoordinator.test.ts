@@ -500,5 +500,50 @@ describe("LifecycleCoordinator", () => {
 			await coordinator.flushDeferredTasks();
 			expect(newTaskFn).toHaveBeenCalledTimes(1);
 		});
+
+		it("should yield a macrotask between deferred tasks during automatic IDLE transition so input events are not blocked", async () => {
+			vi.useFakeTimers();
+			const coordinator = new LifecycleCoordinator({ autoTransitionToIdle: false });
+			const executionOrder: string[] = [];
+
+			coordinator.registerDeferredTask({
+				name: "task-1",
+				priority: 10,
+				run: () => {
+					executionOrder.push("task-1");
+				},
+			});
+			coordinator.registerDeferredTask({
+				name: "task-2",
+				priority: 5,
+				run: () => {
+					executionOrder.push("task-2");
+				},
+			});
+			coordinator.registerDeferredTask({
+				name: "task-3",
+				priority: 1,
+				run: () => {
+					executionOrder.push("task-3");
+				},
+			});
+
+			coordinator.transitionTo("IDLE");
+
+			// Flush microtasks; only the first task may execute before macrotask timer yield
+			for (let i = 0; i < 10; i += 1) {
+				await Promise.resolve();
+			}
+
+			expect(executionOrder).toEqual(["task-1"]);
+
+			await vi.runOnlyPendingTimersAsync();
+			expect(executionOrder).toEqual(["task-1", "task-2"]);
+
+			await vi.runOnlyPendingTimersAsync();
+			expect(executionOrder).toEqual(["task-1", "task-2", "task-3"]);
+
+			vi.useRealTimers();
+		});
 	});
 });

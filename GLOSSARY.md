@@ -96,6 +96,10 @@ _Avoid_: modal page, route wrapper, dialog route
 A non-routed onboarding modal presented on a human visitor's first workspace session to summarize core grid controls and link to the complete instructions.
 _Avoid_: welcome guide, quick-start dialog, onboarding modal
 
+**Module Selection Dialog**:
+A non-routed workspace modal used to configure a Technology Category's Module Selection, preview its Solver Window dimensions, and trigger layout optimization.
+_Avoid_: module dialog, selection modal, upgrade picker
+
 **Update Prompt Dialog**:
 A non-routed notification modal presented when a Staged Worker becomes available during an active session, allowing the user to apply the update immediately or defer it.
 _Avoid_: update modal, refresh prompt, version banner
@@ -121,7 +125,7 @@ The optimization condition where unoccupied active supercharged slots exist on t
 _Avoid_: supercharged window error, SC no-fit, missed supercharge warning
 
 **Forced Solve**:
-A fallback optimization pass initiated by the user after a Pattern No Fit warning that bypasses precomputed pattern templates in favor of full simulated annealing across available grid slots.
+A fallback optimization pass initiated by the user after a Pattern No Fit or Supercharged No Fit warning that bypasses precomputed pattern templates in favor of full simulated annealing across available grid slots. Standard user-facing actions and tooltips use "Optimize" / "Optimization", reserving "Forced Solve" specifically for this fallback pass.
 _Avoid_: force optimize, brute-force solve, fallback solve
 
 **Solve Quality**:

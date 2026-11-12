@@ -1,36 +1,33 @@
 #!/usr/bin/env python3
 """
-CLI utility to query and report Google Analytics 4 INP performance metrics.
+CLI utility to query and report Core Web Vitals (default: INP) from the GA4 BigQuery export.
 
-Queries the GA4 Data API using the local service account credentials,
-reporting high-level device averages, release version breakdowns, and detailed
-interaction-target attribution breakdowns (input delay, processing duration,
-presentation delay).
+Aligns with ADR-0003:
+- Deduplicates daily (`events_*`) and intraday (`events_intraday_*`) table overlap.
+- Filters to production traffic (`nms-optimizer.app`, `www.nms-optimizer.app`, and
+  production server-relayed Measurement Protocol events).
+- Partitions by `(user_pseudo_id, metric_name, metric_instance_key)` using cumulative
+  latest-snapshot resolution for `v8.4.3+` INP/LCP/FCP/TTFB and delta summation for CLS
+  and legacy pre-`v8.4.3` INP.
+- Reports true `p50`, `p75`, `p90`, and `% > Good` alongside a 28-day Google Search /
+  CrUX Readiness Banner (`Android + Chrome` mobile vs. `Desktop + Chrome`).
 """
 
 import argparse
+import os
 import re
 import sys
+from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
 try:
+    from google.cloud import bigquery
     from google.oauth2 import service_account
-    from google.analytics.data_v1beta import BetaAnalyticsDataClient
-    from google.analytics.data_v1beta.types import (
-        DateRange,
-        Dimension,
-        Metric,
-        OrderBy,
-        RunReportRequest,
-        Filter,
-        FilterExpression,
-        FilterExpressionList,
-    )
 except ImportError:
     print(
-        "❌ Error: Required Google Analytics libraries not found in current Python environment.\n"
+        "❌ Error: Required Google Cloud BigQuery libraries not found in current Python environment.\n"
         "Please run this script using the virtual environment:\n"
         "  ./venv/bin/python scripts/report-inp.py\n"
         "or via Bun:\n"
@@ -38,10 +35,16 @@ except ImportError:
     )
     sys.exit(1)
 
-DEFAULT_PROPERTY_ID = "484727815"
+DEFAULT_PROJECT_ID = "cosmic-inkwell-467922-v5"
+DEFAULT_DATASET_ID = "analytics_484727815"
 SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parent
 DEFAULT_KEY_PATH = PROJECT_ROOT / ".gemini" / "analytics-key.json"
+
+NON_PROD_HOST_REGEX = (
+    r"^https?://(localhost|127\.0\.0\.1|0\.0\.0\.0|([^/?#:]+\.)?(pages\.dev|herokuapp\.com))([:/?#]|$)"
+)
+SAFE_SQL_TOKEN_RE = re.compile(r"^[A-Za-z0-9_.\-]+$")
 
 # ANSI color codes for terminal formatting
 GREEN = "\033[92m"
@@ -51,44 +54,6 @@ CYAN = "\033[96m"
 BOLD = "\033[1m"
 RESET = "\033[0m"
 
-
-@dataclass(frozen=True)
-class SubpartStats:
-    """Aggregated INP attribution subpart timings in milliseconds."""
-
-    input_delay: float = 0.0
-    processing_duration: float = 0.0
-    presentation_delay: float = 0.0
-
-    @property
-    def total(self) -> float:
-        return self.input_delay + self.processing_duration + self.presentation_delay
-
-
-@dataclass(frozen=True)
-class ReportContext:
-    """Shared GA4 query context for Web Vitals reporting sections."""
-
-    client: BetaAnalyticsDataClient
-    property_id: str
-    days: int
-    device_filter: str
-    metric_name: str = "INP"
-    version_filter: Optional[str] = None
-
-    @property
-    def property_path(self) -> str:
-        return f"properties/{self.property_id}"
-
-    @property
-    def date_ranges(self) -> list[DateRange]:
-        return [DateRange(start_date=f"{self.days}daysAgo", end_date="today")]
-
-    @property
-    def base_filter(self) -> FilterExpression:
-        return get_base_inp_filter(self.device_filter, self.version_filter, self.metric_name)
-
-
 METRIC_THRESHOLDS: dict[str, tuple[float, float]] = {
     "INP": (200.0, 500.0),
     "LCP": (2500.0, 4000.0),
@@ -96,6 +61,24 @@ METRIC_THRESHOLDS: dict[str, tuple[float, float]] = {
     "FCP": (1800.0, 3000.0),
     "TTFB": (800.0, 1800.0),
 }
+
+ANSI_ESCAPE_RE = re.compile(r"\x1b\[[0-9;]*m")
+
+
+@dataclass(frozen=True)
+class ReportContext:
+    """Shared BigQuery reporting context for Core Web Vitals queries."""
+
+    client: bigquery.Client
+    dataset_fqn: str
+    days: int
+    device_filter: str
+    metric_name: str = "INP"
+    version_filter: Optional[str] = None
+
+    @property
+    def good_threshold(self) -> float:
+        return METRIC_THRESHOLDS.get(self.metric_name, (200.0, 500.0))[0]
 
 
 def format_status(val_ms: float, metric_name: str = "INP") -> str:
@@ -111,10 +94,7 @@ def format_status(val_ms: float, metric_name: str = "INP") -> str:
     return f"{RED}{val_ms:.0f}{unit} (Poor){RESET}"
 
 
-ANSI_ESCAPE_RE = re.compile(r"\x1b\[[0-9;]*m")
-
-
-def format_padded_status(val_ms: float, metric_name: str = "INP", width: int = 22) -> str:
+def format_padded_status(val_ms: float, metric_name: str = "INP", width: int = 21) -> str:
     """Format status string padded to a fixed visible column width."""
     status_str = format_status(val_ms, metric_name)
     plain_len = len(ANSI_ESCAPE_RE.sub("", status_str))
@@ -122,55 +102,71 @@ def format_padded_status(val_ms: float, metric_name: str = "INP", width: int = 2
     return f"{status_str}{extra_padding}"
 
 
-def format_ms(val_ms: float) -> str:
-    """Format a positive millisecond timing or '-' when zero/unavailable."""
-    return f"{val_ms:.0f}ms" if val_ms > 0 else "-"
+def format_ms(val_ms: Optional[float], metric_name: str = "INP") -> str:
+    """Format a positive millisecond timing (or raw CLS score*1000) or '-' when unavailable."""
+    if val_ms is None or val_ms <= 0:
+        return "-"
+    unit = "" if metric_name == "CLS" else "ms"
+    return f"{val_ms:.0f}{unit}"
 
 
-def resolve_effective_inp(avg_val: float, sub: Optional[SubpartStats]) -> tuple[float, str, str, str]:
-    """
-    Resolve effective INP latency and formatted subpart strings.
-
-    When historical multi-report sessions emitted non-positive delta values,
-    falls back to the sum of positive attribution subparts.
-    """
-    if not sub:
-        return avg_val, "-", "-", "-"
-
-    effective_avg = avg_val if avg_val > 0 or sub.total <= 0 else sub.total
-    return (
-        effective_avg,
-        format_ms(sub.input_delay),
-        format_ms(sub.processing_duration),
-        format_ms(sub.presentation_delay),
-    )
+def normalize_version(version: Optional[str]) -> Optional[str]:
+    """Normalize a version string to match GA4 app_version format (e.g. 'v8.10.0')."""
+    if not version:
+        return None
+    trimmed = version.strip()
+    if not trimmed:
+        return None
+    if not SAFE_SQL_TOKEN_RE.match(trimmed):
+        raise ValueError(f"Invalid version filter: {trimmed}")
+    if trimmed[0].isdigit():
+        return f"v{trimmed}"
+    return trimmed
 
 
-def parse_arguments() -> argparse.Namespace:
+def parse_semver_key(version_str: str) -> tuple[int, ...]:
+    """Parse a version string like 'v8.10.0' into a sortable integer tuple."""
+    cleaned = version_str.lstrip("vV")
+    nums: list[int] = []
+    for part in cleaned.split("."):
+        try:
+            nums.append(int(part))
+        except ValueError:
+            nums.append(-1)
+    return tuple(nums)
+
+
+def parse_arguments(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
+    """Parse CLI options for BigQuery Core Web Vitals reporting."""
     parser = argparse.ArgumentParser(
-        description="Report Google Analytics 4 INP (Interaction to Next Paint) attribution data."
+        description="Report deduplicated BigQuery Core Web Vitals (INP) percentiles and CrUX cohorts."
     )
     parser.add_argument(
         "--days",
         type=int,
         default=7,
-        help="Number of days to analyze (default: 7)",
+        help="Number of days to analyze in breakdown tables (default: 7)",
     )
     parser.add_argument(
         "--device",
-        choices=["all", "mobile", "desktop", "tablet"],
+        choices=["all", "crux-mobile", "crux-desktop", "mobile", "desktop", "tablet"],
         default="all",
-        help="Filter by device category (default: all)",
+        help="Filter by device or CrUX browser cohort (default: all)",
     )
     parser.add_argument(
         "--version",
         default=None,
-        help="Filter by app version, e.g. v8.4.2 or 8.4.2 (default: all versions)",
+        help="Filter by app version, e.g. v8.10.0 or 8.10.0 (default: all versions)",
     )
     parser.add_argument(
-        "--property",
-        default=DEFAULT_PROPERTY_ID,
-        help=f"GA4 Property ID (default: {DEFAULT_PROPERTY_ID})",
+        "--project",
+        default=DEFAULT_PROJECT_ID,
+        help=f"Google Cloud project ID (default: {DEFAULT_PROJECT_ID})",
+    )
+    parser.add_argument(
+        "--dataset",
+        default=DEFAULT_DATASET_ID,
+        help=f"BigQuery GA4 dataset ID (default: {DEFAULT_DATASET_ID})",
     )
     parser.add_argument(
         "--credentials",
@@ -190,304 +186,430 @@ def parse_arguments() -> argparse.Namespace:
         default="INP",
         help="Core Web Vital metric to query (default: INP)",
     )
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 
-def create_client(key_path: Path) -> BetaAnalyticsDataClient:
-    if not key_path.exists():
-        print(f"❌ Error: Service account key not found at: {key_path}")
+def create_bigquery_client(key_path: Path, project_id: str) -> bigquery.Client:
+    """Initialize an authenticated BigQuery client."""
+    env_creds = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
+    resolved_path = Path(env_creds) if env_creds else key_path
+
+    if not resolved_path.exists():
+        print(f"❌ Error: Service account key not found at: {resolved_path}")
         sys.exit(1)
 
-    credentials = service_account.Credentials.from_service_account_file(
-        str(key_path),
-        scopes=["https://www.googleapis.com/auth/analytics.readonly"],
-    )
-    return BetaAnalyticsDataClient(credentials=credentials)
+    credentials = service_account.Credentials.from_service_account_file(str(resolved_path))
+    return bigquery.Client(credentials=credentials, project=project_id)
 
 
-def normalize_version(version: Optional[str]) -> Optional[str]:
-    """Normalize a version string to match GA4 app_version format (e.g. 'v8.4.2')."""
-    if not version:
-        return None
-    trimmed = version.strip()
-    if not trimmed:
-        return None
-    if trimmed[0].isdigit():
-        return f"v{trimmed}"
-    return trimmed
+def build_cohort_predicate(device_filter: str) -> str:
+    """Return SQL predicate for the requested device or CrUX browser cohort."""
+    if device_filter == "all":
+        return "TRUE"
+    if device_filter == "crux-mobile":
+        return "device_category = 'mobile' AND os = 'Android' AND browser = 'Chrome'"
+    if device_filter == "crux-desktop":
+        return "device_category = 'desktop' AND browser = 'Chrome'"
+    if device_filter in {"mobile", "desktop", "tablet"}:
+        return f"device_category = '{device_filter}'"
+    raise ValueError(f"Unsupported device filter: {device_filter}")
 
 
-def parse_semver_key(version_str: str) -> tuple:
-    """Parse a version string like 'v8.4.2' into a sortable tuple."""
-    cleaned = version_str.lstrip("vV")
-    parts = cleaned.split(".")
-    nums = []
-    for p in parts:
-        try:
-            nums.append(int(p))
-        except ValueError:
-            nums.append(-1)
-    return tuple(nums)
-
-
-def get_base_inp_filter(
-    device_filter: str,
+def build_deduped_vitals_cte(
+    dataset_fqn: str,
+    device_filter: str = "all",
     version_filter: Optional[str] = None,
     metric_name: str = "INP",
-) -> FilterExpression:
-    """Constructs the base dimension filter for Web Vitals events."""
-    expressions = [
-        FilterExpression(
-            filter=Filter(
-                field_name="customEvent:metric_name",
-                string_filter=Filter.StringFilter(value=metric_name),
-            )
-        )
-    ]
+    days_expr: str = "@days",
+) -> str:
+    """
+    Construct the ADR-0003 deduplicated BigQuery CTE (`deduped_vitals`) for a Web Vital metric.
 
-    if device_filter != "all":
-        expressions.append(
-            FilterExpression(
-                filter=Filter(
-                    field_name="deviceCategory",
-                    string_filter=Filter.StringFilter(value=device_filter),
-                )
-            )
-        )
+    Deduplicates daily and intraday shard overlap, restricts to production hostnames,
+    resolves `v8.4.3+` snapshot instances to their latest chronological event while
+    summing incremental deltas for `CLS` and pre-`v8.4.3` `INP`, and applies optional
+    device/CrUX and release version filters.
+    """
+    if not SAFE_SQL_TOKEN_RE.match(dataset_fqn):
+        raise ValueError(f"Invalid dataset identifier: {dataset_fqn}")
+    if metric_name not in METRIC_THRESHOLDS:
+        raise ValueError(f"Unsupported metric: {metric_name}")
 
     normalized_ver = normalize_version(version_filter)
-    if normalized_ver:
-        expressions.append(
-            FilterExpression(
-                filter=Filter(
-                    field_name="customEvent:app_version",
-                    string_filter=Filter.StringFilter(value=normalized_ver),
-                )
-            )
+    cohort_sql = build_cohort_predicate(device_filter)
+    version_sql = f"AND app_version = '{normalized_ver}'" if normalized_ver else ""
+
+    return f"""
+    WITH raw_source_unioned AS (
+      SELECT
+        event_timestamp,
+        user_pseudo_id,
+        device.category AS device_category,
+        COALESCE(device.operating_system, '') AS os,
+        COALESCE(device.web_info.browser, '') AS browser,
+        device.web_info.hostname AS hostname,
+        event_params
+      FROM `{dataset_fqn}.events_*`
+      WHERE _TABLE_SUFFIX BETWEEN FORMAT_DATE('%Y%m%d', DATE_SUB(CURRENT_DATE(), INTERVAL {days_expr} DAY))
+          AND FORMAT_DATE('%Y%m%d', CURRENT_DATE())
+        AND event_name = 'performance_metric'
+
+      UNION ALL
+
+      SELECT
+        event_timestamp,
+        user_pseudo_id,
+        device.category AS device_category,
+        COALESCE(device.operating_system, '') AS os,
+        COALESCE(device.web_info.browser, '') AS browser,
+        device.web_info.hostname AS hostname,
+        event_params
+      FROM `{dataset_fqn}.events_intraday_*`
+      WHERE _TABLE_SUFFIX BETWEEN FORMAT_DATE('%Y%m%d', DATE_SUB(CURRENT_DATE(), INTERVAL {days_expr} DAY))
+          AND FORMAT_DATE('%Y%m%d', CURRENT_DATE())
+        AND event_name = 'performance_metric'
+    ),
+    raw_source AS (
+      SELECT DISTINCT
+        event_timestamp,
+        user_pseudo_id,
+        device_category,
+        os,
+        browser,
+        (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'metric_name') AS metric_name,
+        COALESCE(
+          (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'metric_id'),
+          (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'label')
+        ) AS metric_id,
+        (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'app_version') AS app_version,
+        (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'interaction_target') AS interaction_target,
+        (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'interaction_type') AS interaction_type,
+        (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'load_state') AS load_state,
+        (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'page_location') AS page_location,
+        COALESCE(
+          (SELECT COALESCE(value.int_value, value.double_value, SAFE_CAST(value.string_value AS FLOAT64))
+           FROM UNNEST(event_params) WHERE key = 'metric_value'),
+          (SELECT COALESCE(value.int_value, value.double_value, SAFE_CAST(value.string_value AS FLOAT64))
+           FROM UNNEST(event_params) WHERE key = 'value')
+        ) AS event_value,
+        (SELECT COALESCE(value.int_value, value.double_value, SAFE_CAST(value.string_value AS FLOAT64))
+         FROM UNNEST(event_params) WHERE key = 'input_delay') AS input_delay,
+        (SELECT COALESCE(value.int_value, value.double_value, SAFE_CAST(value.string_value AS FLOAT64))
+         FROM UNNEST(event_params) WHERE key = 'processing_duration') AS processing_duration,
+        (SELECT COALESCE(value.int_value, value.double_value, SAFE_CAST(value.string_value AS FLOAT64))
+         FROM UNNEST(event_params) WHERE key = 'presentation_delay') AS presentation_delay
+      FROM raw_source_unioned
+      WHERE LOWER(COALESCE(hostname, '')) IN ('', 'nms-optimizer.app', 'www.nms-optimizer.app')
+    ),
+    grouped_instances AS (
+      SELECT
+        metric_name,
+        ARRAY_AGG(device_category IGNORE NULLS ORDER BY event_timestamp DESC LIMIT 1)[SAFE_OFFSET(0)] AS device_category,
+        ARRAY_AGG(os IGNORE NULLS ORDER BY event_timestamp DESC LIMIT 1)[SAFE_OFFSET(0)] AS os,
+        ARRAY_AGG(browser IGNORE NULLS ORDER BY event_timestamp DESC LIMIT 1)[SAFE_OFFSET(0)] AS browser,
+        ARRAY_AGG(app_version IGNORE NULLS ORDER BY event_timestamp DESC LIMIT 1)[SAFE_OFFSET(0)] AS app_version,
+        ARRAY_AGG(interaction_target IGNORE NULLS ORDER BY event_timestamp DESC LIMIT 1)[SAFE_OFFSET(0)] AS interaction_target,
+        ARRAY_AGG(interaction_type IGNORE NULLS ORDER BY event_timestamp DESC LIMIT 1)[SAFE_OFFSET(0)] AS interaction_type,
+        ARRAY_AGG(load_state IGNORE NULLS ORDER BY event_timestamp DESC LIMIT 1)[SAFE_OFFSET(0)] AS load_state,
+        SUM(event_value) AS delta_sum,
+        ARRAY_AGG(event_value IGNORE NULLS ORDER BY event_timestamp DESC LIMIT 1)[SAFE_OFFSET(0)] AS latest_value,
+        ARRAY_AGG(input_delay IGNORE NULLS ORDER BY event_timestamp DESC LIMIT 1)[SAFE_OFFSET(0)] AS input_delay,
+        ARRAY_AGG(processing_duration IGNORE NULLS ORDER BY event_timestamp DESC LIMIT 1)[SAFE_OFFSET(0)] AS processing_duration,
+        ARRAY_AGG(presentation_delay IGNORE NULLS ORDER BY event_timestamp DESC LIMIT 1)[SAFE_OFFSET(0)] AS presentation_delay
+      FROM raw_source
+      WHERE metric_name = '{metric_name}'
+        AND event_value IS NOT NULL
+        AND (
+          page_location IS NULL
+          OR page_location = ''
+          OR NOT REGEXP_CONTAINS(LOWER(page_location), r'{NON_PROD_HOST_REGEX}')
         )
-
-    if len(expressions) == 1:
-        return expressions[0]
-
-    return FilterExpression(
-        and_group=FilterExpressionList(expressions=expressions)
+      GROUP BY
+        user_pseudo_id,
+        metric_name,
+        IF(
+          metric_id IS NOT NULL AND REGEXP_CONTAINS(metric_id, r'^v\\d+-\\d+-\\d+$'),
+          metric_id,
+          CAST(event_timestamp AS STRING)
+        )
+    ),
+    deduped_vitals AS (
+      SELECT
+        device_category,
+        os,
+        browser,
+        app_version,
+        interaction_target,
+        interaction_type,
+        load_state,
+        CASE
+          WHEN metric_name = 'CLS' THEN delta_sum
+          WHEN metric_name = 'INP' AND REGEXP_CONTAINS(
+            COALESCE(app_version, ''),
+            r'^[vV]?([0-7]\\.\\d+\\.\\d+|8\\.[0-3]\\.\\d+|8\\.4\\.[0-2])($|[^0-9.])'
+          ) THEN delta_sum
+          ELSE latest_value
+        END AS metric_value,
+        input_delay,
+        processing_duration,
+        presentation_delay
+      FROM grouped_instances
+      WHERE {cohort_sql}
+        {version_sql}
     )
+    """
 
 
-def fetch_subpart_map(
-    ctx: ReportContext, dimension_names: list[str]
-) -> dict[str, SubpartStats]:
-    """Query custom attribution subpart metrics keyed by colon-joined dimension values."""
-    subparts: dict[str, SubpartStats] = {}
-    try:
-        sub_req = RunReportRequest(
-            property=ctx.property_path,
-            dimensions=[Dimension(name=name) for name in dimension_names],
-            metrics=[
-                Metric(name="averageCustomEvent:input_delay"),
-                Metric(name="averageCustomEvent:processing_duration"),
-                Metric(name="averageCustomEvent:presentation_delay"),
-            ],
-            date_ranges=ctx.date_ranges,
-            dimension_filter=ctx.base_filter,
+def run_query(
+    ctx: ReportContext, sql: str, days_override: Optional[int] = None
+) -> list[bigquery.table.Row]:
+    """Execute a parameterized BigQuery query with `@days` and `@good_max` bound."""
+    job_config = bigquery.QueryJobConfig(
+        query_parameters=[
+            bigquery.ScalarQueryParameter("days", "INT64", days_override or ctx.days),
+            bigquery.ScalarQueryParameter("good_max", "FLOAT64", ctx.good_threshold),
+        ]
+    )
+    return list(ctx.client.query(sql, job_config=job_config).result())
+
+
+def report_crux_banner(ctx: ReportContext) -> None:
+    """Print 28-day Google Search Console / CrUX cohort readiness banner."""
+    cte = build_deduped_vitals_cte(
+        ctx.dataset_fqn,
+        device_filter="all",
+        version_filter=ctx.version_filter,
+        metric_name=ctx.metric_name,
+        days_expr="28",
+    )
+    good_label = f">{ctx.good_threshold:.0f}{'ms' if ctx.metric_name != 'CLS' else ''}"
+    sql = f"""
+    {cte}
+    SELECT
+      CASE
+        WHEN device_category = 'mobile' AND os = 'Android' AND browser = 'Chrome'
+          THEN 'CrUX Mobile (Android Chrome)'
+        WHEN device_category = 'desktop' AND browser = 'Chrome'
+          THEN 'CrUX Desktop (Chrome)'
+        WHEN device_category = 'mobile' AND os = 'iOS'
+          THEN 'iOS WebKit (Non-CrUX Mobile)'
+        ELSE NULL
+      END AS cohort,
+      COUNT(*) AS visits,
+      APPROX_QUANTILES(metric_value, 100)[OFFSET(50)] AS p50,
+      APPROX_QUANTILES(metric_value, 100)[OFFSET(75)] AS p75,
+      APPROX_QUANTILES(metric_value, 100)[OFFSET(90)] AS p90,
+      ROUND(COUNTIF(metric_value > @good_max) * 100.0 / COUNT(*), 1) AS pct_over,
+      AVG(input_delay) AS avg_in,
+      AVG(processing_duration) AS avg_proc,
+      AVG(presentation_delay) AS avg_pres
+    FROM deduped_vitals
+    WHERE metric_value > 0
+    GROUP BY cohort
+    HAVING cohort IS NOT NULL
+    ORDER BY
+      CASE cohort
+        WHEN 'CrUX Mobile (Android Chrome)' THEN 1
+        WHEN 'CrUX Desktop (Chrome)' THEN 2
+        ELSE 3
+      END
+    """
+    rows = run_query(ctx, sql, days_override=28)
+    print(f"\n{BOLD}{CYAN}🚦 Google Search / CrUX Readiness (28-Day Rolling Window){RESET}\n")
+    if not rows:
+        print("  No production telemetry recorded in the last 28 days.")
+        return
+
+    header = (
+        f"{'Cohort':<30} | {'Visits':<7} | {'p50':<7} | {f'p75 {ctx.metric_name}':<21} | "
+        f"{'p90':<7} | {good_label:<7} | {'Input':<7} | {'Proc':<7} | {'Pres':<7}"
+    )
+    print(header)
+    print("-" * 116)
+    for row in rows:
+        p75_str = format_padded_status(float(row.p75 or 0), ctx.metric_name)
+        p50_str = format_ms(row.p50, ctx.metric_name)
+        p90_str = format_ms(row.p90, ctx.metric_name)
+        pct_str = f"{row.pct_over:.1f}%"
+        in_str = format_ms(row.avg_in) if ctx.metric_name == "INP" else "-"
+        proc_str = format_ms(row.avg_proc) if ctx.metric_name == "INP" else "-"
+        pres_str = format_ms(row.avg_pres) if ctx.metric_name == "INP" else "-"
+        print(
+            f"{row.cohort:<30} | {row.visits:<7} | {p50_str:<7} | {p75_str} | "
+            f"{p90_str:<7} | {pct_str:<7} | {in_str:<7} | {proc_str:<7} | {pres_str:<7}"
         )
-        sub_resp = ctx.client.run_report(sub_req)
-        for row in sub_resp.rows:
-            key = ":".join(d.value for d in row.dimension_values)
-            subparts[key] = SubpartStats(
-                input_delay=float(row.metric_values[0].value) if row.metric_values[0].value else 0.0,
-                processing_duration=float(row.metric_values[1].value) if row.metric_values[1].value else 0.0,
-                presentation_delay=float(row.metric_values[2].value) if row.metric_values[2].value else 0.0,
-            )
-    except Exception:
-        pass
-    return subparts
 
 
 def report_device_summary(ctx: ReportContext) -> None:
-    """Queries and prints high-level metric summary grouped by device category."""
-    print(f"\n{BOLD}{CYAN}📊 {ctx.metric_name} Overview by Device Category (Last {ctx.days} days){RESET}\n")
-
-    overview_req = RunReportRequest(
-        property=ctx.property_path,
-        dimensions=[Dimension(name="deviceCategory")],
-        metrics=[
-            Metric(name="eventCount"),
-            Metric(name="averageCustomEvent:value"),
-        ],
-        date_ranges=ctx.date_ranges,
-        dimension_filter=ctx.base_filter,
-        order_bys=[OrderBy(metric=OrderBy.MetricOrderBy(metric_name="eventCount"), desc=True)],
+    """Print high-level percentile summary grouped by device category."""
+    cte = build_deduped_vitals_cte(
+        ctx.dataset_fqn,
+        device_filter=ctx.device_filter,
+        version_filter=ctx.version_filter,
+        metric_name=ctx.metric_name,
     )
-    overview_resp = ctx.client.run_report(overview_req)
-
-    if not overview_resp.rows:
+    good_label = f">{ctx.good_threshold:.0f}{'ms' if ctx.metric_name != 'CLS' else ''}"
+    sql = f"""
+    {cte}
+    SELECT
+      COALESCE(device_category, '(unknown)') AS device_category,
+      COUNT(*) AS visits,
+      APPROX_QUANTILES(metric_value, 100)[OFFSET(50)] AS p50,
+      APPROX_QUANTILES(metric_value, 100)[OFFSET(75)] AS p75,
+      APPROX_QUANTILES(metric_value, 100)[OFFSET(90)] AS p90,
+      ROUND(COUNTIF(metric_value > @good_max) * 100.0 / COUNT(*), 1) AS pct_over,
+      AVG(input_delay) AS avg_in,
+      AVG(processing_duration) AS avg_proc,
+      AVG(presentation_delay) AS avg_pres
+    FROM deduped_vitals
+    WHERE metric_value > 0
+    GROUP BY device_category
+    ORDER BY visits DESC
+    """
+    rows = run_query(ctx, sql)
+    print(f"\n{BOLD}{CYAN}📊 {ctx.metric_name} Overview by Device Category (Last {ctx.days} days){RESET}\n")
+    if not rows:
         print(f"  No {ctx.metric_name} data recorded in this period.")
         return
 
-    subpart_data = fetch_subpart_map(ctx, ["deviceCategory"]) if ctx.metric_name == "INP" else {}
-
     header = (
-        f"{'Device':<10} | {'Events':<12} | {f'Avg {ctx.metric_name}':<22} | "
-        f"{'Input Delay':<12} | {'Processing':<12} | {'Presentation':<12}"
+        f"{'Device':<10} | {'Visits':<8} | {'p50':<7} | {f'p75 {ctx.metric_name}':<21} | "
+        f"{'p90':<7} | {good_label:<7} | {'Input':<7} | {'Proc':<7} | {'Pres':<7}"
     )
     print(header)
-    print("-" * 88)
-
-    for row in overview_resp.rows:
-        device = row.dimension_values[0].value
-        count = int(row.metric_values[0].value)
-        raw_avg = float(row.metric_values[1].value) if row.metric_values[1].value else 0.0
-
-        avg_val, input_str, proc_str, pres_str = resolve_effective_inp(
-            raw_avg, subpart_data.get(device)
-        )
-        padded_status = format_padded_status(avg_val, ctx.metric_name)
-
+    print("-" * 98)
+    for row in rows:
+        p75_str = format_padded_status(float(row.p75 or 0), ctx.metric_name)
         print(
-            f"{device:<10} | {count:<12} | {padded_status} | "
-            f"{input_str:<12} | {proc_str:<12} | {pres_str:<12}"
+            f"{row.device_category:<10} | {row.visits:<8} | {format_ms(row.p50, ctx.metric_name):<7} | "
+            f"{p75_str} | {format_ms(row.p90, ctx.metric_name):<7} | {f'{row.pct_over:.1f}%':<7} | "
+            f"{(format_ms(row.avg_in) if ctx.metric_name == 'INP' else '-'):<7} | "
+            f"{(format_ms(row.avg_proc) if ctx.metric_name == 'INP' else '-'):<7} | "
+            f"{(format_ms(row.avg_pres) if ctx.metric_name == 'INP' else '-'):<7}"
         )
 
 
 def report_version_summary(ctx: ReportContext) -> None:
-    """Queries and prints metric summary grouped by app_version and device category."""
-    print(f"\n{BOLD}{CYAN}📦 {ctx.metric_name} Breakdown by App Version (Last {ctx.days} days){RESET}\n")
-
-    dimensions = ["customEvent:app_version", "deviceCategory"]
-    req = RunReportRequest(
-        property=ctx.property_path,
-        dimensions=[Dimension(name=name) for name in dimensions],
-        metrics=[
-            Metric(name="eventCount"),
-            Metric(name="averageCustomEvent:value"),
-        ],
-        date_ranges=ctx.date_ranges,
-        dimension_filter=ctx.base_filter,
+    """Print percentile breakdown grouped by app_version and device category."""
+    cte = build_deduped_vitals_cte(
+        ctx.dataset_fqn,
+        device_filter=ctx.device_filter,
+        version_filter=ctx.version_filter,
+        metric_name=ctx.metric_name,
     )
-    resp = ctx.client.run_report(req)
-
-    if not resp.rows:
+    good_label = f">{ctx.good_threshold:.0f}{'ms' if ctx.metric_name != 'CLS' else ''}"
+    sql = f"""
+    {cte}
+    SELECT
+      COALESCE(app_version, '(not set)') AS app_version,
+      COALESCE(device_category, '(unknown)') AS device_category,
+      COUNT(*) AS visits,
+      APPROX_QUANTILES(metric_value, 100)[OFFSET(50)] AS p50,
+      APPROX_QUANTILES(metric_value, 100)[OFFSET(75)] AS p75,
+      APPROX_QUANTILES(metric_value, 100)[OFFSET(90)] AS p90,
+      ROUND(COUNTIF(metric_value > @good_max) * 100.0 / COUNT(*), 1) AS pct_over,
+      AVG(input_delay) AS avg_in,
+      AVG(processing_duration) AS avg_proc,
+      AVG(presentation_delay) AS avg_pres
+    FROM deduped_vitals
+    WHERE metric_value > 0
+    GROUP BY app_version, device_category
+    """
+    rows = run_query(ctx, sql)
+    print(f"\n{BOLD}{CYAN}📦 {ctx.metric_name} Breakdown by App Version (Last {ctx.days} days){RESET}\n")
+    if not rows:
         print(f"  No versioned {ctx.metric_name} data recorded in this period.")
         return
 
-    subpart_data = fetch_subpart_map(ctx, dimensions) if ctx.metric_name == "INP" else {}
-
-    header = (
-        f"{'Version':<10} | {'Device':<10} | {'Events':<12} | {f'Avg {ctx.metric_name}':<22} | "
-        f"{'Input Delay':<12} | {'Processing':<12} | {'Presentation':<12}"
-    )
-    print(header)
-    print("-" * 101)
-
     sorted_rows = sorted(
-        resp.rows,
-        key=lambda r: (
-            parse_semver_key(r.dimension_values[0].value or "0.0.0"),
-            int(r.metric_values[0].value),
-        ),
+        rows,
+        key=lambda r: (parse_semver_key(r.app_version if r.app_version != "(not set)" else "0.0.0"), int(r.visits)),
         reverse=True,
     )
-
+    header = (
+        f"{'Version':<10} | {'Device':<10} | {'Visits':<7} | {'p50':<7} | "
+        f"{f'p75 {ctx.metric_name}':<21} | {'p90':<7} | {good_label:<7} | {'Input':<7} | {'Proc':<7} | {'Pres':<7}"
+    )
+    print(header)
+    print("-" * 110)
     for row in sorted_rows:
-        raw_ver = row.dimension_values[0].value
-        ver = raw_ver or "(not set)"
-        device = row.dimension_values[1].value
-        count = int(row.metric_values[0].value)
-        raw_avg = float(row.metric_values[1].value) if row.metric_values[1].value else 0.0
-
-        avg_val, input_str, proc_str, pres_str = resolve_effective_inp(
-            raw_avg, subpart_data.get(f"{raw_ver}:{device}")
-        )
-        padded_status = format_padded_status(avg_val, ctx.metric_name)
-
+        p75_str = format_padded_status(float(row.p75 or 0), ctx.metric_name)
         print(
-            f"{ver:<10} | {device:<10} | {count:<12} | {padded_status} | "
-            f"{input_str:<12} | {proc_str:<12} | {pres_str:<12}"
+            f"{row.app_version:<10} | {row.device_category:<10} | {row.visits:<7} | "
+            f"{format_ms(row.p50, ctx.metric_name):<7} | {p75_str} | "
+            f"{format_ms(row.p90, ctx.metric_name):<7} | {f'{row.pct_over:.1f}%':<7} | "
+            f"{(format_ms(row.avg_in) if ctx.metric_name == 'INP' else '-'):<7} | "
+            f"{(format_ms(row.avg_proc) if ctx.metric_name == 'INP' else '-'):<7} | "
+            f"{(format_ms(row.avg_pres) if ctx.metric_name == 'INP' else '-'):<7}"
         )
 
 
 def report_target_breakdown(ctx: ReportContext, limit: int) -> None:
-    """Queries and prints detailed breakdown by target selector."""
-    secondary_dim = (
-        "customEvent:interaction_type"
-        if ctx.metric_name == "INP"
-        else "customEvent:load_state"
+    """Print target element attribution ordered by slow-visit impact (`count > threshold`)."""
+    cte = build_deduped_vitals_cte(
+        ctx.dataset_fqn,
+        device_filter=ctx.device_filter,
+        version_filter=ctx.version_filter,
+        metric_name=ctx.metric_name,
     )
+    secondary_col = "interaction_type" if ctx.metric_name == "INP" else "load_state"
     secondary_label = "Type" if ctx.metric_name == "INP" else "LoadState"
-    print(f"\n{BOLD}{CYAN}🎯 {ctx.metric_name} Attribution by Target (Top {limit}){RESET}\n")
+    good_label = f">{ctx.good_threshold:.0f}{'ms' if ctx.metric_name != 'CLS' else ''}"
 
-    dimensions = [
-        "deviceCategory",
-        "customEvent:interaction_target",
-        secondary_dim,
-    ]
-    request = RunReportRequest(
-        property=ctx.property_path,
-        dimensions=[Dimension(name=name) for name in dimensions],
-        metrics=[
-            Metric(name="eventCount"),
-            Metric(name="averageCustomEvent:value"),
-        ],
-        date_ranges=ctx.date_ranges,
-        dimension_filter=ctx.base_filter,
-        order_bys=[OrderBy(metric=OrderBy.MetricOrderBy(metric_name="eventCount"), desc=True)],
-        limit=limit,
+    sql = f"""
+    {cte}
+    SELECT
+      COALESCE(device_category, '(unknown)') AS device_category,
+      COALESCE(NULLIF(interaction_target, ''), '(not set)') AS target,
+      COALESCE(NULLIF({secondary_col}, ''), '-') AS secondary_val,
+      COUNT(*) AS visits,
+      COUNTIF(metric_value > @good_max) AS slow_visits,
+      ROUND(COUNTIF(metric_value > @good_max) * 100.0 / COUNT(*), 1) AS pct_over,
+      APPROX_QUANTILES(metric_value, 100)[OFFSET(50)] AS p50,
+      APPROX_QUANTILES(metric_value, 100)[OFFSET(75)] AS p75,
+      COALESCE(AVG(IF(metric_value > @good_max, input_delay, NULL)), AVG(input_delay)) AS avg_in,
+      COALESCE(AVG(IF(metric_value > @good_max, processing_duration, NULL)), AVG(processing_duration)) AS avg_proc,
+      COALESCE(AVG(IF(metric_value > @good_max, presentation_delay, NULL)), AVG(presentation_delay)) AS avg_pres
+    FROM deduped_vitals
+    WHERE metric_value > 0
+    GROUP BY device_category, target, secondary_val
+    ORDER BY slow_visits DESC, visits DESC
+    LIMIT {int(limit)}
+    """
+    rows = run_query(ctx, sql)
+    print(
+        f"\n{BOLD}{CYAN}🎯 {ctx.metric_name} Attribution by Target — Ranked by Slow Visits ({good_label}) (Top {limit}){RESET}\n"
     )
-
-    response = ctx.client.run_report(request)
-
-    if not response.rows:
-        print("  No target element data available yet.")
+    if not rows:
+        print("  No target element data available in this period.")
         return
 
-    target_subparts = fetch_subpart_map(ctx, dimensions) if ctx.metric_name == "INP" else {}
-
     header = (
-        f"{'Device':<8} | {secondary_label:<10} | {'Events':<12} | {f'Avg {ctx.metric_name}':<22} | "
-        f"{'Input':<8} | {'Proc':<8} | {'Pres':<8} | {'Target Element Selector'}"
+        f"{'Device':<8} | {secondary_label:<9} | {'Visits':<6} | {good_label:<12} | "
+        f"{'p50':<6} | {f'p75 {ctx.metric_name}':<21} | {'Input':<6} | {'Proc':<6} | {'Pres':<6} | {'Target Element Selector'}"
     )
     print(header)
-    print("-" * 112)
-
-    has_attributed_rows = False
-    for row in response.rows:
-        device = row.dimension_values[0].value
-        raw_target = row.dimension_values[1].value
-        target = raw_target if raw_target else "(not set / prior to attribution deploy)"
-        raw_itype = row.dimension_values[2].value
-        itype = raw_itype or "-"
-        count = int(row.metric_values[0].value)
-        raw_avg = float(row.metric_values[1].value) if row.metric_values[1].value else 0.0
-
-        avg_val, input_str, proc_str, pres_str = resolve_effective_inp(
-            raw_avg, target_subparts.get(f"{device}:{raw_target}:{raw_itype}")
-        )
-
-        if raw_target:
-            has_attributed_rows = True
-
-        padded_status = format_padded_status(avg_val, ctx.metric_name)
-
+    print("-" * 124)
+    for row in rows:
+        p75_str = format_padded_status(float(row.p75 or 0), ctx.metric_name)
+        slow_str = f"{row.slow_visits} ({row.pct_over:.0f}%)"
         print(
-            f"{device:<8} | {itype:<10} | {count:<12} | {padded_status} | "
-            f"{input_str:<8} | {proc_str:<8} | {pres_str:<8} | {target}"
-        )
-
-    if not has_attributed_rows:
-        print(
-            f"\n💡 {YELLOW}Note:{RESET} Rows showing '(not set)' reflect traffic recorded before deploying\n"
-            "web-vitals/attribution. As users interact with the newly deployed build, this table\n"
-            "will automatically populate with exact DOM elements and subpart timings."
+            f"{row.device_category:<8} | {row.secondary_val:<9} | {row.visits:<6} | {slow_str:<12} | "
+            f"{format_ms(row.p50, ctx.metric_name):<6} | {p75_str} | "
+            f"{(format_ms(row.avg_in) if ctx.metric_name == 'INP' else '-'):<6} | "
+            f"{(format_ms(row.avg_proc) if ctx.metric_name == 'INP' else '-'):<6} | "
+            f"{(format_ms(row.avg_pres) if ctx.metric_name == 'INP' else '-'):<6} | {row.target}"
         )
 
 
-def main() -> None:
-    args = parse_arguments()
-    client = create_client(args.credentials)
+def main(argv: Optional[Sequence[str]] = None) -> None:
+    """Entry point for CLI execution."""
+    args = parse_arguments(argv)
+    client = create_bigquery_client(args.credentials, args.project)
+    dataset_fqn = f"{args.project}.{args.dataset}"
     ctx = ReportContext(
         client=client,
-        property_id=args.property,
+        dataset_fqn=dataset_fqn,
         days=args.days,
         device_filter=args.device,
         metric_name=args.metric,
@@ -495,18 +617,19 @@ def main() -> None:
     )
     ver_label = normalize_version(args.version) or "all"
 
-    print(f"{BOLD}Google Analytics 4 — Real User {ctx.metric_name} Telemetry{RESET}")
+    print(f"{BOLD}BigQuery — Deduplicated Real User {ctx.metric_name} Telemetry (ADR-0003){RESET}")
     print(
-        f"Property: {ctx.property_path} | Metric: {ctx.metric_name} | Range: Last {ctx.days} days | "
-        f"Device: {ctx.device_filter} | Version: {ver_label}"
+        f"Dataset: {ctx.dataset_fqn} | Metric: {ctx.metric_name} | Range: Last {ctx.days} days | "
+        f"Cohort: {ctx.device_filter} | Version: {ver_label}"
     )
 
     try:
+        report_crux_banner(ctx)
         report_device_summary(ctx)
         report_version_summary(ctx)
         report_target_breakdown(ctx, args.limit)
     except Exception as err:
-        print(f"\n❌ Error querying GA4 Data API: {err}")
+        print(f"\n❌ Error querying BigQuery: {err}")
         sys.exit(1)
 
 

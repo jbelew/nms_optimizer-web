@@ -20,7 +20,7 @@
 	"shipSelection": {
 		"dropdownTooltip": "Choisir le type de plateforme",
 		"selectPlatform": "Sélectionner la plateforme",
-		"ariaLabel": "Sélectionner le type de vaisseau",
+		"ariaLabel": "Choisir le type de plateforme",
 		"corvetteWarning": {
 			"title": "Avertissement Corvette !",
 			"description": "Les Corvettes ont <strong>toujours</strong> des problèmes de disposition connus ! Si vous créez une disposition, nous vous recommandons fortement d'utiliser la fonction <strong>Sauvegarder le build</strong> pour conserver une copie de votre travail."
@@ -140,10 +140,10 @@
 			"insufficientSpaceWithWindow": "Aucune Fenêtre de calcul suffisamment grande (nécessite <1>{{width}}×{{height}}</1>) n'est disponible pour placer les modules sélectionnés pour <1>{{technologyName}}</1>. Cela se produit généralement lorsque trop de technologies sont déjà placées sur la grille.",
 			"superchargedInsufficientSpace": "Il n'y a pas assez d'espace autour des emplacements surchargés disponibles pour la Fenêtre de calcul de <1>{{technologyName}}</1>.",
 			"superchargedInsufficientSpaceWithWindow": "Il n'y a pas assez d'espace autour des emplacements surchargés disponibles pour une Fenêtre de calcul de <1>{{width}}×{{height}}</1> pour <1>{{technologyName}}</1>.",
-			"superchargedForceOptimizeSuggestion": "Effacez d'autres technologies pour libérer de l'espace et optimisez d'abord les technologies que vous souhaitez surcharger. Vous pouvez aussi sélectionner <1>Optimisation forcée</1> pour lancer un recuit simulé complet sur l'ensemble des emplacements disponibles.",
-			"forceOptimizeSuggestion": "Vous pouvez essayer <1>Optimisation forcée</1> pour lancer une résolution plus intensive, mais elle risque de ne pas trouver de disposition optimale. Envisagez de réorganiser vos technologies ou d'en sélectionner moins pour améliorer les résultats.",
+			"superchargedForceOptimizeSuggestion": "Effacez d'autres technologies pour libérer de l'espace et optimisez d'abord les technologies que vous souhaitez surcharger. Vous pouvez aussi sélectionner <1>Résolution forcée</1> pour lancer un recuit simulé complet sur l'ensemble des emplacements disponibles.",
+			"forceOptimizeSuggestion": "Vous pouvez essayer <1>Résolution forcée</1> pour lancer une résolution par force brute, mais elle risque de ne pas trouver de disposition optimale. Envisagez de réorganiser vos technologies ou d'en sélectionner moins pour améliorer les résultats.",
 			"cancelButton": "Annuler",
-			"forceOptimizeButton": "Optimisation forcée"
+			"forceOptimizeButton": "Résolution forcée"
 		},
 		"shareLink": {
 			"description": "Copiez le lien ci-dessous pour partager votre grille actuelle. Notez que cette URL est un instantané et ne se mettra pas à jour automatiquement.",
@@ -269,7 +269,7 @@
 			"header": "Builds recommandés",
 			"selectBuildButton": "Choisir un build recommandé",
 			"selectBuildLabel": "Sélectionner un build",
-			"summary": "Les technologies dotées d'<1>emplacements surchargés fixes</1> prennent en charge les <5>builds recommandés</5>."
+			"summary": "Les plateformes dotées d'<1>emplacements surchargés fixes</1> prennent en charge les <5>builds recommandés</5>."
 		}
 	},
 	"technologies": {
@@ -753,11 +753,11 @@
 		"backToMain": "Retourner à la page principale"
 	},
 	"restrictions": {
-		"title": "Action indisponible",
+		"title": "Action indisponible !",
 		"superchargedLimit": "Vous ne pouvez avoir que quatre emplacements surchargés au maximum.",
 		"superchargedFixed": "La position des emplacements surchargés pour les exonefs et l'exocombinaison ne peut pas être modifiée.",
 		"gridFixed": "Les emplacements sont fixes pour les exonefs et ne peuvent pas être modifiés.",
-		"moduleLocked": "Les emplacements avec des modules ne peuvent pas être modifiés. Retirez d'abord le groupe de modules.",
+		"moduleLocked": "Les emplacements avec des modules ne peuvent pas être modifiés. Réinitialisez d'abord la catégorie de technologie.",
 		"rowLimit": "Les emplacements surchargés ne peuvent être placés que dans les quatre premières rangées."
 	}
 }

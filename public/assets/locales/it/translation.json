@@ -20,7 +20,7 @@
 	"shipSelection": {
 		"dropdownTooltip": "Seleziona tipo di piattaforma",
 		"selectPlatform": "Seleziona piattaforma",
-		"ariaLabel": "Seleziona tipo di astronave",
+		"ariaLabel": "Seleziona tipo di piattaforma",
 		"corvetteWarning": {
 			"title": "Avviso Corvetta!",
 			"description": "Le corvette presentano <strong>ancora</strong> problemi di layout noti! Se crei un layout, ti consigliamo vivamente di usare la funzione <strong>Salva configurazione</strong> per conservare un backup del tuo lavoro."
@@ -204,7 +204,7 @@
 		}
 	},
 	"footer": {
-		"issuePrompt": "Qualcosa non torna nella soluzione o hai trovato un bug? <1>Apri una segnalazione su GitHub</1> e faccelo sapere!",
+		"issuePrompt": "Qualcosa non torna nell'ottimizzazione o hai trovato un bug? <1>Apri una segnalazione su GitHub</1> e faccelo sapere!",
 		"builtBy": "Realizzato da jbelew",
 		"license": "GPL-3.0",
 		"buildLabel": "Versione",
@@ -237,12 +237,12 @@
 	"techTree": {
 		"loading": "CARICAMENTO TECNOLOGIA",
 		"tooltips": {
-			"insufficientSpace": "Soluzione incompleta",
-			"validSolve": "Soluzione valida!",
-			"boostedSolve": "Soluzione potenziata!",
+			"insufficientSpace": "Ottimizzazione incompleta",
+			"validSolve": "Ottimizzazione valida!",
+			"boostedSolve": "Ottimizzazione potenziata!",
 			"gridFull": "Griglia piena!",
 			"update": "Aggiorna",
-			"solve": "Risolvi",
+			"solve": "Ottimizza",
 			"reset": "Ripristina"
 		},
 		"categories": {
@@ -269,7 +269,7 @@
 			"header": "Configurazioni consigliate",
 			"selectBuildButton": "Seleziona una configurazione consigliata",
 			"selectBuildLabel": "Seleziona configurazione",
-			"summary": "Le tecnologie con <1>slot sovralimentati fissi</1> supportano le <5>configurazioni consigliate</5>."
+			"summary": "Le piattaforme con <1>slot sovralimentati fissi</1> supportano le <5>configurazioni consigliate</5>."
 		}
 	},
 	"technologies": {
@@ -753,11 +753,11 @@
 		"backToMain": "Torna alla pagina principale"
 	},
 	"restrictions": {
-		"title": "Azione non disponibile",
+		"title": "Azione non disponibile!",
 		"superchargedLimit": "Puoi avere al massimo quattro slot sovralimentati.",
 		"superchargedFixed": "Le posizioni degli slot sovralimentati per Exoscafi ed Exotute non possono essere modificate.",
 		"gridFixed": "Le posizioni degli slot sono fisse per gli Exoscafi e non possono essere modificate.",
-		"moduleLocked": "Gli slot con moduli non possono essere modificati. Rimuovi prima il gruppo di moduli.",
+		"moduleLocked": "Gli slot con moduli non possono essere modificati. Ripristina prima la categoria tecnologica.",
 		"rowLimit": "Gli slot sovralimentati possono essere posizionati solo nelle prime quattro righe."
 	}
 }

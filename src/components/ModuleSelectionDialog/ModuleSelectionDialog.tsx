@@ -14,15 +14,7 @@
  * @module components/ModuleSelectionDialog/ModuleSelectionDialog
  */
 
-import React, {
-	memo,
-	Suspense,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useTransition,
-} from "react";
+import React, { memo, Suspense, useCallback, useEffect, useMemo, useRef } from "react";
 import { CheckCircledIcon, InfoCircledIcon, MagicWandIcon } from "@radix-ui/react-icons";
 import {
 	Badge,
@@ -59,6 +51,7 @@ import { useModuleSelectionDialogStore } from "@/store/ui/uiStore";
 import { trackVirtualPageView } from "@/utils/analytics/pageView";
 import { determineWindowDimensions } from "@/utils/optimization/windowDimensions";
 import { useDialog } from "@/utils/system/dialogUtils";
+import { useAfterNextPaint } from "@/utils/system/postPaint";
 
 /**
  * Shared types for module grouping and selection items.
@@ -480,7 +473,7 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 	const { t } = useTranslation();
 	const { handleOptimize } = useOptimize();
 	const isSmall = !useBreakpoint("640px");
-	const [, startTransition] = useTransition();
+	const schedulePostClose = useAfterNextPaint();
 
 	const { closeDialog, isOpen, selectedTechData } = useModuleSelectionDialogStore(
 		useShallow((state) => ({
@@ -559,24 +552,34 @@ export const ModuleSelectionDialog: React.FC = memo(() => {
 		handleValueChange(getSelectAllModuleIds(modules, checked));
 	};
 
-	const handleOptimizeClick = useCallback(async () => {
+	const handleOptimizeClick = useCallback(() => {
+		const targetTech = activeTech;
 		optimizeClickedRef.current = true;
 		closeDialog();
-		await handleOptimize(activeTech);
-	}, [activeTech, closeDialog, handleOptimize]);
+
+		if (targetTech) {
+			schedulePostClose(() => {
+				void handleOptimize(targetTech);
+			});
+		}
+	}, [activeTech, closeDialog, handleOptimize, schedulePostClose]);
 
 	const handleClose = useCallback(() => {
-		startTransition(() => {
-			if (
-				!optimizeClickedRef.current
-				&& !shallow(currentCheckedModulesRef.current, initialModulesRef.current)
-			) {
-				handleValueChange(initialModulesRef.current);
-			}
+		const targetTech = activeTech;
+		const snapshot = initialModulesRef.current;
+		const shouldRollback =
+			Boolean(targetTech)
+			&& !optimizeClickedRef.current
+			&& !shallow(currentCheckedModulesRef.current, snapshot);
 
-			closeDialog();
-		});
-	}, [closeDialog, handleValueChange]);
+		closeDialog();
+
+		if (shouldRollback) {
+			schedulePostClose(() => {
+				setCheckedModules(targetTech, () => snapshot);
+			});
+		}
+	}, [activeTech, closeDialog, schedulePostClose, setCheckedModules]);
 
 	if (!selectedTechData) {
 		return null;

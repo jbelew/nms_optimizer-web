@@ -32,7 +32,7 @@ test.describe("Workspace Navigation, URL Sync & Build File Flows", () => {
 		await waitForStore(page);
 		await waitForTechTree(page);
 
-		const trigger = page.getByRole("button", { name: /Select ship type/i });
+		const trigger = page.getByRole("button", { name: /Select Platform Type/i });
 		await expect(trigger).toBeVisible();
 		await trigger.click();
 
@@ -115,7 +115,7 @@ test.describe("Workspace Navigation, URL Sync & Build File Flows", () => {
 		await expect(populatedLocator).toHaveCount(populatedAfterApply);
 
 		// In Shared Grid mode, ShipSelection is disabled and edit/share actions are hidden
-		const shipSelectionTrigger = page.getByRole("button", { name: /Select ship type/i });
+		const shipSelectionTrigger = page.getByRole("button", { name: /Select Platform Type/i });
 		await expect(shipSelectionTrigger).toBeDisabled();
 		await expect(page.locator(".gridTable__button--share")).toBeHidden();
 	});

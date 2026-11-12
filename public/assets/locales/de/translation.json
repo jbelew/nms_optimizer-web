@@ -20,7 +20,7 @@
 	"shipSelection": {
 		"dropdownTooltip": "Plattformtyp auswählen",
 		"selectPlatform": "Plattform auswählen",
-		"ariaLabel": "Schiffstyp auswählen",
+		"ariaLabel": "Plattformtyp auswählen",
 		"corvetteWarning": {
 			"title": "Korvetten-Warnung!",
 			"description": "Korvetten haben <strong>immer noch</strong> bekannte Layout-Probleme! Wenn du ein Layout erstellst, empfehlen wir dringend, die Funktion <strong>Build speichern</strong> zu verwenden, um deine Arbeit zu sichern."
@@ -269,7 +269,7 @@
 			"header": "Empfohlene Builds",
 			"selectBuildButton": "Empfohlenen Build auswählen",
 			"selectBuildLabel": "Build auswählen",
-			"summary": "Technologien mit <1>festen turbogeladenen Plätzen</1> unterstützen <5>empfohlene Builds</5>."
+			"summary": "Plattformen mit <1>festen turbogeladenen Plätzen</1> unterstützen <5>empfohlene Builds</5>."
 		}
 	},
 	"technologies": {
@@ -753,11 +753,11 @@
 		"backToMain": "Zurück zur Startseite"
 	},
 	"restrictions": {
-		"title": "Aktion nicht verfügbar",
+		"title": "Aktion nicht verfügbar!",
 		"superchargedLimit": "Du kannst maximal vier turbogeladene Plätze haben.",
 		"superchargedFixed": "Die Positionen turbogeladener Plätze können bei Exo-Fahrzeugen und Exo-Anzügen nicht geändert werden.",
 		"gridFixed": "Die Platzpositionen sind bei Exo-Fahrzeugen fest vorgegeben und können nicht geändert werden.",
-		"moduleLocked": "Plätze mit Modulen können nicht geändert werden. Entferne zuerst die Modulgruppe.",
+		"moduleLocked": "Plätze mit Modulen können nicht geändert werden. Setze zuerst die Technologiekategorie zurück.",
 		"rowLimit": "Turbogeladene Plätze können nur in den ersten vier Reihen platziert werden."
 	}
 }

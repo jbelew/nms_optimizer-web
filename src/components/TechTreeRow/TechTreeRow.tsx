@@ -1,6 +1,6 @@
 import "./TechTreeRow.scss";
 
-import React, { useCallback, useTransition } from "react";
+import React, { useCallback } from "react";
 import {
 	Crosshair2Icon,
 	ExclamationTriangleIcon,
@@ -27,6 +27,7 @@ import { useModuleSelectionDialogStore } from "@/store/ui/uiStore";
 import { sendDeferredEvent } from "@/utils/analytics/tracking";
 import { isTouchDevice } from "@/utils/browser/environment";
 import { Logger } from "@/utils/system/monitoring";
+import { useAfterNextPaint } from "@/utils/system/postPaint";
 
 /** Default empty array for modules to ensure stable reference across renders. */
 const EMPTY_MODULES_ARRAY: { id: string; image: string; label: string; type?: string }[] = [];
@@ -220,9 +221,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 export const TechTreeRow = React.memo(({ tech, techColor, techImage }: TechTreeRowProps) => {
 	const { t } = useTranslation();
 	const { handleOptimize, solving } = useOptimize();
-	const [isResetting, startResetTransition] = useTransition();
-	const [isOptimizing, startOptimizeTransition] = useTransition();
-	const [, startDialogTransition] = useTransition();
+	const scheduleAfterPaint = useAfterNextPaint();
 	const isSmallAndUp = useBreakpoint("640px");
 	const openDialog = useModuleSelectionDialogStore((state) => state.openDialog);
 
@@ -242,15 +241,7 @@ export const TechTreeRow = React.memo(({ tech, techColor, techImage }: TechTreeR
 	const modules = activeGroup?.modules || EMPTY_MODULES_ARRAY;
 
 	const handleReset = useCallback(() => {
-		performance.mark("reset-start");
 		const gaTech = resolveAnalyticsTechName(tech, useTechStore.getState().checkedModules);
-		startResetTransition(() => {
-			try {
-				sessionCoordinator.resetTechnology(tech);
-			} catch (error) {
-				Logger.error("Failed to reset technology in grid:", error);
-			}
-		});
 		sendDeferredEvent({
 			action: "reset_grid",
 			category: "ui",
@@ -259,25 +250,31 @@ export const TechTreeRow = React.memo(({ tech, techColor, techImage }: TechTreeR
 			reset_scope: "technology",
 			tech: gaTech,
 		});
-		performance.mark("reset-end");
-		performance.measure("reset-duration", "reset-start", "reset-end");
-	}, [tech]);
+		scheduleAfterPaint(() => {
+			performance.mark("reset-start");
+
+			try {
+				sessionCoordinator.resetTechnology(tech);
+			} catch (error) {
+				Logger.error("Failed to reset technology in grid:", error);
+			}
+
+			performance.mark("reset-end");
+			performance.measure("reset-duration", "reset-start", "reset-end");
+		}, "reset");
+	}, [scheduleAfterPaint, tech]);
 
 	const handleOptimizeClick = useCallback(() => {
-		startOptimizeTransition(async () => {
-			try {
-				await handleOptimize(tech);
-			} catch (error) {
-				Logger.error("Failed to optimize technology:", error);
-			}
+		void Promise.resolve(handleOptimize(tech)).catch((error) => {
+			Logger.error("Failed to optimize technology:", error);
 		});
 	}, [handleOptimize, tech]);
 
 	const handleOpenDialog = useCallback(() => {
-		startDialogTransition(() => {
+		scheduleAfterPaint(() => {
 			openDialog({ tech, techColor, techImage });
-		});
-	}, [openDialog, tech, techColor, techImage]);
+		}, "open");
+	}, [openDialog, scheduleAfterPaint, tech, techColor, techImage]);
 
 	const translationKeyPart = getTechnologyTranslationKey(tech, techImage);
 	const translatedTechName = t(`technologies.${translationKeyPart}`);
@@ -295,7 +292,7 @@ export const TechTreeRow = React.memo(({ tech, techColor, techImage }: TechTreeR
 
 	const OptimizeIconComponent = hasTechInGrid ? UpdateIcon : MagicWandIcon;
 	const isOptimizeButtonDisabled =
-		(isGridFull && !hasTechInGrid) || solving || isOptimizing || checkedModulesCount === 0;
+		(isGridFull && !hasTechInGrid) || solving || checkedModulesCount === 0;
 
 	const badgeContent = (
 		<div>
@@ -336,7 +333,7 @@ export const TechTreeRow = React.memo(({ tech, techColor, techImage }: TechTreeR
 				<IconButton
 					aria-label={`${t("techTree.tooltips.reset")} ${translatedTechName}`}
 					className={`techRow__resetButton ${hasTechInGrid && !solving ? "cursor-pointer!" : ""}`}
-					disabled={!hasTechInGrid || solving || isResetting || isOptimizing}
+					disabled={!hasTechInGrid || solving}
 					onClick={handleReset}
 				>
 					<ResetIcon />

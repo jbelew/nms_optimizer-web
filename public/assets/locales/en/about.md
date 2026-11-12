@@ -47,7 +47,7 @@ Yes! You can save your favorite builds locally as `.nms` files, generate shareab
 The tool intentionally avoids calculating standard in-game metrics like DPS or Light Year range. Because exact numbers require hidden ship seeds inaccessible without a save editor, the optimizer relies on a "percentage of maximum" score instead.
 
 **Why doesn't the optimized layout include my specific Expedition module?**
-The NMS Optimizer fully supports all **Expedition and Expedition-Redux Rewards** offered after the _Worlds Part I_ update. However, because not all players possess these rare items, these optional modules are not included by default into your solves. You can easily activate them for your build by opening the <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> **Module Selection interface**.
+The NMS Optimizer fully supports all **Expedition and Expedition-Redux Rewards** offered after the _Worlds Part I_ update. However, because not all players possess these rare items, these optional modules are not included by default in your optimizations. You can easily activate them for your build by opening the <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> **Module Selection Dialog**.
 
 ## Under the Hood: Our Tech Stack
 
