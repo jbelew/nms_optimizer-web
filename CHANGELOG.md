@@ -1,3 +1,10 @@
+# [8.10.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.9.3...v8.10.0) (2026-11-12)
+
+
+### Features
+
+* **analytics:** upgrade GA4 telemetry and missed interaction tracking ([7a701ab](https://github.com/jbelew/nms_optimizer-web/commit/7a701ab08d8ffbf9d8310ad8cc7a8a91a6482542))
+
 ## [8.9.3](https://github.com/jbelew/nms_optimizer-web/compare/v8.9.2...v8.9.3) (2026-11-11)
 
 
