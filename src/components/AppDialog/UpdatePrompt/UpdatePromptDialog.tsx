@@ -22,6 +22,7 @@ import { useTranslation } from "react-i18next";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { trackVirtualPageView } from "@/utils/analytics/pageView";
+import { sendDeferredEvent, sendEvent } from "@/utils/analytics/tracking";
 
 /**
  * Props for the {@link UpdatePrompt} presentation component.
@@ -132,6 +133,7 @@ export const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onDismiss, onRefre
 export const UpdatePromptDialog: FC = () => {
 	const { t } = useTranslation();
 	const [showUpdatePrompt, setShowUpdatePrompt] = useState(false);
+	const hasDismissedRef = useRef(false);
 	const updateSWRef = useRef<((reloadPage?: boolean) => Promise<void>) | undefined>(undefined);
 
 	useEffect(() => {
@@ -144,6 +146,7 @@ export const UpdatePromptDialog: FC = () => {
 				:	undefined;
 
 			const openPrompt = () => {
+				hasDismissedRef.current = false;
 				updateSWRef.current = updateSW ?? (async () => {});
 				setShowUpdatePrompt(true);
 			};
@@ -185,6 +188,13 @@ export const UpdatePromptDialog: FC = () => {
 	}, [showUpdatePrompt, t]);
 
 	const handleRefresh = () => {
+		sendEvent({
+			action: "select_content",
+			category: "ui",
+			content_type: "app_update",
+			item_id: "refresh_now",
+			nonInteraction: false,
+		});
 		void import("@/utils/system/setupServiceWorker")
 			.then((swModule) => {
 				if (typeof swModule?.applyStagedServiceWorkerUpdate === "function") {
@@ -197,6 +207,15 @@ export const UpdatePromptDialog: FC = () => {
 	};
 
 	const handleDismissUpdatePrompt = () => {
+		if (hasDismissedRef.current) return;
+		hasDismissedRef.current = true;
+		sendDeferredEvent({
+			action: "select_content",
+			category: "ui",
+			content_type: "app_update",
+			item_id: "later",
+			nonInteraction: false,
+		});
 		setShowUpdatePrompt(false);
 	};
 

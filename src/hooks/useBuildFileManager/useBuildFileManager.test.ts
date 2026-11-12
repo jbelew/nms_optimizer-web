@@ -35,6 +35,7 @@ vi.mock("@/hooks/useToast/useToast", () => ({
 vi.mock("@/utils/analytics/tracking", () => ({
 	sendDeferredEvent: vi.fn(),
 	sendEvent: mockSendEvent,
+	syncAnalyticsPlatformProperty: vi.fn(),
 }));
 
 const mockPlatformCatalog = {
@@ -199,7 +200,6 @@ describe("useBuildFileManager", () => {
 				method: "nms_file",
 				nonInteraction: false,
 				platform: "freighter",
-				value: 1,
 			});
 		});
 
@@ -329,7 +329,6 @@ describe("useBuildFileManager", () => {
 				method: "nms_file",
 				nonInteraction: false,
 				platform: "fighter",
-				value: 1,
 			});
 		});
 
@@ -528,7 +527,6 @@ describe("useBuildFileManager", () => {
 				method: "nms_file",
 				nonInteraction: false,
 				platform: "explorer",
-				value: 1,
 			});
 		});
 

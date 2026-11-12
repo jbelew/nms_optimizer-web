@@ -54,9 +54,15 @@ const fetchPerformanceData = (
 	const rangeKey = `${startDate}-${endDate}`;
 
 	if (!performanceDataPromises.has(rangeKey)) {
+		const baseUrl =
+			API_URL ?
+				API_URL.endsWith("/") ?
+					API_URL
+				:	`${API_URL}/`
+			:	"/";
 		const timestamp = new Date().getTime();
 		const promise = apiCall<PerformanceMetric[]>(
-			`${API_URL}analytics/performance_data?start_date=${startDate}&end_date=${endDate}&_=${timestamp}`,
+			`${baseUrl}analytics/performance_data?start_date=${startDate}&end_date=${endDate}&_=${timestamp}`,
 			{ skipGlobalError: true },
 			10000,
 		).catch((error) => {

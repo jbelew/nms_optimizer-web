@@ -28,6 +28,10 @@ _Avoid_: module type bucket, module category, validation group
 The set of user-checked modules within a Technology Category that are selected as inputs for layout optimization.
 _Avoid_: selected modules, checked upgrades
 
+**Photonix Core Override**:
+The specialized Pulse Engine configuration triggered when the Photonix Core module is included in its Module Selection, applying dedicated Solver Window rules and reporting as a distinct technology entry in optimization statistics.
+_Avoid_: photonix tech, PC variant, pulse override
+
 **Shared Grid**:
 A technology layout imported into the workspace from an encoded URL query parameter rather than configured manually or loaded from a Build File.
 _Avoid_: shared build, imported layout, URL grid
@@ -91,6 +95,10 @@ _Avoid_: modal page, route wrapper, dialog route
 **Welcome Dialog**:
 A non-routed onboarding modal presented on a human visitor's first workspace session to summarize core grid controls and link to the complete instructions.
 _Avoid_: welcome guide, quick-start dialog, onboarding modal
+
+**Update Prompt Dialog**:
+A non-routed notification modal presented when a Staged Worker becomes available during an active session, allowing the user to apply the update immediately or defer it.
+_Avoid_: update modal, refresh prompt, version banner
 
 **Focus Mode**:
 A high-legibility visual mode that mutes background distractions, applies an accessible reading typeface, and increases accent color contrast across the workspace.

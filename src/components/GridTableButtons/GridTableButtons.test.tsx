@@ -320,7 +320,6 @@ describe("GridTableButtons", () => {
 			method: "url",
 			nonInteraction: false,
 			platform: "standard",
-			value: 1,
 		});
 		getShareUrlSpy.mockRestore();
 	});
@@ -334,7 +333,7 @@ describe("GridTableButtons", () => {
 			category: "ui",
 			nonInteraction: false,
 			platform: "standard",
-			value: 1,
+			reset_scope: "session",
 		});
 
 		// Check that the functions inside handleResetGrid are called
@@ -365,7 +364,7 @@ describe("GridTableButtons", () => {
 			category: "ui",
 			nonInteraction: false,
 			platform: "standard",
-			value: 1,
+			reset_scope: "session",
 		});
 		expect(mockResetGrid).toHaveBeenCalled();
 		expect(mockSetIsSharedGrid).not.toHaveBeenCalled();

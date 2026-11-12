@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import type * as useOptimizeModule from "@/hooks/useOptimize/useOptimize";
 import type { GridStore } from "@/store/grid/gridStore";
 import type { BonusStatusData, TechStore } from "@/store/tech/techStore";
 import type { ModuleSelectionDialogState } from "@/store/ui/uiStore";
@@ -10,6 +11,7 @@ import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useTechStore } from "@/store/tech/techStore";
 import { useModuleSelectionDialogStore } from "@/store/ui/uiStore";
+import { sendDeferredEvent } from "@/utils/analytics/tracking";
 
 import { TechTreeRow } from "./TechTreeRow";
 
@@ -19,9 +21,19 @@ vi.mock("@/store/tech/techStore", () => ({ useTechStore: vi.fn() }));
 vi.mock("@/store/ui/uiStore", () => ({
 	useModuleSelectionDialogStore: vi.fn(),
 }));
-vi.mock("@/hooks/useOptimize/useOptimize", () => ({
-	useOptimize: vi.fn(),
+vi.mock("@/utils/analytics/tracking", () => ({
+	sendDeferredEvent: vi.fn(),
+	sendEvent: vi.fn(),
+	syncAnalyticsPlatformProperty: vi.fn(),
 }));
+vi.mock("@/hooks/useOptimize/useOptimize", async (importOriginal) => {
+	const actual = await importOriginal<typeof useOptimizeModule>();
+
+	return {
+		...actual,
+		useOptimize: vi.fn(),
+	};
+});
 
 vi.mock("@/components/ConditionalTooltip/ConditionalTooltip", () => ({
 	ConditionalTooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,
@@ -239,12 +251,25 @@ describe("TechTreeRow", () => {
 			.spyOn(sessionCoordinator, "resetTechnology")
 			.mockImplementation(() => {});
 		setupMocks(true);
+		Object.assign(mockUseTechStore, {
+			getState: () => ({
+				checkedModules: { testTech: ["module1"] },
+			}),
+		});
 		renderWithProviders(<TechTreeRow {...defaultProps} />);
 
 		const resetButton = screen.getByRole("button", { name: "Reset Test Tech Name" });
 		fireEvent.click(resetButton);
 
 		expect(resetTechSpy).toHaveBeenCalledWith("testTech");
+		expect(sendDeferredEvent).toHaveBeenCalledWith({
+			action: "reset_grid",
+			category: "ui",
+			nonInteraction: false,
+			platform: "standard",
+			reset_scope: "technology",
+			tech: "testTech",
+		});
 		resetTechSpy.mockRestore();
 	});
 

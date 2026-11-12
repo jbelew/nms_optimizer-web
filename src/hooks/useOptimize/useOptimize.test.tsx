@@ -367,6 +367,7 @@ describe("useOptimize", () => {
 					action: "no_fit_warning",
 					module_count: 0,
 					platform: "standard",
+					reason: "pattern_no_fit",
 					tech: "Test Tech",
 				}),
 			);
@@ -420,6 +421,7 @@ describe("useOptimize", () => {
 					action: "no_fit_warning",
 					module_count: 0,
 					platform: "standard",
+					reason: "supercharged_no_fit",
 					tech: "pulse",
 				}),
 			);

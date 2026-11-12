@@ -130,7 +130,6 @@ export const LanguageSelector: React.FC = () => {
 			content_type: "language",
 			item_id: newLang,
 			nonInteraction: false,
-			value: 1,
 		});
 	};
 

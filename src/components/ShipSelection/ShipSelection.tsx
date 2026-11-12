@@ -123,7 +123,6 @@ const ShipSelectionMenu: React.FC<ShipSelectionProps> = ({ disabled = false, sol
 					content_type: "platform",
 					item_id: option,
 					nonInteraction: false,
-					value: 1,
 				});
 			}
 		},

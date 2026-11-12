@@ -52,6 +52,7 @@ export interface AnalyticsEventParams {
  * @category Types
  */
 export type GA4Event =
+	| AppInstalledGA4Event
 	| ApplyBuildGA4Event
 	| BuyMeACoffeeClickGA4Event
 	| EarnVirtualCurrencyGA4Event
@@ -70,24 +71,20 @@ export type GA4Event =
 	| SlotRestrictionWarningGA4Event;
 
 /**
- * Telemetry event emitted for canonical route navigations, error screens, and virtual modal views.
+ * Telemetry event emitted for canonical route navigations, Routed Dialogs, virtual modal screens, and error screens (`404`/`500`).
  *
  * @category Types
  */
-export interface PageViewGA4Event extends AcquisitionParams {
+export interface PageViewGA4Event extends AcquisitionParams, BaseGA4Event {
 	/** Event action identifier. */
 	action: "page_view";
-	/** Event category. */
-	category: "engagement" | "navigation";
-	/** Whether the event is non-interactive. */
-	nonInteraction?: boolean;
-	/** Page identifier path, query string, and optional virtual hash. */
+	/** Page identifier path and query/hash string mapped to `page_path` on dispatch. */
 	page?: string;
 	/** Full page location URL. */
 	page_location?: string;
 	/** Referrer URL. */
 	page_referrer?: string;
-	/** Resolved SEO or modal document title. */
+	/** Resolved SEO, modal, or error screen document title. */
 	page_title?: string;
 }
 
@@ -96,13 +93,11 @@ export interface PageViewGA4Event extends AcquisitionParams {
  *
  * @category Types
  */
-export interface PerformanceMetricGA4Event {
+export interface PerformanceMetricGA4Event extends BaseGA4Event {
 	/** Event action identifier. */
 	action: "performance_metric";
 	/** Application version. */
 	app_version?: string;
-	/** Event category. */
-	category: "performance";
 	/** Input delay duration in milliseconds for INP attribution. */
 	input_delay?: number;
 	/** Target DOM element selector for Web Vitals attribution (`INP`, `LCP`, `CLS`). */
@@ -115,160 +110,134 @@ export interface PerformanceMetricGA4Event {
 	load_state?: string;
 	/** Metric name for Web Vitals (`"LCP"`, `"CLS"`, `"INP"`, `"FCP"`, `"TTFB"`). */
 	metric_name: "CLS" | "FCP" | "INP" | "LCP" | "TTFB";
-	/** Whether the event is non-interactive. */
-	nonInteraction: boolean;
+	/** Rounded numeric metric value (`CLS * 1000` or milliseconds) mirrored alongside `value`. */
+	metric_value?: number;
 	/** Presentation delay duration in milliseconds for INP attribution. */
 	presentation_delay?: number;
 	/** Processing duration in milliseconds for INP attribution. */
 	processing_duration?: number;
-	/** Rounded numeric metric value (`CLS * 1000` or milliseconds). */
+	/** Rounded numeric metric value backing the GA4 `Performance Value` Custom Metric. */
 	value: number;
 }
 
 /**
- * Telemetry event emitted when a user applies a Recommended Build.
- *
- * @category Types
+ * Canonical high-level GA4 event categories emitted across the application.
  */
-interface ApplyBuildGA4Event {
+type AnalyticsEventCategory =
+	"build" | "engagement" | "error" | "navigation" | "performance" | "ui";
+
+/**
+ * Telemetry event emitted when the browser reports a completed PWA installation (`appinstalled`).
+ */
+interface AppInstalledGA4Event extends BaseGA4Event {
+	/** Event action identifier. */
+	action: "app_installed";
+	/** Canonical Platform Type identifier active during installation. */
+	platform: string;
+}
+
+/**
+ * Telemetry event emitted when a user applies a Recommended Build.
+ */
+interface ApplyBuildGA4Event extends BaseGA4Event {
 	/** Event action identifier. */
 	action: "apply_build";
 	/** Recommended Build title. */
 	build: string;
-	/** Event category. */
-	category: "build";
-	/** Whether the event is non-interactive. */
-	nonInteraction?: boolean;
 	/** Canonical Platform Type identifier. */
 	platform: string;
-	/** Numeric event value. */
-	value?: number;
+}
+
+/**
+ * Shared envelope fields carried across all application GA4 telemetry events.
+ */
+interface BaseGA4Event {
+	/** High-level event category (`"build"`, `"engagement"`, `"error"`, `"navigation"`, `"performance"`, or `"ui"`). */
+	category: AnalyticsEventCategory;
+	/** Whether the event is passive (`true`) or represents direct user interaction (`false`). */
+	nonInteraction?: boolean;
 }
 
 /**
  * Telemetry event emitted when a user clicks the Buy Me a Coffee button.
- *
- * @category Types
  */
-interface BuyMeACoffeeClickGA4Event {
+interface BuyMeACoffeeClickGA4Event extends BaseGA4Event {
 	/** Event action identifier. */
 	action: "buy_me_a_coffee_click";
-	/** Event category. */
-	category: "ui";
-	/** Whether the event is non-interactive. */
-	nonInteraction?: boolean;
-	/** Numeric event value. */
-	value?: number;
 }
 
 /**
- * Telemetry event emitted when a user triggers the header Easter egg.
- *
- * @category Types
+ * Telemetry event emitted when a user discovers the NMS logo Easter egg coordinates popover.
  */
-interface EarnVirtualCurrencyGA4Event {
+interface EarnVirtualCurrencyGA4Event extends BaseGA4Event {
 	/** Event action identifier. */
 	action: "earn_virtual_currency";
-	/** Event category. */
-	category: "ui";
-	/** Whether the event is non-interactive. */
-	nonInteraction?: boolean;
-	/** Numeric event value. */
-	value?: number;
-	/** Virtual currency name (`"easter_egg"`). */
+	/** Numeric virtual currency quantity (`1`). */
+	value: number;
+	/** Virtual currency identifier (`"easter_egg"`). */
 	virtual_currency_name: string;
 }
 
 /**
  * Standard GA4 `exception` event emitted by error boundaries and error dialogs without stack traces.
- *
- * @category Types
  */
-interface ExceptionGA4Event {
+interface ExceptionGA4Event extends BaseGA4Event {
 	/** Event action identifier. */
 	action: "exception";
-	/** Event category. */
-	category: "error";
 	/** Diagnostic description truncated to 150 characters. */
 	description: string;
 	/** Whether the exception represents a fatal crash (`true`) or handled error (`false`). */
 	fatal: boolean;
-	/** Whether the event is non-interactive. */
-	nonInteraction?: boolean;
 }
 
 /**
  * Telemetry event emitted when a Build File or Shared Grid URL is loaded.
- *
- * @category Types
  */
-interface LoadBuildGA4Event {
+interface LoadBuildGA4Event extends BaseGA4Event {
 	/** Event action identifier. */
 	action: "load_build";
-	/** Event category. */
-	category: "engagement" | "ui";
 	/** Filename involved in a `.nms` Build File import. */
 	file_name?: string;
 	/** Import method (`"nms_file"` or `"shared_url"`). */
 	method: "nms_file" | "shared_url";
-	/** Whether the event is non-interactive. */
-	nonInteraction?: boolean;
 	/** Canonical Platform Type identifier. */
 	platform: string;
-	/** Numeric event value. */
-	value?: number;
 }
 
 /**
- * Telemetry event emitted when an optimization solve triggers a Pattern No Fit warning.
- *
- * @category Types
+ * Telemetry event emitted when an optimization solve triggers a Pattern No Fit or Supercharged No Fit warning.
  */
-interface NoFitWarningGA4Event {
+interface NoFitWarningGA4Event extends BaseGA4Event {
 	/** Event action identifier. */
 	action: "no_fit_warning";
-	/** Event category. */
-	category: "ui";
 	/** Number of checked modules included in the attempted solve. */
 	module_count: number;
-	/** Whether the event is non-interactive. */
-	nonInteraction?: boolean;
 	/** Canonical Platform Type identifier. */
 	platform: string;
-	/** Technology Category identifier. */
+	/** Specific placement constraint warning reason (`"pattern_no_fit"` or `"supercharged_no_fit"`). */
+	reason: "pattern_no_fit" | "supercharged_no_fit";
+	/** Technology Category identifier (including `"photonix"` when Photonix Core Override is active). */
 	tech: string;
-	/** Numeric event value. */
-	value?: number;
 }
 
 /**
  * Telemetry event emitted when the 404 NotFound fallback route mounts.
- *
- * @category Types
  */
-interface NotFoundGA4Event {
+interface NotFoundGA4Event extends BaseGA4Event {
 	/** Event action identifier. */
 	action: "not_found";
-	/** Event category. */
-	category: "navigation";
-	/** Whether the event is non-interactive. */
-	nonInteraction?: boolean;
 }
 
 /**
  * Telemetry event emitted upon completion of a Technology Category optimization solve.
- *
- * @category Types
  */
-interface OptimizeTechGA4Event {
+interface OptimizeTechGA4Event extends BaseGA4Event {
 	/** Event action identifier. */
 	action: "optimize_tech";
 	/** Count of Technology Categories currently placed on the workspace grid. */
 	active_tech_count?: number;
 	/** Solve Quality tier (`"boosted"`, `"standard"`, or `"insufficient_space"`). */
 	bonus_status?: "boosted" | "insufficient_space" | "standard";
-	/** Event category. */
-	category: "engagement" | "ui";
 	/** Whether the optimization was a Forced Solve after a Pattern No Fit warning. */
 	forced?: boolean;
 	/** Whether the workspace grid differs from the platform's Default Grid Layout. */
@@ -279,8 +248,6 @@ interface OptimizeTechGA4Event {
 	max_bonus?: number;
 	/** Number of checked modules included in the solve. */
 	module_count?: number;
-	/** Whether the event is non-interactive. */
-	nonInteraction?: boolean;
 	/** Canonical Platform Type identifier. */
 	platform?: string;
 	/** Optimization solve duration in milliseconds. */
@@ -293,124 +260,88 @@ interface OptimizeTechGA4Event {
 	supercharged?: boolean;
 	/** Technology Category identifier (e.g., `"pulse"`, `"photonix"`, `"hyper"`). */
 	tech?: string;
-	/** Numeric event value. */
-	value?: number;
 }
 
 /**
- * Telemetry event emitted when the user triggers a Session Reset.
- *
- * @category Types
+ * Telemetry event emitted when the user triggers a Session Reset or manual Technology Reset.
  */
-interface ResetGridGA4Event {
+interface ResetGridGA4Event extends BaseGA4Event {
 	/** Event action identifier. */
 	action: "reset_grid";
-	/** Event category. */
-	category: "ui";
-	/** Whether the event is non-interactive. */
-	nonInteraction?: boolean;
 	/** Canonical Platform Type identifier. */
 	platform: string;
-	/** Numeric event value. */
-	value?: number;
+	/** Scope of the reset action (`"session"` for full Session Reset or `"technology"` for single Technology Reset). */
+	reset_scope: "session" | "technology";
+	/** Technology Category identifier cleared during a manual Technology Reset (`reset_scope === "technology"`). */
+	tech?: string;
 }
 
 /**
  * Telemetry event emitted when a user exports a `.nms` Build File.
- *
- * @category Types
  */
-interface SaveBuildGA4Event {
+interface SaveBuildGA4Event extends BaseGA4Event {
 	/** Event action identifier. */
 	action: "save_build";
 	/** Name of the saved Build File. */
 	build_name: string;
-	/** Event category. */
-	category: "ui";
 	/** Export method (`"nms_file"`). */
 	method: "nms_file";
-	/** Whether the event is non-interactive. */
-	nonInteraction?: boolean;
 	/** Canonical Platform Type identifier. */
 	platform: string;
-	/** Numeric event value. */
-	value?: number;
 }
 
 /**
  * Telemetry event emitted when a user exports a PNG screenshot of the grid.
- *
- * @category Types
  */
-interface ScreenshotBuildGA4Event {
+interface ScreenshotBuildGA4Event extends BaseGA4Event {
 	/** Event action identifier. */
 	action: "screenshot_build";
-	/** Event category. */
-	category: "ui";
 	/** Export method (`"png"`). */
 	method: "png";
-	/** Whether the event is non-interactive. */
-	nonInteraction?: boolean;
-	/** Numeric event value. */
-	value?: number;
+	/** Canonical Platform Type identifier. */
+	platform?: string;
 }
 
 /**
- * Telemetry event emitted when a user selects a Platform Type or application language.
- *
- * @category Types
+ * Standard GA4 `select_content` telemetry event emitted when a user selects content, toggles preferences, or acts on prompts.
  */
-interface SelectContentGA4Event {
+interface SelectContentGA4Event extends BaseGA4Event {
 	/** Event action identifier. */
 	action: "select_content";
-	/** Event category. */
-	category: "ui";
-	/** Type of content selected (`"platform"` or `"language"`). */
-	content_type: "language" | "platform";
-	/** Selected platform key or ISO language code. */
+	/** Category of UI content selected, mapped natively to GA4's built-in `Content type` dimension. */
+	content_type:
+		| "app_update"
+		| "error_recovery"
+		| "focus_mode"
+		| "language"
+		| "optimization_alert"
+		| "outbound_link"
+		| "platform"
+		| "share_link";
+	/** Selected item or action identifier, mapped natively to GA4's built-in `Content ID` dimension. */
 	item_id: string;
-	/** Whether the event is non-interactive. */
-	nonInteraction?: boolean;
-	/** Numeric event value. */
-	value?: number;
 }
 
 /**
  * Telemetry event emitted when a user generates a shareable URL for a layout.
- *
- * @category Types
  */
-interface ShareGA4Event {
+interface ShareGA4Event extends BaseGA4Event {
 	/** Event action identifier. */
 	action: "share";
-	/** Event category. */
-	category: "ui";
 	/** Share method (`"url"`). */
 	method: "url";
-	/** Whether the event is non-interactive. */
-	nonInteraction?: boolean;
 	/** Canonical Platform Type identifier. */
 	platform: string;
-	/** Numeric event value. */
-	value?: number;
 }
 
 /**
  * Telemetry event emitted on the 3rd violation of a Slot Restriction in a session.
- *
- * @category Types
  */
-interface SlotRestrictionWarningGA4Event {
+interface SlotRestrictionWarningGA4Event extends BaseGA4Event {
 	/** Event action identifier. */
 	action: "slot_restriction_warning";
-	/** Event category. */
-	category: "ui";
-	/** Whether the event is non-interactive. */
-	nonInteraction?: boolean;
 	/** Canonical Platform Type identifier. */
 	platform: string;
 	/** Slot Restriction violation reason (`"gridFixed"`, `"moduleLocked"`, `"rowLimit"`, `"superchargedFixed"`, `"superchargedLimit"`). */
 	reason: string;
-	/** Numeric event value. */
-	value?: number;
 }

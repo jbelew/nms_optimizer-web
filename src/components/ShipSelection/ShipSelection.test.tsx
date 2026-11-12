@@ -21,6 +21,7 @@ vi.mock("react-router-dom", () => ({
 vi.mock("@/utils/analytics/tracking", () => ({
 	sendDeferredEvent: vi.fn(),
 	sendEvent: vi.fn(),
+	syncAnalyticsPlatformProperty: vi.fn(),
 }));
 
 const mockShowInfo = vi.fn();

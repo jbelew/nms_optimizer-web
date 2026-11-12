@@ -1,6 +1,8 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
+
+import * as trackingModule from "@/utils/analytics/tracking";
 
 import ShareLinkDialog from "./ShareLinkDialog";
 
@@ -87,6 +89,23 @@ describe("ShareLinkDialog", () => {
 		expect(openLink).toHaveAttribute("target", "_blank");
 		expect(openLink).toHaveAttribute("rel", "noopener noreferrer");
 		expect(openLink).toHaveClass("rt-underline-always");
+
+		const deferredSpy = vi
+			.spyOn(trackingModule, "sendDeferredEvent")
+			.mockImplementation(() => {});
+
+		try {
+			fireEvent.click(openLink);
+			expect(deferredSpy).toHaveBeenCalledWith({
+				action: "select_content",
+				category: "ui",
+				content_type: "share_link",
+				item_id: "open_url",
+				nonInteraction: false,
+			});
+		} finally {
+			deferredSpy.mockRestore();
+		}
 	});
 
 	test("should update textarea value when shareUrl prop changes", async () => {

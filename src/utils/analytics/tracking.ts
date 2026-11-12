@@ -2,28 +2,30 @@
  * Analytics utility module for Google Analytics 4 (GA4) and Core Web Vitals.
  *
  * @remarks
- * This module provides a deep, unified interface for tracking user interactions, errors,
- * and Core Web Vitals performance metrics. It supports both client-side tracking via `react-ga4`
- * and a server-side Measurement Protocol relay (`/api/events`) for environments where
- * client-side tracking is blocked (e.g., ad blockers or DNS sinkholes).
+ * Provides a unified telemetry interface supporting direct client-side `window.gtag` dispatch
+ * and a server-side Measurement Protocol relay (`/api/events`) when client-side tracking is
+ * blocked by ad blockers or DNS sinkholes.
  *
- * It encapsulates:
- * - Disabled and bot/crawler guards across both client and server-relay paths.
- * - Client session ID resolution (`_ga` cookie, `localStorage`, or generated `web_<ts>_<rand>`).
+ * Encapsulates:
+ * - Disabled, non-production hostname, and bot/crawler guards across both client and server-relay paths.
+ * - Client ID resolution (`_ga` cookie, `localStorage`, or generated `web_<ts>_<rand>`) shared across transports.
+ * - Rolling 30-minute GA4 `session_id` (`_ga_<container>` cookie or `sessionStorage`) and foreground `engagement_time_msec` tracking so server-relayed events attribute sessions, entrances, and active users in GA4.
+ * - Synchronized `user_properties` (`app_version`, `is_installed`, `platform_type`) and `app_version` event parameters across both client and server transports.
+ * - Real-time `appinstalled` PWA installation listener updating `is_installed` and emitting `app_installed`.
  * - Multi-probe ad-blocker detection with a 3-second timeout safeguard.
- * - Pre-initialization event buffering and early `visibilitychange` / `pagehide` flushing.
+ * - Pre-initialization event buffering and early `visibilitychange` / `pagehide` flushing (including Safari/WebKit `pagehide` before `visibilityState === "hidden"`).
  * - Boolean parameter normalization (`"true"` / `"false"`) for BigQuery parity ([ADR-0003](../../../docs/adr/0003-ga4-bigquery-telemetry-contract.md)).
- * - Core Web Vitals (`CLS`, `INP`, `FCP`, `LCP`, `TTFB`) observer registration and DOM attribution.
+ * - Core Web Vitals (`CLS`, `INP`, `FCP`, `LCP`, `TTFB`) observer registration and normalized DOM attribution (`#grid-cell`, Radix primitive filtering).
  *
  * @see {@link initializeAnalytics}
  * @see {@link sendEvent}
  * @see {@link sendDeferredEvent}
  * @see {@link buildExceptionEvent}
+ * @see {@link syncAnalyticsPlatformProperty}
  *
  * @category Utilities
  */
 
-import type ReactGA from "react-ga4";
 import type {
 	CLSMetricWithAttribution,
 	INPMetricWithAttribution,
@@ -34,65 +36,162 @@ import type {
 
 import type { AnalyticsEventParams, GA4Event, PerformanceMetricGA4Event } from "@/types/analytics";
 import { API_URL, TRACKING_ID } from "@/constants";
-import { isBot, safeGetItem, safeSetItem } from "@/utils/browser/environment";
+import { isBot, isStandalone, safeGetItem, safeSetItem } from "@/utils/browser/environment";
 import { Logger } from "@/utils/system/monitoring";
 
 declare const __APP_VERSION__: string;
 
-/**
- * Resolved `react-ga4` module instance, accounting for CJS/ESM interop in Rolldown.
- *
- * @category Utilities
- */
-let ReactGAInstance: null | typeof ReactGA = null;
-
-/** Event queue for events sent before the ReactGA module loads. */
-let queuedEvents: GA4Event[] = [];
-
 export type { GA4Event };
 
 /**
- * Payload sent to the backend for server-side analytics.
+ * Payload sent to the backend `/api/events` endpoint for server-side Measurement Protocol relay.
  */
 interface AnalyticsEventPayload {
-	/** Unique client session ID. */
+	/** Unique client identifier matching `_ga` / `analytics_client_id`. */
 	clientId: string;
-	/** Event name. */
+	/** Validated GA4 event name. */
 	eventName: string;
-	/** Event-specific parameters. */
+	/** Event-specific parameters including `session_id`, `engagement_time_msec`, and page context. */
 	params?: AnalyticsEventParams;
-	/** Authenticated user ID. */
+	/** Optional authenticated user ID. */
 	userId?: string;
+	/** User-scoped properties forwarded to Measurement Protocol `user_properties`. */
+	userProperties?: AnalyticsUserProperties;
 }
 
-/** Flag indicating if GA has been initialized. */
-let gaInitialized = false;
-/** Flag indicating if pagehide/visibilitychange flush listeners have been attached. */
-let hideListenersRegistered = false;
-/** Flag indicating if pre-unmount interaction target listeners have been attached. */
-let interactionCaptureListenersRegistered = false;
-/** Flag indicating if first-hidden-time visibility tracking has been attached. */
-let visibilityWatcherRegistered = false;
-/** Earliest timestamp (ms from time origin) at which the document was hidden, or `-1` before initialization. */
-let firstHiddenTime = -1;
-/** Most recent pre-unmount DOM selector captured on `pointerdown` or `keydown`. */
-let lastInteractedTargetSelector = "";
-/** Maximum length for generated INP target selectors. */
+/**
+ * User-scoped GA4 properties synchronized across `gtag` and `/api/events`.
+ */
+interface AnalyticsUserProperties {
+	/** Semantic application version (`__APP_VERSION__`). */
+	app_version: string;
+	/** Whether the web app is running in standalone/installed PWA mode (`"yes"` or `"no"`). */
+	is_installed: "no" | "yes";
+	/** Active Platform Type identifier (e.g., `"standard"`, `"corvette"`). */
+	platform_type: string;
+}
+
+/**
+ * Rolling 30-minute GA4 session state persisted in `sessionStorage` when `_ga_<container>` cookies are unavailable.
+ */
+interface StoredSessionState {
+	/** Epoch timestamp (ms) of the most recent analytics event in this session. */
+	lastActivityMs: number;
+	/** Numeric GA4 session ID (epoch seconds at session start). */
+	sessionId: number;
+	/** Monotonically increasing session counter for the tab. */
+	sessionNumber: number;
+}
+
+/** GA4 default session inactivity window (30 minutes in milliseconds). */
+const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
+/** `sessionStorage` key storing rolling GA4 session metadata for server-relayed traffic. */
+const SESSION_STORAGE_KEY = "analytics_session_state";
+/** Matches coordinate-indexed grid cell DOM IDs (e.g., `grid-cell-0-0`, `grid-cell-5-9`). */
+const GRID_CELL_ID_PATTERN = /^grid-cell-\d+-\d+$/;
+/** Maximum length for generated Web Vitals target selectors. */
 const MAX_SELECTOR_LENGTH = 100;
 /** DOM `Node.ELEMENT_NODE` constant (`1`). */
 const ELEMENT_NODE = 1;
 /** DOM `Node.DOCUMENT_NODE` constant (`9`). */
 const DOCUMENT_NODE = 9;
-/** Cached promise for ad blocker detection. */
+
+/** Event queue for events dispatched before transport detection settles. */
+let queuedEvents: GA4Event[] = [];
+/** Flag indicating if GA4 transport initialization has completed. */
+let gaInitialized = false;
+/** Flag indicating if client-side `window.gtag` has been configured for the active session. */
+let gtagConfigured = false;
+/** Flag indicating if `pagehide` / `visibilitychange` flush listeners have been attached. */
+let hideListenersRegistered = false;
+/** Flag indicating if `appinstalled` PWA listener has been attached. */
+let appInstalledListenerRegistered = false;
+/** Flag indicating if pre-unmount interaction target listeners have been attached. */
+let interactionCaptureListenersRegistered = false;
+/** Flag indicating if visibility/engagement tracking has been attached. */
+let visibilityWatcherRegistered = false;
+/** Earliest timestamp (ms from time origin) at which the document was hidden, or `-1` before initialization. */
+let firstHiddenTime = -1;
+/** Epoch timestamp (ms) when the current foreground engagement slice started, or `null` while hidden. */
+let lastEngagementCheckpointMs: null | number = null;
+/** Accumulated foreground engagement duration (ms) waiting to be flushed on the next server-relayed event. */
+let accumulatedEngagementMs = 0;
+/** In-memory fallback session state when `sessionStorage` is unavailable. */
+let memorySessionState: null | StoredSessionState = null;
+/** Most recent pre-unmount DOM selector captured on `pointerdown` or `keydown`. */
+let lastInteractedTargetSelector = "";
+/** Cached promise for ad-blocker detection. */
 let adBlockerDetectionPromise: null | Promise<boolean> = null;
-/** Cached result of ad blocker detection. */
+/** Cached result of ad-blocker detection. */
 let adBlockerResult: boolean | null = null;
 /** Active client ID for the session. */
 let clientId = "";
+/** Cached active Platform Type synchronized with `platformStore`. */
+let currentPlatformType: null | string = null;
+/** Cached standalone/installed PWA state updated dynamically on `appinstalled`. */
+let isInstalledState: boolean | null = null;
 
-/** Whether the app is installed as a PWA. */
-const globalIsInstalled =
-	typeof window !== "undefined" && window.matchMedia("(display-mode: standalone)").matches;
+/**
+ * Resolves the current semantic application version string safely across build and test environments.
+ *
+ * @returns Semantic application version string.
+ */
+const getAppVersion = (): string =>
+	typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "0.0.0";
+
+/**
+ * Resolves whether the application is currently installed or running in standalone PWA mode.
+ *
+ * @returns `true` if running as an installed standalone PWA (including iOS Home Screen) or after `appinstalled`.
+ */
+const getIsInstalled = (): boolean => {
+	if (isInstalledState === null) {
+		isInstalledState = isStandalone();
+	}
+
+	return isInstalledState;
+};
+
+/**
+ * Resolves the active Platform Type for user-property attribution.
+ *
+ * @returns Active Platform Type identifier (defaults to `"standard"`).
+ */
+const getActivePlatformType = (): string => {
+	if (!currentPlatformType) {
+		currentPlatformType = safeGetItem("selectedPlatform") || "standard";
+	}
+
+	return currentPlatformType;
+};
+
+/**
+ * Builds the canonical user-scoped GA4 properties shared by `gtag` and `/api/events`.
+ *
+ * @returns Normalized user properties object.
+ */
+const getUserProperties = (): AnalyticsUserProperties => ({
+	app_version: getAppVersion(),
+	is_installed: getIsInstalled() ? "yes" : "no",
+	platform_type: getActivePlatformType(),
+});
+
+/**
+ * Ensures `window.dataLayer` and `window.gtag` exist so `gtag.js` binds cleanly upon script load.
+ *
+ * @returns Active `window.gtag` command dispatcher.
+ */
+const ensureGtagFunction = (): ((command: string, ...args: unknown[]) => void) => {
+	window.dataLayer = window.dataLayer || [];
+
+	if (typeof window.gtag !== "function") {
+		window.gtag = function gtag() {
+			window.dataLayer?.push(arguments);
+		};
+	}
+
+	return window.gtag;
+};
 
 /**
  * Determines whether a hostname belongs to a local loopback or preview deployment environment.
@@ -148,17 +247,52 @@ const isAnalyticsDisabled = (): boolean => {
 };
 
 /**
- * Normalizes boolean event parameters (except `nonInteraction`) into `"true"` / `"false"` strings.
+ * Synchronizes the active Platform Type user property across client `gtag` and server-relay state.
  *
  * @remarks
- * Client-side `gtag` serializes boolean parameters as strings (`"true"` / `"false"`), whereas
+ * Updates the in-memory `currentPlatformType` used by {@link getUserProperties} for server-relayed
+ * events and immediately pushes `user_properties.platform_type` to `window.gtag` when client
+ * tracking is active.
+ *
+ * @param platform - Active Platform Type identifier (e.g., `"standard"`, `"solar"`, `"corvette"`).
+ *
+ * @returns Side-effects only.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * syncAnalyticsPlatformProperty("corvette");
+ * // updates cached platform_type and forwards to window.gtag when active
+ * ```
+ */
+export const syncAnalyticsPlatformProperty = (platform: string): void => {
+	const resolved = platform || "standard";
+	currentPlatformType = resolved;
+
+	if (
+		!isAnalyticsDisabled()
+		&& typeof window !== "undefined"
+		&& typeof window.gtag === "function"
+	) {
+		window.gtag("set", "user_properties", {
+			platform_type: resolved,
+		});
+	}
+};
+
+/**
+ * Normalizes event parameters for GA4 dispatch while mapping `page` -> `page_path` and booleans -> `"true"` / `"false"`.
+ *
+ * @remarks
+ * Client-side `gtag` serializes boolean custom parameters as strings (`"true"` / `"false"`), whereas
  * the GA4 Measurement Protocol JSON API converts JSON booleans into `int_value` (`1` / `0`) in BigQuery.
  * Normalizing booleans to strings prior to dispatch guarantees identical `string_value` columns
  * across both transports ([ADR-0003](../../../docs/adr/0003-ga4-bigquery-telemetry-contract.md)).
  *
- * @param params - Raw event parameter dictionary.
+ * @param params - Raw event parameter dictionary (excluding `action` and `nonInteraction`).
  *
- * @returns Normalized parameter dictionary with boolean dimensions converted to strings.
+ * @returns Normalized parameter dictionary with `page_path` and stringified boolean dimensions.
  */
 const normalizeEventParams = (params: AnalyticsEventParams): AnalyticsEventParams => {
 	const normalized: AnalyticsEventParams = {};
@@ -166,10 +300,12 @@ const normalizeEventParams = (params: AnalyticsEventParams): AnalyticsEventParam
 	for (const [key, value] of Object.entries(params)) {
 		if (value === undefined) continue;
 
-		if (key !== "nonInteraction" && typeof value === "boolean") {
-			normalized[key] = value ? "true" : "false";
+		const targetKey = key === "page" ? "page_path" : key;
+
+		if (typeof value === "boolean") {
+			normalized[targetKey] = value ? "true" : "false";
 		} else {
-			normalized[key] = value;
+			normalized[targetKey] = value;
 		}
 	}
 
@@ -180,18 +316,12 @@ const normalizeEventParams = (params: AnalyticsEventParams): AnalyticsEventParam
  * Detects if an ad blocker or tracking protection is active.
  *
  * @remarks
- * This function uses a multi-probe strategy to identify both browser-level script
- * blockers (like uBlock Origin) and network-level DNS filters (like Pi-hole).
- *
- * The strategy includes:
- * 1.  **GTM Script Probe**: Attempts to inject the Google Tag Manager script. Verified
- *     against "spoofing" by checking for the `window.google_tag_manager` global.
- * 2.  **GA Collect Probe**: A `fetch` HEAD request to the GA4 collection endpoint.
- *     This specifically catches DNS sinkholes that might allow scripts but block data.
- * 3.  **Fail-Fast Settlement**: The promise resolves to `true` as soon as any probe fails,
- *     triggering the server-side fallback immediately.
- * 4.  **Timeout Safeguard**: Resolves to `true` after 3s if the network silently drops
- *     the requests without an immediate error.
+ * Uses a multi-probe strategy to identify both browser-level script blockers (uBlock Origin, Brave)
+ * and network-level DNS filters (Pi-hole):
+ * 1. **GTM Script Probe**: Injects `gtag/js` and verifies `window.google_tag_manager` is populated.
+ * 2. **GA Collect Probe**: `fetch` HEAD request to `https://www.google-analytics.com/g/collect`.
+ * 3. **Fail-Fast Settlement**: Resolves to `true` immediately when either probe fails.
+ * 4. **Timeout Safeguard**: Resolves to `true` after 3s if network requests silently stall.
  *
  * @returns A promise resolving to `true` if blocking is detected.
  *
@@ -233,6 +363,10 @@ const detectAdBlocker = (): Promise<boolean> => {
 				return true;
 			}
 		})();
+	}
+
+	if (typeof window !== "undefined") {
+		ensureGtagFunction();
 	}
 
 	return new Promise<boolean>((resolve) => {
@@ -280,8 +414,7 @@ const detectAdBlocker = (): Promise<boolean> => {
 
 		script.onload = () => {
 			// Verify it's not a dummy script injected by uBlock/Brave
-			const gtmLoaded = !!(window as unknown as { google_tag_manager?: object })
-				.google_tag_manager;
+			const gtmLoaded = Boolean(window.google_tag_manager);
 
 			if (!gtmLoaded) {
 				failures++;
@@ -333,11 +466,6 @@ const detectAdBlocker = (): Promise<boolean> => {
 /**
  * Gets the cached result of the ad blocker detection or triggers a new detection.
  *
- * @remarks
- * This is the primary accessor for the detection state. It ensures that the detection
- * logic only runs once per session and caches the result for synchronous access in
- * {@link sendEvent}.
- *
  * @returns A promise resolving to `true` if blocking is detected.
  *
  * @see {@link detectAdBlocker}
@@ -364,12 +492,12 @@ const getAdBlockerDetectionResult = async (): Promise<boolean> => {
 /**
  * Attempts to retrieve the Client ID from the Google Analytics cookie (`_ga`).
  *
- * @returns The extracted ID or null.
+ * @returns The extracted ID or `null`.
  *
  * @category Utilities
  */
 const getGaClientIdFromCookie = (): null | string => {
-	if (typeof document === "undefined") return null;
+	if (typeof document === "undefined" || typeof document.cookie !== "string") return null;
 
 	const match = document.cookie.match(/(?:^|; )\s*_ga=GA1\.[0-9]+\.([^;]+)/);
 
@@ -377,7 +505,163 @@ const getGaClientIdFromCookie = (): null | string => {
 };
 
 /**
- * Initializes first-hidden-time tracking so background-loaded tabs can be excluded from `TTFB`.
+ * Attempts to extract the active GA4 `session_id` and `session_number` from the `_ga_<container>` cookie.
+ *
+ * @returns Parsed `{ sessionId, sessionNumber }` when a valid `GS1` or `GS2` container cookie exists, otherwise `null`.
+ */
+const getGaSessionFromCookie = (): null | { sessionId: number; sessionNumber: number } => {
+	if (typeof document === "undefined" || typeof document.cookie !== "string") return null;
+
+	const containerSuffix = TRACKING_ID.replace(/^G-/, "");
+	const cookieRegex = new RegExp(`(?:^|; )\\s*_ga_${containerSuffix}=([^;]+)`);
+	const match = document.cookie.match(cookieRegex);
+
+	if (!match?.[1]) return null;
+
+	const rawValue = match[1];
+
+	// GS1 format: GS1.1.<sessionId>.<sessionNumber>...
+	const gs1Match = rawValue.match(/^GS1\.\d+\.(\d+)\.(\d+)/);
+
+	if (gs1Match) {
+		const sessionId = Number.parseInt(gs1Match[1], 10);
+		const sessionNumber = Number.parseInt(gs1Match[2], 10);
+
+		if (Number.isFinite(sessionId) && sessionId > 0) {
+			return {
+				sessionId,
+				sessionNumber:
+					Number.isFinite(sessionNumber) && sessionNumber > 0 ? sessionNumber : 1,
+			};
+		}
+	}
+
+	// GS2 format: GS2.1.s<sessionId>$o<sessionNumber>$...
+	const gs2SessionMatch = rawValue.match(/(?:^|\.|[$])s(\d+)/);
+
+	if (gs2SessionMatch) {
+		const sessionId = Number.parseInt(gs2SessionMatch[1], 10);
+		const gs2NumberMatch = rawValue.match(/[$]o(\d+)/);
+		const sessionNumber = gs2NumberMatch ? Number.parseInt(gs2NumberMatch[1], 10) : 1;
+
+		if (Number.isFinite(sessionId) && sessionId > 0) {
+			return {
+				sessionId,
+				sessionNumber:
+					Number.isFinite(sessionNumber) && sessionNumber > 0 ? sessionNumber : 1,
+			};
+		}
+	}
+
+	return null;
+};
+
+/**
+ * Reads or advances the rolling 30-minute GA4 session state for server-relayed Measurement Protocol events.
+ *
+ * @returns Active `{ sessionId, sessionNumber }` for the current user session.
+ */
+const getOrUpdateSessionState = (): { sessionId: number; sessionNumber: number } => {
+	const cookieSession = getGaSessionFromCookie();
+
+	if (cookieSession) {
+		return cookieSession;
+	}
+
+	const now = Date.now();
+	let stored: null | StoredSessionState = memorySessionState;
+
+	if (typeof window !== "undefined" && window.sessionStorage) {
+		try {
+			const raw = window.sessionStorage.getItem(SESSION_STORAGE_KEY);
+
+			if (raw) {
+				const parsed = JSON.parse(raw) as Partial<StoredSessionState>;
+
+				if (
+					typeof parsed.sessionId === "number"
+					&& parsed.sessionId > 0
+					&& typeof parsed.lastActivityMs === "number"
+				) {
+					stored = {
+						lastActivityMs: parsed.lastActivityMs,
+						sessionId: parsed.sessionId,
+						sessionNumber:
+							typeof parsed.sessionNumber === "number" && parsed.sessionNumber > 0 ?
+								parsed.sessionNumber
+							:	1,
+					};
+				}
+			}
+		} catch {
+			// Ignore sessionStorage access or parse errors in restricted contexts
+		}
+	}
+
+	const nextState: StoredSessionState =
+		!stored || now - stored.lastActivityMs > SESSION_TIMEOUT_MS ?
+			{
+				lastActivityMs: now,
+				sessionId: Math.max(1, Math.floor(now / 1000)),
+				sessionNumber: (stored?.sessionNumber ?? 0) + 1,
+			}
+		:	{
+				lastActivityMs: now,
+				sessionId: stored.sessionId,
+				sessionNumber: stored.sessionNumber,
+			};
+
+	memorySessionState = nextState;
+
+	if (typeof window !== "undefined" && window.sessionStorage) {
+		try {
+			window.sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(nextState));
+		} catch {
+			// Ignore storage quota or sandbox errors
+		}
+	}
+
+	return {
+		sessionId: nextState.sessionId,
+		sessionNumber: nextState.sessionNumber,
+	};
+};
+
+/**
+ * Consumes foreground engagement milliseconds accumulated since the previous interactive server-relayed event.
+ *
+ * @param isPassive - Whether the event is marked `nonInteraction: true`.
+ *
+ * @returns Positive integer `engagement_time_msec` (`1`..`1800000`) for interactive events, or `undefined` for passive (`nonInteraction: true`) events without draining accumulated foreground time.
+ */
+const consumeEngagementTimeMs = (isPassive: boolean): number | undefined => {
+	if (isPassive) {
+		return undefined;
+	}
+
+	const now = Date.now();
+	const isVisible = typeof document === "undefined" || document.visibilityState !== "hidden";
+
+	let delta = accumulatedEngagementMs;
+	accumulatedEngagementMs = 0;
+
+	if (isVisible) {
+		if (lastEngagementCheckpointMs !== null) {
+			delta += Math.max(0, now - lastEngagementCheckpointMs);
+		}
+
+		lastEngagementCheckpointMs = now;
+	} else {
+		lastEngagementCheckpointMs = null;
+	}
+
+	const rounded = Math.round(delta);
+
+	return Math.min(SESSION_TIMEOUT_MS, Math.max(1, rounded));
+};
+
+/**
+ * Initializes first-hidden-time and foreground engagement visibility tracking.
  *
  * @returns Side-effects only.
  */
@@ -394,6 +678,10 @@ const ensureVisibilityTracking = (): void => {
 		firstHiddenTime = document.visibilityState === "hidden" && !isPrerendering ? 0 : Infinity;
 	}
 
+	if (lastEngagementCheckpointMs === null && document.visibilityState !== "hidden") {
+		lastEngagementCheckpointMs = Date.now();
+	}
+
 	if (visibilityWatcherRegistered) {
 		return;
 	}
@@ -403,12 +691,26 @@ const ensureVisibilityTracking = (): void => {
 	document.addEventListener(
 		"visibilitychange",
 		(event?: Event) => {
-			if (document.visibilityState === "hidden" && !Number.isFinite(firstHiddenTime)) {
-				firstHiddenTime =
-					typeof event?.timeStamp === "number" ? event.timeStamp
-					: typeof performance !== "undefined" && typeof performance.now === "function" ?
-						performance.now()
-					:	0;
+			const now = Date.now();
+
+			if (document.visibilityState === "hidden") {
+				if (!Number.isFinite(firstHiddenTime)) {
+					firstHiddenTime =
+						typeof event?.timeStamp === "number" ? event.timeStamp
+						: (
+							typeof performance !== "undefined"
+							&& typeof performance.now === "function"
+						) ?
+							performance.now()
+						:	0;
+				}
+
+				if (lastEngagementCheckpointMs !== null) {
+					accumulatedEngagementMs += Math.max(0, now - lastEngagementCheckpointMs);
+					lastEngagementCheckpointMs = null;
+				}
+			} else if (lastEngagementCheckpointMs === null) {
+				lastEngagementCheckpointMs = now;
 			}
 		},
 		{ capture: true, passive: true },
@@ -418,6 +720,40 @@ const ensureVisibilityTracking = (): void => {
 if (typeof document !== "undefined") {
 	ensureVisibilityTracking();
 }
+
+/**
+ * Attaches a `window` `"appinstalled"` listener once per lifecycle to capture real-time PWA installations.
+ *
+ * @returns Side-effects only.
+ */
+const ensureAppInstalledListener = (): void => {
+	if (appInstalledListenerRegistered || typeof window === "undefined") {
+		return;
+	}
+
+	appInstalledListenerRegistered = true;
+
+	window.addEventListener("appinstalled", () => {
+		isInstalledState = true;
+
+		if (isAnalyticsDisabled()) {
+			return;
+		}
+
+		if (typeof window.gtag === "function") {
+			window.gtag("set", "user_properties", {
+				is_installed: "yes",
+			});
+		}
+
+		sendEvent({
+			action: "app_installed",
+			category: "engagement",
+			nonInteraction: false,
+			platform: getActivePlatformType(),
+		});
+	});
+};
 
 /**
  * Checks whether a `TTFB` metric originated from a tab that was hidden before `responseStart` or at report time.
@@ -472,8 +808,8 @@ const isBackgroundTtfb = (metric: Metric): boolean => {
  *
  * @remarks
  * Reads the `_ga` cookie if available, falls back to `localStorage`, or generates
- * a new session-scoped `web_<timestamp>_<random>` identifier and attaches early
- * page-hide flush listeners.
+ * a new `web_<timestamp>_<random>` identifier and attaches early page-hide and PWA
+ * installation listeners.
  *
  * @returns The initialized client ID.
  *
@@ -482,6 +818,7 @@ const isBackgroundTtfb = (metric: Metric): boolean => {
 const initializeAnalyticsClient = (): string => {
 	ensureFlushOnHideListeners();
 	ensureVisibilityTracking();
+	ensureAppInstalledListener();
 
 	const gaId = getGaClientIdFromCookie();
 	const stored = safeGetItem("analytics_client_id");
@@ -504,10 +841,6 @@ const initializeAnalyticsClient = (): string => {
 
 /**
  * Gets the current client ID, initializing it if necessary.
- *
- * @remarks
- * Lazily invokes {@link initializeAnalyticsClient} when no in-memory client ID
- * has been resolved yet for the current session.
  *
  * @returns The active client ID.
  *
@@ -555,11 +888,37 @@ export const buildExceptionEvent = (
 });
 
 /**
- * Sends an analytics event to the backend for server-side relay.
+ * Resolves default page context (`page_location`, `page_path`, `page_title`) from the active browser document.
+ *
+ * @returns Default page parameters so non-`page_view` server-relayed events never land in `(not set)` Page path.
+ */
+const getDefaultPageContext = (): AnalyticsEventParams => {
+	const pathname = typeof window !== "undefined" ? (window.location?.pathname ?? "/") : "/";
+	const search = typeof window !== "undefined" ? (window.location?.search ?? "") : "";
+	const href =
+		typeof window !== "undefined" ?
+			window.location?.href
+			|| (window.location?.hostname ?
+				`https://${window.location.hostname}${pathname}${search}`
+			:	undefined)
+		:	undefined;
+	const title = typeof document !== "undefined" ? document.title || undefined : undefined;
+
+	return {
+		...(href ? { page_location: href } : {}),
+		page_path: `${pathname}${search}`,
+		...(title ? { page_title: title } : {}),
+	};
+};
+
+/**
+ * Sends an analytics event to the backend `/api/events` endpoint for Measurement Protocol relay.
  *
  * @remarks
- * Normalizes boolean event parameters to `"true"` / `"false"` strings before
- * transmitting over `navigator.sendBeacon` or `fetch(..., { keepalive: true })`.
+ * Enriches server-relayed events with `session_id`, `session_number`, `engagement_time_msec`,
+ * default page context (`page_location`, `page_path`, `page_title`), and `userProperties`
+ * (`app_version`, `is_installed`, `platform_type`) before transmitting over `navigator.sendBeacon`
+ * or `fetch(..., { keepalive: true })`.
  *
  * @param event - Structured GA4 event to relay.
  *
@@ -569,21 +928,33 @@ export const buildExceptionEvent = (
  */
 const sendServerEvent = (event: GA4Event): void => {
 	try {
-		const { action, category, ...params } = event;
-		const normalizedParams = normalizeEventParams({
-			...params,
-			action,
-			category,
-		});
+		const { action, category, nonInteraction, ...params } = event;
+		const normalizedParams = normalizeEventParams(params);
+		const defaultPageContext = getDefaultPageContext();
+		const { sessionId, sessionNumber } = getOrUpdateSessionState();
+		const engagementTimeMs = consumeEngagementTimeMs(nonInteraction === true);
+		const userProperties = getUserProperties();
+
 		const payload: AnalyticsEventPayload = {
 			clientId: getClientId(),
 			eventName: action,
 			params: {
+				...defaultPageContext,
 				...normalizedParams,
-				app_version: __APP_VERSION__,
-				is_installed: globalIsInstalled ? "yes" : "no",
+				app_version: userProperties.app_version,
+				category,
+				...(engagementTimeMs !== undefined ?
+					{ engagement_time_msec: engagementTimeMs }
+				:	{}),
+				is_installed: userProperties.is_installed,
+				...(typeof nonInteraction === "boolean" ?
+					{ non_interaction: nonInteraction ? "true" : "false" }
+				:	{}),
+				session_id: sessionId,
+				session_number: sessionNumber,
 				tracking_source: "server",
 			},
+			userProperties,
 		};
 
 		const baseUrl =
@@ -596,8 +967,6 @@ const sendServerEvent = (event: GA4Event): void => {
 
 		if (navigator.sendBeacon) {
 			try {
-				// Tag the transport so the server-side relay can distinguish beacon
-				// vs keepalive-fetch deliveries in GA4 reports.
 				payload.params = { ...payload.params, transport: "beacon" };
 				const beaconBlob = new Blob([JSON.stringify(payload)], {
 					type: "application/json",
@@ -629,7 +998,7 @@ const sendServerEvent = (event: GA4Event): void => {
 
 /**
  * Attaches `visibilitychange` and `pagehide` listeners once per session so queued
- * pre-initialization events survive early tab close.
+ * pre-initialization events survive early tab close (including Safari/WebKit `pagehide`).
  *
  * @returns Side-effects only.
  */
@@ -644,12 +1013,8 @@ const ensureFlushOnHideListeners = (): void => {
 
 	hideListenersRegistered = true;
 
-	const flushOnHide = () => {
-		if (
-			isAnalyticsDisabled()
-			|| document.visibilityState !== "hidden"
-			|| queuedEvents.length === 0
-		) {
+	const drainQueuedToServer = () => {
+		if (isAnalyticsDisabled() || queuedEvents.length === 0) {
 			return;
 		}
 
@@ -658,16 +1023,21 @@ const ensureFlushOnHideListeners = (): void => {
 		eventsToFlush.forEach(sendServerEvent);
 	};
 
-	document.addEventListener("visibilitychange", flushOnHide);
-	window.addEventListener("pagehide", flushOnHide);
+	const flushOnVisibilityChange = () => {
+		if (document.visibilityState !== "hidden") {
+			return;
+		}
+
+		drainQueuedToServer();
+	};
+
+	document.addEventListener("visibilitychange", flushOnVisibilityChange);
+	window.addEventListener("pagehide", drainQueuedToServer);
 };
 
 /**
- * Generates a concise CSS selector for an interacted DOM node while skipping ephemeral `#radix-*` IDs.
- *
- * @remarks
- * Mirrors `web-vitals` selector construction (up to 100 characters) but ignores auto-generated
- * `radix-*` element IDs so Radix primitives resolve to stable semantic ancestors and class selectors.
+ * Generates a concise CSS selector for an interacted or shifted DOM node while skipping
+ * ephemeral `#radix-*` IDs and collapsing coordinate-indexed `#grid-cell-r-c` IDs into `#grid-cell`.
  *
  * @param node - The DOM node to generate a selector for.
  *
@@ -684,10 +1054,12 @@ const generateInteractionTarget = (node: Node | null): string => {
 				el.nodeType === ELEMENT_NODE ?
 					el.nodeName.toLowerCase()
 				:	el.nodeName.toUpperCase().replace(/^#/, "");
-			const hasSemanticId = Boolean(el.id && !el.id.startsWith("radix-"));
+			const rawId = el.id || "";
+			const hasSemanticId = Boolean(rawId && !rawId.startsWith("radix-"));
+			const normalizedId = GRID_CELL_ID_PATTERN.test(rawId) ? "grid-cell" : rawId;
 			const part =
 				hasSemanticId ?
-					`#${el.id}`
+					`#${normalizedId}`
 				:	[name, ...Array.from(el.classList ?? []).sort()].join(".");
 
 			if (selector.length + part.length > MAX_SELECTOR_LENGTH - 1) {
@@ -708,6 +1080,16 @@ const generateInteractionTarget = (node: Node | null): string => {
 
 	return selector;
 };
+
+/**
+ * Normalizes a raw target string returned by `web-vitals` when a custom `generateTarget` callback was not used.
+ *
+ * @param rawTarget - Raw CSS selector or URL from Web Vitals attribution.
+ *
+ * @returns Selector with `#grid-cell-r-c` collapsed to `#grid-cell`.
+ */
+const normalizeTargetString = (rawTarget: string): string =>
+	rawTarget.replace(/#grid-cell-\d+-\d+\b/g, "#grid-cell");
 
 /**
  * Registers passive capture-phase `pointerdown` and `keydown` listeners to record the target
@@ -742,10 +1124,11 @@ const ensureInteractionTargetCaptureListeners = (): void => {
  * Formats and dispatches a Core Web Vitals metric through {@link sendEvent}.
  *
  * @remarks
- * Converts the metric value to numerical event parameters suitable for GA4 custom metrics
- * (`CLS * 1000` or rounded milliseconds, using `metric.value` for `INP` so subsequent
- * lower-percentile updates never emit negative deltas) while preserving `label: metric.id`
- * (`^v\d+-\d+-\d+$`) for BigQuery delta deduplication ([ADR-0003](../../../docs/adr/0003-ga4-bigquery-telemetry-contract.md)).
+ * Converts the metric value to rounded integer event parameters (`CLS * 1000` or milliseconds,
+ * using `metric.value` for `INP` so subsequent lower-percentile updates never emit negative deltas)
+ * while preserving both `value` (backing the GA4 `Performance Value` Custom Metric) and `metric_value`,
+ * plus `label: metric.id` (`^v\d+-\d+-\d+$`) for BigQuery delta deduplication
+ * ([ADR-0003](../../../docs/adr/0003-ga4-bigquery-telemetry-contract.md)).
  *
  * @param metric - The Web Vitals metric to send.
  *
@@ -760,15 +1143,17 @@ const sendVitalsMetric = (metric: Metric): void => {
 		metric.name === "CLS" ? metric.delta * 1000
 		: metric.name === "INP" ? (metric.value ?? metric.delta)
 		: metric.delta;
+	const roundedValue = Math.round(rawValue);
 
 	const event: PerformanceMetricGA4Event = {
 		action: "performance_metric",
-		app_version: __APP_VERSION__,
+		app_version: getAppVersion(),
 		category: "performance",
 		label: metric.id,
 		metric_name: metric.name,
+		metric_value: roundedValue,
 		nonInteraction: true,
-		value: Math.round(rawValue),
+		value: roundedValue,
 	};
 
 	if (metric.name === "INP" && "attribution" in metric) {
@@ -776,10 +1161,11 @@ const sendVitalsMetric = (metric: Metric): void => {
 		const attribution = inpMetric.attribution;
 
 		if (attribution) {
-			const target =
+			const rawTarget =
 				attribution.interactionTarget
 				|| lastInteractedTargetSelector
 				|| "(unmounted element)";
+			const target = normalizeTargetString(rawTarget);
 			event.interaction_target = target;
 
 			if (attribution.interactionType) {
@@ -819,7 +1205,7 @@ const sendVitalsMetric = (metric: Metric): void => {
 			const target = attribution.target || attribution.url;
 
 			if (target) {
-				event.interaction_target = target;
+				event.interaction_target = normalizeTargetString(target);
 			}
 		}
 	} else if (metric.name === "CLS" && "attribution" in metric) {
@@ -828,7 +1214,7 @@ const sendVitalsMetric = (metric: Metric): void => {
 
 		if (attribution) {
 			if (attribution.largestShiftTarget) {
-				event.interaction_target = attribution.largestShiftTarget;
+				event.interaction_target = normalizeTargetString(attribution.largestShiftTarget);
 			}
 
 			if (attribution.loadState) {
@@ -859,10 +1245,10 @@ const registerWebVitals = async (): Promise<void> => {
 
 	const { onCLS, onFCP, onINP, onLCP, onTTFB } = vitalsModule;
 	ensureInteractionTargetCaptureListeners();
-	onCLS(sendVitalsMetric);
+	onCLS(sendVitalsMetric, { generateTarget: generateInteractionTarget });
 	onINP(sendVitalsMetric, { generateTarget: generateInteractionTarget });
 	onFCP(sendVitalsMetric);
-	onLCP(sendVitalsMetric);
+	onLCP(sendVitalsMetric, { generateTarget: generateInteractionTarget });
 	onTTFB(sendVitalsMetric);
 };
 
@@ -871,8 +1257,8 @@ const registerWebVitals = async (): Promise<void> => {
  *
  * @remarks
  * Resolves the session client ID, registers Core Web Vitals observers concurrently
- * with ad-blocker detection, initializes `react-ga4` when unblocked, and drains
- * any pre-initialization events.
+ * with ad-blocker detection, configures `window.gtag` directly when unblocked, and drains
+ * any pre-initialization events through the resolved transport.
  *
  * @returns Resolves when initialization is complete or skipped.
  *
@@ -889,49 +1275,24 @@ export const initializeAnalytics = async (): Promise<void> => {
 		return;
 	}
 
-	initializeAnalyticsClient();
+	const resolvedClientId = initializeAnalyticsClient();
 
 	const vitalsPromise = registerWebVitals();
 	const isBlocked = await getAdBlockerDetectionResult();
 
-	if (!isBlocked) {
-		const ReactGAModule = (await import("react-ga4")) as unknown as
-			| undefined
-			| {
-					default?: typeof ReactGA & {
-						default?: typeof ReactGA;
-					};
-			  };
+	if (!isBlocked && typeof window !== "undefined") {
+		const gtag = ensureGtagFunction();
+		const userProperties = getUserProperties();
 
-		// Handle potentially nested default export in certain build environments
-		const resolvedGA = ReactGAModule?.default?.default ?? ReactGAModule?.default;
-
-		if (!resolvedGA) {
-			return;
-		}
-
-		ReactGAInstance = resolvedGA;
-
-		if (
-			typeof window !== "undefined"
-			&& Boolean((window as unknown as { google_tag_manager?: object }).google_tag_manager)
-		) {
-			(ReactGAInstance as unknown as { _hasLoadedGA?: boolean })._hasLoadedGA = true;
-		}
-
-		ReactGAInstance.initialize(TRACKING_ID, {
-			gtagOptions: {
-				allow_ad_personalization_signals: false,
-				allow_google_signals: false,
-				anonymize_ip: true,
-				send_page_view: false,
-				user_properties: {
-					app_version: __APP_VERSION__,
-					is_installed: globalIsInstalled ? "yes" : "no",
-					platform_type: safeGetItem("selectedPlatform") || "standard",
-				},
-			},
+		gtag("js", new Date());
+		gtag("config", TRACKING_ID, {
+			allow_ad_personalization_signals: false,
+			allow_google_signals: false,
+			client_id: resolvedClientId,
+			send_page_view: false,
+			user_properties: userProperties,
 		});
+		gtagConfigured = true;
 	}
 
 	// Drain any events queued before detection completed. When blocked, route
@@ -966,7 +1327,7 @@ const validateEvent = (event: GA4Event): void => {
 };
 
 /**
- * Sends an event to Google Analytics, automatically choosing the transport method.
+ * Sends an event to Google Analytics, automatically choosing the resolved transport method.
  *
  * @param event - Event to send.
  * @param isBlocked - Whether client-side tracking is blocked.
@@ -982,31 +1343,33 @@ const dispatchEvent = (event: GA4Event, isBlocked: boolean): void => {
 		return;
 	}
 
-	if (!ReactGAInstance) {
+	if (!gtagConfigured || typeof window === "undefined" || typeof window.gtag !== "function") {
 		ensureFlushOnHideListeners();
 		queuedEvents.push(event);
 
 		return;
 	}
 
-	const { action, category, ...params } = event;
+	const { action, category, nonInteraction, ...params } = event;
 	const normalizedParams = normalizeEventParams(params);
-	ReactGAInstance.event(action, {
+	window.gtag("event", action, {
 		...normalizedParams,
+		app_version: getAppVersion(),
 		category,
+		is_installed: getIsInstalled() ? "yes" : "no",
+		...(typeof nonInteraction === "boolean" ? { non_interaction: nonInteraction } : {}),
 		tracking_source: "client",
 		transport: "gtag",
 	});
 };
 
 /**
- * Dispatches a validated GA4 event to all configured destinations.
+ * Dispatches a validated GA4 event to the resolved client `gtag` or `/api/events` server relay.
  *
  * @remarks
- * This function provides a synchronous dispatch path for performance and
- * reliability. It suppresses telemetry when analytics are disabled or in bot
- * environments, validates the event using {@link validateEvent}, and routes it
- * to either the `react-ga4` client or the `/api/events` server relay.
+ * Provides a synchronous dispatch path required for late-firing lifecycle events (such as Core Web
+ * Vitals on `visibilitychange`), suppressing telemetry when disabled or in bot environments before
+ * validating and routing via {@link dispatchEvent}.
  *
  * @param event - The structured event payload to transmit.
  *
@@ -1033,20 +1396,16 @@ export const sendEvent = (event: GA4Event): void => {
 		return;
 	}
 
-	// Synchronous dispatch is critical for late-firing events (e.g. Web Vitals
-	// on `visibilitychange`) to ensure they fire before page teardown.
-	// We use the cached adBlockerResult if available, defaulting to false.
 	dispatchEvent(event, adBlockerResult ?? false);
 };
 
 /**
- * Defer a GA4 event so it does not block UI interactions (good for INP).
+ * Defers a GA4 event via `requestIdleCallback` so UI click/tap handlers do not block INP.
  *
  * @remarks
- * Wraps {@link sendEvent} in `requestIdleCallback` (or `setTimeout` fallback). Use
- * this from click/tap handlers where the analytics call is incidental to the
- * interaction. Do NOT use this for late-firing events (Web Vitals,
- * `visibilitychange`, unload) — those must call {@link sendEvent} synchronously.
+ * Wraps {@link sendEvent} in `requestIdleCallback` (with a `setTimeout` fallback) for interactive
+ * UI click/tap handlers. Do not use for unload or `visibilitychange` events—those must call
+ * {@link sendEvent} synchronously.
  *
  * @param event - The structured event payload to transmit.
  *
@@ -1075,11 +1434,11 @@ export const sendDeferredEvent = (event: GA4Event): void => {
 };
 
 /**
- * Reset analytics initialization state for testing.
+ * Resets analytics initialization, session, and listener state for isolated unit tests.
  *
  * @remarks
- * Clears cached ad-blocker detection promises, queued events, session client ID,
- * and initialization flags.
+ * Clears cached ad-blocker detection promises, queued events, session client ID, foreground
+ * engagement accumulators, and DOM listener registration flags between test cases.
  *
  * @returns Side-effects only.
  *
@@ -1093,14 +1452,20 @@ export const sendDeferredEvent = (event: GA4Event): void => {
  */
 export const resetAnalyticsForTesting = (): void => {
 	gaInitialized = false;
+	gtagConfigured = false;
 	hideListenersRegistered = false;
+	appInstalledListenerRegistered = false;
 	interactionCaptureListenersRegistered = false;
 	visibilityWatcherRegistered = false;
 	firstHiddenTime = -1;
+	lastEngagementCheckpointMs = null;
+	accumulatedEngagementMs = 0;
+	memorySessionState = null;
 	lastInteractedTargetSelector = "";
 	adBlockerDetectionPromise = null;
 	adBlockerResult = null;
 	clientId = "";
+	currentPlatformType = null;
+	isInstalledState = null;
 	queuedEvents = [];
-	ReactGAInstance = null;
 };

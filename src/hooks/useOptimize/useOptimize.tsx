@@ -83,6 +83,34 @@ let isOptimizingActive = false;
 let mountedCount = 0;
 
 /**
+ * Resolves the analytics identifier for a Technology Category based on its active Module Selection.
+ *
+ * @remarks
+ * Maps Pulse Engine (`"pulse"`) layouts that include the Photonix Core (`"PC"`) module to the
+ * canonical `"photonix"` Photonix Core Override identifier so solver telemetry and `/userstats/`
+ * charts attribute Photonix Core solves distinctly from standard Pulse Engine solves.
+ *
+ * @param tech - The Technology Category identifier.
+ * @param checkedModules - Map of Technology Category identifiers to checked module IDs.
+ *
+ * @returns `"photonix"` when `"pulse"` includes the `"PC"` module, otherwise `tech`.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * resolveAnalyticsTechName("pulse", { pulse: ["PC", "PE"] });
+ * // returns "photonix"
+ * ```
+ */
+export function resolveAnalyticsTechName(
+	tech: string,
+	checkedModules: Record<string, string[] | undefined>,
+): string {
+	return tech === "pulse" && checkedModules[tech]?.includes("PC") ? "photonix" : tech;
+}
+
+/**
  * Dynamically imports `socket.io-client` and opens a new WebSocket connection for a solve.
  *
  * @returns A connected or connecting `Socket` instance, or `null` if initialization fails.
@@ -147,21 +175,6 @@ function parseOptimizationResult(data: Record<string, unknown>): ApiResponse | n
 	};
 
 	return isApiResponse(translatedData) ? translatedData : null;
-}
-
-/**
- * Resolves the analytics identifier for a Technology Category based on its active Module Selection.
- *
- * @param tech - The Technology Category identifier.
- * @param checkedModules - Map of Technology Category identifiers to checked module IDs.
- *
- * @returns `"photonix"` when `"pulse"` includes the `"PC"` module, otherwise `tech`.
- */
-function resolveAnalyticsTechName(
-	tech: string,
-	checkedModules: Record<string, string[] | undefined>,
-): string {
-	return tech === "pulse" && checkedModules[tech]?.includes("PC") ? "photonix" : tech;
 }
 
 /**
@@ -403,8 +416,8 @@ export const useOptimize = (): UseOptimizeReturn => {
 									module_count: availableModules.length,
 									nonInteraction: false,
 									platform: selectedShipTypeRef.current,
-									tech,
-									value: 1,
+									reason: nextWarningReason,
+									tech: resolveAnalyticsTechName(tech, checkedModules),
 								});
 							}
 						} else {
@@ -464,7 +477,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 											typeof translatedData.maxBonus === "number"
 											&& translatedData.maxBonus > 100,
 										tech: gaTech,
-										value: 1,
 									});
 								}
 							}

@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { Suspense } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { Button, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
@@ -9,6 +9,7 @@ import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { useOptimize } from "@/hooks/useOptimize/useOptimize";
 import { resolveActiveTechVariant } from "@/store/tech/techRules";
 import { useTechStore } from "@/store/tech/techStore";
+import { sendDeferredEvent } from "@/utils/analytics/tracking";
 import { determineWindowDimensions } from "@/utils/optimization/windowDimensions";
 
 /**
@@ -84,6 +85,13 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 	const isOpen = isOpenProp !== undefined ? isOpenProp : Boolean(technologyName);
 	const onClose = onCloseProp ?? clearPatternNoFitTech;
 	const onForceOptimize = onForceOptimizeProp ?? handleForceCurrentPnfOptimize;
+	const hasDismissedRef = useRef(false);
+
+	useEffect(() => {
+		if (isOpen && technologyName) {
+			hasDismissedRef.current = false;
+		}
+	}, [isOpen, technologyName]);
 
 	const categoryKey = technologyName ?? "";
 
@@ -153,11 +161,24 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 		</>
 	);
 
+	const handleDismiss = () => {
+		if (hasDismissedRef.current) return;
+		hasDismissedRef.current = true;
+		sendDeferredEvent({
+			action: "select_content",
+			category: "ui",
+			content_type: "optimization_alert",
+			item_id: "cancel",
+			nonInteraction: false,
+		});
+		onClose();
+	};
+
 	const footer = (
 		<>
 			<Button
 				aria-label={t("dialogs.optimizationAlert.cancelButton")}
-				onClick={onClose}
+				onClick={handleDismiss}
 				variant="soft"
 			>
 				{t("dialogs.optimizationAlert.cancelButton")}
@@ -165,6 +186,13 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 			<Button
 				aria-label={t("dialogs.optimizationAlert.forceOptimizeButton")}
 				onClick={async () => {
+					sendDeferredEvent({
+						action: "select_content",
+						category: "ui",
+						content_type: "optimization_alert",
+						item_id: "force_optimize",
+						nonInteraction: false,
+					});
 					await onForceOptimize();
 				}}
 			>
@@ -179,7 +207,7 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 				content={content}
 				footer={footer}
 				isOpen={isOpen}
-				onClose={onClose}
+				onClose={handleDismiss}
 				title={t("dialogs.titles.optimizationAlert")}
 				titleKey="dialogs.titles.optimizationAlert"
 			/>

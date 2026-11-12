@@ -21,6 +21,7 @@ let solvingState = false;
 vi.mock("@/utils/analytics/tracking", () => ({
 	sendDeferredEvent: vi.fn(),
 	sendEvent: vi.fn(),
+	syncAnalyticsPlatformProperty: vi.fn(),
 }));
 
 vi.mock("@/hooks/useScrollGridIntoView/useScrollGridIntoView", () => ({
@@ -170,7 +171,21 @@ describe("MobileToolbar", () => {
 			method: "url",
 			nonInteraction: false,
 			platform: "standard",
-			value: 1,
+		});
+	});
+
+	it("should emit focus_mode select_content event when Focus Mode button is clicked", () => {
+		renderToolbar();
+
+		const focusModeButton = screen.getByLabelText("buttons.accessibility");
+		fireEvent.click(focusModeButton);
+
+		expect(sendDeferredEvent).toHaveBeenCalledWith({
+			action: "select_content",
+			category: "ui",
+			content_type: "focus_mode",
+			item_id: "enabled",
+			nonInteraction: false,
 		});
 	});
 

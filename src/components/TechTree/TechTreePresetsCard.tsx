@@ -148,7 +148,6 @@ const PresetsCardContent: React.FC<PresetsCardContentProps> = ({ builds, techTre
 							category: "build",
 							nonInteraction: false,
 							platform: selectedPlatform,
-							value: 1,
 						});
 					}
 				});

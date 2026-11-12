@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 import { API_URL } from "@/constants";
+import { syncAnalyticsPlatformProperty } from "@/utils/analytics/tracking";
 import { apiCall } from "@/utils/api/network";
 import { safeGetItem, safeSetItem } from "@/utils/browser/environment";
 import { Logger } from "@/utils/system/monitoring";
@@ -104,21 +105,6 @@ export interface PlatformState {
 }
 
 const catalogCache = new Map<string, Promise<PlatformCatalog>>();
-
-/**
- * Updates the GA4 `platform_type` user property when Google Analytics is initialized on `window`.
- *
- * @param platform - The active Platform Type identifier.
- *
- * @returns Side-effects only.
- */
-const syncAnalyticsPlatformProperty = (platform: string): void => {
-	if (typeof window !== "undefined" && "gtag" in window) {
-		(window.gtag as (command: string, ...args: unknown[]) => void)("set", "user_properties", {
-			platform_type: platform,
-		});
-	}
-};
 
 /**
  * Safely extracts the requested Platform Type identifier from the browser URL.

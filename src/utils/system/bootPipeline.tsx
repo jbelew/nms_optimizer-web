@@ -188,12 +188,17 @@ export const registerDefaultDeferredServices = (
 		},
 	});
 
-	// 2. GA4 analytics client and tracker initialization (priority 5)
+	// 2. GA4 analytics client and tracker initialization (priority 5; non-blocking so DNS sinkholes never stall SW/Sentry)
 	coordinator.registerDeferredTask({
 		name: "ga4-analytics",
 		priority: 5,
-		run: async () => {
-			await initializeAnalytics();
+		run: () => {
+			void initializeAnalytics().catch((error) => {
+				Logger.error('Deferred task "ga4-analytics" failed:', error, {
+					level: "error",
+					tags: { area: "deferred-services", task: "ga4-analytics" },
+				});
+			});
 		},
 	});
 

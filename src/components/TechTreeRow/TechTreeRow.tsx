@@ -17,12 +17,14 @@ import { useShallow } from "zustand/react/shallow";
 import type { TechTreeRowProps } from "@/types/props";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
-import { useOptimize } from "@/hooks/useOptimize/useOptimize";
+import { resolveAnalyticsTechName, useOptimize } from "@/hooks/useOptimize/useOptimize";
+import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { getTechnologyTranslationKey, resolveActiveTechVariant } from "@/store/tech/techRules";
 import { useTechStore } from "@/store/tech/techStore";
 import { useModuleSelectionDialogStore } from "@/store/ui/uiStore";
+import { sendDeferredEvent } from "@/utils/analytics/tracking";
 import { isTouchDevice } from "@/utils/browser/environment";
 import { Logger } from "@/utils/system/monitoring";
 
@@ -241,12 +243,21 @@ export const TechTreeRow = React.memo(({ tech, techColor, techImage }: TechTreeR
 
 	const handleReset = useCallback(() => {
 		performance.mark("reset-start");
+		const gaTech = resolveAnalyticsTechName(tech, useTechStore.getState().checkedModules);
 		startResetTransition(() => {
 			try {
 				sessionCoordinator.resetTechnology(tech);
 			} catch (error) {
 				Logger.error("Failed to reset technology in grid:", error);
 			}
+		});
+		sendDeferredEvent({
+			action: "reset_grid",
+			category: "ui",
+			nonInteraction: false,
+			platform: usePlatformStore.getState().selectedPlatform,
+			reset_scope: "technology",
+			tech: gaTech,
 		});
 		performance.mark("reset-end");
 		performance.measure("reset-duration", "reset-start", "reset-end");

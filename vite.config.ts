@@ -198,13 +198,14 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 								]
 							:	[]),
 							{
-								// Group GA4 and related tracking packages into a neutrally named chunk.
-								// Anchored to node_modules so app-level analytics.ts / analyticsClient.ts
-								// are NOT inadvertently captured here.
+								// Group lazy Core Web Vitals attribution package into a neutrally named chunk.
+								// Anchored to node_modules with minSize: 0 so app-level analytics modules
+								// are NOT captured here and the chunk is never merged into the eager entry bundle.
 								// Name avoids 'analytics' or 'events' to reduce automatic blocking by privacy filters.
+								minSize: 0,
 								name: "vendor-telemetry",
 								priority: 100,
-								test: /[\\/]node_modules[\\/](react-ga4|google-analytics|gtag\.js|web-vitals)[\\/]/,
+								test: /[\\/]node_modules[\\/]web-vitals[\\/]/,
 							},
 							{
 								// Core framework runtime — MUST be highest priority.
@@ -294,7 +295,7 @@ export default defineConfig(async ({ command: _command, mode }): Promise<UserCon
 			"import.meta.env.VITE_SENTRY_ENV": JSON.stringify(sentryEnv),
 		},
 		optimizeDeps: {
-			include: ["react", "react-dom", "react-ga4"],
+			include: ["react", "react-dom"],
 		},
 		oxc: {
 			jsx: {

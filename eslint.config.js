@@ -365,6 +365,13 @@ export default tseslint.config(
 			"no-restricted-syntax": "off",
 		},
 	},
+	{
+		// Google's gtag.js dataLayer contract requires pushing genuine IArguments objects rather than rest-param Arrays
+		files: ["src/utils/analytics/tracking.ts"],
+		rules: {
+			"prefer-rest-params": "off",
+		},
+	},
 
 	//
 	// --- TEST FILES & STORIES ---

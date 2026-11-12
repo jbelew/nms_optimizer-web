@@ -3,7 +3,7 @@ import { Theme } from "@radix-ui/themes";
 import { act, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
-import { sendEvent } from "@/utils/analytics/tracking";
+import { sendDeferredEvent, sendEvent } from "@/utils/analytics/tracking";
 
 import { UpdatePrompt, UpdatePromptDialog } from "./UpdatePromptDialog";
 
@@ -80,12 +80,66 @@ describe("UpdatePrompt & UpdatePromptDialog", () => {
 		await vi.waitFor(() => {
 			expect(mockUpdateSW).toHaveBeenCalledWith(true);
 		});
+		expect(sendEvent).toHaveBeenCalledWith({
+			action: "select_content",
+			category: "ui",
+			content_type: "app_update",
+			item_id: "refresh_now",
+			nonInteraction: false,
+		});
 
 		const laterButton = screen.getByRole("button", { name: /later/i });
 		act(() => {
 			laterButton.click();
 		});
 
+		expect(sendDeferredEvent).toHaveBeenCalledWith({
+			action: "select_content",
+			category: "ui",
+			content_type: "app_update",
+			item_id: "later",
+			nonInteraction: false,
+		});
+		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+	});
+
+	test("emits later select_content telemetry only once when dismissed via Escape key", async () => {
+		const mockUpdateSW = vi.fn().mockResolvedValue(undefined);
+		vi.mocked(globalThis.fetch).mockResolvedValueOnce(
+			new Response(
+				JSON.stringify({
+					buildDate: "2026-06-01T00:00:00.000Z",
+					version: "9.9.9",
+				}),
+				{ status: 200 },
+			),
+		);
+
+		render(
+			<Theme>
+				<UpdatePromptDialog />
+			</Theme>,
+		);
+
+		act(() => {
+			window.dispatchEvent(
+				new CustomEvent("new-version-available", { detail: mockUpdateSW }),
+			);
+		});
+
+		const dialog = await screen.findByRole("dialog");
+		act(() => {
+			dialog.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "Escape" }));
+		});
+
+		expect(sendDeferredEvent).toHaveBeenCalledTimes(1);
+		expect(sendDeferredEvent).toHaveBeenCalledWith({
+			action: "select_content",
+			category: "ui",
+			content_type: "app_update",
+			item_id: "later",
+			nonInteraction: false,
+		});
 		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 	});
 

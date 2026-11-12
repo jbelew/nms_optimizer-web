@@ -142,7 +142,6 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 			method: "url",
 			nonInteraction: false,
 			platform: usePlatformStore.getState().selectedPlatform,
-			value: 1,
 		});
 	};
 
@@ -161,7 +160,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 			category: "ui",
 			nonInteraction: false,
 			platform: usePlatformStore.getState().selectedPlatform,
-			value: 1,
+			reset_scope: "session",
 		});
 
 		startResetTransition(() => {

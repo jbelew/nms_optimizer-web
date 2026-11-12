@@ -96,7 +96,23 @@ export const MobileToolbar: React.FC = () => {
 			method: "url",
 			nonInteraction: false,
 			platform: usePlatformStore.getState().selectedPlatform,
-			value: 1,
+		});
+	};
+
+	/**
+	 * Toggles Focus Mode and records the updated preference via deferred analytics.
+	 *
+	 * @returns Side-effects only.
+	 */
+	const handleToggleFocusMode = () => {
+		const nextEnabled = !a11yMode;
+		toggleA11yMode();
+		sendDeferredEvent({
+			action: "select_content",
+			category: "ui",
+			content_type: "focus_mode",
+			item_id: nextEnabled ? "enabled" : "disabled",
+			nonInteraction: false,
 		});
 	};
 
@@ -190,10 +206,10 @@ export const MobileToolbar: React.FC = () => {
 					</a>
 				</IconButton>
 
-				{/* A11y mode switch */}
+				{/* Focus Mode switch */}
 				<IconButton
 					aria-label={t("buttons.accessibility") ?? ""}
-					onClick={toggleA11yMode}
+					onClick={handleToggleFocusMode}
 					size="2"
 					variant={a11yMode ? "solid" : "surface"}
 				>

@@ -7,6 +7,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "@/store/grid/gridStore";
 import i18n from "@/test/i18n";
+import { sendDeferredEvent } from "@/utils/analytics/tracking";
 import { DialogProvider } from "@/utils/system/dialogUtils";
 
 import AppHeader from "./AppHeader";
@@ -18,6 +19,7 @@ vi.mock("@/hooks/useBreakpoint/useBreakpoint", () => ({
 vi.mock("@/utils/analytics/tracking", () => ({
 	sendDeferredEvent: vi.fn(),
 	sendEvent: vi.fn(),
+	syncAnalyticsPlatformProperty: vi.fn(),
 }));
 
 vi.mock("@/components/LanguageSelector/LanguageSelector", () => ({
@@ -148,5 +150,21 @@ describe("AppHeader", () => {
 			unmount();
 			await i18n.changeLanguage("en");
 		}
+	});
+
+	it("emits focus_mode select_content telemetry when toggling the Focus Mode switch", () => {
+		vi.mocked(useBreakpoint).mockReturnValue(true);
+		renderComponent();
+
+		const focusModeSwitch = screen.getByRole("switch");
+		fireEvent.click(focusModeSwitch);
+
+		expect(sendDeferredEvent).toHaveBeenCalledWith({
+			action: "select_content",
+			category: "ui",
+			content_type: "focus_mode",
+			item_id: expect.stringMatching(/^(enabled|disabled)$/),
+			nonInteraction: false,
+		});
 	});
 });

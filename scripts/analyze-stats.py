@@ -2,6 +2,7 @@
 import json
 import sys
 
+
 def analyze_stats(file_path):
     with open(file_path, 'r') as f:
         data = json.load(f)
@@ -26,7 +27,7 @@ def analyze_stats(file_path):
             new_category = 'socket.io'
         elif '/sentry/' in name or 'node_modules/@sentry/' in name:
             new_category = 'sentry'
-        elif any(pkg in name for pkg in ['web-vitals', 'react-ga4']):
+        elif 'web-vitals' in name:
             new_category = 'events'
 
         size = 0

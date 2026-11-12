@@ -75,7 +75,19 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const handleShowChangelog = onShowChangelog ?? (() => openDialog("changelog"));
 	const WorkspaceTitleTag = activeDialog ? "div" : "h1";
 
-	const accessibilityToggle = (
+	const handleToggleFocusMode = () => {
+		const nextEnabled = !a11yMode;
+		toggleA11yMode();
+		sendDeferredEvent({
+			action: "select_content",
+			category: "ui",
+			content_type: "focus_mode",
+			item_id: nextEnabled ? "enabled" : "disabled",
+			nonInteraction: false,
+		});
+	};
+
+	const focusModeToggle = (
 		<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
 			<Flex
 				align="center"
@@ -88,7 +100,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				<Switch
 					aria-label={t("buttons.accessibility") ?? ""}
 					checked={a11yMode}
-					onCheckedChange={toggleA11yMode}
+					onCheckedChange={handleToggleFocusMode}
 					variant="soft"
 				/>
 			</Flex>
@@ -106,7 +118,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					className="app-header__controls app-header__controls--left"
 					gap="2"
 				>
-					{accessibilityToggle}
+					{focusModeToggle}
 				</Flex>
 			)}
 
@@ -178,7 +190,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 						</ConditionalTooltip>
 					)}
 
-					{isLg && accessibilityToggle}
+					{isLg && focusModeToggle}
 					<LanguageSelector />
 				</Flex>
 			)}

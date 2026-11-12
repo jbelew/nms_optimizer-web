@@ -185,7 +185,6 @@ describe("GridStore actions with validation", () => {
 				nonInteraction: false,
 				platform: "standard",
 				reason: "gridFixed",
-				value: 1,
 			});
 
 			// 4th attempt does not re-dispatch in the same session

@@ -33,6 +33,24 @@ SELF_REFERRER_REGEX = (
     r"nms-optimizer-web[^/]*\\.(pages\\.dev|herokuapp\\.com)|"
     r"localhost|127\\.0\\.0\\.1|0\\.0\\.0\\.0)"
 )
+NON_PROD_HOST_REGEX = (
+    r"^https?://(localhost|127\\.0\\.0\\.1|0\\.0\\.0\\.0|[^/]+\\.(pages\\.dev|herokuapp\\.com))"
+)
+TABLE_WINDOW_FILTER = """(
+        _TABLE_SUFFIX BETWEEN FORMAT_DATE('%Y%m%d', DATE_SUB(CURRENT_DATE(), INTERVAL @days DAY))
+          AND FORMAT_DATE('%Y%m%d', CURRENT_DATE())
+        OR _TABLE_SUFFIX = CONCAT('intraday_', FORMAT_DATE('%Y%m%d', CURRENT_DATE()))
+      )"""
+PROD_HOST_FILTER = f"""(
+        device.web_info.hostname IN ('nms-optimizer.app', 'www.nms-optimizer.app')
+        OR (
+          (device.web_info.hostname IS NULL OR device.web_info.hostname = '')
+          AND NOT REGEXP_CONTAINS(
+            COALESCE((SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'page_location'), ''),
+            '{NON_PROD_HOST_REGEX}'
+          )
+        )
+      )"""
 
 # ANSI color codes for terminal formatting
 GREEN = "\033[92m"
@@ -61,7 +79,8 @@ def print_external_referrers(client: bigquery.Client, table_glob: str, days: int
 
     query = f"""
     WITH page_views AS (
-      SELECT
+      SELECT DISTINCT
+        event_timestamp,
         user_pseudo_id,
         COALESCE(
           (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'tracking_source'),
@@ -69,8 +88,9 @@ def print_external_referrers(client: bigquery.Client, table_glob: str, days: int
         ) AS tracking_source,
         (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'page_referrer') AS page_referrer
       FROM `{table_glob}`
-      WHERE _TABLE_SUFFIX >= FORMAT_DATE('%Y%m%d', DATE_SUB(CURRENT_DATE(), INTERVAL @days DAY))
+      WHERE {TABLE_WINDOW_FILTER}
         AND event_name = 'page_view'
+        AND {PROD_HOST_FILTER}
     )
     SELECT
       page_referrer,
@@ -133,12 +153,14 @@ def print_full_path_referrers(client: bigquery.Client, table_glob: str, days: in
 
     query = f"""
     WITH page_views AS (
-      SELECT
+      SELECT DISTINCT
+        event_timestamp,
         user_pseudo_id,
         (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'page_referrer') AS page_referrer
       FROM `{table_glob}`
-      WHERE _TABLE_SUFFIX >= FORMAT_DATE('%Y%m%d', DATE_SUB(CURRENT_DATE(), INTERVAL @days DAY))
+      WHERE {TABLE_WINDOW_FILTER}
         AND event_name = 'page_view'
+        AND {PROD_HOST_FILTER}
     )
     SELECT
       page_referrer,
@@ -185,7 +207,8 @@ def print_campaign_and_shared_grid_stats(client: bigquery.Client, table_glob: st
 
     campaign_query = f"""
     WITH tagged_views AS (
-      SELECT
+      SELECT DISTINCT
+        event_timestamp,
         user_pseudo_id,
         COALESCE(
           (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'utm_source'),
@@ -204,8 +227,9 @@ def print_campaign_and_shared_grid_stats(client: bigquery.Client, table_glob: st
           REGEXP_EXTRACT((SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'page_location'), r'[?&]ref=([^&#]+)')
         ) AS ref_param
       FROM `{table_glob}`
-      WHERE _TABLE_SUFFIX >= FORMAT_DATE('%Y%m%d', DATE_SUB(CURRENT_DATE(), INTERVAL @days DAY))
+      WHERE {TABLE_WINDOW_FILTER}
         AND event_name = 'page_view'
+        AND {PROD_HOST_FILTER}
     )
     SELECT
       COALESCE(utm_source, '(none)') AS utm_source,
@@ -250,7 +274,8 @@ def print_campaign_and_shared_grid_stats(client: bigquery.Client, table_glob: st
 
     shared_grid_query = f"""
     WITH shared_loads AS (
-      SELECT
+      SELECT DISTINCT
+        event_timestamp,
         user_pseudo_id,
         COALESCE(
           REGEXP_EXTRACT((SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'page_location'), r'[?&]platform=([^&#]+)'),
@@ -265,8 +290,9 @@ def print_campaign_and_shared_grid_stats(client: bigquery.Client, table_glob: st
           ELSE (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'page_referrer')
         END AS referrer_source
       FROM `{table_glob}`
-      WHERE _TABLE_SUFFIX >= FORMAT_DATE('%Y%m%d', DATE_SUB(CURRENT_DATE(), INTERVAL @days DAY))
+      WHERE {TABLE_WINDOW_FILTER}
         AND event_name = 'page_view'
+        AND {PROD_HOST_FILTER}
         AND REGEXP_CONTAINS(
           (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'page_location'),
           r'[?&]grid='

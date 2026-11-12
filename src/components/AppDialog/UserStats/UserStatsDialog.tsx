@@ -105,8 +105,14 @@ let techTreeColorsPromise: null | Promise<Record<string, string>> = null;
  */
 const fetchUserStats = (): Promise<UserStat[]> => {
 	if (!userStatsPromise) {
+		const baseUrl =
+			API_URL ?
+				API_URL.endsWith("/") ?
+					API_URL
+				:	`${API_URL}/`
+			:	"/";
 		userStatsPromise = apiCall<UserStat[]>(
-			API_URL + "analytics/popular_data?start_date=28daysAgo&end_date=today",
+			`${baseUrl}analytics/popular_data?start_date=28daysAgo&end_date=today`,
 			{},
 			10000,
 		).catch((error) => {

@@ -283,7 +283,6 @@ export const sessionCoordinator = {
 				method: "shared_url",
 				nonInteraction: true,
 				platform: targetPlatform,
-				value: 1,
 			});
 		} else {
 			Logger.warn("Deserialization failed, grid not set.");

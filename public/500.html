@@ -12,16 +12,20 @@
 		/>
 		<title>500: Application Error | NMS Optimizer</title>
 
-		<!-- Google tag (gtag.js) — production hostname only (ADR-0003) -->
+		<!-- Google tag (gtag.js) — production hostname & non-bot only (ADR-0003) -->
 		<script>
-			if (window.location.hostname === "nms-optimizer.app") {
+			if (
+				window.location.hostname === "nms-optimizer.app"
+				&& !navigator.webdriver
+				&& !/bot|crawl|spider|slurp|lighthouse|headless/i.test(navigator.userAgent || "")
+			) {
 				const gtagScript = document.createElement("script");
 				gtagScript.async = true;
 				gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-P5VBZQ69Q9";
 				document.head.appendChild(gtagScript);
 
 				const urlParams = new URLSearchParams(window.location.search);
-				const errorType = urlParams.get("error_type");
+				const errorType = urlParams.get("error_type") || "unknown";
 				window.dataLayer = window.dataLayer || [];
 				const gtag = function () {
 					window.dataLayer.push(arguments);
@@ -29,12 +33,18 @@
 				window.gtag = gtag;
 				gtag("js", new Date());
 				gtag("config", "G-P5VBZQ69Q9", {
-					page_title: "500: Application Error | NMS Optimizer",
-					page_path: window.location.pathname,
-					error_type: errorType || "unknown",
-					anonymize_ip: true,
 					allow_ad_personalization_signals: false,
 					allow_google_signals: false,
+					page_path: window.location.pathname,
+					page_title: "500: Application Error | NMS Optimizer",
+					tracking_source: "client",
+				});
+				gtag("event", "exception", {
+					category: "error",
+					description: "static_500:" + errorType,
+					fatal: "true",
+					non_interaction: true,
+					tracking_source: "client",
 				});
 			}
 		</script>
@@ -159,6 +169,16 @@
 			document.getElementById("reset-btn").onclick = function () {
 				this.disabled = true;
 				this.innerText = "Resetting...";
+
+				if (typeof window.gtag === "function") {
+					window.gtag("event", "select_content", {
+						category: "engagement",
+						content_type: "error_recovery",
+						item_id: "hard_reset_500",
+						tracking_source: "client",
+						transport_type: "beacon",
+					});
+				}
 
 				// 1. Clear session storage immediately
 				try {

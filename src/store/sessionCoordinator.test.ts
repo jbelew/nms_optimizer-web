@@ -199,7 +199,6 @@ describe("sessionCoordinator", () => {
 			method: "shared_url",
 			nonInteraction: true,
 			platform: "test-platform",
-			value: 1,
 		});
 	});
 

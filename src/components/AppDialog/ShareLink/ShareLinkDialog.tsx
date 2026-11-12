@@ -5,6 +5,7 @@ import { Button, Link, Text, TextArea } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 import AppDialog from "@/components/AppDialog/Base/AppDialog";
+import { sendDeferredEvent } from "@/utils/analytics/tracking";
 import { Logger } from "@/utils/system/monitoring";
 
 /**
@@ -59,6 +60,13 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, onClose, shareUrl }
 		try {
 			await navigator.clipboard.writeText(shareUrl);
 			setCopied(true);
+			sendDeferredEvent({
+				action: "select_content",
+				category: "ui",
+				content_type: "share_link",
+				item_id: "copy_url",
+				nonInteraction: false,
+			});
 
 			if (copiedTimeoutRef.current) {
 				clearTimeout(copiedTimeoutRef.current);
@@ -96,6 +104,15 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, onClose, shareUrl }
 			>
 				<Link
 					href={shareUrl}
+					onClick={() => {
+						sendDeferredEvent({
+							action: "select_content",
+							category: "ui",
+							content_type: "share_link",
+							item_id: "open_url",
+							nonInteraction: false,
+						});
+					}}
 					rel="noopener noreferrer"
 					target="_blank"
 					underline="always"

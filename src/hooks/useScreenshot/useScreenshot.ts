@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useToast } from "@/hooks/useToast/useToast";
+import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { sendEvent } from "@/utils/analytics/tracking";
 import { Logger } from "@/utils/system/monitoring";
@@ -216,7 +217,7 @@ export function useScreenshot(): UseScreenshotReturn {
 					category: "ui",
 					method: "png",
 					nonInteraction: false,
-					value: 1,
+					platform: usePlatformStore.getState().selectedPlatform,
 				});
 			} catch (error) {
 				Logger.error("Screenshot failed:", error);

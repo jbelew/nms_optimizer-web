@@ -137,7 +137,6 @@ const useImportBuildFile = () => {
 					method: "nms_file",
 					nonInteraction: false,
 					platform: usePlatformStore.getState().selectedPlatform,
-					value: 1,
 				});
 			} catch (error) {
 				Logger.warn("Failed to load build file:", { error });
@@ -285,7 +284,6 @@ export const useBuildFileManager = (): UseBuildFileManagerReturn => {
 					method: "nms_file",
 					nonInteraction: false,
 					platform: snapshot.shipType,
-					value: 1,
 				});
 			} catch (error) {
 				Logger.error("Failed to save build file:", error);

@@ -134,7 +134,6 @@ describe("TechTreePresetsCard", () => {
 				category: "build",
 				nonInteraction: false,
 				platform: "exosuit",
-				value: 1,
 			});
 		});
 

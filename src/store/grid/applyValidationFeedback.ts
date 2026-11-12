@@ -107,7 +107,6 @@ export function applyValidationFeedback(result: ValidationResult): void {
 				nonInteraction: false,
 				platform: usePlatformStore.getState().selectedPlatform,
 				reason: result.reason,
-				value: 1,
 			});
 		}
 	}

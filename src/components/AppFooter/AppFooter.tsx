@@ -7,6 +7,7 @@ import { Trans, useTranslation } from "react-i18next";
 
 import Buymeacoffee from "@/components/BuyMeACoffee/BuyMeACoffee";
 import { build, getBuildDate } from "@/routeConfig";
+import { sendDeferredEvent } from "@/utils/analytics/tracking";
 import { isPlainLeftClick, useDialog } from "@/utils/system/dialogUtils";
 
 /**
@@ -60,6 +61,16 @@ const AppFooter: React.FC<AppFooterProps> = ({
 	const { i18n, t } = useTranslation();
 	const { getDialogHref, openDialog } = useDialog();
 
+	const trackOutboundLink = (itemId: string) => {
+		sendDeferredEvent({
+			action: "select_content",
+			category: "engagement",
+			content_type: "outbound_link",
+			item_id: itemId,
+			nonInteraction: false,
+		});
+	};
+
 	return (
 		<footer
 			className="app-footer"
@@ -80,6 +91,7 @@ const AppFooter: React.FC<AppFooterProps> = ({
 								<a
 									className="app-footer__link"
 									href="https://github.com/jbelew/nms_optimizer-web/issues/new/choose"
+									onClick={() => trackOutboundLink("github_issue")}
 									rel="noopener noreferrer"
 									target="_blank"
 								>
@@ -94,6 +106,7 @@ const AppFooter: React.FC<AppFooterProps> = ({
 					<a
 						aria-label={t("buttons.viewSourceOnGithub") ?? ""}
 						href="https://github.com/jbelew/nms_optimizer-web"
+						onClick={() => trackOutboundLink("github_repo")}
 						rel="noopener noreferrer"
 						target="_blank"
 					>
@@ -102,6 +115,7 @@ const AppFooter: React.FC<AppFooterProps> = ({
 					<a
 						aria-label={t("buttons.viewProfileOnLinkedin") ?? ""}
 						href="https://www.linkedin.com/in/jobelew/"
+						onClick={() => trackOutboundLink("linkedin")}
 						rel="noopener noreferrer"
 						target="_blank"
 					>
@@ -110,6 +124,7 @@ const AppFooter: React.FC<AppFooterProps> = ({
 					<a
 						className="app-footer__link"
 						href="https://www.linkedin.com/in/jobelew/"
+						onClick={() => trackOutboundLink("linkedin")}
 						rel="noopener noreferrer"
 						target="_blank"
 					>
@@ -119,6 +134,7 @@ const AppFooter: React.FC<AppFooterProps> = ({
 					<a
 						className="app-footer__link"
 						href="https://raw.githubusercontent.com/jbelew/nms_optimizer-web/refs/heads/main/LICENSE"
+						onClick={() => trackOutboundLink("github_license")}
 						rel="noopener noreferrer"
 						target="_blank"
 					>
@@ -165,6 +181,7 @@ const AppFooter: React.FC<AppFooterProps> = ({
 					>
 						<a
 							href="https://github.com/jbelew/nms_optimizer-web/stargazers"
+							onClick={() => trackOutboundLink("github_star")}
 							rel="noopener noreferrer"
 							target="_blank"
 						>

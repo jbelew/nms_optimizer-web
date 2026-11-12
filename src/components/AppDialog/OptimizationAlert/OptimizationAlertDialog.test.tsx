@@ -4,6 +4,7 @@ import { vi } from "vitest";
 
 import { useTechStore } from "@/store/tech/techStore";
 import { useOptimizeStore } from "@/store/ui/uiStore";
+import * as trackingModule from "@/utils/analytics/tracking";
 
 import OptimizationAlertDialog from "./OptimizationAlertDialog";
 
@@ -205,24 +206,82 @@ describe("OptimizationAlertDialog", () => {
 		expect(mockOnClose).toHaveBeenCalledTimes(1);
 	});
 
-	test("should invoke onForceOptimize when force optimize button is clicked", async () => {
-		render(
-			<OptimizationAlertDialog
-				isOpen={true}
-				onClose={mockOnClose}
-				onForceOptimize={mockOnForceOptimize}
-				technologyName={testTechName}
-			/>,
-		);
+	test("should invoke onForceOptimize and emit select_content telemetry when force optimize and cancel buttons are clicked", async () => {
+		const deferredSpy = vi
+			.spyOn(trackingModule, "sendDeferredEvent")
+			.mockImplementation(() => {});
 
-		const forceOptimizeButton = await screen.findByText(
-			"dialogs.optimizationAlert.forceOptimizeButton",
-		);
-		forceOptimizeButton.click();
+		try {
+			render(
+				<OptimizationAlertDialog
+					isOpen={true}
+					onClose={mockOnClose}
+					onForceOptimize={mockOnForceOptimize}
+					technologyName={testTechName}
+				/>,
+			);
 
-		await waitFor(() => {
-			expect(mockOnForceOptimize).toHaveBeenCalledTimes(1);
-		});
+			const forceOptimizeButton = await screen.findByText(
+				"dialogs.optimizationAlert.forceOptimizeButton",
+			);
+			forceOptimizeButton.click();
+
+			await waitFor(() => {
+				expect(mockOnForceOptimize).toHaveBeenCalledTimes(1);
+			});
+			expect(deferredSpy).toHaveBeenCalledWith({
+				action: "select_content",
+				category: "ui",
+				content_type: "optimization_alert",
+				item_id: "force_optimize",
+				nonInteraction: false,
+			});
+
+			const cancelButton = await screen.findByText("dialogs.optimizationAlert.cancelButton");
+			cancelButton.click();
+			expect(deferredSpy).toHaveBeenCalledWith({
+				action: "select_content",
+				category: "ui",
+				content_type: "optimization_alert",
+				item_id: "cancel",
+				nonInteraction: false,
+			});
+		} finally {
+			deferredSpy.mockRestore();
+		}
+	});
+
+	test("should deduplicate cancel select_content telemetry when AppDialog invokes onClose twice in one open cycle", async () => {
+		const deferredSpy = vi
+			.spyOn(trackingModule, "sendDeferredEvent")
+			.mockImplementation(() => {});
+
+		try {
+			render(
+				<OptimizationAlertDialog
+					isOpen={true}
+					onClose={mockOnClose}
+					onForceOptimize={mockOnForceOptimize}
+					technologyName={testTechName}
+				/>,
+			);
+
+			const closeButton = await screen.findByText("Close");
+			closeButton.click();
+			closeButton.click();
+
+			expect(mockOnClose).toHaveBeenCalledTimes(1);
+			expect(deferredSpy).toHaveBeenCalledTimes(1);
+			expect(deferredSpy).toHaveBeenCalledWith({
+				action: "select_content",
+				category: "ui",
+				content_type: "optimization_alert",
+				item_id: "cancel",
+				nonInteraction: false,
+			});
+		} finally {
+			deferredSpy.mockRestore();
+		}
 	});
 
 	test("should handle different technology names", async () => {

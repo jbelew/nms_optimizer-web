@@ -63,7 +63,6 @@ export default function BuyMeACoffee() {
 			action: "buy_me_a_coffee_click",
 			category: "ui",
 			nonInteraction: false,
-			value: 1,
 		});
 
 		// Delay to ensure GA event is captured
