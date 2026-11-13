@@ -1,6 +1,7 @@
 import "./GridCell.scss";
 
 import React, { useRef, useState, useTransition } from "react";
+import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import { create } from "zustand";
 import { useShallow } from "zustand/react/shallow";
@@ -177,11 +178,6 @@ const getModuleRankBadge = (label: string | undefined): string => {
 };
 
 /**
- * Translation function compatible with i18next `t`.
- */
-type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
-
-/**
  * Generates an accessible, descriptive WAI-ARIA label for a grid slot.
  *
  * @param cell - The cell data model.
@@ -195,7 +191,7 @@ const getGridCellAriaLabel = (
 	cell: Cell,
 	rowIndex: number,
 	columnIndex: number,
-	t: TranslateFn,
+	t: TFunction,
 ): string => {
 	const row = rowIndex + 1;
 	const col = columnIndex + 1;
