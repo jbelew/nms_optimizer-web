@@ -8,9 +8,9 @@ import { describe, expect, it } from "bun:test";
  */
 function runPythonHelper(code) {
 	const proc = Bun.spawnSync([
-		"./venv/bin/python",
+		"python3",
 		"-c",
-		`import importlib.util, json, pathlib, sys, types\ngc = types.ModuleType("google.cloud")\ngc.bigquery = types.ModuleType("google.cloud.bigquery")\ngc.bigquery.Client = object\ngc.bigquery.table = types.SimpleNamespace(Row=object)\nsys.modules.setdefault("google", types.ModuleType("google"))\nsys.modules["google.cloud"] = gc\nsys.modules["google.cloud.bigquery"] = gc.bigquery\nspec = importlib.util.spec_from_file_location("report_inp", pathlib.Path("scripts/report-inp.py"))\nmod = importlib.util.module_from_spec(spec)\nspec.loader.exec_module(mod)\n${code}`,
+		`import importlib.util, json, pathlib, sys, types\ngc = types.ModuleType("google.cloud")\ngc.bigquery = types.ModuleType("google.cloud.bigquery")\ngc.bigquery.Client = object\ngc.bigquery.table = types.SimpleNamespace(Row=object)\ngo = types.ModuleType("google.oauth2")\ngo.service_account = types.ModuleType("google.oauth2.service_account")\nsys.modules.setdefault("google", types.ModuleType("google"))\nsys.modules["google.cloud"] = gc\nsys.modules["google.cloud.bigquery"] = gc.bigquery\nsys.modules["google.oauth2"] = go\nsys.modules["google.oauth2.service_account"] = go.service_account\nspec = importlib.util.spec_from_file_location("report_inp", pathlib.Path("scripts/report-inp.py"))\nmod = importlib.util.module_from_spec(spec)\nspec.loader.exec_module(mod)\n${code}`,
 	]);
 
 	if (proc.exitCode !== 0) {
