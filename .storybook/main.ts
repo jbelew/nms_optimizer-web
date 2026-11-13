@@ -1,4 +1,5 @@
 import path from "node:path";
+
 import type { StorybookConfig } from "@storybook/react-vite";
 import { mergeConfig } from "vite";
 import { splashScreen } from "vite-plugin-splash-screen";
@@ -13,7 +14,6 @@ const config: StorybookConfig = {
 		"@storybook/addon-docs",
 	],
 	framework: "@storybook/react-vite",
-	staticDirs: ["../public"],
 	stories: ["../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
 	typescript: {
 		reactDocgen: "react-docgen",

@@ -106,14 +106,17 @@ jobs:
         uses: github/codeql-action/analyze@v4.39.3
         with:
           category: "/language:javascript-typescript"
-          output: ../results
 
-      - name: Fail on CodeQL findings
+      - name: Fail on open CodeQL alerts
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          COUNT=$(jq -s '[.[].runs[].results[]] | length' ../results/*.sarif)
-          echo "CodeQL findings count: $COUNT"
+          OPEN_ALERTS=$(gh api "repos/${{ github.repository }}/code-scanning/alerts?state=open&ref=${{ github.ref }}")
+          COUNT=$(echo "$OPEN_ALERTS" | jq 'length')
+          echo "Open CodeQL alerts on ${{ github.ref }}: $COUNT"
           if [ "$COUNT" -gt 0 ]; then
-            jq -r '.runs[].results[] | "::error file=\(.locations[0].physicalLocation.artifactLocation.uri),line=\(.locations[0].physicalLocation.region.startLine)::[\(.ruleId)] \(.message.text)"' ../results/*.sarif
+            echo "$OPEN_ALERTS" | jq -r '.[] | "::error file=\(.most_recent_instance.location.path),line=\(.most_recent_instance.location.start_line)::Alert #\(.number) [\(.rule.id)] \(.most_recent_instance.message.text)"'
             exit 1
           fi
 
