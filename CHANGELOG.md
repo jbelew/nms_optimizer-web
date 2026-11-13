@@ -1,3 +1,10 @@
+## [8.10.1](https://github.com/jbelew/nms_optimizer-web/compare/v8.10.0...v8.10.1) (2026-11-13)
+
+
+### Performance Improvements
+
+* **inp:** yield Zustand mutations past next paint and deduplicate CrUX INP report ([5e140d1](https://github.com/jbelew/nms_optimizer-web/commit/5e140d1dc56b113101f8f9492ee0d5c872b854d2))
+
 # [8.10.0](https://github.com/jbelew/nms_optimizer-web/compare/v8.9.3...v8.10.0) (2026-11-12)
 
 
