@@ -20,6 +20,10 @@ updates:
               patterns:
                   - "vitest*"
                   - "@vitest/*"
+          i18next:
+              patterns:
+                  - "i18next*"
+                  - "react-i18next"
           dev-dependencies:
               dependency-type: "development"
               update-types: ["minor", "patch"]

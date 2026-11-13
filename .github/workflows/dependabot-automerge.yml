@@ -11,8 +11,8 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: dependabot-automerge-${{ github.event.workflow_run.head_branch }}
-  cancel-in-progress: true
+  group: dependabot-automerge
+  cancel-in-progress: false
 
 jobs:
   automerge:
@@ -137,4 +137,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ steps.pr_info.outputs.number }}
           REPO: ${{ github.repository }}
-        run: gh pr merge --merge "$PR_NUMBER" --repo "$REPO"
+        run: |
+          for attempt in 1 2 3; do
+            if gh pr merge --merge "$PR_NUMBER" --repo "$REPO"; then
+              exit 0
+            fi
+            echo "Merge attempt $attempt failed; waiting 5s before retry..."
+            sleep 5
+          done
+          exit 1
