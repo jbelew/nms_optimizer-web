@@ -294,23 +294,28 @@ export const syncAnalyticsPlatformProperty = (platform: string): void => {
  *
  * @returns Normalized parameter dictionary with `page_path` and stringified boolean dimensions.
  */
-const normalizeEventParams = (params: AnalyticsEventParams): AnalyticsEventParams => {
-	const normalized: AnalyticsEventParams = {};
+const normalizeEventParams = (params: AnalyticsEventParams): AnalyticsEventParams =>
+	Object.fromEntries(
+		Object.entries(params).flatMap(([key, value]) => {
+			if (
+				value === undefined
+				|| key === "__proto__"
+				|| key === "constructor"
+				|| key === "prototype"
+			) {
+				return [];
+			}
 
-	for (const [key, value] of Object.entries(params)) {
-		if (value === undefined) continue;
+			const targetKey = key === "page" ? "page_path" : key;
+			const normalizedValue =
+				typeof value === "boolean" ?
+					value ? "true"
+					:	"false"
+				:	value;
 
-		const targetKey = key === "page" ? "page_path" : key;
-
-		if (typeof value === "boolean") {
-			normalized[targetKey] = value ? "true" : "false";
-		} else {
-			normalized[targetKey] = value;
-		}
-	}
-
-	return normalized;
-};
+			return [[targetKey, normalizedValue]];
+		}),
+	);
 
 /**
  * Detects if an ad blocker or tracking protection is active.

@@ -240,11 +240,9 @@ function inspectMermaidLines(code) {
 			continue;
 		}
 
-		if (headerLine === null) {
-			headerLine = trimmed;
-			headerOffset = i + 1;
-			break;
-		}
+		headerLine = trimmed;
+		headerOffset = i + 1;
+		break;
 	}
 
 	if (headerLine === null) {
