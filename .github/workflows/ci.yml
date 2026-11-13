@@ -110,10 +110,10 @@ jobs:
 
       - name: Fail on CodeQL findings
         run: |
-          COUNT=$(jq '[.runs[].results[]] | length' ../results/javascript-typescript.sarif)
+          COUNT=$(jq -s '[.[].runs[].results[]] | length' ../results/*.sarif)
           echo "CodeQL findings count: $COUNT"
           if [ "$COUNT" -gt 0 ]; then
-            jq -r '.runs[].results[] | "::error file=\(.locations[0].physicalLocation.artifactLocation.uri),line=\(.locations[0].physicalLocation.region.startLine)::[\(.ruleId)] \(.message.text)"' ../results/javascript-typescript.sarif
+            jq -r '.runs[].results[] | "::error file=\(.locations[0].physicalLocation.artifactLocation.uri),line=\(.locations[0].physicalLocation.region.startLine)::[\(.ruleId)] \(.message.text)"' ../results/*.sarif
             exit 1
           fi
 
