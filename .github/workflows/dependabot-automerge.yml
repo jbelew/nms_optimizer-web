@@ -87,10 +87,10 @@ jobs:
           UPDATE_TYPE="major"
           ALLOW_JS_MINOR=false
           TITLE_LOWER="${TITLE,,}"
-          if [[ "$TITLE_LOWER" == *"bump the production-minor-patch group"* ]]; then
+          if [[ "$TITLE_LOWER" == *"production-minor-patch group"* ]]; then
             UPDATE_TYPE="minor"
             ALLOW_JS_MINOR=true
-          elif [[ "$TITLE_LOWER" == *"bump the dev-dependencies group"* ]]; then
+          elif [[ "$TITLE_LOWER" == *"dev-dependencies group"* ]]; then
             UPDATE_TYPE="minor"
             ALLOW_JS_MINOR=true
           elif [ -n "$OLD_VER" ] && [ -n "$NEW_VER" ]; then
