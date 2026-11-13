@@ -1,3 +1,11 @@
+## [8.10.2](https://github.com/jbelew/nms_optimizer-web/compare/v8.10.1...v8.10.2) (2026-11-13)
+
+
+### Bug Fixes
+
+* **ci:** query open CodeQL alerts API and remove duplicate Storybook staticDirs copy ([953a7c6](https://github.com/jbelew/nms_optimizer-web/commit/953a7c604c87bc8bd45a92c61eec241724483bd2))
+* **ci:** read ../results/*.sarif in CodeQL findings gate ([5dcfb15](https://github.com/jbelew/nms_optimizer-web/commit/5dcfb1599f774c33f9bde54584430bd71770e43d))
+
 ## [8.10.1](https://github.com/jbelew/nms_optimizer-web/compare/v8.10.0...v8.10.1) (2026-11-13)
 
 
