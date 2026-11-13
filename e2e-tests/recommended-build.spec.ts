@@ -60,8 +60,7 @@ test.describe("Recommended Builds Presets Card", () => {
 		await resetGridButton.click();
 
 		// Verify grid is cleared back to initial state
-		const countAfterReset = await populatedLocator.count();
-		expect(countAfterReset).toBe(initialPopulatedCells);
+		await expect(populatedLocator).toHaveCount(initialPopulatedCells);
 	});
 
 	test("should display and interact with presets card on mobile viewport", async ({ page }) => {
