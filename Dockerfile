@@ -14,8 +14,8 @@ COPY . .
 RUN bun run build:docker
 
 # Stage 2: Prepare Backend
-FROM --platform=$BUILDPLATFORM python:3.14-slim AS backend-builder_amd64
-FROM --platform=$BUILDPLATFORM python:3.14 AS backend-builder_arm64
+FROM --platform=$BUILDPLATFORM python:3.15-slim AS backend-builder_amd64
+FROM --platform=$BUILDPLATFORM python:3.15 AS backend-builder_arm64
 
 FROM backend-builder_${TARGETARCH} AS backend-builder
 
@@ -44,8 +44,8 @@ RUN sed -i '/nms_optimizer_service/d' requirements.txt
 RUN maturin build --release --out /tmp/wheels
 
 # Stage 3: Final Image
-FROM --platform=$BUILDPLATFORM python:3.14-slim AS final-stage_amd64
-FROM --platform=$BUILDPLATFORM python:3.14 AS final-stage_arm64
+FROM --platform=$BUILDPLATFORM python:3.15-slim AS final-stage_amd64
+FROM --platform=$BUILDPLATFORM python:3.15 AS final-stage_arm64
 
 FROM final-stage_${TARGETARCH} AS final-stage
 
